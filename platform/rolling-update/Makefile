@@ -1,0 +1,23 @@
+all: push
+
+# 0.0 shouldn't clobber any released builds
+TAG = 1.0.1
+PREFIX = index.boxlinker.com/boxlinker/krud
+
+server: main.go
+	CGO_ENABLED=0 GOOS=linux godep go build -a -installsuffix cgo -ldflags '-w' -o krud ./main.go
+
+container: server
+	docker build -t $(PREFIX):$(TAG) .
+
+push: container
+	docker push $(PREFIX):$(TAG)
+
+test: container
+	docker run -it -p 8080:80 $(PREFIX):$(TAG) --listen=":8080"
+
+clean:
+	# remove servicelb and contrib-haproxy images
+	docker rmi -f $(PREFIX):$(TAG) || true
+
+# docker build -t registry.36ap.com/admin/nginx-demo:latest -f Dockerfile.test . && docker push registry.36ap.com/admin/nginx-demo:latest
