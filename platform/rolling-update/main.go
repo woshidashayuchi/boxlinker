@@ -6,6 +6,7 @@ import (
 	"k8s.io/kubernetes/pkg/client/unversioned"
 	"k8s.io/kubernetes/pkg/kubectl"
 	"k8s.io/kubernetes/pkg/labels"
+	"k8s.io/kubernetes/pkg/client/restclient"
 	"os"
 	"fmt"
 	"sync"
@@ -360,7 +361,7 @@ func (k *Krud) update (h *Webhook) error {
 	var client *unversioned.Client
 	var err error
 	if k.Test {
-		conf := &unversioned.Config{
+		conf := &restclient.Config{
 			Host: k.Endpoint,
 		}
 		client,err = unversioned.New(conf)
@@ -414,8 +415,17 @@ func (k *Krud) update (h *Webhook) error {
 		}
 		newName := fmt.Sprintf("%s-%s", oldRc.Name, hash)
 		log.Debugf("ImageURL: %s",h.Data.getImageURL())
-		newRc, err := kubectl.CreateNewControllerFromCurrentController(client, codec, imageInfo.Namespace, oldRc.Name,
-			newName, h.Data.getImageURL(), "", k.DeploymentKey)
+		newControllerConfig := &kubectl.NewControllerConfig{
+			Namespace: imageInfo.Namespace,
+			OldName: oldRc.Name,
+			NewName: newName,
+			Image:  h.Data.getImageURL(),
+			DeploymentKey: k.DeploymentKey,
+			PullPolicy: api.PullAlways,
+			Container: "",
+		}
+
+		newRc, err := kubectl.CreateNewControllerFromCurrentController(client, codec, newControllerConfig)
 
 		if err != nil {
 			return err

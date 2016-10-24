@@ -5,7 +5,7 @@ TAG = 1.0.1
 PREFIX = index.boxlinker.com/boxlinker/krud
 
 server: main.go
-	CGO_ENABLED=0 GOOS=linux godep go build -a -installsuffix cgo -ldflags '-w' -o krud ./main.go
+	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o krud ./main.go
 
 container: server
 	docker build -t $(PREFIX):$(TAG) .
