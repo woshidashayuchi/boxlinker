@@ -31,11 +31,11 @@ def create_service(service_name):
        user_msg = {"user_id": user_id, "user_name": user_name}
        log.info("**************")
     except:
-       return code.request_result(202)
+       return json.dumps(code.request_result(202))
     try:
         json_list = json.loads(request.get_data())
     except:
-        return code.request_result(101)
+        return json.dumps(code.request_result(101))
 
     show_resource = {"name": user_name}
     # log.info(controller.show_namespace(show_resource))
@@ -48,10 +48,9 @@ def create_service(service_name):
 
         except Exception, e:
             log.error("resource create error ,reason =%s" % e)
-            return code.request_result(501)
+            return json.dumps(code.request_result(501))
     else:
         log.info("should not create namespace,going...")
-        pass
 
     json_name = {"service_name": service_name, "namespace": user_name}
     json_list.update(json_name)
@@ -73,13 +72,14 @@ def test():
 def get_all_service():
 
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
 
-    except:
-       return code.request_result(202)
+    except Exception, e:
+
+        return json.dumps(code.request_result(202))
     # user_id = json_list1.encode("utf-8")
     try:
         service_name = request.args.get("service_name",)
@@ -92,17 +92,18 @@ def get_all_service():
         return json.dumps(response)
     except Exception, e:
         log.error("start error, reason=%s" % e)
+        return json.dumps(code.request_result(404))
 
 
 @app.route('/api/v1/application/service/<service_name>/details', methods=['GET'])
 def detail_service(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     # json_list1 = request.args.get('user_id',)
     json_list = {"user_id": user_id, "user_name": user_name, "service_name": service_name}
     controller = SheetController()
@@ -114,12 +115,12 @@ def detail_service(service_name):
 @app.route('/api/v1/application/remove/service/<service_name>', methods=['DELETE'])
 def del_service(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     # json_list = json.loads(request.get_data())
     json_list = {"token": token_get1, "service_name": service_name, "user_name": user_name, "namespace": user_name, "user_id": user_id}
     controller = SheetController()
@@ -130,12 +131,12 @@ def del_service(service_name):
 @app.route('/api/v1/application/service/<service_name>', methods=['PUT'])
 def put_service(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
     except:
-       return code.request_result(202)
+       return json.dumps(code.request_result(202))
 
     json_list1 = json.loads(request.get_data())
     log.debug("json_list1=%s" % (json_list1))
@@ -155,13 +156,13 @@ def put_service(service_name):
 @app.route('/api/v1/application/service/<service_name>/container', methods=['PUT'])
 def put_container(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name}
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type": "container"}
     json_list.update(json_name)
@@ -174,19 +175,19 @@ def put_container(service_name):
         return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
-        return code.request_result(502)
+        return json.dumps(code.request_result(502))
 
 
 @app.route('/api/v1/application/service/<service_name>/volume', methods=['PUT'])
 def put_volume(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name}
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
     json_name = {"token": token_get1, "service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type":"volume"}
     json_list.update(json_name)
@@ -198,19 +199,19 @@ def put_volume(service_name):
         return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
-        return code.request_result(502)
+        return json.dumps(code.request_result(502))
 
 
 @app.route('/api/v1/application/service/<service_name>/env', methods=['PUT'])
 def put_env(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name}
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type":"env"}
 
@@ -224,19 +225,19 @@ def put_env(service_name):
         return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
-        return code.request_result(502)
+        return json.dumps(code.request_result(502))
 
 
 @app.route('/api/v1/application/service/<service_name>/cm', methods=['PUT'])
 def put_cm(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name}
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type": "limits"}
     json_list["token"] = token_get1
@@ -249,19 +250,19 @@ def put_cm(service_name):
         return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
-        return code.request_result(502)
+        return json.dumps(code.request_result(502))
 
 
 @app.route('/api/v1/application/service/<service_name>/status', methods=['PUT'])
 def start_service(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name}
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     json_list = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name}
     json_get = json.loads(request.get_data())
 
@@ -286,7 +287,7 @@ def telescopic(service_name):
         user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name,"tel":"tel"}
     except Exception, e:
         log.error("telescopic error, reason=%s" % e)
-        return code.request_result(202)
+        return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
     json_list.update(user_msg)
     try:
@@ -306,7 +307,7 @@ def pod_message(service_name):
         user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name}
     except Exception, e:
         log.error("telescopic error, reason=%s" % e)
-        return code.request_result(202)
+        return json.dumps(code.request_result(202))
     try:
         response = pod_messages(user_msg)
         return json.dumps(response)
@@ -324,13 +325,13 @@ def update_status():
 @app.route('/api/v1/application/service/<service_name>/autostartup', methods=['PUT'])
 def put_auto_startup(service_name):
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name}
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-       return code.request_result(202)
+        return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type": "auto_startup"}
     json_list["token"] = token_get1
@@ -344,7 +345,31 @@ def put_auto_startup(service_name):
         return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
-        return code.request_result(502)
+        return json.dumps(code.request_result(502))
+
+
+@app.route('/api/v1/application/service/<service_name>/publish', methods=['PUT'])
+def put_policy(service_name):
+    try:
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
+    except:
+        return json.dumps(code.request_result(202))
+    json_list = json.loads(request.get_data())
+    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name}
+    json_list["token"] = token_get1
+    json_list.update(json_name)
+    log.info("awsdesacdsc=====%s" % json.dumps(json_list))
+    try:
+        controller = SheetController()
+        response = controller.update_service(json_list)
+        return json.dumps(response)
+    except Exception, e:
+        log.error("update error, reason = %s" % e)
+        return json.dumps(code.request_result(502))
 
 if __name__ == '__main__':
     # app.run(debug=True, host="0.0.0.0", port=9000)

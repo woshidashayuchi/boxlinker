@@ -21,6 +21,7 @@ class ReplicationControllers(object):
     spec_selector_name = Column(String(64))
     template_name = Column(String(64))
     template_container_name = Column(String(64))
+    image_id = Column(String(64))
     image_name = Column(String(64))
     image_version = Column(String(64))
     limits_cpu = Column(String(64))
@@ -35,9 +36,9 @@ class ReplicationControllers(object):
     rc_update_time = Column(DateTime, server_default=func.now())
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %d, %r, %r,%r,%r, %r, %r, %r, %r,%r, %d, %r, %r, %r, %r, %r)' % \
+        return '%s(%r, %r, %r, %d, %r, %r,%r,%r, %r, %r, %r, %r, %r,%r, %d, %r, %r, %r, %r, %r)' % \
                 (self.__class__.__name__, self.uuid, self.rc_name, self.labels_name, self.spec_replicas,
-                 self.spec_selector_name, self.template_name, self.template_container_name, self.image_name,
-                 self.image_version, self.limits_cpu, self.limits_memory, self.policy, self.auto_startup,
-                 self.containerPort, self.protocol, self.env_name, self.env_value, self.rc_create_time,
-                 self.rc_update_time)
+                 self.spec_selector_name, self.template_name, self.template_container_name, self.image_id,
+                 self.image_name, self.image_version, self.limits_cpu, self.limits_memory, self.policy,
+                 self.auto_startup, self.containerPort, self.protocol, self.env_name, self.env_value,
+                 self.rc_create_time, self.rc_update_time)

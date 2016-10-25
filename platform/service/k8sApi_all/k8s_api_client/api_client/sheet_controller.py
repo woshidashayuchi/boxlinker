@@ -778,7 +778,7 @@ class SheetController(object):
                 logicmodel.exeUpdate(cur, update_sql)
                 logicmodel.connClose(conn, cur)
                 result = code.request_result(0, update_svc)
-            except Exception,e:
+            except Exception, e:
                 log.error("update database error, reason=%s" % e)
                 post_es(json_list, 'update the service failed!')
 

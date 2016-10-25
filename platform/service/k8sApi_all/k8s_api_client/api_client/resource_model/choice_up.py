@@ -34,6 +34,9 @@ def choice_up(json_list):
             alls.pop("container_memory")
             json_list.update(alls)
             return json_list
+        elif json_list.get("image_name") is not None:
+            json_list.update(alls)
+            return json_list
         else:
             pass
     except Exception, e:

@@ -180,6 +180,7 @@ class DataOrm(object):
             u.spec_selector_name = service_name
             u.template_name = service_name
             u.template_container_name = service_name
+            u.image_id = json_list.get("image_id")
             u.image_name = json_list.get("image_name")
             u.image_version = json_list.get("image_version")
             u.limits_cpu = json_list.get("container_cpu")
@@ -362,7 +363,7 @@ class DataOrm(object):
                      "b.uuid, b.rc_name, b.labels_name, b.spec_replicas, " \
                      "b.spec_selector_name, b.template_name, b.template_container_name, " \
                      "b.image_name, b.image_version, b.limits_cpu,b.limits_memory," \
-                     "b.policy, b.auto_startup, b.containerPort," \
+                     "b.policy, b.auto_startup, b.containerPort, b.image_id," \
                      "b.protocol, b.env_name, b.env_value, b.rc_update_time ltime," \
                      "c.uuid, c.service_name, c.labels, c.selector_name, " \
                      "c.ports_name, c.ports_port, c.ports_targetport, c.service_domain_name  " \
@@ -445,11 +446,22 @@ class DataOrm(object):
         # env_value = json_list.get("env_value")
         auto_startup = json_list.get("auto_startup")
 
+        image_name = json_list.get("image_name")
+
         ISOTIMEFORMAT = "%Y-%m-%d %X"
         update_time = time.strftime(ISOTIMEFORMAT, time.localtime())
-        update_sql = "update replicationcontrollers set auto_startup=\'%s\', rc_update_time=\'%s\'" \
-        "where uuid=(select rc_id from font_service where user_id = \'%s\' and fservice_name = \'%s\')" % (auto_startup, update_time, user_id, service_name)
-        return update_sql
+        if image_name is None:
+            update_sql = "update replicationcontrollers set auto_startup=\'%s\', rc_update_time=\'%s\'" \
+            "where uuid=(select rc_id from font_service where user_id = \'%s\' and fservice_name = \'%s\')" % (auto_startup, update_time, user_id, service_name)
+            return update_sql
+        else:
+            policy = json_list.get("policy")
+            image_name = json_list.get("image_name")
+            image_version = json_list.get("image_version")
+            update_sql = "update replicationcontrollers set policy=\'%s\', image_name=\'%s\'," \
+            "image_version=\'%s\', rc_update_time=\'%s\'" \
+            "where uuid=(select rc_id from font_service where user_id = \'%s\' and fservice_name = \'%s\')" % (policy, image_name, image_version, update_time, user_id, service_name)
+            return update_sql
 
     @classmethod
     def add_container_sql(cls, json_list):

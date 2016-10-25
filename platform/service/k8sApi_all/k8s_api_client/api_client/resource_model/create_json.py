@@ -62,6 +62,11 @@ class SourceModel(object):
             return result
         #images = image_name+":"+image_version
 
+        if json_list.get("image_name") is not None and json_list.get("policy") is not None:
+            log.info("jsondata=====================%s" % json_list)
+            image_name = json_list.get("image_name")
+            image_version = json_list.get("image_version")
+            policy1 = int(json_list.get("policy"))
 
         images = image_name
         if int(auto_startup) == 1:
