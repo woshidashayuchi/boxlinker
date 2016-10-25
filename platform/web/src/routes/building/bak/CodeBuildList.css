@@ -1,0 +1,75 @@
+.cblOpt{
+  margin-top:25px;
+}
+.cblItem{
+  padding:29px 0 29px 50px;
+  position: relative;
+  border-bottom:1px solid #e8e8e8;
+  transition:box-shadow ease-in-out .2s;
+}
+.cblItem:hover{
+  box-shadow:0 2px 10px rgba(16,34,40,.2);
+}
+.cblItem>div{
+  margin-top:0px;
+}
+.cblItem label{
+  font-weight:normal;
+  color:#333;
+  font-size:14px;
+  position: relative;
+  margin:0;
+}
+.cblItem h4{
+  margin-bottom:25px;
+}
+.cblHd label{
+  padding:0 50px;
+}
+.cblItem .cblName{
+  display:inline-block;
+  vertical-align: middle;
+  width:85px;
+  font-weight:normal;
+  text-align: right;
+  padding:0;
+  color:#333;
+}
+.cblItem>div{
+  margin-top:20px;
+}
+.cblHd label:after{
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width:1px;
+  height:15px;
+  background:#ced3dd;
+  right:0;
+  top:3px;
+}
+.cblHd span{
+  color:#999;
+}
+.cblHd label:first-child{
+  padding-left:0;
+}
+.cblHd label:first-child span:last-child{
+  color:#24a8d9;
+}
+.cblHd label:last-child:after{
+  display:none;
+}
+.cblBtn button{
+  width:65px;
+  padding:4px 10px;
+}
+.cblImage{
+  margin-top:5px;
+}
+.cblItem .cblCheckbox{
+  position: absolute;
+  top:30px;
+  left:25px;
+}
+
