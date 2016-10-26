@@ -4,6 +4,7 @@ import {Media,Tabs,Tab,FormGroup,Col} from 'react-bootstrap';
 import Logs from '../Logs'
 import {BREADCRUMB} from "../../constants";
 import Toggle from '../Toggle';
+import ReactDOM from 'react-dom';
 
 class IsAutoBuildToggle extends  Component{
   static propTypes={
@@ -87,9 +88,15 @@ class BuildingDetail extends React.Component{
     }, 5000);
   }
   onReviseBuilding(){
+    let dockerfile_path = ReactDOM.findDOMNode(this.refs.dockerfile_path).value,
+        repo_branch = ReactDOM.findDOMNode(this.refs.repo_branch).value;
     let data = {
-
+      dockerfile_path:dockerfile_path,
+      repo_branch:repo_branch,
+      auto_build:String(this.state.isAutoBuilding),
+      uuid:this.props.projectId
     };
+    console.log(data);
     this.props.reviseBuilding(data);
   }
   getToggleValue(value){
@@ -119,7 +126,7 @@ class BuildingDetail extends React.Component{
                 Dockerfile位置
               </Col>
               <Col sm={5}>
-                <input className="form-control" type="text" defaultValue={item.dockerfile_path}/>
+                <input className="form-control" type="text" ref = "dockerfile_path" defaultValue={item.dockerfile_path}/>
               </Col>
             </FormGroup>
           </div>
@@ -129,7 +136,7 @@ class BuildingDetail extends React.Component{
                 默认代码分支
               </Col>
               <Col sm={5}>
-                <input className="form-control" type="text" defaultValue={item.repo_branch} />
+                <input className="form-control" type="text" ref = "repo_branch" defaultValue={item.repo_branch} />
               </Col>
             </FormGroup>
           </div>
@@ -149,9 +156,9 @@ class BuildingDetail extends React.Component{
 
               </Col>
               <Col sm={5}>
-                <button className="btn btn-primary"
+                <button className={`btn btn-primary ${!this.props.isBtnState.reviseBuilding?"btn-loading":""}`}
                         onClick={this.onReviseBuilding.bind(this)}
-                        disabled
+                        disabled = {!this.props.isBtnState.reviseBuilding}
                 >确认修改</button>
               </Col>
             </FormGroup>

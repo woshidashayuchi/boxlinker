@@ -142,6 +142,7 @@ class ServiceDetail extends Component{
         });
         break;
       case 6:
+        this.props.onPodListLoad(this.props.serviceName);
         this.setState({
           tabSelect:6
         });

@@ -16,6 +16,8 @@ import {INPUT_TIP} from '../../constants';
 import Link from '../Link';
 import Toggle from '../../components/Toggle';
 import {BREADCRUMB} from "../../constants";
+import {navigate} from '../../actions/route';
+import {receiveNotification,clearNotification} from '../../actions/notification';
 
 const title = '新建服务';
 
@@ -54,6 +56,7 @@ class AutoStartUpToggle extends  Component{
 class AddService extends Component{
   static contextTypes = {
     setTitle: PropTypes.func.isRequired,
+    store:PropTypes.object
   };
   static propTypes = {
     onDeployService : React.PropTypes.func,
@@ -414,6 +417,16 @@ class AddService extends Component{
   componentDidMount(){
     this.props.onVolumeListLoad();
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.NEW_SERVICE);
+    let my = this;
+    if(!my.props.deployData.image_id){
+      my.context.store.dispatch(receiveNotification({message:"请先选择要部署的镜像",level:"danger"}));
+      my.context.store.dispatch(navigate("/choseImage"));
+      setTimeout(function(){
+        my.context.store.dispatch(clearNotification())
+      },3000);
+    }else{
+      this.props.onVolumeListLoad();
+    }
   }
 
   render(){

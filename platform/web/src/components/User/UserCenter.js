@@ -6,6 +6,7 @@ import GetPersonalInfo from './GetPersonalInfo';
 import GetMyAccount from './GetMyAccount';
 import GetAccountManage from './GetAccountManage';
 import GetCertificateMange from './GetCertificateMange';
+import GetOrganize from './GetOrganize';
 import {BREADCRUMB} from "../../constants";
 
 const title = '个人中心';
@@ -27,7 +28,7 @@ class UserCenter extends  Component{
     return (
       <div className = "containerBgF">
         <div className = "userTab">
-          <Tabs defaultActiveKey={1} id="userTabs">
+          <Tabs defaultActiveKey={5} id="userTabs">
             <Tab eventKey={1} title="个人信息">
               <GetPersonalInfo
                 onRevisePassword = {(passwordObj) => this.props.onRevisePassword(passwordObj)}
@@ -45,6 +46,7 @@ class UserCenter extends  Component{
               <GetCertificateMange />
             </Tab>
             <Tab eventKey={5} title="组管理">
+              <GetOrganize />
             </Tab>
           </Tabs>
         </div>

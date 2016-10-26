@@ -402,7 +402,7 @@ export function fetchGetMonitorDataAction(data) {
       })
       .catch (e => {
         dispatch(isLoadingAction(false));
-        console.error("pod is error",e);
+        console.error("monitor is error",e);
       })
   }
 }

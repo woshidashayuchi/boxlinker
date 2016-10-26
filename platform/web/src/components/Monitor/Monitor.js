@@ -34,7 +34,7 @@ class BtnGroup extends  Component{
         time = "1440m";
         break;
       default :
-        return "60m"
+        time = "60m"
     }
     this.props.onSelect(time);
   }
@@ -56,13 +56,13 @@ class BtnGroup extends  Component{
 const ReactHighcharts = require('react-highcharts');
 
 export default class extends React.Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
-      data:{xAxis:[],series:[]}
+      data:{xAxis:[],series:[]},
+      payload:this.props.payload
     }
   }
-
   static propTypes = {
     payload:React.PropTypes.object,
     color:React.PropTypes.array,
@@ -80,7 +80,7 @@ export default class extends React.Component {
       fetch(url,myInit)
         .then(response => response.json())
         .then(json => {
-          console.log(json);
+          console.log(json,data.type);
           if(json.status == 0){
             let monitor = {};
             let xAxis = [];
@@ -131,19 +131,19 @@ export default class extends React.Component {
   }
 
   componentDidMount(){
-    this.fetchGetMonitorDataAction(this.props.payload);
+    this.fetchGetMonitorDataAction(this.state.payload);
     let my = this;
     this.myTime = setInterval(function(){
-      my.fetchGetMonitorDataAction(my.props.payload);
+      my.fetchGetMonitorDataAction(my.state.payload);
     },60000)
   }
+  componentDidUpdate(){}
   componentWillUnmount(){
     clearInterval(this.myTime);
   }
   changeTime(time){
     let data = this.props.payload ;
     data.time_long = time;
-    console.log(data);
     this.fetchGetMonitorDataAction(data);
   }
   render(){
@@ -160,7 +160,6 @@ export default class extends React.Component {
         categories: my.state.data.xAxis,
       },
       yAxis:{
-        min: 0,//纵轴的最小值
         title: {//纵轴标题
           text: ''
         },
@@ -183,6 +182,18 @@ export default class extends React.Component {
           animation: false
         },
         area: {
+          // fillColor: {
+          //   linearGradient: {
+          //     x1: 0,
+          //     y1: 0,
+          //     x2: 0,
+          //     y2: 1
+          //   },
+          //   stops: [
+          //     [0, my.props.color[0]],
+          //     [1, "rgba(255,255,255,0)"]
+          //   ]
+          // },
           marker: {
             enabled: false,
             symbol: 'circle',
@@ -211,6 +222,7 @@ export default class extends React.Component {
       <div className="assBox">
         <div className="btnChoose">
           <BtnGroup
+              ref = "a"
             activeKey={0}
             prop={["1小时","6小时","1天"]}
             type = "memory"

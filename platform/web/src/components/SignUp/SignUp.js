@@ -101,7 +101,7 @@ class SignUp extends React.Component{
                     message:"",
                     level:""
                   },
-                  isSignUp:true
+                  //isSignUp:true
                 });
                 window.location.href = "/login"
               },1000);
@@ -238,52 +238,56 @@ class SignUp extends React.Component{
         </div>
         <div className="entryBd signUp">
           <div className="entryModel">
-            <div className="title">用户注册</div>
+            <div className="entryModelBg">Make it simple   make it fast</div>
             <div className="entryFrom">
-              <div className={`entryItem ${this.state.uName? "entryItemError" :""}`} >
-                <div className="entryInputBox icon-username">
-                  <input onChange={this.changeUserName.bind(this)}
-                         className="entryInput" ref = "username" type="text" placeholder="用户名"/>
+              <div className="title">用户注册</div>
+              <div className="entryItemBox">
+                <div className={`entryItem ${this.state.uName? "entryItemError" :""}`} >
+                  <div className="entryInputBox icon-username">
+                    <input onChange={this.changeUserName.bind(this)}
+                           className="entryInput" ref = "username" type="text" placeholder="用户名"/>
+                  </div>
+                  <div className="entryTip">
+                    <p ref = "userTip">用户名错误</p>
+                  </div>
                 </div>
-                <div className="entryTip">
-                  <p ref = "userTip">用户名错误</p>
+                <div className={`entryItem ${this.state.uEmail? "entryItemError" :""}`} >
+                  <div className="entryInputBox icon-email">
+                    <input onChange={this.changeEmail.bind(this)}
+                           className="entryInput" ref = "email" type="text" placeholder="邮箱"/>
+                  </div>
+                  <div className="entryTip">
+                    <p ref = "emailTip">邮箱错误</p>
+                  </div>
                 </div>
-              </div>
-              <div className={`entryItem ${this.state.uEmail? "entryItemError" :""}`} >
-                <div className="entryInputBox icon-email">
-                  <input onChange={this.changeEmail.bind(this)}
-                         className="entryInput" ref = "email" type="text" placeholder="邮箱"/>
+                <div className={`entryItem ${this.state.uPassword? "entryItemError" :""}`} >
+                  <div className="entryInputBox icon-mima">
+                    <input onInput={this.changePassword.bind(this)}
+                           className="entryInput" ref="password" type="password" placeholder="密码"/>
+                  </div>
+                  <div className="entryTip">
+                    <p ref = "passwordTip">密码错误</p>
+                  </div>
                 </div>
-                <div className="entryTip">
-                  <p ref = "emailTip">邮箱错误</p>
+                <div className={`entryItem entryItemCode ${this.state.uCode? "entryItemError" :""}`} >
+                  <div className="entryInputBox  icon-mima">
+                    <input onInput={this.changeCode.bind(this)}
+                           className="entryInput" ref="code" type="text" placeholder="验证码"/>
+                    <img ref = "codeImg" onClick = {this.changeImageSrc.bind(this)} src = "" />
+                  </div>
+                  <div className="entryTip">
+                    <p ref = "codeTip">验证码错误</p>
+                  </div>
                 </div>
-              </div>
-              <div className={`entryItem ${this.state.uPassword? "entryItemError" :""}`} >
-                <div className="entryInputBox icon-mima">
-                  <input onInput={this.changePassword.bind(this)}
-                         className="entryInput" ref="password" type="password" placeholder="密码"/>
+                <div className="entryBtnBox">
+                  <button className={`btn btn-primary entryBtn ${!this.state.isSignUp?"btn-loading":""}`}
+                          disabled={!this.state.isSignUp}
+                          onClick={this.signUp.bind(this)}>{this.state.isSignUp?"注册":"注册中..."}</button>
                 </div>
-                <div className="entryTip">
-                  <p ref = "passwordTip">密码错误</p>
+                <div className="entryFromFt">
+                  已有账户? <a href="/login">登录</a>
+                  <a href="javascript:;">忘记密码</a>
                 </div>
-              </div>
-              <div className={`entryItem entryItemCode ${this.state.uCode? "entryItemError" :""}`} >
-                <div className="entryInputBox  icon-email">
-                  <input onInput={this.changeCode.bind(this)}
-                         className="entryInput entryInputLittle" ref="code" type="text" placeholder="验证码"/>
-                  <img ref = "codeImg" onClick = {this.changeImageSrc.bind(this)} src = "" />
-                </div>
-                <div className="entryTip">
-                  <p ref = "codeTip">验证码错误</p>
-                </div>
-              </div>
-              <div className="entryBtnBox">
-                <button className="btn btn-primary entryBtn" disabled={!this.state.isSignUp}
-                        onClick={this.signUp.bind(this)}>{this.state.isSignUp?"注册":"注册中..."}</button>
-              </div>
-              <div className="entryFromFt">
-                已有账户? <a href="/login">登录</a>
-                <a href="javascript:;">忘记密码</a>
               </div>
             </div>
           </div>

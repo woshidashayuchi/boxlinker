@@ -66,8 +66,7 @@ class ChooseImage extends Component{
               <span className="cl6">{timeRange(new Date(item.update_time))}</span>
             </td>
             <td>
-              <a href={`http://index.boxlinker.com/${item.repository}`} target = "_blank"
-                 className="clLink">{`index.boxlinker.com/${item.repository}`}</a>
+              <span className="cl6">{`docker pull index.boxlinker.com/${item.repository}`}</span>
             </td>
             <td>
               <span className="cl3">{item.short_description}</span>
@@ -88,7 +87,7 @@ class ChooseImage extends Component{
         <tr>
           <th width="25%">镜像名称</th>
           <th width="10%">最近更新</th>
-          <th width="35%">镜像地址</th>
+          <th width="35%">拉取命令</th>
           <th width="20%">镜像描述</th>
           <th width="10%">操作</th>
         </tr>

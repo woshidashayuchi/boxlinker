@@ -84,9 +84,7 @@ class Building extends Component {
             </div>
           </td>
           <td>
-            <a href="javascript:;" className="clLink" target="_blank">
-              {`${item.repository}/${item.repo_name}:${item.repo_branch}`}
-            </a>
+            {item.src_url}
           </td>
           <td>{buildStatus}</td>
           <td>{buildUserTime}</td>
@@ -129,12 +127,12 @@ class Building extends Component {
           <table className="table table-hover table-bordered">
             <thead>
             <tr>
-              <th width = "20%">镜像名称</th>
-              <th width = "20%">代码源</th>
-              <th width = "15%">构建状态</th>
-              <th width = "15%">上次构建用时</th>
-              <th width = "15%">最近构建</th>
-              <th width = "15%">操作</th>
+              <th width = "30%">镜像名称</th>
+              <th width = "30%">代码源</th>
+              <th width = "10%">构建状态</th>
+              <th width = "10%">上次构建用时</th>
+              <th width = "10%">最近构建</th>
+              <th width = "10%">操作</th>
             </tr>
             </thead>
             <tbody>

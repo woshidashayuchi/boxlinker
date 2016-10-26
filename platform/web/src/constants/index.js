@@ -168,6 +168,7 @@ export const FETCH_URL = {
     return `http://ci-api.boxlinker.com/api/v1/endpoints/${name}`;
   },
   IMAGE:URL + '/registry/image_repository',
+  BUILDING_REVISE:URL+'/api/v1.0/repository/repositorybuilds',
   GET_SERVICE_MONITOR: 'http://monitor.boxlinker.com/api/v1/model/namespaces',
 
 };

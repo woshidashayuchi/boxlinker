@@ -116,13 +116,13 @@ module.exports =
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _assets = __webpack_require__(212);
+  var _assets = __webpack_require__(213);
   
   var _assets2 = _interopRequireDefault(_assets);
   
-  var _runtime = __webpack_require__(213);
+  var _runtime = __webpack_require__(214);
   
-  var _users = __webpack_require__(208);
+  var _users = __webpack_require__(209);
   
   var _toggleSidebar = __webpack_require__(58);
   
@@ -1181,7 +1181,6 @@ module.exports =
           return (0, _assign2.default)({}, state, { env: env });
         }
       case Const.RECEIVE_ENDPOINTS:
-        console.log('==>', action);
         return (0, _assign2.default)({}, state, { endpoints: action.payload });
       case _constants.CLEAR_SERVICE_DETAIL:
         return serviceData;
@@ -1238,7 +1237,6 @@ module.exports =
     switch (action.type) {
       case _constants.IS_BTN_STATE.deploy:
         state.deploy = action.payload;
-        console.log(state);
         return (0, _assign2.default)({}, state);
       case _constants.IS_BTN_STATE.building:
         state.building = action.payload;
@@ -1401,7 +1399,6 @@ module.exports =
       case _constants.ADD_SAVE:
         var addSave = state.volume;
         addSave.push({ at: new Date().getTime(), readonly: 1 });
-        console.log(addSave);
         return (0, _assign2.default)({}, state, { volume: addSave });
       case _constants.DEL_SAVE:
         var delSave = state.volume;
@@ -1727,6 +1724,7 @@ module.exports =
       return 'http://ci-api.boxlinker.com/api/v1/endpoints/' + name;
     },
     IMAGE: URL + '/registry/image_repository',
+    BUILDING_REVISE: URL + '/api/v1.0/repository/repositorybuilds',
     GET_SERVICE_MONITOR: 'http://monitor.boxlinker.com/api/v1/model/namespaces'
   
   };
@@ -2110,7 +2108,7 @@ module.exports =
   
   var _userCenter2 = _interopRequireDefault(_userCenter);
   
-  var _reviseImage = __webpack_require__(209);
+  var _reviseImage = __webpack_require__(210);
   
   var _reviseImage2 = _interopRequireDefault(_reviseImage);
   
@@ -4538,7 +4536,7 @@ module.exports =
         }
       }).catch(function (e) {
         dispatch((0, _header.isLoadingAction)(false));
-        console.error("pod is error", e);
+        console.error("monitor is error", e);
       });
     };
   }
@@ -7765,13 +7763,19 @@ module.exports =
   }
   
   function fetchReviseBuilding(data) {
+    var body = (0, _stringify2.default)({
+      dockerfile_path: data.dockerfile_path,
+      repo_branch: data.repo_branch,
+      auto_build: data.auto_build
+    });
     var myInit = {
       method: "PUT",
       headers: {
         token: localStorage.getItem("_at")
-      }
+      },
+      body: body
     };
-    var url = _constants.FETCH_URL.IMAGE;
+    var url = _constants.FETCH_URL.BUILDING_REVISE + "/" + data.uuid;
     return function (dispatch) {
       dispatch((0, _header.isLoadingAction)(true));
       dispatch(isReviseBuilding(false));
@@ -8875,8 +8879,6 @@ module.exports =
       }))();
     }
   };
-  
-  // import CodeBuildList from './CodeBuildList'
 
 /***/ },
 /* 122 */
@@ -9589,6 +9591,10 @@ module.exports =
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
+  var _reactDom = __webpack_require__(127);
+  
+  var _reactDom2 = _interopRequireDefault(_reactDom);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var IsAutoBuildToggle = function (_Component) {
@@ -9688,7 +9694,15 @@ module.exports =
     }, {
       key: 'onReviseBuilding',
       value: function onReviseBuilding() {
-        var data = {};
+        var dockerfile_path = _reactDom2.default.findDOMNode(this.refs.dockerfile_path).value,
+            repo_branch = _reactDom2.default.findDOMNode(this.refs.repo_branch).value;
+        var data = {
+          dockerfile_path: dockerfile_path,
+          repo_branch: repo_branch,
+          auto_build: String(this.state.isAutoBuilding),
+          uuid: this.props.projectId
+        };
+        console.log(data);
         this.props.reviseBuilding(data);
       }
     }, {
@@ -9746,7 +9760,7 @@ module.exports =
                 _react2.default.createElement(
                   _reactBootstrap.Col,
                   { sm: 5 },
-                  _react2.default.createElement('input', { className: 'form-control', type: 'text', defaultValue: item.dockerfile_path })
+                  _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'dockerfile_path', defaultValue: item.dockerfile_path })
                 )
               )
             ),
@@ -9764,7 +9778,7 @@ module.exports =
                 _react2.default.createElement(
                   _reactBootstrap.Col,
                   { sm: 5 },
-                  _react2.default.createElement('input', { className: 'form-control', type: 'text', defaultValue: item.repo_branch })
+                  _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'repo_branch', defaultValue: item.repo_branch })
                 )
               )
             ),
@@ -9798,9 +9812,9 @@ module.exports =
                   { sm: 5 },
                   _react2.default.createElement(
                     'button',
-                    { className: 'btn btn-primary',
+                    { className: 'btn btn-primary ' + (!_this3.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
                       onClick: _this3.onReviseBuilding.bind(_this3),
-                      disabled: true
+                      disabled: !_this3.props.isBtnState.reviseBuilding
                     },
                     '确认修改'
                   )
@@ -10438,11 +10452,7 @@ module.exports =
             _react2.default.createElement(
               'td',
               null,
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'clLink', target: '_blank' },
-                item.repository + '/' + item.repo_name + ':' + item.repo_branch
-              )
+              item.src_url
             ),
             _react2.default.createElement(
               'td',
@@ -10529,32 +10539,32 @@ module.exports =
                   null,
                   _react2.default.createElement(
                     'th',
-                    { width: '20%' },
+                    { width: '30%' },
                     '镜像名称'
                   ),
                   _react2.default.createElement(
                     'th',
-                    { width: '20%' },
+                    { width: '30%' },
                     '代码源'
                   ),
                   _react2.default.createElement(
                     'th',
-                    { width: '15%' },
+                    { width: '10%' },
                     '构建状态'
                   ),
                   _react2.default.createElement(
                     'th',
-                    { width: '15%' },
+                    { width: '10%' },
                     '上次构建用时'
                   ),
                   _react2.default.createElement(
                     'th',
-                    { width: '15%' },
+                    { width: '10%' },
                     '最近构建'
                   ),
                   _react2.default.createElement(
                     'th',
-                    { width: '15%' },
+                    { width: '10%' },
                     '操作'
                   )
                 )
@@ -12118,6 +12128,10 @@ module.exports =
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
+  var _route = __webpack_require__(57);
+  
+  var _notification = __webpack_require__(79);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var title = '新建服务'; /**
@@ -12719,6 +12733,16 @@ module.exports =
       value: function componentDidMount() {
         this.props.onVolumeListLoad();
         this.props.setBreadcrumb(_constants.BREADCRUMB.CONSOLE, _constants.BREADCRUMB.NEW_SERVICE);
+        var my = this;
+        if (!my.props.deployData.image_id) {
+          my.context.store.dispatch((0, _notification.receiveNotification)({ message: "请先选择要部署的镜像", level: "danger" }));
+          my.context.store.dispatch((0, _route.navigate)("/choseImage"));
+          setTimeout(function () {
+            my.context.store.dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          this.props.onVolumeListLoad();
+        }
       }
     }, {
       key: 'render',
@@ -12850,7 +12874,8 @@ module.exports =
   }(_react.Component);
   
   AddService.contextTypes = {
-    setTitle: _react.PropTypes.func.isRequired
+    setTitle: _react.PropTypes.func.isRequired,
+    store: _react.PropTypes.object
   };
   AddService.propTypes = {
     onDeployService: _react2.default.PropTypes.func,
@@ -13379,10 +13404,9 @@ module.exports =
               'td',
               null,
               _react2.default.createElement(
-                'a',
-                { href: 'http://index.boxlinker.com/' + item.repository, target: '_blank',
-                  className: 'clLink' },
-                'index.boxlinker.com/' + item.repository
+                'span',
+                { className: 'cl6' },
+                'docker pull index.boxlinker.com/' + item.repository
               )
             ),
             _react2.default.createElement(
@@ -13433,7 +13457,7 @@ module.exports =
               _react2.default.createElement(
                 'th',
                 { width: '35%' },
-                '镜像地址'
+                '拉取命令'
               ),
               _react2.default.createElement(
                 'th',
@@ -13745,6 +13769,10 @@ module.exports =
   
   var _constants = __webpack_require__(37);
   
+  var _route = __webpack_require__(57);
+  
+  var _notification = __webpack_require__(79);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   /**
@@ -13866,8 +13894,17 @@ module.exports =
     (0, _createClass3.default)(ConfigContainer, [{
       key: 'componentDidMount',
       value: function componentDidMount() {
-        this.props.getBuildingDetail(this.props.deployData.image_id);
         this.props.setBreadcrumb(_constants.BREADCRUMB.CONSOLE, _constants.BREADCRUMB.ADD_SERVICE, _constants.BREADCRUMB.CONFIG_CONTAINER);
+        var my = this;
+        if (!my.props.deployData.image_id) {
+          my.context.store.dispatch((0, _notification.receiveNotification)({ message: "请先选择要部署的镜像", level: "danger" }));
+          my.context.store.dispatch((0, _route.navigate)("/choseImage"));
+          setTimeout(function () {
+            my.context.store.dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          this.props.getBuildingDetail(this.props.deployData.image_id);
+        }
       }
     }, {
       key: 'onServiceNameChange',
@@ -13942,7 +13979,6 @@ module.exports =
         var tags = this.props.buildingDetail.tags;
         var option = [];
         if (!tags || !tags.length) {
-          console.log("没有显示默认latest");
           option.push(_react2.default.createElement(
             'option',
             { key: 'latest', value: 'latest' },
@@ -14098,7 +14134,8 @@ module.exports =
   }(_react.Component);
   
   ConfigContainer.contextTypes = {
-    setTitle: _react.PropTypes.func.isRequired
+    setTitle: _react.PropTypes.func.isRequired,
+    store: _react.PropTypes.object
   };
   ConfigContainer.propTypes = {
     deployData: _react2.default.PropTypes.object,
@@ -14914,6 +14951,7 @@ module.exports =
             });
             break;
           case 6:
+            this.props.onPodListLoad(this.props.serviceName);
             this.setState({
               tabSelect: 6
             });
@@ -16450,7 +16488,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        if (!this.state.pod_name) return _react2.default.createElement(
+        if (!this.state.pod_name || !this.props.serviceDetail) return _react2.default.createElement(
           'div',
           { className: 'text-center' },
           _react2.default.createElement(
@@ -16459,8 +16497,27 @@ module.exports =
             ' '
           )
         );
+        var limits_cpu = this.props.serviceDetail.limits_cpu;
+        switch (Number(limits_cpu)) {
+          case 8:
+            limits_cpu = 1000;
+            break;
+          case 16:
+            limits_cpu = 2000;
+            break;
+          default:
+            limits_cpu = 200;
+            break;
+        }
         var userName = this.context.store.getState().user_info.user_name;
         var pod_name = this.state.pod_name;
+        var cpu = {
+          userName: userName,
+          pod_name: pod_name,
+          type: "cpu",
+          time_long: "30m",
+          time_span: "1m"
+        };
         var memory = {
           userName: userName,
           pod_name: pod_name,
@@ -16472,13 +16529,6 @@ module.exports =
           userName: userName,
           pod_name: pod_name,
           type: "network",
-          time_long: "30m",
-          time_span: "1m"
-        };
-        var cpu = {
-          userName: userName,
-          pod_name: pod_name,
-          type: "cpu",
           time_long: "30m",
           time_span: "1m"
         };
@@ -16521,8 +16571,8 @@ module.exports =
                 payload: cpu,
                 color: ["#7ed9fc"],
                 legend: false,
-                divisor: '1',
-                valueSuffix: 'K'
+                divisor: limits_cpu,
+                valueSuffix: '%'
               })
             )
           ),
@@ -16670,7 +16720,7 @@ module.exports =
             time = "1440m";
             break;
           default:
-            return "60m";
+            time = "60m";
         }
         this.props.onSelect(time);
       }
@@ -16711,13 +16761,14 @@ module.exports =
   var _class = function (_React$Component) {
     (0, _inherits3.default)(_class, _React$Component);
   
-    function _class() {
+    function _class(props) {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this, props));
   
       _this3.state = {
-        data: { xAxis: [], series: [] }
+        data: { xAxis: [], series: [] },
+        payload: _this3.props.payload
       };
       return _this3;
     }
@@ -16734,7 +16785,7 @@ module.exports =
         (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
           return response.json();
         }).then(function (json) {
-          console.log(json);
+          console.log(json, data.type);
           if (json.status == 0) {
             (function () {
               var monitor = {};
@@ -16788,12 +16839,15 @@ module.exports =
     }, {
       key: 'componentDidMount',
       value: function componentDidMount() {
-        this.fetchGetMonitorDataAction(this.props.payload);
+        this.fetchGetMonitorDataAction(this.state.payload);
         var my = this;
         this.myTime = setInterval(function () {
-          my.fetchGetMonitorDataAction(my.props.payload);
+          my.fetchGetMonitorDataAction(my.state.payload);
         }, 60000);
       }
+    }, {
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate() {}
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
@@ -16804,7 +16858,6 @@ module.exports =
       value: function changeTime(time) {
         var data = this.props.payload;
         data.time_long = time;
-        console.log(data);
         this.fetchGetMonitorDataAction(data);
       }
     }, {
@@ -16823,7 +16876,6 @@ module.exports =
             categories: my.state.data.xAxis
           },
           yAxis: {
-            min: 0, //纵轴的最小值
             title: { //纵轴标题
               text: ''
             },
@@ -16846,6 +16898,18 @@ module.exports =
               animation: false
             },
             area: {
+              // fillColor: {
+              //   linearGradient: {
+              //     x1: 0,
+              //     y1: 0,
+              //     x2: 0,
+              //     y2: 1
+              //   },
+              //   stops: [
+              //     [0, my.props.color[0]],
+              //     [1, "rgba(255,255,255,0)"]
+              //   ]
+              // },
               marker: {
                 enabled: false,
                 symbol: 'circle',
@@ -16877,6 +16941,7 @@ module.exports =
             'div',
             { className: 'btnChoose' },
             _react2.default.createElement(BtnGroup, {
+              ref: 'a',
               activeKey: 0,
               prop: ["1小时", "6小时", "1天"],
               type: 'memory',
@@ -17736,7 +17801,6 @@ module.exports =
       }))();
     }
   };
-  // import DataVolumeList from './DataVolumeList';
 
 /***/ },
 /* 191 */
@@ -18843,8 +18907,7 @@ module.exports =
                     notifications: {
                       message: "",
                       level: ""
-                    },
-                    isLogin: true
+                    }
                   });
                   window.location.href = "/";
                 }, 1000);
@@ -18912,6 +18975,136 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
+        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { obj: this.state.notifications }) : null;
+        this.context.setTitle("登录");
+        return _react2.default.createElement(
+          'div',
+          { className: 'entryBox' },
+          _react2.default.createElement(
+            'div',
+            { className: 'entryHd' },
+            _react2.default.createElement(
+              'div',
+              { className: 'w1200 clearfix' },
+              _react2.default.createElement(
+                'div',
+                { className: 'entryHdLogo' },
+                _react2.default.createElement(
+                  'a',
+                  { href: 'javascript:;', className: 'entryLogo' },
+                  _react2.default.createElement('image', { src: '/logo.png' })
+                )
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'entryHdBtn' },
+                _react2.default.createElement(
+                  'a',
+                  { href: '/signUp' },
+                  '注册'
+                ),
+                _react2.default.createElement(
+                  'a',
+                  { href: '/login' },
+                  '登录'
+                )
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'entryBd' },
+            _react2.default.createElement(
+              'div',
+              { className: 'entryModel' },
+              _react2.default.createElement(
+                'div',
+                { className: 'entryModelBg' },
+                'Make it simple   make it fast'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'entryFrom' },
+                _react2.default.createElement(
+                  'div',
+                  { className: 'title' },
+                  '用户登录'
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'entryItemBox' },
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'entryItem ' + (this.state.uName ? "entryItemError" : "") },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryInputBox icon-username' },
+                      _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名或邮箱' })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryTip' },
+                      _react2.default.createElement(
+                        'p',
+                        { ref: 'userTip' },
+                        '用户名错误'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "") },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryInputBox icon-mima' },
+                      _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryTip' },
+                      _react2.default.createElement(
+                        'p',
+                        { ref: 'passwordTip' },
+                        '密码错误'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'entryBtnBox' },
+                    _react2.default.createElement(
+                      'button',
+                      { className: 'btn btn-primary entryBtn ' + (!this.state.isLogin ? "btn-loading" : ""),
+                        disabled: !this.state.isLogin,
+                        onClick: this.login.bind(this) },
+                      this.state.isLogin ? "登录" : "登录中"
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'entryFromFt' },
+                    _react2.default.createElement(
+                      'a',
+                      { href: '/signUp' },
+                      '立即注册'
+                    ),
+                    _react2.default.createElement(
+                      'a',
+                      { href: 'javascript:;' },
+                      '忘记密码'
+                    )
+                  )
+                )
+              )
+            )
+          ),
+          _react2.default.createElement('div', { className: 'entryBg' }),
+          notification
+        );
+      }
+    }, {
+      key: 'render1',
+      value: function render1() {
         var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { obj: this.state.notifications }) : null;
         this.context.setTitle("登录");
         return _react2.default.createElement(
@@ -19251,8 +19444,7 @@ module.exports =
                       notifications: {
                         message: "",
                         level: ""
-                      },
-                      isSignUp: true
+                      }
                     });
                     window.location.href = "/login";
                   }, 1000);
@@ -19423,112 +19615,122 @@ module.exports =
               { className: 'entryModel' },
               _react2.default.createElement(
                 'div',
-                { className: 'title' },
-                '用户注册'
+                { className: 'entryModelBg' },
+                'Make it simple   make it fast'
               ),
               _react2.default.createElement(
                 'div',
                 { className: 'entryFrom' },
                 _react2.default.createElement(
                   'div',
-                  { className: 'entryItem ' + (this.state.uName ? "entryItemError" : "") },
+                  { className: 'title' },
+                  '用户注册'
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'entryItemBox' },
                   _react2.default.createElement(
                     'div',
-                    { className: 'entryInputBox icon-username' },
-                    _react2.default.createElement('input', { onChange: this.changeUserName.bind(this),
-                      className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名' })
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryTip' },
+                    { className: 'entryItem ' + (this.state.uName ? "entryItemError" : "") },
                     _react2.default.createElement(
-                      'p',
-                      { ref: 'userTip' },
-                      '用户名错误'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryItem ' + (this.state.uEmail ? "entryItemError" : "") },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryInputBox icon-email' },
-                    _react2.default.createElement('input', { onChange: this.changeEmail.bind(this),
-                      className: 'entryInput', ref: 'email', type: 'text', placeholder: '邮箱' })
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryTip' },
+                      'div',
+                      { className: 'entryInputBox icon-username' },
+                      _react2.default.createElement('input', { onChange: this.changeUserName.bind(this),
+                        className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名' })
+                    ),
                     _react2.default.createElement(
-                      'p',
-                      { ref: 'emailTip' },
-                      '邮箱错误'
+                      'div',
+                      { className: 'entryTip' },
+                      _react2.default.createElement(
+                        'p',
+                        { ref: 'userTip' },
+                        '用户名错误'
+                      )
                     )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "") },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryInputBox icon-mima' },
-                    _react2.default.createElement('input', { onInput: this.changePassword.bind(this),
-                      className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })
                   ),
                   _react2.default.createElement(
                     'div',
-                    { className: 'entryTip' },
+                    { className: 'entryItem ' + (this.state.uEmail ? "entryItemError" : "") },
                     _react2.default.createElement(
-                      'p',
-                      { ref: 'passwordTip' },
-                      '密码错误'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryItem entryItemCode ' + (this.state.uCode ? "entryItemError" : "") },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryInputBox  icon-email' },
-                    _react2.default.createElement('input', { onInput: this.changeCode.bind(this),
-                      className: 'entryInput entryInputLittle', ref: 'code', type: 'text', placeholder: '验证码' }),
-                    _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' })
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryTip' },
+                      'div',
+                      { className: 'entryInputBox icon-email' },
+                      _react2.default.createElement('input', { onChange: this.changeEmail.bind(this),
+                        className: 'entryInput', ref: 'email', type: 'text', placeholder: '邮箱' })
+                    ),
                     _react2.default.createElement(
-                      'p',
-                      { ref: 'codeTip' },
-                      '验证码错误'
+                      'div',
+                      { className: 'entryTip' },
+                      _react2.default.createElement(
+                        'p',
+                        { ref: 'emailTip' },
+                        '邮箱错误'
+                      )
                     )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryBtnBox' },
-                  _react2.default.createElement(
-                    'button',
-                    { className: 'btn btn-primary entryBtn', disabled: !this.state.isSignUp,
-                      onClick: this.signUp.bind(this) },
-                    this.state.isSignUp ? "注册" : "注册中..."
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryFromFt' },
-                  '已有账户? ',
-                  _react2.default.createElement(
-                    'a',
-                    { href: '/login' },
-                    '登录'
                   ),
                   _react2.default.createElement(
-                    'a',
-                    { href: 'javascript:;' },
-                    '忘记密码'
+                    'div',
+                    { className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "") },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryInputBox icon-mima' },
+                      _react2.default.createElement('input', { onInput: this.changePassword.bind(this),
+                        className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryTip' },
+                      _react2.default.createElement(
+                        'p',
+                        { ref: 'passwordTip' },
+                        '密码错误'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'entryItem entryItemCode ' + (this.state.uCode ? "entryItemError" : "") },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryInputBox  icon-mima' },
+                      _react2.default.createElement('input', { onInput: this.changeCode.bind(this),
+                        className: 'entryInput', ref: 'code', type: 'text', placeholder: '验证码' }),
+                      _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' })
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'entryTip' },
+                      _react2.default.createElement(
+                        'p',
+                        { ref: 'codeTip' },
+                        '验证码错误'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'entryBtnBox' },
+                    _react2.default.createElement(
+                      'button',
+                      { className: 'btn btn-primary entryBtn ' + (!this.state.isSignUp ? "btn-loading" : ""),
+                        disabled: !this.state.isSignUp,
+                        onClick: this.signUp.bind(this) },
+                      this.state.isSignUp ? "注册" : "注册中..."
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'entryFromFt' },
+                    '已有账户? ',
+                    _react2.default.createElement(
+                      'a',
+                      { href: '/login' },
+                      '登录'
+                    ),
+                    _react2.default.createElement(
+                      'a',
+                      { href: 'javascript:;' },
+                      '忘记密码'
+                    )
                   )
                 )
               )
@@ -19626,7 +19828,7 @@ module.exports =
   
   var _BuildingCreateSelector = __webpack_require__(142);
   
-  var _users = __webpack_require__(208);
+  var _users = __webpack_require__(209);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -19707,6 +19909,10 @@ module.exports =
   
   var _GetCertificateMange2 = _interopRequireDefault(_GetCertificateMange);
   
+  var _GetOrganize = __webpack_require__(208);
+  
+  var _GetOrganize2 = _interopRequireDefault(_GetOrganize);
+  
   var _constants = __webpack_require__(37);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -19741,7 +19947,7 @@ module.exports =
             { className: 'userTab' },
             _react2.default.createElement(
               _reactBootstrap.Tabs,
-              { defaultActiveKey: 1, id: 'userTabs' },
+              { defaultActiveKey: 5, id: 'userTabs' },
               _react2.default.createElement(
                 _reactBootstrap.Tab,
                 { eventKey: 1, title: '个人信息' },
@@ -19768,7 +19974,11 @@ module.exports =
                 { eventKey: 4, title: '礼券管理' },
                 _react2.default.createElement(_GetCertificateMange2.default, null)
               ),
-              _react2.default.createElement(_reactBootstrap.Tab, { eventKey: 5, title: '组管理' })
+              _react2.default.createElement(
+                _reactBootstrap.Tab,
+                { eventKey: 5, title: '组管理' },
+                _react2.default.createElement(_GetOrganize2.default, null)
+              )
             )
           )
         );
@@ -20648,6 +20858,169 @@ module.exports =
   'use strict';
   
   Object.defineProperty(exports, "__esModule", {
+      value: true
+  });
+  
+  var _getPrototypeOf = __webpack_require__(45);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(46);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(47);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(48);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(49);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _HeadLine = __webpack_require__(124);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _class = function (_React$Component) {
+      (0, _inherits3.default)(_class, _React$Component);
+  
+      function _class() {
+          (0, _classCallCheck3.default)(this, _class);
+          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).apply(this, arguments));
+      }
+  
+      (0, _createClass3.default)(_class, [{
+          key: 'componentDidMount',
+          value: function componentDidMount() {
+              console.log(this.context.store);
+          }
+      }, {
+          key: 'getOrganizeBody',
+          value: function getOrganizeBody() {
+              var data = [{}];
+          }
+      }, {
+          key: 'getTableDemo',
+          value: function getTableDemo() {
+              return _react2.default.createElement(
+                  'table',
+                  { className: 'table table-hover table-bordered' },
+                  _react2.default.createElement(
+                      'thead',
+                      null,
+                      _react2.default.createElement(
+                          'tr',
+                          null,
+                          _react2.default.createElement(
+                              'th',
+                              null,
+                              '组织名称'
+                          ),
+                          _react2.default.createElement(
+                              'th',
+                              null,
+                              '组织简介'
+                          ),
+                          _react2.default.createElement(
+                              'th',
+                              null,
+                              '组织权限'
+                          ),
+                          _react2.default.createElement(
+                              'th',
+                              null,
+                              '加入时间'
+                          ),
+                          _react2.default.createElement(
+                              'th',
+                              null,
+                              '操作'
+                          )
+                      )
+                  ),
+                  _react2.default.createElement(
+                      'tbody',
+                      null,
+                      this.getOrganizeBody()
+                  )
+              );
+          }
+      }, {
+          key: 'render',
+          value: function render() {
+              return _react2.default.createElement(
+                  'div',
+                  { className: 'organize' },
+                  _react2.default.createElement(
+                      'div',
+                      { className: 'organizeHd hbHd clearfix' },
+                      _react2.default.createElement(
+                          'div',
+                          { className: 'left' },
+                          _react2.default.createElement(_HeadLine2.default, {
+                              title: '我的组织',
+                              titleEnglish: 'MY ORGANIZE',
+                              titleInfo: '所有我加入的组织的列表'
+                          })
+                      ),
+                      _react2.default.createElement(
+                          'div',
+                          { className: 'hbAdd right' },
+                          _react2.default.createElement(
+                              'div',
+                              { className: 'hbAddBtn clearfix' },
+                              _react2.default.createElement('div', { className: 'hbPlus left' }),
+                              _react2.default.createElement(
+                                  'div',
+                                  { className: 'hbPlusInfo left' },
+                                  _react2.default.createElement(
+                                      'p',
+                                      { className: 'hbPName' },
+                                      '新建组织'
+                                  ),
+                                  _react2.default.createElement(
+                                      'p',
+                                      { className: 'hbPInfo' },
+                                      'Create Organize'
+                                  )
+                              )
+                          )
+                      )
+                  ),
+                  _react2.default.createElement(
+                      'div',
+                      { className: 'organizeBd sl-bd TableTextLeft' },
+                      this.getTableDemo()
+                  )
+              );
+          }
+      }]);
+      return _class;
+  }(_react2.default.Component);
+  
+  _class.contextTypes = {
+      store: _react2.default.PropTypes.object
+  };
+  _class.propTypes = {};
+  exports.default = _class;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
     value: true
   });
   
@@ -20733,7 +21106,7 @@ module.exports =
   }
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20754,7 +21127,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ReviseImageContainer = __webpack_require__(210);
+  var _ReviseImageContainer = __webpack_require__(211);
   
   var _ReviseImageContainer2 = _interopRequireDefault(_ReviseImageContainer);
   
@@ -20785,7 +21158,7 @@ module.exports =
   // import CodeBuildList from './CodeBuildList'
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20794,7 +21167,7 @@ module.exports =
     value: true
   });
   
-  var _ReviseImage = __webpack_require__(211);
+  var _ReviseImage = __webpack_require__(212);
   
   var _ReviseImage2 = _interopRequireDefault(_ReviseImage);
   
@@ -20847,7 +21220,7 @@ module.exports =
   exports.default = ReviseImageContainer;
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21142,13 +21515,13 @@ module.exports =
   exports.default = ReviseImage;
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';

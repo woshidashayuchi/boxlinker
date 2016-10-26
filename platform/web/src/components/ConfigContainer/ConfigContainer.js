@@ -17,6 +17,8 @@ import ReactDOM from 'react-dom';
 import {INPUT_TIP} from '../../constants/index';
 import Link from '../Link';
 import {BREADCRUMB} from "../../constants";
+import {navigate} from '../../actions/route';
+import {receiveNotification,clearNotification} from '../../actions/notification';
 const title = '新建服务';
 
 
@@ -84,6 +86,7 @@ class UpdateStartToggle extends  Component{
 class ConfigContainer extends Component{
   static contextTypes = {
     setTitle: PropTypes.func.isRequired,
+    store:PropTypes.object
   };
   static propTypes = {
     deployData:React.PropTypes.object,
@@ -105,8 +108,17 @@ class ConfigContainer extends Component{
   }
 
   componentDidMount(){
-    this.props.getBuildingDetail(this.props.deployData.image_id);
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.ADD_SERVICE,BREADCRUMB.CONFIG_CONTAINER);
+    let my = this;
+    if(!my.props.deployData.image_id){
+      my.context.store.dispatch(receiveNotification({message:"请先选择要部署的镜像",level:"danger"}));
+      my.context.store.dispatch(navigate("/choseImage"));
+      setTimeout(function(){
+        my.context.store.dispatch(clearNotification())
+      },3000);
+    }else{
+      this.props.getBuildingDetail(this.props.deployData.image_id);
+    }
   }
 
   onServiceNameChange(){
@@ -174,7 +186,6 @@ class ConfigContainer extends Component{
     let tags = this.props.buildingDetail.tags;
     let option = [];
     if(!tags||!tags.length){
-      console.log("没有显示默认latest");
       option.push(<option key = "latest" value = "latest">latest</option>)
     }else {
       tags.map((item,i) => {

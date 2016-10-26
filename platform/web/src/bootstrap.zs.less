@@ -793,8 +793,7 @@
   margin-top:36px;
 }
 .asTableBox{
-  padding:0 15px;
-  margin-top:30px;
+  padding:15px;
 }
 .asTabs>div>ul>li>a:after{
   font-family:"icomoon";
@@ -1082,6 +1081,7 @@
 
 .userTab{
   padding-top:23px;
+  min-height:400px;
   .nav-tabs > li > a:after{
     font-family: "icomoon";
     content: "\e927";
@@ -1355,6 +1355,9 @@
 .astKeyItem{
   margin-bottom:10px;
 }
+.organizeHd{
+  margin-bottom:20px;
+}
 /**
   imageDetail
 **/
@@ -1623,25 +1626,59 @@
 .entryModel{
   position: absolute;
   left:50%;
-  margin-left:-210px;
-  width:420px;
-  background:rgba(255,255,255,.2);
-  min-height:390px;
+  margin-left:-458px;
+  width:907px;
+  background:#fff;
+  height:560px;
   top:100px;
-  border-radius:15px;
   padding-bottom:50px;
   z-index: 2;
   .title{
-    height:80px;
-    line-height:90px;
+    height:57px;
+    line-height:66px;
     text-align:center;
-    font-size:22px;
-    color:#fff;
+    font-size:18px;
+    color:#797979;
+    border-bottom:2px solid #259ee3;
   }
 }
+@media screen and (min-width:1300px) {
+  .entryModel{
+    top:20%;
+  }
+}
+.entryModelBg{
+  width:414px;
+  height:560px;
+  display:inline-block;
+  background:url("./components/Login/entry_bg.jpg") no-repeat;
+  vertical-align: top;
+  color:#fff;
+  text-align: center;
+  padding-top:283px;
+  text-transform:uppercase;
+}
 .entryFrom{
-  padding-top:10px;
-  padding-left:40px;
+  width:493px;
+  display:inline-block;
+}
+.entryItemBox{
+  width:343px;
+  margin:85px auto 0 auto;
+}
+.signUp {
+  .entryItemBox{
+    margin:60px auto 0 auto;
+  }
+  .entryItemCode{
+    img{
+      width:70px;
+      height:30px;
+      cursor:pointer;
+      position: absolute;
+      right:0;
+    }
+  }
 }
 .entryInputBox{
   position: relative;
@@ -1649,8 +1686,8 @@
 .entryInputBox:before{
   position: absolute;
   font-size:16px;
-  top:17px;
-  left:15px;
+  top:9px;
+  left:10px;
   color:#b5bbbf;
   z-index:2;
 }
@@ -1658,38 +1695,36 @@
   height:37px;
   p{
     display:none;
-    font-size:14px;
-    padding:5px;
+    font-size:12px;
+    padding:3px 5px;
   }
 }
 .entryItemError.entryItem{
   .entryInput{
-    border:1px solid #ff1048;
-    box-shadow: 0px 3px 7px rgba(247,0,47,.35);
+    border-bottom:1px solid #ff0915;
   }
   .entryTip{
     p {
       display:block;
-      color: #ff1048;
+      color: #ff0915;
     }
   }
 }
 .entryInput{
   outline:none;
-  border-radius:6px;
   width:343px;
-  height:47px;
-  background:#dbebf6;
-  padding-left:38px;
+  height:33px;
+  padding-left:42px;
   font-size:14px;
-  border:1px solid #dbebf6;
+  border:0;
+  border-bottom:1px solid #dbebf6;
   position: relative;
   transition:all ease .3s;
 }
 .entryInput:focus{
   border-color:#259ee3;
   background:#fff;
-  box-shadow:0 4px 10px 2px rgba(37,158,227,.3);
+  box-shadow:none;//0 -2px 10px 2px rgba(37,158,227,.3);
 }
 .entryInputBox:after{
   content: '';
@@ -1698,29 +1733,33 @@
   height:14px;
   background:#bcc2c6;
   position: absolute;
-  left:32px;
-  top:16px;
-  display:none;
+  left:33px;
+  top:10px;
 }
 .entryBtn{
-  height:47px;
+  height:45px;
   border:0;
   width:343px;
-  border-radius:6px;
+  border-radius:10px;
   background:#259ee3;
   color:#fff;
   outline:none;
   font-size:15px;
 }
+.entryBtn.btn-loading:after{
+  right:140px;
+  top:13px;
+}
 .entryFromFt{
-  margin-right:38px;
-  margin-top:20px;
+  margin-top:14px;
   color:#fff;
   font-size:14px;
   height:20px;
+  overflow:hidden;
   a{
-    color:#fff;
-    margin-left:10px;
+    float:left;
+    font-size:12px;
+    color:#0dadf7;
   }
   a:last-child{
     float: right;
@@ -1730,7 +1769,7 @@
   width:213px;
   padding-left:15px;
 }
-.entryInputBox img{
+.entryInputBentryBgox img{
   height:47px;
   width:122px;
   border-radius:6px;

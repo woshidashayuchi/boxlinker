@@ -8,7 +8,6 @@
  */
 
 import React from 'react';
-// import DataVolumeList from './DataVolumeList';
 import VolumeListContainer from '../../containers/Volumes/VolumeListContainer'
 export default {
 

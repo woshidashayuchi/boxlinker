@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchReviseBuilding(data))
     }
   }
-}
+};
 
 const BuildingDetailContainer = connect(
   mapStateToProps,

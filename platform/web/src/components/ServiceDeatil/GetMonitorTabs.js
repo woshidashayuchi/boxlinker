@@ -23,7 +23,7 @@ class GetMonitorTabs extends Component{
   constructor(props){
     super(props);
     this.state = {
-      pod_name:this.props.podList[0].pod_name
+      pod_name:this.props.podList[0].pod_name,
     }
   }
   componentDidMount(){
@@ -50,9 +50,28 @@ class GetMonitorTabs extends Component{
   }
 
   render(){
-    if(!this.state.pod_name) return(<div className="text-center"><Loading> </Loading></div>);
+    if(!this.state.pod_name || !this.props.serviceDetail) return(<div className="text-center"><Loading> </Loading></div>);
+    let limits_cpu = this.props.serviceDetail.limits_cpu;
+    switch (Number(limits_cpu)){
+      case 8 :
+        limits_cpu = 1000;
+      break;
+      case 16 :
+        limits_cpu = 2000;
+      break;
+      default :
+        limits_cpu = 200;
+      break;
+    }
     let userName = this.context.store.getState().user_info.user_name;
     let pod_name = this.state.pod_name;
+    let cpu = {
+      userName: userName,
+      pod_name: pod_name,
+      type: "cpu",
+      time_long: "30m",
+      time_span: "1m"
+    };
     let memory = {
       userName: userName,
       pod_name: pod_name,
@@ -64,13 +83,6 @@ class GetMonitorTabs extends Component{
       userName: userName,
       pod_name: pod_name,
       type: "network",
-      time_long: "30m",
-      time_span: "1m"
-    };
-    let cpu = {
-      userName: userName,
-      pod_name: pod_name,
-      type: "cpu",
       time_long: "30m",
       time_span: "1m"
     };
@@ -100,8 +112,8 @@ class GetMonitorTabs extends Component{
               payload = {cpu}
               color = {["#7ed9fc"]}
               legend = {false}
-              divisor = "1"
-              valueSuffix = "K"
+              divisor = {limits_cpu}
+              valueSuffix = "%"
             >
             </Monitor>
           </div>

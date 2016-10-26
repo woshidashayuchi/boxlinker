@@ -143,7 +143,6 @@ function serviceDetail(state = serviceData ,action){
         return Object.assign({},state,{env:env});
       }
     case Const.RECEIVE_ENDPOINTS:
-      console.log('==>',action);
       return Object.assign({},state,{endpoints: action.payload});
     case CLEAR_SERVICE_DETAIL:
       return serviceData;
@@ -193,7 +192,6 @@ function isBtnState(
   switch (action.type){
     case IS_BTN_STATE.deploy:
       state.deploy = action.payload;
-      console.log(state);
       return Object.assign({},state);
     case IS_BTN_STATE.building:
       state.building = action.payload;
@@ -326,7 +324,6 @@ function deployData(state = serviceData,action){
     case ADD_SAVE:
       let addSave = state.volume;
       addSave.push({at:new Date().getTime(),readonly:1});
-      console.log(addSave);
       return Object.assign({},state,{volume:addSave});
     case DEL_SAVE:
       let delSave = state.volume;

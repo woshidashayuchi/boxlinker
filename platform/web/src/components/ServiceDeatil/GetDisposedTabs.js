@@ -129,7 +129,7 @@ class GetDisposedTabs extends Component{
       isStateUp:1
     }
   }
-  delVal (index){
+  delVal(index){
     let containerTr = ReactDOM.findDOMNode(this.refs.tab_container_body).getElementsByTagName("tr");
     let input = containerTr[index].getElementsByTagName("input")[0];
     input.focus();

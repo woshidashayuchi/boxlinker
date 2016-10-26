@@ -293,13 +293,19 @@ function isReviseBuilding(state){
 }
 
 export function fetchReviseBuilding(data){
+  let body = JSON.stringify({
+    dockerfile_path:data.dockerfile_path,
+    repo_branch:data.repo_branch,
+    auto_build:data.auto_build,
+  });
   let myInit = {
     method:"PUT",
     headers:{
       token:localStorage.getItem("_at"),
-    }
+    },
+    body:body
   };
-  let url = FETCH_URL.IMAGE;
+  let url = FETCH_URL.BUILDING_REVISE+"/"+data.uuid;
   return(dispatch) => {
     dispatch(isLoadingAction(true));
     dispatch(isReviseBuilding(false));
