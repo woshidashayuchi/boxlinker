@@ -19,6 +19,9 @@ from notification import notification
 from resource_model.container_domain import ContainerDomain
 from call_volumn.inner_api import InnerApi
 from time import sleep
+from service_acl.acl_code.acl_model.controller import Controller
+from token_about.token_for_out import p_out
+from flask import request
 
 
 class SheetController(object):
@@ -243,7 +246,12 @@ class SheetController(object):
         except Exception, e:
             log.error("notification error,reason=%s" % e)
 
+        controller = Controller()
+        rest = controller.add_acl(json_list)
+        log.info(rest)
+
         result = "service is creating..."
+
         return code.request_result(0, result)
 
     def service_list(self, json_list):
@@ -457,13 +465,14 @@ class SheetController(object):
             log.error("es error, reason=%s" % e)
 
         delete_pod = del_pod.delete_pod(json_list)
-        log.info(delete_pod)
+
         delete_pod1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": delete_pod}
         json_list_pod = str(delete_pod1)
 
         try:
-            kubernete_sclient.rpc_exec(json_list_pod)
-
+            delresult = kubernete_sclient.rpc_name(json_list_pod)
+            if delresult != "<Response [200]>":
+                return code.request_result(503)
             log.info("{'userid': '%s', 'log_info': 'pod has be deleted!'}"
                      % (json_list.get("user_name")))
 
@@ -486,7 +495,10 @@ class SheetController(object):
         json_list_rc = str(json_list1)
         kubernete_sclient = KubernetesClient()
         try:
-            rc_response = kubernete_sclient.rpc_exec(json_list_rc)
+            rc_response = kubernete_sclient.rpc_name(json_list_rc)
+            if rc_response != "<Response [200]>":
+                log.info("rc delete error reason=%s" % rc_response)
+                return code.request_result(503)
 
             log.info("{'userid': '%s', 'log_info': 'replicationcontroller has be deleted!'}"
                      % (json_list.get("user_name")))
@@ -507,7 +519,11 @@ class SheetController(object):
         json_list_service = str(json_list1)
         kubernete_sclient = KubernetesClient()
         try:
-            service_response = kubernete_sclient.rpc_exec(json_list_service)
+            service_response = kubernete_sclient.rpc_name(json_list_service)
+
+            if service_response != "<Response [200]>":
+                log.info("service delete error reason=%s" % service_response)
+                return code.request_result(503)
 
             log.info("{'userid': '%s', 'log_info': 'service has be deleted'}"
                      % (json_list.get("user_name")))
@@ -563,16 +579,41 @@ class SheetController(object):
             return result
 
         try:
-            logicmodel.exeDelete(cur, del_service)
-            logicmodel.exeDelete(cur, del_rc)
-            logicmodel.exeDelete(cur, del_fservice)
-            logicmodel.exeDelete(cur, del_container)
-            logicmodel.exeDelete(cur, del_env)
-            logicmodel.exeDelete(cur, del_volume)
+            res10 = logicmodel.exeDelete(cur, del_service)
+            res11 = logicmodel.exeDelete(cur, del_rc)
+            res12 = logicmodel.exeDelete(cur, del_fservice)
+            res13 = logicmodel.exeDelete(cur, del_container)
+            res14 = logicmodel.exeDelete(cur, del_env)
+            res15 = logicmodel.exeDelete(cur, del_volume)
 
             log.info("{'userid': '%s', 'log_info': 'service delete success!'}"
                      % (json_list.get("user_name")))
 
+            if res10 == 1 or res10 == 0:
+                if res11 == 1 or res11 == 0:
+                    if res12 == 1 or res12 == 0:
+                        if res13 == 1 or res13 == 0:
+                            if res14 == 1 or res14 == 0:
+                                if res15 == 1 or res15 == 0:
+                                    log.info("database delete success")
+                                else:
+                                    log.info("database delete error")
+                                    return code.request_result(402)
+                            else:
+                                log.info("database delete error")
+                                return code.request_result(402)
+                        else:
+                            log.info("database delete error")
+                            return code.request_result(402)
+                    else:
+                        log.info("database delete error")
+                        return code.request_result(402)
+                else:
+                    log.info("database delete error")
+                    return code.request_result(402)
+            else:
+                log.info("database delete error")
+                return code.request_result(402)
         except Exception, e:
             log.error('k8sapi exec the sql running error, reason=%s'
                         % (e))
@@ -629,7 +670,11 @@ class SheetController(object):
                 log.info("{'userid': '%s', 'log_info': 'updating the replication and pod...'}"
                      % (json_list.get("user_name")))
 
-                kubernete_sclient.rpc_exec(json_list2)
+                rest = kubernete_sclient.rpc_name(json_list2)
+
+                if rest != "<Response [200]>":
+                    log.info("update error, reason=%s" % rest)
+                    return code.request_result(502)
             except Exception, e:
                 log.warning('k8sapi update the rc running error, reason=%s'
                         % (e))
@@ -647,7 +692,12 @@ class SheetController(object):
             json_list_pod = str(delete_pod1)
             try:
                 kubernete_sclient = KubernetesClient()
-                kubernete_sclient.rpc_exec(json_list_pod)
+                rest = kubernete_sclient.rpc_name(json_list_pod)
+
+                if rest != "<Response [200]>":
+                    log.info("update error, reason=%s" % rest)
+                    return code.request_result(502)
+
             except Exception, e:
                 log.warning('k8sapi delete the pod from k8s running error, reason=%s'
                             % (e))
@@ -661,7 +711,11 @@ class SheetController(object):
             json_list2 = str(json_list1)
             try:
                 kubernete_sclient = KubernetesClient()
-                kubernete_sclient.rpc_exec(json_list2)
+                rest = kubernete_sclient.rpc_name(json_list2)
+
+                if rest != "<Response [200]>":
+                    log.info("update error, reason=%s" % rest)
+                    return code.request_result(502)
 
                 log.info("{'userid': '%s', 'log_info': 'update the replicationcontroller and pod success!'}"
                      % (json_list.get("user_name")))
@@ -706,8 +760,10 @@ class SheetController(object):
                 log.info("volume+++++++++++++++++++++++")
 
                 resul = InnerApi.change_status(json_list)
+                if resul != "ok":
+                    log.info(resul)
+                    return code.request_result(502)
 
-                log.info(resul)
                 log.info("volume++++++++++++++++++!!!!!")
             except Exception, e:
                 log.error("storage status update error,reason=%s" % e)
@@ -755,7 +811,11 @@ class SheetController(object):
                 log.info("{'userid': '%s', 'log_info': 'updating the using service...'}"
                      % (json_list.get("user_name")))
 
-                kubernete_svc.rpc_exec(json_list4)
+                rest = kubernete_svc.rpc_name(json_list4)
+
+                if rest != "<Response [200]>":
+                    log.error("update service error, reason=%s" % rest)
+                    return code.request_result(502)
 
                 log.info("{'userid': '%s', 'log_info': 'update the using service success!'}"
                      % (json_list.get("user_name")))
@@ -775,8 +835,15 @@ class SheetController(object):
                 logicmodel = LogicModel()
                 conn, cur = logicmodel.connection()
                 update_sql = DataOrm.update_sql(json_list)
-                logicmodel.exeUpdate(cur, update_sql)
+                rest = logicmodel.exeUpdate(cur, update_sql)
                 logicmodel.connClose(conn, cur)
+                log.info(rest)
+                if rest == 1 or rest == 0:
+                    pass
+                else:
+                    log.error("update database error, reason=%s" % rest)
+                    return code.request_result(502)
+
                 result = code.request_result(0, update_svc)
             except Exception, e:
                 log.error("update database error, reason=%s" % e)

@@ -20,10 +20,8 @@ class TokenForApi(object):
         user_info = get_userinfo(token)['user_info']
         log.info("``````````````-----------%s" % user_info)
         user_info = json.loads(user_info)
-        user_name = user_info['user_name']
-        # user_role = user_info['user_role']
-        # user_orag = user_info['user_orag']
-        # user_ip = user_info['user_ip']
+        user_name = user_info['user_orga']
         user_id = user_info['uid']
-
-        return user_id, user_name
+        user_orga = user_info["orga_uuid"]
+        role_uuid = user_info["role_uuid"]
+        return user_id, user_name, user_orga, role_uuid

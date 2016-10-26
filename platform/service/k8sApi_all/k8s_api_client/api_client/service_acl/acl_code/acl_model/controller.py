@@ -18,6 +18,7 @@ class Controller(object):
 
     def add_acl(self, json_data):
         json_data["rtype"] = "acl"
+        json_data["resource_type"] = "service"
         try:
             res = DataOrm.add_method(json_data)
             return res

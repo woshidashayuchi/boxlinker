@@ -14,6 +14,7 @@ from time import sleep
 from podstatus_monitor.anytime_update_status import Up
 from resource_model.sheet_model import SheetModel
 from podstatus_monitor.pod_message import pod_messages
+from token_about.token_for_out import p_out
 
 app = Flask(__name__)
 CORS(app=app)
@@ -22,16 +23,13 @@ CORS(app=app)
 @app.route('/api/v1/application/service/<service_name>', methods=['POST'])
 def create_service(service_name):
     controller = SheetController()
+    auth_ret = p_out()
+    if auth_ret != "failed":
+       user_id, user_name, user_orga, role_uuid = auth_ret
+       user_msg = {"user_id": user_id, "user_name": user_name}
+    else:
+        return json.dumps(code.request_result(202))
 
-    try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
-       log.info("**************")
-    except:
-       return json.dumps(code.request_result(202))
     try:
         json_list = json.loads(request.get_data())
     except:
@@ -75,7 +73,7 @@ def get_all_service():
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
 
     except Exception, e:
 
@@ -86,7 +84,7 @@ def get_all_service():
         # service_name = json_list2.encode("utf-8")
         json_list = {"user_id": user_id}
         if service_name is not None:
-            json_list = {"user_id": user_id, "user_name":user_name, "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
+            json_list = {"user_id": user_id, "user_name":user_name, "service_name": service_name}
         controller = SheetController()
         response = controller.service_list(json_list)
         return json.dumps(response)
@@ -101,11 +99,11 @@ def detail_service(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
     except:
         return json.dumps(code.request_result(202))
     # json_list1 = request.args.get('user_id',)
-    json_list = {"user_id": user_id, "user_name": user_name, "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
+    json_list = {"user_id": user_id, "user_name": user_name, "service_name": service_name}
     controller = SheetController()
     response = controller.detail_service(json_list)
     print(response)
@@ -118,12 +116,11 @@ def del_service(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
     except:
         return json.dumps(code.request_result(202))
     # json_list = json.loads(request.get_data())
-    json_list = {"token": token_get1, "service_name": service_name, "user_name": user_name, "namespace": user_name, "user_id": user_id,
-                  "user_orga": user_orga, "role_uuid": role_uuid}
+    json_list = {"token": token_get1, "service_name": service_name, "user_name": user_name, "namespace": user_name, "user_id": user_id}
     controller = SheetController()
     response = controller.del_service(json_list)
     return json.dumps(response)
@@ -135,15 +132,14 @@ def put_service(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
     except:
        return json.dumps(code.request_result(202))
 
     json_list1 = json.loads(request.get_data())
     log.debug("json_list1=%s" % (json_list1))
     try:
-        json_list = {"service_name": service_name, "user_id": user_id, "user_name": user_name,
-                     "user_orga": user_orga, "role_uuid": role_uuid}
+        json_list = {"service_name": service_name, "user_id": user_id, "user_name": user_name}
         json_list = json.loads(json.dumps(json_list))
         json_list.update(json_list1)
         json_list["token"] = token_get1
@@ -161,8 +157,8 @@ def put_container(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
@@ -186,8 +182,8 @@ def put_volume(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name,  "user_orga": user_orga, "role_uuid": role_uuid}
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
@@ -210,13 +206,12 @@ def put_env(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "type":"env",  "user_orga": user_orga, "role_uuid": role_uuid}
+    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type":"env"}
 
     json_list.update(json_name)
     json_list["token"] = token_get1
@@ -237,13 +232,12 @@ def put_cm(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "type": "limits",  "user_orga": user_orga, "role_uuid": role_uuid}
+    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type": "limits"}
     json_list["token"] = token_get1
     json_list.update(json_name)
     try:
@@ -263,12 +257,11 @@ def start_service(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
         return json.dumps(code.request_result(202))
-    json_list = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "user_orga": user_orga, "role_uuid": role_uuid}
+    json_list = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name}
     json_get = json.loads(request.get_data())
 
     if json_get.get("operate") == "start":
@@ -288,9 +281,8 @@ def telescopic(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name,
-                    "tel": "tel", "user_orga": user_orga, "role_uuid": role_uuid}
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name,"tel":"tel"}
     except Exception, e:
         log.error("telescopic error, reason=%s" % e)
         return json.dumps(code.request_result(202))
@@ -309,9 +301,8 @@ def pod_message(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name,
-                    "user_orga": user_orga, "role_uuid": role_uuid}
+        user_id, user_name = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name}
     except Exception, e:
         log.error("telescopic error, reason=%s" % e)
         return json.dumps(code.request_result(202))
@@ -335,14 +326,12 @@ def put_auto_startup(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "type": "auto_startup",  "user_orga": user_orga, "role_uuid": role_uuid}
-
+    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type": "auto_startup"}
     json_list["token"] = token_get1
     json_list["auto"] = "auto"
     json_list.update(json_name)
@@ -363,13 +352,12 @@ def put_policy(service_name):
         token_get1 = request.headers.get("token")
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_id, user_name = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "user_orga": user_orga, "role_uuid": role_uuid}
+    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name}
     json_list["token"] = token_get1
     json_list.update(json_name)
     log.info("awsdesacdsc=====%s" % json.dumps(json_list))

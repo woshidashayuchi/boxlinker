@@ -44,6 +44,7 @@ class Show(object):
                 change = i
                 res_sql = get_sql.get(change)
                 re = json.loads(requests.get(BASEURL+res_sql).text)
+                log.info(re)
                 for i in re.get("results"):
                     if i.get("series") == None:
                         pass
@@ -55,19 +56,22 @@ class Show(object):
                 # log.info(json.loads(requests.get(BASEURL+res_sql).text))
                 result.append(respon)
             # result["aaa"] = json.loads(requests.get(BASEURL+res_sql).text)
+            log.info("go----====++++++!!!!!")
+            log.info(result)
+            if result[0].get("value") is not None:
+                for i in result:
+                    log.info("########")
+                    for j in i.get("value"):
+                        if j[1] == 0 and i.get("value").index(j) > 0 and i.get("value")[i.get("value").index(j)-1][1] is not None:
+                            j[1] = i.get("value")[i.get("value").index(j)-1][1]
 
-            for i in result:
-                for j in i.get("value"):
-                    if j[1] == 0 or j[1] is None and i.get("value").index(j) > 0:
-                        j[1] = i.get("value")[i.get("value").index(j)-1][1]
-                        log.info("sss")
-                    if j[1] == 0 or j[1] is None and i.get("value").index(j) == 0:
-                        for x in i.get("value"):
-                            if x[1] != 0 and x[1] is not None:
-                                j[1] = x[1]
-                        # j[1] = i.get("value")[i.get("value").index(j)+1][1]
-                    if j[1] < 0 and j[1] is not None:
-                        j[1] = abs(j[1])
+                        if j[1] == 0 and i.get("value").index(j) == 0:
+                            for x in i.get("value"):
+                                if x[1] != 0 and x[1] is not None:
+                                    j[1] = x[1]
+                            # j[1] = i.get("value")[i.get("value").index(j)+1][1]
+                        if j[1] < 0 and j[1] is not None:
+                            j[1] = abs(j[1])
 
             return result
 
