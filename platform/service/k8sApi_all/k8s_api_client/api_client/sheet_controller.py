@@ -450,7 +450,11 @@ class SheetController(object):
         return result
 
     def del_service(self, json_list):
-
+        controller = Controller()
+        del_acl = controller.del_acl(json_list)
+        if del_acl == "error":
+            log.error("authority is not allowed..delete service error")
+            return code.request_result(503)
         kubernete_sclient = KubernetesClient()
         del_pod = SourceModel()
         del_type = {"del_type": "pod"}
@@ -579,44 +583,17 @@ class SheetController(object):
             return result
 
         try:
-            res10 = logicmodel.exeDelete(cur, del_service)
-            res11 = logicmodel.exeDelete(cur, del_rc)
-            res12 = logicmodel.exeDelete(cur, del_fservice)
-            res13 = logicmodel.exeDelete(cur, del_container)
-            res14 = logicmodel.exeDelete(cur, del_env)
-            res15 = logicmodel.exeDelete(cur, del_volume)
+            logicmodel.exeDelete(cur, del_service)
+            logicmodel.exeDelete(cur, del_rc)
+            logicmodel.exeDelete(cur, del_container)
+            logicmodel.exeDelete(cur, del_env)
+            logicmodel.exeDelete(cur, del_volume)
+            logicmodel.exeDelete(cur, del_fservice)
 
             log.info("{'userid': '%s', 'log_info': 'service delete success!'}"
                      % (json_list.get("user_name")))
-
-            if res10 == 1 or res10 == 0:
-                if res11 == 1 or res11 == 0:
-                    if res12 == 1 or res12 == 0:
-                        if res13 == 1 or res13 == 0:
-                            if res14 == 1 or res14 == 0:
-                                if res15 == 1 or res15 == 0:
-                                    log.info("database delete success")
-                                else:
-                                    log.info("database delete error")
-                                    return code.request_result(402)
-                            else:
-                                log.info("database delete error")
-                                return code.request_result(402)
-                        else:
-                            log.info("database delete error")
-                            return code.request_result(402)
-                    else:
-                        log.info("database delete error")
-                        return code.request_result(402)
-                else:
-                    log.info("database delete error")
-                    return code.request_result(402)
-            else:
-                log.info("database delete error")
-                return code.request_result(402)
         except Exception, e:
-            log.error('k8sapi exec the sql running error, reason=%s'
-                        % (e))
+            log.error('k8sapi exec the sql running error, reason=%s' % e)
 
             log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
                      % (json_list.get("user_name")))

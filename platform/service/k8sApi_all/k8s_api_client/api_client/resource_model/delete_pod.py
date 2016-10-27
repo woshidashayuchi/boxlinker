@@ -32,7 +32,7 @@ class DeletePod(object):
         try:
             for i in resu:
                 log.info(i)
-                if json_list.get("service_name") in i.get("metadata").get("name"):
+                if json_list.get("service_name") == i.get("metadata").get("labels").get("component"):
                     pod_name = i.get("metadata").get("name")
         except Exception, e:
             log.error("iterater pod_name error, reason=%s" % e)
@@ -43,8 +43,12 @@ class DeletePod(object):
         kuber_delpod = KubernetesClient()
 
         try:
-            kuber_delpod.rpc_exec(del_pod)
+            rest = kuber_delpod.rpc_name(del_pod)
+            if rest != "<Response [200]>":
+                log.error("stop resource error, reason=%s" % rest)
+                return "error"
         except Exception, e:
             log.error("delete pod error, reason= %s" % e)
+            return "error"
 
 

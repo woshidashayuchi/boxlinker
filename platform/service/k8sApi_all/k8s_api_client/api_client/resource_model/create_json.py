@@ -522,12 +522,14 @@ class SourceModel(object):
         log.error("data=%s,type=%s" % (container, type(container)))
 
         if int(auto_startup) == 1:
-            rc_krub = images[20:].replace("/", "_").replace(":", "_")
+            pass
         else:
-            rc_krub = "null"
+            pods_num = 0
         if int(policy1) == 1:
+            rc_krub = images[20:].replace("/", "_").replace(":", "_")
             pullpolicy = "Always"
         else:
+            rc_krub = "null"
             pullpolicy = "IfNotPresent"
         service_name2 = user_name+service_name
         service_name1 = service_name2.replace("_", "-")

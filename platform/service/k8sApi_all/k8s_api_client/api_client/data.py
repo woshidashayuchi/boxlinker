@@ -135,7 +135,6 @@ class DataOrm(object):
         acl.create()
     '''
 
-
     rc_table = Table('replicationcontrollers', metadata, autoload=True)
     service_table = Table('service', metadata, autoload=True)
     font_table = Table('font_service', metadata, autoload=True)
@@ -294,7 +293,7 @@ class DataOrm(object):
             u.service_name = json_list.get("service_name")
             u.resource_type = json_list.get("resource_type")
             # u.admin = json_list.get("admin")
-            u.organization = json_list.get("user_name")
+            u.organization = json_list.get("user_orga")
             u.user = json_list.get("user_id")
             session.add(u)
             session.flush()

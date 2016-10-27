@@ -25,7 +25,7 @@ class MonitorApi(object):
             token_get1 = request.headers.get("token")
             token_get2 = token_get1.decode("utf-8")
             token_get = token_get2.encode("utf-8")
-            user_id, user_name = TokenForApi.get_msg(token_get)
+            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         except Exception, e:
             log.info("token check error, reason = %s" % e)
             return code.request_result(201)
@@ -44,7 +44,7 @@ class MonitorApi(object):
             token_get1 = request.headers.get("token")
             token_get2 = token_get1.decode("utf-8")
             token_get = token_get2.encode("utf-8")
-            user_id, user_name = TokenForApi.get_msg(token_get)
+            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         except Exception, e:
             log.info("token check error, reason = %s" % e)
             return code.request_result(201)
