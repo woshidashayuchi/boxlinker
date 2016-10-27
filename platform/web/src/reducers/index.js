@@ -70,7 +70,7 @@ function sidebarActive(state = "", action){
   }
 }
 
-function serviceList(state = [],action){
+function serviceList(state = [1],action){
   switch (action.type){
     case GET_ALL_SERVICES:
       return action.payload;
@@ -83,7 +83,7 @@ function serviceList(state = [],action){
   }
 }
 
-function podList(state = [],action) {
+function podList(state = [1],action) {
   switch (action.type){
     case GET_POD_LIST:
       return action.payload;
@@ -170,7 +170,7 @@ function monitorData(state = {memory:{},network:{},cpu:{}},action){
   }
 }
 
-function volumesList(state = [],action){
+function volumesList(state = [1],action){
   switch (action.type) {
     case RECEIVE_VOLUMES_LIST:
         return action.payload.map((item)=>{
@@ -228,7 +228,7 @@ function isLoading(state = false,action){
   }
 }
 
-function imageList(state = [],action){
+function imageList(state = [1],action){
   switch (action.type){
     case GET_IMAGE_LIST:
       return action.payload;
@@ -273,7 +273,7 @@ function githubAuthURL(state = '',action){
   }
 }
 
-function buildingImageList(state = [],action){
+function buildingImageList(state = [1],action){
   switch (action.type){
     case GET_BUILDING_IMAGE_LIST:
       return action.payload;
@@ -391,6 +391,15 @@ function notifications(state = {},action){
           return state
   }
 }
+function organizeList(state = [1],action){
+  switch (action.type){
+    case Const.GET_ORGANIZE_LIST:
+      return action.payload;
+    break;
+    default :
+        return state
+  }
+}
 
 const rootReducer = combineReducers({
   isSidebarOpen,
@@ -414,7 +423,8 @@ const rootReducer = combineReducers({
   logs_xhr,
   notifications,
   runtime,
-  isBtnState
+  isBtnState,
+  organizeList
 });
 
 

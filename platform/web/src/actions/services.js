@@ -8,7 +8,8 @@ import {
 import {isLoadingAction} from './header';
 import fetch from 'isomorphic-fetch';
 import {receiveNotification,clearNotification} from './notification';
-import {fetchServiceDetailAction} from './serviceDetail'
+import {fetchServiceDetailAction} from './serviceDetail';
+import {navigate} from "./route";
 
 function receiveServices(data){
   return {
@@ -43,8 +44,8 @@ export function fetchAllServicesAction(txt){
   }
 }
 
-export  function fetchDeleteServiceAction(serviceName){
-  let url =`${API_DELETE_SERVICE_URL}`+"/"+serviceName,
+export  function fetchDeleteServiceAction(data){
+  let url =`${API_DELETE_SERVICE_URL}`+"/"+data.serviceName,
       myInit = {
         method:"DELETE",
         headers:{token:localStorage.getItem("_at")},
@@ -60,7 +61,11 @@ export  function fetchDeleteServiceAction(serviceName){
                 setTimeout(function(){
                   dispatch(clearNotification())
                 },3000);
-                dispatch(fetchAllServicesAction());
+                  if(data.type == "list"){
+                      dispatch(fetchAllServicesAction());
+                  }else{
+                      dispatch(navigate("/serviceList"));
+                  }
               }else{
                 dispatch(receiveNotification({message:"删除失败",level:"danger"}));
                 setTimeout(function(){

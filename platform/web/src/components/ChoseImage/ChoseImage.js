@@ -8,6 +8,7 @@ import HeadLine from '../../components/HeadLine';
 import Tabs from 'react-bootstrap/lib/Tabs';
 import Tab from 'react-bootstrap/lib/Tab';
 import Link from '../Link';
+import Loading from '../Loading';
 import {BREADCRUMB} from "../../constants";
 import {timeRange} from '../../core/utils'
 const title = '新建服务';
@@ -50,7 +51,8 @@ class ChooseImage extends Component{
   }
   getTableBody(){
     let data = this.props.imageList;
-    if(!data.length){return <tr><td colSpan="5">暂无数据~</td></tr>}
+    if(!data.length){return <tr><td colSpan="5" style={{"textAlign":"center"}}>暂无数据~</td></tr>}
+    if(data.length == 1&&data[0] == 1) return <tr><td colSpan="5" style={{"textAlign":"center"}}><Loading /></td></tr>;
     let body = [];
     data.map((item,i) => {
         body.push(  <tr key={i}>

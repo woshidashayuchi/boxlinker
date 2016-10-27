@@ -96,7 +96,8 @@ class ServiceDetail extends Component{
     monitorData:React.PropTypes.object,
     buildingDetail:React.PropTypes.object,
     getBuildingDetail:React.PropTypes.func,
-    onChangeRelease:React.PropTypes.func
+    onChangeRelease:React.PropTypes.func,
+    onDeleteService: React.PropTypes.func,
   };
   constructor(props){
     super(props);
@@ -252,7 +253,10 @@ class ServiceDetail extends Component{
         />;
         break;
       case 7:
-        tab = <GetOptTabs />;
+        tab = <GetOptTabs
+            serviceName = {this.props.serviceName}
+            onDeleteService = {(name) =>{this.props.onDeleteService(name)}}
+        />;
         break;
 
     }

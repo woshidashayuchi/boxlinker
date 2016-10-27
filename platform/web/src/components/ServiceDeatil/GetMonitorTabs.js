@@ -26,27 +26,18 @@ class GetMonitorTabs extends Component{
       pod_name:this.props.podList[0].pod_name,
     }
   }
-  componentDidMount(){
-  }
-  changeTime(type,time){
-    let userName = this.context.store.getState().user_info.user_name;
-    let pod_name = this.state.pod_name;
-    let data = {
-      userName: userName,
-      pod_name: pod_name,
-      type: type,
-      time_long: time,
-      time_span: "1m"
-    };
-    console.log(data);
-    this.props.getMonitorData(data);
-  }
+  componentDidMount(){}
 
   changePods(e){
-    console.log(e.target.value);
     this.setState({
       pod_name:e.target.value
-    })
+    });
+    let my = this;
+    setTimeout(function(){
+      my.refs.cpu.componentDidMount();
+      my.refs.memory.componentDidMount();
+      my.refs.network.componentDidMount()
+    },200)
   }
 
   render(){
@@ -69,21 +60,18 @@ class GetMonitorTabs extends Component{
       userName: userName,
       pod_name: pod_name,
       type: "cpu",
-      time_long: "30m",
       time_span: "1m"
     };
     let memory = {
       userName: userName,
       pod_name: pod_name,
       type: "memory",
-      time_long: "30m",
       time_span: "1m"
     };
-    let netWork = {
+    let network = {
       userName: userName,
       pod_name: pod_name,
       type: "network",
-      time_long: "30m",
       time_span: "1m"
     };
     let option = this.props.podList.map((item,i) => {
@@ -109,6 +97,7 @@ class GetMonitorTabs extends Component{
           />
           <div className={s.assBox}>
             <Monitor
+              ref = "cpu"
               payload = {cpu}
               color = {["#7ed9fc"]}
               legend = {false}
@@ -126,6 +115,7 @@ class GetMonitorTabs extends Component{
           />
           <div className={s.assBox}>
             <Monitor
+              ref = "memory"
               payload = {memory}
               color = {["#b7e769"]}
               legend = {false}
@@ -143,7 +133,8 @@ class GetMonitorTabs extends Component{
           />
           <div className={s.assBox}>
             <Monitor
-              payload = {netWork}
+              ref = "network"
+              payload = {network}
               color = {["#f7a397","#b7e769"]}
               legend = {true}
               divisor = "1000"

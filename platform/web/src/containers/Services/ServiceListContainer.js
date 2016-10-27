@@ -27,8 +27,8 @@ const mapDispatchToProps = (dispatch) => {
     onServiceListLoad : (txt)=>{
       dispatch(fetchAllServicesAction(txt))
     },
-    onDeleteService : (serviceName) => {
-      dispatch(fetchDeleteServiceAction(serviceName))
+    onDeleteService : (data) => {
+      dispatch(fetchDeleteServiceAction(data))
     },
     setBreadcrumb:(...arr) => {
       dispatch(setBreadcrumbAction(...arr))

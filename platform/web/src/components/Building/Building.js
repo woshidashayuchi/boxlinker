@@ -67,6 +67,7 @@ class Building extends Component {
   getLines(){
     let data = this.props.buildingImageList;
     if(!data.length) return <tr><td colSpan="6" style={{"textAlign":"center"}}>暂无数据~</td></tr>
+    if(data.length == 1&&data[0] == 1) return <tr><td colSpan="6" style={{"textAlign":"center"}}><Loading /></td></tr>;
     if(data.length == 1&&data[0] == 0) return <tr><td colSpan="6" style={{"textAlign":"center"}}><Loading /></td></tr>
     let body = [];
     data.map((item,i)=>{

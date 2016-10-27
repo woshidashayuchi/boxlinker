@@ -116,11 +116,11 @@ module.exports =
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _assets = __webpack_require__(213);
+  var _assets = __webpack_require__(214);
   
   var _assets2 = _interopRequireDefault(_assets);
   
-  var _runtime = __webpack_require__(214);
+  var _runtime = __webpack_require__(215);
   
   var _users = __webpack_require__(209);
   
@@ -1100,7 +1100,7 @@ module.exports =
   }
   
   function serviceList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1116,7 +1116,7 @@ module.exports =
   }
   
   function podList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1212,7 +1212,7 @@ module.exports =
   }
   
   function volumesList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1280,7 +1280,7 @@ module.exports =
   }
   
   function imageList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1340,7 +1340,7 @@ module.exports =
   }
   
   function buildingImageList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1475,6 +1475,18 @@ module.exports =
         return state;
     }
   }
+  function organizeList() {
+    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var action = arguments[1];
+  
+    switch (action.type) {
+      case Const.GET_ORGANIZE_LIST:
+        return action.payload;
+        break;
+      default:
+        return state;
+    }
+  }
   
   var rootReducer = (0, _redux.combineReducers)({
     isSidebarOpen: isSidebarOpen,
@@ -1498,7 +1510,8 @@ module.exports =
     logs_xhr: logs_xhr,
     notifications: notifications,
     runtime: _runtime2.default,
-    isBtnState: isBtnState
+    isBtnState: isBtnState,
+    organizeList: organizeList
   });
   
   exports.default = rootReducer;
@@ -1725,7 +1738,10 @@ module.exports =
     },
     IMAGE: URL + '/registry/image_repository',
     BUILDING_REVISE: URL + '/api/v1.0/repository/repositorybuilds',
-    GET_SERVICE_MONITOR: 'http://monitor.boxlinker.com/api/v1/model/namespaces'
+    GET_SERVICE_MONITOR: 'http://monitor.boxlinker.com/api/v1/model/namespaces',
+  
+    //new
+    ORGANIZE: URL + '/api/v1.0/usercenter/orgs'
   
   };
   // endpoints
@@ -1765,6 +1781,8 @@ module.exports =
     autoStateUp: 'IS_AUTO_STATE_UP',
     reviseBuilding: "REVISE_BUILDING"
   };
+  
+  var GET_ORGANIZE_LIST = exports.GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
 
 /***/ },
 /* 38 */
@@ -2108,7 +2126,7 @@ module.exports =
   
   var _userCenter2 = _interopRequireDefault(_userCenter);
   
-  var _reviseImage = __webpack_require__(210);
+  var _reviseImage = __webpack_require__(211);
   
   var _reviseImage2 = _interopRequireDefault(_reviseImage);
   
@@ -5761,6 +5779,8 @@ module.exports =
   
   var _serviceDetail = __webpack_require__(80);
   
+  var _route = __webpack_require__(57);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   function receiveServices(data) {
@@ -5795,8 +5815,8 @@ module.exports =
     };
   }
   
-  function fetchDeleteServiceAction(serviceName) {
-    var url = '' + _constants.API_DELETE_SERVICE_URL + "/" + serviceName,
+  function fetchDeleteServiceAction(data) {
+    var url = '' + _constants.API_DELETE_SERVICE_URL + "/" + data.serviceName,
         myInit = {
       method: "DELETE",
       headers: { token: localStorage.getItem("_at") }
@@ -5812,7 +5832,11 @@ module.exports =
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
           }, 3000);
-          dispatch(fetchAllServicesAction());
+          if (data.type == "list") {
+            dispatch(fetchAllServicesAction());
+          } else {
+            dispatch((0, _route.navigate)("/serviceList"));
+          }
         } else {
           dispatch((0, _notification.receiveNotification)({ message: "删除失败", level: "danger" }));
           setTimeout(function () {
@@ -6669,6 +6693,10 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+  var _Loading = __webpack_require__(137);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var ImageForPlatform = function (_React$Component) {
@@ -6690,7 +6718,7 @@ module.exports =
       value: function deployImage(ImageName, id) {
         var obj = {
           image_name: 'index.boxlinker.com/' + ImageName,
-          uuid: id
+          image_id: id
         };
         this.props.goToConfigContainer(obj);
       }
@@ -6700,6 +6728,16 @@ module.exports =
         var _this2 = this;
   
         var data = this.props.imageList;
+        if (!data || !data.length) return _react2.default.createElement(
+          'div',
+          null,
+          '暂无数据~'
+        );
+        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(_Loading2.default, null)
+        );
         var body = [];
         data.map(function (item, i) {
           body.push(_react2.default.createElement(
@@ -7190,6 +7228,10 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+  var _Loading = __webpack_require__(137);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
   var _route = __webpack_require__(57);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -7213,7 +7255,7 @@ module.exports =
       value: function deployImage(ImageName, id) {
         var obj = {
           image_name: 'index.boxlinker.com/' + ImageName,
-          uuid: id
+          image_id: id
         };
         this.props.goToConfigContainer(obj);
       }
@@ -7239,6 +7281,11 @@ module.exports =
           'div',
           null,
           '暂无数据~'
+        );
+        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(_Loading2.default, null)
         );
         var body = [];
         data.map(function (item, i) {
@@ -8064,10 +8111,10 @@ module.exports =
       }
     }, {
       key: 'deployImage',
-      value: function deployImage(ImageName, id) {
+      value: function deployImage(ImageName) {
         var obj = {
           image_name: 'index.boxlinker.com/' + ImageName,
-          uuid: id
+          image_id: this.props.uuid
         };
         this.props.goToConfigContainer(obj);
       }
@@ -8119,7 +8166,7 @@ module.exports =
               _react2.default.createElement(
                 _reactBootstrap.SplitButton,
                 {
-                  onClick: _this3.deployImage.bind(_this3, data.repository, data.uuid),
+                  onClick: _this3.deployImage.bind(_this3, data.repository),
                   bsStyle: 'primary', title: '部署', id: 'building-table-line-' + i },
                 _react2.default.createElement(
                   _reactBootstrap.MenuItem,
@@ -10414,6 +10461,15 @@ module.exports =
             '暂无数据~'
           )
         );
+        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            { colSpan: '6', style: { "textAlign": "center" } },
+            _react2.default.createElement(_Loading2.default, null)
+          )
+        );
         if (data.length == 1 && data[0] == 0) return _react2.default.createElement(
           'tr',
           null,
@@ -11490,8 +11546,8 @@ module.exports =
       onServiceListLoad: function onServiceListLoad(txt) {
         dispatch((0, _services.fetchAllServicesAction)(txt));
       },
-      onDeleteService: function onDeleteService(serviceName) {
-        dispatch((0, _services.fetchDeleteServiceAction)(serviceName));
+      onDeleteService: function onDeleteService(data) {
+        dispatch((0, _services.fetchDeleteServiceAction)(data));
       },
       setBreadcrumb: function setBreadcrumb() {
         dispatch(_breadcumb.setBreadcrumbAction.apply(undefined, arguments));
@@ -11603,7 +11659,8 @@ module.exports =
     }, {
       key: 'deleteService',
       value: function deleteService(serviceName) {
-        confirm("是否删除?") ? this.props.onDeleteService(serviceName) : "";
+        var data = { serviceName: serviceName, type: "list" };
+        confirm("是否删除?") ? this.props.onDeleteService(data) : "";
       }
     }, {
       key: 'changeState',
@@ -11625,6 +11682,15 @@ module.exports =
             'td',
             { colSpan: '5', style: { "textAlign": "center" } },
             '暂无数据~'
+          )
+        );
+        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            { colSpan: '5', style: { "textAlign": "center" } },
+            _react2.default.createElement(_Loading2.default, null)
           )
         );
         if (data.length == 1 && data[0] == 0) return _react2.default.createElement(
@@ -13303,17 +13369,19 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+  var _Loading = __webpack_require__(137);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
   var _constants = __webpack_require__(37);
   
   var _utils = __webpack_require__(112);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  /**
-   * Created by zhangsai on 16/9/18.
-   */
-  
-  var title = '新建服务';
+  var title = '新建服务'; /**
+                       * Created by zhangsai on 16/9/18.
+                       */
   
   var ChooseImage = function (_Component) {
     (0, _inherits3.default)(ChooseImage, _Component);
@@ -13363,11 +13431,20 @@ module.exports =
             null,
             _react2.default.createElement(
               'td',
-              { colSpan: '5' },
+              { colSpan: '5', style: { "textAlign": "center" } },
               '暂无数据~'
             )
           );
         }
+        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            { colSpan: '5', style: { "textAlign": "center" } },
+            _react2.default.createElement(_Loading2.default, null)
+          )
+        );
         var body = [];
         data.map(function (item, i) {
           body.push(_react2.default.createElement(
@@ -14724,6 +14801,9 @@ module.exports =
       },
       onChangeRelease: function onChangeRelease(data) {
         dispatch(actions.fetchChangeReleaseAction(data));
+      },
+      onDeleteService: function onDeleteService(data) {
+        dispatch((0, _services.fetchDeleteServiceAction)(data));
       }
     };
   };
@@ -15123,7 +15203,12 @@ module.exports =
             });
             break;
           case 7:
-            tab = _react2.default.createElement(_GetOptTabs2.default, null);
+            tab = _react2.default.createElement(_GetOptTabs2.default, {
+              serviceName: this.props.serviceName,
+              onDeleteService: function onDeleteService(name) {
+                _this3.props.onDeleteService(name);
+              }
+            });
             break;
   
         }
@@ -15333,7 +15418,8 @@ module.exports =
     monitorData: _react2.default.PropTypes.object,
     buildingDetail: _react2.default.PropTypes.object,
     getBuildingDetail: _react2.default.PropTypes.func,
-    onChangeRelease: _react2.default.PropTypes.func
+    onChangeRelease: _react2.default.PropTypes.func,
+    onDeleteService: _react2.default.PropTypes.func
   };
   exports.default = (0, _withStyles2.default)(_ServiceDetail2.default)(ServiceDetail);
 
@@ -16463,27 +16549,17 @@ module.exports =
       key: 'componentDidMount',
       value: function componentDidMount() {}
     }, {
-      key: 'changeTime',
-      value: function changeTime(type, time) {
-        var userName = this.context.store.getState().user_info.user_name;
-        var pod_name = this.state.pod_name;
-        var data = {
-          userName: userName,
-          pod_name: pod_name,
-          type: type,
-          time_long: time,
-          time_span: "1m"
-        };
-        console.log(data);
-        this.props.getMonitorData(data);
-      }
-    }, {
       key: 'changePods',
       value: function changePods(e) {
-        console.log(e.target.value);
         this.setState({
           pod_name: e.target.value
         });
+        var my = this;
+        setTimeout(function () {
+          my.refs.cpu.componentDidMount();
+          my.refs.memory.componentDidMount();
+          my.refs.network.componentDidMount();
+        }, 200);
       }
     }, {
       key: 'render',
@@ -16515,21 +16591,18 @@ module.exports =
           userName: userName,
           pod_name: pod_name,
           type: "cpu",
-          time_long: "30m",
           time_span: "1m"
         };
         var memory = {
           userName: userName,
           pod_name: pod_name,
           type: "memory",
-          time_long: "30m",
           time_span: "1m"
         };
-        var netWork = {
+        var network = {
           userName: userName,
           pod_name: pod_name,
           type: "network",
-          time_long: "30m",
           time_span: "1m"
         };
         var option = this.props.podList.map(function (item, i) {
@@ -16568,6 +16641,7 @@ module.exports =
               'div',
               { className: _ServiceDetail2.default.assBox },
               _react2.default.createElement(_Monitor2.default, {
+                ref: 'cpu',
                 payload: cpu,
                 color: ["#7ed9fc"],
                 legend: false,
@@ -16588,6 +16662,7 @@ module.exports =
               'div',
               { className: _ServiceDetail2.default.assBox },
               _react2.default.createElement(_Monitor2.default, {
+                ref: 'memory',
                 payload: memory,
                 color: ["#b7e769"],
                 legend: false,
@@ -16608,7 +16683,8 @@ module.exports =
               'div',
               { className: _ServiceDetail2.default.assBox },
               _react2.default.createElement(_Monitor2.default, {
-                payload: netWork,
+                ref: 'network',
+                payload: network,
                 color: ["#f7a397", "#b7e769"],
                 legend: true,
                 divisor: '1000',
@@ -16768,20 +16844,21 @@ module.exports =
   
       _this3.state = {
         data: { xAxis: [], series: [] },
-        payload: _this3.props.payload
+        payload: _this3.props.payload,
+        time: "60m"
       };
       return _this3;
     }
   
     (0, _createClass3.default)(_class, [{
       key: 'fetchGetMonitorDataAction',
-      value: function fetchGetMonitorDataAction(data) {
+      value: function fetchGetMonitorDataAction(data, time_long) {
         var myInit = {
           method: "GET",
           headers: { token: localStorage.getItem("_at") }
         };
         var my = this;
-        var url = Const.FETCH_URL.GET_SERVICE_MONITOR + "/" + data.userName + "/pods/" + data.pod_name + "/metrics/" + data.type + "?time_long=" + data.time_long; //+"&time_span="+data.time_span;
+        var url = Const.FETCH_URL.GET_SERVICE_MONITOR + "/" + data.userName + "/pods/" + data.pod_name + "/metrics/" + data.type + "?time_long=" + time_long;
         (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
           return response.json();
         }).then(function (json) {
@@ -16793,19 +16870,23 @@ module.exports =
               var seriesName = [];
               var seriesValue = [];
               json.result.map(function (item, i) {
-                if (data.type == "memory") {
-                  if (i == 2) {
-                    seriesName.push(item.name.split("/")[1]);
-                    seriesValue.push(item.value);
-                  }
-                } else if (data.type == "cpu") {
-                  if (i == 1) {
-                    seriesName.push(item.name.split("/")[1]);
-                    seriesValue.push(item.value);
-                  }
+                if (!item.name) {
+                  return false;
                 } else {
-                  seriesName.push(item.name.split("/")[1]);
-                  seriesValue.push(item.value);
+                  if (data.type == "memory") {
+                    if (i == 2) {
+                      seriesName.push(item.name.split("/")[1]);
+                      seriesValue.push(item.value);
+                    }
+                  } else if (data.type == "cpu") {
+                    if (i == 1) {
+                      seriesName.push(item.name.split("/")[1]);
+                      seriesValue.push(item.value);
+                    }
+                  } else {
+                    seriesName.push(item.name.split("/")[1]);
+                    seriesValue.push(item.value);
+                  }
                 }
               });
               var series = seriesValue.map(function (item, i) {
@@ -16839,15 +16920,13 @@ module.exports =
     }, {
       key: 'componentDidMount',
       value: function componentDidMount() {
-        this.fetchGetMonitorDataAction(this.state.payload);
+        var data = this.props.payload;
+        this.fetchGetMonitorDataAction(data, this.state.time);
         var my = this;
         this.myTime = setInterval(function () {
-          my.fetchGetMonitorDataAction(my.state.payload);
+          my.fetchGetMonitorDataAction(data, my.state.time);
         }, 60000);
       }
-    }, {
-      key: 'componentDidUpdate',
-      value: function componentDidUpdate() {}
     }, {
       key: 'componentWillUnmount',
       value: function componentWillUnmount() {
@@ -16857,8 +16936,13 @@ module.exports =
       key: 'changeTime',
       value: function changeTime(time) {
         var data = this.props.payload;
-        data.time_long = time;
-        this.fetchGetMonitorDataAction(data);
+        this.setState({
+          time: time
+        });
+        var my = this;
+        setTimeout(function () {
+          my.fetchGetMonitorDataAction(data, my.state.time);
+        }, 200);
       }
     }, {
       key: 'render',
@@ -16898,18 +16982,6 @@ module.exports =
               animation: false
             },
             area: {
-              // fillColor: {
-              //   linearGradient: {
-              //     x1: 0,
-              //     y1: 0,
-              //     x2: 0,
-              //     y2: 1
-              //   },
-              //   stops: [
-              //     [0, my.props.color[0]],
-              //     [1, "rgba(255,255,255,0)"]
-              //   ]
-              // },
               marker: {
                 enabled: false,
                 symbol: 'circle',
@@ -16941,7 +17013,6 @@ module.exports =
             'div',
             { className: 'btnChoose' },
             _react2.default.createElement(BtnGroup, {
-              ref: 'a',
               activeKey: 0,
               prop: ["1小时", "6小时", "1天"],
               type: 'memory',
@@ -16951,7 +17022,7 @@ module.exports =
           _react2.default.createElement(
             'div',
             { className: 'monitorBox' },
-            _react2.default.createElement(ReactHighcharts, { config: config })
+            !this.state.data.xAxis.length ? "监控信息传输中,请稍后再试" : _react2.default.createElement(ReactHighcharts, { config: config })
           )
         );
       }
@@ -17541,7 +17612,7 @@ module.exports =
   'use strict';
   
   Object.defineProperty(exports, "__esModule", {
-    value: true
+      value: true
   });
   
   var _getPrototypeOf = __webpack_require__(45);
@@ -17576,45 +17647,51 @@ module.exports =
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
-  var _Button = __webpack_require__(182);
-  
-  var _Button2 = _interopRequireDefault(_Button);
-  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  /**
-   * Created by zhangsai on 16/9/2.
-   */
   var GetOptTabs = function (_Component) {
-    (0, _inherits3.default)(GetOptTabs, _Component);
+      (0, _inherits3.default)(GetOptTabs, _Component);
   
-    function GetOptTabs() {
-      (0, _classCallCheck3.default)(this, GetOptTabs);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOptTabs).apply(this, arguments));
-    }
-  
-    (0, _createClass3.default)(GetOptTabs, [{
-      key: 'render',
-      value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: _ServiceDetail2.default.handleBox },
-          _react2.default.createElement(
-            _Button2.default,
-            { bsStyle: 'danger' },
-            '删除应用'
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            '*删除应用将清除该应用的所有数据，且该操作不能被恢复，请慎重选择！ '
-          )
-        );
+      function GetOptTabs() {
+          (0, _classCallCheck3.default)(this, GetOptTabs);
+          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOptTabs).apply(this, arguments));
       }
-    }]);
-    return GetOptTabs;
-  }(_react.Component);
   
+      (0, _createClass3.default)(GetOptTabs, [{
+          key: 'deleteService',
+          value: function deleteService() {
+              var serviceName = this.props.serviceName;
+              var data = { serviceName: serviceName, type: "detail" };
+              confirm("是否删除?") ? this.props.onDeleteService(data) : "";
+          }
+      }, {
+          key: 'render',
+          value: function render() {
+              return _react2.default.createElement(
+                  'div',
+                  { className: _ServiceDetail2.default.handleBox },
+                  _react2.default.createElement(
+                      'button',
+                      { className: 'btn btn-danger', onClick: this.deleteService.bind(this) },
+                      '删除应用'
+                  ),
+                  _react2.default.createElement(
+                      'p',
+                      null,
+                      '*删除应用将清除该应用的所有数据，且该操作不能被恢复，请慎重选择！ '
+                  )
+              );
+          }
+      }]);
+      return GetOptTabs;
+  }(_react.Component); /**
+                        * Created by zhangsai on 16/9/2.
+                        */
+  
+  
+  GetOptTabs.propTypes = {
+      onDeleteService: _react2.default.PropTypes.func
+  };
   exports.default = (0, _withStyles2.default)(_ServiceDetail2.default)(GetOptTabs);
 
 /***/ },
@@ -19694,7 +19771,12 @@ module.exports =
                       { className: 'entryInputBox  icon-mima' },
                       _react2.default.createElement('input', { onInput: this.changeCode.bind(this),
                         className: 'entryInput', ref: 'code', type: 'text', placeholder: '验证码' }),
-                      _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' })
+                      _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' }),
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'icon-refresh', onClick: this.changeImageSrc.bind(this) },
+                        ' '
+                      )
                     ),
                     _react2.default.createElement(
                       'div',
@@ -19720,16 +19802,10 @@ module.exports =
                   _react2.default.createElement(
                     'div',
                     { className: 'entryFromFt' },
-                    '已有账户? ',
                     _react2.default.createElement(
                       'a',
                       { href: '/login' },
-                      '登录'
-                    ),
-                    _react2.default.createElement(
-                      'a',
-                      { href: 'javascript:;' },
-                      '忘记密码'
+                      '已有账户   登录'
                     )
                   )
                 )
@@ -19830,12 +19906,18 @@ module.exports =
   
   var _users = __webpack_require__(209);
   
+  var _organizeListSelector = __webpack_require__(210);
+  
+  var _organizeListSelector2 = _interopRequireDefault(_organizeListSelector);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var mapStateToProps = function mapStateToProps(state) {
-    var s1 = (0, _BuildingCreateSelector.makeGetGithubAuthURLSelector)();
+    var getGithubAuthURL = (0, _BuildingCreateSelector.makeGetGithubAuthURLSelector)();
+    var getOrganizeList = (0, _organizeListSelector2.default)();
     return {
-      githubAuthURL: s1(state)
+      githubAuthURL: getGithubAuthURL(state),
+      organizeList: getOrganizeList(state)
     };
   };
   
@@ -19849,6 +19931,12 @@ module.exports =
       },
       onRevisePassword: function onRevisePassword(passwordObj) {
         dispatch((0, _users.fetchRevisePasswordAction)(passwordObj));
+      },
+      createOrganize: function createOrganize(org_name) {
+        dispatch((0, _users.fetchCreateOrganize)(org_name));
+      },
+      getOrganizeList: function getOrganizeList() {
+        dispatch((0, _users.fetchGetOrganizeListAction)());
       }
     };
   };
@@ -19977,7 +20065,15 @@ module.exports =
               _react2.default.createElement(
                 _reactBootstrap.Tab,
                 { eventKey: 5, title: '组管理' },
-                _react2.default.createElement(_GetOrganize2.default, null)
+                _react2.default.createElement(_GetOrganize2.default, {
+                  createOrganize: function createOrganize(org_name) {
+                    _this2.props.createOrganize(org_name);
+                  },
+                  getOrganizeList: function getOrganizeList() {
+                    _this2.props.getOrganizeList();
+                  },
+                  organizeList: this.props.organizeList
+                })
               )
             )
           )
@@ -19992,7 +20088,10 @@ module.exports =
     setBreadcrumb: _react2.default.PropTypes.func,
     githubAuthURL: _react2.default.PropTypes.string,
     getGithubAuthURL: _react2.default.PropTypes.func,
-    onRevisePassword: _react2.default.PropTypes.func
+    onRevisePassword: _react2.default.PropTypes.func,
+    createOrganize: _react2.default.PropTypes.func,
+    organizeList: _react2.default.PropTypes.array,
+    getOrganizeList: _react2.default.PropTypes.func
   };
   exports.default = UserCenter;
 
@@ -20861,6 +20960,10 @@ module.exports =
       value: true
   });
   
+  var _extends2 = __webpack_require__(36);
+  
+  var _extends3 = _interopRequireDefault(_extends2);
+  
   var _getPrototypeOf = __webpack_require__(45);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -20889,25 +20992,89 @@ module.exports =
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
+  var _reactBootstrap = __webpack_require__(69);
+  
+  var _Loading = __webpack_require__(137);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var _class = function (_React$Component) {
-      (0, _inherits3.default)(_class, _React$Component);
+  var GetOrganize = function (_Component) {
+      (0, _inherits3.default)(GetOrganize, _Component);
   
-      function _class() {
-          (0, _classCallCheck3.default)(this, _class);
-          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).apply(this, arguments));
+      function GetOrganize() {
+          (0, _classCallCheck3.default)(this, GetOrganize);
+          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrganize).apply(this, arguments));
       }
   
-      (0, _createClass3.default)(_class, [{
-          key: 'componentDidMount',
-          value: function componentDidMount() {
-              console.log(this.context.store);
+      (0, _createClass3.default)(GetOrganize, [{
+          key: 'createOrganize',
+          value: function createOrganize(org_name) {
+              this.props.createOrganize(org_name);
+              this.refs.createOrgModel.hide();
           }
       }, {
           key: 'getOrganizeBody',
           value: function getOrganizeBody() {
-              var data = [{}];
+              var data = this.props.organizeList;
+              if (data[0] == 1) return _react2.default.createElement(
+                  'tr',
+                  null,
+                  _react2.default.createElement(
+                      'td',
+                      { colSpan: '5', style: { textAlign: "center" } },
+                      _react2.default.createElement(_Loading2.default, null)
+                  )
+              );
+              if (!data.length) return _react2.default.createElement(
+                  'tr',
+                  null,
+                  _react2.default.createElement(
+                      'td',
+                      { colSpan: '5', style: { textAlign: "center" } },
+                      '暂无数据~'
+                  )
+              );
+              return data.map(function (item, i) {
+                  return _react2.default.createElement(
+                      'tr',
+                      { key: i },
+                      _react2.default.createElement(
+                          'td',
+                          null,
+                          _react2.default.createElement(
+                              'div',
+                              { className: 'mediaItem' },
+                              _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
+                              _react2.default.createElement(
+                                  'span',
+                                  { className: 'mediaTxt' },
+                                  item.org_name
+                              )
+                          )
+                      ),
+                      _react2.default.createElement(
+                          'td',
+                          null,
+                          item.org_detail
+                      ),
+                      _react2.default.createElement(
+                          'td',
+                          null,
+                          item.is_ower
+                      ),
+                      _react2.default.createElement(
+                          'td',
+                          null,
+                          _react2.default.createElement(
+                              'button',
+                              { className: 'btn btn-danger' },
+                              '退出组织'
+                          )
+                      )
+                  );
+              });
           }
       }, {
           key: 'getTableDemo',
@@ -20923,27 +21090,22 @@ module.exports =
                           null,
                           _react2.default.createElement(
                               'th',
-                              null,
+                              { width: '25%' },
                               '组织名称'
                           ),
                           _react2.default.createElement(
                               'th',
-                              null,
+                              { width: '25%' },
                               '组织简介'
                           ),
                           _react2.default.createElement(
                               'th',
-                              null,
+                              { width: '25%' },
                               '组织权限'
                           ),
                           _react2.default.createElement(
                               'th',
-                              null,
-                              '加入时间'
-                          ),
-                          _react2.default.createElement(
-                              'th',
-                              null,
+                              { width: '25%' },
                               '操作'
                           )
                       )
@@ -20956,8 +21118,15 @@ module.exports =
               );
           }
       }, {
+          key: 'componentDidMount',
+          value: function componentDidMount() {
+              this.props.getOrganizeList();
+          }
+      }, {
           key: 'render',
           value: function render() {
+              var _this2 = this;
+  
               return _react2.default.createElement(
                   'div',
                   { className: 'organize' },
@@ -20978,7 +21147,9 @@ module.exports =
                           { className: 'hbAdd right' },
                           _react2.default.createElement(
                               'div',
-                              { className: 'hbAddBtn clearfix' },
+                              { className: 'hbAddBtn clearfix', onClick: function onClick() {
+                                      _this2.refs.createOrgModel.open();
+                                  } },
                               _react2.default.createElement('div', { className: 'hbPlus left' }),
                               _react2.default.createElement(
                                   'div',
@@ -21001,18 +21172,180 @@ module.exports =
                       'div',
                       { className: 'organizeBd sl-bd TableTextLeft' },
                       this.getTableDemo()
+                  ),
+                  _react2.default.createElement(CreateOrganize, { onCreateOrganize: this.createOrganize.bind(this), ref: 'createOrgModel' })
+              );
+          }
+      }]);
+      return GetOrganize;
+  }(_react.Component);
+  
+  GetOrganize.contextTypes = {
+      store: _react2.default.PropTypes.object
+  };
+  GetOrganize.propTypes = {
+      createOrganize: _react2.default.PropTypes.func,
+      organizeList: _react2.default.PropTypes.array,
+      getOrganizeList: _react2.default.PropTypes.func
+  };
+  
+  var CreateOrganize = function (_Component2) {
+      (0, _inherits3.default)(CreateOrganize, _Component2);
+  
+      function CreateOrganize(props) {
+          (0, _classCallCheck3.default)(this, CreateOrganize);
+  
+          var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CreateOrganize).call(this, props));
+  
+          _this3.state = {
+              show: false,
+              orgName: false
+          };
+          return _this3;
+      }
+  
+      (0, _createClass3.default)(CreateOrganize, [{
+          key: 'open',
+          value: function open() {
+              this.setState({
+                  show: true
+              });
+          }
+      }, {
+          key: 'hide',
+          value: function hide() {
+              this.setState({
+                  show: false
+              });
+          }
+      }, {
+          key: 'createOrganize',
+          value: function createOrganize() {
+              var org_name = this.refs.org_name;
+              var org_tip = this.refs.org_tip;
+              if (!org_name.value) {
+                  this.setState({
+                      orgName: true
+                  });
+                  org_tip.innerHTML = "组织名称不能为空";
+                  return false;
+              }
+              this.props.onCreateOrganize(org_name.value);
+          }
+      }, {
+          key: 'organizeName',
+          value: function organizeName() {
+              var value = this.refs.org_name.value;
+              var org_tip = this.refs.org_tip;
+              if (value.length == 0) {
+                  this.setState({
+                      orgName: false
+                  });
+              } else if (value.length < 6) {
+                  this.setState({
+                      orgName: true
+                  });
+                  org_tip.innerHTML = "组织名称太短";
+              } else if (!/^[a-z]{1}[a-z0-9_]{5,}$/.test(value)) {
+                  this.setState({
+                      orgName: true
+                  });
+                  org_tip.innerHTML = "组织名称格式不正确";
+              } else {
+                  this.setState({
+                      orgName: false
+                  });
+              }
+          }
+      }, {
+          key: 'render',
+          value: function render() {
+              return _react2.default.createElement(
+                  _reactBootstrap.Modal,
+                  (0, _extends3.default)({}, this.props, { show: this.state.show,
+                      onHide: this.hide.bind(this),
+                      bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
+                  _react2.default.createElement(
+                      'div',
+                      { className: 'modal-header' },
+                      _react2.default.createElement(
+                          'button',
+                          { type: 'button', onClick: this.hide.bind(this), className: 'close', 'aria-label': 'Close' },
+                          _react2.default.createElement(
+                              'span',
+                              { 'aria-hidden': 'true' },
+                              '×'
+                          )
+                      ),
+                      _react2.default.createElement(
+                          'h4',
+                          { className: 'modal-title', id: 'contained-modal-title-sm' },
+                          '新建组织'
+                      )
+                  ),
+                  _react2.default.createElement(
+                      'div',
+                      { className: this.state.orgName ? "modal-body has-error" : "modal-body" },
+                      _react2.default.createElement(
+                          'div',
+                          { className: 'modalItem' },
+                          _react2.default.createElement(
+                              'label',
+                              null,
+                              _react2.default.createElement(
+                                  'span',
+                                  null,
+                                  '组织名称'
+                              )
+                          ),
+                          _react2.default.createElement(
+                              'label',
+                              null,
+                              _react2.default.createElement('input', { onInput: this.organizeName.bind(this),
+                                  className: 'form-control form-control-sm',
+                                  type: 'input', placeholder: '请输入名称',
+                                  ref: 'org_name' })
+                          )
+                      ),
+                      _react2.default.createElement(
+                          'div',
+                          { ref: 'org_tip', className: 'volumeTip' },
+                          '组织名称不正确'
+                      ),
+                      _react2.default.createElement(
+                          'div',
+                          { className: 'modalItem modelItemLast' },
+                          _react2.default.createElement(
+                              'label',
+                              null,
+                              _react2.default.createElement(
+                                  'span',
+                                  null,
+                                  ' '
+                              )
+                          ),
+                          _react2.default.createElement(
+                              'label',
+                              null,
+                              _react2.default.createElement(
+                                  'button',
+                                  { className: 'btn btn-primary',
+                                      onClick: this.createOrganize.bind(this) },
+                                  '创建组织'
+                              )
+                          )
+                      )
                   )
               );
           }
       }]);
-      return _class;
-  }(_react2.default.Component);
+      return CreateOrganize;
+  }(_react.Component);
   
-  _class.contextTypes = {
-      store: _react2.default.PropTypes.object
+  CreateOrganize.propTypes = {
+      onCreateOrganize: _react2.default.PropTypes.func
   };
-  _class.propTypes = {};
-  exports.default = _class;
+  exports.default = GetOrganize;
 
 /***/ },
 /* 209 */
@@ -21031,8 +21364,12 @@ module.exports =
   exports.receiveUserInfo = receiveUserInfo;
   exports.fetchUserInfo = fetchUserInfo;
   exports.fetchRevisePasswordAction = fetchRevisePasswordAction;
+  exports.fetchCreateOrganize = fetchCreateOrganize;
+  exports.fetchGetOrganizeListAction = fetchGetOrganizeListAction;
   
   var _constants = __webpack_require__(37);
+  
+  var Const = _interopRequireWildcard(_constants);
   
   var _isomorphicFetch = __webpack_require__(81);
   
@@ -21041,6 +21378,8 @@ module.exports =
   var _notification = __webpack_require__(79);
   
   var _route = __webpack_require__(57);
+  
+  function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -21104,9 +21443,93 @@ module.exports =
       });
     };
   }
+  
+  function fetchCreateOrganize(org_name) {
+    console.log(org_name);
+    var body = (0, _stringify2.default)({ org_name: org_name });
+    var myInit = {
+      method: "POST",
+      headers: { token: localStorage.getItem("_at") },
+      body: body
+    };
+    var url = Const.FETCH_URL.ORGANIZE;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json, "新建组织返回值");
+        if (json.status == 0) {
+          dispatch((0, _notification.receiveNotification)({ message: "创建成功", level: "success" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "创建失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function receiveOrganizeList(data) {
+    return {
+      type: Const.GET_ORGANIZE_LIST,
+      payload: data
+  
+    };
+  }
+  
+  function fetchGetOrganizeListAction() {
+    var myInit = {
+      method: "GET",
+      headers: { token: localStorage.getItem("_at") }
+    };
+    var url = Const.FETCH_URL.ORGANIZE;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json, "组织列表");
+        if (json.status == 0) {
+          dispatch(receiveOrganizeList(json.result));
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "获取组织列表失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
 
 /***/ },
 /* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _reselect = __webpack_require__(62);
+  
+  var getOrganizeList = function getOrganizeList(state) {
+    return state.organizeList;
+  };
+  
+  var makeGetOrganizeListSelector = function makeGetOrganizeListSelector() {
+    return (0, _reselect.createSelector)([getOrganizeList], function (organizeList) {
+      return organizeList;
+    });
+  };
+  
+  exports.default = makeGetOrganizeListSelector;
+
+/***/ },
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21127,7 +21550,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ReviseImageContainer = __webpack_require__(211);
+  var _ReviseImageContainer = __webpack_require__(212);
   
   var _ReviseImageContainer2 = _interopRequireDefault(_ReviseImageContainer);
   
@@ -21158,7 +21581,7 @@ module.exports =
   // import CodeBuildList from './CodeBuildList'
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21167,7 +21590,7 @@ module.exports =
     value: true
   });
   
-  var _ReviseImage = __webpack_require__(212);
+  var _ReviseImage = __webpack_require__(213);
   
   var _ReviseImage2 = _interopRequireDefault(_ReviseImage);
   
@@ -21220,7 +21643,7 @@ module.exports =
   exports.default = ReviseImageContainer;
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21515,13 +21938,13 @@ module.exports =
   exports.default = ReviseImage;
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';

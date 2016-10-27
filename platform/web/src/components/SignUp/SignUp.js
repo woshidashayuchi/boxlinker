@@ -274,6 +274,7 @@ class SignUp extends React.Component{
                     <input onInput={this.changeCode.bind(this)}
                            className="entryInput" ref="code" type="text" placeholder="验证码"/>
                     <img ref = "codeImg" onClick = {this.changeImageSrc.bind(this)} src = "" />
+                    <span className="icon-refresh" onClick = {this.changeImageSrc.bind(this)}> </span>
                   </div>
                   <div className="entryTip">
                     <p ref = "codeTip">验证码错误</p>
@@ -285,8 +286,7 @@ class SignUp extends React.Component{
                           onClick={this.signUp.bind(this)}>{this.state.isSignUp?"注册":"注册中..."}</button>
                 </div>
                 <div className="entryFromFt">
-                  已有账户? <a href="/login">登录</a>
-                  <a href="javascript:;">忘记密码</a>
+                  <a href="/login">已有账户   登录</a>
                 </div>
               </div>
             </div>

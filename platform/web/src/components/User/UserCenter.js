@@ -17,7 +17,10 @@ class UserCenter extends  Component{
     setBreadcrumb:React.PropTypes.func,
     githubAuthURL: React.PropTypes.string,
     getGithubAuthURL: React.PropTypes.func,
-    onRevisePassword:React.PropTypes.func
+    onRevisePassword:React.PropTypes.func,
+    createOrganize:React.PropTypes.func,
+    organizeList:React.PropTypes.array,
+    getOrganizeList:React.PropTypes.func
   };
   componentDidMount(){
     this.props.getGithubAuthURL();
@@ -46,7 +49,11 @@ class UserCenter extends  Component{
               <GetCertificateMange />
             </Tab>
             <Tab eventKey={5} title="组管理">
-              <GetOrganize />
+              <GetOrganize
+                  createOrganize = {(org_name) =>{this.props.createOrganize(org_name)}}
+                  getOrganizeList = {() => {this.props.getOrganizeList()}}
+                  organizeList = {this.props.organizeList}
+              />
             </Tab>
           </Tabs>
         </div>

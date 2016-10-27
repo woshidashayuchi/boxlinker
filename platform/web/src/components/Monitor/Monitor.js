@@ -60,7 +60,8 @@ export default class extends React.Component {
     super(props);
     this.state = {
       data:{xAxis:[],series:[]},
-      payload:this.props.payload
+      payload:this.props.payload,
+      time:"60m"
     }
   }
   static propTypes = {
@@ -69,14 +70,14 @@ export default class extends React.Component {
     legend:React.PropTypes.bool,
     valueSuffix:React.PropTypes.string
   };
-  fetchGetMonitorDataAction(data) {
+  fetchGetMonitorDataAction(data,time_long) {
     let myInit = {
       method : "GET",
       headers:{token:localStorage.getItem("_at")},
     };
     let my = this;
     let url = Const.FETCH_URL.GET_SERVICE_MONITOR+"/"+data.userName+"/pods/"+data.pod_name+"/metrics/"+data.type+
-      "?time_long="+data.time_long//+"&time_span="+data.time_span;
+      "?time_long="+time_long;
       fetch(url,myInit)
         .then(response => response.json())
         .then(json => {
@@ -87,19 +88,21 @@ export default class extends React.Component {
             let seriesName = [];
             let seriesValue = [];
             json.result.map((item,i) => {
-              if(data.type == "memory") {
-                if (i == 2) {
+              if(!item.name){return false}else {
+                if (data.type == "memory") {
+                  if (i == 2) {
+                    seriesName.push(item.name.split("/")[1]);
+                    seriesValue.push(item.value);
+                  }
+                } else if (data.type == "cpu") {
+                  if (i == 1) {
+                    seriesName.push(item.name.split("/")[1]);
+                    seriesValue.push(item.value);
+                  }
+                } else {
                   seriesName.push(item.name.split("/")[1]);
                   seriesValue.push(item.value);
                 }
-              }else if(data.type == "cpu"){
-                if(i==1) {
-                  seriesName.push(item.name.split("/")[1]);
-                  seriesValue.push(item.value);
-                }
-              }else{
-                seriesName.push(item.name.split("/")[1]);
-                seriesValue.push(item.value);
               }
             });
             let series = seriesValue.map((item,i) => {
@@ -131,20 +134,25 @@ export default class extends React.Component {
   }
 
   componentDidMount(){
-    this.fetchGetMonitorDataAction(this.state.payload);
+    let data = this.props.payload ;
+    this.fetchGetMonitorDataAction(data,this.state.time);
     let my = this;
     this.myTime = setInterval(function(){
-      my.fetchGetMonitorDataAction(my.state.payload);
+      my.fetchGetMonitorDataAction(data,my.state.time);
     },60000)
   }
-  componentDidUpdate(){}
   componentWillUnmount(){
     clearInterval(this.myTime);
   }
   changeTime(time){
     let data = this.props.payload ;
-    data.time_long = time;
-    this.fetchGetMonitorDataAction(data);
+    this.setState({
+      time:time
+    });
+    let my = this;
+    setTimeout(function(){
+      my.fetchGetMonitorDataAction(data,my.state.time);
+    },200);
   }
   render(){
     let my = this;
@@ -182,18 +190,6 @@ export default class extends React.Component {
           animation: false
         },
         area: {
-          // fillColor: {
-          //   linearGradient: {
-          //     x1: 0,
-          //     y1: 0,
-          //     x2: 0,
-          //     y2: 1
-          //   },
-          //   stops: [
-          //     [0, my.props.color[0]],
-          //     [1, "rgba(255,255,255,0)"]
-          //   ]
-          // },
           marker: {
             enabled: false,
             symbol: 'circle',
@@ -222,7 +218,6 @@ export default class extends React.Component {
       <div className="assBox">
         <div className="btnChoose">
           <BtnGroup
-              ref = "a"
             activeKey={0}
             prop={["1小时","6小时","1天"]}
             type = "memory"
@@ -231,7 +226,9 @@ export default class extends React.Component {
           </BtnGroup>
         </div>
         <div className="monitorBox">
-          <ReactHighcharts config={config} />
+          {
+            !this.state.data.xAxis.length?"监控信息传输中,请稍后再试":<ReactHighcharts config={config} />
+          }
         </div>
       </div>
     )

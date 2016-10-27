@@ -19,7 +19,7 @@ import {
   fetchAutoStateUp,
   fetchGetMonitorDataAction
 } from '../../actions/serviceDetail';
-import {fetchChangeStateAction} from '../../actions/services'
+import {fetchChangeStateAction,fetchDeleteServiceAction} from '../../actions/services'
 import * as actions from '../../actions/serviceDetail'
 import { fetchVolumesListAction } from '../../actions/volumes';
 import makeServiceDetailSelector from '../../selectors/serviceDetailSelector';
@@ -128,7 +128,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     onChangeRelease:(data) =>{
       dispatch(actions.fetchChangeReleaseAction(data))
-      }
+    },
+    onDeleteService : (data) => {
+      dispatch(fetchDeleteServiceAction(data))
+    },
   }
 };
 

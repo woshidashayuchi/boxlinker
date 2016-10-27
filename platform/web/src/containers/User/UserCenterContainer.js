@@ -7,12 +7,19 @@ import {
   fetchGithubAuthURLAction,
 } from '../../actions/building';
 import {makeGetGithubAuthURLSelector} from '../../selectors/BuildingCreateSelector';
-import {fetchRevisePasswordAction} from '../../actions/users'
+import {
+  fetchRevisePasswordAction,
+    fetchCreateOrganize,
+    fetchGetOrganizeListAction
+} from '../../actions/users';
+import makeGetOrganizeListSelector from '../../selectors/organizeListSelector';
 
 const mapStateToProps = (state) => {
-  const s1 = makeGetGithubAuthURLSelector();
+  const getGithubAuthURL = makeGetGithubAuthURLSelector();
+  const getOrganizeList = makeGetOrganizeListSelector();
   return {
-    githubAuthURL: s1(state),
+    githubAuthURL: getGithubAuthURL(state),
+    organizeList:getOrganizeList(state)
   }
 };
 
@@ -26,6 +33,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     onRevisePassword:(passwordObj) =>{
       dispatch(fetchRevisePasswordAction(passwordObj))
+    },
+    createOrganize:(org_name) =>{
+      dispatch(fetchCreateOrganize(org_name))
+    },
+    getOrganizeList:() =>{
+      dispatch(fetchGetOrganizeListAction())
     }
   }
 };

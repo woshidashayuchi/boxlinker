@@ -3,6 +3,7 @@ import React from 'react';
 import {Panel} from 'react-bootstrap';
 import {BREADCRUMB} from "../../constants";
 import Link from '../Link';
+import Loading from '../Loading';
 
 
 class ImageForPlatform extends React.Component{
@@ -22,12 +23,14 @@ class ImageForPlatform extends React.Component{
   deployImage(ImageName,id){
     let obj = {
       image_name :`index.boxlinker.com/${ImageName}`,
-      uuid:id
+      image_id:id
     };
     this.props.goToConfigContainer(obj);
   }
   getImageList(){
     let data = this.props.imageList;
+    if(!data || !data.length) return <div>暂无数据~</div>
+    if(data.length == 1&&data[0] == 1) return <div><Loading /></div>;
     let body = [];
     data.map((item,i) => {
         body.push(<div className="imagesListItem" key={i}>

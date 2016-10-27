@@ -72,10 +72,10 @@ class ImageDetail extends Component{
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.IMAGE_DETAIL);
     this.props.getImageDetail(uuid);
   }
-  deployImage(ImageName,id){
+  deployImage(ImageName){
     let obj = {
       image_name :`index.boxlinker.com/${ImageName}`,
-      uuid:id
+      image_id:this.props.uuid
     };
     this.props.goToConfigContainer(obj);
   }
@@ -100,7 +100,7 @@ class ImageDetail extends Component{
           <td>{item.tag}</td>
           <td>
             <SplitButton
-              onClick = {this.deployImage.bind(this,data.repository,data.uuid)}
+              onClick = {this.deployImage.bind(this,data.repository)}
               bsStyle="primary" title="部署" id={`building-table-line-${i}`}>
               <MenuItem eventKey="1" onClick = {this.showModal.bind(this)}>拉取</MenuItem>
             </SplitButton>

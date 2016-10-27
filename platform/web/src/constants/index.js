@@ -171,6 +171,9 @@ export const FETCH_URL = {
   BUILDING_REVISE:URL+'/api/v1.0/repository/repositorybuilds',
   GET_SERVICE_MONITOR: 'http://monitor.boxlinker.com/api/v1/model/namespaces',
 
+  //new
+  ORGANIZE:URL + '/api/v1.0/usercenter/orgs',
+
 };
 // endpoints
 export const RECEIVE_ENDPOINTS = 'RECEIVE_ENDPOINTS'
@@ -215,6 +218,8 @@ export const IS_BTN_STATE = {
   autoStateUp:'IS_AUTO_STATE_UP',
   reviseBuilding:"REVISE_BUILDING"
 };
+
+export const GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
 
 
 

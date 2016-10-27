@@ -49,7 +49,8 @@ class ServiceList extends Component{
   }
 
   deleteService(serviceName){
-    confirm("是否删除?")?this.props.onDeleteService(serviceName):"";
+    let data = {serviceName:serviceName,type:"list"};
+    confirm("是否删除?")?this.props.onDeleteService(data):"";
   }
   changeState(serviceName,state){
     let data = {serviceName:serviceName,state:state};
@@ -58,8 +59,9 @@ class ServiceList extends Component{
   }
   getTableBody(){
     let data = this.props.serviceList;
-    if(!data.length) return <tr><td colSpan="5" style={{"textAlign":"center"}}>暂无数据~</td></tr>
-    if(data.length == 1&&data[0] == 0) return <tr><td colSpan="5" style={{"textAlign":"center"}}><Loading /></td></tr>
+    if(!data.length) return <tr><td colSpan="5" style={{"textAlign":"center"}}>暂无数据~</td></tr>;
+    if(data.length == 1&&data[0] == 1) return <tr><td colSpan="5" style={{"textAlign":"center"}}><Loading /></td></tr>;
+    if(data.length == 1&&data[0] == 0) return <tr><td colSpan="5" style={{"textAlign":"center"}}><Loading /></td></tr>;
     let body = [];
     data.map((item, i) => {
       let serviceState = "";
