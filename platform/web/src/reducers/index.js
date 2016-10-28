@@ -400,6 +400,24 @@ function organizeList(state = [1],action){
         return state
   }
 }
+function organizeDetail(state = {creation_time:""},action){
+  switch (action.type){
+    case Const.GET_ORGANIZE_DETAIL:
+      return action.payload;
+      break;
+    default:
+      return Object.assign({},state);
+  }
+}
+function organizeUserList(state = [1],action){
+  switch (action.type){
+    case Const.GET_ORGANIZE_USER_LIST:
+      return action.payload;
+      break;
+    default :
+      return state
+  }
+}
 
 const rootReducer = combineReducers({
   isSidebarOpen,
@@ -424,7 +442,9 @@ const rootReducer = combineReducers({
   notifications,
   runtime,
   isBtnState,
-  organizeList
+  organizeList,
+  organizeDetail,
+  organizeUserList
 });
 
 

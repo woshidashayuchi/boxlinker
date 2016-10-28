@@ -10,30 +10,54 @@ class GetOrganize extends Component {
     static propTypes = {
         createOrganize:React.PropTypes.func,
         organizeList:React.PropTypes.array,
-        getOrganizeList:React.PropTypes.func
+        getOrganizeList:React.PropTypes.func,
+        leaveOrganize:React.PropTypes.func,
+        deleteOrganize:React.PropTypes.func
     };
     createOrganize(org_name){
         this.props.createOrganize(org_name);
         this.refs.createOrgModel.hide();
 
     }
+    leaveOrganize(id){
+        confirm("确定退出组织吗?")?this.props.leaveOrganize(id):"";
+    }
+    deleteOrganize(id){
+        confirm("确定解散组织吗?")?this.props.deleteOrganize(id):"";
+    }
     getOrganizeBody(){
         let data = this.props.organizeList;
         if(data[0] == 1) return <tr><td colSpan = "5" style = {{textAlign:"center"}}><Loading /></td></tr>;
         if(!data.length) return <tr><td colSpan = "5" style = {{textAlign:"center"}}>暂无数据~</td></tr>;
+        let role = "";
         return data.map((item,i) =>{
+            let opt = <button className="btn btn-danger" onClick = {this.leaveOrganize.bind(this,item.org_id)}>退出组织</button>;
+            switch (Number(item.role)){
+                case 200 :
+                    role = "组织拥有者";
+                    opt = <button className="btn btn-danger" onClick = {this.deleteOrganize.bind(this,item.org_id)}>解散组织</button>;
+                break;
+                case 210 :
+                    role = "管理员";
+                break;
+                case 400 :
+                    role = "成员";
+                break;
+                default :
+                    role = "成员";
+            }
             return (
                 <tr key = {i}>
                     <td>
                         <div className="mediaItem">
                             <img className="mediaImg" src = "/slImgJx.png" />
-                            <span className="mediaTxt">{item.org_name}</span>
+                            <span className="mediaTxt">{item.orga_name}</span>
                         </div>
                     </td>
-                    <td>{item.org_detail}</td>
-                    <td>{item.is_ower}</td>
+                    <td>{item.org_detail||"暂无简介"}</td>
+                    <td>{role}</td>
                     <td>
-                        <button className="btn btn-danger">退出组织</button>
+                        {opt}
                     </td>
                 </tr>
             )

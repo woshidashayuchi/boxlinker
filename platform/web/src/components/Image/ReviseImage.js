@@ -13,21 +13,21 @@ class IsPublicToggle extends  Component{
   constructor(props) {
     super(props);
     this.state = {
-      autoStart:this.props.state
+      is_public:this.props.state
     };
   }
   handClick(component, value){
     this.setState({
-      autoStart: !this.state.autoStart,
+      is_public: !this.state.is_public,
     });
-    this.props.getToggle(this.state.autoStart);
+    this.props.getToggle(this.state.is_public);
   }
   componentDidMount(){
   }
   render(){
     return(
       <Toggle
-        defaultChecked={this.state.autoStart}
+        defaultChecked={this.state.is_public}
         onChange={this.handClick.bind(this)}
       />
     )

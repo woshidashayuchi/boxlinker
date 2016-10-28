@@ -5,8 +5,8 @@ class Loading extends Component{
 
   render(){
     return(
-      <div>
-        <img width="50" height="50" src="/loading.gif"/>
+      <div className="listRefresh icon-refresh">
+        {/*//<img width="50" height="50" src="/loading.gif"/>*/}
       </div>
     )
   }

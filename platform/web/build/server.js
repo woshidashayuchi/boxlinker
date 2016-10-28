@@ -116,11 +116,11 @@ module.exports =
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _assets = __webpack_require__(214);
+  var _assets = __webpack_require__(219);
   
   var _assets2 = _interopRequireDefault(_assets);
   
-  var _runtime = __webpack_require__(215);
+  var _runtime = __webpack_require__(220);
   
   var _users = __webpack_require__(209);
   
@@ -1487,6 +1487,30 @@ module.exports =
         return state;
     }
   }
+  function organizeDetail() {
+    var state = arguments.length <= 0 || arguments[0] === undefined ? { creation_time: "" } : arguments[0];
+    var action = arguments[1];
+  
+    switch (action.type) {
+      case Const.GET_ORGANIZE_DETAIL:
+        return action.payload;
+        break;
+      default:
+        return (0, _assign2.default)({}, state);
+    }
+  }
+  function organizeUserList() {
+    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var action = arguments[1];
+  
+    switch (action.type) {
+      case Const.GET_ORGANIZE_USER_LIST:
+        return action.payload;
+        break;
+      default:
+        return state;
+    }
+  }
   
   var rootReducer = (0, _redux.combineReducers)({
     isSidebarOpen: isSidebarOpen,
@@ -1511,7 +1535,9 @@ module.exports =
     notifications: notifications,
     runtime: _runtime2.default,
     isBtnState: isBtnState,
-    organizeList: organizeList
+    organizeList: organizeList,
+    organizeDetail: organizeDetail,
+    organizeUserList: organizeUserList
   });
   
   exports.default = rootReducer;
@@ -1581,21 +1607,17 @@ module.exports =
   };
   var SIDEBAR_ACTIVE = exports.SIDEBAR_ACTIVE = 'SIDEBAR_ACTIVE';
   var SET_RUNTIME_VARIABLE = exports.SET_RUNTIME_VARIABLE = 'SET_RUNTIME_VARIABLE';
-  var GET_VOLUMES_LIST = exports.GET_VOLUMES_LIST = 'GET_VOLUMES_LIST';
   var RECEIVE_VOLUMES_LIST = exports.RECEIVE_VOLUMES_LIST = 'RECEIVE_VOLUMES_LIST';
   var CLEAR_VOLUMES_LIST = exports.CLEAR_VOLUMES_LIST = 'CLEAR_VOLUMES_LIST';
-  
   // deploy service
   var DEPLOY_SVC_IMAGE = exports.DEPLOY_SVC_IMAGE = "DEPLOY_SVC_IMAGE";
   var DEPLOY_SVC_CONTAINER = exports.DEPLOY_SVC_CONTAINER = 'DEPLOY_SVC_CONTAINER';
   var DEPLOY_SVC_SENIOR = exports.DEPLOY_SVC_SENIOR = 'DEPLOY_SVC_SENIOR';
   var CLEAR_DEPLOY_DATA = exports.CLEAR_DEPLOY_DATA = 'CLEAR_DEPLOY_DATA';
-  
-  // servicesList
+  // service
   var GET_ALL_SERVICES = exports.GET_ALL_SERVICES = 'GET_ALL_SERVICES';
   var CLEAR_SERVICE_LIST = exports.CLEAR_SERVICE_LIST = 'CLEAR_SERVICE_LIST';
   var REFRESH_LIST = exports.REFRESH_LIST = 'REFRESH_LIST';
-  //serviceDetail
   var GET_SERVICE_DETAIL = exports.GET_SERVICE_DETAIL = 'GET_SERVICE_DETAIL';
   var ADD_PORT = exports.ADD_PORT = 'ADD_PORT';
   var DEL_PORT = exports.DEL_PORT = 'DEL_PORT';
@@ -1611,29 +1633,26 @@ module.exports =
     Stopping: 'stopping'
   };
   var GET_MONITOR_DATA = exports.GET_MONITOR_DATA = 'GET_MONITOR_DATA';
-  //imagelist
+  //image
   var GET_IMAGE_LIST = exports.GET_IMAGE_LIST = 'GET_IMAGE_LIST';
   var CLEAR_IMAGE_LIST = exports.CLEAR_IMAGE_LIST = 'CLEAR_IMAGE_LIST';
-  //imageDetail
   var GET_IMAGE_DETAIL = exports.GET_IMAGE_DETAIL = 'GET_IMAGE_DETELE';
-  
   var API_VOLUMES_URL = exports.API_VOLUMES_URL = "http://storage.boxlinker.com/api/v1.0/storage/volumes";
   var API_SERVICE_URL = exports.API_SERVICE_URL = "http://api.boxlinker.com/api/v1/application/service";
   var API_DELETE_SERVICE_URL = exports.API_DELETE_SERVICE_URL = "http://api.boxlinker.com/api/v1/application/remove/service";
   var API_IMAGE_URL = exports.API_IMAGE_URL = "http://auth.boxlinker.com/registry/v2";
-  
   // building
   var GET_REPO_LIST = exports.GET_REPO_LIST = "GET_REPO_LIST";
   var IS_LOADING = exports.IS_LOADING = "IS_LOADING";
   var GET_GITHUB_AUTH_URL = exports.GET_GITHUB_AUTH_URL = "GET_GITHUB_AUTH_URL";
   var GET_BUILDING_IMAGE_LIST = exports.GET_BUILDING_IMAGE_LIST = "GET_BUILDING_IMAGE_LIST";
   var GET_BUILDING_DETAIL = exports.GET_BUILDING_DETAIL = 'GET_BUILDING_DETAIL';
-  
   // userinfo
-  
-  var USER_INFO = exports.USER_INFO = "USER_INFO";
   var RECEIVE_USER_INFO = exports.RECEIVE_USER_INFO = "RECEIVE_USER_INFO";
-  
+  // organize
+  var GET_ORGANIZE_LIST = exports.GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
+  var GET_ORGANIZE_DETAIL = exports.GET_ORGANIZE_DETAIL = 'GET_ORGANIZE_DETAIL';
+  var GET_ORGANIZE_USER_LIST = exports.GET_ORGANIZE_USER_LIST = 'GET_ORGANIZE_USER_LIST';
   // breadcrumb
   var BREADCRUMB_LIST = exports.BREADCRUMB_LIST = "BREADCRUMB_LIST";
   var BREADCRUMB = exports.BREADCRUMB = {
@@ -1696,6 +1715,10 @@ module.exports =
     USER_CONTAINER: {
       title: '个人中心',
       link: '/user'
+    },
+    ORGANIZE: {
+      title: '组织中心',
+      link: '/organize'
     }
   };
   
@@ -1741,7 +1764,8 @@ module.exports =
     GET_SERVICE_MONITOR: 'http://monitor.boxlinker.com/api/v1/model/namespaces',
   
     //new
-    ORGANIZE: URL + '/api/v1.0/usercenter/orgs'
+    ORGANIZE: URL + '/api/v1.0/usercenter/orgs',
+    TOKEN: URL + '/api/v1.0/usercenter/tokens'
   
   };
   // endpoints
@@ -1781,8 +1805,6 @@ module.exports =
     autoStateUp: 'IS_AUTO_STATE_UP',
     reviseBuilding: "REVISE_BUILDING"
   };
-  
-  var GET_ORGANIZE_LIST = exports.GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
 
 /***/ },
 /* 38 */
@@ -2062,23 +2084,23 @@ module.exports =
   
   var _imageForPlatform2 = _interopRequireDefault(_imageForPlatform);
   
-  var _imageForMy = __webpack_require__(105);
+  var _imageForMy = __webpack_require__(106);
   
   var _imageForMy2 = _interopRequireDefault(_imageForMy);
   
-  var _imageDetail = __webpack_require__(109);
+  var _imageDetail = __webpack_require__(110);
   
   var _imageDetail2 = _interopRequireDefault(_imageDetail);
   
-  var _createImage = __webpack_require__(121);
+  var _createImage = __webpack_require__(122);
   
   var _createImage2 = _interopRequireDefault(_createImage);
   
-  var _buildingDetail = __webpack_require__(129);
+  var _buildingDetail = __webpack_require__(130);
   
   var _buildingDetail2 = _interopRequireDefault(_buildingDetail);
   
-  var _building = __webpack_require__(134);
+  var _building = __webpack_require__(135);
   
   var _building2 = _interopRequireDefault(_building);
   
@@ -2126,28 +2148,22 @@ module.exports =
   
   var _userCenter2 = _interopRequireDefault(_userCenter);
   
-  var _reviseImage = __webpack_require__(211);
+  var _reviseImage = __webpack_require__(212);
   
   var _reviseImage2 = _interopRequireDefault(_reviseImage);
   
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  var _organize = __webpack_require__(215);
   
-  // Child routes
-  /**
-   * React Starter Kit (https://www.reactstarterkit.com/)
-   *
-   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE.txt file in the root directory of this source tree.
-   */
+  var _organize2 = _interopRequireDefault(_organize);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   exports.default = {
   
     path: '/',
   
     // keep in mind, routes are evaluated in order
-    children: [_dashboard2.default, _imageCenter2.default, _imageForPlatform2.default, _imageForMy2.default, _imageDetail2.default, _createImage2.default, _reviseImage2.default, _buildingCreate2.default, _buildingDetail2.default, _building2.default, _serviceList2.default, _serviceDetail2.default, _addService2.default, _dataVolumeList2.default, _login2.default, _signUp2.default, _userCenter2.default, _choseImage2.default, _configContainer2.default,
+    children: [_dashboard2.default, _imageCenter2.default, _imageForPlatform2.default, _imageForMy2.default, _imageDetail2.default, _createImage2.default, _reviseImage2.default, _buildingCreate2.default, _buildingDetail2.default, _building2.default, _serviceList2.default, _serviceDetail2.default, _addService2.default, _dataVolumeList2.default, _login2.default, _signUp2.default, _userCenter2.default, _choseImage2.default, _configContainer2.default, _organize2.default,
   
     // place new routes before...
     _error2.default],
@@ -2201,6 +2217,16 @@ module.exports =
       }))();
     }
   };
+  
+  // Child routes
+  /**
+   * React Starter Kit (https://www.reactstarterkit.com/)
+   *
+   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.txt file in the root directory of this source tree.
+   */
 
 /***/ },
 /* 44 */
@@ -3338,6 +3364,8 @@ module.exports =
       key: 'getList',
       value: function getList() {
         var open = this.props.isSidebarOpen;
+        var is_user = this.context.store.getState().user_info.is_user;
+        console.log(is_user);
         return open ? _react2.default.createElement(
           'div',
           { className: _Sidebar2.default.listPack },
@@ -3444,7 +3472,7 @@ module.exports =
                 )
               )
             ),
-            _react2.default.createElement(
+            is_user == 1 ? _react2.default.createElement(
               'ul',
               { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
               _react2.default.createElement(
@@ -3455,6 +3483,19 @@ module.exports =
                   MenuListItem,
                   { href: '/user', icon: showIcon("icon-login") },
                   '用户中心'
+                )
+              )
+            ) : _react2.default.createElement(
+              'ul',
+              { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
+              _react2.default.createElement(
+                'li',
+                { onClick: this.onChangeAction.bind(this, "/organize"),
+                  className: this.props.sidebarActive == "/organize" ? "subListAction" : "" },
+                _react2.default.createElement(
+                  MenuListItem,
+                  { href: '/organize', icon: showIcon("icon-login") },
+                  '组织中心'
                 )
               )
             )
@@ -3552,7 +3593,7 @@ module.exports =
               className: this.props.sidebarActive == "/building" ? "menuListAction" : ""
             })
           ),
-          _react2.default.createElement(ThinList, {
+          is_user == 1 ? _react2.default.createElement(ThinList, {
             href: '/user',
             isOpen: false,
             title: '用户中心',
@@ -3563,6 +3604,17 @@ module.exports =
             ),
             onClick: this.onChangeAction.bind(this, "/user"),
             className: this.props.sidebarActive == "/user" ? "menuListAction" : ""
+          }) : _react2.default.createElement(ThinList, {
+            href: '/organize',
+            isOpen: false,
+            title: '组织中心',
+            icon: _react2.default.createElement(
+              'i',
+              { className: 'icon-login' },
+              ' '
+            ),
+            onClick: this.onChangeAction.bind(this, "/organize"),
+            className: this.props.sidebarActive == "/organize" ? "menuListAction" : ""
           })
         );
       }
@@ -3584,6 +3636,9 @@ module.exports =
   // <li><a href="/serviceList">服务列表</a></li>
   //   <li><a href="/">存储卷管理</a></li>
   
+  Sidebar.contextTypes = {
+    store: _react2.default.PropTypes.object
+  };
   Sidebar.propTypes = {
     isSidebarOpen: _react2.default.PropTypes.bool,
     sidebarActive: _react2.default.PropTypes.string,
@@ -3734,6 +3789,10 @@ module.exports =
   
   var _Header2 = _interopRequireDefault(_Header);
   
+  var _organize = __webpack_require__(210);
+  
+  var funOrganize = _interopRequireWildcard(_organize);
+  
   var _isSidebarOpenSelector = __webpack_require__(70);
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
@@ -3742,16 +3801,22 @@ module.exports =
   
   var _isLoadingSelector2 = _interopRequireDefault(_isLoadingSelector);
   
-  var _header = __webpack_require__(76);
+  var _organizeListSelector = __webpack_require__(211);
+  
+  var _organizeListSelector2 = _interopRequireDefault(_organizeListSelector);
+  
+  function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var mapStateToProps = function mapStateToProps(state) {
     var isSidebarOpenSelector = (0, _isSidebarOpenSelector2.default)();
     var isLoadingSelector = (0, _isLoadingSelector2.default)();
+    var getOrganizeList = (0, _organizeListSelector2.default)();
     return {
       isSidebarOpen: isSidebarOpenSelector(state),
-      isLoading: isLoadingSelector(state)
+      isLoading: isLoadingSelector(state),
+      organizeList: getOrganizeList(state)
     };
   };
   
@@ -3760,8 +3825,11 @@ module.exports =
       onSidebarToggleClick: function onSidebarToggleClick(flag) {
         dispatch((0, _toggleSidebar.toggleSidebarAction)(flag));
       },
-      goToUserCenter: function goToUserCenter() {
-        dispatch((0, _header.goToUserCenter)());
+      getOrganizeList: function getOrganizeList() {
+        dispatch(funOrganize.fetchGetOrganizeListAction());
+      },
+      changeAccount: function changeAccount(id) {
+        dispatch(funOrganize.fetchChangeAccountAction(id));
       }
     };
   };
@@ -3825,8 +3893,8 @@ module.exports =
     }
   
     (0, _createClass3.default)(Header, [{
-      key: 'handleSelect',
-      value: function handleSelect(key) {
+      key: 'handleSelect1',
+      value: function handleSelect1(key) {
         console.log(key);
         switch (key) {
           case 1:
@@ -3836,7 +3904,6 @@ module.exports =
             _reactCookie2.default.save('isSidebarOpen', !this.props.isSidebarOpen, { path: '/', expires: exp });
             break;
           case 3:
-            this.props.goToUserCenter();
             break;
           case 4.1:
             _reactCookie2.default.remove('_at');
@@ -3847,8 +3914,85 @@ module.exports =
         }
       }
     }, {
+      key: 'handleSelect',
+      value: function handleSelect(key) {
+        console.log(key);
+        switch (key) {
+          case 1.1:
+            this.props.onSidebarToggleClick(!this.props.isSidebarOpen);
+            var exp = new Date();
+            exp.setTime(exp.getTime() + 1000 * 60 * 60 * 24 * 7);
+            _reactCookie2.default.save('isSidebarOpen', !this.props.isSidebarOpen, { path: '/', expires: exp });
+            break;
+          case 4.1:
+            _reactCookie2.default.remove('_at');
+            localStorage.removeItem('_at');
+            localStorage.removeItem('sidebarActive');
+            location.href = '/login';
+            break;
+          default:
+            var organizeList = this.props.organizeList;
+            var org_id = organizeList[key].org_id;
+            this.props.changeAccount(org_id);
+        }
+      }
+    }, {
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        this.props.getOrganizeList();
+      }
+    }, {
       key: 'render',
       value: function render() {
+        var username = this.context.store.getState().user_info.user_name;
+        var menuItem = this.props.organizeList.map(function (item, i) {
+          return _react2.default.createElement(
+            _reactBootstrap.MenuItem,
+            { eventKey: i, key: i },
+            item.orga_name
+          );
+        });
+        var dropdown = username ? _react2.default.createElement(
+          _reactBootstrap.NavDropdown,
+          { eventKey: 4, title: username, id: 'header-nav-item-userinfo' },
+          menuItem,
+          _react2.default.createElement(
+            _reactBootstrap.MenuItem,
+            { eventKey: 4.1 },
+            '退出'
+          )
+        ) : _react2.default.createElement(
+          _reactBootstrap.NavDropdown,
+          { eventKey: 4.1, title: '退出', id: 'header-nav-item-userinfo' },
+          ' '
+        );
+        return _react2.default.createElement(
+          _reactBootstrap.Navbar,
+          { fixedTop: true, className: 'app-navbar', style: { left: "180px" } },
+          _react2.default.createElement(
+            _reactBootstrap.Nav,
+            { onSelect: this.handleSelect.bind(this) },
+            _react2.default.createElement(
+              _reactBootstrap.NavItem,
+              { eventKey: 1.1, href: 'javascript:void(0)' },
+              _react2.default.createElement('i', { className: this.props.isSidebarOpen ? "icon-withdraw" : "icon-back", 'aria-hidden': 'true' })
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Nav,
+            { pullRight: true, onSelect: this.handleSelect.bind(this), style: { marginRight: "0" } },
+            _react2.default.createElement(
+              _reactBootstrap.NavItem,
+              { className: 'loading-animation' },
+              this.props.isLoading ? _react2.default.createElement(_reactLoading2.default, { type: 'bubbles', color: '#fff', height: '50px', width: '50px' }) : null
+            ),
+            dropdown
+          )
+        );
+      }
+    }, {
+      key: 'render1',
+      value: function render1() {
         var username = this.context.store.getState().user_info.user_name;
         var dropdown = username ? _react2.default.createElement(
           _reactBootstrap.NavDropdown,
@@ -3868,7 +4012,7 @@ module.exports =
             { eventKey: 4.1 },
             '退出'
           )
-        ) : null;
+        ) : _react2.default.createElement(_reactBootstrap.NavDropdown, { eventKey: 4.1, title: '退出', id: 'header-nav-item-userinfo' });
         return _react2.default.createElement(
           _reactBootstrap.Navbar,
           { fixedTop: true, className: 'app-navbar', style: { left: "180px" } },
@@ -3901,7 +4045,9 @@ module.exports =
     isLoading: _react2.default.PropTypes.bool,
     isSidebarOpen: _react2.default.PropTypes.bool.isRequired,
     onSidebarToggleClick: _react2.default.PropTypes.func,
-    goToUserCenter: _react2.default.PropTypes.func
+    organizeList: _react2.default.PropTypes.array,
+    getOrganizeList: _react2.default.PropTypes.func,
+    changeAccount: _react2.default.PropTypes.func
   };
   Header.contextTypes = {
     store: _react2.default.PropTypes.object
@@ -3949,7 +4095,6 @@ module.exports =
     value: true
   });
   exports.isLoadingAction = isLoadingAction;
-  exports.goToUserCenter = goToUserCenter;
   
   var _constants = __webpack_require__(37);
   
@@ -3959,12 +4104,6 @@ module.exports =
     return {
       type: _constants.IS_LOADING,
       payload: flag
-    };
-  }
-  
-  function goToUserCenter() {
-    return function (dispatch) {
-      dispatch((0, _route.navigate)("/user"));
     };
   }
 
@@ -6618,7 +6757,7 @@ module.exports =
   
   var _breadcumb = __webpack_require__(90);
   
-  var _deployService = __webpack_require__(104);
+  var _deployService = __webpack_require__(105);
   
   var _imageListSelector = __webpack_require__(94);
   
@@ -6693,7 +6832,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -6906,6 +7045,61 @@ module.exports =
 /* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
+  "use strict";
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _getPrototypeOf = __webpack_require__(45);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(46);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(47);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(48);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(49);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var Loading = function (_Component) {
+    (0, _inherits3.default)(Loading, _Component);
+  
+    function Loading() {
+      (0, _classCallCheck3.default)(this, Loading);
+      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Loading).apply(this, arguments));
+    }
+  
+    (0, _createClass3.default)(Loading, [{
+      key: "render",
+      value: function render() {
+        return _react2.default.createElement("div", { className: "listRefresh icon-refresh" });
+      }
+    }]);
+    return Loading;
+  }(_react.Component);
+  
+  exports.default = Loading;
+
+/***/ },
+/* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
   'use strict';
   
   Object.defineProperty(exports, "__esModule", {
@@ -7078,7 +7272,7 @@ module.exports =
   }
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7099,7 +7293,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ImageForMyContainer = __webpack_require__(106);
+  var _ImageForMyContainer = __webpack_require__(107);
   
   var _ImageForMyContainer2 = _interopRequireDefault(_ImageForMyContainer);
   
@@ -7129,7 +7323,7 @@ module.exports =
   };
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7138,7 +7332,7 @@ module.exports =
     value: true
   });
   
-  var _ImageForMy = __webpack_require__(107);
+  var _ImageForMy = __webpack_require__(108);
   
   var _ImageForMy2 = _interopRequireDefault(_ImageForMy);
   
@@ -7152,9 +7346,9 @@ module.exports =
   
   var _breadcumb = __webpack_require__(90);
   
-  var _deployService = __webpack_require__(104);
+  var _deployService = __webpack_require__(105);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -7187,7 +7381,7 @@ module.exports =
   exports.default = ImageForMyContainer;
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7228,7 +7422,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -7493,7 +7687,7 @@ module.exports =
   exports.default = ImageForMy;
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7851,7 +8045,7 @@ module.exports =
   }
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7872,7 +8066,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ImageDetailContainer = __webpack_require__(110);
+  var _ImageDetailContainer = __webpack_require__(111);
   
   var _ImageDetailContainer2 = _interopRequireDefault(_ImageDetailContainer);
   
@@ -7912,7 +8106,7 @@ module.exports =
   };
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7921,27 +8115,27 @@ module.exports =
     value: true
   });
   
-  var _ImageDetail = __webpack_require__(111);
+  var _ImageDetail = __webpack_require__(112);
   
   var _ImageDetail2 = _interopRequireDefault(_ImageDetail);
   
   var _reactRedux = __webpack_require__(50);
   
-  var _imageDetail = __webpack_require__(117);
+  var _imageDetail = __webpack_require__(118);
   
-  var _imageDetailSelector = __webpack_require__(118);
+  var _imageDetailSelector = __webpack_require__(119);
   
   var _imageDetailSelector2 = _interopRequireDefault(_imageDetailSelector);
   
   var _breadcumb = __webpack_require__(90);
   
-  var _deployService = __webpack_require__(104);
+  var _deployService = __webpack_require__(105);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
-  var _reviseImage = __webpack_require__(119);
+  var _reviseImage = __webpack_require__(120);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -7981,7 +8175,7 @@ module.exports =
   exports.default = ImageDetailContainer;
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8020,11 +8214,11 @@ module.exports =
   
   var _constants = __webpack_require__(37);
   
-  var _utils = __webpack_require__(112);
+  var _utils = __webpack_require__(113);
   
   var _reactBootstrap = __webpack_require__(69);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
@@ -8472,7 +8666,7 @@ module.exports =
   exports.default = ImageDetail;
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports) {
 
   "use strict";
@@ -8522,7 +8716,7 @@ module.exports =
   }
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -8551,11 +8745,11 @@ module.exports =
   
   var classNames = _interopRequire(__webpack_require__(65));
   
-  var Check = _interopRequire(__webpack_require__(114));
+  var Check = _interopRequire(__webpack_require__(115));
   
-  var X = _interopRequire(__webpack_require__(115));
+  var X = _interopRequire(__webpack_require__(116));
   
-  var PureRenderMixin = _interopRequire(__webpack_require__(116));
+  var PureRenderMixin = _interopRequire(__webpack_require__(117));
   
   module.exports = React.createClass({
     mixins: [PureRenderMixin],
@@ -8632,7 +8826,7 @@ module.exports =
   });
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -8660,7 +8854,7 @@ module.exports =
   });
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -8689,13 +8883,13 @@ module.exports =
   });
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports) {
 
   module.exports = require("react-addons-pure-render-mixin");
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8752,7 +8946,7 @@ module.exports =
   }
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8777,7 +8971,7 @@ module.exports =
   exports.default = makeGetImageDetail;
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8854,7 +9048,7 @@ module.exports =
   }
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8878,7 +9072,7 @@ module.exports =
   exports.default = makeIsBtnStateSelector;
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8899,7 +9093,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _CreateImageContainer = __webpack_require__(122);
+  var _CreateImageContainer = __webpack_require__(123);
   
   var _CreateImageContainer2 = _interopRequireDefault(_CreateImageContainer);
   
@@ -8928,7 +9122,7 @@ module.exports =
   };
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8937,19 +9131,19 @@ module.exports =
     value: true
   });
   
-  var _CreateImage = __webpack_require__(123);
+  var _CreateImage = __webpack_require__(124);
   
   var _CreateImage2 = _interopRequireDefault(_CreateImage);
   
   var _reactRedux = __webpack_require__(50);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
   var _breadcumb = __webpack_require__(90);
   
-  var _createImage = __webpack_require__(128);
+  var _createImage = __webpack_require__(129);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -8979,7 +9173,7 @@ module.exports =
   exports.default = CreateImageContainer;
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9012,15 +9206,15 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
@@ -9271,7 +9465,7 @@ module.exports =
   exports.default = CreateImage;
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9288,7 +9482,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _HeadLine = __webpack_require__(125);
+  var _HeadLine = __webpack_require__(126);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -9341,11 +9535,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_HeadLine2.default)(HeadLine);
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(126);
+      var content = __webpack_require__(127);
       var insertCss = __webpack_require__(18);
   
       if (typeof content === 'string') {
@@ -9375,7 +9569,7 @@ module.exports =
     
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(17)();
@@ -9395,13 +9589,13 @@ module.exports =
   };
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports) {
 
   module.exports = require("react-dom");
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9479,7 +9673,7 @@ module.exports =
   }
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9500,7 +9694,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _BuildingDetailContainer = __webpack_require__(130);
+  var _BuildingDetailContainer = __webpack_require__(131);
   
   var _BuildingDetailContainer2 = _interopRequireDefault(_BuildingDetailContainer);
   
@@ -9530,7 +9724,7 @@ module.exports =
   };
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9539,7 +9733,7 @@ module.exports =
     value: true
   });
   
-  var _BuildingDetail = __webpack_require__(131);
+  var _BuildingDetail = __webpack_require__(132);
   
   var _BuildingDetail2 = _interopRequireDefault(_BuildingDetail);
   
@@ -9547,13 +9741,13 @@ module.exports =
   
   var _breadcumb = __webpack_require__(90);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
-  var _buildingDetailSelector = __webpack_require__(133);
+  var _buildingDetailSelector = __webpack_require__(134);
   
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -9593,7 +9787,7 @@ module.exports =
   exports.default = BuildingDetailContainer;
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9628,17 +9822,17 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(69);
   
-  var _Logs = __webpack_require__(132);
+  var _Logs = __webpack_require__(133);
   
   var _Logs2 = _interopRequireDefault(_Logs);
   
   var _constants = __webpack_require__(37);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -10007,7 +10201,7 @@ module.exports =
   exports.default = BuildingDetail;
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10044,7 +10238,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -10056,7 +10250,7 @@ module.exports =
   
   var _reactCookie2 = _interopRequireDefault(_reactCookie);
   
-  var _utils = __webpack_require__(112);
+  var _utils = __webpack_require__(113);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -10182,7 +10376,7 @@ module.exports =
   exports.default = _class;
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10207,7 +10401,7 @@ module.exports =
   exports.default = makeGetBuildingDetail;
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10228,7 +10422,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _BuildingContainer = __webpack_require__(135);
+  var _BuildingContainer = __webpack_require__(136);
   
   var _BuildingContainer2 = _interopRequireDefault(_BuildingContainer);
   
@@ -10259,7 +10453,7 @@ module.exports =
   // import CodeBuildList from './CodeBuildList'
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10268,13 +10462,13 @@ module.exports =
     value: true
   });
   
-  var _Building = __webpack_require__(136);
+  var _Building = __webpack_require__(137);
   
   var _Building2 = _interopRequireDefault(_Building);
   
   var _reactRedux = __webpack_require__(50);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
   var _buildingImageListSelector = __webpack_require__(138);
   
@@ -10316,7 +10510,7 @@ module.exports =
   exports.default = BuildingContainer;
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10359,11 +10553,11 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _utils = __webpack_require__(112);
+  var _utils = __webpack_require__(113);
   
   var _constants = __webpack_require__(37);
   
@@ -10652,65 +10846,6 @@ module.exports =
   exports.default = Building;
 
 /***/ },
-/* 137 */
-/***/ function(module, exports, __webpack_require__) {
-
-  "use strict";
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  
-  var _getPrototypeOf = __webpack_require__(45);
-  
-  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-  
-  var _classCallCheck2 = __webpack_require__(46);
-  
-  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-  
-  var _createClass2 = __webpack_require__(47);
-  
-  var _createClass3 = _interopRequireDefault(_createClass2);
-  
-  var _possibleConstructorReturn2 = __webpack_require__(48);
-  
-  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-  
-  var _inherits2 = __webpack_require__(49);
-  
-  var _inherits3 = _interopRequireDefault(_inherits2);
-  
-  var _react = __webpack_require__(9);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var Loading = function (_Component) {
-    (0, _inherits3.default)(Loading, _Component);
-  
-    function Loading() {
-      (0, _classCallCheck3.default)(this, Loading);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Loading).apply(this, arguments));
-    }
-  
-    (0, _createClass3.default)(Loading, [{
-      key: "render",
-      value: function render() {
-        return _react2.default.createElement(
-          "div",
-          null,
-          _react2.default.createElement("img", { width: "50", height: "50", src: "/loading.gif" })
-        );
-      }
-    }]);
-    return Loading;
-  }(_react.Component);
-  
-  exports.default = Loading;
-
-/***/ },
 /* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -10802,7 +10937,7 @@ module.exports =
   
   var _BuildingCreate2 = _interopRequireDefault(_BuildingCreate);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
   var _BuildingCreateSelector = __webpack_require__(142);
   
@@ -10810,7 +10945,7 @@ module.exports =
   
   var _breadcumb = __webpack_require__(90);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -10884,15 +11019,15 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(69);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -11601,7 +11736,7 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(69);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -11609,7 +11744,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -12051,7 +12186,7 @@ module.exports =
   
   var _reactRedux = __webpack_require__(50);
   
-  var _deployService = __webpack_require__(104);
+  var _deployService = __webpack_require__(105);
   
   var _volumes = __webpack_require__(95);
   
@@ -12067,7 +12202,7 @@ module.exports =
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -12174,13 +12309,13 @@ module.exports =
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _reactBootstrap = __webpack_require__(69);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -12190,7 +12325,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
@@ -13272,7 +13407,7 @@ module.exports =
   
   var _reactRedux = __webpack_require__(50);
   
-  var _deployService = __webpack_require__(104);
+  var _deployService = __webpack_require__(105);
   
   var _imageList = __webpack_require__(93);
   
@@ -13353,7 +13488,7 @@ module.exports =
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -13369,13 +13504,13 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _constants = __webpack_require__(37);
   
-  var _utils = __webpack_require__(112);
+  var _utils = __webpack_require__(113);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -13728,7 +13863,7 @@ module.exports =
   
   var _reactRedux = __webpack_require__(50);
   
-  var _deployService = __webpack_require__(104);
+  var _deployService = __webpack_require__(105);
   
   var _deployDataSelector = __webpack_require__(154);
   
@@ -13740,9 +13875,9 @@ module.exports =
   
   var _breadcumb = __webpack_require__(90);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
-  var _buildingDetailSelector = __webpack_require__(133);
+  var _buildingDetailSelector = __webpack_require__(134);
   
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
@@ -13818,7 +13953,7 @@ module.exports =
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -13830,11 +13965,11 @@ module.exports =
   
   var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -14691,13 +14826,13 @@ module.exports =
   
   var _podListSelector2 = _interopRequireDefault(_podListSelector);
   
-  var _buildingDetailSelector = __webpack_require__(133);
+  var _buildingDetailSelector = __webpack_require__(134);
   
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
   var _breadcumb = __webpack_require__(90);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -14705,7 +14840,7 @@ module.exports =
   
   var _monitorDataSelector2 = _interopRequireDefault(_monitorDataSelector);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -14890,7 +15025,7 @@ module.exports =
   
   var _GetOptTabs2 = _interopRequireDefault(_GetOptTabs);
   
-  var _Logs = __webpack_require__(132);
+  var _Logs = __webpack_require__(133);
   
   var _Logs2 = _interopRequireDefault(_Logs);
   
@@ -14902,7 +15037,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -15560,7 +15695,7 @@ module.exports =
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -15572,13 +15707,13 @@ module.exports =
   
   var _ContainerItem2 = _interopRequireDefault(_ContainerItem);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
   var _lib = __webpack_require__(176);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -16517,7 +16652,7 @@ module.exports =
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -16525,7 +16660,7 @@ module.exports =
   
   var _Monitor2 = _interopRequireDefault(_Monitor);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -16746,7 +16881,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -16758,7 +16893,7 @@ module.exports =
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _utils = __webpack_require__(112);
+  var _utils = __webpack_require__(113);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -17080,7 +17215,7 @@ module.exports =
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -17088,7 +17223,7 @@ module.exports =
   
   var _reactToggle2 = _interopRequireDefault(_reactToggle);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -17312,7 +17447,7 @@ module.exports =
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -17903,7 +18038,7 @@ module.exports =
   
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -17996,7 +18131,7 @@ module.exports =
   
   var _constants = __webpack_require__(37);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -18081,6 +18216,15 @@ module.exports =
             'td',
             { colSpan: '6', style: { "textAlign": "center" } },
             '暂无数据~'
+          )
+        );
+        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            { colSpan: '6', style: { "textAlign": "center" } },
+            _react2.default.createElement(_Loading2.default, null)
           )
         );
         if (data.length == 1 && data[0] == 0) return _react2.default.createElement(
@@ -18232,32 +18376,32 @@ module.exports =
                   null,
                   _react2.default.createElement(
                     'th',
-                    null,
+                    { width: '20%' },
                     '存储卷名称'
                   ),
                   _react2.default.createElement(
                     'th',
-                    null,
+                    { width: '20%' },
                     '创建时间'
                   ),
                   _react2.default.createElement(
                     'th',
-                    null,
+                    { width: '15%' },
                     '存储格式'
                   ),
                   _react2.default.createElement(
                     'th',
-                    null,
+                    { width: '15%' },
                     '状态'
                   ),
                   _react2.default.createElement(
                     'th',
-                    null,
+                    { width: '15%' },
                     '容量'
                   ),
                   _react2.default.createElement(
                     'th',
-                    null,
+                    { width: '15%' },
                     '操作'
                   )
                 )
@@ -18899,7 +19043,7 @@ module.exports =
   
   var _constants = __webpack_require__(37);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -19398,7 +19542,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -19900,15 +20044,23 @@ module.exports =
   
   var _breadcumb = __webpack_require__(90);
   
-  var _building = __webpack_require__(108);
+  var _building = __webpack_require__(109);
   
   var _BuildingCreateSelector = __webpack_require__(142);
   
   var _users = __webpack_require__(209);
   
-  var _organizeListSelector = __webpack_require__(210);
+  var funUser = _interopRequireWildcard(_users);
+  
+  var _organize = __webpack_require__(210);
+  
+  var funOrganize = _interopRequireWildcard(_organize);
+  
+  var _organizeListSelector = __webpack_require__(211);
   
   var _organizeListSelector2 = _interopRequireDefault(_organizeListSelector);
+  
+  function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -19930,13 +20082,19 @@ module.exports =
         dispatch((0, _building.fetchGithubAuthURLAction)());
       },
       onRevisePassword: function onRevisePassword(passwordObj) {
-        dispatch((0, _users.fetchRevisePasswordAction)(passwordObj));
+        dispatch(funUser.fetchRevisePasswordAction(passwordObj));
       },
       createOrganize: function createOrganize(org_name) {
-        dispatch((0, _users.fetchCreateOrganize)(org_name));
+        dispatch(funOrganize.fetchCreateOrganize(org_name));
       },
       getOrganizeList: function getOrganizeList() {
-        dispatch((0, _users.fetchGetOrganizeListAction)());
+        dispatch(funOrganize.fetchGetOrganizeListAction());
+      },
+      leaveOrganize: function leaveOrganize(id) {
+        dispatch(funOrganize.fetchLeaveOrganize(id));
+      },
+      deleteOrganize: function deleteOrganize(id) {
+        dispatch(funOrganize.fetchDeleteOrganize(id));
       }
     };
   };
@@ -20072,7 +20230,13 @@ module.exports =
                   getOrganizeList: function getOrganizeList() {
                     _this2.props.getOrganizeList();
                   },
-                  organizeList: this.props.organizeList
+                  organizeList: this.props.organizeList,
+                  leaveOrganize: function leaveOrganize(id) {
+                    return _this2.props.leaveOrganize(id);
+                  },
+                  deleteOrganize: function deleteOrganize(id) {
+                    return _this2.props.deleteOrganize(id);
+                  }
                 })
               )
             )
@@ -20091,7 +20255,9 @@ module.exports =
     onRevisePassword: _react2.default.PropTypes.func,
     createOrganize: _react2.default.PropTypes.func,
     organizeList: _react2.default.PropTypes.array,
-    getOrganizeList: _react2.default.PropTypes.func
+    getOrganizeList: _react2.default.PropTypes.func,
+    leaveOrganize: _react2.default.PropTypes.func,
+    deleteOrganize: _react2.default.PropTypes.func
   };
   exports.default = UserCenter;
 
@@ -20129,11 +20295,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -20414,7 +20580,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -20774,7 +20940,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -20889,7 +21055,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -20988,13 +21154,13 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _reactBootstrap = __webpack_require__(69);
   
-  var _Loading = __webpack_require__(137);
+  var _Loading = __webpack_require__(104);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -21015,8 +21181,20 @@ module.exports =
               this.refs.createOrgModel.hide();
           }
       }, {
+          key: 'leaveOrganize',
+          value: function leaveOrganize(id) {
+              confirm("确定退出组织吗?") ? this.props.leaveOrganize(id) : "";
+          }
+      }, {
+          key: 'deleteOrganize',
+          value: function deleteOrganize(id) {
+              confirm("确定解散组织吗?") ? this.props.deleteOrganize(id) : "";
+          }
+      }, {
           key: 'getOrganizeBody',
           value: function getOrganizeBody() {
+              var _this2 = this;
+  
               var data = this.props.organizeList;
               if (data[0] == 1) return _react2.default.createElement(
                   'tr',
@@ -21036,7 +21214,31 @@ module.exports =
                       '暂无数据~'
                   )
               );
+              var role = "";
               return data.map(function (item, i) {
+                  var opt = _react2.default.createElement(
+                      'button',
+                      { className: 'btn btn-danger', onClick: _this2.leaveOrganize.bind(_this2, item.org_id) },
+                      '退出组织'
+                  );
+                  switch (Number(item.role)) {
+                      case 200:
+                          role = "组织拥有者";
+                          opt = _react2.default.createElement(
+                              'button',
+                              { className: 'btn btn-danger', onClick: _this2.deleteOrganize.bind(_this2, item.org_id) },
+                              '解散组织'
+                          );
+                          break;
+                      case 210:
+                          role = "管理员";
+                          break;
+                      case 400:
+                          role = "成员";
+                          break;
+                      default:
+                          role = "成员";
+                  }
                   return _react2.default.createElement(
                       'tr',
                       { key: i },
@@ -21050,28 +21252,24 @@ module.exports =
                               _react2.default.createElement(
                                   'span',
                                   { className: 'mediaTxt' },
-                                  item.org_name
+                                  item.orga_name
                               )
                           )
                       ),
                       _react2.default.createElement(
                           'td',
                           null,
-                          item.org_detail
+                          item.org_detail || "暂无简介"
                       ),
                       _react2.default.createElement(
                           'td',
                           null,
-                          item.is_ower
+                          role
                       ),
                       _react2.default.createElement(
                           'td',
                           null,
-                          _react2.default.createElement(
-                              'button',
-                              { className: 'btn btn-danger' },
-                              '退出组织'
-                          )
+                          opt
                       )
                   );
               });
@@ -21125,7 +21323,7 @@ module.exports =
       }, {
           key: 'render',
           value: function render() {
-              var _this2 = this;
+              var _this3 = this;
   
               return _react2.default.createElement(
                   'div',
@@ -21148,7 +21346,7 @@ module.exports =
                           _react2.default.createElement(
                               'div',
                               { className: 'hbAddBtn clearfix', onClick: function onClick() {
-                                      _this2.refs.createOrgModel.open();
+                                      _this3.refs.createOrgModel.open();
                                   } },
                               _react2.default.createElement('div', { className: 'hbPlus left' }),
                               _react2.default.createElement(
@@ -21186,7 +21384,9 @@ module.exports =
   GetOrganize.propTypes = {
       createOrganize: _react2.default.PropTypes.func,
       organizeList: _react2.default.PropTypes.array,
-      getOrganizeList: _react2.default.PropTypes.func
+      getOrganizeList: _react2.default.PropTypes.func,
+      leaveOrganize: _react2.default.PropTypes.func,
+      deleteOrganize: _react2.default.PropTypes.func
   };
   
   var CreateOrganize = function (_Component2) {
@@ -21195,13 +21395,13 @@ module.exports =
       function CreateOrganize(props) {
           (0, _classCallCheck3.default)(this, CreateOrganize);
   
-          var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CreateOrganize).call(this, props));
+          var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CreateOrganize).call(this, props));
   
-          _this3.state = {
+          _this4.state = {
               show: false,
               orgName: false
           };
-          return _this3;
+          return _this4;
       }
   
       (0, _createClass3.default)(CreateOrganize, [{
@@ -21364,8 +21564,6 @@ module.exports =
   exports.receiveUserInfo = receiveUserInfo;
   exports.fetchUserInfo = fetchUserInfo;
   exports.fetchRevisePasswordAction = fetchRevisePasswordAction;
-  exports.fetchCreateOrganize = fetchCreateOrganize;
-  exports.fetchGetOrganizeListAction = fetchGetOrganizeListAction;
   
   var _constants = __webpack_require__(37);
   
@@ -21395,7 +21593,6 @@ module.exports =
   
     return function (dispatch) {
       var url = '' + (development ? _constants.FETCH_URL.USER_INFO : _constants.FETCH_URL.USER_INFO_INTERNAL);
-      console.log('fetch user: ' + url);
       return (0, _isomorphicFetch2.default)(url, {
         method: 'GET',
         headers: {
@@ -21443,10 +21640,52 @@ module.exports =
       });
     };
   }
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _stringify = __webpack_require__(12);
+  
+  var _stringify2 = _interopRequireDefault(_stringify);
+  
+  exports.fetchCreateOrganize = fetchCreateOrganize;
+  exports.fetchGetOrganizeListAction = fetchGetOrganizeListAction;
+  exports.fetchLeaveOrganize = fetchLeaveOrganize;
+  exports.fetchDeleteOrganize = fetchDeleteOrganize;
+  exports.fetchGetOrganizeDetailAction = fetchGetOrganizeDetailAction;
+  exports.fetchSetOrganizeDetailAction = fetchSetOrganizeDetailAction;
+  exports.fetchGetOrganizeUserListAction = fetchGetOrganizeUserListAction;
+  exports.fetchChangeAccountAction = fetchChangeAccountAction;
+  
+  var _constants = __webpack_require__(37);
+  
+  var Const = _interopRequireWildcard(_constants);
+  
+  var _isomorphicFetch = __webpack_require__(81);
+  
+  var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+  
+  var _notification = __webpack_require__(79);
+  
+  var _reactCookie = __webpack_require__(68);
+  
+  var _reactCookie2 = _interopRequireDefault(_reactCookie);
+  
+  var _route = __webpack_require__(57);
+  
+  function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   function fetchCreateOrganize(org_name) {
-    console.log(org_name);
-    var body = (0, _stringify2.default)({ org_name: org_name });
+    var body = (0, _stringify2.default)({ orga_name: org_name });
     var myInit = {
       method: "POST",
       headers: { token: localStorage.getItem("_at") },
@@ -21460,6 +21699,7 @@ module.exports =
         console.log(json, "新建组织返回值");
         if (json.status == 0) {
           dispatch((0, _notification.receiveNotification)({ message: "创建成功", level: "success" }));
+          dispatch(fetchGetOrganizeListAction());
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
           }, 3000);
@@ -21503,9 +21743,188 @@ module.exports =
       });
     };
   }
+  
+  function fetchLeaveOrganize(id) {
+    var myInit = {
+      method: "PUT",
+      headers: { token: localStorage.getItem("_at") }
+    };
+    var url = Const.FETCH_URL.ORGANIZE + "/" + id;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json);
+        if (json.status == 0) {
+          dispatch((0, _notification.receiveNotification)({ message: "退出成功", level: "success" }));
+          dispatch(fetchGetOrganizeListAction());
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "退出失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function fetchDeleteOrganize(id) {
+    var myInit = {
+      method: "DELETE",
+      headers: { token: localStorage.getItem("_at") }
+    };
+    var url = Const.FETCH_URL.ORGANIZE + "/" + id;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json);
+        if (json.status == 0) {
+          dispatch((0, _notification.receiveNotification)({ message: "解散成功", level: "success" }));
+          dispatch(fetchGetOrganizeListAction());
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "解散失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function receiveOrganizeDetail(data) {
+    return {
+      type: Const.GET_ORGANIZE_DETAIL,
+      payload: data
+    };
+  }
+  
+  function fetchGetOrganizeDetailAction(id) {
+    var myInit = {
+      method: "GET",
+      headers: { token: localStorage.getItem("_at") }
+    };
+    var url = Const.FETCH_URL.ORGANIZE + "/" + id;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json);
+        if (json.status == 0) {
+          dispatch(receiveOrganizeDetail(json.result));
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "获取组织详情失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function fetchSetOrganizeDetailAction(data) {
+    var body = (0, _stringify2.default)({
+      orga_detail: data.orga_detail,
+      is_public: data.is_public
+    });
+    console.log(body, "修改组织参数");
+    var myInit = {
+      method: "PUT",
+      headers: { token: localStorage.getItem("_at") },
+      body: body
+    };
+    var url = Const.FETCH_URL.ORGANIZE + "/" + data.id;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json);
+        if (json.status == 0) {
+          dispatch((0, _notification.receiveNotification)({ message: "修改成功", level: "success" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "修改失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function receiveOrganizeUserList(data) {
+    return {
+      type: Const.GET_ORGANIZE_USER_LIST,
+      payload: data
+    };
+  }
+  function fetchGetOrganizeUserListAction(id) {
+    var myInit = {
+      method: "GET",
+      headers: { token: localStorage.getItem("_at") }
+    };
+    var url = Const.FETCH_URL.ORGANIZE + "/" + id + "/users";
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json, "组织用户列表");
+        if (json.status == 0) {
+          dispatch(receiveOrganizeUserList(json.result));
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "获取组织用户列表失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function fetchChangeAccountAction(id) {
+    var body = (0, _stringify2.default)({
+      orga_uuid: id
+    });
+    console.log(body);
+    var myInit = {
+      method: "PUT",
+      headers: { token: localStorage.getItem("_at") },
+      body: body
+    };
+    var url = Const.FETCH_URL.TOKEN;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json, "切换组织");
+        if (json.status == 0) {
+          var exp = new Date();
+          exp.setTime(exp.getTime() + 1000 * 60 * 60 * 24 * 7);
+          _reactCookie2.default.save('_at', json.result.token, { path: '/', expires: exp });
+          localStorage.setItem("_at", json.result.token);
+          console.log(json.result.token, 1);
+          console.log(_reactCookie2.default.load("_at"), 2);
+          location.href = '/';
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "切换组织失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21529,7 +21948,7 @@ module.exports =
   exports.default = makeGetOrganizeListSelector;
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21550,7 +21969,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ReviseImageContainer = __webpack_require__(212);
+  var _ReviseImageContainer = __webpack_require__(213);
   
   var _ReviseImageContainer2 = _interopRequireDefault(_ReviseImageContainer);
   
@@ -21581,7 +22000,7 @@ module.exports =
   // import CodeBuildList from './CodeBuildList'
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21590,25 +22009,25 @@ module.exports =
     value: true
   });
   
-  var _ReviseImage = __webpack_require__(213);
+  var _ReviseImage = __webpack_require__(214);
   
   var _ReviseImage2 = _interopRequireDefault(_ReviseImage);
   
   var _reactRedux = __webpack_require__(50);
   
-  var _isBtnStateSelector = __webpack_require__(120);
+  var _isBtnStateSelector = __webpack_require__(121);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
-  var _imageDetailSelector = __webpack_require__(118);
+  var _imageDetailSelector = __webpack_require__(119);
   
   var _imageDetailSelector2 = _interopRequireDefault(_imageDetailSelector);
   
   var _breadcumb = __webpack_require__(90);
   
-  var _imageDetail = __webpack_require__(117);
+  var _imageDetail = __webpack_require__(118);
   
-  var _reviseImage = __webpack_require__(119);
+  var _reviseImage = __webpack_require__(120);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -21643,7 +22062,7 @@ module.exports =
   exports.default = ReviseImageContainer;
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21676,15 +22095,15 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(124);
+  var _HeadLine = __webpack_require__(125);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(127);
+  var _reactDom = __webpack_require__(128);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _Toggle = __webpack_require__(113);
+  var _Toggle = __webpack_require__(114);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
@@ -21701,7 +22120,7 @@ module.exports =
       var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
   
       _this.state = {
-        autoStart: _this.props.state
+        is_public: _this.props.state
       };
       return _this;
     }
@@ -21710,9 +22129,9 @@ module.exports =
       key: 'handClick',
       value: function handClick(component, value) {
         this.setState({
-          autoStart: !this.state.autoStart
+          is_public: !this.state.is_public
         });
-        this.props.getToggle(this.state.autoStart);
+        this.props.getToggle(this.state.is_public);
       }
     }, {
       key: 'componentDidMount',
@@ -21721,7 +22140,7 @@ module.exports =
       key: 'render',
       value: function render() {
         return _react2.default.createElement(_Toggle2.default, {
-          defaultChecked: this.state.autoStart,
+          defaultChecked: this.state.is_public,
           onChange: this.handClick.bind(this)
         });
       }
@@ -21938,13 +22357,262 @@ module.exports =
   exports.default = ReviseImage;
 
 /***/ },
-/* 214 */
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _regenerator = __webpack_require__(2);
+  
+  var _regenerator2 = _interopRequireDefault(_regenerator);
+  
+  var _asyncToGenerator2 = __webpack_require__(3);
+  
+  var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _OrganizeContainer = __webpack_require__(216);
+  
+  var _OrganizeContainer2 = _interopRequireDefault(_OrganizeContainer);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  exports.default = {
+    path: '/organize',
+  
+    action: function action() {
+      var _this = this;
+  
+      return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                return _context.abrupt('return', _react2.default.createElement(_OrganizeContainer2.default, null));
+  
+              case 1:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, _this);
+      }))();
+    }
+  };
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _Organize = __webpack_require__(217);
+  
+  var _Organize2 = _interopRequireDefault(_Organize);
+  
+  var _reactRedux = __webpack_require__(50);
+  
+  var _breadcumb = __webpack_require__(90);
+  
+  var _organize = __webpack_require__(210);
+  
+  var fun = _interopRequireWildcard(_organize);
+  
+  var _organizeDetailSelector = __webpack_require__(221);
+  
+  var _organizeDetailSelector2 = _interopRequireDefault(_organizeDetailSelector);
+  
+  var _organizeUserListSelector = __webpack_require__(225);
+  
+  var _organizeUserListSelector2 = _interopRequireDefault(_organizeUserListSelector);
+  
+  function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var mapStateToProps = function mapStateToProps(state) {
+    var getOrganizeDetail = (0, _organizeDetailSelector2.default)();
+    var getOrganizeUserList = (0, _organizeUserListSelector2.default)();
+    return {
+      organizeDetail: getOrganizeDetail(state),
+      organizeUserList: getOrganizeUserList(state)
+    };
+  };
+  
+  var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+      setBreadcrumb: function setBreadcrumb() {
+        dispatch(_breadcumb.setBreadcrumbAction.apply(undefined, arguments));
+      },
+      getOrganizeDetail: function getOrganizeDetail(id) {
+        dispatch(fun.fetchGetOrganizeDetailAction(id));
+      },
+      setOrganizeDetail: function setOrganizeDetail(data) {
+        dispatch(fun.fetchSetOrganizeDetailAction(data));
+      },
+      getOrganizeUserList: function getOrganizeUserList(id) {
+        dispatch(fun.fetchGetOrganizeUserListAction(id));
+      }
+    };
+  };
+  
+  var OrganizeContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Organize2.default);
+  
+  exports.default = OrganizeContainer;
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _getPrototypeOf = __webpack_require__(45);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(46);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(47);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(48);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(49);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _reactBootstrap = __webpack_require__(69);
+  
+  var _constants = __webpack_require__(37);
+  
+  var _GetOrgInfo = __webpack_require__(222);
+  
+  var _GetOrgInfo2 = _interopRequireDefault(_GetOrgInfo);
+  
+  var _GetOrgDeal = __webpack_require__(223);
+  
+  var _GetOrgDeal2 = _interopRequireDefault(_GetOrgDeal);
+  
+  var _GetOrgAdmin = __webpack_require__(224);
+  
+  var _GetOrgAdmin2 = _interopRequireDefault(_GetOrgAdmin);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var title = '组织中心';
+  
+  var Organize = function (_Component) {
+    (0, _inherits3.default)(Organize, _Component);
+  
+    function Organize() {
+      (0, _classCallCheck3.default)(this, Organize);
+      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Organize).apply(this, arguments));
+    }
+  
+    (0, _createClass3.default)(Organize, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        this.props.setBreadcrumb(_constants.BREADCRUMB.CONSOLE, _constants.BREADCRUMB.ORGANIZE);
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _this2 = this;
+  
+        this.context.setTitle(title);
+        return _react2.default.createElement(
+          'div',
+          { className: 'containerBgF' },
+          _react2.default.createElement(
+            'div',
+            { className: 'userTab' },
+            _react2.default.createElement(
+              _reactBootstrap.Tabs,
+              { defaultActiveKey: 4, id: 'userTabs' },
+              _react2.default.createElement(_reactBootstrap.Tab, { eventKey: 1, title: '账户信息' }),
+              _react2.default.createElement(
+                _reactBootstrap.Tab,
+                { eventKey: 2, title: '组织信息' },
+                _react2.default.createElement(_GetOrgInfo2.default, {
+                  getOrganizeDetail: function getOrganizeDetail(id) {
+                    _this2.props.getOrganizeDetail(id);
+                  },
+                  organizeDetail: this.props.organizeDetail,
+                  setOrganizeDetail: function setOrganizeDetail(data) {
+                    _this2.props.setOrganizeDetail(data);
+                  }
+                })
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Tab,
+                { eventKey: 3, title: '交易记录' },
+                _react2.default.createElement(_GetOrgDeal2.default, null)
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Tab,
+                { eventKey: 4, title: '组织管理' },
+                _react2.default.createElement(_GetOrgAdmin2.default, {
+                  organizeUserList: this.props.organizeUserList,
+                  getOrganizeUserList: function getOrganizeUserList(id) {
+                    _this2.props.getOrganizeUserList(id);
+                  }
+                })
+              )
+            )
+          )
+        );
+      }
+    }]);
+    return Organize;
+  }(_react.Component);
+  
+  Organize.contextTypes = {
+    setTitle: _react.PropTypes.func.isRequired,
+    store: _react2.default.PropTypes.object
+  };
+  Organize.propTypes = {
+    setBreadcrumb: _react2.default.PropTypes.func,
+    getOrganizeDetail: _react2.default.PropTypes.func,
+    organizeDetail: _react2.default.PropTypes.object,
+    setOrganizeDetail: _react2.default.PropTypes.func,
+    organizeUserList: _react2.default.PropTypes.array,
+    getOrganizeUserList: _react2.default.PropTypes.func
+  };
+  exports.default = Organize;
+
+/***/ },
+/* 218 */,
+/* 219 */
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
-/* 215 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21968,6 +22636,551 @@ module.exports =
       }
     };
   }
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _reselect = __webpack_require__(62);
+  
+  //getOrganizeDetail
+  var getOrganizeDetail = function getOrganizeDetail(state) {
+    return state.organizeDetail;
+  };
+  
+  var makeGetOrganizeDetail = function makeGetOrganizeDetail() {
+    return (0, _reselect.createSelector)([getOrganizeDetail], function (organizeDetail) {
+      return organizeDetail;
+    });
+  };
+  
+  exports.default = makeGetOrganizeDetail;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _getPrototypeOf = __webpack_require__(45);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(46);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(47);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(48);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(49);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _HeadLine = __webpack_require__(125);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _Toggle = __webpack_require__(114);
+  
+  var _Toggle2 = _interopRequireDefault(_Toggle);
+  
+  var _Loading = __webpack_require__(104);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
+  var _reactDom = __webpack_require__(128);
+  
+  var _reactDom2 = _interopRequireDefault(_reactDom);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var IsPublicToggle = function (_Component) {
+    (0, _inherits3.default)(IsPublicToggle, _Component);
+  
+    function IsPublicToggle(props) {
+      (0, _classCallCheck3.default)(this, IsPublicToggle);
+  
+      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+  
+      _this.state = {
+        is_public: _this.props.state
+      };
+      return _this;
+    }
+  
+    (0, _createClass3.default)(IsPublicToggle, [{
+      key: 'handClick',
+      value: function handClick(component, value) {
+        this.setState({
+          is_public: !this.state.is_public
+        });
+        this.props.getToggle(this.state.is_public);
+      }
+    }, {
+      key: 'componentDidMount',
+      value: function componentDidMount() {}
+    }, {
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(_Toggle2.default, {
+          defaultChecked: this.state.is_public,
+          onChange: this.handClick.bind(this)
+        });
+      }
+    }]);
+    return IsPublicToggle;
+  }(_react.Component);
+  
+  IsPublicToggle.propTypes = {
+    getToggle: _react2.default.PropTypes.func,
+    state: _react2.default.PropTypes.bool
+  };
+  
+  var GetOrgInfo = function (_Component2) {
+    (0, _inherits3.default)(GetOrgInfo, _Component2);
+  
+    function GetOrgInfo(props) {
+      (0, _classCallCheck3.default)(this, GetOrgInfo);
+  
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgInfo).call(this, props));
+  
+      _this2.state = {
+        is_public: 1
+      };
+      return _this2;
+    }
+  
+    (0, _createClass3.default)(GetOrgInfo, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        var organizeId = this.context.store.getState().user_info.orga_uuid;
+        this.props.getOrganizeDetail(organizeId);
+      }
+    }, {
+      key: 'getToggleValue',
+      value: function getToggleValue(value) {
+        var flag = !value ? 1 : 0; //1 true  0 false
+        this.setState({
+          is_public: flag
+        });
+      }
+    }, {
+      key: 'setOrganizeDetail',
+      value: function setOrganizeDetail() {
+        var data = {
+          orga_id: "529fb638-1f91-3788-a78c-5eb223c15ee1",
+          orga_detail: this.refs.orga_detail.value,
+          is_public: this.state.is_public
+        };
+        this.props.setOrganizeDetail(data);
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var data = this.props.organizeDetail;
+        if (data.creation_time == "") return _react2.default.createElement(
+          'div',
+          null,
+          '加载中'
+        );
+        return _react2.default.createElement(
+          'div',
+          { className: 'userTabBox', key: new Date(data.creation_time).getTime() },
+          _react2.default.createElement(
+            'div',
+            { className: 'userItem organizeBox' },
+            _react2.default.createElement(_HeadLine2.default, {
+              title: '组织头像',
+              titleEnglish: '',
+              titleInfo: 'ORGANIZE HEAD'
+            }),
+            _react2.default.createElement(
+              'div',
+              { className: 'userHead organizeItem' },
+              _react2.default.createElement(
+                'div',
+                { className: 'userHeadBox' },
+                _react2.default.createElement('img', null)
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'choose icon-operation' },
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  '更改头像'
+                )
+              )
+            ),
+            _react2.default.createElement(_HeadLine2.default, {
+              title: '组织描述',
+              titleEnglish: '',
+              titleInfo: 'ORGANIZE '
+            }),
+            _react2.default.createElement(
+              'div',
+              { className: 'organizeItem' },
+              _react2.default.createElement('textarea', { type: 'text', className: 'form-control', ref: 'orga_detail', defaultValue: data.orga_detail })
+            ),
+            _react2.default.createElement(_HeadLine2.default, {
+              title: '是否公开',
+              titleEnglish: '',
+              titleInfo: 'IS PUBLIC'
+            }),
+            _react2.default.createElement(
+              'div',
+              { className: 'organizeItem' },
+              _react2.default.createElement(IsPublicToggle, {
+                state: data.is_public == 1,
+                getToggle: this.getToggleValue.bind(this)
+              })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'organizeItem organizeItemBtn ' },
+              _react2.default.createElement(
+                'button',
+                { className: 'btn btn-primary', onClick: this.setOrganizeDetail.bind(this) },
+                '保存'
+              )
+            )
+          )
+        );
+      }
+    }]);
+    return GetOrgInfo;
+  }(_react.Component);
+  
+  GetOrgInfo.contextTypes = {
+    store: _react2.default.PropTypes.object
+  };
+  GetOrgInfo.propTypes = {
+    getOrganizeDetail: _react2.default.PropTypes.func,
+    organizeDetail: _react2.default.PropTypes.object,
+    setOrganizeDetail: _react2.default.PropTypes.func
+  };
+  exports.default = GetOrgInfo;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _getPrototypeOf = __webpack_require__(45);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(46);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(47);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(48);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(49);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _HeadLine = __webpack_require__(125);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactDom = __webpack_require__(128);
+  
+  var _reactDom2 = _interopRequireDefault(_reactDom);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var GetOrgDeal = function (_Component) {
+    (0, _inherits3.default)(GetOrgDeal, _Component);
+  
+    function GetOrgDeal(props) {
+      (0, _classCallCheck3.default)(this, GetOrgDeal);
+  
+      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgDeal).call(this, props));
+  
+      _this.state = {};
+      return _this;
+    }
+  
+    (0, _createClass3.default)(GetOrgDeal, [{
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(
+          'div',
+          { className: 'userTabBox' },
+          '123'
+        );
+      }
+    }]);
+    return GetOrgDeal;
+  }(_react.Component);
+  
+  GetOrgDeal.propTypes = {};
+  exports.default = GetOrgDeal;
+
+/***/ },
+/* 224 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _getPrototypeOf = __webpack_require__(45);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(46);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(47);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(48);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(49);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _HeadLine = __webpack_require__(125);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _Loading = __webpack_require__(104);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
+  var _route = __webpack_require__(57);
+  
+  var _reactDom = __webpack_require__(128);
+  
+  var _reactDom2 = _interopRequireDefault(_reactDom);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var GetOrgAdmin = function (_Component) {
+    (0, _inherits3.default)(GetOrgAdmin, _Component);
+  
+    function GetOrgAdmin(props) {
+      (0, _classCallCheck3.default)(this, GetOrgAdmin);
+  
+      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgAdmin).call(this, props));
+  
+      _this.state = {};
+      return _this;
+    }
+  
+    (0, _createClass3.default)(GetOrgAdmin, [{
+      key: 'componentWillMount',
+      value: function componentWillMount() {
+        var is_user = this.context.store.getState().user_info.is_user;
+        console.log(is_user);
+        if (is_user == 1) {
+          this.context.store.dispatch((0, _route.navigate)("/"));
+        }
+      }
+    }, {
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        var organizeId = this.context.store.getState().user_info.orga_uuid;
+        this.props.getOrganizeUserList(organizeId);
+      }
+    }, {
+      key: 'getOrganizeUserBody',
+      value: function getOrganizeUserBody() {
+        var data = this.props.organizeUserList;
+        if (data[0] == 1) return _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            { colSpan: '3', style: { textAlign: "center" } },
+            _react2.default.createElement(_Loading2.default, null)
+          )
+        );
+        if (!data.length) return _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            { colSpan: '3', style: { textAlign: "center" } },
+            '暂无数据~'
+          )
+        );
+        return data.map(function (item, i) {
+          return _react2.default.createElement(
+            'tr',
+            { key: i },
+            _react2.default.createElement(
+              'td',
+              null,
+              _react2.default.createElement(
+                'div',
+                { className: 'mediaItem' },
+                _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'mediaTxt' },
+                  '123'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              '123'
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              '123'
+            )
+          );
+        });
+      }
+    }, {
+      key: 'getTableDemo',
+      value: function getTableDemo() {
+        return _react2.default.createElement(
+          'table',
+          { className: 'table table-hover table-bordered' },
+          _react2.default.createElement(
+            'thead',
+            null,
+            _react2.default.createElement(
+              'tr',
+              null,
+              _react2.default.createElement(
+                'th',
+                { width: '33%' },
+                '用户名'
+              ),
+              _react2.default.createElement(
+                'th',
+                { width: '33%' },
+                '权限信息'
+              ),
+              _react2.default.createElement(
+                'th',
+                { width: '34%' },
+                '操作'
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'tbody',
+            null,
+            this.getOrganizeUserBody()
+          )
+        );
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(
+          'div',
+          { className: 'organize' },
+          _react2.default.createElement(
+            'div',
+            { className: 'organizeHd hbHd clearfix' },
+            _react2.default.createElement(
+              'div',
+              { className: 'left' },
+              _react2.default.createElement(_HeadLine2.default, {
+                title: '组织管理',
+                titleEnglish: 'ORGANIZE',
+                titleInfo: '管理组织信息'
+              })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'organizeBd sl-bd TableTextLeft' },
+            this.getTableDemo()
+          )
+        );
+      }
+    }]);
+    return GetOrgAdmin;
+  }(_react.Component);
+  
+  GetOrgAdmin.contextTypes = {
+    store: _react2.default.PropTypes.object
+  };
+  GetOrgAdmin.propTypes = {
+    organizeUserList: _react2.default.PropTypes.array,
+    getOrganizeUserList: _react2.default.PropTypes.func
+  };
+  exports.default = GetOrgAdmin;
+
+/***/ },
+/* 225 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _reselect = __webpack_require__(62);
+  
+  var getOrganizeUserList = function getOrganizeUserList(state) {
+    return state.organizeUserList;
+  };
+  
+  var makeGetOrganizeUserListSelector = function makeGetOrganizeUserListSelector() {
+    return (0, _reselect.createSelector)([getOrganizeUserList], function (organizeUserList) {
+      return organizeUserList;
+    });
+  };
+  
+  exports.default = makeGetOrganizeUserListSelector;
 
 /***/ }
 /******/ ]);

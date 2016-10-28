@@ -6,22 +6,17 @@ export const SIDEBAR_STATUS = {
 };
 export const SIDEBAR_ACTIVE = 'SIDEBAR_ACTIVE';
 export const SET_RUNTIME_VARIABLE = 'SET_RUNTIME_VARIABLE';
-export const GET_VOLUMES_LIST = 'GET_VOLUMES_LIST';
 export const RECEIVE_VOLUMES_LIST = 'RECEIVE_VOLUMES_LIST';
 export const CLEAR_VOLUMES_LIST = 'CLEAR_VOLUMES_LIST';
-
 // deploy service
 export const DEPLOY_SVC_IMAGE = "DEPLOY_SVC_IMAGE";
 export const DEPLOY_SVC_CONTAINER = 'DEPLOY_SVC_CONTAINER';
 export const DEPLOY_SVC_SENIOR = 'DEPLOY_SVC_SENIOR';
 export const CLEAR_DEPLOY_DATA = 'CLEAR_DEPLOY_DATA';
-
-
-// servicesList
+// service
 export const GET_ALL_SERVICES = 'GET_ALL_SERVICES';
 export const CLEAR_SERVICE_LIST = 'CLEAR_SERVICE_LIST';
 export const REFRESH_LIST = 'REFRESH_LIST';
-//serviceDetail
 export const GET_SERVICE_DETAIL = 'GET_SERVICE_DETAIL';
 export const ADD_PORT = 'ADD_PORT';
 export const DEL_PORT = 'DEL_PORT';
@@ -37,32 +32,26 @@ export const SERVICE_STATE = {
   Stopping:'stopping'
 };
 export const GET_MONITOR_DATA = 'GET_MONITOR_DATA';
-//imagelist
+//image
 export const GET_IMAGE_LIST = 'GET_IMAGE_LIST';
 export const CLEAR_IMAGE_LIST = 'CLEAR_IMAGE_LIST';
-//imageDetail
 export const GET_IMAGE_DETAIL = 'GET_IMAGE_DETELE';
-
-
-
 export const API_VOLUMES_URL = "http://storage.boxlinker.com/api/v1.0/storage/volumes";
 export const API_SERVICE_URL = "http://api.boxlinker.com/api/v1/application/service";
 export const API_DELETE_SERVICE_URL = "http://api.boxlinker.com/api/v1/application/remove/service";
 export const API_IMAGE_URL = "http://auth.boxlinker.com/registry/v2";
-
-
 // building
 export const GET_REPO_LIST = "GET_REPO_LIST";
 export const IS_LOADING = "IS_LOADING";
 export const GET_GITHUB_AUTH_URL = "GET_GITHUB_AUTH_URL";
 export const GET_BUILDING_IMAGE_LIST = "GET_BUILDING_IMAGE_LIST";
 export const GET_BUILDING_DETAIL = 'GET_BUILDING_DETAIL';
-
 // userinfo
-
-export const USER_INFO = "USER_INFO";
 export const RECEIVE_USER_INFO = "RECEIVE_USER_INFO";
-
+// organize
+export const GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
+export const GET_ORGANIZE_DETAIL = 'GET_ORGANIZE_DETAIL';
+export const GET_ORGANIZE_USER_LIST = 'GET_ORGANIZE_USER_LIST';
 // breadcrumb
 export const BREADCRUMB_LIST = "BREADCRUMB_LIST";
 export const BREADCRUMB = {
@@ -125,6 +114,10 @@ export const BREADCRUMB = {
   USER_CONTAINER:{
     title:'个人中心',
     link:'/user'
+  },
+  ORGANIZE:{
+    title:'组织中心',
+    link:'/organize'
   }
 };
 
@@ -173,6 +166,7 @@ export const FETCH_URL = {
 
   //new
   ORGANIZE:URL + '/api/v1.0/usercenter/orgs',
+  TOKEN:URL + '/api/v1.0/usercenter/tokens',
 
 };
 // endpoints
@@ -218,8 +212,6 @@ export const IS_BTN_STATE = {
   autoStateUp:'IS_AUTO_STATE_UP',
   reviseBuilding:"REVISE_BUILDING"
 };
-
-export const GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
 
 
 

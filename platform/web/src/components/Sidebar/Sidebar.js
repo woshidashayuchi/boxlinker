@@ -130,6 +130,9 @@ class ThinList extends Component{
 }
 
 class Sidebar extends Component {
+  static contextTypes = {
+    store: React.PropTypes.object
+  };
   static propTypes = {
     isSidebarOpen: React.PropTypes.bool,
     sidebarActive:React.PropTypes.string,
@@ -155,6 +158,8 @@ class Sidebar extends Component {
   }
   getList(){
     let open = this.props.isSidebarOpen;
+    let is_user = this.context.store.getState().user_info.is_user;
+    console.log(is_user);
     return (
       open?
         <div className={s.listPack}>
@@ -194,11 +199,17 @@ class Sidebar extends Component {
                   <MenuListItem href="/building" icon={showIcon("icon-codeconstruct")}>代码构建</MenuListItem></li>
               </ul>
             </MenuList>
-            <ul className={cx(s.list,"sidebar-menu-list")}>
+            {is_user == 1?<ul className={cx(s.list,"sidebar-menu-list")}>
               <li onClick = {this.onChangeAction.bind(this,"/user")}
                   className={this.props.sidebarActive =="/user"?"subListAction":""}>
                 <MenuListItem href="/user" icon={showIcon("icon-login")}>用户中心</MenuListItem></li>
-            </ul>
+            </ul>:
+              <ul className={cx(s.list,"sidebar-menu-list")}>
+                <li onClick = {this.onChangeAction.bind(this,"/organize")}
+                    className={this.props.sidebarActive =="/organize"?"subListAction":""}>
+                  <MenuListItem href="/organize" icon={showIcon("icon-login")}>组织中心</MenuListItem></li>
+              </ul>
+            }
           </div>
         </div>
         :
@@ -254,15 +265,26 @@ class Sidebar extends Component {
                       className={this.props.sidebarActive =="/building"?"menuListAction":""}
             />
           </ThinList>
-          <ThinList
-            href = "/user"
-            isOpen={false}
-            title="用户中心"
-            icon={<i className="icon-login"> </i>}
-            onClick = {this.onChangeAction.bind(this,"/user")}
-            className={this.props.sidebarActive =="/user"?"menuListAction":""}
-          >
-          </ThinList>
+          {is_user==1?
+            <ThinList
+              href = "/user"
+              isOpen={false}
+              title="用户中心"
+              icon={<i className="icon-login"> </i>}
+              onClick = {this.onChangeAction.bind(this,"/user")}
+              className={this.props.sidebarActive =="/user"?"menuListAction":""}
+            >
+            </ThinList>:
+            <ThinList
+              href = "/organize"
+              isOpen={false}
+              title="组织中心"
+              icon={<i className="icon-login"> </i>}
+              onClick = {this.onChangeAction.bind(this,"/organize")}
+              className={this.props.sidebarActive =="/organize"?"menuListAction":""}
+            >
+            </ThinList>
+            }
         </div>
     )
   }

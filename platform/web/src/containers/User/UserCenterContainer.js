@@ -7,11 +7,8 @@ import {
   fetchGithubAuthURLAction,
 } from '../../actions/building';
 import {makeGetGithubAuthURLSelector} from '../../selectors/BuildingCreateSelector';
-import {
-  fetchRevisePasswordAction,
-    fetchCreateOrganize,
-    fetchGetOrganizeListAction
-} from '../../actions/users';
+import * as funUser from '../../actions/users';
+import * as funOrganize from  '../../actions/organize';
 import makeGetOrganizeListSelector from '../../selectors/organizeListSelector';
 
 const mapStateToProps = (state) => {
@@ -32,13 +29,19 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchGithubAuthURLAction())
     },
     onRevisePassword:(passwordObj) =>{
-      dispatch(fetchRevisePasswordAction(passwordObj))
+      dispatch(funUser.fetchRevisePasswordAction(passwordObj))
     },
     createOrganize:(org_name) =>{
-      dispatch(fetchCreateOrganize(org_name))
+      dispatch(funOrganize.fetchCreateOrganize(org_name))
     },
     getOrganizeList:() =>{
-      dispatch(fetchGetOrganizeListAction())
+      dispatch(funOrganize.fetchGetOrganizeListAction())
+    },
+    leaveOrganize:(id) =>{
+      dispatch(funOrganize.fetchLeaveOrganize(id))
+    },
+    deleteOrganize:(id) =>{
+      dispatch(funOrganize.fetchDeleteOrganize(id))
     }
   }
 };

@@ -9,12 +9,14 @@ class Header extends Component {
     isLoading: React.PropTypes.bool,
     isSidebarOpen: React.PropTypes.bool.isRequired,
     onSidebarToggleClick: React.PropTypes.func,
-    goToUserCenter:React.PropTypes.func
+    organizeList:React.PropTypes.array,
+    getOrganizeList:React.PropTypes.func,
+    changeAccount:React.PropTypes.func
   };
   static contextTypes = {
     store: React.PropTypes.object
   };
-  handleSelect(key){
+  handleSelect1(key){
     console.log(key);
     switch (key) {
       case 1:
@@ -24,24 +26,75 @@ class Header extends Component {
             cookie.save('isSidebarOpen',!this.props.isSidebarOpen,{path:'/',expires: exp});
             break;
       case 3:
-            this.props.goToUserCenter();
             break;
       case 4.1:
-            cookie.remove('_at')
+            cookie.remove('_at');
             localStorage.removeItem('_at');
             localStorage.removeItem('sidebarActive');
             location.href = '/login';
             break;
     }
   }
+  handleSelect(key){
+    console.log(key);
+    switch (key) {
+      case 1.1:
+        this.props.onSidebarToggleClick(!this.props.isSidebarOpen);
+        var exp = new Date();
+        exp.setTime(exp.getTime()+1000*60*60*24*7);
+        cookie.save('isSidebarOpen',!this.props.isSidebarOpen,{path:'/',expires: exp});
+        break;
+      case 4.1:
+        cookie.remove('_at');
+        localStorage.removeItem('_at');
+        localStorage.removeItem('sidebarActive');
+        location.href = '/login';
+        break;
+      default:
+        let organizeList = this.props.organizeList;
+        let org_id = organizeList[key].org_id;
+        this.props.changeAccount(org_id);
+    }
+
+  }
+  componentDidMount(){
+    this.props.getOrganizeList();
+  }
   render(){
+    const username = this.context.store.getState().user_info.user_name;
+    let menuItem = this.props.organizeList.map((item,i) =>{
+      return <MenuItem eventKey={i} key = {i}>{item.orga_name}</MenuItem>
+    });
+    let dropdown = username?
+      <NavDropdown eventKey={4} title={username} id="header-nav-item-userinfo">
+        {menuItem}
+        <MenuItem eventKey={4.1}>退出</MenuItem>
+      </NavDropdown>
+      :
+      <NavDropdown eventKey={4.1} title="退出" id="header-nav-item-userinfo"> </NavDropdown>;
+    return (
+      <Navbar fixedTop={true} className="app-navbar" style={{left:"180px"}}>
+        <Nav onSelect={this.handleSelect.bind(this)}>
+          <NavItem eventKey={1.1} href="javascript:void(0)"><i className={this.props.isSidebarOpen?"icon-withdraw":"icon-back"} aria-hidden="true"></i></NavItem>
+        </Nav>
+        <Nav pullRight onSelect={this.handleSelect.bind(this)} style={{marginRight:"0"}}>
+          <NavItem className="loading-animation">{this.props.isLoading?<Loading type="bubbles" color="#fff" height="50px" width="50px"/>:null}</NavItem>
+          {dropdown}
+        </Nav>
+
+      </Navbar>
+    )
+  }
+  render1(){
     const username = this.context.store.getState().user_info.user_name;
     let dropdown = username?
       <NavDropdown eventKey={4} title={username} id="header-nav-item-userinfo">
         <MenuItem eventKey={2}>创建组管理</MenuItem>
         <MenuItem eventKey={3}>用户中心</MenuItem>
         <MenuItem eventKey={4.1}>退出</MenuItem>
-      </NavDropdown>:null
+      </NavDropdown>:
+      <NavDropdown eventKey={4.1} title="退出" id="header-nav-item-userinfo">
+      </NavDropdown>;
     return (
       <Navbar fixedTop={true} className="app-navbar" style={{left:"180px"}}>
         <Nav onSelect={this.handleSelect.bind(this)}>

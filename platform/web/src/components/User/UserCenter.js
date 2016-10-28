@@ -20,7 +20,9 @@ class UserCenter extends  Component{
     onRevisePassword:React.PropTypes.func,
     createOrganize:React.PropTypes.func,
     organizeList:React.PropTypes.array,
-    getOrganizeList:React.PropTypes.func
+    getOrganizeList:React.PropTypes.func,
+    leaveOrganize:React.PropTypes.func,
+    deleteOrganize:React.PropTypes.func
   };
   componentDidMount(){
     this.props.getGithubAuthURL();
@@ -53,6 +55,8 @@ class UserCenter extends  Component{
                   createOrganize = {(org_name) =>{this.props.createOrganize(org_name)}}
                   getOrganizeList = {() => {this.props.getOrganizeList()}}
                   organizeList = {this.props.organizeList}
+                  leaveOrganize = {(id) => this.props.leaveOrganize(id)}
+                  deleteOrganize = {(id) => this.props.deleteOrganize(id)}
               />
             </Tab>
           </Tabs>

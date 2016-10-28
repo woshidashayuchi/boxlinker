@@ -33,6 +33,7 @@ import login from './login';
 import signUp from './signUp';
 import user from './userCenter';
 import reviseImage from './reviseImage';
+import organize from './organize';
 export default {
 
   path: '/',
@@ -58,6 +59,7 @@ export default {
     user,
     choseImage,
     configContainer,
+    organize,
 
     // place new routes before...
     error,

@@ -58,6 +58,7 @@ class VolumeList extends Component{
   getTableLine(){
     let data = this.props.volumesList;
     if(!data.length) return <tr><td colSpan="6" style={{"textAlign":"center"}}>暂无数据~</td></tr>
+    if(data.length == 1&&data[0] == 1) return <tr><td colSpan="6" style={{"textAlign":"center"}}><Loading /></td></tr>
     if(data.length == 1&&data[0] == 0) return <tr><td colSpan="6" style={{"textAlign":"center"}}><Loading /></td></tr>
     let body = [];
     data.map((item,i)=>{
@@ -121,12 +122,12 @@ class VolumeList extends Component{
           <table className="table table-hover table-bordered volumes-table">
             <thead>
             <tr>
-              <th>存储卷名称</th>
-              <th>创建时间</th>
-              <th>存储格式</th>
-              <th>状态</th>
-              <th>容量</th>
-              <th>操作</th>
+              <th width = "20%">存储卷名称</th>
+              <th width = "20%">创建时间</th>
+              <th width = "15%">存储格式</th>
+              <th width = "15%">状态</th>
+              <th width = "15%">容量</th>
+              <th width = "15%">操作</th>
             </tr>
             </thead>
             <tbody>

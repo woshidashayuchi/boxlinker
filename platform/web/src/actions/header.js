@@ -8,10 +8,3 @@ export function isLoadingAction (flag){
     payload : flag
   }
 }
-
-export function goToUserCenter() {
-  return dispatch => {
-    dispatch(navigate("/user"));
-
-  }
-}
