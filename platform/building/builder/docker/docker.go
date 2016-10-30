@@ -70,6 +70,10 @@ func (b *Builder) build(ctx context.Context, w io.Writer, opts builder.BuildOpti
 
 	c, err := b.client.CreateContainer(docker.CreateContainerOptions{
 		Name: name,
+		HostConfig: &docker.HostConfig{
+			Privileged: true,
+			VolumesFrom: []string{b.dataVolume()},
+		},
 		Config: &docker.Config{
 			Tty: 		false,
 			AttachStdout: 	true,
@@ -90,10 +94,8 @@ func (b *Builder) build(ctx context.Context, w io.Writer, opts builder.BuildOpti
 	})
 
 	log.Debugf("starting container: %s",c.ID)
-	if err := b.client.StartContainer(c.ID, &docker.HostConfig{
-		Privileged: true,
-		VolumesFrom: []string{b.dataVolume()},
-	}); err != nil {
+
+	if err := b.client.StartContainer(c.ID, nil); err != nil {
 		return fmt.Errorf("start container: %v", err)
 	}
 
