@@ -21,7 +21,6 @@ def pod_messages(json_list):
     try:
         pods_msg = kuberclient.rpc_pod(to_server)
         resu = json.loads(pods_msg).get("items")
-        log.info(pods_msg)
 
         for i in resu:
             if json_list.get("user_name")+json_list.get("service_name") == i.get("metadata").get("labels").get("component"):

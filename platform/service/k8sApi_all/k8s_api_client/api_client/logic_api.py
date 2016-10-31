@@ -171,10 +171,12 @@ def put_container(service_name):
     json_list["token"] = token_get1
     controller = SheetController()
     try:
-        controller.update_service(json_list)
+        rest = controller.update_service(json_list)
         response = controller.update_container(json_list)
-
-        return json.dumps(response)
+        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
+            return json.dumps(response)
+        else:
+            return json.dumps(code.request_result(502))
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
@@ -195,10 +197,14 @@ def put_volume(service_name):
     json_list.update(json_name)
     controller = SheetController()
     try:
-        controller.update_service(json_list)
+        rest = controller.update_service(json_list)
         response = controller.update_volume(json_list)
+        log.info(rest,response)
+        if rest.get("status") == 0 and response.get("status") == 0:
 
-        return json.dumps(response)
+            return json.dumps(response)
+        else:
+            return json.dumps(code.request_result(502))
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
@@ -222,10 +228,13 @@ def put_env(service_name):
     json_list["token"] = token_get1
     controller = SheetController()
     try:
-        controller.update_service(json_list)
+        rest = controller.update_service(json_list)
         response = controller.update_env(json_list)
+        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
+            return json.dumps(response)
+        else:
+            return json.dumps(code.request_result(502))
 
-        return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
@@ -248,10 +257,13 @@ def put_cm(service_name):
     json_list.update(json_name)
     try:
         controller = SheetController()
-        controller.update_service(json_list)
+        rest = controller.update_service(json_list)
         response = controller.update_cm(json_list)
+        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
+            return json.dumps(response)
+        else:
+            return json.dumps(code.request_result(502))
 
-        return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
@@ -348,10 +360,14 @@ def put_auto_startup(service_name):
     json_list.update(json_name)
     try:
         controller = SheetController()
-        controller.update_service(json_list)
+        rest = controller.update_service(json_list)
         response = controller.update_cm(json_list)
 
-        return json.dumps(response)
+        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
+            return json.dumps(response)
+        else:
+            return json.dumps(code.request_result(502))
+
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
@@ -376,6 +392,32 @@ def put_policy(service_name):
     try:
         controller = SheetController()
         response = controller.update_service(json_list)
+        return json.dumps(response)
+    except Exception, e:
+        log.error("update error, reason = %s" % e)
+        return json.dumps(code.request_result(502))
+
+
+@app.route('/api/v1/application/service/<service_name>/command', methods=['PUT'])
+def put_command(service_name):
+    try:
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name}
+    except:
+        return json.dumps(code.request_result(202))
+    json_list = json.loads(request.get_data())
+    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
+                 "user_orga": user_orga, "role_uuid": role_uuid}
+    json_list["token"] = token_get1
+    json_list.update(json_name)
+    try:
+        controller = SheetController()
+        controller.update_service(json_list)
+        response = controller.update_cm(json_list)
+
         return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)

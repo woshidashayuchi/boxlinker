@@ -29,11 +29,16 @@ class CreateVolume(object):
                 try:
                     log.info(headers)
                     resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get("result")
+                    if resu == {}:
+                        return "error"
+                    else:
+                        pass
                     log.info(resu)
                 except Exception, e:
                     log.error("select volumes error,reason=%s"% (e))
                     return "timeout"
-
+                log.info("hahahahahahahahahahahahahaha")
+                log.info(resu)
                 vname = resu.get("disk_name")
                 pool_name = resu.get("pool_name")
                 image = resu.get("image_name")

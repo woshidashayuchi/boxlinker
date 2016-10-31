@@ -15,6 +15,8 @@ def choice_up(json_list):
     try:
         if json_list.get("type") == "container":
             alls.pop("container")
+            log.info("######:::::")
+            log.info(alls)
             json_list.update(alls)
             return json_list
         elif json_list.get("type") == "env":
@@ -37,6 +39,11 @@ def choice_up(json_list):
         elif json_list.get("image_name") is not None:
             json_list.update(alls)
             return json_list
+        elif json_list.get("command") is not None and json_list.get("command") != "":
+            json_list.update(alls)
+            return json_list
+        elif json_list.get("operate") == "start":
+            return alls
         else:
             pass
     except Exception, e:

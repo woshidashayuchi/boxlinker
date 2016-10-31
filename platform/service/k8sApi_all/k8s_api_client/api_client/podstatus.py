@@ -7,6 +7,7 @@ from data import DataOrm
 from common.logs import logging as log
 import json
 from es.to_es import post_es
+from detail_podstatus import update_s
 
 
 class PodStatus(object):
@@ -19,6 +20,7 @@ class PodStatus(object):
         update_status_sql = ""
         try:
             log.info("json_list=%s, type=%s" % (json_list, type(json_list)))
+            log.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             json1 = eval(json_list)
             update_status_sql = DataOrm.update_pods(json1)
         except Exception, e:
@@ -39,7 +41,7 @@ class PodStatus(object):
                 return "failed"
 
             logical.connClose(conn, cur)
-            return "success"
+
         else:
             try:
                 logical.exeUpdate(cur, update_status_sql)
@@ -48,3 +50,5 @@ class PodStatus(object):
             except Exception, e:
                 log.error("status update error,reason=%s" % e)
                 return "failed"
+
+        # update_s(json_list)

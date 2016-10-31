@@ -74,6 +74,7 @@ class ArrayIterator(object):
         m = 1
         for i in ser:
             domain_http = "%s-%s%s.lb1.boxlinker.com:" % (user_name, service_name, i.get("container_port"))
+            log.info("-------------------%s" % i)
             if i.get("access_mode").upper() == "HTTP":
                 http_lbadd = domain_http + i.get("container_port")
                 if http_lb == "":
@@ -109,3 +110,14 @@ class ArrayIterator(object):
         tcp_port = {"container": ser}
 
         return http_lb, tcp_lb, tcp_port
+
+    @classmethod
+    def command_query(cls, json_list):
+        log.info("command=%s,%s"%(type(json_list.get("command")),json_list.get("command")))
+        if json_list.get("command") != "" and json_list.get("command") is not None:
+            com = json_list.get("command")
+            command = com.split(",")
+            log.info(command)
+            return command
+        else:
+            return None

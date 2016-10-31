@@ -26,10 +26,12 @@ class SourceModel(object):
         if json_list.get("tel") == None and json_list.get("operate") == None:
            json_list = choice_up(json_list)
         elif json_list.get("tel") == None and json_list.get("operate") == "start":
-            pass
+            json_list = choice_up(json_list)
         else:
             json_list.pop("tel")
 
+        command = None
+        com = ""
         log.info(json_list)
         volumes = []
         image_name = ""
@@ -55,12 +57,25 @@ class SourceModel(object):
                 container_memory = i.get("limits_memory")
                 pods_num = int(i.get("spec_replicas"))
                 policy1 = int(i.get("policy"))
+                command = i.get("command")
             logicmodel.connClose(conn, cur)
+            log.info("command=====%s" % command)
 
+            if json_list.get("command") == "" or json_list.get("command") is None:
+                pass
+            else:
+                command = json_list.get("command")
+
+            if command != "" and command is not None:
+                com = command.split(",")
+            else:
+                com = ""
+            log.info("ssssssssssssssss")
+            log.info(com)
         except Exception as msg:
             result = code.request_result(403, ret={"msg": msg.message, "msg1": msg.args})
             return result
-        #images = image_name+":"+image_version
+        # images = image_name+":"+image_version
 
         if json_list.get("image_name") is not None and json_list.get("policy") is not None:
             log.info("jsondata=====================%s" % json_list)
@@ -85,7 +100,7 @@ class SourceModel(object):
             if json_list.get("volume") != "":
                 volume = CreateVolume()
                 volumes = volume.define_volumes(json_list)
-                if volumes == "timeout":
+                if volumes == "timeout" or volumes == "error":
                     return "timeout"
             else:
                 volumes = "null"
@@ -97,8 +112,8 @@ class SourceModel(object):
         service_name = json_list.get("service_name")
         service_name = user_name+service_name
         service_name1 = service_name.replace("_", "-")
-
-        container_cpu = limits_cm(json_list)
+        if json_list.get("container_cpu") is not None:
+            container_cpu, container_memory = limits_cm(json_list)
 
         update_rc = {
                        "kind": "ReplicationController",
@@ -133,6 +148,7 @@ class SourceModel(object):
                                       "name": service_name1,
                                       "image": image_name+":"+image_version,
                                       "imagePullPolicy": pullpolicy,
+                                      "command": com,
                                       "resources": {"limits": {"cpu": container_cpu,
                                                                "memory": container_memory}},
                                       "ports": ArrayIterator.container(container),
@@ -160,6 +176,11 @@ class SourceModel(object):
                 for i in update_rc["spec"]["template"]["spec"]["containers"]:
                     del update_rc["spec"]["template"]["spec"]["containers"][j]["volumeMounts"]
                     j += 1
+            if com is None or com == "":
+                j = 0
+                for i in update_rc["spec"]["template"]["spec"]["containers"]:
+                    del update_rc["spec"]["template"]["spec"]["containers"][j]["command"]
+                    j += 1
         except Exception, e:
             log.error("have an error, reason=%s" % e)
         log.info(update_rc)
@@ -172,7 +193,7 @@ class SourceModel(object):
         image_version = json_list.get("image_version")
         service_name = json_list.get("service_name")
 
-        container_memory = json_list.get("container_memory")
+        # container_memory = json_list.get("container_memory")
 
         # container_cpu = json_list.get("container_cpu")
 
@@ -180,13 +201,15 @@ class SourceModel(object):
 
         user_name = json_list.get("user_name")
 
+        command = ArrayIterator.command_query(json_list)
+
         policy1 = json_list.get("policy")
         # images = image_name+":"+image_version
         images = image_name
         container = json_list.get("container")
         env = json_list.get("env")
         auto_startup = json_list.get("auto_startup")
-
+        log.info("8888888888888888888888+++%s" % command)
         if int(auto_startup) == 1:
             # rc_krub = images[20:].replace("/", "_").replace(":", "_")
             pass
@@ -213,7 +236,7 @@ class SourceModel(object):
             service_name2 = user_name+service_name
             service_name1 = service_name2.replace("_", "-")
 
-            container_cpu = limits_cm(json_list)
+            container_cpu, container_memory = limits_cm(json_list)
 
             # 创建rc
             log.info("user_id================%s" % json_list.get("user_id"))
@@ -250,6 +273,7 @@ class SourceModel(object):
                                       "name": service_name1,
                                       "image": image_name+":"+image_version,
                                       "imagePullPolicy": pullpolicy,
+                                      "command": command,
                                       "resources": {"limits": {"cpu": container_cpu,
                                                                "memory": container_memory}},
                                       "ports": ArrayIterator.container(container),
@@ -274,6 +298,11 @@ class SourceModel(object):
                 del add_rc["spec"]["template"]["spec"]["volumes"]
                 for i in add_rc["spec"]["template"]["spec"]["containers"]:
                     del add_rc["spec"]["template"]["spec"]["containers"][j]["volumeMounts"]
+                    j += 1
+            if command == "" or command is None:
+                j = 0
+                for i in add_rc["spec"]["template"]["spec"]["containers"]:
+                    del add_rc["spec"]["template"]["spec"]["containers"][j]["command"]
                     j += 1
             else:
                 pass
@@ -400,6 +429,8 @@ class SourceModel(object):
         return update_service
 
     def delete_pod(self, json_list):
+        com = ""
+        command = ""
         image_name = ""
         image_version = ""
         container_cpu = ""
@@ -428,7 +459,14 @@ class SourceModel(object):
                 container_cpu = i.get("limits_cpu")
                 container_memory = i.get("limits_memory")
                 policy1 = int(i.get("policy"))
+                com = i.get("command")
             logicmodel.connClose(conn, cur)
+            if json_list.get("command") != "" and json_list.get("command") is not None:
+                com = json_list.get("command")
+            if com != "" and com is not None:
+                command = com.split(",")
+            log.info("0000000000000000")
+            log.info(command)
         except Exception as msg:
             result = code.request_result(403, ret={"msg": msg.message, "msg1": msg.args})
             return result
@@ -479,6 +517,7 @@ class SourceModel(object):
                                       "name": service_name1,
                                       "image": image_name+":"+image_version,
                                       "imagePullPolicy": pullpolicy,
+                                      "command": command,
                                       "resources": {"limits": {"cpu": container_cpu,
                                                                "memory": container_memory}},
                                       "ports": ArrayIterator.container(res),
@@ -497,6 +536,11 @@ class SourceModel(object):
         #    update_rc["spec"]["template"]["spec"]["containers"].pop("env")
         # else:
         #    pass
+        if command == "" or command is None:
+            j = 0
+            for i in del_pod["spec"]["template"]["spec"]["containers"]:
+                del del_pod["spec"]["template"]["spec"]["containers"][j]["command"]
+                j += 1
         log.info(del_pod)
 
         return del_pod

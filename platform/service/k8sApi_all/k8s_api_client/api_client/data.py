@@ -186,6 +186,7 @@ class DataOrm(object):
             u.limits_memory = json_list.get("container_memory")
             u.policy = json_list.get("policy")
             u.auto_startup = json_list.get("auto_startup")
+            u.command = json_list.get("command")
             # u.containerPort = int(json_list.get("container")[0].get("container_port"))
             # u.protocol = json_list.get("container1")
             # u.env_name = json_list.get("env1")
@@ -362,7 +363,7 @@ class DataOrm(object):
                      "b.uuid, b.rc_name, b.labels_name, b.spec_replicas, " \
                      "b.spec_selector_name, b.template_name, b.template_container_name, " \
                      "b.image_name, b.image_version, b.limits_cpu,b.limits_memory," \
-                     "b.policy, b.auto_startup, b.containerPort, b.image_id," \
+                     "b.policy, b.auto_startup, b.containerPort, b.image_id, b.command," \
                      "b.protocol, b.env_name, b.env_value, b.rc_update_time ltime," \
                      "c.uuid, c.service_name, c.labels, c.selector_name, " \
                      "c.ports_name, c.ports_port, c.ports_targetport, c.service_domain_name  " \
@@ -556,6 +557,11 @@ class DataOrm(object):
     def put_auto_startup(cls, json_list):
         update_auto = "update replicationcontrollers a set a.auto_startup = \'%s\' where a.uuid=\'%s\'" % (json_list.get("auto_startup"), json_list.get("rc_id"))
         return update_auto
+
+    @classmethod
+    def put_command(cls, json_list):
+        command = "update replicationcontrollers a set a.command = \'%s\' where a.uuid=\'%s\'" % (json_list.get("command"), json_list.get("rc_id"))
+        return command
 
     @classmethod
     def check_name(cls, json_list):

@@ -30,10 +30,9 @@ class SheetModel(object):
         json_to = {"action": "put", "resources_type": "replicationcontrollers", "parameters": update_json}
         kubeclient = KubernetesClient()
         try:
-            rest = kubeclient.rpc_name(json_to)
-
-            if rest != "<Response [200]>":
-                log.error("start resource error, reason=%s" % rest)
+            ret = kubeclient.rpc_name(json_to)
+            log.info("ffffffffffffffff%s" % ret)
+            if ret != "<Response [200]>":
                 return code.request_result(502)
             base_result("Running", json_list)
             return code.request_result(0, "started")
@@ -47,28 +46,24 @@ class SheetModel(object):
         sourceModel = SourceModel()
         delete_pod = sourceModel.delete_pod(json_list)
         kubeclient = KubernetesClient()
-        log.info("aaaaaaaaaaaaaa")
+        log.info("gggggggggggg")
         log.info(delete_pod)
         delete_pod1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": delete_pod}
         try:
-            rest = kubeclient.rpc_name(delete_pod1)
-
-            if rest != "<Response [200]>":
-                log.error("stop resource error, reason=%s" % rest)
+            ret = kubeclient.rpc_name(delete_pod1)
+            log.info(ret)
+            if ret != "<Response [200]>":
                 return code.request_result(502)
-            return code.request_result(0, "stopped")
+
         except Exception, e:
             log.error("kubernetes update error, reason=%s" % e)
             return code.request_result(502)
-        # try:
-        #    rest = DeletePod.delete_pod(json_list)
-        #    if rest == "error":
-        #        return code.request_result(502)
-        #    base_result("Stopping", json_list)
-        #    return code.request_result(0, "stopped")
-        # except Exception, e:
-        #    log.error("pod delete error, reason=%s" % e)
-        #    return code.request_result(502)
+        try:
+            # DeletePod.delete_pod(json_list)
+            base_result("Stopping", json_list)
+            return code.request_result(0, "stopped")
+        except Exception, e:
+            log.error("pod delete error, reason=%s" % e)
 
     @classmethod
     def elastic_telescopic(cls, json_list):

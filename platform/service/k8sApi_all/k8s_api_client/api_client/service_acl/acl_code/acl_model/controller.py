@@ -36,16 +36,20 @@ class Controller(object):
     def authority_judge(self, json_data):
         user_id, user_name, user_orga, role_uuid = json_data.get("user_id"), json_data.get("user_name"), json_data.get("user_orga"), json_data.get("role_uuid")
         query = self.list_acl(json_data)
-
+        log.info(query)
         if query != "error":
             for i in query:
                 log.info("orga=%s, user=%s" % (i.get("organization"), i.get("user")))
+                log.info(i.get("organization"))
+                log.info(role_uuid)
+                log.info(user_orga)
                 if i.get("organization") == user_orga and int(role_uuid) == 200:
                     return "correct"
-                if i.get("organization") == user_orga and int(role_uuid) == 210:
+                elif i.get("organization") == user_orga and int(role_uuid) == 210:
                     return "correct"
-                if i.get("organization") == user_orga and int(role_uuid) == 400 and i.get("user") == user_id:
+                elif i.get("organization") == user_orga and int(role_uuid) == 400 and i.get("user") == user_id:
                     return "correct"
+
             return "error"
         else:
 
@@ -121,5 +125,9 @@ class Controller(object):
         except Exception, e:
             log.error("update acl error, reason=%s" % e)
             return "%s" % e
+
+    def svc_list_acl(self, json_data):
+        pass
+
 
 

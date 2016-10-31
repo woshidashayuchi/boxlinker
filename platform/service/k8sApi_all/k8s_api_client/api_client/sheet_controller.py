@@ -642,6 +642,7 @@ class SheetController(object):
                 return result
             json_list1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": update_json}
             json_list2 = str(json_list1)
+
             try:
 
                 log.info("{'userid': '%s', 'log_info': 'updating the replication and pod...'}"
@@ -670,7 +671,7 @@ class SheetController(object):
             try:
                 kubernete_sclient = KubernetesClient()
                 rest = kubernete_sclient.rpc_name(json_list_pod)
-
+                log.info(json_list_pod)
                 if rest != "<Response [200]>":
                     log.info("update error, reason=%s" % rest)
                     return code.request_result(502)
@@ -902,6 +903,7 @@ class SheetController(object):
                 print i.get("rc_id")
                 rc = {"uid_rc": i.get("rc_id"), "rtype": "volume"}
                 json_list.update(rc)
+            return code.request_result(0, "success")
 
         except Exception, e:
             log.warning('query rc_id running error, json=%s, reason=%s'
@@ -970,14 +972,26 @@ class SheetController(object):
             log.warning('query rc_id running error, reason=%s'
                         % (e))
         try:
-            if json_list.get("auto") is None:
+            x = 99
+            if json_list.get("auto") is None and (json_list.get("command") is None or json_list.get("command") == ""):
+                log.info(3333333)
                 update_cm_sql = DataOrm.put_cpu_memory(json_list)
-                logicmodel.exeUpdate(cur, update_cm_sql)
+                x = logicmodel.exeUpdate(cur, update_cm_sql)
                 logicmodel.connClose(conn, cur)
-            elif json_list.get("auto") == "auto":
+            if json_list.get("auto") == "auto":
                 update_auto_sql = DataOrm.put_auto_startup(json_list)
-                logicmodel.exeUpdate(cur, update_auto_sql)
+                x = logicmodel.exeUpdate(cur, update_auto_sql)
                 logicmodel.connClose(conn, cur)
+            if json_list.get("command") is not None and json_list.get("command") != "":
+                log.info(22222222)
+
+                update_command_sql = DataOrm.put_command(json_list)
+                x = logicmodel.exeUpdate(cur, update_command_sql)
+                logicmodel.connClose(conn, cur)
+            if x == 0 or x == 1:
+                pass
+            else:
+                return "error"
         except Exception, e:
             log.error("cm entering the database error data=%s,reason=%s" % (update_cm_sql, e))
             result = code.request_result(403)
