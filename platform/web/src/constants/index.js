@@ -48,6 +48,7 @@ export const GET_BUILDING_IMAGE_LIST = "GET_BUILDING_IMAGE_LIST";
 export const GET_BUILDING_DETAIL = 'GET_BUILDING_DETAIL';
 // userinfo
 export const RECEIVE_USER_INFO = "RECEIVE_USER_INFO";
+export const GET_USER_LIST = 'GET_USER_LIST';
 // organize
 export const GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
 export const GET_ORGANIZE_DETAIL = 'GET_ORGANIZE_DETAIL';
@@ -210,7 +211,12 @@ export const IS_BTN_STATE = {
   building:'IS_BUILDING',
   createVolume:'IS_CREATE_VOLUME',
   autoStateUp:'IS_AUTO_STATE_UP',
-  reviseBuilding:"REVISE_BUILDING"
+  reviseBuilding:"REVISE_BUILDING",
+  port:'IS_PORT',
+  storage:'STORAGE',
+  env:'ENV',
+  command:'COMMAND',
+  pods:'PODS'
 };
 
 

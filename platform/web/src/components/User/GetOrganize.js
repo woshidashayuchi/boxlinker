@@ -2,6 +2,7 @@ import React,{PropTypes,Component,} from 'react';
 import HeadLine from '../HeadLine';
 import {Modal} from 'react-bootstrap';
 import Loading from '../Loading';
+import {navigate} from '../../actions/route';
 
 class GetOrganize extends Component {
     static contextTypes = {
@@ -27,10 +28,12 @@ class GetOrganize extends Component {
     }
     getOrganizeBody(){
         let data = this.props.organizeList;
+        let user_name = this.context.store.getState().user_info.user_name;
         if(data[0] == 1) return <tr><td colSpan = "5" style = {{textAlign:"center"}}><Loading /></td></tr>;
         if(!data.length) return <tr><td colSpan = "5" style = {{textAlign:"center"}}>暂无数据~</td></tr>;
         let role = "";
         return data.map((item,i) =>{
+            if(item.orga_name == user_name) return false;
             let opt = <button className="btn btn-danger" onClick = {this.leaveOrganize.bind(this,item.org_id)}>退出组织</button>;
             switch (Number(item.role)){
                 case 200 :
@@ -82,6 +85,14 @@ class GetOrganize extends Component {
     }
     componentDidMount(){
         this.props.getOrganizeList();
+    }
+    componentWillMount(){
+        let is_user = this.context.store.getState().user_info.is_user;
+        console.log(",,,.",is_user);
+        if(is_user == 0){
+            console.log("sss");
+            this.context.store.dispatch(navigate("/"));
+        }
     }
     render(){
         return(

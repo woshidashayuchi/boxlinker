@@ -6,12 +6,15 @@ import {
 import * as fun from '../../actions/organize';
 import makeGetOrganizeDetail  from '../../selectors/organizeDetailSelector';
 import makeGetOrganizeUserList from '../../selectors/organizeUserListSelector';
+import makeGetUserList from '../../selectors/userListSelector';
 const mapStateToProps = (state) => {
   const getOrganizeDetail = makeGetOrganizeDetail();
   const getOrganizeUserList = makeGetOrganizeUserList();
+  const getUserList = makeGetUserList();
   return {
     organizeDetail:getOrganizeDetail(state),
     organizeUserList:getOrganizeUserList(state),
+    userList:getUserList(state),
   }
 };
 
@@ -28,6 +31,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     getOrganizeUserList:(id) =>{
       dispatch(fun.fetchGetOrganizeUserListAction(id))
+    },
+    getUserList:(name) =>{
+      dispatch(fun.fetchGetUserListAction(name))
+    },
+    inviteUser:(data) =>{
+      dispatch(fun.fetchInviteUser(data))
     }
   }
 };

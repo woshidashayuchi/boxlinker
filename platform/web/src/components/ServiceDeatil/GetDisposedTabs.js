@@ -120,6 +120,7 @@ class GetDisposedTabs extends Component{
     onDelSave:React.PropTypes.func,
     onAddEnv:React.PropTypes.func,
     onDelEnv: React.PropTypes.func,
+    onSaveCommand:React.PropTypes.func,
     onAutoStateUp:React.PropTypes.func,
     isBtnState:React.PropTypes.object
   };
@@ -451,6 +452,15 @@ class GetDisposedTabs extends Component{
     console.log(data);
     this.props.onAutoStateUp(data);
   }
+  saveCommand(){
+    let txt = this.refs.command.value;
+    console.log(txt);
+    let data = {
+      command:txt,
+      serviceName:this.props.serviceDetail.fservice_name,
+    };
+    this.props.onSaveCommand(data);
+  }
 
   render(){
     let data = this.props.serviceDetail;
@@ -475,8 +485,12 @@ class GetDisposedTabs extends Component{
             {this.getPortTable()}
           </div>
           <div className={s.assBtnBox}>
-            <Button bsStyle="primary" onClick = {this.addPortTr.bind(this)}>添加</Button>
-            <Button bsStyle="default" onClick = {this.savePort.bind(this)}>保存</Button>
+            <button className="btn btn-primary"
+                    onClick = {this.addPortTr.bind(this)}
+            >添加</button>
+            <button className={`btn btn-default ${!this.props.isBtnState.port?"btn-loading":""}`}
+                    disabled={!this.props.isBtnState.port}
+                    onClick = {this.savePort.bind(this)}>保存</button>
           </div>
         </div>
         <div className={cx(s.assItem)}>
@@ -489,8 +503,11 @@ class GetDisposedTabs extends Component{
             {this.getSaveTable()}
           </div>
           <div className={s.assBtnBox}>
-            <Button bsStyle="primary" onClick = {this.addSaveTr.bind(this)}>添加</Button>
-            <Button bsStyle="default" onClick = {this.saveStorage.bind(this)}>保存</Button>
+            <button className="btn btn-primary" onClick = {this.addSaveTr.bind(this)}>添加</button>
+            <button className={`btn btn-default ${!this.props.isBtnState.storage?"btn-loading":""}`}
+                    disabled={!this.props.isBtnState.storage}
+                    onClick = {this.saveStorage.bind(this)}
+            >保存</button>
           </div>
         </div>
         <div className={cx(s.assItem)}>
@@ -503,8 +520,11 @@ class GetDisposedTabs extends Component{
             {this.getEnvironment()}
           </div>
           <div className={s.assBtnBox}>
-            <Button bsStyle="primary" onClick = {this.addEnvironmentData.bind(this)}>添加</Button>
-            <Button bsStyle="default" onClick = {this.saveEnvironment.bind(this)}>保存</Button>
+            <button className="btn btn-primary" onClick = {this.addEnvironmentData.bind(this)}>添加</button>
+            <button className={`btn btn-default ${!this.props.isBtnState.env?"btn-loading":""}`}
+                    disabled={!this.props.isBtnState.env}
+                    onClick = {this.saveEnvironment.bind(this)}
+            >保存</button>
           </div>
         </div>
         <div className={cx(s.assItem)}>
@@ -531,10 +551,15 @@ class GetDisposedTabs extends Component{
             <input className = "form-control"
                    type="text"
                    placeholder=""
+                   ref = "command"
+                   defaultValue={data.command}
             />
           </div>
           <div className={s.assBtnBox}>
-            <Button bsStyle="default" >保存</Button>
+            <button className={`btn btn-default ${!this.props.isBtnState.command?"btn-loading":""}`}
+                    disabled={!this.props.isBtnState.command}
+                    onClick = {this.saveCommand.bind(this)}
+            >保存</button>
           </div>
         </div>
         <div className={cx(s.assItem, s.assItemNoborder)}>

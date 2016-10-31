@@ -187,7 +187,8 @@ function volumesList(state = [1],action){
 }
 
 function isBtnState(
-  state = {deploy:true,building:true,volume:true,autoStateUp:true,reviseBuilding:true}
+  state = {deploy:true,building:true,volume:true,autoStateUp:true,reviseBuilding:true,
+    port:true,storage:true,env:true,command:true,pods:true}
   ,action){
   switch (action.type){
     case IS_BTN_STATE.deploy:
@@ -205,6 +206,21 @@ function isBtnState(
     case Const.IS_BTN_STATE.reviseBuilding:
       state.reviseBuilding = action.payload;
           return Object.assign({},state);
+    case Const.IS_BTN_STATE.port:
+      state.port = action.payload;
+      return Object.assign({},state);
+    case Const.IS_BTN_STATE.storage:
+      state.storage = action.payload;
+      return Object.assign({},state);
+    case Const.IS_BTN_STATE.env:
+      state.env = action.payload;
+      return Object.assign({},state);
+    case Const.IS_BTN_STATE.command:
+      state.command = action.payload;
+      return Object.assign({},state);
+    case Const.IS_BTN_STATE.pods:
+      state.pods = action.payload;
+      return Object.assign({},state);
     default:
       return state;
   }
@@ -418,6 +434,15 @@ function organizeUserList(state = [1],action){
       return state
   }
 }
+function userList(state = [],action){
+  switch (action.type){
+    case Const.GET_USER_LIST:
+      return action.payload;
+    break;
+    default:
+      return state;
+  }
+}
 
 const rootReducer = combineReducers({
   isSidebarOpen,
@@ -444,7 +469,8 @@ const rootReducer = combineReducers({
   isBtnState,
   organizeList,
   organizeDetail,
-  organizeUserList
+  organizeUserList,
+  userList
 });
 
 

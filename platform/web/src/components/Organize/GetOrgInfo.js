@@ -63,8 +63,9 @@ class GetOrgInfo extends Component{
   }
 
   setOrganizeDetail(){
+    let orga_id = this.context.store.getState().user_info.orga_uuid;
     let data = {
-      orga_id:"529fb638-1f91-3788-a78c-5eb223c15ee1",
+      orga_id:orga_id,
       orga_detail:this.refs.orga_detail.value,
       is_public:this.state.is_public
     };

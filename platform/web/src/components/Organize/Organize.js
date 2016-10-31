@@ -20,7 +20,10 @@ class Organize extends  Component{
     organizeDetail:React.PropTypes.object,
     setOrganizeDetail:React.PropTypes.func,
     organizeUserList:React.PropTypes.array,
-    getOrganizeUserList:React.PropTypes.func
+    getOrganizeUserList:React.PropTypes.func,
+    userList:React.PropTypes.array,
+    getUserList:React.PropTypes.func,
+    inviteUser:React.PropTypes.func
   };
   componentDidMount(){
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.ORGANIZE)
@@ -47,6 +50,9 @@ class Organize extends  Component{
               <GetOrgAdmin
                 organizeUserList = {this.props.organizeUserList}
                 getOrganizeUserList={(id) =>{this.props.getOrganizeUserList(id)}}
+                userList = {this.props.userList}
+                getUserList={(name => {this.props.getUserList(name)})}
+                inviteUser = {(data) => {this.props.inviteUser(data)}}
               />
             </Tab>
           </Tabs>

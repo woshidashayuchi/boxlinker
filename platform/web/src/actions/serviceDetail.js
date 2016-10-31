@@ -109,6 +109,36 @@ export function addEnvAction() {
     type:ADD_ENV
   }
 }
+export function savePortAction(flag) {
+  return {
+    type:Const.IS_BTN_STATE.port,
+    payload:flag
+  }
+}
+export function saveStorageAction(flag) {
+  return {
+    type:Const.IS_BTN_STATE.storage,
+    payload:flag
+  }
+}
+export function saveEnvAction(flag) {
+  return {
+    type:Const.IS_BTN_STATE.env,
+    payload:flag
+  }
+}
+export function saveCommandAction(flag) {
+  return {
+    type:Const.IS_BTN_STATE.command,
+    payload:flag
+  }
+}
+export function savePodsAction(flag) {
+  return {
+    type:Const.IS_BTN_STATE.pods,
+    payload:flag
+  }
+}
 
 
 export function fetchSavePortAction(data){
@@ -121,6 +151,7 @@ export function fetchSavePortAction(data){
   };
   return dispatch => {
     dispatch(isLoadingAction(true));
+    dispatch(savePortAction(false));
     return fetch(`${API_SERVICE_URL}/`+data.serviceName+`/container`,myInit)
       .then(response => response.json())
       .then(json => {
@@ -139,9 +170,11 @@ export function fetchSavePortAction(data){
           console.error(json);
         }
         dispatch(isLoadingAction(false));
+        dispatch(savePortAction(true));
       })
       .catch (e => {
         dispatch(isLoadingAction(false));
+        dispatch(savePortAction(true));
         console.error("SavePort is error",e);
       })
   }
@@ -157,6 +190,7 @@ export function fetchSaveVolumeAction(data){
   };
   return dispatch => {
     dispatch(isLoadingAction(true));
+    dispatch(saveStorageAction(false));
     return fetch(`${API_SERVICE_URL}/`+data.serviceName+`/volume`,myInit)
       .then(response => response.json())
       .then(json => {
@@ -175,9 +209,11 @@ export function fetchSaveVolumeAction(data){
           console.error(json);
         }
         dispatch(isLoadingAction(false));
+        dispatch(saveStorageAction(true));
       })
       .catch (e => {
         dispatch(isLoadingAction(false));
+        dispatch(saveStorageAction(true));
         console.error("SaveVolume is error",e);
       })
   }
@@ -196,6 +232,7 @@ export function fetchSaveEnvironmentAction(data){
   };
   return dispatch => {
     dispatch(isLoadingAction(true));
+    dispatch(saveEnvAction(false));
     return fetch(`${API_SERVICE_URL}/`+data.serviceName+`/env`,myInit)
       .then(response => response.json())
       .then(json => {
@@ -214,9 +251,11 @@ export function fetchSaveEnvironmentAction(data){
           console.error(json);
         }
         dispatch(isLoadingAction(false));
+        dispatch(saveEnvAction(true));
       })
       .catch (e => {
         dispatch(isLoadingAction(false));
+        dispatch(saveEnvAction(true));
         console.error("serviceDetail is error",e);
       })
   }
@@ -273,6 +312,7 @@ export function onSavePodsAction(data) {
   };
   return dispatch => {
     dispatch(isLoadingAction(true));
+    dispatch(savePodsAction(false));
     return fetch(`${API_SERVICE_URL}/`+data.serviceName+`/telescopic`,myInit)
       .then(response => response.json())
       .then(json => {
@@ -291,8 +331,10 @@ export function onSavePodsAction(data) {
           console.error(json);
         }
         dispatch(isLoadingAction(false));
+        dispatch(savePodsAction(true));
       })
       .catch (e => {
+        dispatch(savePodsAction(true));
         dispatch(isLoadingAction(false));
         console.error("pods_num is error",e);
       })
@@ -453,5 +495,43 @@ export function fetchChangeReleaseAction(data){
           dispatch(isChange(true));
           console.error("publish is error",e);
         })
+  }
+}
+export function fetchSaveCommand(data){
+  let obj = JSON.stringify({
+    command:data.command
+  });
+  let myInit = {
+    method : "PUT",
+    headers:{token:localStorage.getItem("_at")},
+    body:obj
+  };
+  let url = Const.API_SERVICE_URL+"/"+data.serviceName+"/command";
+  return dispatch => {
+    dispatch(isLoadingAction(true));
+    dispatch(saveCommandAction(false));
+    return fetch(url,myInit)
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        dispatch(isLoadingAction(false));
+        dispatch(saveCommandAction(true));
+        if(json.status == 0){
+          dispatch(receiveNotification({message:"更新成功",level:"success"}));
+          setTimeout(function(){
+            dispatch(clearNotification())
+          },3000);
+        }else{
+          dispatch(receiveNotification({message: "更新失败:" + json.msg, level: "danger"}));
+          setTimeout(function () {
+            dispatch(clearNotification())
+          }, 5000);
+        }
+      })
+      .catch (e => {
+        dispatch(isLoadingAction(false));
+        dispatch(saveCommandAction(true));
+        console.error("publish is error",e);
+      })
   }
 }

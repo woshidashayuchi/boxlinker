@@ -231,11 +231,70 @@ export function fetchChangeAccountAction(id){
           exp.setTime(exp.getTime()+1000*60*60*24*7);
           cookie.save('_at',json.result.token,{path:'/',expires: exp});
           localStorage.setItem("_at",json.result.token);
-          console.log(json.result.token,1);
-          console.log(cookie.load("_at"),2);
           location.href = '/';
         }else{
           dispatch(receiveNotification({message:"切换组织失败:"+json.msg,level:"danger"}));
+          setTimeout(function(){
+            dispatch(clearNotification());
+          },3000);
+        }
+      })
+  })
+}
+
+function receiveUserList(data){
+  return{
+    type:Const.GET_USER_LIST,
+    payload:data
+  }
+}
+
+export function fetchGetUserListAction(name){
+  let myInit = {
+    method:"GET",
+    headers:{token:localStorage.getItem("_at")}
+  };
+  let url = Const.FETCH_URL.USER+"/users/list/"+name;
+  return (dispatch =>{
+    return fetch(url,myInit)
+      .then(response =>response.json())
+      .then(json =>{
+        console.log(json,"用户列表");
+        if(json.status == 0){
+          dispatch(receiveUserList(json.result));
+        }else{
+          dispatch(receiveNotification({message:"获取用户列表失败:"+json.msg,level:"danger"}));
+          setTimeout(function(){
+            dispatch(clearNotification());
+          },3000);
+        }
+      })
+  })
+}
+
+export function fetchInviteUser(data){
+  let body = JSON.stringify({
+    user_uuid:data.user_id
+  });
+  console.log(data);
+  let myInit = {
+    method:"POST",
+    headers:{token:localStorage.getItem("_at")},
+    body:body
+  };
+  let url = Const.FETCH_URL.ORGANIZE+"/"+data.orga_id+"/users";
+  return (dispatch =>{
+    return fetch(url,myInit)
+      .then(response =>response.json())
+      .then(json =>{
+        console.log(json,"邀请用户");
+        if(json.status == 0){
+          dispatch(receiveNotification({message:"邀请成功,请耐心等待:",level:"success"}));
+          setTimeout(function(){
+            dispatch(clearNotification());
+          },3000);
+        }else{
+          dispatch(receiveNotification({message:"获取用户列表失败:"+json.msg,level:"danger"}));
           setTimeout(function(){
             dispatch(clearNotification());
           },3000);

@@ -91,6 +91,7 @@ class ServiceDetail extends Component{
     podList :React.PropTypes.array,
     onChangeState:React.PropTypes.func,
     onAutoStateUp:React.PropTypes.func,
+    onSaveCommand:React.PropTypes.func,
     isBtnState:React.PropTypes.object,
     getMonitorData:React.PropTypes.func,
     monitorData:React.PropTypes.object,
@@ -215,6 +216,7 @@ class ServiceDetail extends Component{
           onDelSave={(item) =>this.props.onDelSave(item)}
           onAddEnv={()=> this.props.onAddEnv()}
           onDelEnv={(item) => this.props.onDelEnv(item)}
+          onSaveCommand = {(txt) => this.props.onSaveCommand(txt)}
           onAutoStateUp = {(data) => this.props.onAutoStateUp(data)}
           isBtnState = {this.props.isBtnState}
         />;
@@ -304,7 +306,9 @@ class ServiceDetail extends Component{
                 <div className={s.sdInputRanges}>
                   <InputRangesBox number={data.spec_replicas} getContianerNum = {this.getContainerNum.bind(this)} />
                 </div>
-                <button className="btn btn-primary" onClick = {this.onSavePods.bind(this)}>保存</button>
+                <button className={`btn btn-default ${!this.props.isBtnState.pods?"btn-loading":""}`}
+                        disabled={!this.props.isBtnState.pods}
+                        onClick = {this.onSavePods.bind(this)}>保存</button>
               </div>
             </div>
           </div>

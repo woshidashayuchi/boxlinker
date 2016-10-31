@@ -363,7 +363,8 @@ class AddService extends Component{
       container:container,
       env:env,
       volume :save,
-      auto_startup:this.state.isStateUp//ReactDOM.findDOMNode(this.refs.auto_startup).checked?1:0
+      auto_startup:this.state.isStateUp,
+      command:this.refs.command.value
     };
     console.log(data);
     this.props.onDeploySenior(data);
@@ -401,7 +402,8 @@ class AddService extends Component{
       container:container,
       env:env,
       volume :save,
-      auto_startup:this.state.isStateUp
+      auto_startup:this.state.isStateUp,
+      command:this.refs.command.value
     };
     let data=Object.assign({},this.props.deployData,third);
     console.log(data);
@@ -484,6 +486,20 @@ class AddService extends Component{
             <Button bsStyle="primary" onClick = {this.addEnvironmentData.bind(this)}>添加</Button>
           </div>
         </div>
+         <div className="assItem">
+           <HeadLine
+             title="启动命令"
+             titleEnglish="JRE"
+             titleInfo="启动命令解释说明 "
+           />
+           <div className="assBox">
+             <input className = "form-control"
+                    type="text"
+                    ref = "command"
+                    placeholder="如果输入，会覆盖镜像的默认启动命令"
+             />
+           </div>
+         </div>
         <div className="assItem assItemNoborder">
           <HeadLine
             title="自动启动"

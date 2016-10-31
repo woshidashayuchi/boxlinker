@@ -38,6 +38,10 @@ class Header extends Component {
   handleSelect(key){
     console.log(key);
     switch (key) {
+      case 0.1:
+        let orga_uuid = this.context.store.getState().user_info.orga_uuid;
+        this.props.changeAccount(orga_uuid);
+        break;
       case 1.1:
         this.props.onSidebarToggleClick(!this.props.isSidebarOpen);
         var exp = new Date();
@@ -62,16 +66,35 @@ class Header extends Component {
   }
   render(){
     const username = this.context.store.getState().user_info.user_name;
+    const is_user = this.context.store.getState().user_info.is_user;
+    const user_orga =  this.context.store.getState().user_info.user_orga;
     let menuItem = this.props.organizeList.map((item,i) =>{
-      return <MenuItem eventKey={i} key = {i}>{item.orga_name}</MenuItem>
+      if(item.orga_name == username && is_user == 1){
+
+      }else if(item.orga_name == user_orga){
+
+      }else{
+        return <MenuItem eventKey={i} key = {i}>{item.orga_name}</MenuItem>;
+      }
     });
-    let dropdown = username?
-      <NavDropdown eventKey={4} title={username} id="header-nav-item-userinfo">
-        {menuItem}
-        <MenuItem eventKey={4.1}>退出</MenuItem>
-      </NavDropdown>
-      :
-      <NavDropdown eventKey={4.1} title="退出" id="header-nav-item-userinfo"> </NavDropdown>;
+    let dropdown = null;
+    if(is_user == 0){
+      dropdown = user_orga?
+        <NavDropdown eventKey={4} title={user_orga} id="header-nav-item-userinfo">
+          {menuItem}
+          <MenuItem eventKey={4.1}>退出</MenuItem>
+        </NavDropdown>
+        :
+        <NavDropdown eventKey={4.1} title="退出" id="header-nav-item-userinfo"> </NavDropdown>;
+    }else{
+      dropdown = username?
+        <NavDropdown eventKey={4} title={username} id="header-nav-item-userinfo">
+          {menuItem}
+          <MenuItem eventKey={4.1}>退出</MenuItem>
+        </NavDropdown>
+        :
+        <NavDropdown eventKey={4.1} title="退出" id="header-nav-item-userinfo"> </NavDropdown>;
+    }
     return (
       <Navbar fixedTop={true} className="app-navbar" style={{left:"180px"}}>
         <Nav onSelect={this.handleSelect.bind(this)}>

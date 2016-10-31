@@ -159,7 +159,6 @@ class Sidebar extends Component {
   getList(){
     let open = this.props.isSidebarOpen;
     let is_user = this.context.store.getState().user_info.is_user;
-    console.log(is_user);
     return (
       open?
         <div className={s.listPack}>

@@ -129,6 +129,9 @@ const mapDispatchToProps = (dispatch) => {
     onChangeRelease:(data) =>{
       dispatch(actions.fetchChangeReleaseAction(data))
     },
+    onSaveCommand:(data) =>{
+      dispatch(actions.fetchSaveCommand(data))
+    },
     onDeleteService : (data) => {
       dispatch(fetchDeleteServiceAction(data))
     },

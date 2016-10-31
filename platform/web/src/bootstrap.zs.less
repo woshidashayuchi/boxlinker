@@ -493,7 +493,7 @@
   padding:6px 12px;
 }
 .modelItemLast{
-  padding-top:10px;
+  padding:10px 0 50px;
 }
 .dilatationModalItem{
   padding-top:20px;
@@ -1361,7 +1361,8 @@
   margin-bottom:10px;
 }
 .organizeHd{
-  margin-bottom:20px;
+  margin:35px 17px 0;
+  padding-bottom:20px;
 }
 .has-error{
   .volumeTip{
@@ -1382,6 +1383,54 @@
   button{
 
   }
+}
+.inviteUser{
+  margin-top:20px;
+  position: relative;
+  .inviteUserInput{
+    display:inline-block;
+    width:300px;
+  }
+  button{
+    margin-left:20px;
+    vertical-align: top;
+  }
+  .inviteHide{
+    display:none;
+  }
+  .inviteShow{
+    display:inline-block;
+  }
+  >ul{
+    border:1px solid #ccc;
+    position:absolute;
+    width:300px;
+    left:0;
+    top:35px;
+    background:#fff;
+    z-index:3;
+    li{
+      list-style-type:none;
+      padding:5px 10px;
+      color:#333;
+      cursor:pointer;
+      position: relative;
+      img{
+        position: absolute;
+
+      }
+      p{
+        margin-left:50px;
+      }
+
+    }
+    li:hover{
+      background:#efefef;
+    }
+  }
+}
+.organizeUserTab{
+  margin-top:30px;
 }
 /**
   imageDetail
