@@ -1,8 +1,9 @@
 .PHONY: test build data
 
 IMAGE=remind101/conveyor-builder
+TAG=master
 DATA_IMAGE=conveyor-builder-data
-EMAIL=your_email@example.com
+EMAIL=330785652@qq.com
 
 test: bootstrap
 	docker run --privileged=true \
@@ -17,7 +18,7 @@ test: bootstrap
 bootstrap: build data
 
 build: Dockerfile bin/*
-	docker build -t ${IMAGE} .
+	docker build -t ${IMAGE}:${TAG} .
 
 data: data/.docker/config.json data/.ssh/id_rsa
 	docker rm data || true
