@@ -98,9 +98,9 @@ then
 else
 	if [ "$LOG" == "file" ]
 	then
-		docker -d $DOCKER_DAEMON_ARGS &>/var/log/docker.log &
+		dockerd $DOCKER_DAEMON_ARGS &>/var/log/docker.log &
 	else
-		docker -d $DOCKER_DAEMON_ARGS &
+		dockerd $DOCKER_DAEMON_ARGS &
 	fi
 	(( timeout = 60 + SECONDS ))
 	until docker info >/dev/null 2>&1

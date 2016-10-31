@@ -56,6 +56,7 @@ func (b *Builder) Build(ctx context.Context, w io.Writer, opts builder.BuildOpti
 
 func (b *Builder) build(ctx context.Context, w io.Writer, opts builder.BuildOptions) error {
 	env := []string{
+		fmt.Sprintf("DOCKER_DAEMON_ARGS=%s", strings.ToLower("--insecure-registry=index.boxlinker.com")),
 		fmt.Sprintf("REPOSITORY=%s", strings.ToLower(opts.Repository)),
 		fmt.Sprintf("BRANCH=%s", opts.Branch),
 		fmt.Sprintf("SHA=%s", opts.Sha),
