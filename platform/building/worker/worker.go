@@ -124,6 +124,11 @@ func (w *Worker) build(ctx context.Context, options builder.BuildOptions) (err e
 	}
 
 	var image string
+	var logger io.Writer
+	logger, err = w.Writer(ctx, buildID)
+	if err != nil {
+		return
+	}
 	defer func(){
 		if err == nil {
 			err = w.BuildComplete(ctx, buildID, image)
@@ -132,14 +137,8 @@ func (w *Worker) build(ctx context.Context, options builder.BuildOptions) (err e
 		}
 	}()
 
-	var logger io.Writer
-
-	logger, err = w.Writer(ctx, buildID)
-	if err != nil {
-		return
-	}
-
 	image, err = w.Build(ctx, logger, options)
+
 	if err != nil {
 		return
 	}
