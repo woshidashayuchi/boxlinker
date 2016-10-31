@@ -96,7 +96,7 @@ build() {
   docker build -t "$REPOSITORY" .
   docker tag "$REPOSITORY" "$REPOSITORY:$SHA"
   if [ ! -z "$BRANCH" ]; then
-    docker tag -f "$REPOSITORY" "$REPOSITORY:$BRANCH" # Force tag because we pulled the last build for this branch.
+    docker tag "$REPOSITORY" "$REPOSITORY:$BRANCH" # Force tag because we pulled the last build for this branch.
   fi
 }
 
