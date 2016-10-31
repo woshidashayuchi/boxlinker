@@ -3,6 +3,8 @@
 # Fail fast.
 set -e
 
+REGISTRY_HOST=index.boxlinker.com
+
 status() {
   echo "\033[0;32m$@\033[0m"
 }
@@ -85,7 +87,7 @@ pull() {
   if [ "$CACHE" = "on" ]; then
     status "Pulling..."
     # Attempt to pull the last build image for this branch.
-    docker pull "$REPOSITORY:$BRANCH" || docker pull "$REPOSITORY:master" || docker pull "$REPOSITORY:latest" || true
+    docker pull "$REGISTRY_HOST/$REPOSITORY:$BRANCH" || docker pull "$REGISTRY_HOST/$REPOSITORY:master" || docker pull "$REGISTRY_HOST/$REPOSITORY:latest" || true
   else
     status "Cache disabled. Not pulling."
   fi
@@ -93,10 +95,10 @@ pull() {
 
 build() {
   status "Building..."
-  docker build -t "$REPOSITORY" .
-  docker tag "$REPOSITORY" "$REPOSITORY:$SHA"
+  docker build -t "$REGISTRY_HOST/$REPOSITORY" .
+  docker tag "$REGISTRY_HOST/$REPOSITORY" "$REGISTRY_HOST/$REPOSITORY:$SHA"
   if [ ! -z "$BRANCH" ]; then
-    docker tag "$REPOSITORY" "$REPOSITORY:$BRANCH" # Force tag because we pulled the last build for this branch.
+    docker tag "$REGISTRY_HOST/$REPOSITORY" "$REGISTRY_HOST/$REPOSITORY:$BRANCH" # Force tag because we pulled the last build for this branch.
   fi
 }
 
@@ -104,7 +106,7 @@ build() {
 push_tag() {
   local tag="$1"
   status "Pushing ${tag}..."
-  retry 3 docker push "$REPOSITORY:$tag"
+  retry 3 docker push "$REGISTRY_HOST/$REPOSITORY:$tag"
 }
 
 push() {
