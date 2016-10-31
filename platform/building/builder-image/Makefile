@@ -9,11 +9,12 @@ test: bootstrap
 	docker run --privileged=true \
 		--volumes-from=data \
 		-e CACHE=off \
-		-e REPOSITORY=remind101/conveyor-builder-test \
+		-e REPOSITORY=cabernety/chat-demo \
 		-e BRANCH=master \
-		-e SHA=01ac59b40c069a0114d9aab8bde096527cbab2f8 \
+		-e SHA=d10a2c0f4f24b9f9a25192e63233b33a44bc0301 \
 		-e DRY=true \
-		${IMAGE}
+		-it --rm --entrypoint bash \
+		${IMAGE}:${TAG}
 
 bootstrap: build data
 

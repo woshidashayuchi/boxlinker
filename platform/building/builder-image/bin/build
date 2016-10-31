@@ -63,7 +63,9 @@ setup() {
   fi
 
   status "Starting Docker..."
-  wrapdocker
+  #wrapdocker
+  service docker start
+  sleep 3s
   docker version
 }
 
