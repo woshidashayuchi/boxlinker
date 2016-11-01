@@ -1,7 +1,8 @@
 
 import React, { PropTypes,Component } from 'react';
 import {Media,Tabs,Tab,FormGroup,Col} from 'react-bootstrap';
-import Logs from '../Logs'
+import Logs from '../Logs';
+import Loading from '../Loading';
 import {BREADCRUMB} from "../../constants";
 import Toggle from '../Toggle';
 import ReactDOM from 'react-dom';
@@ -24,7 +25,6 @@ class IsAutoBuildToggle extends  Component{
     this.props.getToggle(this.state.autoStart);
   }
   componentDidMount(){
-    console.log(this.props.state);
   }
   render(){
     return(
@@ -60,14 +60,13 @@ class BuildingDetail extends React.Component{
   componentDidMount() {
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE, BREADCRUMB.BUILD_IMAGE, BREADCRUMB.IMAGE_DETAIL);
     this.props.getBuildingDetail(this.props.projectId);
-    let my = this;
-    this.myTime = setInterval(function () {
-      if (my.props.buildingDetail.build_status != 2) {
-        clearInterval(my.myTime)
-      } else {
-        my.props.getBuildingDetail(my.props.projectId);
-      }
-    }, 5000);
+    let build_status = this.props.buildingDetail.build_status;
+    if(build_status ==2){
+      let my = this;
+      my.myTime = setInterval(function () {my.props.getBuildingDetail(my.props.projectId);},5000)
+    }else{
+      clearInterval(this.myTime);
+    }
   }
   componentWillUnmount(){
     clearInterval(this.myTime);
@@ -184,6 +183,12 @@ class BuildingDetail extends React.Component{
     const username = this.context.store.getState().user_info.user_name;
     let buildDetail = this.props.buildingDetail;
     let uuid = this.props.projectId;
+    let build_status = buildDetail.build_status;
+    if(buildDetail&&!build_status){
+      return (
+        <div style={{"textAlign":"center"}}><Loading /></div>
+      )
+    }
     return (
       <div className="containerBgF">
         <div className="cdBd">

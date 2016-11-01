@@ -37,6 +37,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     inviteUser:(data) =>{
       dispatch(fun.fetchInviteUser(data))
+    },
+    changeUserRole:(data) =>{
+      dispatch(fun.fetchChangeUserRoleAction(data))
+    },
+    changeOrganizeOwner:(data) =>{
+      dispatch(fun.fetchChangeOrganizeOwnerAction(data))
+    },
+    deleteOrganize:(id) =>{
+      dispatch(fun.fetchDeleteOrganize(id))
     }
   }
 };

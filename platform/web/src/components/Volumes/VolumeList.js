@@ -42,7 +42,7 @@ class VolumeList extends Component{
      )
   }
   deleteLine(diskName){
-    this.props.onVolumeDelete(diskName)
+    confirm("确定删除?")?this.props.onVolumeDelete(diskName):"";
   }
   createVolume(data){
     this.props.onVolumeCreate(data);

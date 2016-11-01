@@ -222,7 +222,7 @@ class ServiceDetail extends Component{
         />;
             break;
       case 2:
-        tab = <GetMonitorTabs
+        tab = this.props.podList.length == 0?<div className="assItem">该服务因没有启动，尚未占用资源，暂无容器实例。</div>:<GetMonitorTabs
           serviceDetail = {this.props.serviceDetail}
           podList = {this.props.podList}
           getMonitorData = {(data) => this.props.getMonitorData(data)}
@@ -250,7 +250,7 @@ class ServiceDetail extends Component{
         />;
         break;
       case 6:
-        tab = <GetContainerTabs
+        tab = this.props.podList.length == 0?<div className="assItem">该服务因没有启动，尚未占用资源，暂无容器实例。</div>:<GetContainerTabs
             podList = {this.props.podList}
         />;
         break;

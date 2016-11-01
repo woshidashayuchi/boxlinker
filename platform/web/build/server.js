@@ -3986,11 +3986,43 @@ module.exports =
         var is_user = this.context.store.getState().user_info.is_user;
         var user_orga = this.context.store.getState().user_info.user_orga;
         var menuItem = this.props.organizeList.map(function (item, i) {
-          if (item.orga_name == username && is_user == 1) {} else if (item.orga_name == user_orga) {} else {
+          if (item.orga_name == username && is_user == 0) {
             return _react2.default.createElement(
               _reactBootstrap.MenuItem,
               { eventKey: i, key: i },
-              item.orga_name
+              _react2.default.createElement(
+                'div',
+                { className: 'headerOrgList' },
+                _react2.default.createElement(
+                  'p',
+                  null,
+                  item.orga_name
+                ),
+                _react2.default.createElement(
+                  'p',
+                  null,
+                  '切换到个人'
+                )
+              )
+            );
+          } else if (item.orga_name == user_orga) {} else {
+            return _react2.default.createElement(
+              _reactBootstrap.MenuItem,
+              { eventKey: i, key: i },
+              _react2.default.createElement(
+                'div',
+                { className: 'headerOrgList' },
+                _react2.default.createElement(
+                  'p',
+                  null,
+                  item.orga_name
+                ),
+                _react2.default.createElement(
+                  'p',
+                  null,
+                  '切换到该组织'
+                )
+              )
             );
           }
         });
@@ -4145,6 +4177,8 @@ module.exports =
   exports.fetchChangeAccountAction = fetchChangeAccountAction;
   exports.fetchGetUserListAction = fetchGetUserListAction;
   exports.fetchInviteUser = fetchInviteUser;
+  exports.fetchChangeUserRoleAction = fetchChangeUserRoleAction;
+  exports.fetchChangeOrganizeOwnerAction = fetchChangeOrganizeOwnerAction;
   
   var _constants = __webpack_require__(37);
   
@@ -4253,7 +4287,8 @@ module.exports =
     };
   }
   
-  function fetchDeleteOrganize(id) {
+  function fetchDeleteOrganize(id, flag) {
+    console.log(flag);
     var myInit = {
       method: "DELETE",
       headers: { token: localStorage.getItem("_at") }
@@ -4267,6 +4302,9 @@ module.exports =
         if (json.status == 0) {
           dispatch((0, _notification.receiveNotification)({ message: "解散成功", level: "success" }));
           dispatch(fetchGetOrganizeListAction());
+          if (!flag) {
+            dispatch(fetchChangeAccountAction(id));
+          }
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
           }, 3000);
@@ -4394,7 +4432,7 @@ module.exports =
           localStorage.setItem("_at", json.result.token);
           location.href = '/';
         } else {
-          dispatch((0, _notification.receiveNotification)({ message: "切换组织失败:" + json.msg, level: "danger" }));
+          dispatch((0, _notification.receiveNotification)({ message: "切换失败:" + json.msg, level: "danger" }));
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
           }, 3000);
@@ -4450,12 +4488,72 @@ module.exports =
       }).then(function (json) {
         console.log(json, "邀请用户");
         if (json.status == 0) {
-          dispatch((0, _notification.receiveNotification)({ message: "邀请成功,请耐心等待:", level: "success" }));
+          dispatch((0, _notification.receiveNotification)({ message: "邀请成功", level: "success" }));
+          dispatch(fetchGetOrganizeUserListAction(data.orga_id));
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
           }, 3000);
         } else {
-          dispatch((0, _notification.receiveNotification)({ message: "获取用户列表失败:" + json.msg, level: "danger" }));
+          dispatch((0, _notification.receiveNotification)({ message: "邀请失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function fetchChangeUserRoleAction(data) {
+    console.log(data, "设置用户权限参数");
+    var body = (0, _stringify2.default)({
+      role_uuid: data.role_uuid
+    });
+    var myInit = {
+      method: data.method,
+      headers: { token: localStorage.getItem("_at") },
+      body: body
+    };
+    var url = Const.FETCH_URL.ORGANIZE + "/" + data.orga_uuid + "/users/" + data.user_uuid;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json, "设置用户权限");
+        if (json.status == 0) {
+          dispatch((0, _notification.receiveNotification)({ message: "设置成功", level: "success" }));
+          dispatch(fetchGetOrganizeUserListAction(data.orga_uuid));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "操作失败:" + json.msg, level: "danger" }));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        }
+      });
+    };
+  }
+  
+  function fetchChangeOrganizeOwnerAction(data) {
+    var myInit = {
+      method: 'PUT',
+      headers: { token: localStorage.getItem("_at") }
+    };
+    var url = Const.FETCH_URL.ORGANIZE + "/" + data.orga_uuid + "/owner/" + data.user_uuid;
+    return function (dispatch) {
+      return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log(json, "委托组织创建者");
+        if (json.status == 0) {
+          dispatch((0, _notification.receiveNotification)({ message: "设置成功", level: "success" }));
+          dispatch(fetchGetOrganizeUserListAction(data.orga_uuid));
+          setTimeout(function () {
+            dispatch((0, _notification.clearNotification)());
+          }, 3000);
+        } else {
+          dispatch((0, _notification.receiveNotification)({ message: "操作失败:" + json.msg, level: "danger" }));
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
           }, 3000);
@@ -10338,6 +10436,10 @@ module.exports =
   
   var _Logs2 = _interopRequireDefault(_Logs);
   
+  var _Loading = __webpack_require__(106);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
   var _constants = __webpack_require__(37);
   
   var _Toggle = __webpack_require__(116);
@@ -10374,9 +10476,7 @@ module.exports =
       }
     }, {
       key: 'componentDidMount',
-      value: function componentDidMount() {
-        console.log(this.props.state);
-      }
+      value: function componentDidMount() {}
     }, {
       key: 'render',
       value: function render() {
@@ -10411,16 +10511,21 @@ module.exports =
     (0, _createClass3.default)(BuildingDetail, [{
       key: 'componentDidMount',
       value: function componentDidMount() {
+        var _this3 = this;
+  
         this.props.setBreadcrumb(_constants.BREADCRUMB.CONSOLE, _constants.BREADCRUMB.BUILD_IMAGE, _constants.BREADCRUMB.IMAGE_DETAIL);
         this.props.getBuildingDetail(this.props.projectId);
-        var my = this;
-        this.myTime = setInterval(function () {
-          if (my.props.buildingDetail.build_status != 2) {
-            clearInterval(my.myTime);
-          } else {
-            my.props.getBuildingDetail(my.props.projectId);
-          }
-        }, 5000);
+        var build_status = this.props.buildingDetail.build_status;
+        if (build_status == 2) {
+          (function () {
+            var my = _this3;
+            my.myTime = setInterval(function () {
+              my.props.getBuildingDetail(my.props.projectId);
+            }, 5000);
+          })();
+        } else {
+          clearInterval(this.myTime);
+        }
       }
     }, {
       key: 'componentWillUnmount',
@@ -10469,7 +10574,7 @@ module.exports =
     }, {
       key: 'baseSeting',
       value: function baseSeting() {
-        var _this3 = this;
+        var _this4 = this;
   
         //基本设置
         var data = [this.props.buildingDetail];
@@ -10549,7 +10654,7 @@ module.exports =
                 _react2.default.createElement(
                   _reactBootstrap.Col,
                   { sm: 5 },
-                  _react2.default.createElement(IsAutoBuildToggle, { state: item.auto_build == 1, getToggle: _this3.getToggleValue.bind(_this3) })
+                  _react2.default.createElement(IsAutoBuildToggle, { state: item.auto_build == 1, getToggle: _this4.getToggleValue.bind(_this4) })
                 )
               )
             ),
@@ -10565,9 +10670,9 @@ module.exports =
                   { sm: 5 },
                   _react2.default.createElement(
                     'button',
-                    { className: 'btn btn-primary ' + (!_this3.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
-                      onClick: _this3.onReviseBuilding.bind(_this3),
-                      disabled: !_this3.props.isBtnState.reviseBuilding
+                    { className: 'btn btn-primary ' + (!_this4.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
+                      onClick: _this4.onReviseBuilding.bind(_this4),
+                      disabled: !_this4.props.isBtnState.reviseBuilding
                     },
                     '确认修改'
                   )
@@ -10609,6 +10714,14 @@ module.exports =
         var username = this.context.store.getState().user_info.user_name;
         var buildDetail = this.props.buildingDetail;
         var uuid = this.props.projectId;
+        var build_status = buildDetail.build_status;
+        if (buildDetail && !build_status) {
+          return _react2.default.createElement(
+            'div',
+            { style: { "textAlign": "center" } },
+            _react2.default.createElement(_Loading2.default, null)
+          );
+        }
         return _react2.default.createElement(
           'div',
           { className: 'containerBgF' },
@@ -15835,7 +15948,11 @@ module.exports =
             });
             break;
           case 2:
-            tab = _react2.default.createElement(_GetMonitorTabs2.default, {
+            tab = this.props.podList.length == 0 ? _react2.default.createElement(
+              'div',
+              { className: 'assItem' },
+              '该服务因没有启动，尚未占用资源，暂无容器实例。'
+            ) : _react2.default.createElement(_GetMonitorTabs2.default, {
               serviceDetail: this.props.serviceDetail,
               podList: this.props.podList,
               getMonitorData: function getMonitorData(data) {
@@ -15871,7 +15988,11 @@ module.exports =
             });
             break;
           case 6:
-            tab = _react2.default.createElement(_GetContainerTabs2.default, {
+            tab = this.props.podList.length == 0 ? _react2.default.createElement(
+              'div',
+              { className: 'assItem' },
+              '该服务因没有启动，尚未占用资源，暂无容器实例。'
+            ) : _react2.default.createElement(_GetContainerTabs2.default, {
               podList: this.props.podList
             });
             break;
@@ -18752,7 +18873,7 @@ module.exports =
     }, {
       key: 'deleteLine',
       value: function deleteLine(diskName) {
-        this.props.onVolumeDelete(diskName);
+        confirm("确定删除?") ? this.props.onVolumeDelete(diskName) : "";
       }
     }, {
       key: 'createVolume',
@@ -22751,6 +22872,15 @@ module.exports =
       },
       inviteUser: function inviteUser(data) {
         dispatch(fun.fetchInviteUser(data));
+      },
+      changeUserRole: function changeUserRole(data) {
+        dispatch(fun.fetchChangeUserRoleAction(data));
+      },
+      changeOrganizeOwner: function changeOrganizeOwner(data) {
+        dispatch(fun.fetchChangeOrganizeOwnerAction(data));
+      },
+      deleteOrganize: function deleteOrganize(id) {
+        dispatch(fun.fetchDeleteOrganize(id));
       }
     };
   };
@@ -22874,6 +23004,15 @@ module.exports =
                   },
                   inviteUser: function inviteUser(data) {
                     _this2.props.inviteUser(data);
+                  },
+                  changeUserRole: function changeUserRole(data) {
+                    _this2.props.changeUserRole(data);
+                  },
+                  changeOrganizeOwner: function changeOrganizeOwner(data) {
+                    _this2.props.changeOrganizeOwner(data);
+                  },
+                  deleteOrganize: function deleteOrganize(id, flag) {
+                    _this2.props.deleteOrganize(id, flag);
                   }
                 })
               )
@@ -22898,7 +23037,9 @@ module.exports =
     getOrganizeUserList: _react2.default.PropTypes.func,
     userList: _react2.default.PropTypes.array,
     getUserList: _react2.default.PropTypes.func,
-    inviteUser: _react2.default.PropTypes.func
+    inviteUser: _react2.default.PropTypes.func,
+    changeOrganizeOwner: _react2.default.PropTypes.func,
+    deleteOrganize: _react2.default.PropTypes.func
   };
   exports.default = Organize;
 
@@ -23271,8 +23412,44 @@ module.exports =
         this.props.getOrganizeUserList(organizeId);
       }
     }, {
+      key: 'onChangeUserRole',
+      value: function onChangeUserRole(user_uuid, key) {
+        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
+        var data = {
+          orga_uuid: orga_uuid,
+          user_uuid: user_uuid,
+          role_uuid: key,
+          method: "PUT"
+        };
+        console.log(key);
+        this.props.changeUserRole(data);
+      }
+    }, {
+      key: 'onDeleteUser',
+      value: function onDeleteUser(user_uuid) {
+        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
+        var data = {
+          orga_uuid: orga_uuid,
+          user_uuid: user_uuid,
+          role_uuid: "",
+          method: "DELETE"
+        };
+        confirm("确定移除该成员?") ? this.props.changeUserRole(data) : "";
+      }
+    }, {
+      key: 'onDeleteOrganize',
+      value: function onDeleteOrganize() {
+        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
+        confirm("确定解散组织吗?") ? this.props.deleteOrganize(orga_uuid) : "";
+      }
+    }, {
+      key: 'onLeaveOrganize',
+      value: function onLeaveOrganize() {}
+    }, {
       key: 'getOrganizeUserBody',
       value: function getOrganizeUserBody() {
+        var _this2 = this;
+  
         var user_name = this.context.store.getState().user_info.user_name;
         var orgRole = Number(this.context.store.getState().user_info.role_uuid);
         var data = this.props.organizeUserList;
@@ -23296,68 +23473,128 @@ module.exports =
         );
         return data.map(function (item, i) {
           var role = "";
-          var splitButton = "";
+          var buttonGroup = "";
           switch (Number(item.role)) {
             case 200:
               role = "组织创建者";
-              splitButton = _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  bsStyle: "primary",
-                  disabled: true,
-                  title: '更改权限', id: 'volumes-table-line-' + i },
+              buttonGroup = _react2.default.createElement(
+                'div',
+                { className: 'roleBox' },
                 _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '210' },
-                  '管理员'
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '400' },
-                  '用户'
+                  'button',
+                  { disabled: orgRole != 200,
+                    onClick: _this2.onDeleteOrganize.bind(_this2),
+                    className: 'btn btn-danger' },
+                  '解散组织'
                 )
               );
               break;
             case 210:
               role = "管理员";
-              splitButton = _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  bsStyle: "primary",
-                  title: '更改权限', id: 'volumes-table-line-' + i },
+              buttonGroup = _react2.default.createElement(
+                'div',
+                { className: 'roleBox' },
                 _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '400' },
-                  '用户'
+                  _reactBootstrap.DropdownButton,
+                  {
+                    onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
+                    bsStyle: "primary",
+                    disabled: orgRole != 200 && user_name != item.user_name,
+                    title: '更改权限', id: 'volumes-table-line-' + i },
+                  _react2.default.createElement(
+                    _reactBootstrap.MenuItem,
+                    { eventKey: '400' },
+                    '用户'
+                  ),
+                  orgRole == 200 ? _react2.default.createElement(
+                    _reactBootstrap.MenuItem,
+                    { eventKey: '520' },
+                    '组织创建者'
+                  ) : ""
+                ),
+                user_name == item.user_name ? _react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-danger' },
+                  '离开组织'
+                ) : _react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-danger',
+                    onClick: _this2.onDeleteUser.bind(_this2, item.uid),
+                    disabled: orgRole != 200 },
+                  '移除组织'
                 )
               );
               break;
             case 400:
               role = "成员";
-              splitButton = _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  bsStyle: "primary",
-                  title: '更改权限', id: 'volumes-table-line-' + i },
+              buttonGroup = _react2.default.createElement(
+                'div',
+                { className: 'roleBox' },
                 _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '210' },
-                  '管理员'
+                  _reactBootstrap.DropdownButton,
+                  {
+                    onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
+                    bsStyle: "primary",
+                    disabled: orgRole != 200,
+                    title: '更改权限', id: 'volumes-table-line-' + i },
+                  orgRole == 200 ? _react2.default.createElement(
+                    _reactBootstrap.MenuItem,
+                    { eventKey: '210' },
+                    '管理员'
+                  ) : "",
+                  orgRole == 200 ? _react2.default.createElement(
+                    _reactBootstrap.MenuItem,
+                    { eventKey: '520' },
+                    '组织创建者'
+                  ) : ""
+                ),
+                user_name == item.user_name ? _react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-danger' },
+                  '离开组织'
+                ) : _react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-danger',
+                    disabled: orgRole == 400,
+                    onClick: _this2.onDeleteUser.bind(_this2, item.uid)
+                  },
+                  '移除组织'
                 )
               );
               break;
             default:
               role = "成员";
-              splitButton = _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  bsStyle: "primary",
-                  title: '更改权限', id: 'volumes-table-line-' + i },
+              buttonGroup = _react2.default.createElement(
+                'div',
+                { className: 'roleBox' },
                 _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '210' },
-                  '管理员'
-                )
+                  _reactBootstrap.DropdownButton,
+                  {
+                    onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
+                    bsStyle: "primary",
+                    disabled: orgRole == 400 && user_name != item.user_name,
+                    title: '更改权限', id: 'volumes-table-line-' + i },
+                  orgRole == 200 ? _react2.default.createElement(
+                    _reactBootstrap.MenuItem,
+                    { eventKey: '210' },
+                    '管理员'
+                  ) : "",
+                  orgRole == 200 ? _react2.default.createElement(
+                    _reactBootstrap.MenuItem,
+                    { eventKey: '520' },
+                    '组织创建者'
+                  ) : ""
+                ),
+                user_name == item.user_name ? _react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-danger' },
+                  '离开组织'
+                ) : "",
+                orgRole == 200 || orgRole == 210 ? _react2.default.createElement(
+                  'button',
+                  { className: 'btn btn-danger' },
+                  '移除组织'
+                ) : ""
               );
   
           }
@@ -23386,16 +23623,7 @@ module.exports =
             _react2.default.createElement(
               'td',
               null,
-              splitButton,
-              item.user_name == user_name ? _react2.default.createElement(
-                'button',
-                { className: 'btn btn-danger' },
-                '离开组织'
-              ) : orgRole == 210 || orgRole == 200 ? _react2.default.createElement(
-                'button',
-                { className: 'btn btn-danger' },
-                '移除成员'
-              ) : ""
+              buttonGroup
             )
           );
         });
@@ -23498,7 +23726,7 @@ module.exports =
     }, {
       key: 'onInviteUser',
       value: function onInviteUser() {
-        var _this2 = this;
+        var _this3 = this;
   
         var userList = this.props.userList;
         var userInfo = this.refs.username.value;
@@ -23509,7 +23737,7 @@ module.exports =
               user_id: item.user_id,
               orga_id: orga_id
             };
-            _this2.props.inviteUser(data);
+            _this3.props.inviteUser(data);
           }
         });
       }
@@ -23576,7 +23804,10 @@ module.exports =
     getOrganizeUserList: _react2.default.PropTypes.func,
     getUserList: _react2.default.PropTypes.func,
     userList: _react2.default.PropTypes.array,
-    inviteUser: _react2.default.PropTypes.func
+    inviteUser: _react2.default.PropTypes.func,
+    changeUserRole: _react2.default.PropTypes.func,
+    changeOrganizeOwner: _react2.default.PropTypes.func,
+    deleteOrganize: _react2.default.PropTypes.func
   };
   exports.default = GetOrgAdmin;
 

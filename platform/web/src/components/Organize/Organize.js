@@ -23,7 +23,9 @@ class Organize extends  Component{
     getOrganizeUserList:React.PropTypes.func,
     userList:React.PropTypes.array,
     getUserList:React.PropTypes.func,
-    inviteUser:React.PropTypes.func
+    inviteUser:React.PropTypes.func,
+    changeOrganizeOwner:React.PropTypes.func,
+    deleteOrganize:React.PropTypes.func
   };
   componentDidMount(){
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.ORGANIZE)
@@ -53,6 +55,9 @@ class Organize extends  Component{
                 userList = {this.props.userList}
                 getUserList={(name => {this.props.getUserList(name)})}
                 inviteUser = {(data) => {this.props.inviteUser(data)}}
+                changeUserRole = {(data) =>{this.props.changeUserRole(data)}}
+                changeOrganizeOwner = {(data) =>{this.props.changeOrganizeOwner(data)}}
+                deleteOrganize = {(id,flag) =>{this.props.deleteOrganize(id,flag)}}
               />
             </Tab>
           </Tabs>

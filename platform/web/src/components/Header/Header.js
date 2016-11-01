@@ -69,12 +69,18 @@ class Header extends Component {
     const is_user = this.context.store.getState().user_info.is_user;
     const user_orga =  this.context.store.getState().user_info.user_orga;
     let menuItem = this.props.organizeList.map((item,i) =>{
-      if(item.orga_name == username && is_user == 1){
-
+      if(item.orga_name == username && is_user == 0){
+        return <MenuItem eventKey={i} key = {i}><div className="headerOrgList">
+          <p>{item.orga_name}</p>
+          <p>切换到个人</p>
+        </div></MenuItem>;
       }else if(item.orga_name == user_orga){
 
       }else{
-        return <MenuItem eventKey={i} key = {i}>{item.orga_name}</MenuItem>;
+        return <MenuItem eventKey={i} key = {i}><div className="headerOrgList">
+          <p>{item.orga_name}</p>
+          <p>切换到该组织</p>
+        </div></MenuItem>;
       }
     });
     let dropdown = null;

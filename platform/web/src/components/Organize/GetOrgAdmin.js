@@ -3,7 +3,7 @@
 import React,{PropTypes,Component} from 'react';
 import HeadLine from '../HeadLine';
 import Loading from '../Loading';
-import {SplitButton,MenuItem} from 'react-bootstrap'
+import {DropdownButton,MenuItem} from 'react-bootstrap'
 import {navigate} from '../../actions/route';
 
 class GetOrgAdmin extends Component{
@@ -15,7 +15,10 @@ class GetOrgAdmin extends Component{
     getOrganizeUserList:React.PropTypes.func,
     getUserList:React.PropTypes.func,
     userList:React.PropTypes.array,
-    inviteUser:React.PropTypes.func
+    inviteUser:React.PropTypes.func,
+    changeUserRole:React.PropTypes.func,
+    changeOrganizeOwner:React.PropTypes.func,
+    deleteOrganize:React.PropTypes.func
   };
 
   constructor(props){
@@ -34,6 +37,34 @@ class GetOrgAdmin extends Component{
     let organizeId = this.context.store.getState().user_info.orga_uuid;
     this.props.getOrganizeUserList(organizeId);
   }
+  onChangeUserRole(user_uuid,key){
+    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
+    let data = {
+      orga_uuid:orga_uuid,
+      user_uuid:user_uuid,
+      role_uuid:key,
+      method:"PUT"
+    };
+    console.log(key);
+    this.props.changeUserRole(data);
+  }
+  onDeleteUser(user_uuid){
+    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
+    let data = {
+      orga_uuid:orga_uuid,
+      user_uuid:user_uuid,
+      role_uuid:"",
+      method:"DELETE"
+    };
+    confirm("确定移除该成员?")?this.props.changeUserRole(data):"";
+  }
+  onDeleteOrganize(){
+    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
+    confirm("确定解散组织吗?")?this.props.deleteOrganize(orga_uuid):"";
+  }
+  onLeaveOrganize(){
+
+  }
 
   getOrganizeUserBody(){
     let user_name = this.context.store.getState().user_info.user_name;
@@ -43,41 +74,70 @@ class GetOrgAdmin extends Component{
     if(!data.length) return <tr><td colSpan = "3" style = {{textAlign:"center"}}>暂无数据~</td></tr>;
     return data.map((item,i) =>{
       let role = "";
-      let splitButton = "";
+      let buttonGroup = "";
       switch (Number(item.role)){
         case 200:
           role = "组织创建者";
-          splitButton = <SplitButton
-                          bsStyle={"primary"}
-                          disabled
-                          title={'更改权限'} id={`volumes-table-line-${i}`}>
-                          <MenuItem eventKey="210">管理员</MenuItem>
-                          <MenuItem eventKey="400">用户</MenuItem>
-                        </SplitButton>
+          buttonGroup =  <div className="roleBox">
+            <button disabled = {orgRole != 200}
+                    onClick={this.onDeleteOrganize.bind(this)}
+                    className="btn btn-danger">解散组织</button>
+          </div>;
           break;
         case 210 :
           role = "管理员";
-          splitButton = <SplitButton
-            bsStyle={"primary"}
-            title={'更改权限'} id={`volumes-table-line-${i}`}>
-            <MenuItem eventKey="400">用户</MenuItem>
-          </SplitButton>
+          buttonGroup = <div className="roleBox">
+            <DropdownButton
+              onSelect = {this.onChangeUserRole.bind(this,item.uid)}
+              bsStyle={"primary"}
+              disabled = {orgRole != 200 && user_name != item.user_name}
+              title={'更改权限'} id={`volumes-table-line-${i}`}>
+              <MenuItem eventKey="400">用户</MenuItem>
+              {orgRole == 200?<MenuItem eventKey="520">组织创建者</MenuItem>:""}
+            </DropdownButton>
+            {user_name == item.user_name?
+              <button className="btn btn-danger">离开组织</button>:
+              <button className="btn btn-danger"
+                      onClick={this.onDeleteUser.bind(this,item.uid)}
+                      disabled={orgRole != 200}>移除组织</button>
+            }
+
+          </div>;
           break;
         case 400 :
           role = "成员";
-          splitButton = <SplitButton
-            bsStyle={"primary"}
-            title={'更改权限'} id={`volumes-table-line-${i}`}>
-            <MenuItem eventKey="210">管理员</MenuItem>
-          </SplitButton>
+          buttonGroup = <div className="roleBox">
+             <DropdownButton
+              onSelect = {this.onChangeUserRole.bind(this,item.uid)}
+              bsStyle={"primary"}
+              disabled = {orgRole != 200}
+              title={'更改权限'} id={`volumes-table-line-${i}`}>
+              {orgRole == 200?<MenuItem eventKey="210">管理员</MenuItem>:""}
+              {orgRole == 200?<MenuItem eventKey="520">组织创建者</MenuItem>:""}
+            </DropdownButton>
+            {user_name == item.user_name?
+              <button className="btn btn-danger">离开组织</button>:
+              <button className="btn btn-danger"
+                      disabled={orgRole == 400}
+                      onClick={this.onDeleteUser.bind(this,item.uid)}
+              >移除组织</button>
+            }
+          </div>;
           break;
         default :
           role = "成员";
-          splitButton = <SplitButton
-            bsStyle={"primary"}
-            title={'更改权限'} id={`volumes-table-line-${i}`}>
-            <MenuItem eventKey="210">管理员</MenuItem>
-          </SplitButton>
+          buttonGroup = <div className="roleBox">
+            <DropdownButton
+              onSelect = {this.onChangeUserRole.bind(this,item.uid)}
+              bsStyle={"primary"}
+              disabled = {orgRole == 400 && user_name != item.user_name}
+              title={'更改权限'} id={`volumes-table-line-${i}`}>
+              {orgRole == 200?<MenuItem eventKey="210">管理员</MenuItem>:""}
+              {orgRole == 200?<MenuItem eventKey="520">组织创建者</MenuItem>:""}
+            </DropdownButton>
+            {user_name == item.user_name?<button className="btn btn-danger">离开组织</button>:""}
+            {orgRole == 200 || orgRole ==210 ?<button className="btn btn-danger">移除组织</button>:""}
+          </div>;
 
       }
       return (
@@ -90,8 +150,9 @@ class GetOrgAdmin extends Component{
           </td>
           <td>{role}</td>
           <td>
-            {splitButton}{item.user_name == user_name?<button className="btn btn-danger">离开组织</button>:
-              orgRole ==210||orgRole ==200?<button className="btn btn-danger">移除成员</button>:""}
+            {buttonGroup}
+            {/*{item.user_name == user_name?<button className="btn btn-danger">离开组织</button>:*/}
+              {/*orgRole ==210||orgRole ==200?<button className="btn btn-danger">移除成员</button>:""}*/}
           </td>
         </tr>
       )

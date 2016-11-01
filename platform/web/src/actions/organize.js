@@ -92,7 +92,8 @@ export function fetchLeaveOrganize(id){
   })
 }
 
-export function fetchDeleteOrganize(id){
+export function fetchDeleteOrganize(id,flag){
+  console.log(flag);
   let myInit = {
     method:"DELETE",
     headers:{token:localStorage.getItem("_at")}
@@ -106,6 +107,9 @@ export function fetchDeleteOrganize(id){
         if(json.status == 0){
           dispatch(receiveNotification({message:"解散成功",level:"success"}));
           dispatch(fetchGetOrganizeListAction());
+          if(!flag){
+            dispatch(fetchChangeAccountAction(id))
+          }
           setTimeout(function(){
             dispatch(clearNotification());
           },3000);
@@ -233,7 +237,7 @@ export function fetchChangeAccountAction(id){
           localStorage.setItem("_at",json.result.token);
           location.href = '/';
         }else{
-          dispatch(receiveNotification({message:"切换组织失败:"+json.msg,level:"danger"}));
+          dispatch(receiveNotification({message:"切换失败:"+json.msg,level:"danger"}));
           setTimeout(function(){
             dispatch(clearNotification());
           },3000);
@@ -289,12 +293,72 @@ export function fetchInviteUser(data){
       .then(json =>{
         console.log(json,"邀请用户");
         if(json.status == 0){
-          dispatch(receiveNotification({message:"邀请成功,请耐心等待:",level:"success"}));
+          dispatch(receiveNotification({message:"邀请成功",level:"success"}));
+          dispatch(fetchGetOrganizeUserListAction(data.orga_id));
           setTimeout(function(){
             dispatch(clearNotification());
           },3000);
         }else{
-          dispatch(receiveNotification({message:"获取用户列表失败:"+json.msg,level:"danger"}));
+          dispatch(receiveNotification({message:"邀请失败:"+json.msg,level:"danger"}));
+          setTimeout(function(){
+            dispatch(clearNotification());
+          },3000);
+        }
+      })
+  })
+}
+
+export function fetchChangeUserRoleAction(data){
+  console.log(data,"设置用户权限参数");
+  let body = JSON.stringify({
+    role_uuid:data.role_uuid
+  });
+  let myInit = {
+    method:data.method,
+    headers:{token:localStorage.getItem("_at")},
+    body:body
+  };
+  let url = Const.FETCH_URL.ORGANIZE+"/"+data.orga_uuid+"/users/"+data.user_uuid;
+  return(dispatch =>{
+    return fetch(url,myInit)
+      .then(response => response.json())
+      .then(json =>{
+        console.log(json,"设置用户权限");
+        if(json.status == 0){
+          dispatch(receiveNotification({message:"设置成功",level:"success"}));
+          dispatch(fetchGetOrganizeUserListAction(data.orga_uuid));
+          setTimeout(function(){
+            dispatch(clearNotification());
+          },3000);
+        }else{
+          dispatch(receiveNotification({message:"操作失败:"+json.msg,level:"danger"}));
+          setTimeout(function(){
+            dispatch(clearNotification());
+          },3000);
+        }
+      })
+  })
+}
+
+export function fetchChangeOrganizeOwnerAction(data){
+  let myInit = {
+    method:'PUT',
+    headers:{token:localStorage.getItem("_at")},
+  };
+  let url = Const.FETCH_URL.ORGANIZE+"/"+data.orga_uuid+"/owner/"+data.user_uuid;
+  return(dispatch =>{
+    return fetch(url,myInit)
+      .then(response => response.json())
+      .then(json =>{
+        console.log(json,"委托组织创建者");
+        if(json.status == 0){
+          dispatch(receiveNotification({message:"设置成功",level:"success"}));
+          dispatch(fetchGetOrganizeUserListAction(data.orga_uuid));
+          setTimeout(function(){
+            dispatch(clearNotification());
+          },3000);
+        }else{
+          dispatch(receiveNotification({message:"操作失败:"+json.msg,level:"danger"}));
           setTimeout(function(){
             dispatch(clearNotification());
           },3000);
