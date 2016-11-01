@@ -18,6 +18,7 @@ import (
 	"github.com/cabernety/boxlinker/platform/building/logs"
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
+	"github.com/cabernety/boxlinker/platform/building/logs/es"
 )
 
 
@@ -54,6 +55,8 @@ func newLogger(c *cli.Context) logs.Logger {
 	switch u.Scheme {
 	case "stdout":
 		return logs.Stdout
+	case "es":
+		return es.NewLogger(u.Host)
 	default:
 		must(fmt.Errorf("Unknown logger: %v", u.Scheme))
 		return nil

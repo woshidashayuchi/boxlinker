@@ -29,7 +29,7 @@ var sharedFlags = []cli.Flag{
 	cli.StringFlag{
 		Name:   "logger",
 		Value:  "stdout://",
-		Usage:  "The logger to use. Available options are `stdout://`, `s3://bucket` or `cloudwatch://`.",
+		Usage:  "The logger to use. Available options are `stdout://`, `es://es_url`, `s3://bucket` or `cloudwatch://`.",
 		EnvVar: "LOGGER",
 	},
 	cli.StringFlag{
@@ -89,10 +89,16 @@ func mainAction(c *cli.Context){
 	go func(){
 		worker <- runWorker(b, c)
 	}()
-
-	<-server
-	<-amqp
-	<-worker
+	var err error
+	if err = <-server; err != nil {
+		log.Errorf("server err: %v",err)
+	}
+	if err = <-amqp; err != nil {
+		log.Errorf("amqp err: %v",err)
+	}
+	if err = <-worker; err != nil {
+		log.Errorf("server err: %v",err)
+	}
 }
 
 

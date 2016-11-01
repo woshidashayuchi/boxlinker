@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"strings"
 	"regexp"
+	log "github.com/Sirupsen/logrus"
 )
 
 type client interface {
@@ -72,6 +73,7 @@ func (s *Server) Push(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.client.Build(ctx, opts)
 	if err != nil {
+		log.Errorf("Github Push Build err: %v",err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

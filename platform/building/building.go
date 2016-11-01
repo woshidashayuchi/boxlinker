@@ -6,6 +6,7 @@ import (
 	"io"
 	"github.com/jmoiron/sqlx"
 	"github.com/cabernety/boxlinker/platform/building/builder"
+	"fmt"
 )
 
 type Building struct {
@@ -70,6 +71,7 @@ func (b *Building) Build(ctx context.Context, req BuildRequest) (*Build, error) 
 }
 
 func (b *Building) Writer(ctx context.Context, buildID string) (io.Writer, error) {
+	fmt.Sprintf("buildID: %s",buildID)
 	return b.Logger.Create(buildID)
 }
 
