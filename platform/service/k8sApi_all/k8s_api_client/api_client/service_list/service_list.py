@@ -18,6 +18,8 @@ class ServiceList(object):
         pass
 
     def base_list(self, json_list):
+
+        log.info("重定向查询------------")
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         result_one = []
@@ -110,9 +112,18 @@ class ServiceList(object):
                 if len(x["container"]) != 0:
                     result_two.append(x)
 
-            result = code.request_result(0, result_two)
+            # result = code.request_result(0, result_two)
             logicmodel.connClose(conn, cur)
-            return result
+            res = []
+            rest = json_list.get("svc_msg")
+            log.info(result_two)
+            log.info(rest)
+            for i in result_two:
+                for j in rest:
+                    if i.get("fservice_name") == j:
+                        res.append(i)
+            return code.request_result(0, res)
 
         except Exception, e:
             log.error("containers list create error, reason=%s" % e)
+

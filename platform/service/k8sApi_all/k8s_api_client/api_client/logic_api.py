@@ -24,14 +24,15 @@ def create_service(service_name):
     controller = SheetController()
 
     try:
-       token_get1 = request.headers.get("token")
-       token_get2 = token_get1.decode("utf-8")
-       token_get = token_get2.encode("utf-8")
-       user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-       user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
-       log.info("**************")
-    except:
-       return json.dumps(code.request_result(202))
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+        user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
+        log.info("**************")
+    except Exception, e:
+        log.error("author registry error, reason=%s" % e)
+        return json.dumps(code.request_result(202))
     try:
         json_list = json.loads(request.get_data())
     except:
@@ -84,7 +85,7 @@ def get_all_service():
     try:
         service_name = request.args.get("service_name",)
         # service_name = json_list2.encode("utf-8")
-        json_list = {"user_id": user_id}
+        json_list = {"user_id": user_id,"user_name":user_name,"user_orga":user_orga,"role_uuid":role_uuid}
         if service_name is not None:
             json_list = {"user_id": user_id, "user_name":user_name, "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
         controller = SheetController()
@@ -162,21 +163,26 @@ def put_container(service_name):
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
+        # user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type": "container"}
+    json_name = {"service_name": service_name, "user_id": user_id,
+                 "user_name": user_name, "type": "container",
+                 "user_orga": user_orga, "role_uuid": role_uuid}
     json_list.update(json_name)
     json_list["token"] = token_get1
     controller = SheetController()
     try:
         rest = controller.update_service(json_list)
-        response = controller.update_container(json_list)
-        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
-            return json.dumps(response)
-        else:
+        if int(rest.get("status")) != 0:
+            log.error(rest)
             return json.dumps(code.request_result(502))
+        response = controller.update_container(json_list)
+        if int(response.get("status")) != 0:
+            log.error(response)
+            return json.dumps(code.request_result(502))
+        return json.dumps(response)
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
@@ -198,13 +204,14 @@ def put_volume(service_name):
     controller = SheetController()
     try:
         rest = controller.update_service(json_list)
-        response = controller.update_volume(json_list)
-        log.info(rest,response)
-        if rest.get("status") == 0 and response.get("status") == 0:
-
-            return json.dumps(response)
-        else:
+        if int(rest.get("status")) != 0:
             return json.dumps(code.request_result(502))
+        response = controller.update_volume(json_list)
+        if int(response.get("status")) != 0:
+            return json.dumps(code.request_result(502))
+
+        return json.dumps(response)
+
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
@@ -229,11 +236,17 @@ def put_env(service_name):
     controller = SheetController()
     try:
         rest = controller.update_service(json_list)
-        response = controller.update_env(json_list)
-        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
-            return json.dumps(response)
-        else:
+
+        if int(rest.get("status")) != 0:
+            log.error(rest)
             return json.dumps(code.request_result(502))
+        response = controller.update_env(json_list)
+        if int(response.get("status")) != 0:
+            log.error(response)
+            return json.dumps(code.request_result(502))
+
+        return json.dumps(response)
+
 
     except Exception, e:
         log.error("update error, reason = %s" % e)

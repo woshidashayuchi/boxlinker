@@ -23,5 +23,10 @@ class AclSql(object):
 
     @classmethod
     def li_sql(cls, json_data):
+        if json_data.get("list_acl") == "list":
+
+            list_sql = "select * from service_acl where organization=\'%s\'" % (json_data.get("user_orga"))
+            return list_sql
+
         list_sql = "select * from service_acl where service_name=\'%s\'" % (json_data.get("service_name"))
         return list_sql

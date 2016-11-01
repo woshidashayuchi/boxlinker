@@ -21,10 +21,11 @@ class ServiceAcl(object):
     admin = Column(String(64))
     organization = Column(String(64))
     user = Column(String(64))
+    role = Column(Integer)
     create_time = Column(DateTime, server_default=func.now())
     update_time = Column(DateTime, server_default=func.now())
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %r, %r, %r, %r, %r)' % \
+        return '%s(%r, %r, %r, %r, %r, %r, %d, %r, %r)' % \
                (self.__class__.__name__, self.uuid, self.service_name, self.resource_type, self.admin,
-                self.organization, self.user, self.create_time, self.update_time)
+                self.organization, self.user, self.role, self.create_time, self.update_time)

@@ -13,6 +13,7 @@ import re
 from es.to_es import post_es
 import json
 from resource_check.check_name import CheckName
+from service_list.service_list import ServiceList
 from resource_model.array_iterator import ArrayIterator
 from common.logs import logging as log
 from notification import notification
@@ -221,20 +222,27 @@ class SheetController(object):
         except Exception, e:
             log.error('k8sapi entering the resource(volume) runing error,reason=%s'
                       % e)
-        typee = {"rtype": "fservice", "uid_font": uid_font, "status": "Pending", "all_name": json_list.get("user_name")+json_list.get("service_name")}
+        typee = {"rtype": "fservice", "uid_font": uid_font, "status": "Pending",
+                 "all_name": json_list.get("user_name")+json_list.get("service_name"),
+                 "orga_orga": json_list.get("user_orga")}
         json_list.update(typee)
 
         try:
             DataOrm.add_method(json_list)
             # log.info("{'userid': '%s', 'log_info': 'created success!!!'}"
             #         % (json_list.get("user_name")))
-
-            result = code.request_result(0, add_rc)
         except Exception, e:
             log.warning('k8sapi entering the resource(fservice) running error, reason=%s'
                         % (e))
             result = code.request_result(401)
             return result
+        try:
+            controller = Controller()
+            rest = controller.add_acl(json_list)
+            log.info(rest)
+        except Exception, e:
+            log.error("service acl add error, reason=%s" % e)
+            return code.request_result(401)
 
         try:
             post_es(json_list, 'service is creating...')
@@ -246,9 +254,7 @@ class SheetController(object):
         except Exception, e:
             log.error("notification error,reason=%s" % e)
 
-        controller = Controller()
-        rest = controller.add_acl(json_list)
-        log.info(rest)
+
 
         result = "service is creating..."
 
@@ -256,104 +262,18 @@ class SheetController(object):
 
     def service_list(self, json_list):
 
-        logicmodel = LogicModel()
-        conn, cur = logicmodel.connection()
-        result_one = []
-        try:
-            if json_list.get("service_name") is None:
-                select_rc = DataOrm.query_sql(json_list)
-                select_co = DataOrm.list_container(json_list)
-            else:
-                select_one = DataOrm.query_only(json_list)
-                resu = logicmodel.exeQuery(cur, select_one)
-                for j in resu:
-                    match_string = "[a-zA-Z0-9-_]*%s[a-zA-Z0-9-_]*" % str(json_list.get("service_name"))
-                    if re.search(match_string, j.get("fservice_name")):
-                        up_json = {"user_id": json_list.get("user_id"), "service_name": j.get("fservice_name")}
-                        select_rc = DataOrm.query_sql(up_json)
-                        logicmodel = LogicModel()
-                        conn, cur = logicmodel.connection()
-                        resu1 = logicmodel.exeQuery(cur, select_rc)
-                        for i in resu1:
-                            time_list = {}
-                            update_time = str(i.get("ltime"))
-                            time_list["ltime"] = DataOrm.time_diff(update_time)
-                            i.update(time_list)
-                        result_one.append(i)
-                    else:
-                        pass
-
-                select_co = DataOrm.list_container(json_list)
-                con_resu = logicmodel.exeQuery(cur, select_co)
-
-                result_two = []
-                kkkk = []
-                for h in con_resu:
-                    kkkk.append(h)
-
-                for x in result_one:
-
-                    x["container"] = []
-
-                    for y in kkkk:
-                        if x["rc_name"] == y["service_name"]:
-
-                            x["container"].append(y)
-
-                    if len(x["container"]) != 0:
-                        result_two.append(x)
-
-                result = code.request_result(0, result_two)
-                logicmodel.connClose(conn, cur)
-                return result
-        except Exception, e:
-            log.warning('k8sapi get some in_all running error, reason=%s'
-                        % (e))
-            result = code.request_result(101)
-            return result
-
-
-        try:
-            print(select_rc)
-            resu_cu = logicmodel.exeQuery(cur, select_rc)
-            for i in resu_cu:
-                update_time = str(i.get("ltime"))
-                time_list = {}
-                difftime = DataOrm.time_diff(update_time)
-                time_list["ltime"] = difftime
-                i.update(time_list)
-                result_one.append(i)
-
-        except Exception, e:
-            log.warning('k8sapi get all running error, reason=%s'
-                        % (e))
-            result = code.request_result(404)
-            return result
-
-        try:
-            con_resu = logicmodel.exeQuery(cur, select_co)
-
-            kkkk = []
-            result_two = []
-
-            for h in con_resu:
-                kkkk.append(h)
-
-            for x in result_one:
-                x["container"] = []
-                for y in kkkk:
-                    if x.get("rc_name") == y.get("service_name"):
-                        x["container"].append(y)
-
-                if len(x["container"]) != 0:
-                    result_two.append(x)
-
-            result = code.request_result(0, result_two)
-            logicmodel.connClose(conn, cur)
-            return result
-
-        except Exception, e:
-            log.error("containers list create error, reason=%s" % e)
+        control = Controller()
+        service_l = ServiceList()
+        json_list["list_acl"] = "list"
+        x = control.authority_judge(json_list)
+        log.info(x)
+        if x is None:
+            return code.request_result(0, [])
+        elif len(x) != 0:
+            json_list["svc_msg"] = x
+            rest = service_l.base_list(json_list)
+            log.info(rest)
+            return rest
 
     def detail_service(self, json_list):
         logicmodel = LogicModel()
@@ -451,10 +371,10 @@ class SheetController(object):
 
     def del_service(self, json_list):
         controller = Controller()
-        del_acl = controller.del_acl(json_list)
-        if del_acl == "error":
+        del_acl = controller.up_judge(json_list)
+        if del_acl != 0:
             log.error("authority is not allowed..delete service error")
-            return code.request_result(503)
+            return code.request_result(202)
         kubernete_sclient = KubernetesClient()
         del_pod = SourceModel()
         del_type = {"del_type": "pod"}
@@ -611,6 +531,11 @@ class SheetController(object):
         return code.request_result(0, "delete success")
 
     def update_service(self, json_list):
+            contoller = Controller()
+            rest = contoller.up_judge(json_list)
+            if rest != 0:
+                log.error(rest)
+                return code.request_result(202)
 
             update_svc = dict()
             create_json = SourceModel()

@@ -7,7 +7,7 @@ from data import DataOrm
 from common.logs import logging as log
 import json
 from es.to_es import post_es
-from detail_podstatus import update_s
+# from detail_podstatus import update_s
 
 
 class PodStatus(object):

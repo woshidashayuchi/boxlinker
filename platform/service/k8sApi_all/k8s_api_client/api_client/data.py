@@ -42,12 +42,12 @@ class DataOrm(object):
     }
 
     engine = create_engine('mysql://%s:%s@%s:%s/%s?charset=%s' % (db_config['user'],
-                                                               db_config['passwd'],
-                                                               db_config['host'],
-                                                               db_config['port'],
-                                                               db_config['db'],
-                                                               db_config['charset'],
-                                                               ), echo=True)
+                                                                  db_config['passwd'],
+                                                                  db_config['host'],
+                                                                  db_config['port'],
+                                                                  db_config['db'],
+                                                                  db_config['charset'],
+                                                                  ), echo=True)
 
     metadata = MetaData(engine)
     # Base = declarative_base()
@@ -128,6 +128,7 @@ class DataOrm(object):
                 Column('admin',String(64)),
                 Column('organization',String(64)),
                 Column('user',String(64)),
+                Column('role',Integer),
                 Column('create_time', DateTime, server_default=func.now()),
                 Column('update_time', DateTime, server_default=func.now())
 
@@ -218,6 +219,7 @@ class DataOrm(object):
 
             u.uuid = json_list.get("uid_font")
             u.user_id = json_list.get("user_id")
+            u.orga_id = json_list.get("user_orga")
             u.service_id = json_list.get("uid_service")
             u.rc_id = json_list.get("uid_rc")
             u.all_name = json_list.get("all_name")
@@ -235,7 +237,7 @@ class DataOrm(object):
                 uid_con = str(uuid.uuid4())
                 u.uuid = uid_con
                 u.rc_id = json_list.get("uid_rc")
-                u.user_id = json_list.get("user_id")
+                u.user_id = json_list.get("user_orga")
                 u.service_name = json_list.get("service_name")
                 u.containerPort = int(i.get("container_port"))
                 u.protocol = i.get("protocol")
@@ -258,7 +260,7 @@ class DataOrm(object):
                     uid_env = str(uuid.uuid4())
                     u.uuid = uid_env
                     u.rc_id = json_list.get("uid_rc")
-                    u.user_id = json_list.get("user_id")
+                    u.user_id = json_list.get("user_orga")
                     u.service_name = json_list.get("service_name")
 
                     u.env_name = i.get("env_key")
@@ -277,7 +279,7 @@ class DataOrm(object):
                     uid_volume = str(uuid.uuid4())
                     u.uuid = uid_volume
                     u.rc_id = json_list.get("uid_rc")
-                    u.user_id = json_list.get("user_id")
+                    u.user_id = json_list.get("user_orga")
                     u.service_name = json_list.get("service_name")
 
                     u.volume_name = i.get("disk_name")
@@ -296,68 +298,32 @@ class DataOrm(object):
             # u.admin = json_list.get("admin")
             u.organization = json_list.get("user_orga")
             u.user = json_list.get("user_id")
+            u.role = json_list.get("role_uuid")
             session.add(u)
             session.flush()
             session.commit()
             session.close()
 
-    @classmethod
-    def del_method(cls, json_list):
-        session = create_session()
-        if json_list.get("rtype") == "rc":
-            result = session.query(ReplicationControllers).filter(uuid='%s').delete() % json_list.get('rc_id')
-            session.flush()
-            session.commit()
-            return result
-        elif json_list.get("rtype") == "service":
-            reuslt = session.query(Service).filter(uuid='%s').delete() % json_list.get('service_id')
-            session.flush()
-            session.commit()
-            return reuslt
-        elif json_list.get("rtype") == "fservice":
-            result = session.query(FontService).filter(uuid='%s').delete() % json_list.get('font_id')
-            session.flush()
-            session.commit()
-            return result
-
-    @classmethod
-    def update_method(cls, json_list):
-        session = create_session()
-        if json_list.get("rtype") == "rc":
-            result = session.query(ReplicationControllers).filter(uuid='%s').delete() % json_list.get('rc_id')
-            session.flush()
-            session.commit()
-            return result
-        elif json_list.get("rtype") == "service":
-            reuslt = session.query(Service).filter(uuid='%s').delete() % json_list.get('service_id')
-            session.flush()
-            session.commit()
-            return reuslt
-        elif json_list.get("rtype") == "fservice":
-            result = session.query(FontService).filter(uuid='%s').delete() % json_list.get('font_id')
-            session.flush()
-            session.commit()
-            return result
 
     @classmethod
     def query_sql(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         select_rc = "select distinct(b.rc_name), c.service_domain_name, a.fservice_name, a.fservice_status," \
                     "a.fservice_update_time ltime from font_service a," \
                     "replicationcontrollers b,service c,containers d where (a.rc_id = b.uuid and " \
-                    "a.service_id = c.uuid and a.user_id=\'%s\')" % user_id
+                    "a.service_id = c.uuid and a.orga_id=\'%s\')" % user_id
         if service_name is not None:
            select_one = "select b.rc_name, c.service_domain_name, a.fservice_name, a.fservice_status," \
                         "a.fservice_update_time ltime from font_service a," \
                         "replicationcontrollers b, service c,containers d where (a.rc_id = b.uuid and " \
-                        "a.service_id = c.uuid and a.user_id= \'%s\' and a.fservice_name = \'%s\')" % (user_id, service_name)
+                        "a.service_id = c.uuid and a.orga_id= \'%s\' and a.fservice_name = \'%s\')" % (user_id, service_name)
            return select_one
         return select_rc
 
     @classmethod
     def detail_list(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         select_all = "select a.service_id, a.rc_id, a.fservice_name, a.fservice_status, " \
                      "b.uuid, b.rc_name, b.labels_name, b.spec_replicas, " \
@@ -370,25 +336,25 @@ class DataOrm(object):
                      "from " \
                      "(font_service a inner join replicationcontrollers b on a.rc_id=b.uuid) " \
                      "inner join service c on a.service_id=c.uuid  and " \
-                     "a.fservice_name=\'%s\' and a.user_id=\'%s\'" % (service_name, user_id)
+                     "a.fservice_name=\'%s\' and a.orga_id=\'%s\'" % (service_name, user_id)
         return select_all
 
     @classmethod
     def detail_container(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         select_containers = "select * from containers a where a.user_id=\'%s\' and a.service_name=\'%s\'" % (user_id, service_name)
         return select_containers
 
     @classmethod
     def list_container(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         select_containers = "select a.user_id,a.service_name,a.http_domain,a.tcp_domain from containers a where a.user_id=\'%s\'" % user_id
         return select_containers
 
     @classmethod
     def con_one(cls,json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         select_one = "select * from containers a where a.user_id=\'%s\' and a.service_name=\'%s\'" % (user_id,service_name)
         return select_one
@@ -400,27 +366,27 @@ class DataOrm(object):
 
     @classmethod
     def detail_env(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         select_env = "select * from env a where a.user_id=\'%s\' and a.service_name=\'%s\'" % (user_id, service_name)
         return select_env
 
     @classmethod
     def detail_volume(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         select_volume = "select * from volume a where a.user_id=\'%s\' and a.service_name=\'%s\'" % (user_id, service_name)
         return select_volume
 
     @classmethod
     def query_only(cls, json_list):
-        user_id = json_list.get("user_id")
-        select_only = "select a.fservice_name from font_service a where (a.user_id = \'%s\')" % (user_id)
+        user_id = json_list.get("user_orga")
+        select_only = "select a.fservice_name from font_service a where (a.orga_id = \'%s\')" % (user_id)
         return select_only
 
     @classmethod
     def delete_sql(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         user_name = json_list.get("user_name")
         service_name = json_list.get("service_name")
         rc_name1 = "rc-"+user_name+service_name
@@ -428,9 +394,9 @@ class DataOrm(object):
         serv_service_name1 = "serv-"+user_name+service_name
         serv_service_name = serv_service_name1.replace("_", "-")
         namespace = json_list.get("namespace")
-        del_rc = "delete from replicationcontrollers where uuid in (select rc_id from font_service where fservice_name=\'%s\' and user_id = \'%s\')" % (service_name, user_id)
-        del_service = "delete from service where uuid in (select service_id from font_service where user_id = \'%s\' and fservice_name=\'%s\')" % (user_id, service_name)
-        del_fservice = "delete from font_service where user_id = \'%s\' and fservice_name = \'%s\'" % (user_id, service_name)
+        del_rc = "delete from replicationcontrollers where uuid in (select rc_id from font_service where fservice_name=\'%s\' and orga_id = \'%s\')" % (service_name, user_id)
+        del_service = "delete from service where uuid in (select service_id from font_service where orga_id = \'%s\' and fservice_name=\'%s\')" % (user_id, service_name)
+        del_fservice = "delete from font_service where orga_id = \'%s\' and fservice_name = \'%s\'" % (user_id, service_name)
         del_container = "delete from containers where user_id = \'%s\' and service_name = \'%s\'" % (user_id, service_name)
         del_env = "delete from env where user_id = \'%s\' and service_name = \'%s\'" % (user_id, service_name)
         del_volume = "delete from volume where user_id = \'%s\' and service_name = \'%s\'" % (user_id, service_name)
@@ -438,7 +404,7 @@ class DataOrm(object):
 
     @classmethod
     def update_sql(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         # container_port = int(json_list.get("container_port"))
         # protocol = json_list.get("protocol")
@@ -452,7 +418,7 @@ class DataOrm(object):
         update_time = time.strftime(ISOTIMEFORMAT, time.localtime())
         if image_name is None:
             update_sql = "update replicationcontrollers set auto_startup=\'%s\', rc_update_time=\'%s\'" \
-            "where uuid=(select rc_id from font_service where user_id = \'%s\' and fservice_name = \'%s\')" % (auto_startup, update_time, user_id, service_name)
+            "where uuid=(select rc_id from font_service where orga_id = \'%s\' and fservice_name = \'%s\')" % (auto_startup, update_time, user_id, service_name)
             return update_sql
         else:
             policy = json_list.get("policy")
@@ -460,14 +426,14 @@ class DataOrm(object):
             image_version = json_list.get("image_version")
             update_sql = "update replicationcontrollers set policy=\'%s\', image_name=\'%s\'," \
             "image_version=\'%s\', rc_update_time=\'%s\'" \
-            "where uuid=(select rc_id from font_service where user_id = \'%s\' and fservice_name = \'%s\')" % (policy, image_name, image_version, update_time, user_id, service_name)
+            "where uuid=(select rc_id from font_service where orga_id = \'%s\' and fservice_name = \'%s\')" % (policy, image_name, image_version, update_time, user_id, service_name)
             return update_sql
 
     @classmethod
     def add_container_sql(cls, json_list):
         uuids = str(uuid.uuid4())
         rc_id = json_list.get("rc_id")
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         container_port = int(json_list.get("container_port"))
         protocol = json_list.get("protocol")
@@ -479,66 +445,66 @@ class DataOrm(object):
 
     @classmethod
     def delete_container_sql(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        delete_sql = "delete from containers where rc_id=(select uuid from replicationcontrollers where uuid=(select rc_id from font_service where user_id=\'%s\' and  fservice_name=\'%s\'))" % (user_id, service_name)
+        delete_sql = "delete from containers where rc_id=(select uuid from replicationcontrollers where uuid=(select rc_id from font_service where orga_id=\'%s\' and  fservice_name=\'%s\'))" % (user_id, service_name)
         return delete_sql
 
     @classmethod
     def delete_volume_sql(cls,json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        delete_sql = "delete from volume where rc_id=(select uuid from replicationcontrollers where uuid=(select rc_id from font_service where user_id=\'%s\' and  fservice_name=\'%s\'))" % (user_id, service_name)
+        delete_sql = "delete from volume where rc_id=(select uuid from replicationcontrollers where uuid=(select rc_id from font_service where orga_id=\'%s\' and  fservice_name=\'%s\'))" % (user_id, service_name)
         return delete_sql
 
     @classmethod
     def get_using_volume(cls,json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        get_sql = "select volume_name from volume where rc_id=(select rc_id from font_service where user_id=\'%s\' and  fservice_name=\'%s\')" % (user_id, service_name)
+        get_sql = "select volume_name from volume where rc_id=(select rc_id from font_service where orga_id=\'%s\' and  fservice_name=\'%s\')" % (user_id, service_name)
         return get_sql
 
     @classmethod
     def get_rc_id(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        get_id_sql = "select rc_id from font_service where user_id=\'%s\' and fservice_name=\'%s\'" % (user_id, service_name)
+        get_id_sql = "select rc_id from font_service where orga_id=\'%s\' and fservice_name=\'%s\'" % (user_id, service_name)
         return get_id_sql
 
     @classmethod
     def delete_env_sql(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        delete_sql = "delete from env where rc_id=(select uuid from replicationcontrollers where uuid=(select rc_id from font_service where user_id=\'%s\' and  fservice_name=\'%s\'))" % (user_id, service_name)
+        delete_sql = "delete from env where rc_id=(select uuid from replicationcontrollers where uuid=(select rc_id from font_service where orga_id=\'%s\' and  fservice_name=\'%s\'))" % (user_id, service_name)
         return delete_sql
 
     @classmethod
     def get_update_rc(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         log.info(json_list)
         log.info(user_id)
         # select_rc = "select a.* from replicationcontrollers a, font_service b where b.user_id=%d" \
         # "and b.fservice_name=\'%s\' and a.uuid = b.rc_id" % (user_id, service_name)
-        select_rc = "select a.* from replicationcontrollers a, font_service b where b.user_id=\'%s\' and b.fservice_name=\'%s\' and a.uuid = b.rc_id" % (user_id, service_name)
+        select_rc = "select a.* from replicationcontrollers a, font_service b where b.orga_id=\'%s\' and b.fservice_name=\'%s\' and a.uuid = b.rc_id" % (user_id, service_name)
         return select_rc
 
     @classmethod
     def update_pods(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         user_name = json_list.get("user_name")
         service_name = json_list.get("service_name")
         fservice_name = service_name.replace(user_name, "")
         status = json_list.get("status")
-        update_podstatus = "update font_service set fservice_status=\'%s\' where user_id =\'%s\' and fservice_name=\'%s\'"%(status, user_id, fservice_name)
+        update_podstatus = "update font_service set fservice_status=\'%s\' where orga_id =\'%s\' and fservice_name=\'%s\'"%(status, user_id, fservice_name)
         return update_podstatus
 
     @classmethod
     def anytime_update_pod(cls, json_list):
         status = json_list.get("status")
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         fservice_name = json_list.get("service_name")
-        anytime_update_status = "update font_service set fservice_status=\'%s\' where user_id =\'%s\' and fservice_name=\'%s\'"%(status, user_id, fservice_name)
+        anytime_update_status = "update font_service set fservice_status=\'%s\' where orga_id =\'%s\' and fservice_name=\'%s\'"%(status, user_id, fservice_name)
         return anytime_update_status
 
     @classmethod
@@ -565,16 +531,16 @@ class DataOrm(object):
 
     @classmethod
     def check_name(cls, json_list):
-        select_name = "select fservice_name from font_service where user_id=\'%s\'" % (json_list.get("user_id"))
+        select_name = "select fservice_name from font_service where orga_id=\'%s\'" % (json_list.get("user_orga"))
         return select_name
 
 
     @classmethod
     def update_pnum(cls, json_list):
-        user_id = json_list.get("user_id")
+        user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         pods_num = int(json_list.get("pods_num"))
-        up_sql = "update replicationcontrollers set spec_replicas = \'%s\' where uuid = (select rc_id from font_service where user_id = \'%s\' and fservice_name=\'%s\')" %(pods_num, user_id, service_name)
+        up_sql = "update replicationcontrollers set spec_replicas = \'%s\' where uuid = (select rc_id from font_service where orga_id = \'%s\' and fservice_name=\'%s\')" %(pods_num, user_id, service_name)
         return up_sql
 
 
