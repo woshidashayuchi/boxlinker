@@ -5,8 +5,8 @@ import {Panel,MenuItem,Tab,Tabs,SplitButton} from 'react-bootstrap';
 import {BREADCRUMB} from "../../constants";
 import Link from '../Link';
 import Loading from '../Loading';
+import Confirm from '../Confirm';
 import {navigate} from '../../actions/route';
-
 
 class ImageForMy extends React.Component{
   static contextTypes = {
@@ -20,6 +20,12 @@ class ImageForMy extends React.Component{
     goToConfigContainer:React.PropTypes.func,
     onDeleteImage:React.PropTypes.func
   };
+  constructor(){
+    super();
+    this.state = {
+      delData:{}
+    }
+  }
   componentDidMount(){
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.IMAGES_MY);
     this.props.onImageList();
@@ -37,14 +43,20 @@ class ImageForMy extends React.Component{
         this.context.store.dispatch(navigate(`/reviseImage/${uuid}`));
         break;
       case "2":
-        confirm("确认删除?")?this.props.onDeleteImage(name,"imageList"):"";
+        this.setState({
+          delData:{
+            name:name,
+            keyList:"imageList"
+          }
+        });
+        this.refs.confirmModal.open();
         break;
     }
   }
   getImageList(){
     let data = this.props.imageList;
-    if(!data || !data.length) return <div>暂无数据~</div>
-    if(data.length == 1&&data[0] == 1) return <div><Loading /></div>;
+    if(!data || !data.length) return <div>暂无数据~</div>;
+    if(data.length == 1&&data[0] == 1) return <div className="text-center"><Loading /></div>;
     let body = [];
     data.map((item,i) => {
       body.push(
@@ -134,6 +146,12 @@ class ImageForMy extends React.Component{
             {this.getImageTopTen(10)}
           </Panel>
         </div>
+        <Confirm
+          title = "警告"
+          text = "确定要删除此镜像吗?"
+          func = {() =>{this.props.onDeleteImage(this.state.delData)}}
+          ref = "confirmModal"
+        />
       </div>
     )
   }

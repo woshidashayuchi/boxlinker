@@ -37,11 +37,11 @@ const mapDispatchToProps = (dispatch) => {
     getOrganizeList:() =>{
       dispatch(funOrganize.fetchGetOrganizeListAction())
     },
-    leaveOrganize:(id) =>{
-      dispatch(funOrganize.fetchLeaveOrganize(id))
+    leaveOrganize:(data) =>{
+      dispatch(funOrganize.fetchLeaveOrganize(data))
     },
-    deleteOrganize:(id) =>{
-      dispatch(funOrganize.fetchDeleteOrganize(id))
+    deleteOrganize:(data) =>{
+      dispatch(funOrganize.fetchDeleteOrganize(data))
     }
   }
 };

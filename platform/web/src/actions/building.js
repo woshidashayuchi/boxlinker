@@ -196,15 +196,15 @@ export function refreshBuildingList(){
   }
 }
 
-export function onDeleteImageAction(name,keyList){
+export function onDeleteImageAction(data){
   let myInit = {
     method:"DELETE",
     headers:{
       token:localStorage.getItem("_at"),
-      imagename:name
+      imagename:data.name
     }
   };
-  let url = FETCH_URL.IMAGE_LIST+"?imagename="+name;
+  let url = FETCH_URL.IMAGE_LIST+"?imagename="+data.name;
   return(dispatch)=>{
     dispatch(isLoadingAction(true));
     return fetch(url,myInit)
@@ -213,7 +213,7 @@ export function onDeleteImageAction(name,keyList){
         console.log("删除镜像返回值",json);
         dispatch(isLoadingAction(false));
         if(json.status==0){
-          switch (keyList){
+          switch (data.keyList){
             case "myList":
               dispatch(navigate("/imageForMy"));
                   break;

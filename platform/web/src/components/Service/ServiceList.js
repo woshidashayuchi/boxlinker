@@ -12,6 +12,7 @@ import {SplitButton,MenuItem} from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import Link from '../Link';
 import Loading from "../Loading";
+import Confirm from "../Confirm";
 import {BREADCRUMB} from "../../constants";
 import * as Const from '../../constants';
 
@@ -37,6 +38,7 @@ class ServiceList extends Component{
     super();
     this.state = {
       isLoop: true,
+      delData:{}
     }
   }
   componentDidMount(){
@@ -50,7 +52,10 @@ class ServiceList extends Component{
 
   deleteService(serviceName){
     let data = {serviceName:serviceName,type:"list"};
-    confirm("是否删除?")?this.props.onDeleteService(data):"";
+    this.setState({
+      delData:data
+    });
+    this.refs.confirmModal.open();
   }
   changeState(serviceName,state){
     let data = {serviceName:serviceName,state:state};
@@ -191,6 +196,12 @@ class ServiceList extends Component{
         <div className="sl-bd TableTextLeft">
           {this.getDemoTable()}
         </div>
+        <Confirm
+          title = "警告"
+          text = "您确定要删除此服务吗?"
+          ref = "confirmModal"
+          func = {() => {this.props.onDeleteService(this.state.delData)}}
+        />
       </div>
     );
   }

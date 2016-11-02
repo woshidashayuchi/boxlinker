@@ -4,6 +4,8 @@ import {BREADCRUMB} from "../../constants";
 import {timeRange} from '../../core/utils';
 import {Tabs,Tab,Button,Modal,FormControl,SplitButton,MenuItem} from 'react-bootstrap';
 import Toggle from '../Toggle';
+import Confirm from '../Confirm';
+import Loading from '../Loading';
 import {navigate} from '../../actions/route';
 
 const title = '镜像详情';
@@ -57,7 +59,8 @@ class ImageDetail extends Component{
     super(props);
     this.state = {
       show: false,
-      isPublic:1
+      isPublic:1,
+      delData:{}
     };
   }
   showModal() {
@@ -85,7 +88,13 @@ class ImageDetail extends Component{
         this.context.store.dispatch(navigate(`/reviseImage/${this.props.uuid}`));
       break;
       case "2":
-        confirm("确认删除?")?this.props.onDeleteImage(name,"myList"):"";
+        this.setState({
+          delData:{
+            name:name,
+            keyList:"myList"
+          }
+        });
+        this.refs.confirmModal.open();
       break;
     }
   }
@@ -153,6 +162,7 @@ class ImageDetail extends Component{
   render(){
     this.context.setTitle(title);
     let data = this.props.imageDetail;
+    if(!data.repository) return <div className="text-center"><Loading /></div>;
     let tag = data.image_tag?`:${data.image_tag}`:":latest";
     return (
       <div className="containerBgF containerPadding" key = {data.is_public}>
@@ -237,6 +247,12 @@ class ImageDetail extends Component{
             </Tab>
           </Tabs>
         </div>
+        <Confirm
+          title = "警告"
+          text = "确定要删除此镜像吗?"
+          func = {() =>{this.props.onDeleteImage(this.state.delData)}}
+          ref = "confirmModal"
+        />
       </div>
     )
   }

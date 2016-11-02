@@ -61,12 +61,14 @@ class BuildingDetail extends React.Component{
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE, BREADCRUMB.BUILD_IMAGE, BREADCRUMB.IMAGE_DETAIL);
     this.props.getBuildingDetail(this.props.projectId);
     let build_status = this.props.buildingDetail.build_status;
-    if(build_status ==2){
-      let my = this;
-      my.myTime = setInterval(function () {my.props.getBuildingDetail(my.props.projectId);},5000)
-    }else{
-      clearInterval(this.myTime);
-    }
+    let my = this;
+    this.myTime = setInterval(function () {
+      if (my.props.buildingDetail.build_status != 2) {
+        clearInterval(my.myTime)
+      } else {
+        my.props.getBuildingDetail(my.props.projectId);
+      }
+    }, 5000);
   }
   componentWillUnmount(){
     clearInterval(this.myTime);

@@ -44,8 +44,8 @@ const mapDispatchToProps = (dispatch) => {
     changeOrganizeOwner:(data) =>{
       dispatch(fun.fetchChangeOrganizeOwnerAction(data))
     },
-    deleteOrganize:(id) =>{
-      dispatch(fun.fetchDeleteOrganize(id))
+    deleteOrganize:(data) =>{
+      dispatch(fun.fetchDeleteOrganize(data))
     }
   }
 };

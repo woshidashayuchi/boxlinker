@@ -7,8 +7,6 @@ import {Button,Panel,Table,Pagination} from 'react-bootstrap';
 import {BREADCRUMB} from "../../constants";
 import Link from '../Link';
 
-// import echarts from 'echarts';
-
 const ReactHighcharts = require('react-highcharts');
 
 class Panel1Box extends Component {
@@ -50,9 +48,9 @@ class ResourceDetail extends Component {
     volumesList: React.PropTypes.array,
   };
   render(){
-    let serviceLength = this.props.serviceList.length||0;
-    let imageLength = this.props.imageList.length||0;
-    let volumesLength = this.props.volumesList.length||0;
+    let serviceLength = this.props.serviceList[0] ==1?0:this.props.serviceList.length ;
+    let imageLength = this.props.imageList[0] ==1?0:this.props.imageList.length ;
+    let volumesLength = this.props.volumesList[0] ==1?0:this.props.volumesList.length ;
     return (
       <Panel header="资源详细">
         <ul className={s.p1List}>

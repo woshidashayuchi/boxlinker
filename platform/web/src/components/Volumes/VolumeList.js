@@ -14,6 +14,7 @@ import VolumeScaleModal from './VolumeScaleModal'
 import {SplitButton,MenuItem} from 'react-bootstrap'
 import { BREADCRUMB } from '../../constants';
 import Loading from "../Loading";
+import Confirm from '../Confirm';
 const title = '数据卷列表';
 
 
@@ -30,6 +31,12 @@ class VolumeList extends Component{
     onClearVolumesList:React.PropTypes.func,
     isBtnState:React.PropTypes.object
   };
+  constructor(){
+    super();
+    this.state = {
+      diskName:""
+    }
+  }
   getCreateBtn(){
      return (
        <div className={cx("hbAddBtn", "clearfix")} onClick={()=>{this.refs.createModal.open()}}>
@@ -42,7 +49,10 @@ class VolumeList extends Component{
      )
   }
   deleteLine(diskName){
-    confirm("确定删除?")?this.props.onVolumeDelete(diskName):"";
+    this.setState({
+      diskName:diskName
+    });
+    this.refs.confirmModal.open();
   }
   createVolume(data){
     this.props.onVolumeCreate(data);
@@ -137,6 +147,12 @@ class VolumeList extends Component{
         </div>
         <VolumeScaleModal ref="scaleModal" onSave={this.scaleVolume.bind(this)}/>
         <VolumeCreateModal ref="createModal" isBtnState = {this.props.isBtnState} onVolumeCreate={this.createVolume.bind(this)}/>
+        <Confirm
+          title = "警告"
+          text = "您确定要删除此数据卷吗?"
+          ref = "confirmModal"
+          func = {() => {this.props.onVolumeDelete(this.state.diskName)}}
+        />
       </div>
     );
   }

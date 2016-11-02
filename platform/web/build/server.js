@@ -2547,7 +2547,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        var notification = this.props.notifications.message ? _react2.default.createElement(_Notification2.default, { obj: this.props.notifications }) : null;
+        var notification = this.props.notifications.message ? _react2.default.createElement(_Notification2.default, { show: true, obj: this.props.notifications }) : _react2.default.createElement(_Notification2.default, { show: false, obj: this.props.notifications });
         return _react2.default.createElement(
           'div',
           { className: 'app ' + (this.props.isSidebarOpen ? "" : "sidebar-close") },
@@ -2583,15 +2583,6 @@ module.exports =
     onInit: _react2.default.PropTypes.func
   };
   exports.default = App;
-  
-  // function select(state){
-  //   const {toggleSidebar} = state;
-  //   return {
-  //     toggleSidebar
-  //   }
-  // }
-  //
-  // export default connect(select)(App);
 
 /***/ },
 /* 53 */
@@ -4260,12 +4251,12 @@ module.exports =
     };
   }
   
-  function fetchLeaveOrganize(id) {
+  function fetchLeaveOrganize(data) {
     var myInit = {
       method: "PUT",
       headers: { token: localStorage.getItem("_at") }
     };
-    var url = Const.FETCH_URL.ORGANIZE + "/" + id;
+    var url = Const.FETCH_URL.ORGANIZE + "/" + data.orgId;
     return function (dispatch) {
       return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
         return response.json();
@@ -4273,7 +4264,13 @@ module.exports =
         console.log(json);
         if (json.status == 0) {
           dispatch((0, _notification.receiveNotification)({ message: "退出成功", level: "success" }));
-          dispatch(fetchGetOrganizeListAction());
+          switch (data.keyList) {
+            case "orgList":
+              dispatch(fetchGetOrganizeListAction());
+              break;
+            case "userList":
+  
+          }
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
           }, 3000);
@@ -4287,13 +4284,12 @@ module.exports =
     };
   }
   
-  function fetchDeleteOrganize(id, flag) {
-    console.log(flag);
+  function fetchDeleteOrganize(data) {
     var myInit = {
       method: "DELETE",
       headers: { token: localStorage.getItem("_at") }
     };
-    var url = Const.FETCH_URL.ORGANIZE + "/" + id;
+    var url = Const.FETCH_URL.ORGANIZE + "/" + data.orgId;
     return function (dispatch) {
       return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
         return response.json();
@@ -4301,9 +4297,10 @@ module.exports =
         console.log(json);
         if (json.status == 0) {
           dispatch((0, _notification.receiveNotification)({ message: "解散成功", level: "success" }));
-          dispatch(fetchGetOrganizeListAction());
-          if (!flag) {
-            dispatch(fetchChangeAccountAction(id));
+          switch (data.keyList) {
+            case "orgList":
+              dispatch(fetchGetOrganizeListAction());
+              break;
           }
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
@@ -5330,7 +5327,7 @@ module.exports =
         var text = this.props.obj.message;
         return _react2.default.createElement(
           _reactBootstrap.Alert,
-          { bsStyle: this.props.obj.level || "success", className: 'notification' },
+          { bsStyle: this.props.obj.level || "success", className: !this.props.show ? "notification" : "notification notificationShow" },
           text
         );
       }
@@ -5561,8 +5558,6 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  // import echarts from 'echarts';
-  
   var ReactHighcharts = __webpack_require__(91);
   
   var Panel1Box = function (_Component) {
@@ -5652,9 +5647,9 @@ module.exports =
     (0, _createClass3.default)(ResourceDetail, [{
       key: 'render',
       value: function render() {
-        var serviceLength = this.props.serviceList.length || 0;
-        var imageLength = this.props.imageList.length || 0;
-        var volumesLength = this.props.volumesList.length || 0;
+        var serviceLength = this.props.serviceList[0] == 1 ? 0 : this.props.serviceList.length;
+        var imageLength = this.props.imageList[0] == 1 ? 0 : this.props.imageList.length;
+        var volumesLength = this.props.volumesList[0] == 1 ? 0 : this.props.volumesList.length;
         return _react2.default.createElement(
           _reactBootstrap.Panel,
           { header: '资源详细' },
@@ -7484,7 +7479,7 @@ module.exports =
         );
         if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
           'div',
-          null,
+          { className: 'text-center' },
           _react2.default.createElement(_Loading2.default, null)
         );
         var body = [];
@@ -8036,6 +8031,10 @@ module.exports =
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
+  var _Confirm = __webpack_require__(227);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
   var _route = __webpack_require__(57);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -8045,7 +8044,13 @@ module.exports =
   
     function ImageForMy() {
       (0, _classCallCheck3.default)(this, ImageForMy);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageForMy).apply(this, arguments));
+  
+      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageForMy).call(this));
+  
+      _this.state = {
+        delData: {}
+      };
+      return _this;
     }
   
     (0, _createClass3.default)(ImageForMy, [{
@@ -8071,7 +8076,13 @@ module.exports =
             this.context.store.dispatch((0, _route.navigate)('/reviseImage/' + uuid));
             break;
           case "2":
-            confirm("确认删除?") ? this.props.onDeleteImage(name, "imageList") : "";
+            this.setState({
+              delData: {
+                name: name,
+                keyList: "imageList"
+              }
+            });
+            this.refs.confirmModal.open();
             break;
         }
       }
@@ -8088,7 +8099,7 @@ module.exports =
         );
         if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
           'div',
-          null,
+          { className: 'text-center' },
           _react2.default.createElement(_Loading2.default, null)
         );
         var body = [];
@@ -8205,6 +8216,8 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
+        var _this3 = this;
+  
         this.context.setTitle('我的镜像');
         var panelHd = _react2.default.createElement(
           'div',
@@ -8276,7 +8289,15 @@ module.exports =
               { className: 'imagesRankingList', header: '排行榜' },
               this.getImageTopTen(10)
             )
-          )
+          ),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '确定要删除此镜像吗?',
+            func: function func() {
+              _this3.props.onDeleteImage(_this3.state.delData);
+            },
+            ref: 'confirmModal'
+          })
         );
       }
     }]);
@@ -8519,15 +8540,15 @@ module.exports =
     };
   }
   
-  function onDeleteImageAction(name, keyList) {
+  function onDeleteImageAction(data) {
     var myInit = {
       method: "DELETE",
       headers: {
         token: localStorage.getItem("_at"),
-        imagename: name
+        imagename: data.name
       }
     };
-    var url = _constants.FETCH_URL.IMAGE_LIST + "?imagename=" + name;
+    var url = _constants.FETCH_URL.IMAGE_LIST + "?imagename=" + data.name;
     return function (dispatch) {
       dispatch((0, _header.isLoadingAction)(true));
       return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
@@ -8536,7 +8557,7 @@ module.exports =
         console.log("删除镜像返回值", json);
         dispatch((0, _header.isLoadingAction)(false));
         if (json.status == 0) {
-          switch (keyList) {
+          switch (data.keyList) {
             case "myList":
               dispatch((0, _route.navigate)("/imageForMy"));
               break;
@@ -8832,6 +8853,14 @@ module.exports =
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
+  var _Confirm = __webpack_require__(227);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
+  var _Loading = __webpack_require__(106);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
   var _route = __webpack_require__(57);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -8891,7 +8920,8 @@ module.exports =
   
       _this2.state = {
         show: false,
-        isPublic: 1
+        isPublic: 1,
+        delData: {}
       };
       return _this2;
     }
@@ -8930,7 +8960,13 @@ module.exports =
             this.context.store.dispatch((0, _route.navigate)('/reviseImage/' + this.props.uuid));
             break;
           case "2":
-            confirm("确认删除?") ? this.props.onDeleteImage(name, "myList") : "";
+            this.setState({
+              delData: {
+                name: name,
+                keyList: "myList"
+              }
+            });
+            this.refs.confirmModal.open();
             break;
         }
       }
@@ -9051,8 +9087,15 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
+        var _this4 = this;
+  
         this.context.setTitle(title);
         var data = this.props.imageDetail;
+        if (!data.repository) return _react2.default.createElement(
+          'div',
+          { className: 'text-center' },
+          _react2.default.createElement(_Loading2.default, null)
+        );
         var tag = data.image_tag ? ':' + data.image_tag : ":latest";
         return _react2.default.createElement(
           'div',
@@ -9253,7 +9296,15 @@ module.exports =
                 )
               )
             )
-          )
+          ),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '确定要删除此镜像吗?',
+            func: function func() {
+              _this4.props.onDeleteImage(_this4.state.delData);
+            },
+            ref: 'confirmModal'
+          })
         );
       }
     }]);
@@ -10511,21 +10562,17 @@ module.exports =
     (0, _createClass3.default)(BuildingDetail, [{
       key: 'componentDidMount',
       value: function componentDidMount() {
-        var _this3 = this;
-  
         this.props.setBreadcrumb(_constants.BREADCRUMB.CONSOLE, _constants.BREADCRUMB.BUILD_IMAGE, _constants.BREADCRUMB.IMAGE_DETAIL);
         this.props.getBuildingDetail(this.props.projectId);
         var build_status = this.props.buildingDetail.build_status;
-        if (build_status == 2) {
-          (function () {
-            var my = _this3;
-            my.myTime = setInterval(function () {
-              my.props.getBuildingDetail(my.props.projectId);
-            }, 5000);
-          })();
-        } else {
-          clearInterval(this.myTime);
-        }
+        var my = this;
+        this.myTime = setInterval(function () {
+          if (my.props.buildingDetail.build_status != 2) {
+            clearInterval(my.myTime);
+          } else {
+            my.props.getBuildingDetail(my.props.projectId);
+          }
+        }, 5000);
       }
     }, {
       key: 'componentWillUnmount',
@@ -10574,7 +10621,7 @@ module.exports =
     }, {
       key: 'baseSeting',
       value: function baseSeting() {
-        var _this4 = this;
+        var _this3 = this;
   
         //基本设置
         var data = [this.props.buildingDetail];
@@ -10654,7 +10701,7 @@ module.exports =
                 _react2.default.createElement(
                   _reactBootstrap.Col,
                   { sm: 5 },
-                  _react2.default.createElement(IsAutoBuildToggle, { state: item.auto_build == 1, getToggle: _this4.getToggleValue.bind(_this4) })
+                  _react2.default.createElement(IsAutoBuildToggle, { state: item.auto_build == 1, getToggle: _this3.getToggleValue.bind(_this3) })
                 )
               )
             ),
@@ -10670,9 +10717,9 @@ module.exports =
                   { sm: 5 },
                   _react2.default.createElement(
                     'button',
-                    { className: 'btn btn-primary ' + (!_this4.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
-                      onClick: _this4.onReviseBuilding.bind(_this4),
-                      disabled: !_this4.props.isBtnState.reviseBuilding
+                    { className: 'btn btn-primary ' + (!_this3.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
+                      onClick: _this3.onReviseBuilding.bind(_this3),
+                      disabled: !_this3.props.isBtnState.reviseBuilding
                     },
                     '确认修改'
                   )
@@ -11124,8 +11171,8 @@ module.exports =
       onClearImageList: function onClearImageList() {
         dispatch((0, _building.refreshBuildingList)());
       },
-      onDeleteImage: function onDeleteImage(name, keyList) {
-        dispatch((0, _building.onDeleteImageAction)(name, keyList));
+      onDeleteImage: function onDeleteImage(data) {
+        dispatch((0, _building.onDeleteImageAction)(data));
       }
     };
   };
@@ -11182,6 +11229,10 @@ module.exports =
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
+  var _Confirm = __webpack_require__(227);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
   var _utils = __webpack_require__(115);
   
   var _constants = __webpack_require__(37);
@@ -11197,7 +11248,8 @@ module.exports =
       var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Building).call(this));
   
       _this.state = {
-        githubModalShow: false
+        githubModalShow: false,
+        delData: {}
       };
       return _this;
     }
@@ -11244,7 +11296,13 @@ module.exports =
     }, {
       key: 'deleteLine',
       value: function deleteLine(name) {
-        confirm("确认删除?") ? this.props.onDeleteImage(name, "buildingList") : "";
+        this.setState({
+          delData: {
+            name: name,
+            keyList: "buildingList"
+          }
+        });
+        this.refs.confirmModal.open();
       }
     }, {
       key: 'getSourceName',
@@ -11382,6 +11440,8 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
+        var _this3 = this;
+  
         this.context.setTitle('构建镜像');
         return _react2.default.createElement(
           'div',
@@ -11450,7 +11510,15 @@ module.exports =
                 this.getLines()
               )
             )
-          )
+          ),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '确定要删除此镜像吗?',
+            func: function func() {
+              _this3.props.onDeleteImage(_this3.state.delData);
+            },
+            ref: 'confirmModal'
+          })
         );
       }
     }]);
@@ -12373,6 +12441,10 @@ module.exports =
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
+  var _Confirm = __webpack_require__(227);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
   var _constants = __webpack_require__(37);
   
   var Const = _interopRequireWildcard(_constants);
@@ -12381,14 +12453,16 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var title = '服务列表'; /**
-                       * React Starter Kit (https://www.reactstarterkit.com/)
-                       *
-                       * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
-                       *
-                       * This source code is licensed under the MIT license found in the
-                       * LICENSE.txt file in the root directory of this source tree.
-                       */
+  /**
+   * React Starter Kit (https://www.reactstarterkit.com/)
+   *
+   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.txt file in the root directory of this source tree.
+   */
+  
+  var title = '服务列表';
   
   var ServiceList = function (_Component) {
     (0, _inherits3.default)(ServiceList, _Component);
@@ -12399,7 +12473,8 @@ module.exports =
       var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ServiceList).call(this));
   
       _this.state = {
-        isLoop: true
+        isLoop: true,
+        delData: {}
       };
       return _this;
     }
@@ -12420,7 +12495,10 @@ module.exports =
       key: 'deleteService',
       value: function deleteService(serviceName) {
         var data = { serviceName: serviceName, type: "list" };
-        confirm("是否删除?") ? this.props.onDeleteService(data) : "";
+        this.setState({
+          delData: data
+        });
+        this.refs.confirmModal.open();
       }
     }, {
       key: 'changeState',
@@ -12648,6 +12726,8 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
+        var _this3 = this;
+  
         this.context.setTitle(title);
         return _react2.default.createElement(
           'div',
@@ -12711,7 +12791,15 @@ module.exports =
             'div',
             { className: 'sl-bd TableTextLeft' },
             this.getDemoTable()
-          )
+          ),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '您确定要删除此服务吗?',
+            ref: 'confirmModal',
+            func: function func() {
+              _this3.props.onDeleteService(_this3.state.delData);
+            }
+          })
         );
       }
     }]);
@@ -18824,23 +18912,35 @@ module.exports =
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
+  var _Confirm = __webpack_require__(227);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var title = '数据卷列表'; /**
-                        * React Starter Kit (https://www.reactstarterkit.com/)
-                        *
-                        * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
-                        *
-                        * This source code is licensed under the MIT license found in the
-                        * LICENSE.txt file in the root directory of this source tree.
-                        */
+  /**
+   * React Starter Kit (https://www.reactstarterkit.com/)
+   *
+   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.txt file in the root directory of this source tree.
+   */
+  
+  var title = '数据卷列表';
   
   var VolumeList = function (_Component) {
     (0, _inherits3.default)(VolumeList, _Component);
   
     function VolumeList() {
       (0, _classCallCheck3.default)(this, VolumeList);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(VolumeList).apply(this, arguments));
+  
+      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(VolumeList).call(this));
+  
+      _this.state = {
+        diskName: ""
+      };
+      return _this;
     }
   
     (0, _createClass3.default)(VolumeList, [{
@@ -18873,7 +18973,10 @@ module.exports =
     }, {
       key: 'deleteLine',
       value: function deleteLine(diskName) {
-        confirm("确定删除?") ? this.props.onVolumeDelete(diskName) : "";
+        this.setState({
+          diskName: diskName
+        });
+        this.refs.confirmModal.open();
       }
     }, {
       key: 'createVolume',
@@ -19024,6 +19127,8 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
+        var _this4 = this;
+  
         this.context.setTitle(title);
         return _react2.default.createElement(
           'div',
@@ -19103,7 +19208,15 @@ module.exports =
             )
           ),
           _react2.default.createElement(_VolumeScaleModal2.default, { ref: 'scaleModal', onSave: this.scaleVolume.bind(this) }),
-          _react2.default.createElement(_VolumeCreateModal2.default, { ref: 'createModal', isBtnState: this.props.isBtnState, onVolumeCreate: this.createVolume.bind(this) })
+          _react2.default.createElement(_VolumeCreateModal2.default, { ref: 'createModal', isBtnState: this.props.isBtnState, onVolumeCreate: this.createVolume.bind(this) }),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '您确定要删除此数据卷吗?',
+            ref: 'confirmModal',
+            func: function func() {
+              _this4.props.onVolumeDelete(_this4.state.diskName);
+            }
+          })
         );
       }
     }]);
@@ -19820,7 +19933,7 @@ module.exports =
                     }
                   });
                   window.location.href = "/";
-                }, 1000);
+                }, 2000);
               } else if (data.status == 705) {
                 userTip.innerHTML = "用户名或者密码错误";
                 my.setState({
@@ -19877,7 +19990,6 @@ module.exports =
         var me = this;
         document.onkeydown = function (e) {
           if (e.keyCode == 13) {
-            console.log(111);
             me.login();
           }
         };
@@ -19885,7 +19997,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { obj: this.state.notifications }) : null;
+        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { show: true, obj: this.state.notifications }) : _react2.default.createElement(_Notification2.default, { show: false, obj: this.state.notifications });
         this.context.setTitle("登录");
         return _react2.default.createElement(
           'div',
@@ -20357,7 +20469,7 @@ module.exports =
                       }
                     });
                     window.location.href = "/login";
-                  }, 1000);
+                  }, 2000);
                 } else {
                   my.changeImageSrc();
                   my.setState({
@@ -20481,7 +20593,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { obj: this.state.notifications }) : null;
+        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { show: true, obj: this.state.notifications }) : _react2.default.createElement(_Notification2.default, { show: false, obj: this.state.notifications });
         this.context.setTitle("注册");
         return _react2.default.createElement(
           'div',
@@ -20779,11 +20891,11 @@ module.exports =
       getOrganizeList: function getOrganizeList() {
         dispatch(funOrganize.fetchGetOrganizeListAction());
       },
-      leaveOrganize: function leaveOrganize(id) {
-        dispatch(funOrganize.fetchLeaveOrganize(id));
+      leaveOrganize: function leaveOrganize(data) {
+        dispatch(funOrganize.fetchLeaveOrganize(data));
       },
-      deleteOrganize: function deleteOrganize(id) {
-        dispatch(funOrganize.fetchDeleteOrganize(id));
+      deleteOrganize: function deleteOrganize(data) {
+        dispatch(funOrganize.fetchDeleteOrganize(data));
       }
     };
   };
@@ -21853,6 +21965,10 @@ module.exports =
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
+  var _Confirm = __webpack_require__(227);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
   var _route = __webpack_require__(57);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -21862,7 +21978,16 @@ module.exports =
   
       function GetOrganize() {
           (0, _classCallCheck3.default)(this, GetOrganize);
-          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrganize).apply(this, arguments));
+  
+          var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrganize).call(this));
+  
+          _this.state = {
+              orgData: {
+                  orgId: "",
+                  ketList: ""
+              }
+          };
+          return _this;
       }
   
       (0, _createClass3.default)(GetOrganize, [{
@@ -21874,12 +21999,24 @@ module.exports =
       }, {
           key: 'leaveOrganize',
           value: function leaveOrganize(id) {
-              confirm("确定退出组织吗?") ? this.props.leaveOrganize(id) : "";
+              this.setState({
+                  orgData: {
+                      orgId: id,
+                      keyList: "orgList"
+                  }
+              });
+              this.refs.confirmModalLeave.open();
           }
       }, {
           key: 'deleteOrganize',
           value: function deleteOrganize(id) {
-              confirm("确定解散组织吗?") ? this.props.deleteOrganize(id) : "";
+              this.setState({
+                  orgData: {
+                      orgId: id,
+                      keyList: "orgList"
+                  }
+              });
+              this.refs.confirmModalDelete.open();
           }
       }, {
           key: 'getOrganizeBody',
@@ -21897,7 +22034,7 @@ module.exports =
                       _react2.default.createElement(_Loading2.default, null)
                   )
               );
-              if (!data.length) return _react2.default.createElement(
+              if (data.length == 1 && data[0].orga_name == user_name) return _react2.default.createElement(
                   'tr',
                   null,
                   _react2.default.createElement(
@@ -22074,7 +22211,23 @@ module.exports =
                       { className: 'organizeBd sl-bd TableTextLeft' },
                       this.getTableDemo()
                   ),
-                  _react2.default.createElement(CreateOrganize, { onCreateOrganize: this.createOrganize.bind(this), ref: 'createOrgModel' })
+                  _react2.default.createElement(CreateOrganize, { onCreateOrganize: this.createOrganize.bind(this), ref: 'createOrgModel' }),
+                  _react2.default.createElement(_Confirm2.default, {
+                      title: '警告',
+                      text: '您确定要离开此组织吗?',
+                      ref: 'confirmModalLeave',
+                      func: function func() {
+                          _this3.props.leaveOrganize(_this3.state.orgData);
+                      }
+                  }),
+                  _react2.default.createElement(_Confirm2.default, {
+                      title: '警告',
+                      text: '您确定要解散此组织吗?',
+                      ref: 'confirmModalDelete',
+                      func: function func() {
+                          _this3.props.deleteOrganize(_this3.state.orgData);
+                      }
+                  })
               );
           }
       }]);
@@ -22879,8 +23032,8 @@ module.exports =
       changeOrganizeOwner: function changeOrganizeOwner(data) {
         dispatch(fun.fetchChangeOrganizeOwnerAction(data));
       },
-      deleteOrganize: function deleteOrganize(id) {
-        dispatch(fun.fetchDeleteOrganize(id));
+      deleteOrganize: function deleteOrganize(data) {
+        dispatch(fun.fetchDeleteOrganize(data));
       }
     };
   };
@@ -23379,6 +23532,10 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(69);
   
+  var _Confirm = __webpack_require__(227);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
   var _route = __webpack_require__(57);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -23392,7 +23549,8 @@ module.exports =
       var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgAdmin).call(this, props));
   
       _this.state = {
-        inviteBox: false
+        inviteBox: false,
+        roleData: {}
       };
       return _this;
     }
@@ -23411,40 +23569,6 @@ module.exports =
         var organizeId = this.context.store.getState().user_info.orga_uuid;
         this.props.getOrganizeUserList(organizeId);
       }
-    }, {
-      key: 'onChangeUserRole',
-      value: function onChangeUserRole(user_uuid, key) {
-        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
-        var data = {
-          orga_uuid: orga_uuid,
-          user_uuid: user_uuid,
-          role_uuid: key,
-          method: "PUT"
-        };
-        console.log(key);
-        this.props.changeUserRole(data);
-      }
-    }, {
-      key: 'onDeleteUser',
-      value: function onDeleteUser(user_uuid) {
-        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
-        var data = {
-          orga_uuid: orga_uuid,
-          user_uuid: user_uuid,
-          role_uuid: "",
-          method: "DELETE"
-        };
-        confirm("确定移除该成员?") ? this.props.changeUserRole(data) : "";
-      }
-    }, {
-      key: 'onDeleteOrganize',
-      value: function onDeleteOrganize() {
-        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
-        confirm("确定解散组织吗?") ? this.props.deleteOrganize(orga_uuid) : "";
-      }
-    }, {
-      key: 'onLeaveOrganize',
-      value: function onLeaveOrganize() {}
     }, {
       key: 'getOrganizeUserBody',
       value: function getOrganizeUserBody() {
@@ -23742,8 +23866,46 @@ module.exports =
         });
       }
     }, {
+      key: 'onChangeUserRole',
+      value: function onChangeUserRole(user_uuid, key) {
+        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
+        var data = {
+          orga_uuid: orga_uuid,
+          user_uuid: user_uuid,
+          role_uuid: key,
+          method: "PUT"
+        };
+        console.log(key);
+        this.props.changeUserRole(data);
+      }
+    }, {
+      key: 'onDeleteUser',
+      value: function onDeleteUser(user_uuid) {
+        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
+        this.setState({
+          roleData: {
+            orga_uuid: orga_uuid,
+            user_uuid: user_uuid,
+            role_uuid: "",
+            method: "DELETE"
+          }
+        });
+        this.refs.confirmModal.open();
+      }
+    }, {
+      key: 'onDeleteOrganize',
+      value: function onDeleteOrganize() {
+        var orga_uuid = this.context.store.getState().user_info.orga_uuid;
+        confirm("确定解散组织吗?") ? this.props.deleteOrganize(orga_uuid) : "";
+      }
+    }, {
+      key: 'onLeaveOrganize',
+      value: function onLeaveOrganize() {}
+    }, {
       key: 'render',
       value: function render() {
+        var _this4 = this;
+  
         var role = this.context.store.getState().user_info.role_uuid;
         return _react2.default.createElement(
           'div',
@@ -23789,7 +23951,15 @@ module.exports =
               { className: 'organizeUserTab' },
               this.getTableDemo()
             )
-          )
+          ),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '您确定要移除此用户吗?',
+            ref: 'confirmModal',
+            func: function func() {
+              _this4.props.changeUserRole(_this4.state.roleData);
+            }
+          })
         );
       }
     }]);
@@ -23922,6 +24092,144 @@ module.exports =
       }
     };
   }
+
+/***/ },
+/* 227 */
+/***/ function(module, exports, __webpack_require__) {
+
+  "use strict";
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _extends2 = __webpack_require__(36);
+  
+  var _extends3 = _interopRequireDefault(_extends2);
+  
+  var _getPrototypeOf = __webpack_require__(45);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(46);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(47);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(48);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(49);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(9);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _reactBootstrap = __webpack_require__(69);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var Confirm = function (_Component) {
+    (0, _inherits3.default)(Confirm, _Component);
+  
+    function Confirm(props) {
+      (0, _classCallCheck3.default)(this, Confirm);
+  
+      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Confirm).call(this, props));
+  
+      _this.state = {
+        show: false
+      };
+      return _this;
+    }
+  
+    (0, _createClass3.default)(Confirm, [{
+      key: "open",
+      value: function open() {
+        this.setState({
+          show: true
+        });
+      }
+    }, {
+      key: "hide",
+      value: function hide() {
+        this.setState({
+          show: false
+        });
+      }
+    }, {
+      key: "isOk",
+      value: function isOk() {
+        this.props.func();
+        this.setState({
+          show: false
+        });
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        return _react2.default.createElement(
+          _reactBootstrap.Modal,
+          (0, _extends3.default)({}, this.props, { show: this.state.show,
+            onHide: this.hide.bind(this),
+            bsSize: "sm", "aria-labelledby": "contained-modal-title-sm" }),
+          _react2.default.createElement(
+            "div",
+            { className: "modal-header" },
+            _react2.default.createElement(
+              "button",
+              { type: "button", onClick: this.hide.bind(this), className: "close", "aria-label": "Close" },
+              _react2.default.createElement(
+                "span",
+                { "aria-hidden": "true" },
+                "×"
+              )
+            ),
+            _react2.default.createElement(
+              "h4",
+              { className: "modal-title", id: "contained-modal-title-sm" },
+              this.props.title
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "modal-body" },
+            _react2.default.createElement(
+              "div",
+              { className: "modalItem" },
+              this.props.text
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "modal-footer" },
+            _react2.default.createElement(
+              "button",
+              { className: "btn btn-default", onClick: this.hide.bind(this) },
+              "取消"
+            ),
+            _react2.default.createElement(
+              "button",
+              { className: "btn btn-primary", onClick: this.isOk.bind(this) },
+              "确定"
+            )
+          )
+        );
+      }
+    }]);
+    return Confirm;
+  }(_react.Component);
+  
+  Confirm.propTypes = {
+    func: _react2.default.PropTypes.func
+  };
+  exports.default = Confirm;
 
 /***/ }
 /******/ ]);

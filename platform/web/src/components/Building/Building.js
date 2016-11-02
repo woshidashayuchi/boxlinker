@@ -3,8 +3,9 @@ import React,{Component} from 'react';
 import {SplitButton,MenuItem,
 } from 'react-bootstrap';
 import cx from 'classnames';
-import Link from '../../components/Link';
-import Loading from '../../components/Loading';
+import Link from '../Link';
+import Loading from '../Loading';
+import Confirm from "../Confirm";
 import {timeRange} from '../../core/utils';
 import {BREADCRUMB} from "../../constants";
 
@@ -15,7 +16,8 @@ class Building extends Component {
   constructor(){
     super();
     this.state = {
-      githubModalShow: false
+      githubModalShow: false,
+      delData:{}
     }
   }
   static propTypes = {
@@ -49,9 +51,14 @@ class Building extends Component {
     )
   }
   deleteLine(name){
-    confirm("确认删除?")?this.props.onDeleteImage(name,"buildingList"):"";
+    this.setState({
+      delData:{
+        name:name,
+        keyList:"buildingList"
+      }
+    });
+    this.refs.confirmModal.open();
   }
-
   getSourceName(name){
     let _name;
     if(_name = /^https\:\/\/github.com\/([0-9a-zA-Z_-]+\/[0-9a-zA-Z_-]+)\.git$/.exec(name)){
@@ -141,6 +148,12 @@ class Building extends Component {
             </tbody>
           </table>
         </div>
+        <Confirm
+          title = "警告"
+          text = "确定要删除此镜像吗?"
+          func = {() =>{this.props.onDeleteImage(this.state.delData)}}
+          ref = "confirmModal"
+        />
       </div>
     )
   }

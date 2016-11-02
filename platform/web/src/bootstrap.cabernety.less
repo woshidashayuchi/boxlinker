@@ -265,8 +265,13 @@ code, kbd, pre, samp {
 .notification{
   position: fixed;
   top: 70px;
-  right: 20px;
+  right: -40px;
   z-index:100;
+  transition:all ease 0.3s 0s;
+  height:52px;
+}
+.notification.notificationShow{
+  right:20px;
 }
 ul.dropdown-menu[aria-labelledby=building-create-source-repos]{
   max-height: 200px;

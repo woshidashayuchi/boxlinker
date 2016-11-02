@@ -30,7 +30,7 @@ class App extends Component {
 
   render() {
     let notification = this.props.notifications.message?
-      <Notification obj={this.props.notifications}/>:null;
+      <Notification show = {true} obj={this.props.notifications}/>:<Notification show = {false} obj={this.props.notifications}/>;
     return (
       <div className={`app ${this.props.isSidebarOpen?"":"sidebar-close"}`}>
         <HeaderContainer/>
@@ -51,12 +51,3 @@ class App extends Component {
 }
 
 export default App;
-
-// function select(state){
-//   const {toggleSidebar} = state;
-//   return {
-//     toggleSidebar
-//   }
-// }
-//
-// export default connect(select)(App);

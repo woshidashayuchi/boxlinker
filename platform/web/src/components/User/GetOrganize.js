@@ -2,6 +2,7 @@ import React,{PropTypes,Component,} from 'react';
 import HeadLine from '../HeadLine';
 import {Modal} from 'react-bootstrap';
 import Loading from '../Loading';
+import Confirm from '../Confirm';
 import {navigate} from '../../actions/route';
 
 class GetOrganize extends Component {
@@ -15,22 +16,43 @@ class GetOrganize extends Component {
         leaveOrganize:React.PropTypes.func,
         deleteOrganize:React.PropTypes.func
     };
+    constructor(){
+        super();
+        this.state = {
+            orgData:{
+                orgId:"",
+                ketList:""
+            }
+        }
+    }
     createOrganize(org_name){
         this.props.createOrganize(org_name);
         this.refs.createOrgModel.hide();
 
     }
     leaveOrganize(id){
-        confirm("确定退出组织吗?")?this.props.leaveOrganize(id):"";
+        this.setState({
+            orgData:{
+                orgId:id,
+                keyList:"orgList"
+            }
+        });
+        this.refs.confirmModalLeave.open();
     }
     deleteOrganize(id){
-        confirm("确定解散组织吗?")?this.props.deleteOrganize(id):"";
+        this.setState({
+            orgData:{
+                orgId:id,
+                keyList:"orgList"
+            }
+        });
+        this.refs.confirmModalDelete.open();
     }
     getOrganizeBody(){
         let data = this.props.organizeList;
         let user_name = this.context.store.getState().user_info.user_name;
         if(data[0] == 1) return <tr><td colSpan = "5" style = {{textAlign:"center"}}><Loading /></td></tr>;
-        if(!data.length) return <tr><td colSpan = "5" style = {{textAlign:"center"}}>暂无数据~</td></tr>;
+        if(data.length == 1 && data[0].orga_name == user_name) return <tr><td colSpan = "5" style = {{textAlign:"center"}}>暂无数据~</td></tr>;
         let role = "";
         return data.map((item,i) =>{
             if(item.orga_name == user_name) return false;
@@ -119,6 +141,18 @@ class GetOrganize extends Component {
                     {this.getTableDemo()}
                 </div>
                 <CreateOrganize onCreateOrganize = {this.createOrganize.bind(this)} ref = "createOrgModel" />
+                <Confirm
+                  title = "警告"
+                  text = "您确定要离开此组织吗?"
+                  ref = "confirmModalLeave"
+                  func = {() => {this.props.leaveOrganize(this.state.orgData)}}
+                />
+                <Confirm
+                  title = "警告"
+                  text = "您确定要解散此组织吗?"
+                  ref = "confirmModalDelete"
+                  func = {() => {this.props.deleteOrganize(this.state.orgData)}}
+                />
             </div>
         )
     }

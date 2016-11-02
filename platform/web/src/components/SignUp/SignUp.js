@@ -104,7 +104,7 @@ class SignUp extends React.Component{
                   //isSignUp:true
                 });
                 window.location.href = "/login"
-              },1000);
+              },2000);
             }else{
               my.changeImageSrc();
               my.setState({
@@ -219,7 +219,7 @@ class SignUp extends React.Component{
   }
   render(){
     let notification = this.state.notifications.message?
-      <Notification obj={this.state.notifications}/>:null;
+      <Notification show = {true} obj={this.state.notifications}/>:<Notification show = {false} obj={this.state.notifications}/>;
     this.context.setTitle("注册");
     return (
       <div className="entryBox">

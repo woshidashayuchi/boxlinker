@@ -3,7 +3,8 @@
 import React,{PropTypes,Component} from 'react';
 import HeadLine from '../HeadLine';
 import Loading from '../Loading';
-import {DropdownButton,MenuItem} from 'react-bootstrap'
+import {DropdownButton,MenuItem} from 'react-bootstrap';
+import Confirm from '../Confirm';
 import {navigate} from '../../actions/route';
 
 class GetOrgAdmin extends Component{
@@ -24,7 +25,8 @@ class GetOrgAdmin extends Component{
   constructor(props){
     super(props);
     this.state = {
-      inviteBox:false
+      inviteBox:false,
+      roleData:{}
     }
   }
   componentWillMount(){
@@ -37,35 +39,6 @@ class GetOrgAdmin extends Component{
     let organizeId = this.context.store.getState().user_info.orga_uuid;
     this.props.getOrganizeUserList(organizeId);
   }
-  onChangeUserRole(user_uuid,key){
-    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
-    let data = {
-      orga_uuid:orga_uuid,
-      user_uuid:user_uuid,
-      role_uuid:key,
-      method:"PUT"
-    };
-    console.log(key);
-    this.props.changeUserRole(data);
-  }
-  onDeleteUser(user_uuid){
-    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
-    let data = {
-      orga_uuid:orga_uuid,
-      user_uuid:user_uuid,
-      role_uuid:"",
-      method:"DELETE"
-    };
-    confirm("确定移除该成员?")?this.props.changeUserRole(data):"";
-  }
-  onDeleteOrganize(){
-    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
-    confirm("确定解散组织吗?")?this.props.deleteOrganize(orga_uuid):"";
-  }
-  onLeaveOrganize(){
-
-  }
-
   getOrganizeUserBody(){
     let user_name = this.context.store.getState().user_info.user_name;
     let orgRole = Number(this.context.store.getState().user_info.role_uuid);
@@ -151,8 +124,6 @@ class GetOrgAdmin extends Component{
           <td>{role}</td>
           <td>
             {buttonGroup}
-            {/*{item.user_name == user_name?<button className="btn btn-danger">离开组织</button>:*/}
-              {/*orgRole ==210||orgRole ==200?<button className="btn btn-danger">移除成员</button>:""}*/}
           </td>
         </tr>
       )
@@ -223,8 +194,36 @@ class GetOrgAdmin extends Component{
         };
         this.props.inviteUser(data)
       }
-
     })
+  }
+  onChangeUserRole(user_uuid,key){
+    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
+    let data = {
+      orga_uuid:orga_uuid,
+      user_uuid:user_uuid,
+      role_uuid:key,
+      method:"PUT"
+    };
+    console.log(key);
+    this.props.changeUserRole(data);
+  }
+  onDeleteUser(user_uuid){
+    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
+    this.setState({
+      roleData: {
+        orga_uuid: orga_uuid,
+        user_uuid: user_uuid,
+        role_uuid: "",
+        method: "DELETE"
+      }
+    });
+    this.refs.confirmModal.open();
+  }
+  onDeleteOrganize(){
+    let orga_uuid = this.context.store.getState().user_info.orga_uuid;
+    confirm("确定解散组织吗?")?this.props.deleteOrganize(orga_uuid):"";
+  }
+  onLeaveOrganize(){
 
   }
 
@@ -262,6 +261,12 @@ class GetOrgAdmin extends Component{
             {this.getTableDemo()}
           </div>
         </div>
+        <Confirm
+          title = "警告"
+          text = "您确定要移除此用户吗?"
+          ref = "confirmModal"
+          func = {() => {this.props.changeUserRole(this.state.roleData)}}
+        />
       </div>
     )
   }

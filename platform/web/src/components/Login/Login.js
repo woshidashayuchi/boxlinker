@@ -79,7 +79,7 @@ class Login extends React.Component{
                 //isLogin:true
               });
               window.location.href = "/"
-            },1000);
+            },2000);
           }else if(data.status == 705){
             userTip.innerHTML = "用户名或者密码错误";
             my.setState({
@@ -131,14 +131,13 @@ class Login extends React.Component{
     let me = this;
     document.onkeydown = function(e){
       if(e.keyCode == 13){
-        console.log(111);
         me.login();
       }
     }
   }
   render(){
     let notification = this.state.notifications.message?
-      <Notification obj={this.state.notifications}/>:null;
+      <Notification show = {true} obj={this.state.notifications}/>:<Notification show = {false} obj={this.state.notifications}/>;
     this.context.setTitle("登录");
     return(
       <div className="entryBox">

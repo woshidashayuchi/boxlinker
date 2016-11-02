@@ -65,12 +65,12 @@ export function fetchGetOrganizeListAction(){
   })
 }
 
-export function fetchLeaveOrganize(id){
+export function fetchLeaveOrganize(data){
   let myInit = {
     method:"PUT",
     headers:{token:localStorage.getItem("_at")}
   };
-  let url = Const.FETCH_URL.ORGANIZE+"/"+id;
+  let url = Const.FETCH_URL.ORGANIZE+"/"+data.orgId;
   return (dispatch =>{
     return fetch(url,myInit)
       .then(response => response.json())
@@ -78,7 +78,13 @@ export function fetchLeaveOrganize(id){
         console.log(json);
         if(json.status == 0){
           dispatch(receiveNotification({message:"退出成功",level:"success"}));
-          dispatch(fetchGetOrganizeListAction());
+          switch (data.keyList){
+            case "orgList":
+              dispatch(fetchGetOrganizeListAction());
+              break;
+            case "userList":
+
+          }
           setTimeout(function(){
             dispatch(clearNotification());
           },3000);
@@ -92,13 +98,12 @@ export function fetchLeaveOrganize(id){
   })
 }
 
-export function fetchDeleteOrganize(id,flag){
-  console.log(flag);
+export function fetchDeleteOrganize(data){
   let myInit = {
     method:"DELETE",
     headers:{token:localStorage.getItem("_at")}
   };
-  let url = Const.FETCH_URL.ORGANIZE+"/"+id;
+  let url = Const.FETCH_URL.ORGANIZE+"/"+data.orgId;
   return (dispatch =>{
     return fetch(url,myInit)
       .then(response => response.json())
@@ -106,9 +111,10 @@ export function fetchDeleteOrganize(id,flag){
         console.log(json);
         if(json.status == 0){
           dispatch(receiveNotification({message:"解散成功",level:"success"}));
-          dispatch(fetchGetOrganizeListAction());
-          if(!flag){
-            dispatch(fetchChangeAccountAction(id))
+          switch (data.keyList){
+            case "orgList":
+              dispatch(fetchGetOrganizeListAction());
+              break;
           }
           setTimeout(function(){
             dispatch(clearNotification());

@@ -29,8 +29,8 @@ class ImageForPlatform extends React.Component{
   }
   getImageList(){
     let data = this.props.imageList;
-    if(!data || !data.length) return <div>暂无数据~</div>
-    if(data.length == 1&&data[0] == 1) return <div><Loading /></div>;
+    if(!data || !data.length) return <div>暂无数据~</div>;
+    if(data.length == 1&&data[0] == 1) return <div className="text-center"><Loading /></div>;
     let body = [];
     data.map((item,i) => {
         body.push(<div className="imagesListItem" key={i}>

@@ -10,7 +10,7 @@ export default class extends React.Component {
   render(){
     let text = this.props.obj.message;
     return (
-      <Alert bsStyle = {this.props.obj.level||"success"} className="notification">
+      <Alert bsStyle = {this.props.obj.level||"success"} className={!this.props.show?"notification":"notification notificationShow"}>
         {text}
       </Alert>
     )

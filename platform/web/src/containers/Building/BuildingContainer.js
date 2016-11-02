@@ -32,8 +32,8 @@ const mapDispatchToProps = (dispatch) => {
     onClearImageList:() => {
       dispatch(refreshBuildingList())
     },
-    onDeleteImage:(name,keyList) =>{
-      dispatch(onDeleteImageAction(name,keyList))
+    onDeleteImage:(data) =>{
+      dispatch(onDeleteImageAction(data))
     }
   }
 }
