@@ -161,7 +161,12 @@ class ServiceList extends Component{
   }
   searchService(){
     let searchTxt = ReactDOM.findDOMNode(this.refs.searchInput).value;
-    this.props.onServiceListLoad(searchTxt);
+    let my = this;
+    clearInterval(this.myTime);
+    this.myTime = setInterval(function(){
+      console.log("222");
+      my.props.onServiceListLoad(searchTxt);
+    },10000);
   }
 
   refresh(){// refresh

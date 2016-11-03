@@ -188,7 +188,8 @@ export const INPUT_TIP = {
     Repeat:"端口不能重复"
   },
   volumes:{
-    Format:"必须以/开头,后可加字母数字下划线"
+    Format:"必须以/开头,后可加字母数字下划线",
+    Repeat:"数据卷名称不能重复"
   },
   env:{
     Null:"环境变量不能为空",
