@@ -31,7 +31,6 @@ class StorageStatus(object):
     def storage_status(cls, json_list):
         response = ""
         volume = json_list.get("volume")
-        log.info(type(json_list))
 
         if json_list.get("action").upper() == "POST":
             for i in volume:

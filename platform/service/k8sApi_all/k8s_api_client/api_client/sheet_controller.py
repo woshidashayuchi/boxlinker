@@ -491,7 +491,7 @@ class SheetController(object):
         conn, cur = logicmodel.connection()
 
         try:
-            del_rc, del_service, del_fservice, del_container, del_env, del_volume = DataOrm.delete_sql(json_list)
+            del_rc, del_service, del_fservice, del_container, del_env, del_volume, del_acl = DataOrm.delete_sql(json_list)
         except Exception, e:
             log.warning('k8sapi struct the sql running error, reason=%s'
                         % (e))
@@ -509,6 +509,7 @@ class SheetController(object):
             logicmodel.exeDelete(cur, del_env)
             logicmodel.exeDelete(cur, del_volume)
             logicmodel.exeDelete(cur, del_fservice)
+            logicmodel.exeDelete(cur, del_acl)
 
             log.info("{'userid': '%s', 'log_info': 'service delete success!'}"
                      % (json_list.get("user_name")))
@@ -663,9 +664,9 @@ class SheetController(object):
                 log.info("volume+++++++++++++++++++++++")
 
                 resul = InnerApi.change_status(json_list)
-                if resul != "ok":
-                    log.info(resul)
-                    return code.request_result(502)
+                if resul != "ok" and str(resul) != "<Response [200]>":
+                    log.info("resul type====%s" % type(resul))
+                    # return code.request_result(502)
 
                 log.info("volume++++++++++++++++++!!!!!")
             except Exception, e:
@@ -801,19 +802,27 @@ class SheetController(object):
         return result
 
     def update_volume(self, json_list):
+        log.info("begin.........~~~~~~~~~~~~~~~")
+
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         try:
+
             delete_container_sql = DataOrm.delete_volume_sql(json_list)
             using_volume = InnerApi.using_volume(json_list)
-
+            log.info("delete_sql====%s" % delete_container_sql)
+            log.info("using_volume===%s" % using_volume)
             # 更新storage状态
+            xx = "ok"
             try:
-                InnerApi.change_status(using_volume)
+                if len(using_volume) != 0:
+
+                    xx = InnerApi.change_status1(using_volume)
+                    log.info("xx=========%s" % xx)
             except Exception, e:
                 log.error("storage status update error,reason=%s" % e)
-
-            logicmodel.exeDelete(cur, delete_container_sql)
+            if xx != "ok":
+                logicmodel.exeDelete(cur, delete_container_sql)
         except Exception, e:
             log.error("delete volume message error,reason=%s" % e)
             result = code.request_result(403)
@@ -828,7 +837,7 @@ class SheetController(object):
                 print i.get("rc_id")
                 rc = {"uid_rc": i.get("rc_id"), "rtype": "volume"}
                 json_list.update(rc)
-            return code.request_result(0, "success")
+            # return code.request_result(0, "success")
 
         except Exception, e:
             log.warning('query rc_id running error, json=%s, reason=%s'
@@ -837,7 +846,8 @@ class SheetController(object):
 
         # 更新storage状态
         try:
-            InnerApi.change_status(using_volume)
+            xx = InnerApi.change_status(using_volume)
+            log.info("2222222222222==" % xx)
         except Exception, e:
             log.error("storage status update error,reason=%s" % e)
 
@@ -898,7 +908,7 @@ class SheetController(object):
                         % (e))
         try:
             x = 99
-            if json_list.get("auto") is None and (json_list.get("command") is None or json_list.get("command") == ""):
+            if json_list.get("auto") is None and json_list.get("command") is None:
                 log.info(3333333)
                 update_cm_sql = DataOrm.put_cpu_memory(json_list)
                 x = logicmodel.exeUpdate(cur, update_cm_sql)
@@ -907,7 +917,7 @@ class SheetController(object):
                 update_auto_sql = DataOrm.put_auto_startup(json_list)
                 x = logicmodel.exeUpdate(cur, update_auto_sql)
                 logicmodel.connClose(conn, cur)
-            if json_list.get("command") is not None and json_list.get("command") != "":
+            if json_list.get("command") is not None:
                 log.info(22222222)
 
                 update_command_sql = DataOrm.put_command(json_list)
