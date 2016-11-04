@@ -1,0 +1,8 @@
+rabbitmq:
+  image: index.36ap.com/centos-rabbitmq:cluster-firstnode-1.0.0
+  volumes:
+  - "/etc/hosts:/etc/hosts"
+  ports:
+  - "192.168.1.21:4369:4369"
+  - "192.168.1.21:25672:25672"
+  - "192.168.1.21:5672:5672"
