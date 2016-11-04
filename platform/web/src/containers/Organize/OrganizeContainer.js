@@ -46,6 +46,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteOrganize:(data) =>{
       dispatch(fun.fetchDeleteOrganize(data))
+    },
+    leaveOrganize:(data) =>{
+      dispatch(fun.fetchLeaveOrganize(data))
     }
   }
 };

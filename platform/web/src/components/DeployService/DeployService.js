@@ -79,7 +79,10 @@ class AddService extends Component{
     this.state = {
       isPort:false,
       isPortShow:false,
-      isStateUp:1
+      isStateUp:1,
+      port:false,
+      volume:false,
+      env:false
     };
   }
 
@@ -104,41 +107,76 @@ class AddService extends Component{
       containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
       container.push(containerObj);
     }
+    this.setState({
+      port:false
+    });
+    e.target.className = "form-control form-control-sm";
     if(value<=10 && value.length != 0){
-      alert(INPUT_TIP.port.Format);
+      this.setState({
+        port:true
+      });
+      e.target.className = "form-control form-control-sm inputError";
+      this.refs.portTip.innerHTML = INPUT_TIP.port.Format;
+      return false;
     }
     container.splice(index,1);
-    container.map((item,i) => {
+    container.map((item) => {
       if(item.container_port == value && value !=""){
-        alert(INPUT_TIP.port.Repeat);
+        this.setState({
+          port:true
+        });
+        e.target.className = "form-control form-control-sm inputError";
+        this.refs.portTip.innerHTML = INPUT_TIP.port.Repeat;
         e.target.focus();
+        return false;
       }
     });
+
   }
   isSaveRepeat(index,e){
     let save = [];
     let saveTr = ReactDOM.findDOMNode(this.refs.tab_save_box).children;
     let key = e.target.value;
+    this.setState({
+      volume:false
+    });
     for(let i = 0;i<saveTr.length;i++){
       let saveObj = {};
       saveObj.value = saveTr[i].getElementsByTagName("select")[0].value;
       save.push(saveObj);
     }
     save.splice(index,1);
-    console.log(key);
     save.map((item) => {
       if(item.value == key && key !=""){
-        alert(INPUT_TIP.volumes.Repeat);
+        this.setState({
+          volume:true
+        });
+        this.refs.volumeTip.innerHTML = INPUT_TIP.volumes.Repeat;
         e.target.value = "-1";
         e.target.focus();
+        return false;
       }
     })
 
   }
-  isEnvKeyRepeat(index,e){
+  isEnvKey(index,e){
     let env = [];
+    let regExp = /^[a-zA-Z]+[a-zA-Z0-9-]*$/;
     let envTr = ReactDOM.findDOMNode(this.refs.tab_env_box).children;
     let key = e.target.value;
+    this.setState({
+      env:false
+    });
+    e.target.className = "form-control";
+    if(!regExp.test(key)){
+      this.setState({
+        env:true
+      });
+      this.refs.envTip.innerHTML = INPUT_TIP.env.Format;
+      e.target.className = "form-control inputError";
+      e.target.focus();
+      return false;
+    }
     for(let i = 0;i<envTr.length;i++){
       let envObj = {};
       envObj.env_key = envTr[i].getElementsByTagName("input")[0].value;
@@ -147,17 +185,35 @@ class AddService extends Component{
     env.splice(index,1);
     env.map((item) => {
       if(item.env_key == key && key !=""){
-        alert(INPUT_TIP.env.Repeat);
+        this.setState({
+          env:true
+        });
+        this.refs.envTip.innerHTML = INPUT_TIP.volumes.Repeat;
+        e.target.className = "form-control inputError";
         e.target.focus();
       }
     })
-
+  }
+  isEnvValue(e){
+    this.setState({
+      env:false
+    });
+    e.target.className = "form-control";
   }
   isPathValidata(e){
     let regExp = /^\/[a-zA-Z]+[a-zA-Z0-9_]*$/;
     let value = e.target.value;
     if(!regExp.test(value)&&value.length != 0){
-      console.log(INPUT_TIP.volumes.Format);
+      this.setState({
+        volume:true
+      });
+      e.target.className = "form-control inputError";
+      this.refs.volumeTip.innerHTML = INPUT_TIP.volumes.Format;
+    }else{
+      this.setState({
+        volume:false
+      });
+      e.target.className = "form-control";
     }
 
   }
@@ -274,7 +330,8 @@ class AddService extends Component{
           </td>
           <td>
             <div className="astTdBox">
-                <input type = "text" defaultValue={item.disk_path} className = "form-control" onBlur={this.isPathValidata.bind(this)} ref = "container_path"/>
+                <input type = "text" defaultValue={item.disk_path} className = "form-control"
+                       onBlur={this.isPathValidata.bind(this)} ref = "container_path"/>
             </div>
           </td>
           <td>
@@ -327,11 +384,11 @@ class AddService extends Component{
       return (
         <div key = {item.at} className = "astKeyItem">
           <div className="astInp">
-            <input type = "text" className = "form-control" onBlur={this.isEnvKeyRepeat.bind(this,i)} ref = "env_key" placeholder = "键" defaultValue = {item.env_key} />
+            <input type = "text" className = "form-control" onBlur={this.isEnvKey.bind(this,i)} ref = "env_key" placeholder = "键" defaultValue = {item.env_key} />
           </div>
           <div className="astLine"></div>
           <div className="astInp">
-            <input type = "text" className = "form-control" ref = "env_value" placeholder = "值" defaultValue = {item.env_value} />
+            <input type = "text" className = "form-control" onBlur={this.isEnvValue.bind(this)} ref = "env_value" placeholder = "值" defaultValue = {item.env_value} />
           </div>
           <div className = "astDel">
             <a href="javascript:;" className="delBtn" onClick = {this.delEnvironmentData.bind(this,item.at)}> </a>
@@ -401,7 +458,17 @@ class AddService extends Component{
       envTr = ReactDOM.findDOMNode(this.refs.tab_env_box).children;
     for(var i=0;i<containerTr.length;i++){
       let containerObj = {};
-      containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
+      let container_port = containerTr[i].getElementsByTagName("input")[0];
+      if(container_port.value == ""){
+        this.setState({
+          port:true
+        });
+        container_port.className = "form-control form-control-sm inputError";
+        container_port.focus();
+        this.refs.portTip.innerHTML = INPUT_TIP.port.Null;
+        return false;
+      }
+      containerObj.container_port = container_port.value;
       containerObj.protocol = containerTr[i].getElementsByTagName("select")[0].value;
       containerObj.access_mode = containerTr[i].getElementsByTagName("select")[1].value;
       containerObj.access_scope = containerTr[i].getElementsByTagName("select")[2].value;
@@ -409,15 +476,38 @@ class AddService extends Component{
     }
     for(let i = 0;i<saveTr.length;i++){
       let saveObj = {};
-      saveObj.disk_name = saveTr[i].getElementsByTagName("select")[0].value;
-      saveObj.disk_path = saveTr[i].getElementsByTagName("input")[0].value;
-      saveObj.readonly = saveTr[i].getElementsByTagName("input")[1].checked ? "True" : "False";
+      let disk_name = saveTr[i].getElementsByTagName("select")[0];
+      let disk_path = saveTr[i].getElementsByTagName("input")[0];
+      let readonly = saveTr[i].getElementsByTagName("input")[1].checked ? "True" : "False";
+      if(disk_name.value!=-1 && disk_path.value == ""){
+        this.setState({
+          volume:true
+        });
+        disk_path.className = "form-control inputError";
+        this.refs.volumeTip.innerHTML = INPUT_TIP.volumes.Null;
+        disk_path.focus();
+        return false;
+      }
+      saveObj.disk_name = disk_name.value;
+      saveObj.disk_path = disk_path.value;
+      saveObj.readonly = readonly;
       save.push(saveObj);
     }
     for(let i = 0;i<envTr.length;i++){
       let envObj = {};
-      envObj.env_key = envTr[i].getElementsByTagName("input")[0].value;
-      envObj.env_value = envTr[i].getElementsByTagName("input")[1].value;
+      let env_key = envTr[i].getElementsByTagName("input")[0];
+      let env_value = envTr[i].getElementsByTagName("input")[1];
+      if(env_key.value && env_value.value==""){
+        this.setState({
+          env:true
+        });
+        this.refs.envTip.innerHTML = INPUT_TIP.env.Null;
+        env_value.className = "form-control inputError";
+        env_value.focus();
+        return false;
+      }
+      envObj.env_key = env_key.value;
+      envObj.env_value = env_value.value;
       env.push(envObj);
     }
     let third = {
@@ -479,7 +569,10 @@ class AddService extends Component{
             {this.getPortTable()}
           </div>
           <div className="assBtnBox">
-            <Button bsStyle="primary" onClick = {this.addPortTr.bind(this)}>添加</Button>
+            <button className="btn btn-primary" onClick = {this.addPortTr.bind(this)}>添加</button>
+            <span className={this.state.port?"inputTip inputTipShow":"inputTip"} ref = "portTip">
+
+            </span>
           </div>
         </div>
         <div className="assItem">
@@ -493,6 +586,9 @@ class AddService extends Component{
           </div>
           <div className="assBtnBox">
             <Button bsStyle="primary" onClick = {this.addSaveTr.bind(this)}>添加</Button>
+            <span className={this.state.volume?"inputTip inputTipShow":"inputTip"} ref = "volumeTip">
+
+            </span>
           </div>
         </div>
         <div className="assItem">
@@ -506,6 +602,9 @@ class AddService extends Component{
           </div>
           <div className="assBtnBox">
             <Button bsStyle="primary" onClick = {this.addEnvironmentData.bind(this)}>添加</Button>
+            <span className={this.state.env?"inputTip inputTipShow":"inputTip"} ref = "envTip">
+
+            </span>
           </div>
         </div>
          <div className="assItem">

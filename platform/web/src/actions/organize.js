@@ -77,17 +77,23 @@ export function fetchLeaveOrganize(data){
       .then(json =>{
         console.log(json);
         if(json.status == 0){
-          dispatch(receiveNotification({message:"退出成功",level:"success"}));
           switch (data.keyList){
             case "orgList":
+              dispatch(receiveNotification({message:"退出成功",level:"success"}));
               dispatch(fetchGetOrganizeListAction());
+              setTimeout(function(){
+                dispatch(clearNotification());
+              },3000);
               break;
             case "userList":
+              dispatch(receiveNotification({message:"退出成功,请重新登录",level:"success"}));
+              setTimeout(function(){
+                dispatch(clearNotification());
+                window.location.href = "/login";
+              },3000);
+              break;
 
           }
-          setTimeout(function(){
-            dispatch(clearNotification());
-          },3000);
         }else{
           dispatch(receiveNotification({message:"退出失败:"+json.msg,level:"danger"}));
           setTimeout(function(){
@@ -115,6 +121,14 @@ export function fetchDeleteOrganize(data){
             case "orgList":
               dispatch(fetchGetOrganizeListAction());
               break;
+            case "userList":
+              dispatch(receiveNotification({message:"解散成功,请重新登录",level:"success"}));
+              setTimeout(function(){
+                dispatch(clearNotification());
+                window.location.href = "/login";
+              },3000);
+              break;
+
           }
           setTimeout(function(){
             dispatch(clearNotification());
@@ -358,10 +372,11 @@ export function fetchChangeOrganizeOwnerAction(data){
       .then(json =>{
         console.log(json,"委托组织创建者");
         if(json.status == 0){
-          dispatch(receiveNotification({message:"设置成功",level:"success"}));
+          dispatch(receiveNotification({message:"设置成功请重新登录",level:"success"}));
           dispatch(fetchGetOrganizeUserListAction(data.orga_uuid));
           setTimeout(function(){
             dispatch(clearNotification());
+            window.location.href = "/login";
           },3000);
         }else{
           dispatch(receiveNotification({message:"操作失败:"+json.msg,level:"danger"}));

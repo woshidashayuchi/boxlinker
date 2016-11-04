@@ -48,7 +48,7 @@ const serviceData = {
   isUpdate:1,
   container:[{at:new Date().getTime()}],
   env:[{at:new Date().getTime()}],
-  volume:[{at:new Date().getTime(),readonly:1}],
+  volume:[{at:new Date().getTime(),readonly:0}],
   auto_startup:1
 };
 
