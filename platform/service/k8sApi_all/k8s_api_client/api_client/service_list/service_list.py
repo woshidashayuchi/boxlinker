@@ -23,6 +23,7 @@ class ServiceList(object):
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         result_one = []
+
         try:
             if json_list.get("service_name") is None:
                 select_rc = DataOrm.query_sql(json_list)
@@ -33,11 +34,12 @@ class ServiceList(object):
                 for j in resu:
                     match_string = "[a-zA-Z0-9-_]*%s[a-zA-Z0-9-_]*" % str(json_list.get("service_name"))
                     if re.search(match_string, j.get("fservice_name")):
-                        up_json = {"user_id": json_list.get("user_id"), "service_name": j.get("fservice_name")}
+                        up_json = {"user_orga": json_list.get("user_orga"), "service_name": j.get("fservice_name")}
                         select_rc = DataOrm.query_sql(up_json)
                         logicmodel = LogicModel()
                         conn, cur = logicmodel.connection()
                         resu1 = logicmodel.exeQuery(cur, select_rc)
+                        i={}
                         for i in resu1:
                             time_list = {}
                             update_time = str(i.get("ltime"))

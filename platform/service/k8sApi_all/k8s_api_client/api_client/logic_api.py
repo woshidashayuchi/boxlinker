@@ -199,13 +199,14 @@ def put_volume(service_name):
     except:
         return json.dumps(code.request_result(202))
     json_list = json.loads(request.get_data())
-    json_name = {"token": token_get1, "service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "type":"volume"}
+    json_name = {"token": token_get1, "service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid, "type":"volume"}
     json_list.update(json_name)
     controller = SheetController()
     try:
         rest = controller.update_service(json_list)
         if int(rest.get("status")) != 0:
             return json.dumps(code.request_result(502))
+        log.info(json_list)
         response = controller.update_volume(json_list)
         if int(response.get("status")) != 0:
             return json.dumps(code.request_result(502))
@@ -315,7 +316,7 @@ def telescopic(service_name):
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name,
-                    "tel": "tel", "user_orga": user_orga, "role_uuid": role_uuid}
+                    "tel": "tel", "user_orga": user_orga, "role_uuid": role_uuid,"token": token_get1}
     except Exception, e:
         log.error("telescopic error, reason=%s" % e)
         return json.dumps(code.request_result(202))

@@ -80,14 +80,19 @@ class Controller(object):
         query = self.list_acl(json_data)
         log.info(query)
         if query == "error":
-            log.info("+++---")
             return "error"
         else:
             pass
         for i in query:
-
+            log.info("organization===%s,orga====%s" % (i.get("organization"), user_orga))
+            log.info("user_id=====%s,user====%s" % (user_id, i.get("user")))
+            log.info("service_name====%s,jjservice_name====%s" % (i.get("service_name"), json_data.get("service_name")))
             if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and \
-                                                                                 int(role_uuid) <= i.get("role"):
+                                                                                 int(role_uuid) < i.get("role"):
+                return 0
+            if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and \
+                                                                                 user_id == i.get("user"):
+                log.info("iiiiiiiiiiiiiiiiiiiiii")
                 return 0
         return 1
 
@@ -121,6 +126,9 @@ class Controller(object):
             for i in query:
                 log.info("orga=%s, user=%s" % (i.get("organization"), i.get("user")))
                 if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and i.get("user") == user_id:
+                    a = i.get("uuid")
+                if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and \
+                                                                                 int(role_uuid) < i.get("role"):
                     a = i.get("uuid")
         else:
 
@@ -165,6 +173,3 @@ class Controller(object):
 
     def svc_list_acl(self, json_data):
         pass
-
-
-

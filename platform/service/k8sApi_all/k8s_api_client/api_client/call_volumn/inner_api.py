@@ -41,7 +41,7 @@ class InnerApi(object):
 
     @classmethod
     def change_status(cls, json_list):
-        if json_list.get("volume") != "":
+        if len(json_list.get("volume")) != 0:
             storage_status = {"action": "post"}
             json_list.update(storage_status)
             try:
@@ -52,6 +52,7 @@ class InnerApi(object):
                 return response
             except Exception, e:
                 log.error("storage update error,reason=%s" % e)
+                return "error"
         else:
             return "ok"
 

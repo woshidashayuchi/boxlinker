@@ -92,7 +92,7 @@ class CreateVolume(object):
 
         headers = {"token": json_list.get("token")}
         put_url = "http://%s/api/v1.0/storage/volumes/%s/status" % (os.environ.get("STORAGE_HOST"), json_list.get("disk_name"))
-        log.info("inner parameters========================")
+        log.info("inner parameters========================%s" % headers)
         log.info(json_list)
         using = {"disk_status": json_list.get("disk_status")}
         resu = ""

@@ -10,7 +10,7 @@ def base_result(status, json_data):
 
     result = {
                  "status": status,
-                 "user_id": json_data.get("user_id"),
+                 "user_orga": json_data.get("user_orga"),
                  "service_name": json_data.get("service_name")
              }
 

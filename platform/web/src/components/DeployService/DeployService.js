@@ -115,6 +115,26 @@ class AddService extends Component{
       }
     });
   }
+  isSaveRepeat(index,e){
+    let save = [];
+    let saveTr = ReactDOM.findDOMNode(this.refs.tab_save_box).children;
+    let key = e.target.value;
+    for(let i = 0;i<saveTr.length;i++){
+      let saveObj = {};
+      saveObj.value = saveTr[i].getElementsByTagName("select")[0].value;
+      save.push(saveObj);
+    }
+    save.splice(index,1);
+    console.log(key);
+    save.map((item) => {
+      if(item.value == key && key !=""){
+        alert(INPUT_TIP.volumes.Repeat);
+        e.target.value = "-1";
+        e.target.focus();
+      }
+    })
+
+  }
   isEnvKeyRepeat(index,e){
     let env = [];
     let envTr = ReactDOM.findDOMNode(this.refs.tab_env_box).children;
@@ -244,7 +264,9 @@ class AddService extends Component{
         <tr key = {item.at}>
           <td>
             <div className="astTdBox">
-              <select className="form-control" ref = "volumn_name" defaultValue={item.disk_name}>
+              <select className="form-control" ref = "volumn_name" defaultValue={item.disk_name}
+                      onChange={this.isSaveRepeat.bind(this,i)}
+              >
                 <option key = "-1" value = "-1">请选择数据卷</option>
                 {options}
               </select>
@@ -466,7 +488,7 @@ class AddService extends Component{
             titleEnglish="SAVE SETTING"
             titleInfo={volumeLength}
           />
-          <div className="astBox">
+          <div className="astBox" ref = "tab_save_box">
             {this.getSaveTable()}
           </div>
           <div className="assBtnBox">

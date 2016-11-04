@@ -400,7 +400,8 @@ class DataOrm(object):
         del_container = "delete from containers where user_id = \'%s\' and service_name = \'%s\'" % (user_id, service_name)
         del_env = "delete from env where user_id = \'%s\' and service_name = \'%s\'" % (user_id, service_name)
         del_volume = "delete from volume where user_id = \'%s\' and service_name = \'%s\'" % (user_id, service_name)
-        return del_rc, del_service, del_fservice, del_container, del_env, del_volume
+        del_acl = "delete from service_acl where organization=\'%s\' and service_name=\'%s\'" % (user_id, service_name)
+        return del_rc, del_service, del_fservice, del_container, del_env, del_volume, del_acl
 
     @classmethod
     def update_sql(cls, json_list):
@@ -526,9 +527,12 @@ class DataOrm(object):
 
     @classmethod
     def put_command(cls, json_list):
-        command = "update replicationcontrollers a set a.command = \'%s\' where a.uuid=\'%s\'" % (json_list.get("command"), json_list.get("rc_id"))
-        return command
-
+        if json_list.get("command") != "Null":
+            command = "update replicationcontrollers a set a.command = \'%s\' where a.uuid=\'%s\'" % (json_list.get("command"), json_list.get("rc_id"))
+            return command
+        else:
+            command = "update replicationcontrollers a set a.command = NULL where a.uuid=\'%s\'" % (json_list.get("rc_id"))
+            return command
     @classmethod
     def check_name(cls, json_list):
         select_name = "select fservice_name from font_service where orga_id=\'%s\'" % (json_list.get("user_orga"))

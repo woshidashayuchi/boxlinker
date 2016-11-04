@@ -96,6 +96,7 @@ class SourceModel(object):
         else:
             rc_krub = "null"
             pullpolicy = "IfNotPresent"
+
         try:
             if json_list.get("volume") != "":
                 volume = CreateVolume()

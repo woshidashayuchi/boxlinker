@@ -13,6 +13,7 @@ import Toggle from '../Toggle';
 import {Button,Modal} from 'react-bootstrap/lib';
 import ReactDOM from 'react-dom';
 import {CPU,INPUT_TIP} from '../../constants';
+import {clearDeployData} from '../../actions/deployService';
 
 class AutoStartUpToggle extends  Component{
   static propTypes={
@@ -141,7 +142,6 @@ class GetDisposedTabs extends Component{
     let input = containerTr[index].getElementsByTagName("input")[0];
     input.focus();
   }
-
   isPortRepeat(index,e){
     let container = [];
     let containerTr = ReactDOM.findDOMNode(this.refs.tab_container_body).getElementsByTagName("tr");
@@ -162,6 +162,26 @@ class GetDisposedTabs extends Component{
       }
     });
   }
+  isSaveRepeat(index,e){
+    let save = [];
+    let saveTr = ReactDOM.findDOMNode(this.refs.tab_save_box).children;
+    let key = e.target.value;
+    for(let i = 0;i<saveTr.length;i++){
+      let saveObj = {};
+      saveObj.value = saveTr[i].getElementsByTagName("select")[0].value;
+      save.push(saveObj);
+    }
+    save.splice(index,1);
+    console.log(key);
+    save.map((item) => {
+      if(item.value == key && key !=""){
+        alert(INPUT_TIP.volumes.Repeat);
+        e.target.value = "-1";
+        e.target.focus();
+      }
+    })
+
+  }
   isEnvKeyRepeat(index,e){
     let env = [];
     let envTr = ReactDOM.findDOMNode(this.refs.tab_env_box).children;
@@ -180,7 +200,6 @@ class GetDisposedTabs extends Component{
     })
 
   }
-
   getPortTableBody(){//端口
     let data = [],sd = this.props.serviceDetail;
     if(sd&&sd.container&&sd.container.length)
@@ -274,13 +293,12 @@ class GetDisposedTabs extends Component{
     console.log(data,"+++++++")
     this.props.onSavePort(data);
   }
-
   getSaveTableBody(){//存储
     let data = [],sd = this.props.serviceDetail;
     let my = this;
     if(sd&&sd.volume&&sd.volume.length)
       data = this.props.serviceDetail.volume;
-    let tr = data.map((item) => {
+    let tr = data.map((item,i) => {
       let options = my.props.volumeList.map((obj,i) => {
         if(item.disk_name == obj.disk_name || obj.disk_status == "unused"  ) {
           return (
@@ -294,8 +312,10 @@ class GetDisposedTabs extends Component{
         <tr key = {item.at}>
           <td>
             <div className={s.astTdBox}>
-              <select className="form-control" ref = "volumnName" defaultValue={item.disk_name}>
-                <option key = "-1">请选择数据卷</option>
+              <select className="form-control" ref = "volumnName" defaultValue={item.disk_name}
+                onChange={this.isSaveRepeat.bind(this,i)}
+              >
+                <option value = "-1">请选择数据卷</option>
                 {options}
               </select>
             </div>
@@ -351,10 +371,21 @@ class GetDisposedTabs extends Component{
     let saveTr = ReactDOM.findDOMNode(this.refs.tab_storage_body).children;
     for(let i = 0;i<saveTr.length;i++){
       let saveObj = {};
-      saveObj.disk_name = saveTr[i].getElementsByTagName("select")[0].value;
-      saveObj.disk_path = saveTr[i].getElementsByTagName("input")[0].value;
-      saveObj.readonly = saveTr[i].getElementsByTagName("input")[1].checked?"True":"False";
-      save.push(saveObj);
+      let disk_name = saveTr[i].getElementsByTagName("select")[0];
+      let disk_path = saveTr[i].getElementsByTagName("input")[0];
+      let readonly = saveTr[i].getElementsByTagName("input")[1].checked ? "True" : "False";
+      if(disk_name.value ==-1){
+
+      }else if(disk_path.value ==""){
+        alert("容器路径不能为空");
+        disk_path.focus();
+        return false;
+      }else{
+        saveObj.disk_name = disk_name.value;
+        saveObj.disk_path = disk_path.value;
+        saveObj.readonly = readonly;
+        save.push(saveObj);
+      }
     }
     console.log(save);
     let data = {
@@ -364,7 +395,6 @@ class GetDisposedTabs extends Component{
     this.props.onSaveVolume(data);
 
   }
-
   getEnvironment(){
     let data = [],sd = this.props.serviceDetail;
     if(sd&&sd.env&&sd.env.length)
@@ -410,7 +440,6 @@ class GetDisposedTabs extends Component{
     };
     this.props.onSaveEnvironment(data);
   }
-
   getContainerBox(n){
     if(!n){
       n=0;
@@ -440,7 +469,6 @@ class GetDisposedTabs extends Component{
       children
     )
   }
-
   getIsStartUp(value){
     this.setState({
       isStateUp:!value?1:0
@@ -460,6 +488,9 @@ class GetDisposedTabs extends Component{
       serviceName:this.props.serviceDetail.fservice_name,
     };
     this.props.onSaveCommand(data);
+  }
+  componentWillUnmount(){
+    this.context.store.dispatch(clearDeployData())
   }
 
   render(){
@@ -499,7 +530,7 @@ class GetDisposedTabs extends Component{
             titleEnglish="SAVE SETTING"
             titleInfo={volumeLength}
           />
-          <div className={s.astBox}>
+          <div className={s.astBox} ref = "tab_save_box">
             {this.getSaveTable()}
           </div>
           <div className={s.assBtnBox}>
