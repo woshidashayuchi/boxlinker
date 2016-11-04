@@ -49,9 +49,9 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json())
 
 /**
- * @api {post} /send 发送邮件
+ * @api {post} /v1/email/send 发送邮件
  * @apiName 发送邮件
- * @apiGroup 发送邮件
+ * @apiGroup Send Email
  *
  * @apiParam {String} to 接收方邮箱
  * @apiParam {String} title 标题

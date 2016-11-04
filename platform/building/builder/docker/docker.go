@@ -49,7 +49,7 @@ func NewBuilderFromEnv() (*Builder, error) {
 }
 
 func (b *Builder) Build(ctx context.Context, w io.Writer, opts builder.BuildOptions) (image string, err error ) {
-	image = fmt.Sprintf("%s:%s", opts.Repository, opts.Sha)
+	image = fmt.Sprintf("%s/%s:%s", opts.Registry, opts.Repository, opts.Sha)
 	err = b.build(ctx, w, opts)
 	return
 }
@@ -58,6 +58,7 @@ func (b *Builder) build(ctx context.Context, w io.Writer, opts builder.BuildOpti
 	env := []string{
 		fmt.Sprintf("DOCKER_DAEMON_ARGS=%s", strings.ToLower("--insecure-registry=index.boxlinker.com")),
 		fmt.Sprintf("REPOSITORY=%s", strings.ToLower(opts.Repository)),
+		fmt.Sprintf("REGISTRY_HOST=%s", strings.ToLower(opts.Registry)),
 		fmt.Sprintf("BRANCH=%s", opts.Branch),
 		fmt.Sprintf("SHA=%s", opts.Sha),
 		fmt.Sprintf("CACHE=%s", b.cache(opts)),

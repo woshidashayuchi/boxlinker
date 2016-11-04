@@ -29,14 +29,38 @@ var sharedFlags = []cli.Flag{
 	cli.StringFlag{
 		Name:   "logger",
 		Value:  "stdout://",
-		Usage:  "The logger to use. Available options are `stdout://`, `es://es_url`, `s3://bucket` or `cloudwatch://`.",
+		Usage:  "The logger to use. Available options are `stdout://`, `oss://oss_url`, `es://es_url`, `s3://bucket` or `cloudwatch://`.",
 		EnvVar: "LOGGER",
+	},
+	cli.StringFlag{
+		Name: "oss-access-key-id",
+		Value: "LTAIRgaFkdGaZlVM",
+		Usage: "oss access key id",
+		EnvVar: "OSS_ACCESS_KEY_ID",
+	},
+	cli.StringFlag{
+		Name: "oss-access-key-secret",
+		Value: "EGv0wHzPE5cv97INkIQ4vYdqyYzxnH",
+		Usage: "oss access key secret",
+		EnvVar: "OSS_ACCESS_KEY_SECRET",
+	},
+	cli.StringFlag{
+		Name: "oss-bucket-name",
+		Value: "boxlinker-logs",
+		Usage: "oss bucket name",
+		EnvVar: "OSS_BUCKET_NAME",
 	},
 	cli.StringFlag{
 		Name: 	"db",
 		Value: 	"postgres://postgres:postgres@127.0.0.1/postgres?sslmode=disable",
 		Usage: 	"postgres 数据库地址",
 		EnvVar: "DATABASE_URL",
+	},
+	cli.StringFlag{
+		Name: 	"registry-host",
+		Value: 	"index.boxlinker.com",
+		Usage: 	"需要推送的镜像库地址",
+		EnvVar: "REGISTRY_HOST",
 	},
 	cli.BoolFlag{
 		Name: 	"debug, D",
@@ -58,12 +82,13 @@ func main(){
 	}
 	app.Flags = append(
 		sharedFlags,
-		append(amqpFlags,append(workerFlags,serverFlags...)...)...,
+		append(workerFlags,serverFlags...)...,
+		//append(amqpFlags,append(workerFlags,serverFlags...)...)...,
 	)
 
 	app.Commands = []cli.Command{
 		cmdServer,
-		cmdAmqp,
+		//cmdAmqp,
 		cmdWorker,
 	}
 
@@ -76,15 +101,15 @@ func mainAction(c *cli.Context){
 	b := newBuilding(c)
 
 	server := make(chan error)
-	amqp := make(chan error)
+	//amqp := make(chan error)
 	worker := make(chan error)
 
 	go func(){
 		server <- runServer(b, c)
 	}()
-	go func(){
-		amqp <- runAmqp(b,c)
-	}()
+	//go func(){
+	//	amqp <- runAmqp(b,c)
+	//}()
 
 	go func(){
 		worker <- runWorker(b, c)
@@ -93,9 +118,9 @@ func mainAction(c *cli.Context){
 	if err = <-server; err != nil {
 		log.Errorf("server err: %v",err)
 	}
-	if err = <-amqp; err != nil {
-		log.Errorf("amqp err: %v",err)
-	}
+	//if err = <-amqp; err != nil {
+	//	log.Errorf("amqp err: %v",err)
+	//}
 	if err = <-worker; err != nil {
 		log.Errorf("server err: %v",err)
 	}

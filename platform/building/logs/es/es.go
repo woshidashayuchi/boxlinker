@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"io/ioutil"
 )
 
 
@@ -46,7 +47,7 @@ func (l *Logs) sendLog(logger *Logger){
 		log.Errorf("sendLog err: %v",err)
 	} else {
 		host := fmt.Sprintf("http://%s/logstash-%s/fluentd?pretty",l.Host,time.Now().Format("2006.01.02"))
-		//log.Debugf("send log to %s: %s",host,string(b))
+		log.Debugf("send log to %s: %s",host,string(b))
 		req,err := http.NewRequest("POST",host,bytes.NewBuffer(b))
 		if err != nil {
 			log.Errorf("make request error: %v",err)
@@ -57,11 +58,12 @@ func (l *Logs) sendLog(logger *Logger){
 			if err != nil {
 				log.Errorf("send log reponse error: %v",err)
 			} else {
-				//body,err := ioutil.ReadAll(res.Body)
+				body,err := ioutil.ReadAll(res.Body)
 				if err != nil {
 					log.Errorf("send log read response body error: %v",err)
 				} else {
-					log.Debugf("send log: %s", logger.Log)
+					log.Debugf("resp: %s",string(body))
+					fmt.Print(logger.Log)
 				}
 			}
 		}

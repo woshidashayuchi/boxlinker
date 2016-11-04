@@ -19,6 +19,8 @@ import (
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
 	"github.com/cabernety/boxlinker/platform/building/logs/es"
+	"github.com/cabernety/boxlinker/platform/building/logs/oss"
+	log "github.com/Sirupsen/logrus"
 )
 
 
@@ -37,6 +39,7 @@ func newBuilding(c *cli.Context) *building.Building{
 	b.BuildQueue = newBuildQueue(c)
 	b.Logger = newLogger(c)
 	b.GitHub = building.NewGitHub(newGitHubClient(c))
+	b.Registry = c.String("registry-host")
 	return b
 }
 
@@ -51,12 +54,22 @@ func newGitHubClient(c *cli.Context) *github.Client {
 
 func newLogger(c *cli.Context) logs.Logger {
 	u := urlParse(c.String("logger"))
-
+	log.Infof("Use Logger: %s",u.String())
 	switch u.Scheme {
 	case "stdout":
 		return logs.Stdout
 	case "es":
 		return es.NewLogger(u.Host)
+	case "oss":
+		keyId := c.String("oss-access-key-id")
+		keySecret := c.String("oss-access-key-secret")
+		bucketName := c.String("oss-bucket-name")
+		return oss.NewLogger(&oss.LogsConfig{
+			Endpoint: u.Host,
+			AccessKeyId: keyId,
+			AccessKeySecret: keySecret,
+			Bucket: bucketName,
+		})
 	default:
 		must(fmt.Errorf("Unknown logger: %v", u.Scheme))
 		return nil

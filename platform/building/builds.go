@@ -8,6 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	"strings"
+	log "github.com/Sirupsen/logrus"
 )
 
 var ErrDuplicateBuild = errors.New("重复的构建")
@@ -52,8 +53,8 @@ func (s BuildState) String() string {
 }
 
 func (s *BuildState) Scan(src interface{}) error {
-	if v, ok := src.([]byte); ok {
-		switch string(v) {
+	if v, ok := src.(string); ok {
+		switch v {
 		case "pending":
 			*s = StatePending
 		case "building":
@@ -90,6 +91,7 @@ func buildsFindByID(tx *sqlx.Tx, buildID string) (*Build, error) {
 	const findBuildSql = `SELECT * FROM builds WHERE id = ? LIMIT 1`
 	var b Build
 	err := tx.Get(&b, tx.Rebind(findBuildSql), buildID)
+	log.Infof("findBuid by id:%s => %v",buildID, &b)
 	return &b, err
 }
 
