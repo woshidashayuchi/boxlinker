@@ -44,57 +44,64 @@ class MonitorAct(object):
         if rtype == "cpu":
 
             STATICCPU = "SELECT sum(\"value\") FROM \"%s\" WHERE \"type\" = 'node' " \
-                        "AND \"nodename\" =~ /'node_name'$/ " \
+                        "AND \"nodename\" =~ /node_name$/ " \
                         "AND time > now() - %s GROUP BY time(1m), \"nodename\" fill(null);SELECT sum(\"value\") " \
                         "FROM \"%s\" WHERE \"type\" = 'node' " \
-                        "AND \"nodename\" =~ /'node_name'$/ AND time > now() - %s GROUP BY time(1m), " \
+                        "AND \"nodename\" =~ /node_name$/ AND time > now() - %s GROUP BY time(1m), " \
                         "\"nodename\" fill(null);SELECT sum(\"value\") FROM \"%s\" WHERE \"type\" = 'node' " \
-                        "AND \"nodename\" =~ /'node_name'$/ AND time > now() - %s GROUP BY time(1m), " \
+                        "AND \"nodename\" =~ /node_name$/ AND time > now() - %s GROUP BY time(1m), " \
                         "\"nodename\" fill(null)&epoch=ms" % (result[0], time_long, result[1],
                                                               time_long, result[2], time_long)
             if node_name is None or node_name == "":
-                c_sql = STATICCPU.replace("AND \"nodename\" =~ /'node_name'$/", "")
+                c_sql = STATICCPU.replace("AND \"nodename\" =~ /node_name$/", "")
+
                 return STATICFONT+c_sql
             else:
                 c_sql = STATICCPU.replace("node_name", node_name)
+
                 return STATICFONT+c_sql
-        elif rtype == "memory":
+        if rtype == "memory":
             STATICMEMORY = "SELECT sum(\"value\") FROM \"%s\" WHERE \"type\" = 'node' " \
-                           "AND \"nodename\" =~ /'node_name'$/ " \
-                           " AND time > now() - %s " \
-                           "GROUP BY time(1m) fill(null);SELECT sum(\"value\") FROM \"%s\" " \
-                           "WHERE \"type\" = 'node' AND \"nodename\" =~ /'node_name'$/ "\
-                           "AND time > now() - %s GROUP BY time(1m) fill(null);SELECT sum(\"value\") FROM \"%s\" " \
-                           "WHERE \"type\" = 'node' AND \"nodename\" =~ /'node_name'$/" \
-                           "AND time > now() - %s GROUP BY time(1m) fill(null);SELECT sum(\"value\") " \
-                           "FROM \"%s\" WHERE \"type\" = 'node' AND \"nodename\" =~ /'node_name'$/ " \
-                           "AND time > now() - %s GROUP BY time(1m) " \
-                           "fill(null)&epoch=ms " % (result[0], time_long, result[1], time_long,
+                           "AND \"nodename\" =~ /node_name$/ " \
+                           "AND time > now() - %s " \
+                           "GROUP BY time(1m), \"nodename\" fill(null);SELECT sum(\"value\") FROM \"%s\" " \
+                           "WHERE \"type\" = 'node' AND \"nodename\" =~ /node_name$/ "\
+                           "AND time > now() - %s GROUP BY time(1m), \"nodename\" fill(null);SELECT " \
+                           "sum(\"value\") FROM \"%s\" " \
+                           "WHERE \"type\" = 'node' AND \"nodename\" =~ /node_name$/" \
+                           "AND time > now() - %s GROUP BY time(1m), \"nodename\" fill(null);SELECT sum(\"value\") " \
+                           "FROM \"%s\" WHERE \"type\" = 'node' AND \"nodename\" =~ /node_name$/ " \
+                           "AND time > now() - %s GROUP BY time(1m), " \
+                           "\"nodename\" fill(null)&epoch=ms " % (result[0], time_long, result[1], time_long,
                                                      result[2], time_long, result[3], time_long)
             if node_name is None or node_name == "":
-                m_sql = STATICMEMORY.replace("AND \"nodename\" =~ /'node_name'$/", "")
+                m_sql = STATICMEMORY.replace("AND \"nodename\" =~ /node_name$/", "")
+
                 return STATICFONT+m_sql
             else:
                 m_sql = STATICMEMORY.replace("node_name", node_name)
+
                 return STATICFONT+m_sql
-        elif rtype == "filesystem":
+        if rtype == "filesystem":
             STATICFILESYSTEM = "SELECT sum(\"value\") FROM \"%s\" WHERE \"type\" = 'node' " \
-                               "AND \"nodename\" =~ /'node_name'$/ " \
-                               "AND time > now() - %s GROUP BY time(1m) fill(null);SELECT sum(\"value\") FROM " \
-                               "\"%s\" WHERE \"type\" = 'node' AND \"nodename\" =~ /'node_name'$/  " \
-                               "AND time > now() - %s GROUP BY time(1m) " \
-                               "fill(null)&epoch=ms" % (result[0], time_long, result[1], time_long)
+                               "AND \"nodename\" =~ /node_name$/ " \
+                               "AND time > now() - %s GROUP BY time(1m), \"nodename\" fill(null);" \
+                               "SELECT sum(\"value\") FROM " \
+                               "\"%s\" WHERE \"type\" = 'node' AND \"nodename\" =~ /node_name$/  " \
+                               "AND time > now() - %s GROUP BY time(1m), " \
+                               "\"nodename\" fill(null)&epoch=ms" % (result[0], time_long, result[1], time_long)
             if node_name is None or node_name == "":
-                f_sql = STATICFILESYSTEM.replace("AND \"nodename\" =~ /'node_name'$/", "")
+                f_sql = STATICFILESYSTEM.replace("AND \"nodename\" =~ /node_name$/", "")
                 return STATICFONT+f_sql
             else:
                 f_sql = STATICFILESYSTEM.replace("node_name", node_name)
+
                 return STATICFONT+f_sql
         else:
             return "error"
 
     def count_msg(self, json_data):
-        log.info("----------------+++%s" % json_data)
+
         result = self.nape(json_data)
         log.info(result)
         json_data["result"] = result
