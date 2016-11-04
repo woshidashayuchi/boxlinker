@@ -4363,6 +4363,7 @@ module.exports =
   
   function fetchSetOrganizeDetailAction(data) {
     var body = (0, _stringify2.default)({
+      org_name: data.org_name,
       orga_detail: data.orga_detail,
       is_public: data.is_public
     });
@@ -4372,7 +4373,7 @@ module.exports =
       headers: { token: localStorage.getItem("_at") },
       body: body
     };
-    var url = Const.FETCH_URL.ORGANIZE + "/" + data.id;
+    var url = Const.FETCH_URL.ORGANIZE + "/" + data.orga_id;
     return function (dispatch) {
       return (0, _isomorphicFetch2.default)(url, myInit).then(function (response) {
         return response.json();
@@ -20041,7 +20042,7 @@ module.exports =
           _react2.default.createElement(_reactInputRange2.default, {
             className: 'formField',
             maxValue: 100,
-            minValue: 10,
+            minValue: this.props.value || 10,
             step: 10,
             labelPrefix: '',
             labelSuffix: 'G',
@@ -23759,7 +23760,9 @@ module.exports =
       key: 'setOrganizeDetail',
       value: function setOrganizeDetail() {
         var orga_id = this.context.store.getState().user_info.orga_uuid;
+        var org_name = this.context.store.getState().user_info.user_orga;
         var data = {
+          org_name: org_name,
           orga_id: orga_id,
           orga_detail: this.refs.orga_detail.value,
           is_public: this.state.is_public
