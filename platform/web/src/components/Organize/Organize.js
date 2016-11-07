@@ -36,7 +36,7 @@ class Organize extends  Component{
     return (
       <div className = "containerBgF">
         <div className = "userTab">
-          <Tabs defaultActiveKey={4} id="userTabs">
+          <Tabs defaultActiveKey={2} id="userTabs">
             <Tab eventKey={1} title="账户信息">
             </Tab>
             <Tab eventKey={2} title="组织信息">

@@ -183,12 +183,12 @@ class ServiceList extends Component{
               <div className="hbAddBtn clearfix">
                 <div className="hbPlus left"></div>
                 <div className="hbPlusInfo left">
-                  <p className={"hbPName"}>新建服务</p>
-                  <p className={"hbPInfo"}>Create Service</p>
+                  <p className="hbPName">新建服务</p>
+                  <p className="hbPInfo">Create Service</p>
                 </div>
               </div>
             </Link>
-            <a href="javascript:;" className={"hbAddExplain"}>什么是容器云服务？</a>
+            <a href="javascript:;" className="hbAddExplain">什么是容器云服务？</a>
           </div>
           <div className="slSearch right">
             <button className="btn btn-default icon-refresh" onClick = {this.refresh.bind(this)} title = "刷新"> </button>

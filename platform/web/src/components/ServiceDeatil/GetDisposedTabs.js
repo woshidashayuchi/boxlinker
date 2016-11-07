@@ -2,10 +2,6 @@
  * Created by zhangsai on 16/9/2.
  */
 import React, { PropTypes,Component } from 'react';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
-
-import cx from 'classnames';
-import s from './ServiceDetail.css';
 import HeadLine from '../HeadLine';
 import ContainerBox from '../ContainerBox';
 import ContainerItem from '../ContainerItem';
@@ -81,7 +77,7 @@ class ChooseContainerBtn extends Component{//选择容器 按钮
     this.hideModal();
   }
   render(){
-    return(<div className={cx(s.chooseContainer,"icon-operation")} onClick={this.showModal.bind(this)}>
+    return(<div className="chooseContainer icon-operation" onClick={this.showModal.bind(this)}>
         <span>更改</span>
         <Modal {...this.props} show={this.state.show} onHide={this.hideModal.bind(this)} bsSize="sm" aria-labelledby="contained-modal-title-sm">
           <div className="modal-header">
@@ -89,12 +85,12 @@ class ChooseContainerBtn extends Component{//选择容器 按钮
             <h4 className="modal-title" id="contained-modal-title-sm">容器配置</h4>
           </div>
           <div className="modal-body">
-            <div className={s.modalItem}>
+            <div className="modalItem">
               <ContainerBox
                 getContainer = {this.getContainer.bind(this)}
               />
             </div>
-            <div className={s.modalBtn}>
+            <div className="modalBtn">
               <Button bsStyle="primary" onClick = {this.saveContainerDeploy.bind(this)}>保存</Button>
               <Button bsStyle="default" onClick={this.hideModal.bind(this)}>取消</Button>
             </div>
@@ -274,16 +270,16 @@ class GetDisposedTabs extends Component{
       return(
         <tr key = {item.at}>
           <td>
-            <div className={s.astTdBox}>
+            <div className="astTdBox">
               <div className={"iaBox"}>
                 <input type="number" ref="container_port"  onBlur={this.isPortRepeat.bind(this,i)} className="form-control form-control-sm" defaultValue={item.container_port}/>
-                <span className={cx("iaOk","icon-right")} onClick = {this.focusVal.bind(this,i)}> </span>
-                <span className={cx("iaDel","icon-delete")} onClick = {this.delVal.bind(this,i)}> </span>
+                <span className="iaOk icon-right" onClick = {this.focusVal.bind(this,i)}> </span>
+                <span className="iaDel icon-delete" onClick = {this.delVal.bind(this,i)}> </span>
               </div>
             </div>
           </td>
           <td>
-            <div className={s.astTdBox}>
+            <div className="astTdBox">
               <select className="form-control" ref = "protocol" defaultValue = {item.protocol}>
                 <option value="TCP">TCP</option>
                 <option value="UDP">UDP</option>
@@ -291,7 +287,7 @@ class GetDisposedTabs extends Component{
             </div>
           </td>
           <td>
-            <div className={s.astTdBox}>
+            <div className="astTdBox">
               <select className="form-control" ref = "access_mode" defaultValue = {item.access_mode}>
                 <option value="HTTP">HTTP</option>
                 <option value="TCP">TCP</option>
@@ -300,7 +296,7 @@ class GetDisposedTabs extends Component{
             </div>
           </td>
           <td>
-            <div className={s.astTdBox}>
+            <div className="astTdBox">
               <select className="form-control" ref = "access_scope" defaultValue = {item.access_scope}>
                 <option value="outsisde">外部范围</option>
                 <option value="inside">内部范围</option>
@@ -387,7 +383,7 @@ class GetDisposedTabs extends Component{
       return (
         <tr key = {item.at}>
           <td>
-            <div className={s.astTdBox}>
+            <div className="astTdBox">
               <select className="form-control" ref = "volumnName" defaultValue={item.disk_name}
                 onChange={this.isSaveRepeat.bind(this,i)}
               >
@@ -397,14 +393,14 @@ class GetDisposedTabs extends Component{
             </div>
           </td>
           <td>
-            <div className={s.astTdBox}>
+            <div className="astTdBox">
               <input type = "text" className = "form-control" ref = "container_path" defaultValue={item.disk_path}
                 onBlur={this.isPathValidata.bind(this)}
               />
             </div>
           </td>
           <td>
-            <div className={s.astTdBox}>
+            <div className="astTdBox">
               <label>
                 <input type="checkbox" defaultChecked={item.readonly == "True"} /> 是否只读
               </label>
@@ -484,15 +480,15 @@ class GetDisposedTabs extends Component{
       data = this.props.serviceDetail.env;
     let keyBox = data.map((item,i) => {
       return (
-        <div key = {item.at} className = {s.astKeyItem}>
-          <div className={s.astInp}>
+        <div key = {item.at} className = "astKeyItem">
+          <div className="astInp">
             <input type = "text" className = "form-control" onBlur={this.isEnvKeyRepeat.bind(this,i)} placeholder = "键" defaultValue={item.env_key} />
           </div>
-          <div className={s.astLine}></div>
-          <div className={s.astInp}>
+          <div className="astLine"></div>
+          <div className="astInp">
             <input type = "text" className = "form-control" onBlur={this.isEnvValue.bind(this)} placeholder = "值" defaultValue={item.env_value} />
           </div>
-          <div className = {s.astDel}>
+          <div className = "astDel">
             <a href="javascript:;" className="delBtn" onClick = {this.delEnvironmentData.bind(this,item.at)}> </a>
           </div>
         </div>
@@ -711,5 +707,5 @@ class GetDisposedTabs extends Component{
   }
 }
 
-export default withStyles(s)(GetDisposedTabs);
+export default GetDisposedTabs;
 

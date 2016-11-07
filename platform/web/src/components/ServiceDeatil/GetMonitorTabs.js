@@ -2,10 +2,6 @@
  * Created by zhangsai on 16/9/2.
  */
 import React,{ PropTypes,Component } from 'react';
-import withStyle from 'isomorphic-style-loader/lib/withStyles';
-
-import cx from 'classnames';
-import s from './ServiceDetail.css';
 import HeadLine from '../HeadLine';
 import Monitor from '../Monitor';
 import Loading from '../Loading';
@@ -89,13 +85,13 @@ class GetMonitorTabs extends Component{
             {option}
           </select>
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="CPU监控"
             titleEnglish="CPU MONITOR"
             titleInfo="24小时"
           />
-          <div className={s.assBox}>
+          <div className="assBox">
             <Monitor
               ref = "cpu"
               payload = {cpu}
@@ -107,13 +103,13 @@ class GetMonitorTabs extends Component{
             </Monitor>
           </div>
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="内存监控"
             titleEnglish="MEMORY MONITOR"
             titleInfo="24小时"
           />
-          <div className={s.assBox}>
+          <div className="assBox">
             <Monitor
               ref = "memory"
               payload = {memory}
@@ -125,13 +121,13 @@ class GetMonitorTabs extends Component{
             </Monitor>
           </div>
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="网络监控"
             titleEnglish="NETWORK MONITOR"
             titleInfo="24小时"
           />
-          <div className={s.assBox}>
+          <div className="assBox">
             <Monitor
               ref = "network"
               payload = {network}
@@ -148,4 +144,4 @@ class GetMonitorTabs extends Component{
   }
 }
 
-export default withStyle(s)(GetMonitorTabs);
+export default GetMonitorTabs;

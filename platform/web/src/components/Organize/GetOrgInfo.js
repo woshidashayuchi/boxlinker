@@ -1,10 +1,8 @@
 
-
 import React,{PropTypes,Component} from 'react';
 import HeadLine from '../../components/HeadLine';
 import Toggle from '../Toggle';
 import Loading from '../Loading';
-import ReactDOM from 'react-dom';
 
 class IsPublicToggle extends  Component{
   static propTypes={
@@ -48,7 +46,7 @@ class GetOrgInfo extends Component{
   constructor(props){
     super(props);
     this.state = {
-      is_public:1
+      is_public:0
     }
   }
   componentDidMount(){
@@ -64,16 +62,19 @@ class GetOrgInfo extends Component{
 
   setOrganizeDetail(){
     let orga_id = this.context.store.getState().user_info.orga_uuid;
+    let org_name = this.context.store.getState().user_info.user_orga;
     let data = {
+      org_name:org_name,
       orga_id:orga_id,
       orga_detail:this.refs.orga_detail.value,
       is_public:this.state.is_public
     };
+    console.log(data);
     this.props.setOrganizeDetail(data);
   }
   render(){
     let data = this.props.organizeDetail;
-    if(data.creation_time == "") return <div>加载中</div>;
+    if(data.creation_time == "") return <div style={{textAlign:"center"}}><Loading /></div>;
     return (
       <div className = "userTabBox" key = {new Date(data.creation_time).getTime()}>
         <div className = "userItem organizeBox">

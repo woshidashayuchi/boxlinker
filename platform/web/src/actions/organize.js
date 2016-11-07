@@ -175,6 +175,7 @@ export function fetchGetOrganizeDetailAction(id){
 
 export function fetchSetOrganizeDetailAction(data){
   let body = JSON.stringify({
+    org_name: data.org_name,
     orga_detail:data.orga_detail,
     is_public:data.is_public
   });
@@ -184,12 +185,12 @@ export function fetchSetOrganizeDetailAction(data){
     headers:{token:localStorage.getItem("_at")},
     body:body
   };
-  let url = Const.FETCH_URL.ORGANIZE+"/"+data.id;
+  let url = Const.FETCH_URL.ORGANIZE+"/"+data.orga_id;
   return (dispatch =>{
     return fetch(url,myInit)
       .then(response => response.json())
       .then(json =>{
-        console.log(json);
+        console.log(json,"修改组织返回值");
         if(json.status == 0){
           dispatch(receiveNotification({message:"修改成功",level:"success"}));
           setTimeout(function(){

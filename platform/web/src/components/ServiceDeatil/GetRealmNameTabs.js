@@ -2,32 +2,27 @@
  * Created by zhangsai on 16/9/2.
  */
 import React,{ PropTypes,Component } from 'react';
-import withStyle from 'isomorphic-style-loader/lib/withStyles';
-
-import cx from 'classnames';
-import s from './ServiceDetail.css';
 import HeadLine from '../../components/HeadLine';
-import Button from 'react-bootstrap/lib/Button';
 
 class GetRealmNameTabs extends Component{
   getRealmNameTableBody(){
     return (
       <tr>
         <td>
-          <div className={cx(s.astTdBox,s.sdDomain)}>
+          <div className="astTdBox sdDomain">
             <input type="text" placeholder="请输入新域名"/>
           </div>
         </td>
         <td>
-          <div className={s.astTdBox}></div>
+          <div className="astTdBox"></div>
         </td>
         <td>
-          <div className={s.astTdBox}>
+          <div className="astTdBox">
             <span className="color999">是</span>
           </div>
         </td>
         <td>
-          <Button bsStyle="primary">添加</Button>
+          <button className="btn btn-primary">添加</button>
         </td>
       </tr>
     )
@@ -52,14 +47,14 @@ class GetRealmNameTabs extends Component{
   render(){
     return(
       <div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="绑定自有域名"
             titleEnglish="BIND OWN DOMAIN"
             titleInfo="域名绑定说明"
           />
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           {this.getRealmNameTable()}
         </div>
       </div>
@@ -67,4 +62,4 @@ class GetRealmNameTabs extends Component{
   }
 }
 
-export default withStyle(s)(GetRealmNameTabs);
+export default GetRealmNameTabs;

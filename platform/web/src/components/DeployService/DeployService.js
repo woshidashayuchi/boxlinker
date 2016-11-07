@@ -8,14 +8,12 @@
  */
 
 import React, { PropTypes,Component } from 'react';
-import ServiceStep from '../../components/ServiceStep';
-import HeadLine from '../../components/HeadLine';
-import {Button,Overlay,Tooltip} from 'react-bootstrap';
+import ServiceStep from '../ServiceStep';
+import HeadLine from '../HeadLine';
 import ReactDOM from 'react-dom';
-import {INPUT_TIP} from '../../constants';
 import Link from '../Link';
-import Toggle from '../../components/Toggle';
-import {BREADCRUMB} from "../../constants";
+import Toggle from '../Toggle';
+import {INPUT_TIP,BREADCRUMB} from "../../constants";
 import {navigate} from '../../actions/route';
 import {receiveNotification,clearNotification} from '../../actions/notification';
 
@@ -97,7 +95,6 @@ class AddService extends Component{
     let input = containerTr[index].getElementsByTagName("input")[0];
     input.focus();
   }
-
   isPortRepeat(index,e){
     let container = [];
     let containerTr = ReactDOM.findDOMNode(this.refs.tab_container_body).getElementsByTagName("tr");
@@ -188,7 +185,7 @@ class AddService extends Component{
         this.setState({
           env:true
         });
-        this.refs.envTip.innerHTML = INPUT_TIP.volumes.Repeat;
+        this.refs.envTip.innerHTML = INPUT_TIP.env.Repeat;
         e.target.className = "form-control inputError";
         e.target.focus();
       }
@@ -217,16 +214,11 @@ class AddService extends Component{
     }
 
   }
-
   getPortTableBody(){//端口
     let data = [],sd = this.props.deployData;
     if(sd&&sd.container&&sd.container.length)
       data = this.props.deployData.container;
     let tr = data.map((item , i) => {
-      const sharedProps = {
-        show: this.state.isPortShow,
-        target: () => ReactDOM.findDOMNode(this.refs.container_port)
-      };
       return(
         <tr key = {item.at}>
           <td>
@@ -235,9 +227,6 @@ class AddService extends Component{
                   <input type="number" ref="container_port" onBlur={this.isPortRepeat.bind(this,i)} className="form-control form-control-sm" defaultValue={item.container_port}/>
                   <span className="iaOk icon-right" onClick = {this.focusVal.bind(this,i)}> </span>
                   <span className="iaDel icon-delete" onClick = {this.delVal.bind(this,i)}> </span>
-                  <Overlay {...sharedProps} placement="top">
-                    <Tooltip id="overload-left">不能为空</Tooltip>
-                  </Overlay>
               </div>
             </div>
           </td>
@@ -300,7 +289,6 @@ class AddService extends Component{
   delPortTr(item){
     this.props.onDelPort(item);
   }
-
   getSaveTableBody(){//存储
     let volumeList = this.props.volumeList;
     let options = volumeList.map((item,i) => {
@@ -375,7 +363,6 @@ class AddService extends Component{
   delSaveTr(item){
     this.props.onDelSave(item)
   }
-
   getEnvironment(){
     let data = [],sd = this.props.deployData;
     if(sd&&sd.env&&sd.env.length)
@@ -406,7 +393,6 @@ class AddService extends Component{
   delEnvironmentData(item){
     this.props.onDelEnv(item);
   }
-
   onChangeStep(){
     let container = [],
       save = [],
@@ -448,7 +434,6 @@ class AddService extends Component{
     console.log(data);
     this.props.onDeploySenior(data);
   }
-
   deployService(){
     let container = [],
       save = [],
@@ -517,17 +502,16 @@ class AddService extends Component{
       auto_startup:this.state.isStateUp,
       command:this.refs.command.value
     };
+    if(this.state.env||this.state.port||this.state.volume){return false;}
     let data=Object.assign({},this.props.deployData,third);
     console.log(data);
     this.props.onDeployService(data);
   }
-
   getIsStartUp(value){
     this.setState({
       isStateUp:!value?1:0
     })
   }
-
   componentDidMount(){
     this.props.onVolumeListLoad();
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.NEW_SERVICE);
@@ -542,7 +526,6 @@ class AddService extends Component{
       this.props.onVolumeListLoad();
     }
   }
-
   render(){
     this.context.setTitle(title);
     let data = this.props.deployData;
@@ -585,7 +568,7 @@ class AddService extends Component{
             {this.getSaveTable()}
           </div>
           <div className="assBtnBox">
-            <Button bsStyle="primary" onClick = {this.addSaveTr.bind(this)}>添加</Button>
+            <button className="btn btn-primary" onClick = {this.addSaveTr.bind(this)}>添加</button>
             <span className={this.state.volume?"inputTip inputTipShow":"inputTip"} ref = "volumeTip">
 
             </span>
@@ -601,7 +584,7 @@ class AddService extends Component{
             {this.getEnvironment()}
           </div>
           <div className="assBtnBox">
-            <Button bsStyle="primary" onClick = {this.addEnvironmentData.bind(this)}>添加</Button>
+            <button className="btn btn-primary" onClick = {this.addEnvironmentData.bind(this)}>添加</button>
             <span className={this.state.env?"inputTip inputTipShow":"inputTip"} ref = "envTip">
 
             </span>

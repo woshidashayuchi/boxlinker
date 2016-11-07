@@ -2,8 +2,6 @@
  * Created by zhangsai on 16/9/2.
  */
 import React,{ PropTypes,Component } from 'react';
-import withStyle from 'isomorphic-style-loader/lib/withStyles';
-import s from './ServiceDetail.css';
 import HeadLine from '../../components/HeadLine';
 import Toggle from 'react-toggle';
 import ReactDOM from 'react-dom';
@@ -117,4 +115,4 @@ class GetReleaseTabs extends Component{
   }
 }
 
-export default withStyle(s)(GetReleaseTabs);
+export default GetReleaseTabs;
