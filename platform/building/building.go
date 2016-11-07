@@ -7,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/cabernety/boxlinker/platform/building/builder"
 	"fmt"
+	"strings"
 )
 
 type Building struct {
@@ -14,6 +15,7 @@ type Building struct {
 	Logger logs.Logger
 	GitHub GitHubAPI
 	db *sqlx.DB
+	Registry string
 }
 
 func New(db *sqlx.DB) *Building {
@@ -67,7 +69,57 @@ func (b *Building) Build(ctx context.Context, req BuildRequest) (*Build, error) 
 		Sha:        req.Sha,
 		Branch:     req.Branch,
 		NoCache:    req.NoCache,
+		Registry: 	b.Registry,
 	})
+}
+
+// FindBuild finds a build by its identity.
+func (c *Building) FindBuild(ctx context.Context, buildIdentity string) (*Build, error) {
+	tx, err := c.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
+
+	var find func(*sqlx.Tx, string) (*Build, error)
+	switch strings.Contains(buildIdentity, "@") {
+	case true:
+		find = buildsFindByRepoSha
+	default:
+		find = buildsFindByID
+	}
+
+	b, err := find(tx, buildIdentity)
+	if err != nil {
+		tx.Rollback()
+		return b, err
+	}
+
+	return b, tx.Commit()
+}
+
+
+// FindArtifact finds an artifact by its identity.
+func (c *Building) FindArtifact(ctx context.Context, artifactIdentity string) (*Artifact, error) {
+	tx, err := c.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
+
+	var find func(*sqlx.Tx, string) (*Artifact, error)
+	switch strings.Contains(artifactIdentity, "@") {
+	case true:
+		find = artifactsFindByRepoSha
+	default:
+		find = artifactsFindByID
+	}
+
+	a, err := find(tx, artifactIdentity)
+	if err != nil {
+		tx.Rollback()
+		return a, err
+	}
+
+	return a, tx.Commit()
 }
 
 func (b *Building) Writer(ctx context.Context, buildID string) (io.Writer, error) {
@@ -97,6 +149,14 @@ func (b *Building) BuildComplete(ctx context.Context, buildID, image string) err
 	}
 
 	if err := buildsUpdateState(tx, buildID, StateSucceeded); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := artifactsCreate(tx, &Artifact{
+		BuildID: buildID,
+		Image:   image,
+	}); err != nil {
 		tx.Rollback()
 		return err
 	}

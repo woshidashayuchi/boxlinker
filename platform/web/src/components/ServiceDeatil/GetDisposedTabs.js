@@ -106,6 +106,9 @@ class ChooseContainerBtn extends Component{//选择容器 按钮
 }
 
 class GetDisposedTabs extends Component{
+  static contextTypes = {
+    store:PropTypes.object
+  };
   static propTypes = {
     serviceDetail : React.PropTypes.object,
     onServiceDetailLoad : React.PropTypes.func,
@@ -128,7 +131,10 @@ class GetDisposedTabs extends Component{
   constructor(props){
     super(props);
     this.state = {
-      isStateUp:1
+      isStateUp:1,
+      port:false,
+      volume:false,
+      env:false
     }
   }
   delVal(index){
@@ -151,14 +157,28 @@ class GetDisposedTabs extends Component{
       containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
       container.push(containerObj);
     }
+    this.setState({
+      port:false
+    });
+    e.target.className = "form-control form-control-sm";
     if(value<=10 && value.length != 0){
-      alert(INPUT_TIP.port.Format);
+      this.setState({
+        port:true
+      });
+      e.target.className = "form-control form-control-sm inputError";
+      this.refs.portTip.innerHTML = INPUT_TIP.port.Format;
+      return false;
     }
     container.splice(index,1);
     container.map((item,i) => {
       if(item.container_port == value && value !=""){
-        alert(INPUT_TIP.port.Repeat);
+        this.setState({
+          port:true
+        });
+        e.target.className = "form-control form-control-sm inputError";
+        this.refs.portTip.innerHTML = INPUT_TIP.port.Repeat;
         e.target.focus();
+        return false;
       }
     });
   }
@@ -166,26 +186,46 @@ class GetDisposedTabs extends Component{
     let save = [];
     let saveTr = ReactDOM.findDOMNode(this.refs.tab_save_box).children;
     let key = e.target.value;
+    this.setState({
+      volume:false
+    });
     for(let i = 0;i<saveTr.length;i++){
       let saveObj = {};
       saveObj.value = saveTr[i].getElementsByTagName("select")[0].value;
       save.push(saveObj);
     }
     save.splice(index,1);
-    console.log(key);
     save.map((item) => {
       if(item.value == key && key !=""){
-        alert(INPUT_TIP.volumes.Repeat);
+        this.setState({
+          volume:true
+        });
+        this.refs.volumeTip.innerHTML = INPUT_TIP.volumes.Repeat;
         e.target.value = "-1";
         e.target.focus();
+        return false;
       }
     })
 
   }
   isEnvKeyRepeat(index,e){
     let env = [];
+    let regExp = /^[a-zA-Z]+[a-zA-Z0-9-]*$/;
     let envTr = ReactDOM.findDOMNode(this.refs.tab_env_box).children;
     let key = e.target.value;
+    this.setState({
+      env:false
+    });
+    e.target.className = "form-control";
+    if(!regExp.test(key)){
+      this.setState({
+        env:true
+      });
+      this.refs.envTip.innerHTML = INPUT_TIP.env.Format;
+      e.target.className = "form-control inputError";
+      e.target.focus();
+      return false;
+    }
     for(let i = 0;i<envTr.length;i++){
       let envObj = {};
       envObj.env_key = envTr[i].getElementsByTagName("input")[0].value;
@@ -194,10 +234,36 @@ class GetDisposedTabs extends Component{
     env.splice(index,1);
     env.map((item) => {
       if(item.env_key == key && key !=""){
-        alert(INPUT_TIP.env.Repeat);
+        this.setState({
+          env:true
+        });
+        this.refs.envTip.innerHTML = INPUT_TIP.volumes.Repeat;
+        e.target.className = "form-control inputError";
         e.target.focus();
       }
     })
+  }
+  isEnvValue(e){
+    this.setState({
+      env:false
+    });
+    e.target.className = "form-control";
+  }
+  isPathValidata(e){
+    let regExp = /^\/[a-zA-Z0-9]+[a-zA-Z0-9_]*$/;
+    let value = e.target.value;
+    if(!regExp.test(value)&&value.length != 0){
+      this.setState({
+        volume:true
+      });
+      e.target.className = "form-control inputError";
+      this.refs.volumeTip.innerHTML = INPUT_TIP.volumes.Format;
+    }else{
+      this.setState({
+        volume:false
+      });
+      e.target.className = "form-control";
+    }
 
   }
   getPortTableBody(){//端口
@@ -280,7 +346,17 @@ class GetDisposedTabs extends Component{
     let containerTr = ReactDOM.findDOMNode(this.refs.tab_container_body).getElementsByTagName("tr");
     for(var i=0;i<containerTr.length;i++){
       let containerObj = {};
-      containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
+      let container_port = containerTr[i].getElementsByTagName("input")[0];
+      if(container_port.value == ""){
+        this.setState({
+          port:true
+        });
+        container_port.className = "form-control form-control-sm inputError";
+        container_port.focus();
+        this.refs.portTip.innerHTML = INPUT_TIP.port.Null;
+        return false;
+      }
+      containerObj.container_port = container_port.value;
       containerObj.protocol = containerTr[i].getElementsByTagName("select")[0].value;
       containerObj.access_mode = containerTr[i].getElementsByTagName("select")[1].value;
       containerObj.access_scope = containerTr[i].getElementsByTagName("select")[2].value;
@@ -322,7 +398,9 @@ class GetDisposedTabs extends Component{
           </td>
           <td>
             <div className={s.astTdBox}>
-              <input type = "text" className = "form-control" ref = "container_path" defaultValue={item.disk_path}/>
+              <input type = "text" className = "form-control" ref = "container_path" defaultValue={item.disk_path}
+                onBlur={this.isPathValidata.bind(this)}
+              />
             </div>
           </td>
           <td>
@@ -374,13 +452,18 @@ class GetDisposedTabs extends Component{
       let disk_name = saveTr[i].getElementsByTagName("select")[0];
       let disk_path = saveTr[i].getElementsByTagName("input")[0];
       let readonly = saveTr[i].getElementsByTagName("input")[1].checked ? "True" : "False";
-      if(disk_name.value ==-1){
-
-      }else if(disk_path.value ==""){
-        alert("容器路径不能为空");
+      if(disk_name.value!=-1 && disk_path.value == ""){
+        this.setState({
+          volume:true
+        });
+        disk_path.className = "form-control inputError";
+        this.refs.volumeTip.innerHTML = INPUT_TIP.volumes.Null;
         disk_path.focus();
         return false;
-      }else{
+      }
+      if(disk_name.value ==-1){
+
+      }else {
         saveObj.disk_name = disk_name.value;
         saveObj.disk_path = disk_path.value;
         saveObj.readonly = readonly;
@@ -407,7 +490,7 @@ class GetDisposedTabs extends Component{
           </div>
           <div className={s.astLine}></div>
           <div className={s.astInp}>
-            <input type = "text" className = "form-control" placeholder = "值" defaultValue={item.env_value} />
+            <input type = "text" className = "form-control" onBlur={this.isEnvValue.bind(this)} placeholder = "值" defaultValue={item.env_value} />
           </div>
           <div className = {s.astDel}>
             <a href="javascript:;" className="delBtn" onClick = {this.delEnvironmentData.bind(this,item.at)}> </a>
@@ -430,8 +513,19 @@ class GetDisposedTabs extends Component{
     let envTr = ReactDOM.findDOMNode(this.refs.tab_env_box).children;
     for(let i = 0;i<envTr.length;i++){
       let envObj = {};
-      envObj.env_key = envTr[i].getElementsByTagName("input")[0].value;
-      envObj.env_value = envTr[i].getElementsByTagName("input")[1].value;
+      let env_key = envTr[i].getElementsByTagName("input")[0];
+      let env_value = envTr[i].getElementsByTagName("input")[1];
+      if(env_key.value && env_value.value==""){
+        this.setState({
+          env:true
+        });
+        this.refs.envTip.innerHTML = INPUT_TIP.env.Null;
+        env_value.className = "form-control inputError";
+        env_value.focus();
+        return false;
+      }
+      envObj.env_key = env_key.value;
+      envObj.env_value = env_value.value;
       env.push(envObj);
     }
     let data = {
@@ -490,7 +584,7 @@ class GetDisposedTabs extends Component{
     this.props.onSaveCommand(data);
   }
   componentWillUnmount(){
-    this.context.store.dispatch(clearDeployData())
+    this.context.store.dispatch(clearDeployData());
   }
 
   render(){
@@ -505,66 +599,75 @@ class GetDisposedTabs extends Component{
                         "暂时没有数据卷":
                         `目前有${n}个数据卷`;
     return(
-      <div className={s.asTabThird}>
-        <div className={cx(s.assItem)}>
+      <div className="asTabThird">
+        <div className="assItem">
           <HeadLine
             title="端口"
             titleEnglish="PORT"
             titleInfo="容器端口会映射到主机端口上"
           />
-          <div className={s.astBox}>
+          <div className="astBox">
             {this.getPortTable()}
           </div>
-          <div className={s.assBtnBox}>
+          <div className="assBtnBox">
             <button className="btn btn-primary"
                     onClick = {this.addPortTr.bind(this)}
             >添加</button>
             <button className={`btn btn-default ${!this.props.isBtnState.port?"btn-loading":""}`}
                     disabled={!this.props.isBtnState.port}
                     onClick = {this.savePort.bind(this)}>保存</button>
+            <span className={this.state.port?"inputTip inputTipShow":"inputTip"} ref = "portTip">
+
+            </span>
           </div>
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="存储设置"
             titleEnglish="SAVE SETTING"
             titleInfo={volumeLength}
           />
-          <div className={s.astBox} ref = "tab_save_box">
+          <div className="astBox" ref = "tab_save_box">
             {this.getSaveTable()}
           </div>
-          <div className={s.assBtnBox}>
+          <div className="assBtnBox">
             <button className="btn btn-primary" onClick = {this.addSaveTr.bind(this)}>添加</button>
             <button className={`btn btn-default ${!this.props.isBtnState.storage?"btn-loading":""}`}
                     disabled={!this.props.isBtnState.storage}
                     onClick = {this.saveStorage.bind(this)}
             >保存</button>
+            <span className={this.state.volume?"inputTip inputTipShow":"inputTip"} ref = "volumeTip">
+
+            </span>
           </div>
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="环境变量"
             titleEnglish="ENVIRONMENT VARIABLE"
             titleInfo=""
           />
-          <div className={s.astBox} ref = "tab_env_box">
+          <div className="astBox" ref = "tab_env_box">
             {this.getEnvironment()}
           </div>
-          <div className={s.assBtnBox}>
+          <div className="assBtnBox">
             <button className="btn btn-primary" onClick = {this.addEnvironmentData.bind(this)}>添加</button>
             <button className={`btn btn-default ${!this.props.isBtnState.env?"btn-loading":""}`}
                     disabled={!this.props.isBtnState.env}
                     onClick = {this.saveEnvironment.bind(this)}
             >保存</button>
+            <span className={this.state.env?"inputTip inputTipShow":"inputTip"} ref = "envTip">
+
+            </span>
           </div>
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="容器配置"
             titleEnglish="CONTAINER CONFIGURATION"
             titleInfo="容器配置说明"
           />
-          <div className={s.assBox}>
+          <div className="assBox">
             {this.getContainerBox(data.containerDeploy)}
             <ChooseContainerBtn
               serviceName = {this.props.serviceDetail.fservice_name}
@@ -572,13 +675,13 @@ class GetDisposedTabs extends Component{
             />
           </div>
         </div>
-        <div className={cx(s.assItem)}>
+        <div className="assItem">
           <HeadLine
             title="启动命令"
             titleEnglish="JRE"
             titleInfo="启动命令解释说明 "
           />
-          <div className={s.assBox}>
+          <div className="assBox">
             <input className = "form-control"
                    type="text"
                    placeholder=""
@@ -586,20 +689,20 @@ class GetDisposedTabs extends Component{
                    defaultValue={data.command}
             />
           </div>
-          <div className={s.assBtnBox}>
+          <div className="assBtnBox">
             <button className={`btn btn-default ${!this.props.isBtnState.command?"btn-loading":""}`}
                     disabled={!this.props.isBtnState.command}
                     onClick = {this.saveCommand.bind(this)}
             >保存</button>
           </div>
         </div>
-        <div className={cx(s.assItem, s.assItemNoborder)}>
+        <div className="assItem assItemNoborder">
           <HeadLine
             title="自动启动"
             titleEnglish="AUTO UPDATE SETTING"
             titleInfo="自动启动设置"
           />
-          <div className={s.assBox}>
+          <div className="assBox">
             <AutoStartUpToggle disabled ={!this.props.isBtnState.autoStateUp} isState = {data.auto_startup==1} getToggle = {this.getIsStartUp.bind(this)}  />
           </div>
         </div>

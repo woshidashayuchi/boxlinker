@@ -36,6 +36,7 @@ type BuildOptions struct {
 	Sha string
 	Branch string
 	NoCache bool
+	Registry string
 }
 
 type Builder interface {

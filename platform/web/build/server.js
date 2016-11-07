@@ -1071,7 +1071,7 @@ module.exports =
     isUpdate: 1,
     container: [{ at: new Date().getTime() }],
     env: [{ at: new Date().getTime() }],
-    volume: [{ at: new Date().getTime(), readonly: 1 }],
+    volume: [{ at: new Date().getTime(), readonly: 0 }],
     auto_startup: 1
   };
   
@@ -1816,12 +1816,13 @@ module.exports =
       Repeat: "端口不能重复"
     },
     volumes: {
+      Null: "容器路径不能为空",
       Format: "必须以/开头,后可加字母数字下划线",
       Repeat: "数据卷名称不能重复"
     },
     env: {
-      Null: "环境变量不能为空",
-      Format: "环境变量格式不对",
+      Null: "环境变量值不能为空",
+      Format: "环境变量只能为字母数字中划线,并以字母开头",
       Repeat: "环境变量键值不能重复"
     }
   
@@ -4264,17 +4265,23 @@ module.exports =
       }).then(function (json) {
         console.log(json);
         if (json.status == 0) {
-          dispatch((0, _notification.receiveNotification)({ message: "退出成功", level: "success" }));
           switch (data.keyList) {
             case "orgList":
+              dispatch((0, _notification.receiveNotification)({ message: "退出成功", level: "success" }));
               dispatch(fetchGetOrganizeListAction());
+              setTimeout(function () {
+                dispatch((0, _notification.clearNotification)());
+              }, 3000);
               break;
             case "userList":
+              dispatch((0, _notification.receiveNotification)({ message: "退出成功,请重新登录", level: "success" }));
+              setTimeout(function () {
+                dispatch((0, _notification.clearNotification)());
+                window.location.href = "/login";
+              }, 3000);
+              break;
   
           }
-          setTimeout(function () {
-            dispatch((0, _notification.clearNotification)());
-          }, 3000);
         } else {
           dispatch((0, _notification.receiveNotification)({ message: "退出失败:" + json.msg, level: "danger" }));
           setTimeout(function () {
@@ -4302,6 +4309,14 @@ module.exports =
             case "orgList":
               dispatch(fetchGetOrganizeListAction());
               break;
+            case "userList":
+              dispatch((0, _notification.receiveNotification)({ message: "解散成功,请重新登录", level: "success" }));
+              setTimeout(function () {
+                dispatch((0, _notification.clearNotification)());
+                window.location.href = "/login";
+              }, 3000);
+              break;
+  
           }
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
@@ -4545,10 +4560,11 @@ module.exports =
       }).then(function (json) {
         console.log(json, "委托组织创建者");
         if (json.status == 0) {
-          dispatch((0, _notification.receiveNotification)({ message: "设置成功", level: "success" }));
+          dispatch((0, _notification.receiveNotification)({ message: "设置成功请重新登录", level: "success" }));
           dispatch(fetchGetOrganizeUserListAction(data.orga_uuid));
           setTimeout(function () {
             dispatch((0, _notification.clearNotification)());
+            window.location.href = "/login";
           }, 3000);
         } else {
           dispatch((0, _notification.receiveNotification)({ message: "操作失败:" + json.msg, level: "danger" }));
@@ -12854,9 +12870,9 @@ module.exports =
       value: function searchService() {
         var searchTxt = _reactDom2.default.findDOMNode(this.refs.searchInput).value;
         var my = this;
+        my.props.onServiceListLoad(searchTxt);
         clearInterval(this.myTime);
         this.myTime = setInterval(function () {
-          console.log("222");
           my.props.onServiceListLoad(searchTxt);
         }, 10000);
       }
@@ -13258,7 +13274,10 @@ module.exports =
       _this2.state = {
         isPort: false,
         isPortShow: false,
-        isStateUp: 1
+        isStateUp: 1,
+        port: false,
+        volume: false,
+        env: false
       };
       return _this2;
     }
@@ -13281,6 +13300,8 @@ module.exports =
     }, {
       key: 'isPortRepeat',
       value: function isPortRepeat(index, e) {
+        var _this3 = this;
+  
         var container = [];
         var containerTr = _reactDom2.default.findDOMNode(this.refs.tab_container_body).getElementsByTagName("tr");
         var value = e.target.value;
@@ -13289,44 +13310,82 @@ module.exports =
           containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
           container.push(containerObj);
         }
+        this.setState({
+          port: false
+        });
+        e.target.className = "form-control form-control-sm";
         if (value <= 10 && value.length != 0) {
-          alert(_constants.INPUT_TIP.port.Format);
+          this.setState({
+            port: true
+          });
+          e.target.className = "form-control form-control-sm inputError";
+          this.refs.portTip.innerHTML = _constants.INPUT_TIP.port.Format;
+          return false;
         }
         container.splice(index, 1);
-        container.map(function (item, i) {
+        container.map(function (item) {
           if (item.container_port == value && value != "") {
-            alert(_constants.INPUT_TIP.port.Repeat);
+            _this3.setState({
+              port: true
+            });
+            e.target.className = "form-control form-control-sm inputError";
+            _this3.refs.portTip.innerHTML = _constants.INPUT_TIP.port.Repeat;
             e.target.focus();
+            return false;
           }
         });
       }
     }, {
       key: 'isSaveRepeat',
       value: function isSaveRepeat(index, e) {
+        var _this4 = this;
+  
         var save = [];
         var saveTr = _reactDom2.default.findDOMNode(this.refs.tab_save_box).children;
         var key = e.target.value;
+        this.setState({
+          volume: false
+        });
         for (var i = 0; i < saveTr.length; i++) {
           var saveObj = {};
           saveObj.value = saveTr[i].getElementsByTagName("select")[0].value;
           save.push(saveObj);
         }
         save.splice(index, 1);
-        console.log(key);
         save.map(function (item) {
           if (item.value == key && key != "") {
-            alert(_constants.INPUT_TIP.volumes.Repeat);
+            _this4.setState({
+              volume: true
+            });
+            _this4.refs.volumeTip.innerHTML = _constants.INPUT_TIP.volumes.Repeat;
             e.target.value = "-1";
             e.target.focus();
+            return false;
           }
         });
       }
     }, {
-      key: 'isEnvKeyRepeat',
-      value: function isEnvKeyRepeat(index, e) {
+      key: 'isEnvKey',
+      value: function isEnvKey(index, e) {
+        var _this5 = this;
+  
         var env = [];
+        var regExp = /^[a-zA-Z]+[a-zA-Z0-9-]*$/;
         var envTr = _reactDom2.default.findDOMNode(this.refs.tab_env_box).children;
         var key = e.target.value;
+        this.setState({
+          env: false
+        });
+        e.target.className = "form-control";
+        if (!regExp.test(key)) {
+          this.setState({
+            env: true
+          });
+          this.refs.envTip.innerHTML = _constants.INPUT_TIP.env.Format;
+          e.target.className = "form-control inputError";
+          e.target.focus();
+          return false;
+        }
         for (var i = 0; i < envTr.length; i++) {
           var envObj = {};
           envObj.env_key = envTr[i].getElementsByTagName("input")[0].value;
@@ -13335,10 +13394,22 @@ module.exports =
         env.splice(index, 1);
         env.map(function (item) {
           if (item.env_key == key && key != "") {
-            alert(_constants.INPUT_TIP.env.Repeat);
+            _this5.setState({
+              env: true
+            });
+            _this5.refs.envTip.innerHTML = _constants.INPUT_TIP.volumes.Repeat;
+            e.target.className = "form-control inputError";
             e.target.focus();
           }
         });
+      }
+    }, {
+      key: 'isEnvValue',
+      value: function isEnvValue(e) {
+        this.setState({
+          env: false
+        });
+        e.target.className = "form-control";
       }
     }, {
       key: 'isPathValidata',
@@ -13346,13 +13417,22 @@ module.exports =
         var regExp = /^\/[a-zA-Z]+[a-zA-Z0-9_]*$/;
         var value = e.target.value;
         if (!regExp.test(value) && value.length != 0) {
-          console.log(_constants.INPUT_TIP.volumes.Format);
+          this.setState({
+            volume: true
+          });
+          e.target.className = "form-control inputError";
+          this.refs.volumeTip.innerHTML = _constants.INPUT_TIP.volumes.Format;
+        } else {
+          this.setState({
+            volume: false
+          });
+          e.target.className = "form-control";
         }
       }
     }, {
       key: 'getPortTableBody',
       value: function getPortTableBody() {
-        var _this3 = this;
+        var _this6 = this;
   
         //端口
         var data = [],
@@ -13360,9 +13440,9 @@ module.exports =
         if (sd && sd.container && sd.container.length) data = this.props.deployData.container;
         var tr = data.map(function (item, i) {
           var sharedProps = {
-            show: _this3.state.isPortShow,
+            show: _this6.state.isPortShow,
             target: function target() {
-              return _reactDom2.default.findDOMNode(_this3.refs.container_port);
+              return _reactDom2.default.findDOMNode(_this6.refs.container_port);
             }
           };
           return _react2.default.createElement(
@@ -13377,15 +13457,15 @@ module.exports =
                 _react2.default.createElement(
                   'div',
                   { className: 'iaBox' },
-                  _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this3.isPortRepeat.bind(_this3, i), className: 'form-control form-control-sm', defaultValue: item.container_port }),
+                  _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this6.isPortRepeat.bind(_this6, i), className: 'form-control form-control-sm', defaultValue: item.container_port }),
                   _react2.default.createElement(
                     'span',
-                    { className: 'iaOk icon-right', onClick: _this3.focusVal.bind(_this3, i) },
+                    { className: 'iaOk icon-right', onClick: _this6.focusVal.bind(_this6, i) },
                     ' '
                   ),
                   _react2.default.createElement(
                     'span',
-                    { className: 'iaDel icon-delete', onClick: _this3.delVal.bind(_this3, i) },
+                    { className: 'iaDel icon-delete', onClick: _this6.delVal.bind(_this6, i) },
                     ' '
                   ),
                   _react2.default.createElement(
@@ -13476,7 +13556,7 @@ module.exports =
               null,
               _react2.default.createElement(
                 'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this3.delPortTr.bind(_this3, item.at) },
+                { href: 'javascript:;', className: 'delBtn', onClick: _this6.delPortTr.bind(_this6, item.at) },
                 ' '
               )
             )
@@ -13543,7 +13623,7 @@ module.exports =
     }, {
       key: 'getSaveTableBody',
       value: function getSaveTableBody() {
-        var _this4 = this;
+        var _this7 = this;
   
         //存储
         var volumeList = this.props.volumeList;
@@ -13575,7 +13655,7 @@ module.exports =
                 _react2.default.createElement(
                   'select',
                   { className: 'form-control', ref: 'volumn_name', defaultValue: item.disk_name,
-                    onChange: _this4.isSaveRepeat.bind(_this4, i)
+                    onChange: _this7.isSaveRepeat.bind(_this7, i)
                   },
                   _react2.default.createElement(
                     'option',
@@ -13592,7 +13672,8 @@ module.exports =
               _react2.default.createElement(
                 'div',
                 { className: 'astTdBox' },
-                _react2.default.createElement('input', { type: 'text', defaultValue: item.disk_path, className: 'form-control', onBlur: _this4.isPathValidata.bind(_this4), ref: 'container_path' })
+                _react2.default.createElement('input', { type: 'text', defaultValue: item.disk_path, className: 'form-control',
+                  onBlur: _this7.isPathValidata.bind(_this7), ref: 'container_path' })
               )
             ),
             _react2.default.createElement(
@@ -13614,7 +13695,7 @@ module.exports =
               null,
               _react2.default.createElement(
                 'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this4.delSaveTr.bind(_this4, item.at) },
+                { href: 'javascript:;', className: 'delBtn', onClick: _this7.delSaveTr.bind(_this7, item.at) },
                 ' '
               )
             )
@@ -13677,7 +13758,7 @@ module.exports =
     }, {
       key: 'getEnvironment',
       value: function getEnvironment() {
-        var _this5 = this;
+        var _this8 = this;
   
         var data = [],
             sd = this.props.deployData;
@@ -13689,20 +13770,20 @@ module.exports =
             _react2.default.createElement(
               'div',
               { className: 'astInp' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this5.isEnvKeyRepeat.bind(_this5, i), ref: 'env_key', placeholder: '键', defaultValue: item.env_key })
+              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvKey.bind(_this8, i), ref: 'env_key', placeholder: '键', defaultValue: item.env_key })
             ),
             _react2.default.createElement('div', { className: 'astLine' }),
             _react2.default.createElement(
               'div',
               { className: 'astInp' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', ref: 'env_value', placeholder: '值', defaultValue: item.env_value })
+              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvValue.bind(_this8), ref: 'env_value', placeholder: '值', defaultValue: item.env_value })
             ),
             _react2.default.createElement(
               'div',
               { className: 'astDel' },
               _react2.default.createElement(
                 'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this5.delEnvironmentData.bind(_this5, item.at) },
+                { href: 'javascript:;', className: 'delBtn', onClick: _this8.delEnvironmentData.bind(_this8, item.at) },
                 ' '
               )
             )
@@ -13774,7 +13855,17 @@ module.exports =
             envTr = _reactDom2.default.findDOMNode(this.refs.tab_env_box).children;
         for (var i = 0; i < containerTr.length; i++) {
           var containerObj = {};
-          containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
+          var container_port = containerTr[i].getElementsByTagName("input")[0];
+          if (container_port.value == "") {
+            this.setState({
+              port: true
+            });
+            container_port.className = "form-control form-control-sm inputError";
+            container_port.focus();
+            this.refs.portTip.innerHTML = _constants.INPUT_TIP.port.Null;
+            return false;
+          }
+          containerObj.container_port = container_port.value;
           containerObj.protocol = containerTr[i].getElementsByTagName("select")[0].value;
           containerObj.access_mode = containerTr[i].getElementsByTagName("select")[1].value;
           containerObj.access_scope = containerTr[i].getElementsByTagName("select")[2].value;
@@ -13782,15 +13873,38 @@ module.exports =
         }
         for (var _i3 = 0; _i3 < saveTr.length; _i3++) {
           var saveObj = {};
-          saveObj.disk_name = saveTr[_i3].getElementsByTagName("select")[0].value;
-          saveObj.disk_path = saveTr[_i3].getElementsByTagName("input")[0].value;
-          saveObj.readonly = saveTr[_i3].getElementsByTagName("input")[1].checked ? "True" : "False";
+          var disk_name = saveTr[_i3].getElementsByTagName("select")[0];
+          var disk_path = saveTr[_i3].getElementsByTagName("input")[0];
+          var readonly = saveTr[_i3].getElementsByTagName("input")[1].checked ? "True" : "False";
+          if (disk_name.value != -1 && disk_path.value == "") {
+            this.setState({
+              volume: true
+            });
+            disk_path.className = "form-control inputError";
+            this.refs.volumeTip.innerHTML = _constants.INPUT_TIP.volumes.Null;
+            disk_path.focus();
+            return false;
+          }
+          saveObj.disk_name = disk_name.value;
+          saveObj.disk_path = disk_path.value;
+          saveObj.readonly = readonly;
           save.push(saveObj);
         }
         for (var _i4 = 0; _i4 < envTr.length; _i4++) {
           var envObj = {};
-          envObj.env_key = envTr[_i4].getElementsByTagName("input")[0].value;
-          envObj.env_value = envTr[_i4].getElementsByTagName("input")[1].value;
+          var env_key = envTr[_i4].getElementsByTagName("input")[0];
+          var env_value = envTr[_i4].getElementsByTagName("input")[1];
+          if (env_key.value && env_value.value == "") {
+            this.setState({
+              env: true
+            });
+            this.refs.envTip.innerHTML = _constants.INPUT_TIP.env.Null;
+            env_value.className = "form-control inputError";
+            env_value.focus();
+            return false;
+          }
+          envObj.env_key = env_key.value;
+          envObj.env_value = env_value.value;
           env.push(envObj);
         }
         var third = {
@@ -13863,10 +13977,11 @@ module.exports =
                 'div',
                 { className: 'assBtnBox' },
                 _react2.default.createElement(
-                  _reactBootstrap.Button,
-                  { bsStyle: 'primary', onClick: this.addPortTr.bind(this) },
+                  'button',
+                  { className: 'btn btn-primary', onClick: this.addPortTr.bind(this) },
                   '添加'
-                )
+                ),
+                _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' })
               )
             ),
             _react2.default.createElement(
@@ -13889,7 +14004,8 @@ module.exports =
                   _reactBootstrap.Button,
                   { bsStyle: 'primary', onClick: this.addSaveTr.bind(this) },
                   '添加'
-                )
+                ),
+                _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' })
               )
             ),
             _react2.default.createElement(
@@ -13912,7 +14028,8 @@ module.exports =
                   _reactBootstrap.Button,
                   { bsStyle: 'primary', onClick: this.addEnvironmentData.bind(this) },
                   '添加'
-                )
+                ),
+                _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' })
               )
             ),
             _react2.default.createElement(
@@ -14337,8 +14454,8 @@ module.exports =
       onImageListLoad: function onImageListLoad(flag) {
         dispatch((0, _imageList.fetchImageListAction)(flag));
       },
-      deployImageName: function deployImageName(obj) {
-        dispatch((0, _deployService.deployImageNameAction)(obj));
+      goToConfigContainer: function goToConfigContainer(obj) {
+        dispatch((0, _deployService.goToConfigContainer)(obj));
       },
       setBreadcrumb: function setBreadcrumb() {
         dispatch(_breadcumb.setBreadcrumbAction.apply(undefined, arguments));
@@ -14439,7 +14556,7 @@ module.exports =
           image_name: 'index.boxlinker.com/' + ImageName,
           image_id: id
         };
-        this.props.deployImageName(data);
+        this.props.goToConfigContainer(data);
       }
     }, {
       key: 'tabSelect',
@@ -14534,8 +14651,8 @@ module.exports =
               'td',
               null,
               _react2.default.createElement(
-                _Link2.default,
-                { to: '/configContainer', className: 'btn btn-sm btn-primary',
+                'button',
+                { className: 'btn btn-sm btn-primary',
                   onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid) },
                 '部署'
               )
@@ -14669,7 +14786,7 @@ module.exports =
     imageList: _react2.default.PropTypes.array,
     onImageListLoad: _react2.default.PropTypes.func,
     deployData: _react2.default.PropTypes.object,
-    deployImageName: _react2.default.PropTypes.func,
+    goToConfigContainer: _react2.default.PropTypes.func,
     setBreadcrumb: _react2.default.PropTypes.func
   };
   exports.default = ChooseImage;
@@ -16812,7 +16929,10 @@ module.exports =
       var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetDisposedTabs).call(this, props));
   
       _this3.state = {
-        isStateUp: 1
+        isStateUp: 1,
+        port: false,
+        volume: false,
+        env: false
       };
       return _this3;
     }
@@ -16835,6 +16955,8 @@ module.exports =
     }, {
       key: 'isPortRepeat',
       value: function isPortRepeat(index, e) {
+        var _this4 = this;
+  
         var container = [];
         var containerTr = _reactDom2.default.findDOMNode(this.refs.tab_container_body).getElementsByTagName("tr");
         var value = e.target.value;
@@ -16843,44 +16965,82 @@ module.exports =
           containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
           container.push(containerObj);
         }
+        this.setState({
+          port: false
+        });
+        e.target.className = "form-control form-control-sm";
         if (value <= 10 && value.length != 0) {
-          alert(_constants.INPUT_TIP.port.Format);
+          this.setState({
+            port: true
+          });
+          e.target.className = "form-control form-control-sm inputError";
+          this.refs.portTip.innerHTML = _constants.INPUT_TIP.port.Format;
+          return false;
         }
         container.splice(index, 1);
         container.map(function (item, i) {
           if (item.container_port == value && value != "") {
-            alert(_constants.INPUT_TIP.port.Repeat);
+            _this4.setState({
+              port: true
+            });
+            e.target.className = "form-control form-control-sm inputError";
+            _this4.refs.portTip.innerHTML = _constants.INPUT_TIP.port.Repeat;
             e.target.focus();
+            return false;
           }
         });
       }
     }, {
       key: 'isSaveRepeat',
       value: function isSaveRepeat(index, e) {
+        var _this5 = this;
+  
         var save = [];
         var saveTr = _reactDom2.default.findDOMNode(this.refs.tab_save_box).children;
         var key = e.target.value;
+        this.setState({
+          volume: false
+        });
         for (var i = 0; i < saveTr.length; i++) {
           var saveObj = {};
           saveObj.value = saveTr[i].getElementsByTagName("select")[0].value;
           save.push(saveObj);
         }
         save.splice(index, 1);
-        console.log(key);
         save.map(function (item) {
           if (item.value == key && key != "") {
-            alert(_constants.INPUT_TIP.volumes.Repeat);
+            _this5.setState({
+              volume: true
+            });
+            _this5.refs.volumeTip.innerHTML = _constants.INPUT_TIP.volumes.Repeat;
             e.target.value = "-1";
             e.target.focus();
+            return false;
           }
         });
       }
     }, {
       key: 'isEnvKeyRepeat',
       value: function isEnvKeyRepeat(index, e) {
+        var _this6 = this;
+  
         var env = [];
+        var regExp = /^[a-zA-Z]+[a-zA-Z0-9-]*$/;
         var envTr = _reactDom2.default.findDOMNode(this.refs.tab_env_box).children;
         var key = e.target.value;
+        this.setState({
+          env: false
+        });
+        e.target.className = "form-control";
+        if (!regExp.test(key)) {
+          this.setState({
+            env: true
+          });
+          this.refs.envTip.innerHTML = _constants.INPUT_TIP.env.Format;
+          e.target.className = "form-control inputError";
+          e.target.focus();
+          return false;
+        }
         for (var i = 0; i < envTr.length; i++) {
           var envObj = {};
           envObj.env_key = envTr[i].getElementsByTagName("input")[0].value;
@@ -16889,15 +17049,45 @@ module.exports =
         env.splice(index, 1);
         env.map(function (item) {
           if (item.env_key == key && key != "") {
-            alert(_constants.INPUT_TIP.env.Repeat);
+            _this6.setState({
+              env: true
+            });
+            _this6.refs.envTip.innerHTML = _constants.INPUT_TIP.volumes.Repeat;
+            e.target.className = "form-control inputError";
             e.target.focus();
           }
         });
       }
     }, {
+      key: 'isEnvValue',
+      value: function isEnvValue(e) {
+        this.setState({
+          env: false
+        });
+        e.target.className = "form-control";
+      }
+    }, {
+      key: 'isPathValidata',
+      value: function isPathValidata(e) {
+        var regExp = /^\/[a-zA-Z0-9]+[a-zA-Z0-9_]*$/;
+        var value = e.target.value;
+        if (!regExp.test(value) && value.length != 0) {
+          this.setState({
+            volume: true
+          });
+          e.target.className = "form-control inputError";
+          this.refs.volumeTip.innerHTML = _constants.INPUT_TIP.volumes.Format;
+        } else {
+          this.setState({
+            volume: false
+          });
+          e.target.className = "form-control";
+        }
+      }
+    }, {
       key: 'getPortTableBody',
       value: function getPortTableBody() {
-        var _this4 = this;
+        var _this7 = this;
   
         //端口
         var data = [],
@@ -16916,15 +17106,15 @@ module.exports =
                 _react2.default.createElement(
                   'div',
                   { className: "iaBox" },
-                  _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this4.isPortRepeat.bind(_this4, i), className: 'form-control form-control-sm', defaultValue: item.container_port }),
+                  _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this7.isPortRepeat.bind(_this7, i), className: 'form-control form-control-sm', defaultValue: item.container_port }),
                   _react2.default.createElement(
                     'span',
-                    { className: (0, _classnames2.default)("iaOk", "icon-right"), onClick: _this4.focusVal.bind(_this4, i) },
+                    { className: (0, _classnames2.default)("iaOk", "icon-right"), onClick: _this7.focusVal.bind(_this7, i) },
                     ' '
                   ),
                   _react2.default.createElement(
                     'span',
-                    { className: (0, _classnames2.default)("iaDel", "icon-delete"), onClick: _this4.delVal.bind(_this4, i) },
+                    { className: (0, _classnames2.default)("iaDel", "icon-delete"), onClick: _this7.delVal.bind(_this7, i) },
                     ' '
                   )
                 )
@@ -17006,7 +17196,7 @@ module.exports =
               null,
               _react2.default.createElement(
                 'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this4.delPortTr.bind(_this4, item.at) },
+                { href: 'javascript:;', className: 'delBtn', onClick: _this7.delPortTr.bind(_this7, item.at) },
                 ' '
               )
             )
@@ -17077,7 +17267,17 @@ module.exports =
         var containerTr = _reactDom2.default.findDOMNode(this.refs.tab_container_body).getElementsByTagName("tr");
         for (var i = 0; i < containerTr.length; i++) {
           var containerObj = {};
-          containerObj.container_port = containerTr[i].getElementsByTagName("input")[0].value;
+          var container_port = containerTr[i].getElementsByTagName("input")[0];
+          if (container_port.value == "") {
+            this.setState({
+              port: true
+            });
+            container_port.className = "form-control form-control-sm inputError";
+            container_port.focus();
+            this.refs.portTip.innerHTML = _constants.INPUT_TIP.port.Null;
+            return false;
+          }
+          containerObj.container_port = container_port.value;
           containerObj.protocol = containerTr[i].getElementsByTagName("select")[0].value;
           containerObj.access_mode = containerTr[i].getElementsByTagName("select")[1].value;
           containerObj.access_scope = containerTr[i].getElementsByTagName("select")[2].value;
@@ -17093,7 +17293,7 @@ module.exports =
     }, {
       key: 'getSaveTableBody',
       value: function getSaveTableBody() {
-        var _this5 = this;
+        var _this8 = this;
   
         //存储
         var data = [],
@@ -17125,7 +17325,7 @@ module.exports =
                 _react2.default.createElement(
                   'select',
                   { className: 'form-control', ref: 'volumnName', defaultValue: item.disk_name,
-                    onChange: _this5.isSaveRepeat.bind(_this5, i)
+                    onChange: _this8.isSaveRepeat.bind(_this8, i)
                   },
                   _react2.default.createElement(
                     'option',
@@ -17142,7 +17342,9 @@ module.exports =
               _react2.default.createElement(
                 'div',
                 { className: _ServiceDetail2.default.astTdBox },
-                _react2.default.createElement('input', { type: 'text', className: 'form-control', ref: 'container_path', defaultValue: item.disk_path })
+                _react2.default.createElement('input', { type: 'text', className: 'form-control', ref: 'container_path', defaultValue: item.disk_path,
+                  onBlur: _this8.isPathValidata.bind(_this8)
+                })
               )
             ),
             _react2.default.createElement(
@@ -17164,7 +17366,7 @@ module.exports =
               null,
               _react2.default.createElement(
                 'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this5.delSaveTr.bind(_this5, item.at) },
+                { href: 'javascript:;', className: 'delBtn', onClick: _this8.delSaveTr.bind(_this8, item.at) },
                 ' '
               )
             )
@@ -17234,11 +17436,16 @@ module.exports =
           var disk_name = saveTr[i].getElementsByTagName("select")[0];
           var disk_path = saveTr[i].getElementsByTagName("input")[0];
           var readonly = saveTr[i].getElementsByTagName("input")[1].checked ? "True" : "False";
-          if (disk_name.value == -1) {} else if (disk_path.value == "") {
-            alert("容器路径不能为空");
+          if (disk_name.value != -1 && disk_path.value == "") {
+            this.setState({
+              volume: true
+            });
+            disk_path.className = "form-control inputError";
+            this.refs.volumeTip.innerHTML = _constants.INPUT_TIP.volumes.Null;
             disk_path.focus();
             return false;
-          } else {
+          }
+          if (disk_name.value == -1) {} else {
             saveObj.disk_name = disk_name.value;
             saveObj.disk_path = disk_path.value;
             saveObj.readonly = readonly;
@@ -17255,7 +17462,7 @@ module.exports =
     }, {
       key: 'getEnvironment',
       value: function getEnvironment() {
-        var _this6 = this;
+        var _this9 = this;
   
         var data = [],
             sd = this.props.serviceDetail;
@@ -17267,20 +17474,20 @@ module.exports =
             _react2.default.createElement(
               'div',
               { className: _ServiceDetail2.default.astInp },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this6.isEnvKeyRepeat.bind(_this6, i), placeholder: '键', defaultValue: item.env_key })
+              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this9.isEnvKeyRepeat.bind(_this9, i), placeholder: '键', defaultValue: item.env_key })
             ),
             _react2.default.createElement('div', { className: _ServiceDetail2.default.astLine }),
             _react2.default.createElement(
               'div',
               { className: _ServiceDetail2.default.astInp },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: '值', defaultValue: item.env_value })
+              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this9.isEnvValue.bind(_this9), placeholder: '值', defaultValue: item.env_value })
             ),
             _react2.default.createElement(
               'div',
               { className: _ServiceDetail2.default.astDel },
               _react2.default.createElement(
                 'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this6.delEnvironmentData.bind(_this6, item.at) },
+                { href: 'javascript:;', className: 'delBtn', onClick: _this9.delEnvironmentData.bind(_this9, item.at) },
                 ' '
               )
             )
@@ -17305,8 +17512,19 @@ module.exports =
         var envTr = _reactDom2.default.findDOMNode(this.refs.tab_env_box).children;
         for (var i = 0; i < envTr.length; i++) {
           var envObj = {};
-          envObj.env_key = envTr[i].getElementsByTagName("input")[0].value;
-          envObj.env_value = envTr[i].getElementsByTagName("input")[1].value;
+          var env_key = envTr[i].getElementsByTagName("input")[0];
+          var env_value = envTr[i].getElementsByTagName("input")[1];
+          if (env_key.value && env_value.value == "") {
+            this.setState({
+              env: true
+            });
+            this.refs.envTip.innerHTML = _constants.INPUT_TIP.env.Null;
+            env_value.className = "form-control inputError";
+            env_value.focus();
+            return false;
+          }
+          envObj.env_key = env_key.value;
+          envObj.env_value = env_value.value;
           env.push(envObj);
         }
         var data = {
@@ -17384,7 +17602,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        var _this7 = this;
+        var _this10 = this;
   
         var data = this.props.serviceDetail;
         var n = 0;
@@ -17396,10 +17614,10 @@ module.exports =
         var volumeLength = n == 0 ? "暂时没有数据卷" : '目前有' + n + '个数据卷';
         return _react2.default.createElement(
           'div',
-          { className: _ServiceDetail2.default.asTabThird },
+          { className: 'asTabThird' },
           _react2.default.createElement(
             'div',
-            { className: (0, _classnames2.default)(_ServiceDetail2.default.assItem) },
+            { className: 'assItem' },
             _react2.default.createElement(_HeadLine2.default, {
               title: '端口',
               titleEnglish: 'PORT',
@@ -17407,12 +17625,12 @@ module.exports =
             }),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.astBox },
+              { className: 'astBox' },
               this.getPortTable()
             ),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.assBtnBox },
+              { className: 'assBtnBox' },
               _react2.default.createElement(
                 'button',
                 { className: 'btn btn-primary',
@@ -17426,12 +17644,13 @@ module.exports =
                   disabled: !this.props.isBtnState.port,
                   onClick: this.savePort.bind(this) },
                 '保存'
-              )
+              ),
+              _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' })
             )
           ),
           _react2.default.createElement(
             'div',
-            { className: (0, _classnames2.default)(_ServiceDetail2.default.assItem) },
+            { className: 'assItem' },
             _react2.default.createElement(_HeadLine2.default, {
               title: '存储设置',
               titleEnglish: 'SAVE SETTING',
@@ -17439,12 +17658,12 @@ module.exports =
             }),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.astBox, ref: 'tab_save_box' },
+              { className: 'astBox', ref: 'tab_save_box' },
               this.getSaveTable()
             ),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.assBtnBox },
+              { className: 'assBtnBox' },
               _react2.default.createElement(
                 'button',
                 { className: 'btn btn-primary', onClick: this.addSaveTr.bind(this) },
@@ -17457,12 +17676,13 @@ module.exports =
                   onClick: this.saveStorage.bind(this)
                 },
                 '保存'
-              )
+              ),
+              _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' })
             )
           ),
           _react2.default.createElement(
             'div',
-            { className: (0, _classnames2.default)(_ServiceDetail2.default.assItem) },
+            { className: 'assItem' },
             _react2.default.createElement(_HeadLine2.default, {
               title: '环境变量',
               titleEnglish: 'ENVIRONMENT VARIABLE',
@@ -17470,12 +17690,12 @@ module.exports =
             }),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.astBox, ref: 'tab_env_box' },
+              { className: 'astBox', ref: 'tab_env_box' },
               this.getEnvironment()
             ),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.assBtnBox },
+              { className: 'assBtnBox' },
               _react2.default.createElement(
                 'button',
                 { className: 'btn btn-primary', onClick: this.addEnvironmentData.bind(this) },
@@ -17488,12 +17708,13 @@ module.exports =
                   onClick: this.saveEnvironment.bind(this)
                 },
                 '保存'
-              )
+              ),
+              _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' })
             )
           ),
           _react2.default.createElement(
             'div',
-            { className: (0, _classnames2.default)(_ServiceDetail2.default.assItem) },
+            { className: 'assItem' },
             _react2.default.createElement(_HeadLine2.default, {
               title: '容器配置',
               titleEnglish: 'CONTAINER CONFIGURATION',
@@ -17501,19 +17722,19 @@ module.exports =
             }),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.assBox },
+              { className: 'assBox' },
               this.getContainerBox(data.containerDeploy),
               _react2.default.createElement(ChooseContainerBtn, {
                 serviceName: this.props.serviceDetail.fservice_name,
                 onSaveContainerDeploy: function onSaveContainerDeploy(data) {
-                  _this7.props.onSaveContainerDeploy(data);
+                  _this10.props.onSaveContainerDeploy(data);
                 }
               })
             )
           ),
           _react2.default.createElement(
             'div',
-            { className: (0, _classnames2.default)(_ServiceDetail2.default.assItem) },
+            { className: 'assItem' },
             _react2.default.createElement(_HeadLine2.default, {
               title: '启动命令',
               titleEnglish: 'JRE',
@@ -17521,7 +17742,7 @@ module.exports =
             }),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.assBox },
+              { className: 'assBox' },
               _react2.default.createElement('input', { className: 'form-control',
                 type: 'text',
                 placeholder: '',
@@ -17531,7 +17752,7 @@ module.exports =
             ),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.assBtnBox },
+              { className: 'assBtnBox' },
               _react2.default.createElement(
                 'button',
                 { className: 'btn btn-default ' + (!this.props.isBtnState.command ? "btn-loading" : ""),
@@ -17544,7 +17765,7 @@ module.exports =
           ),
           _react2.default.createElement(
             'div',
-            { className: (0, _classnames2.default)(_ServiceDetail2.default.assItem, _ServiceDetail2.default.assItemNoborder) },
+            { className: 'assItem assItemNoborder' },
             _react2.default.createElement(_HeadLine2.default, {
               title: '自动启动',
               titleEnglish: 'AUTO UPDATE SETTING',
@@ -17552,7 +17773,7 @@ module.exports =
             }),
             _react2.default.createElement(
               'div',
-              { className: _ServiceDetail2.default.assBox },
+              { className: 'assBox' },
               _react2.default.createElement(AutoStartUpToggle, { disabled: !this.props.isBtnState.autoStateUp, isState: data.auto_startup == 1, getToggle: this.getIsStartUp.bind(this) })
             )
           )
@@ -17562,6 +17783,9 @@ module.exports =
     return GetDisposedTabs;
   }(_react.Component);
   
+  GetDisposedTabs.contextTypes = {
+    store: _react.PropTypes.object
+  };
   GetDisposedTabs.propTypes = {
     serviceDetail: _react2.default.PropTypes.object,
     onServiceDetailLoad: _react2.default.PropTypes.func,
@@ -19817,7 +20041,7 @@ module.exports =
           _react2.default.createElement(_reactInputRange2.default, {
             className: 'formField',
             maxValue: 100,
-            minValue: this.props.value || 10,
+            minValue: 10,
             step: 10,
             labelPrefix: '',
             labelSuffix: 'G',
@@ -23240,6 +23464,9 @@ module.exports =
       },
       deleteOrganize: function deleteOrganize(data) {
         dispatch(fun.fetchDeleteOrganize(data));
+      },
+      leaveOrganize: function leaveOrganize(data) {
+        dispatch(fun.fetchLeaveOrganize(data));
       }
     };
   };
@@ -23372,6 +23599,9 @@ module.exports =
                   },
                   deleteOrganize: function deleteOrganize(id, flag) {
                     _this2.props.deleteOrganize(id, flag);
+                  },
+                  leaveOrganize: function leaveOrganize(data) {
+                    _this2.props.leaveOrganize(data);
                   }
                 })
               )
@@ -23398,7 +23628,8 @@ module.exports =
     getUserList: _react2.default.PropTypes.func,
     inviteUser: _react2.default.PropTypes.func,
     changeOrganizeOwner: _react2.default.PropTypes.func,
-    deleteOrganize: _react2.default.PropTypes.func
+    deleteOrganize: _react2.default.PropTypes.func,
+    leaveOrganize: _react2.default.PropTypes.func
   };
   exports.default = Organize;
 
@@ -23744,6 +23975,8 @@ module.exports =
   
   var _route = __webpack_require__(57);
   
+  var _notification = __webpack_require__(77);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var GetOrgAdmin = function (_Component) {
@@ -23756,7 +23989,9 @@ module.exports =
   
       _this.state = {
         inviteBox: false,
-        roleData: {}
+        roleData: {},
+        deleteData: {},
+        leaveData: {}
       };
       return _this;
     }
@@ -23844,7 +24079,9 @@ module.exports =
                 ),
                 user_name == item.user_name ? _react2.default.createElement(
                   'button',
-                  { className: 'btn btn-danger' },
+                  { className: 'btn btn-danger',
+                    onClick: _this2.onLeaveOrganize.bind(_this2)
+                  },
                   '离开组织'
                 ) : _react2.default.createElement(
                   'button',
@@ -23880,7 +24117,9 @@ module.exports =
                 ),
                 user_name == item.user_name ? _react2.default.createElement(
                   'button',
-                  { className: 'btn btn-danger' },
+                  { className: 'btn btn-danger',
+                    onClick: _this2.onLeaveOrganize.bind(_this2)
+                  },
                   '离开组织'
                 ) : _react2.default.createElement(
                   'button',
@@ -24061,15 +24300,26 @@ module.exports =
         var userList = this.props.userList;
         var userInfo = this.refs.username.value;
         var orga_id = this.context.store.getState().user_info.orga_uuid;
+        var data = {};
         userList.map(function (item) {
           if (item.username == userInfo || item.email == userInfo) {
-            var data = {
+            data = {
               user_id: item.user_id,
               orga_id: orga_id
             };
-            _this3.props.inviteUser(data);
           }
         });
+        if (data.user_id) {
+          this.props.inviteUser(data);
+        } else {
+          (function () {
+            _this3.context.store.dispatch((0, _notification.receiveNotification)({ message: "没有找到此用户", level: "danger" }));
+            var my = _this3;
+            setTimeout(function () {
+              my.context.store.dispatch((0, _notification.clearNotification)());
+            }, 3000);
+          })();
+        }
       }
     }, {
       key: 'onChangeUserRole',
@@ -24082,7 +24332,11 @@ module.exports =
           method: "PUT"
         };
         console.log(key);
-        this.props.changeUserRole(data);
+        if (key == 520) {
+          this.props.changeOrganizeOwner(data);
+        } else {
+          this.props.changeUserRole(data);
+        }
       }
     }, {
       key: 'onDeleteUser',
@@ -24102,11 +24356,26 @@ module.exports =
       key: 'onDeleteOrganize',
       value: function onDeleteOrganize() {
         var orga_uuid = this.context.store.getState().user_info.orga_uuid;
-        confirm("确定解散组织吗?") ? this.props.deleteOrganize(orga_uuid) : "";
+        this.setState({
+          orgData: {
+            orgId: orga_uuid,
+            keyList: "userList"
+          }
+        });
+        this.refs.confirmModalDelete.open();
       }
     }, {
       key: 'onLeaveOrganize',
-      value: function onLeaveOrganize() {}
+      value: function onLeaveOrganize() {
+        var orgId = this.context.store.getState().user_info.orga_uuid;
+        this.setState({
+          leaveData: {
+            orgId: orgId,
+            keyList: "userList"
+          }
+        });
+        this.refs.confirmModalLeave.open();
+      }
     }, {
       key: 'render',
       value: function render() {
@@ -24165,6 +24434,22 @@ module.exports =
             func: function func() {
               _this4.props.changeUserRole(_this4.state.roleData);
             }
+          }),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '您确定要离开此组织吗?',
+            ref: 'confirmModalLeave',
+            func: function func() {
+              _this4.props.leaveOrganize(_this4.state.leaveData);
+            }
+          }),
+          _react2.default.createElement(_Confirm2.default, {
+            title: '警告',
+            text: '您确定要解散此组织吗?',
+            ref: 'confirmModalDelete',
+            func: function func() {
+              _this4.props.deleteOrganize(_this4.state.orgData);
+            }
           })
         );
       }
@@ -24183,7 +24468,8 @@ module.exports =
     inviteUser: _react2.default.PropTypes.func,
     changeUserRole: _react2.default.PropTypes.func,
     changeOrganizeOwner: _react2.default.PropTypes.func,
-    deleteOrganize: _react2.default.PropTypes.func
+    deleteOrganize: _react2.default.PropTypes.func,
+    leaveOrganize: _react2.default.PropTypes.func
   };
   exports.default = GetOrgAdmin;
 

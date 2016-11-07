@@ -3,7 +3,7 @@
 # Fail fast.
 set -e
 
-REGISTRY_HOST=index.boxlinker.com
+#REGISTRY_HOST=index.boxlinker.com
 
 status() {
   echo "\033[0;32m$@\033[0m"

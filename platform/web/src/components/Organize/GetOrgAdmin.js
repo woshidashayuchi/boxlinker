@@ -1,11 +1,10 @@
-
-
 import React,{PropTypes,Component} from 'react';
 import HeadLine from '../HeadLine';
 import Loading from '../Loading';
 import {DropdownButton,MenuItem} from 'react-bootstrap';
 import Confirm from '../Confirm';
 import {navigate} from '../../actions/route';
+import {receiveNotification,clearNotification} from "../../actions/notification";
 
 class GetOrgAdmin extends Component{
   static contextTypes = {
@@ -19,14 +18,17 @@ class GetOrgAdmin extends Component{
     inviteUser:React.PropTypes.func,
     changeUserRole:React.PropTypes.func,
     changeOrganizeOwner:React.PropTypes.func,
-    deleteOrganize:React.PropTypes.func
+    deleteOrganize:React.PropTypes.func,
+    leaveOrganize:React.PropTypes.func
   };
 
   constructor(props){
     super(props);
     this.state = {
       inviteBox:false,
-      roleData:{}
+      roleData:{},
+      deleteData:{},
+      leaveData:{}
     }
   }
   componentWillMount(){
@@ -69,7 +71,9 @@ class GetOrgAdmin extends Component{
               {orgRole == 200?<MenuItem eventKey="520">组织创建者</MenuItem>:""}
             </DropdownButton>
             {user_name == item.user_name?
-              <button className="btn btn-danger">离开组织</button>:
+              <button className="btn btn-danger"
+                onClick={this.onLeaveOrganize.bind(this)}
+              >离开组织</button>:
               <button className="btn btn-danger"
                       onClick={this.onDeleteUser.bind(this,item.uid)}
                       disabled={orgRole != 200}>移除组织</button>
@@ -89,7 +93,9 @@ class GetOrgAdmin extends Component{
               {orgRole == 200?<MenuItem eventKey="520">组织创建者</MenuItem>:""}
             </DropdownButton>
             {user_name == item.user_name?
-              <button className="btn btn-danger">离开组织</button>:
+              <button className="btn btn-danger"
+                      onClick={this.onLeaveOrganize.bind(this)}
+              >离开组织</button>:
               <button className="btn btn-danger"
                       disabled={orgRole == 400}
                       onClick={this.onDeleteUser.bind(this,item.uid)}
@@ -186,15 +192,24 @@ class GetOrgAdmin extends Component{
     let userList = this.props.userList;
     let userInfo = this.refs.username.value;
     let orga_id = this.context.store.getState().user_info.orga_uuid;
+    let data = {};
     userList.map((item)=>{
       if(item.username == userInfo || item.email == userInfo){
-        let data = {
+        data = {
           user_id:item.user_id,
           orga_id:orga_id
         };
-        this.props.inviteUser(data)
       }
-    })
+    });
+    if(data.user_id){
+      this.props.inviteUser(data);
+    }else{
+      this.context.store.dispatch(receiveNotification({message:"没有找到此用户",level:"danger"}));
+      let my = this;
+      setTimeout(function(){
+        my.context.store.dispatch(clearNotification());
+      },3000);
+    }
   }
   onChangeUserRole(user_uuid,key){
     let orga_uuid = this.context.store.getState().user_info.orga_uuid;
@@ -205,7 +220,11 @@ class GetOrgAdmin extends Component{
       method:"PUT"
     };
     console.log(key);
-    this.props.changeUserRole(data);
+    if(key == 520){
+      this.props.changeOrganizeOwner(data);
+    }else {
+      this.props.changeUserRole(data);
+    }
   }
   onDeleteUser(user_uuid){
     let orga_uuid = this.context.store.getState().user_info.orga_uuid;
@@ -221,10 +240,23 @@ class GetOrgAdmin extends Component{
   }
   onDeleteOrganize(){
     let orga_uuid = this.context.store.getState().user_info.orga_uuid;
-    confirm("确定解散组织吗?")?this.props.deleteOrganize(orga_uuid):"";
+    this.setState({
+      orgData:{
+        orgId:orga_uuid,
+        keyList:"userList"
+      }
+    });
+    this.refs.confirmModalDelete.open();
   }
   onLeaveOrganize(){
-
+    let orgId = this.context.store.getState().user_info.orga_uuid;
+    this.setState({
+      leaveData:{
+        orgId:orgId,
+        keyList:"userList"
+      }
+    });
+    this.refs.confirmModalLeave.open();
   }
 
   render(){
@@ -267,6 +299,19 @@ class GetOrgAdmin extends Component{
           ref = "confirmModal"
           func = {() => {this.props.changeUserRole(this.state.roleData)}}
         />
+        <Confirm
+          title = "警告"
+          text = "您确定要离开此组织吗?"
+          ref = "confirmModalLeave"
+          func = {() => {this.props.leaveOrganize(this.state.leaveData)}}
+        />
+        <Confirm
+          title = "警告"
+          text = "您确定要解散此组织吗?"
+          ref = "confirmModalDelete"
+          func = {() => {this.props.deleteOrganize(this.state.orgData)}}
+        />
+
       </div>
     )
   }

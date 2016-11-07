@@ -27,7 +27,7 @@ class InputRangesBox extends Component {//input滑块
         <InputRange
           className="formField"
           maxValue={100}
-          minValue={this.props.value||10}
+          minValue={10}
           step={10}
           labelPrefix=""
           labelSuffix="G"

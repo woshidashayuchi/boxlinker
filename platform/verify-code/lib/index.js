@@ -40,7 +40,7 @@ var captcha = ccap({
 var app = express();
 
 /**
- * @api {get} /check_code/:id?code={code} 验证用户输入的验证码
+ * @api {get} /v1/verify-code/check_code/:id?code={code} 验证用户输入的验证码
  * @apiName 验证验证码
  * @apiGroup verify code
  *
@@ -71,7 +71,7 @@ app.get('/v1/verify-code/check_code/:id',function(req,res){
 })
 
 /**
- * @api {get} /code?uuid={uuid} 获取验证码图片
+ * @api {get} /v1/verify-code/code?uuid={uuid} 获取验证码图片
  * @apiName 获取验证码图片
  * @apiGroup verify code
  *

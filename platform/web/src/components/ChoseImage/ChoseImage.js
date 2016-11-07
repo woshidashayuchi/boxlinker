@@ -22,7 +22,7 @@ class ChooseImage extends Component{
     imageList:React.PropTypes.array,
     onImageListLoad:React.PropTypes.func,
     deployData:React.PropTypes.object,
-    deployImageName:React.PropTypes.func,
+    goToConfigContainer:React.PropTypes.func,
     setBreadcrumb:React.PropTypes.func
   };
 
@@ -36,7 +36,7 @@ class ChooseImage extends Component{
       image_name :`index.boxlinker.com/${ImageName}`,
       image_id:id
     };
-    this.props.deployImageName(data);
+    this.props.goToConfigContainer(data);
   }
   tabSelect(key){
     switch (key){
@@ -74,8 +74,8 @@ class ChooseImage extends Component{
               <span className="cl3">{item.short_description}</span>
             </td>
             <td>
-              <Link to={`/configContainer`} className="btn btn-sm btn-primary"
-                    onClick = {this.deployImage.bind(this,item.repository,item.uuid)}>部署</Link>
+              <button className="btn btn-sm btn-primary"
+                    onClick = {this.deployImage.bind(this,item.repository,item.uuid)}>部署</button>
             </td>
           </tr>)
     });

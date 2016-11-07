@@ -188,12 +188,13 @@ export const INPUT_TIP = {
     Repeat:"端口不能重复"
   },
   volumes:{
+    Null:"容器路径不能为空",
     Format:"必须以/开头,后可加字母数字下划线",
     Repeat:"数据卷名称不能重复"
   },
   env:{
-    Null:"环境变量不能为空",
-    Format:"环境变量格式不对",
+    Null:"环境变量值不能为空",
+    Format:"环境变量只能为字母数字中划线,并以字母开头",
     Repeat:"环境变量键值不能重复"
   }
 

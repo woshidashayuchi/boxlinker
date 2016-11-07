@@ -1,7 +1,7 @@
 import ChoseImage from '../../components/ChoseImage/ChoseImage';
 import {connect} from 'react-redux';
 import {
-  deployImageNameAction,
+  goToConfigContainer,
 } from '../../actions/deployService';
 import {fetchImageListAction } from "../../actions/imageList";
 import makeGetImageListSelector from '../../selectors/imageListSelector';
@@ -24,8 +24,8 @@ const mapDispatchToProps = (dispatch) => {
     onImageListLoad : (flag) => {
       dispatch(fetchImageListAction(flag));
     },
-    deployImageName:(obj) => {
-      dispatch(deployImageNameAction(obj))
+    goToConfigContainer:(obj) => {
+      dispatch(goToConfigContainer(obj))
     },
     setBreadcrumb:(...arr) => {
       dispatch(setBreadcrumbAction(...arr))
