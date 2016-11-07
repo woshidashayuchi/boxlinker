@@ -23,7 +23,7 @@
             },
             "spec": {
                 "nodeSelector" : {
-                    "role": "node"
+                    "role": "user"
                     },
                 "imagePullSecrets": [ 
                     {
@@ -72,14 +72,15 @@
                         "name": "rbddisk",
                         "rbd": {
                             "monitors": [
-                                "192.168.1.5:5000",
-                                "192.168.1.8:5000",
-                                "192.168.1.9:5000"
+                                "10.10.10.11:5000",
+                                "10.10.10.12:5000",
+                                "10.10.10.21:5000"
                             ],
                             "pool": "pool_hdd",
                             "image": "database03disk01",
                             "user": "admin",
                             "keyring": "/etc/ceph/keyring",
+                            "secretRef": null,
                             "fsType": "xfs",
                             "readOnly": false
                         }
