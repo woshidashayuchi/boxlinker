@@ -1,0 +1,36 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "centos"
+    },
+    "spec": {
+        "containers": [
+            {
+                "name": "centos-ssh",
+                "image": "registry.36ap.com/library/centos-ssh",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/mnt/cephfs",
+                        "name": "cephfs"
+                    }
+                ]
+            }
+        ],
+        "volumes": [
+            {
+                "name": "cephfs",
+                "cephfs": {
+                    "monitors": [
+        						"172.20.10.11:5000",
+						        "172.20.10.12:5000"
+    				 ],
+                    "path": "/",
+                    "secretFile": "/etc/ceph/admin.keyring",
+                    "user": "admin",
+                    "readOnly": false
+                }
+            }
+        ]
+    }
+}

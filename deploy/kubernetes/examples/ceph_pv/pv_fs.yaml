@@ -1,0 +1,17 @@
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: pv0001
+  spec:
+    capacity:
+      storage: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Recycle
+    cephfs:
+      monitors: [ "172.20.10.11:5000",
+                  "172.20.10.12:5000" ]
+      path: /
+      secretFile: /etc/ceph/admin.keyring
+      user: admin
+      readOnly: false

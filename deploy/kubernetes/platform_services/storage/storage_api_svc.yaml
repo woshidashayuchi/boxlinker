@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: storage-api
+    namespace: boxlinker
+    labels:
+        name: storage-api
+    annotations:
+        serviceloadbalancer/lb.http: storage.boxlinker.com:9999
+        serviceloadbalancer/lb.node: main
+spec:
+    selector:
+        name: storage-api
+    ports:
+    - name: rest-api
+      port: 9999
+      targetPort: 9999

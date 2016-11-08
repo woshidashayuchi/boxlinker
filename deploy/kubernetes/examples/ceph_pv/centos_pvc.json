@@ -1,0 +1,30 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "centospvc"
+    },
+    "spec": {
+        "containers": [
+            {
+                "name": "centos-ssh",
+                "image": "registry.36ap.com/library/centos-ssh",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/mnt/cephfs",
+                        "name": "mypd"
+                    }
+                ]
+            }
+        ],
+        "volumes": [
+            {
+                "name": "mypd",
+                "persistentVolumeClaim":
+                    {
+                        "claimName": "myclaim"
+                    }
+                }
+         ]
+    }
+}

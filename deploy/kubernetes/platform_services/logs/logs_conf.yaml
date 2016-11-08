@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: List
+items:
+# logs api config
+
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: logs-api
+    namespace: boxlinker
+    labels:
+      name: logs-api
+      rc-krud: "boxlinker_centos-logs"
+  spec:
+    replicas: 1
+    selector:
+      name: logs-api
+    template:
+      metadata:
+        labels:
+          name: logs-api
+      spec:
+        nodeSelector:
+          logs: "true"
+        imagePullSecrets:
+        - name: registry-key
+        containers:
+        - name: logs-api
+          imagePullPolicy: Always
+          image: index.boxlinker.com/boxlinker/centos-logs:api-1.0.7
+          ports:
+          - containerPort: 8001
+            hostPort: 80
+          env:
+          - name: TOKEN_AUTH_API
+            value: http://registry-api:8080/user/check_token_get
+          - name: KIBANA_LOG_API
+            value: http://kibana:5601/elasticsearch/_msearch?timeout=0&ignore_unavailable=true&preference=1473650101921

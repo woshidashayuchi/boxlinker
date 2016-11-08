@@ -1,0 +1,199 @@
+apiVersion: v1
+kind: List
+items:
+# elasticsearch config
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: elasticsearch
+    namespace: boxlinker
+    annotations:
+      serviceloadbalancer/lb.http: es.boxlinker.com:9200
+      serviceloadbalancer/lb.node: main
+    labels:
+      component: elasticsearch
+      role: client
+  spec:
+    selector:
+      component: elasticsearch
+      role: client
+    ports:
+    - name: http
+      port: 9200
+      protocol: TCP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: elasticsearch-discovery
+    namespace: boxlinker
+    labels:
+      component: elasticsearch
+      role: master
+  spec:
+    selector:
+      component: elasticsearch
+      role: master
+    ports:
+    - name: transport
+      port: 9300
+      protocol: TCP
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: es-master
+    namespace: boxlinker
+    labels:
+      component: elasticsearch
+      role: master
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        namespace: boxlinker
+        labels:
+          component: elasticsearch
+          role: master
+      spec:
+        nodeSelector:
+          role: node
+        imagePullSecrets:
+        - name: registry-key
+        containers:
+        - name: es-master
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          image: index.boxlinker.com/boxlinker/docker-elasticsearch-kubernetes:2.3.4
+          env:
+          - name: KUBERNETES_CA_CERTIFICATE_FILE
+            value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: "CLUSTER_NAME"
+            value: "myesdb"
+          - name: NODE_MASTER
+            value: "true"
+          - name: NODE_DATA
+            value: "false"
+          - name: HTTP_ENABLE
+            value: "false"
+          ports:
+          - containerPort: 9300
+            name: transport
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /data
+            name: storage
+        volumes:
+        - name: storage
+          emptyDir: {}
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: es-data
+    namespace: boxlinker
+    labels:
+      component: elasticsearch
+      role: data
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        namespace: boxlinker
+        labels:
+          component: elasticsearch
+          role: data
+      spec:
+        nodeSelector:
+          role: node
+        imagePullSecrets:
+        - name: registry-key
+        containers:
+        - name: es-data
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          image: index.boxlinker.com/boxlinker/docker-elasticsearch-kubernetes:2.3.4
+          env:
+          - name: KUBERNETES_CA_CERTIFICATE_FILE
+            value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: "CLUSTER_NAME"
+            value: "myesdb"
+          - name: NODE_MASTER
+            value: "false"
+          - name: HTTP_ENABLE
+            value: "false"
+          ports:
+          - containerPort: 9300
+            name: transport
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /data
+            name: storage
+        volumes:
+        - name: storage
+          emptyDir: {}
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: es-client
+    namespace: boxlinker
+    labels:
+      component: elasticsearch
+      role: client
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        namespace: boxlinker
+        labels:
+          component: elasticsearch
+          role: client
+      spec:
+        nodeSelector:
+          role: node
+        imagePullSecrets:
+        - name: registry-key
+        containers:
+        - name: es-client
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          image: index.boxlinker.com/boxlinker/docker-elasticsearch-kubernetes:2.3.4
+          env:
+          - name: KUBERNETES_CA_CERTIFICATE_FILE
+            value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: "CLUSTER_NAME"
+            value: "myesdb"
+          - name: NODE_MASTER
+            value: "false"
+          - name: NODE_DATA
+            value: "false"
+          - name: HTTP_ENABLE
+            value: "true"
+          ports:
+          - containerPort: 9200
+            name: http
+            protocol: TCP
+          - containerPort: 9300
+            name: transport
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /data
+            name: storage
+        volumes:
+        - name: storage
+          emptyDir: {}

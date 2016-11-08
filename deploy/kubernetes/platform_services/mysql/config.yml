@@ -1,0 +1,143 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    namespace: kube-system
+    name: k8s-api-mysql
+  spec:
+    selector:
+      component: k8s-api-mysql-cluster
+    ports:
+    - port: 3306
+- apiVersion: v1
+  kind: Service
+  metadata:
+    namespace: kube-system
+    name: k8s-api-mysql-backend
+  spec:
+    selector:
+      component: k8s-api-mysql-cluster
+    ports:
+    - port: 4567
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    namespace: kube-system
+    name: k8s-api-mysql-cluster-01
+    labels:
+      component: k8s-api-mysql-cluster
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        namespace: kube-system
+        name: k8s-api-mysql-cluster-01
+        labels:
+          name: k8s-api-mysql-cluster-01
+          component: k8s-api-mysql-cluster
+      spec:
+        containers:
+        - name: k8s-api-mysql-cluster-01
+          image: index.36ap.com/centos-mariadb:cluster-first-1.0.0
+          ports:
+          - containerPort: 3306
+          - containerPort: 4567
+          volumeMounts:
+          - mountPath: /database
+            name: rbddisk
+        volumes:
+        - name: rbddisk
+          rbd:
+            monitors:
+            - "192.168.1.9:5000"
+            - "192.168.1.8:5000"
+            - "192.168.1.5:5000"
+            pool: pool_hdd
+            image: kube-system_mysql-cluster-01
+            user: amdin
+            keyring: /etc/ceph/keyring
+            secretRef: null
+            fsType: xfs
+            readOnly: false
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    namespace: kube-system
+    name: k8s-api-mysql-cluster-02
+    labels:
+      component: k8s-api-mysql-cluster
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        namespace: kube-system
+        name: k8s-api-mysql-cluster-02
+        labels:
+          name: k8s-api-mysql-cluster-02
+          component: k8s-api-mysql-cluster
+      spec:
+        containers:
+        - name: mysql-cluster-02
+          image: index.36ap.com/centos-mariadb:cluster-node-1.0.0
+          ports:
+          - containerPort: 3306
+          - containerPort: 4567
+          volumeMounts:
+          - mountPath: /database
+            name: rbddisk
+        volumes:
+        - name: rbddisk
+          rbd:
+            monitors:
+            - "192.168.1.9:5000"
+            - "192.168.1.8:5000"
+            - "192.168.1.5:5000"
+            pool: pool_hdd
+            image: kube-system_mysql-cluster-02
+            user: amdin
+            keyring: /etc/ceph/keyring
+            secretRef: null
+            fsType: xfs
+            readOnly: false
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    namespace: kube-system
+    name: k8s-api-mysql-cluster-03
+    labels:
+      component: k8s-api-mysql-cluster
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        namespace: kube-system
+        name: k8s-api-mysql-cluster-03
+        labels:
+          name: k8s-api-mysql-cluster-03
+          component: k8s-api-mysql-cluster
+      spec:
+        containers:
+        - name: mysql-cluster-03
+          image: index.36ap.com/centos-mariadb:cluster-node-1.0.0
+          ports:
+          - containerPort: 3306
+          - containerPort: 4567
+          volumeMounts:
+          - mountPath: /database
+            name: rbddisk
+        volumes:
+        - name: rbddisk
+          rbd:
+            monitors:
+            - "192.168.1.9:5000"
+            - "192.168.1.8:5000"
+            - "192.168.1.5:5000"
+            pool: pool_hdd
+            image: kube-system_mysql-cluster-03
+            user: amdin
+            keyring: /etc/ceph/keyring
+            secretRef: null
+            fsType: xfs
+            readOnly: false

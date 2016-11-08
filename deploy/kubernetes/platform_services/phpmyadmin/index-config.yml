@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: dbviewer-index
+    namespace: boxlinker
+    annotations:
+      serviceloadbalancer/lb.http: dbviewer-index.boxlinker.com:80
+      serviceloadbalancer/lb.node: main
+  spec:
+    selector:
+      component: dbviewer-index
+    sessionAffinity: ClientIP
+    ports:
+    - port: 80
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: dbviewer-index
+    namespace: boxlinker
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        name: dbviewer-index
+        labels:
+          component: dbviewer-index
+      spec:
+        nodeSelector:
+          role: node
+        imagePullSecrets:
+        - name: registry-key
+        containers:
+        - name: dbviewer
+          image: index.boxlinker.com/phpmyadmin/phpmyadmin:latest
+          env:
+          - name: PMA_HOST
+            value: database-index
+          - name: PMA_PORT
+            value: "3306"
+          - name: PMA_USER
+            value: root
+          - name: PMA_PASSWORD
+            value: root123
+          ports:
+          - containerPort: 80

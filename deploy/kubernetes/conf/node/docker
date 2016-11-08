@@ -1,0 +1,1 @@
+DOCKER_OPTS="-H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock -s devicemapper --selinux-enabled=false --insecure-registry=10.25.97.182:5000 --insecure-registry=index.boxlinker.com"

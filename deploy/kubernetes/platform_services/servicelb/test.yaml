@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: lb-test
+    annotations:
+      serviceloadbalancer/lb.host: lb-test.36ap.com
+    labels:
+      k8s-app: lb-test
+  spec:
+    selector:
+      k8s-app: lb-test
+    ports:
+    - port: 80
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: lb-test
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          k8s-app: lb-test
+      spec:
+        containers:
+        - image: index.36ap.com/nginx
+          name: lb-test
+          ports:
+          - containerPort: 80
