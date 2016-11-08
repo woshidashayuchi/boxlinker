@@ -1,2 +1,0 @@
-运行前需要修改storage_api_rc.yaml文件中环境变量值
-

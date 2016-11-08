@@ -1,2 +1,0 @@
-运行前需要修改monitor_service_conf.yaml文件中环境变量值
-
