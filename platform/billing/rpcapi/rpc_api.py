@@ -63,7 +63,7 @@ class BillingRpcApi(object):
             return request_result(598)
 
     @acl_check
-    def voucher_update(self, context, parameters=None):
+    def voucher_active(self, context, parameters=None):
         try:
             dict_data = {"api": "bil_voc_voc_act", "context": context, "parameters": parameters}
             json_data = json.dumps(dict_data)

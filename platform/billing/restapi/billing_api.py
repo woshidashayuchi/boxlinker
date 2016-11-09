@@ -223,7 +223,7 @@ class VoucherApi(Resource):
                       "resource_uuid": "bil_voc_voc_act"
                   }
 
-        return self.billing_api.voucher_update(context, parameters)
+        return self.billing_api.voucher_active(context, parameters)
 
 
 class BillsAPI(Resource):

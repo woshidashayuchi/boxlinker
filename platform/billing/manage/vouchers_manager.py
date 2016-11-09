@@ -34,10 +34,10 @@ class VouchersManager(object):
 
         return request_result(0, result)
 
-    def voucher_update(self, voucher_uuid, orga_uuid, user_uuid):
+    def voucher_active(self, voucher_uuid, orga_uuid, user_uuid):
 
         try:
-            self.billing_db.voucher_update(voucher_uuid, orga_uuid, user_uuid)
+            self.billing_db.voucher_active(voucher_uuid, orga_uuid, user_uuid)
         except Exception, e:
             log.error('Database update error')
             return request_result(403)
@@ -49,6 +49,29 @@ class VouchersManager(object):
                  }
 
         return request_result(0, result)
+
+    def voucher_check(self, user_uuid, orga_uuid, amount):
+
+        try:
+            user_voucher = self.billing_db.voucher_check(user_uuid, orga_uuid, amount)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+
+        try:
+            voucher_uuid = user_voucher[0][0]
+        except Exception:
+            voucher_uuid = False
+
+        return voucher_uuid
+
+    def voucher_update(self, voucher_uuid, amount):
+
+        try:
+            self.billing_db.voucher_update(voucher_uuid, amount)
+        except Exception, e:
+            log.error('Database update error, reason=%s' % (e))
+
+        return
 
     def voucher_get(self, user_uuid, orga_uuid,
                     role_uuid, start_time, end_time):

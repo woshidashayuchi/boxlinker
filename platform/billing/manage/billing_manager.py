@@ -109,7 +109,7 @@ class BillingManagerAPI(object):
                     user_uuid, denomination, invalid_time)
 
     @token_check
-    def voucher_update(self, context, parameters):
+    def voucher_active(self, context, parameters):
 
         try:
             user_info = context['user_info']
@@ -121,7 +121,7 @@ class BillingManagerAPI(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.vouchers_manager.voucher_update(
+        return self.vouchers_manager.voucher_active(
                     voucher_uuid, orga_uuid, user_uuid)
 
     @token_check
@@ -277,7 +277,7 @@ class BillingManagerAPI(object):
                 "bil_rss_rss_put": self.resource_update,
                 "bil_rss_rss_get": self.resource_get,
                 "bil_voc_voc_crt": self.voucher_create,
-                "bil_voc_voc_act": self.voucher_update,
+                "bil_voc_voc_act": self.voucher_active,
                 "bil_voc_voc_get": self.voucher_get,
                 "bil_bls_bls_get": self.bill_get,
                 "bil_blc_blc_add": self.balance_init,

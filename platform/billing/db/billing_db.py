@@ -103,6 +103,15 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_select_sql(sql)
 
+    def resources_get(self):
+
+        sql = "select a.resource_uuid, a.resource_type, a.orga_uuid, a.user_uuid, \
+               b.resource_conf, b.resource_status \
+               from resources_acl a join resources b \
+               where a.resource_uuid=b.resource_uuid"
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
     def voucher_insert(self, user_uuid, denomination, invalid_time):
 
         denomination = int(denomination)
@@ -114,7 +123,7 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_update_sql(sql)
 
-    def voucher_update(self, voucher_uuid, orga_uuid, user_uuid):
+    def voucher_active(self, voucher_uuid, orga_uuid, user_uuid):
 
         sql_01 = "insert into resources_acl(resource_uuid, resource_type, \
                   admin_uuid, orga_uuid, user_uuid, create_time, update_time) \
@@ -126,6 +135,27 @@ class BillingDB(MysqlInit):
                   % (voucher_uuid)
 
         return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
+
+    def voucher_check(self, user_uuid, orga_uuid, amount):
+
+        amount = float(amount)
+        sql = "select a.vouchers_uuid from vouchers a join resources_acl b \
+               where a.vouchers_uuid=b.resource_uuid  \
+               and a.invalid_time >= now() and a.balance >= %f \
+               and b.user_uuid='%s' and b.orga_uuid='%s' \
+               order by a.invalid_time asc limit 1" \
+               % (amount, user_uuid, orga_uuid)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def voucher_update(self, voucher_uuid, amount):
+
+        amount = float(amount)
+        sql = "update vouchers set balance=balance - %f, update_time=now() \
+               where vouchers_uuid='%s'" \
+               % (amount, voucher_uuid)
+
+        return super(BillingDB, self).exec_update_sql(sql)
 
     def voucher_get(self, user_uuid, orga_uuid,
                     role_uuid, start_time, end_time):
@@ -181,15 +211,29 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_select_sql(sql)
 
+    def bill_insert(self, user_uuid, orga_uuid,
+                    resource_uuid, resource_cost,
+                    voucher_cost):
+
+        sql = "insert into bills(resource_uuid, resource_cost, voucher_cost, \
+               user_uuid, orga_uuid, insert_time) \
+               values('%s', '%f', '%f', '%s', '%s', now())" \
+               % (resource_uuid, float(resource_cost), float(voucher_cost),
+                  user_uuid, orga_uuid)
+
+        return super(BillingDB, self).exec_update_sql(sql)
+
     def bill_get(self, user_uuid, orga_uuid,
                  role_uuid, start_time, end_time):
 
-        sql = "select a.resource_uuid, b.denomination, b.balance, \
-                   b.active_time, b.invalid_time \
-                   from resources_acl a join vouchers b \
-                   where a.resource_uuid=b.vouchers_uuid and a.orga_uuid='%s' \
-                   and a.user_uuid='%s' and b.create_time between '%s' and '%s'" \
-                   % (orga_uuid, user_uuid, start_time, end_time)
+        sql = "select a.resource_uuid, a.resource_name, b.resource_type, \
+               c.user_uuid, c.orga_uuid, c.resource_cost, c.vouchers_used \
+               from resources a join resources_acl b join bills c \
+               where a.resource_uuid=b.resource_uuid \
+               and b.resource_uuid = c.resource_uuid \
+               and c.user_uuid='%s' and c.orga_uuid='%s' \
+               and c.insert_time between '%s' and '%s'" \
+               % (user_uuid, orga_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)
 

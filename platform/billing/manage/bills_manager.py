@@ -17,6 +17,18 @@ class BillsManager(object):
 
         self.billing_db = BillingDB()
 
+    def bill_create(self, user_uuid, orga_uuid, resource_uuid,
+                    resource_cost, voucher_cost):
+
+        try:
+            self.billing_db.bill_insert(user_uuid, orga_uuid,
+                                        resource_uuid, resource_cost,
+                                        voucher_cost)
+        except Exception, e:
+            log.error('Database insert error, reason=%s' % (e))
+
+        return
+
     def bill_get(self, user_uuid, orga_uuid,
                  role_uuid, start_time, end_time):
 

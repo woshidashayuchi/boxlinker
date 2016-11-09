@@ -69,3 +69,8 @@ class BalancesManager(object):
         result = json.loads(result)
 
         return request_result(0, result)
+
+    def balances_update(self):
+
+
+        return
