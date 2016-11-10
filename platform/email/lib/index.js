@@ -11,7 +11,7 @@ var transporter = nodemailer.createTransport(smtpPool({
     port: 25,
     auth: {
         user: 'service@boxlinker.com',
-        pass: '3xt-Tfe-cMa-Rrt'
+        pass: 'boxlinker'
     },
     // use up to 5 parallel connections
     maxConnections: 5,
@@ -35,7 +35,9 @@ transporter.on('idle',function(){
 function sendLoop(){
     while(transporter.isIdle() && messages.length){
         // transporter.send(messages.shift());
-        transporter.sendMail(messages.shift(), function(error, info){
+        var msg = messages.shift();
+        console.log("send to: %s", msg.to)
+        transporter.sendMail(msg, function(error, info){
             if(error){
                 return console.error(error)
             }
@@ -69,15 +71,16 @@ app.post('/v1/email/send',function(req,res){
         ;
     if (!isemail.validate(to)) return res.json({status:2,msg:"error receiver email format"})
     if (!(text||html)||!title) return res.json({status:1,msg:"no text/html/title provided"})
-
+    var from = 'service@boxlinker.com';
     // setup e-mail data with unicode symbols
     var mailOptions = {
-        from: 'service@boxlinker.com', // sender address
+        from: from, // sender address
         to: to, // list of receivers
         subject: title, // Subject line
         text: text, // plaintext body
         html: html // html body
     };
+    console.log('receive send: from %s - to %s', from,to)
     messages.push(mailOptions)
     res.json({status:0,msg:"messages length "+messages.length})
 // send mail with defined transport object

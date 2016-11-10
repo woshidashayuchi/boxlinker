@@ -28,6 +28,7 @@ def CPUinfo():
                     procinfo[line.split(':')[0].strip()] = ''
     return CPUinfo
 
+
 def meminfo():
 
     meminfo = OrderedDict()
