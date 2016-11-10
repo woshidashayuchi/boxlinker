@@ -53,5 +53,5 @@ class EmailAb(object):
                "<h3>please take immediate actions!!!<h3>" \
                "</div>"
         log.info("text========#########%s" % text)
-        email_te = {"to": "wxf_come_on@163.com", "title": "boxlinker resource alarming", "html": text}
+        email_te = {"to": "359876749@qq.com", "title": "boxlinker resource alarming", "html": text}
         return email_te

@@ -66,7 +66,7 @@ class SourceModel(object):
             else:
                 command = json_list.get("command")
 
-            if command != "" and command is not None:
+            if command != "" and command is not None and command != "Null":
                 com = command.split(",")
             else:
                 com = ""
@@ -150,8 +150,8 @@ class SourceModel(object):
                                       "image": image_name+":"+image_version,
                                       "imagePullPolicy": pullpolicy,
                                       "command": com,
-                                      "resources": {"limits": {"cpu": container_cpu,
-                                                               "memory": container_memory}},
+                                      # "resources": {"limits": {"cpu": container_cpu,
+                                      #                         "memory": container_memory}},
                                       "ports": ArrayIterator.container(container),
                                       "env": ArrayIterator.env(env),
                                       "volumeMounts": volume.fill_containerfor_volume(json_list)
@@ -177,7 +177,7 @@ class SourceModel(object):
                 for i in update_rc["spec"]["template"]["spec"]["containers"]:
                     del update_rc["spec"]["template"]["spec"]["containers"][j]["volumeMounts"]
                     j += 1
-            if com is None or com == "":
+            if com is None or com == "" or com == "Null":
                 j = 0
                 for i in update_rc["spec"]["template"]["spec"]["containers"]:
                     del update_rc["spec"]["template"]["spec"]["containers"][j]["command"]
@@ -275,8 +275,8 @@ class SourceModel(object):
                                       "image": image_name+":"+image_version,
                                       "imagePullPolicy": pullpolicy,
                                       "command": command,
-                                      "resources": {"limits": {"cpu": container_cpu,
-                                                               "memory": container_memory}},
+                                      # "resources": {"limits": {"cpu": container_cpu,
+                                      #                         "memory": container_memory}},
                                       "ports": ArrayIterator.container(container),
                                       "env": ArrayIterator.env(env),
                                       "volumeMounts": volume.fill_containerfor_volume(json_list)
@@ -300,7 +300,7 @@ class SourceModel(object):
                 for i in add_rc["spec"]["template"]["spec"]["containers"]:
                     del add_rc["spec"]["template"]["spec"]["containers"][j]["volumeMounts"]
                     j += 1
-            if command == "" or command is None:
+            if command == "" or command is None or command == "Null":
                 j = 0
                 for i in add_rc["spec"]["template"]["spec"]["containers"]:
                     del add_rc["spec"]["template"]["spec"]["containers"][j]["command"]
@@ -519,8 +519,8 @@ class SourceModel(object):
                                       "image": image_name+":"+image_version,
                                       "imagePullPolicy": pullpolicy,
                                       "command": command,
-                                      "resources": {"limits": {"cpu": container_cpu,
-                                                               "memory": container_memory}},
+                                      # "resources": {"limits": {"cpu": container_cpu,
+                                      #                         "memory": container_memory}},
                                       "ports": ArrayIterator.container(res),
                                       # "env": ArrayIterator.env(env)
 
@@ -614,8 +614,8 @@ class SourceModel(object):
                                       "name": service_name1,
                                       "image": image_name+":"+image_version,
                                       "imagePullPolicy": pullpolicy,
-                                      "resources": {"limits": {"cpu": container_cpu,
-                                                               "memory": container_memory}},
+                                      # "resources": {"limits": {"cpu": container_cpu,
+                                      #                         "memory": container_memory}},
                                       "ports": ArrayIterator.container(container),
                                       "env": ArrayIterator.env(env),
                                       "volumeMounts": volume_mounts
