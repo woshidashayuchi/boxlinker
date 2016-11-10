@@ -37,7 +37,7 @@ class CostsManager(object):
                 resource_cost = 0
             else:
                 resource_cost = resource_conf * self.app_datum_cost
-        elif resource_type == 'storage':
+        elif resource_type == 'volume':
             resource_cost = resource_conf * self.hdd_datum_cost
         else:
             resource_cost = resource_conf * 0.1
@@ -60,7 +60,7 @@ class CostsManager(object):
         else:
             voucher_cost = 0
             self.balances_manager.balance_update(
-                 user_uuid, orga_uuid, resource_cost)
+                 user_uuid, orga_uuid, -resource_cost)
 
         self.bills_manager.bill_create(user_uuid, orga_uuid, resource_uuid,
                                        resource_cost, voucher_cost)

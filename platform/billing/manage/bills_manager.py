@@ -47,15 +47,19 @@ class BillsManager(object):
         bills_list = []
         for bills_info in bills_list_info:
             resource_uuid = bills_info[0]
-            resource_cost = bills_info[1]
-            vouchers_used = bills_info[2]
+            resource_name = bills_info[1]
+            resource_type = bills_info[2]
+            resource_cost = bills_info[3]
+            voucher_cost = bills_info[4]
 
             v_bills_info = {
                                "user_uuid": user_uuid,
                                "orga_uuid": orga_uuid,
                                "resource_uuid": resource_uuid,
+                               "resource_name": resource_name,
+                               "resource_type": resource_type,
                                "resource_cost": resource_cost,
-                               "vouchers_used": vouchers_used,
+                               "voucher_cost": voucher_cost,
                                "start_time": start_time,
                                "end_time": end_time
                            }

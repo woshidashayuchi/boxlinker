@@ -226,13 +226,15 @@ class BillingDB(MysqlInit):
     def bill_get(self, user_uuid, orga_uuid,
                  role_uuid, start_time, end_time):
 
-        sql = "select a.resource_uuid, a.resource_name, b.resource_type, \
-               c.user_uuid, c.orga_uuid, c.resource_cost, c.vouchers_used \
+        sql = "select a.resource_uuid, a.resource_name, \
+               b.resource_type, \
+               round(sum(c.resource_cost), 2), round(sum(c.voucher_cost), 2) \
                from resources a join resources_acl b join bills c \
                where a.resource_uuid=b.resource_uuid \
                and b.resource_uuid = c.resource_uuid \
                and c.user_uuid='%s' and c.orga_uuid='%s' \
-               and c.insert_time between '%s' and '%s'" \
+               and c.insert_time between '%s' and '%s' \
+               group by b.resource_type" \
                % (user_uuid, orga_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)
