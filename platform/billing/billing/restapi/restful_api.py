@@ -38,4 +38,4 @@ def rest_app_run():
     api.add_resource(billing_api.OrderApi,
                      '/api/v1.0/billing/orders/<order_uuid>')
 
-    app.run(host='0.0.0.0', port=8001, threaded=True, debug=False)
+    app.run(host='0.0.0.0', port=8001, threaded=True, debug=True)
