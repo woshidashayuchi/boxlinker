@@ -8,6 +8,7 @@ class IsPublicToggle extends  Component{
   static propTypes={
     getToggle:React.PropTypes.func,
     state:React.PropTypes.bool,
+    disabled:React.PropTypes.bool
   };
   constructor(props) {
     super(props);
@@ -28,6 +29,7 @@ class IsPublicToggle extends  Component{
       <Toggle
         defaultChecked={this.state.is_public}
         onChange={this.handClick.bind(this)}
+        disabled = {this.props.disabled}
       />
     )
   }
@@ -40,7 +42,8 @@ class GetOrgInfo extends Component{
   static propTypes = {
     getOrganizeDetail:React.PropTypes.func,
     organizeDetail:React.PropTypes.object,
-    setOrganizeDetail:React.PropTypes.func
+    setOrganizeDetail:React.PropTypes.func,
+    isBtnState:React.PropTypes.object
   };
 
   constructor(props){
@@ -61,19 +64,16 @@ class GetOrgInfo extends Component{
   }
 
   setOrganizeDetail(){
-    let orga_id = this.context.store.getState().user_info.orga_uuid;
-    let org_name = this.context.store.getState().user_info.user_orga;
     let data = {
-      org_name:org_name,
-      orga_id:orga_id,
       orga_detail:this.refs.orga_detail.value,
       is_public:this.state.is_public
     };
-    console.log(data);
     this.props.setOrganizeDetail(data);
   }
   render(){
     let data = this.props.organizeDetail;
+    let role_uuid = this.context.store.getState().user_info.role_uuid;
+    let role = role_uuid == 200;
     if(data.creation_time == "") return <div style={{textAlign:"center"}}><Loading /></div>;
     return (
       <div className = "userTabBox" key = {new Date(data.creation_time).getTime()}>
@@ -97,7 +97,11 @@ class GetOrgInfo extends Component{
             titleInfo="ORGANIZE "
           />
           <div className = "organizeItem">
-            <textarea type = "text" className = "form-control" ref = "orga_detail" defaultValue={data.orga_detail} />
+            {role?
+              <textarea type = "text" className = "form-control" ref = "orga_detail" defaultValue={data.orga_detail} />
+            :
+              <p>{data.orga_detail}</p>
+            }
           </div>
           <HeadLine
             title="是否公开"
@@ -108,10 +112,15 @@ class GetOrgInfo extends Component{
             <IsPublicToggle
               state = {data.is_public == 1}
               getToggle={this.getToggleValue.bind(this)}
+              disabled={!role}
             />
           </div>
           <div className = "organizeItem organizeItemBtn ">
-            <button className="btn btn-primary" onClick={this.setOrganizeDetail.bind(this)}>保存</button>
+            <button className={`btn btn-primary ${!this.props.isBtnState.setOrg?"btn-loading":""}`}
+                    disabled = {!this.props.isBtnState.setOrg}
+                    onClick={this.setOrganizeDetail.bind(this)}>
+              {this.props.isBtnState.setOrg?"保存":"保存中..."}
+            </button>
           </div>
         </div>
       </div>

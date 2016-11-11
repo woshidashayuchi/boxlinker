@@ -188,7 +188,7 @@ function volumesList(state = [1],action){
 
 function isBtnState(
   state = {deploy:true,building:true,volume:true,autoStateUp:true,reviseBuilding:true,
-    port:true,storage:true,env:true,command:true,pods:true}
+    port:true,storage:true,env:true,command:true,pods:true,setOrg:true}
   ,action){
   switch (action.type){
     case IS_BTN_STATE.deploy:
@@ -220,6 +220,9 @@ function isBtnState(
       return Object.assign({},state);
     case Const.IS_BTN_STATE.pods:
       state.pods = action.payload;
+      return Object.assign({},state);
+    case Const.IS_BTN_STATE.setOrg:
+      state.setOrg = action.payload;
       return Object.assign({},state);
     default:
       return state;
@@ -280,10 +283,16 @@ function breadcrumbList(state = [],action){
   }
 }
 
-function githubAuthURL(state = '',action){
+function authUrl(state = {github:"",coding:""},action){
   switch(action.type){
     case GET_GITHUB_AUTH_URL :
-      return action.payload;
+      state.github = action.payload;
+      return Object.assign({},state);
+      break;
+    case Const.GET_CODING_AUTH_URL:
+      state.coding = action.payload;
+      return Object.assign({},state);
+      break;
     default :
       return state;
   }
@@ -434,6 +443,23 @@ function organizeUserList(state = [1],action){
       return state
   }
 }
+function dashboard(state = {
+  cpu_b:"0%",
+  cpu_limit:0,
+  cpu_usage:0,
+  memory_b:"0%",
+  memory_limit:0,
+  memory_usage:0,
+  flag:1
+},action){
+  switch (action.type){
+    case Const.GET_DASHBOARD:
+      return action.payload;
+    default:
+      return state;
+  }
+
+}
 function userList(state = [],action){
   switch (action.type){
     case Const.GET_USER_LIST:
@@ -444,7 +470,18 @@ function userList(state = [],action){
   }
 }
 
+function balance(state = 0,action){
+  switch(action.type){
+    case Const.GET_BALANCE:
+      return action.payload;
+    default:
+      return state
+  }
+
+}
+
 const rootReducer = combineReducers({
+  dashboard,
   isSidebarOpen,
   sidebarActive,
   volumesList,
@@ -458,7 +495,7 @@ const rootReducer = combineReducers({
   imageDetail,
   user_info,
   breadcrumbList,
-  githubAuthURL,
+  authUrl,
   buildingImageList,
   buildingDetail,
   deployData,
@@ -470,7 +507,8 @@ const rootReducer = combineReducers({
   organizeList,
   organizeDetail,
   organizeUserList,
-  userList
+  userList,
+  balance
 });
 
 

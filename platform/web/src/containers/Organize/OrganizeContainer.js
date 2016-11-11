@@ -7,14 +7,17 @@ import * as fun from '../../actions/organize';
 import makeGetOrganizeDetail  from '../../selectors/organizeDetailSelector';
 import makeGetOrganizeUserList from '../../selectors/organizeUserListSelector';
 import makeGetUserList from '../../selectors/userListSelector';
+import makeIsBtnStateSelector from '../../selectors/isBtnStateSelector';
 const mapStateToProps = (state) => {
   const getOrganizeDetail = makeGetOrganizeDetail();
   const getOrganizeUserList = makeGetOrganizeUserList();
   const getUserList = makeGetUserList();
+  const isBtnStateSelector = makeIsBtnStateSelector();
   return {
     organizeDetail:getOrganizeDetail(state),
     organizeUserList:getOrganizeUserList(state),
     userList:getUserList(state),
+    isBtnState:isBtnStateSelector(state),
   }
 };
 

@@ -135,7 +135,7 @@ export function deleteVolume(diskName){
   }
 }
 
-export function fetchVolumesListAction(currentPage,pageNum){
+export function fetchVolumesListAction(){
   return dispatch => {
     dispatch(isLoadingAction(true));
     return fetch(`${API_VOLUMES_URL}`,{
@@ -150,6 +150,11 @@ export function fetchVolumesListAction(currentPage,pageNum){
         if (json.status == 0) {
           dispatch(receiveVolumes(json.result.volume_list))
         } else {
+          dispatch(receiveNotification({message:"获取列表失败:"+json.msg,level:"danger"}));
+          setTimeout(function(){
+            dispatch(clearNotification())
+          },3000);
+          dispatch(receiveVolumes([]))
           console.error('get all volumes failed:',json);
         }
         dispatch(isLoadingAction(false));

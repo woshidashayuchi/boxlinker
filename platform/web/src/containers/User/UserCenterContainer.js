@@ -4,19 +4,22 @@ import {
   setBreadcrumbAction,
 } from '../../actions/breadcumb'
 import {
-  fetchGithubAuthURLAction,
+  fetchGetAuthURLLAction,
 } from '../../actions/building';
-import {makeGetGithubAuthURLSelector} from '../../selectors/BuildingCreateSelector';
+import {makeGetAuthURLSelector} from '../../selectors/BuildingCreateSelector';
 import * as funUser from '../../actions/users';
 import * as funOrganize from  '../../actions/organize';
 import makeGetOrganizeListSelector from '../../selectors/organizeListSelector';
+import makeGetBalanceSelector from '../../selectors/balanceSelector';
 
 const mapStateToProps = (state) => {
-  const getGithubAuthURL = makeGetGithubAuthURLSelector();
+  const getAuthURL = makeGetAuthURLSelector();
   const getOrganizeList = makeGetOrganizeListSelector();
+  const getBalance = makeGetBalanceSelector();
   return {
-    githubAuthURL: getGithubAuthURL(state),
-    organizeList:getOrganizeList(state)
+    authUrl: getAuthURL(state),
+    organizeList:getOrganizeList(state),
+    balance:getBalance(state)
   }
 };
 
@@ -25,8 +28,8 @@ const mapDispatchToProps = (dispatch) => {
     setBreadcrumb:(...arr) => {
       dispatch(setBreadcrumbAction(...arr))
     },
-    getGithubAuthURL: () => {
-      dispatch(fetchGithubAuthURLAction())
+    getAuthURL: (data) => {
+      dispatch(fetchGetAuthURLLAction(data))
     },
     onRevisePassword:(passwordObj) =>{
       dispatch(funUser.fetchRevisePasswordAction(passwordObj))
@@ -42,6 +45,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteOrganize:(data) =>{
       dispatch(funOrganize.fetchDeleteOrganize(data))
+    },
+    getBalance:() =>{
+      dispatch(funUser.fetchGetBalanceAction())
     }
   }
 };

@@ -33,7 +33,11 @@ export function fetchAllServicesAction(txt){
         if (json.status == 0) {
           dispatch(receiveServices(json.result))
         } else {
-          console.error(json);
+          dispatch(receiveNotification({message:"获取列表失败:"+json.msg,level:"danger"}));
+          setTimeout(function(){
+            dispatch(clearNotification())
+          },3000);
+          dispatch(receiveServices([]))
         }
         dispatch(isLoadingAction(false));
       })

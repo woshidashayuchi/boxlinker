@@ -1,9 +1,10 @@
 
 import React,{ PropTypes,Component } from 'react';
 import ReactDOM from 'react-dom'
-import * as Const from '../../constants'
+import * as Const from '../../constants';
 import fetch from 'isomorphic-fetch';
 import {timeFormat} from '../../core/utils';
+import {isLoadingAction} from "../../actions/header";
 
 class BtnGroup extends  Component{
   static propTypes = {
@@ -56,6 +57,9 @@ class BtnGroup extends  Component{
 const ReactHighcharts = require('react-highcharts');
 
 export default class extends React.Component {
+  static contextTypes = {
+    store:React.PropTypes.object
+  };
   constructor(props){
     super(props);
     this.state = {
@@ -76,12 +80,14 @@ export default class extends React.Component {
       headers:{token:localStorage.getItem("_at")},
     };
     let my = this;
+    this.context.store.dispatch(isLoadingAction(true));
     let url = Const.FETCH_URL.GET_SERVICE_MONITOR+"/"+data.userName+"/pods/"+data.pod_name+"/metrics/"+data.type+
       "?time_long="+time_long;
       fetch(url,myInit)
         .then(response => response.json())
         .then(json => {
           console.log(json,data.type);
+          my.context.store.dispatch(isLoadingAction(false));
           if(json.status == 0){
             let monitor = {};
             let xAxis = [];

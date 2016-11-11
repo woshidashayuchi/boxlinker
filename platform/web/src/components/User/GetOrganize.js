@@ -53,6 +53,7 @@ class GetOrganize extends Component {
         let user_name = this.context.store.getState().user_info.user_name;
         if(data[0] == 1) return <tr><td colSpan = "5" style = {{textAlign:"center"}}><Loading /></td></tr>;
         if(data.length == 1 && data[0].orga_name == user_name) return <tr><td colSpan = "5" style = {{textAlign:"center"}}>暂无数据~</td></tr>;
+        if(data.length == 0) return <tr><td colSpan = "5" style = {{textAlign:"center"}}>暂无数据~</td></tr>;
         let role = "";
         return data.map((item,i) =>{
             if(item.orga_name == user_name) return false;
@@ -110,9 +111,7 @@ class GetOrganize extends Component {
     }
     componentWillMount(){
         let is_user = this.context.store.getState().user_info.is_user;
-        console.log(",,,.",is_user);
         if(is_user == 0){
-            console.log("sss");
             this.context.store.dispatch(navigate("/"));
         }
     }
@@ -190,7 +189,9 @@ class CreateOrganize extends Component{
             org_tip.innerHTML = "组织名称不能为空";
             return false;
         }
-        this.props.onCreateOrganize(org_name.value);
+        if(!this.state.orgName) {
+            this.props.onCreateOrganize(org_name.value);
+        }
     }
     organizeName(){
       let value = this.refs.org_name.value;
@@ -199,16 +200,19 @@ class CreateOrganize extends Component{
             this.setState({
                 orgName:false
             });
+            return false;
         }else  if(value.length<6){
             this.setState({
                 orgName:true
             });
             org_tip.innerHTML = "组织名称太短";
+            return false;
         }else if (!/^[a-z]{1}[a-z0-9_]{5,}$/.test(value)){
             this.setState({
                 orgName:true
             });
             org_tip.innerHTML = "组织名称格式不正确";
+            return false;
         }else{
             this.setState({
                 orgName:false
@@ -235,7 +239,7 @@ class CreateOrganize extends Component{
                 </div>
                 <div ref = "org_tip" className="volumeTip">组织名称不正确</div>
                 <div className="modalItem modelItemLast">
-                    <label><span> </span></label>
+                    <label><span>{this.state.orgName} </span></label>
                     <label>
                         <button className="btn btn-primary"
                                 onClick={this.createOrganize.bind(this)}>创建组织</button>

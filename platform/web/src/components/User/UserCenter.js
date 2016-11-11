@@ -15,17 +15,18 @@ class UserCenter extends  Component{
   static contextTypes = {setTitle: PropTypes.func.isRequired};
   static propTypes = {
     setBreadcrumb:React.PropTypes.func,
-    githubAuthURL: React.PropTypes.string,
-    getGithubAuthURL: React.PropTypes.func,
+    authUrl: React.PropTypes.object,
+    getAuthURL: React.PropTypes.func,
     onRevisePassword:React.PropTypes.func,
     createOrganize:React.PropTypes.func,
     organizeList:React.PropTypes.array,
     getOrganizeList:React.PropTypes.func,
     leaveOrganize:React.PropTypes.func,
-    deleteOrganize:React.PropTypes.func
+    deleteOrganize:React.PropTypes.func,
+    balance:React.PropTypes.number,
+    getBalance:React.PropTypes.func
   };
   componentDidMount(){
-    this.props.getGithubAuthURL();
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.USER_CONTAINER)
   }
   render(){
@@ -33,18 +34,22 @@ class UserCenter extends  Component{
     return (
       <div className = "containerBgF">
         <div className = "userTab">
-          <Tabs defaultActiveKey={5} id="userTabs">
+          <Tabs defaultActiveKey={3} id="userTabs">
             <Tab eventKey={1} title="个人信息">
               <GetPersonalInfo
                 onRevisePassword = {(passwordObj) => this.props.onRevisePassword(passwordObj)}
               />
             </Tab>
             <Tab eventKey={2} title="我的账户">
-              <GetMyAccount />
+              <GetMyAccount
+                balance = {this.props.balance}
+                getBalance = {() =>{this.props.getBalance()}}
+              />
             </Tab>
             <Tab eventKey={3} title="账户管理">
               <GetAccountManage
-                githubAuthURL = {this.props.githubAuthURL}
+                authUrl = {this.props.authUrl}
+                getAuthURL = {(data) =>{this.props.getAuthURL(data)}}
               />
             </Tab>
             <Tab eventKey={4} title="礼券管理">

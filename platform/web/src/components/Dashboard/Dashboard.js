@@ -5,6 +5,7 @@ import s from './Dashboard.css';
 import cx from 'classnames';
 import {Button,Panel,Table,Pagination} from 'react-bootstrap';
 import {BREADCRUMB} from "../../constants";
+import Loading from '../Loading';
 import Link from '../Link';
 
 const ReactHighcharts = require('react-highcharts');
@@ -78,7 +79,16 @@ class ResourceDetail extends Component {
 
 // Highcharts.getOptions().plotOptions.pie.colors=["red","blue"]
 class Monitor extends Component {
+  static propTypes = {
+    dashboard:React.PropTypes.object
+  };
   render(){
+    let dashboard = this.props.dashboard;
+    if(dashboard.flag) return <div style = {{textAlign:"center"}}><Loading /></div>
+    let cpu_b = Number(parseFloat(dashboard.cpu_b).toFixed(2));
+    let userCpu_b = 100-cpu_b;
+    let memory_b = Number(parseFloat(dashboard.memory_b).toFixed(2));
+    let userMemory_b = 100 -memory_b;
     const config1 = {
       chart: {
         height:145,
@@ -110,8 +120,8 @@ class Monitor extends Component {
         innerSize: '80%',
         color:"red",
         data: [
-          ['used',   70],
-          ['unUsed',       30],
+          ['used',  userCpu_b ],
+          ['unUsed',cpu_b],
         ],
         states: {
           hover: {
@@ -151,8 +161,8 @@ class Monitor extends Component {
         type: 'pie',
         innerSize: '80%',
         data: [
-          ['used',   50],
-          ['unUsed',       50],
+          ['used',  userMemory_b ],
+          ['unUsed',memory_b ],
         ],
         states: {
           hover: {
@@ -211,7 +221,7 @@ class Monitor extends Component {
         <div className={s.resourceBox}>
           <div className={s.resourceItem}>
             <div className={s.resourceLeft}>
-              <p>CPU总剩余量<br /><span>30%</span></p>
+              <p>CPU总剩余量<br /><span>{cpu_b}%</span></p>
               <div className={s.hcItem}>
                 <ReactHighcharts config={config1}> </ReactHighcharts>
               </div>
@@ -223,22 +233,22 @@ class Monitor extends Component {
               <div className={s.resourceBd}>
                   <div className={s.resourceInfo}>
                     <p>总数量</p>
-                    <p><span>10</span>核</p>
+                    <p><span>{dashboard.cpu_limit.toFixed(2)}</span>核</p>
                   </div>
                   <div className={s.resourceInfo}>
                     <p>已使用</p>
-                    <p><span>7</span>核</p>
+                    <p><span>{dashboard.cpu_usage.toFixed(2)}</span>核</p>
                   </div>
                   <div className={s.resourceInfo}>
                     <p>剩余数</p>
-                    <p><span>3</span>核</p>
+                    <p><span>{dashboard.cpu_limit.toFixed(2) - dashboard.cpu_usage.toFixed(2)}</span>核</p>
                   </div>
               </div>
             </div>
           </div>
           <div className={s.resourceItem}>
             <div className={s.resourceLeft}>
-              <p>内存总剩余量<br /><span>50%</span></p>
+              <p>内存总剩余量<br /><span>{memory_b}%</span></p>
               <div className={s.hcItem}>
                 <ReactHighcharts config={config2}> </ReactHighcharts>
               </div>
@@ -250,15 +260,15 @@ class Monitor extends Component {
               <div className={s.resourceBd}>
                 <div className={s.resourceInfo}>
                   <p>总数量</p>
-                  <p><span>10</span>MB</p>
+                  <p><span>{dashboard.memory_limit.toFixed(2)}</span>MB</p>
                 </div>
                 <div className={s.resourceInfo}>
                   <p>已使用</p>
-                  <p><span>5</span>MB</p>
+                  <p><span>{dashboard.memory_usage.toFixed(2)}</span>MB</p>
                 </div>
                 <div className={s.resourceInfo}>
                   <p>剩余数</p>
-                  <p><span>5</span>MB</p>
+                  <p><span>{dashboard.memory_limit.toFixed(2) - dashboard.memory_usage.toFixed(2)}</span>MB</p>
                 </div>
               </div>
             </div>
@@ -327,18 +337,22 @@ class Dashboard extends Component {
     onImageListLoad:React.PropTypes.func,
     volumesList: React.PropTypes.array,
     onVolumesListLoad: React.PropTypes.func,
-}
+    onDashboardLoad:React.PropTypes.func,
+    dashboard:React.PropTypes.object
+  };
   componentDidMount(){
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.CONSOLE);
     this.props.onServiceListLoad();
     this.props.onImageListLoad();
     this.props.onVolumesListLoad();
+    this.props.onDashboardLoad();
   }
   render(){
     this.context.setTitle(title);
     let serviceList = this.props.serviceList;
     let imageList = this.props.imageList;
     let volumesList = this.props.volumesList;
+    let data = this.props.dashboard;
     return (
       <div className={cx(s.root,"containerPadding")}>
         <ResourceDetail
@@ -347,7 +361,7 @@ class Dashboard extends Component {
           volumesList={volumesList}
         />
         <div className={s.row}>
-          <Monitor/>
+          <Monitor dashboard = {data} />
           <AccountInfo/>
         </div>
       </div>
