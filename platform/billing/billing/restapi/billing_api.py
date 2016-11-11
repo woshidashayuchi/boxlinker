@@ -11,7 +11,6 @@ from common.logs import logging as log
 from common.code import request_result
 from common.token_decode import get_userinfo
 from common.time_log import time_log
-from common.parameter import parameters_check
 from billing.rpcapi import rpc_api
 
 
@@ -36,7 +35,6 @@ class ResourcesApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
-            parameters = parameters_check(parameters)
         except Exception, e:
             log.error('Parameters error, body=%s, reason=%s' % (body, e))
 
@@ -112,7 +110,6 @@ class ResourceApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
-            # parameters = parameters_check(parameters)
         except Exception, e:
             log.error('Parameters error, body=%s, reason=%s' % (body, e))
 
@@ -148,7 +145,6 @@ class VouchersApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
-            parameters = parameters_check(parameters)
         except Exception, e:
             log.error('Parameters error, body=%s, reason=%s' % (body, e))
 
@@ -306,7 +302,6 @@ class BalancesApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
-            # parameters = parameters_check(parameters)
         except Exception, e:
             log.error('Parameters error, body=%s, reason=%s' % (body, e))
 
@@ -362,7 +357,6 @@ class OrdersApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
-            parameters = parameters_check(parameters)
         except Exception, e:
             log.error('Parameters error, body=%s, reason=%s' % (body, e))
 
@@ -430,7 +424,6 @@ class OrderApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
-            parameters = parameters_check(parameters)
         except Exception, e:
             log.error('Parameters error, body=%s, reason=%s' % (body, e))
 
