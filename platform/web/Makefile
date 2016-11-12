@@ -1,7 +1,7 @@
 all: push
 
 # 0.0 shouldn't clobber any released builds
-TAG = 1.0.3
+TAG = latest
 PREFIX = index.boxlinker.com/boxlinker
 IMAGE_NAME = web
 

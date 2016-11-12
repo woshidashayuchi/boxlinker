@@ -48,83 +48,87 @@ module.exports =
 
   'use strict';
   
-  var _typeof2 = __webpack_require__(1);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _typeof2 = __webpack_require__(2);
   
   var _typeof3 = _interopRequireDefault(_typeof2);
   
-  var _regenerator = __webpack_require__(2);
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  __webpack_require__(4);
+  __webpack_require__(5);
   
-  var _path = __webpack_require__(5);
+  var _path = __webpack_require__(6);
   
   var _path2 = _interopRequireDefault(_path);
   
-  var _express = __webpack_require__(6);
+  var _express = __webpack_require__(7);
   
   var _express2 = _interopRequireDefault(_express);
   
-  var _cookieParser = __webpack_require__(7);
+  var _cookieParser = __webpack_require__(8);
   
   var _cookieParser2 = _interopRequireDefault(_cookieParser);
   
-  var _bodyParser = __webpack_require__(8);
+  var _bodyParser = __webpack_require__(9);
   
   var _bodyParser2 = _interopRequireDefault(_bodyParser);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _server = __webpack_require__(10);
+  var _server = __webpack_require__(11);
   
   var _server2 = _interopRequireDefault(_server);
   
-  var _Html = __webpack_require__(11);
+  var _Html = __webpack_require__(12);
   
   var _Html2 = _interopRequireDefault(_Html);
   
-  var _ErrorPage = __webpack_require__(13);
+  var _ErrorPage = __webpack_require__(14);
   
-  var _ErrorPage2 = __webpack_require__(15);
+  var _ErrorPage2 = __webpack_require__(16);
   
   var _ErrorPage3 = _interopRequireDefault(_ErrorPage2);
   
-  var _universalRouter = __webpack_require__(22);
+  var _universalRouter = __webpack_require__(23);
   
   var _universalRouter2 = _interopRequireDefault(_universalRouter);
   
-  var _prettyError = __webpack_require__(23);
+  var _prettyError = __webpack_require__(24);
   
   var _prettyError2 = _interopRequireDefault(_prettyError);
   
-  var _createHistory = __webpack_require__(24);
+  var _createHistory = __webpack_require__(25);
   
   var _createHistory2 = _interopRequireDefault(_createHistory);
   
-  var _configureStore = __webpack_require__(28);
+  var _configureStore = __webpack_require__(29);
   
   var _configureStore2 = _interopRequireDefault(_configureStore);
   
-  var _routes = __webpack_require__(43);
+  var _routes = __webpack_require__(44);
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _assets = __webpack_require__(225);
+  var _assets = __webpack_require__(226);
   
   var _assets2 = _interopRequireDefault(_assets);
   
-  var _runtime = __webpack_require__(226);
+  var _runtime = __webpack_require__(227);
   
-  var _users = __webpack_require__(211);
+  var _users = __webpack_require__(212);
   
-  var _toggleSidebar = __webpack_require__(58);
+  var _toggleSidebar = __webpack_require__(59);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -218,7 +222,7 @@ module.exports =
                         }
   
                         _context.next = 11;
-                        return store.dispatch((0, _users.fetchUserInfo)(token, ("development") == 'development'));
+                        return store.dispatch((0, _users.fetchUserInfo)(token, ("production") == 'development'));
   
                       case 11:
                         css = [];
@@ -249,7 +253,7 @@ module.exports =
                             pathname: req.path
                           },
                           render: function render(component) {
-                            var status = arguments.length <= 1 || arguments[1] === undefined ? 200 : arguments[1];
+                            var status = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
   
                             css = [];
                             statusCode = status;
@@ -327,15 +331,13 @@ module.exports =
     // eslint-disable-line no-unused-vars
     console.log(pe.render(err)); // eslint-disable-line no-console
     var statusCode = err.status || 500;
-    var html = _server2.default.renderToStaticMarkup(_react2.default.createElement(
-      _Html2.default,
-      {
-        title: 'Internal Server Error',
-        description: err.message,
-        style: _ErrorPage3.default._getCss() // eslint-disable-line no-underscore-dangle
-      },
-      _server2.default.renderToString(_react2.default.createElement(_ErrorPage.ErrorPage, { error: err }))
-    ));
+    var html = _server2.default.renderToStaticMarkup((0, _jsx3.default)(_Html2.default, {
+      title: 'Internal Server Error',
+      description: err.message,
+      style: _ErrorPage3.default._getCss()
+    }, void 0, _server2.default.renderToString((0, _jsx3.default)(_ErrorPage.ErrorPage, {
+      error: err
+    }))));
     res.status(statusCode);
     res.send('<!doctype html>' + html);
   });
@@ -355,64 +357,70 @@ module.exports =
 /* 1 */
 /***/ function(module, exports) {
 
-  module.exports = require("babel-runtime/helpers/typeof");
+  module.exports = require("babel-runtime/helpers/jsx");
 
 /***/ },
 /* 2 */
 /***/ function(module, exports) {
 
-  module.exports = require("babel-runtime/regenerator");
+  module.exports = require("babel-runtime/helpers/typeof");
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-  module.exports = require("babel-runtime/helpers/asyncToGenerator");
+  module.exports = require("babel-runtime/regenerator");
 
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-  module.exports = require("babel-polyfill");
+  module.exports = require("babel-runtime/helpers/asyncToGenerator");
 
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
 
-  module.exports = require("path");
+  module.exports = require("babel-polyfill");
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-  module.exports = require("express");
+  module.exports = require("path");
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-  module.exports = require("cookie-parser");
+  module.exports = require("express");
 
 /***/ },
 /* 8 */
 /***/ function(module, exports) {
 
-  module.exports = require("body-parser");
+  module.exports = require("cookie-parser");
 
 /***/ },
 /* 9 */
 /***/ function(module, exports) {
 
-  module.exports = require("react");
+  module.exports = require("body-parser");
 
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
 
-  module.exports = require("react-dom/server");
+  module.exports = require("react");
 
 /***/ },
 /* 11 */
+/***/ function(module, exports) {
+
+  module.exports = require("react-dom/server");
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -421,11 +429,15 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
-  var _react = __webpack_require__(9);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
@@ -433,67 +445,71 @@ module.exports =
   
   // import { analytics } from '../config';
   
+  var _ref2 = (0, _jsx3.default)("meta", {
+    charSet: "utf-8"
+  });
+  
+  var _ref3 = (0, _jsx3.default)("meta", {
+    httpEquiv: "x-ua-compatible",
+    content: "ie=edge"
+  });
+  
+  var _ref4 = (0, _jsx3.default)("meta", {
+    name: "viewport",
+    content: "width=device-width, initial-scale=1"
+  });
+  
+  var _ref5 = (0, _jsx3.default)("link", {
+    rel: "apple-touch-icon",
+    href: "apple-touch-icon.png"
+  });
+  
+  var _ref6 = (0, _jsx3.default)("link", {
+    rel: "stylesheet",
+    href: "/icomoon/style.css"
+  });
+  
   function Html(_ref) {
-    var title = _ref.title;
-    var description = _ref.description;
-    var bootstrapCss = _ref.bootstrapCss;
-    var style = _ref.style;
-    var script = _ref.script;
-    var children = _ref.children;
-    var state = _ref.state;
+    var title = _ref.title,
+        description = _ref.description,
+        bootstrapCss = _ref.bootstrapCss,
+        style = _ref.style,
+        script = _ref.script,
+        children = _ref.children,
+        state = _ref.state;
   
-    return _react2.default.createElement(
-      "html",
-      { className: "no-js", lang: "" },
-      _react2.default.createElement(
-        "head",
-        null,
-        _react2.default.createElement("meta", { charSet: "utf-8" }),
-        _react2.default.createElement("meta", { httpEquiv: "x-ua-compatible", content: "ie=edge" }),
-        _react2.default.createElement(
-          "title",
-          null,
-          title
-        ),
-        _react2.default.createElement("meta", { name: "description", content: description }),
-        _react2.default.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
-        _react2.default.createElement("link", { rel: "apple-touch-icon", href: "apple-touch-icon.png" }),
-        _react2.default.createElement("link", { rel: "stylesheet", href: "/icomoon/style.css" }),
-        _react2.default.createElement("link", { rel: "stylesheet", href: bootstrapCss }),
-        _react2.default.createElement("style", { id: "css", dangerouslySetInnerHTML: { __html: style } })
-      ),
-      _react2.default.createElement(
-        "body",
-        null,
-        _react2.default.createElement("div", { id: "app", dangerouslySetInnerHTML: { __html: children } }),
-        script && _react2.default.createElement("script", {
-          id: "source",
-          src: script,
-          "data-initial-state": (0, _stringify2.default)(state)
-        })
-      )
-    );
+    return (0, _jsx3.default)("html", {
+      className: "no-js",
+      lang: ""
+    }, void 0, (0, _jsx3.default)("head", {}, void 0, _ref2, _ref3, (0, _jsx3.default)("title", {}, void 0, title), (0, _jsx3.default)("meta", {
+      name: "description",
+      content: description
+    }), _ref4, _ref5, _ref6, (0, _jsx3.default)("link", {
+      rel: "stylesheet",
+      href: bootstrapCss
+    }), (0, _jsx3.default)("style", {
+      id: "css",
+      dangerouslySetInnerHTML: { __html: style }
+    })), (0, _jsx3.default)("body", {}, void 0, (0, _jsx3.default)("div", {
+      id: "app",
+      dangerouslySetInnerHTML: { __html: children }
+    }), script && (0, _jsx3.default)("script", {
+      id: "source",
+      src: script,
+      "data-initial-state": (0, _stringify2.default)(state)
+    })));
   }
-  
-  Html.propTypes = {
-    title: _react.PropTypes.string.isRequired,
-    description: _react.PropTypes.string.isRequired,
-    style: _react.PropTypes.string.isRequired,
-    script: _react.PropTypes.string,
-    children: _react.PropTypes.string,
-    state: _react.PropTypes.object.isRequired
-  };
   
   exports.default = Html;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -501,13 +517,18 @@ module.exports =
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
   exports.ErrorPage = ErrorPage;
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
@@ -534,54 +555,35 @@ module.exports =
     if (error.status === 404) {
       title = 'Page Not Found';
       content = 'Sorry, the page you were trying to view does not exist.';
-    } else if (true) {
-      errorMessage = _react2.default.createElement(
-        'pre',
-        null,
-        error.stack
-      );
+    } else if (false) {
+      errorMessage = (0, _jsx3.default)('pre', {}, void 0, error.stack);
     }
   
     if (context.setTitle) {
       context.setTitle(title);
     }
   
-    return _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(
-        'h1',
-        null,
-        title
-      ),
-      _react2.default.createElement(
-        'p',
-        null,
-        content
-      ),
-      errorMessage
-    );
+    return (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)('h1', {}, void 0, title), (0, _jsx3.default)('p', {}, void 0, content), errorMessage);
   }
   
-  ErrorPage.propTypes = { error: _react.PropTypes.object.isRequired };
   ErrorPage.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
   
   exports.default = ErrorPage;
   // export default withStyles(s)(ErrorPage);
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
   module.exports = require("isomorphic-style-loader/lib/withStyles");
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(16);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(17);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -591,40 +593,23 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ErrorPage.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ErrorPage.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n* {\n  line-height: 1.2;\n  margin: 0;\n}\n\nhtml {\n  color: #888;\n  display: table;\n  font-family: sans-serif;\n  height: 100%;\n  text-align: center;\n  width: 100%;\n}\n\nbody {\n  display: table-cell;\n  vertical-align: middle;\n  /* stylelint-disable */\n  margin: 2em auto;\n  /* stylelint-enable */\n}\n\nh1 {\n  color: #555;\n  font-size: 2em;\n  font-weight: 400;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\npre {\n  text-align: left;\n  margin-top: 32px;\n  margin-top: 2rem;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body,\n  p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n  }\n\n}\n", "", {"version":3,"sources":["/./routes/error/ErrorPage.css"],"names":[],"mappings":"AAAA;;;;;;;GAOG;;AAEH;EACE,iBAAiB;EACjB,UAAU;CACX;;AAED;EACE,YAAY;EACZ,eAAe;EACf,wBAAwB;EACxB,aAAa;EACb,mBAAmB;EACnB,YAAY;CACb;;AAED;EACE,oBAAoB;EACpB,uBAAuB;EACvB,uBAAuB;EACvB,iBAAiB;EACjB,sBAAsB;CACvB;;AAED;EACE,YAAY;EACZ,eAAe;EACf,iBAAiB;CAClB;;AAED;EACE,eAAe;EACf,aAAa;CACd;;AAED;EACE,iBAAiB;EACjB,iBAAiB;EAAjB,iBAAiB;CAClB;;AAED;;EAEE;;IAEE,WAAW;GACZ;;EAED;IACE,iBAAiB;IACjB,kBAAkB;GACnB;;CAEF","file":"ErrorPage.css","sourcesContent":["/**\n * React Starter Kit (https://www.reactstarterkit.com/)\n *\n * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE.txt file in the root directory of this source tree.\n */\n\n* {\n  line-height: 1.2;\n  margin: 0;\n}\n\nhtml {\n  color: #888;\n  display: table;\n  font-family: sans-serif;\n  height: 100%;\n  text-align: center;\n  width: 100%;\n}\n\nbody {\n  display: table-cell;\n  vertical-align: middle;\n  /* stylelint-disable */\n  margin: 2em auto;\n  /* stylelint-enable */\n}\n\nh1 {\n  color: #555;\n  font-size: 2em;\n  font-weight: 400;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\npre {\n  text-align: left;\n  margin-top: 2rem;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body,\n  p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n  }\n\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "*{line-height:1.2;margin:0}html{color:#888;display:table;font-family:sans-serif;height:100%;text-align:center;width:100%}body{display:table-cell;vertical-align:middle;margin:2em auto}h1{color:#555;font-size:2em;font-weight:400}p{margin:0 auto;width:280px}pre{text-align:left;margin-top:32px;margin-top:2rem}@media only screen and (max-width:280px){body,p{width:95%}h1{font-size:1.5em;margin:0 0 .3em}}", ""]);
   
   // exports
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
   /*
@@ -680,24 +665,24 @@ module.exports =
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
   
-  var _assign = __webpack_require__(19);
+  var _assign = __webpack_require__(20);
   
   var _assign2 = _interopRequireDefault(_assign);
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
-  var _slicedToArray2 = __webpack_require__(20);
+  var _slicedToArray2 = __webpack_require__(21);
   
   var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
   
-  var _getIterator2 = __webpack_require__(21);
+  var _getIterator2 = __webpack_require__(22);
   
   var _getIterator3 = _interopRequireDefault(_getIterator2);
   
@@ -841,37 +826,37 @@ module.exports =
   module.exports = insertCss;
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/object/assign");
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/slicedToArray");
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/get-iterator");
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
   module.exports = require("universal-router");
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports) {
 
   module.exports = require("pretty-error");
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -880,15 +865,15 @@ module.exports =
     value: true
   });
   
-  var _createBrowserHistory = __webpack_require__(25);
+  var _createBrowserHistory = __webpack_require__(26);
   
   var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
   
-  var _createMemoryHistory = __webpack_require__(26);
+  var _createMemoryHistory = __webpack_require__(27);
   
   var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
   
-  var _useQueries = __webpack_require__(27);
+  var _useQueries = __webpack_require__(28);
   
   var _useQueries2 = _interopRequireDefault(_useQueries);
   
@@ -904,25 +889,25 @@ module.exports =
                                                                                                                                       */
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
   module.exports = require("history/lib/createBrowserHistory");
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
   module.exports = require("history/lib/createMemoryHistory");
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports) {
 
   module.exports = require("history/lib/useQueries");
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -932,21 +917,21 @@ module.exports =
   });
   exports.default = configureStore;
   
-  var _redux = __webpack_require__(29);
+  var _redux = __webpack_require__(30);
   
-  var _reduxThunk = __webpack_require__(30);
+  var _reduxThunk = __webpack_require__(31);
   
   var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
   
-  var _logger = __webpack_require__(31);
+  var _logger = __webpack_require__(32);
   
   var _logger2 = _interopRequireDefault(_logger);
   
-  var _reducers = __webpack_require__(33);
+  var _reducers = __webpack_require__(34);
   
   var _reducers2 = _interopRequireDefault(_reducers);
   
-  var _createHelpers = __webpack_require__(38);
+  var _createHelpers = __webpack_require__(39);
   
   var _createHelpers2 = _interopRequireDefault(_createHelpers);
   
@@ -958,14 +943,14 @@ module.exports =
   
     var enhancer = void 0;
   
-    if (true) {
+    if (false) {
       middleware.push((0, _logger2.default)());
   
       // https://github.com/zalmoxisus/redux-devtools-extension#redux-devtools-extension
       var devToolsExtension = function devToolsExtension(f) {
         return f;
       };
-      if (false) {
+      if (process.env.BROWSER && window.devToolsExtension) {
         devToolsExtension = window.devToolsExtension();
       }
       enhancer = (0, _redux.compose)(_redux.applyMiddleware.apply(undefined, middleware), devToolsExtension);
@@ -988,19 +973,19 @@ module.exports =
   }
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports) {
 
   module.exports = require("redux");
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports) {
 
   module.exports = require("redux-thunk");
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -1010,7 +995,7 @@ module.exports =
   });
   exports.default = createLogger;
   
-  var _util = __webpack_require__(32);
+  var _util = __webpack_require__(33);
   
   // Server side redux action logger
   function createLogger() {
@@ -1029,13 +1014,13 @@ module.exports =
   }
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
   module.exports = require("util");
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -1044,17 +1029,17 @@ module.exports =
     value: true
   });
   
-  var _assign = __webpack_require__(19);
+  var _assign = __webpack_require__(20);
   
   var _assign2 = _interopRequireDefault(_assign);
   
-  var _redux = __webpack_require__(29);
+  var _redux = __webpack_require__(30);
   
-  var _runtime = __webpack_require__(34);
+  var _runtime = __webpack_require__(35);
   
   var _runtime2 = _interopRequireDefault(_runtime);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
@@ -1076,7 +1061,7 @@ module.exports =
   };
   
   function isSidebarOpen() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? _constants.SIDEBAR_STATUS.OPEN : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _constants.SIDEBAR_STATUS.OPEN;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1088,7 +1073,7 @@ module.exports =
   }
   
   function sidebarActive() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
     var action = arguments[1];
   
     switch (action.type) {
@@ -1100,7 +1085,7 @@ module.exports =
   }
   
   function serviceList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1116,7 +1101,7 @@ module.exports =
   }
   
   function podList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1128,7 +1113,7 @@ module.exports =
   }
   
   function serviceDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? serviceData : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : serviceData;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1190,7 +1175,7 @@ module.exports =
   }
   
   function monitorData() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? { memory: {}, network: {}, cpu: {} } : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { memory: {}, network: {}, cpu: {} };
     var action = arguments[1];
   
     switch (action.type) {
@@ -1212,7 +1197,7 @@ module.exports =
   }
   
   function volumesList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1231,8 +1216,8 @@ module.exports =
   }
   
   function isBtnState() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? { deploy: true, building: true, volume: true, autoStateUp: true, reviseBuilding: true,
-      port: true, storage: true, env: true, command: true, pods: true } : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { deploy: true, building: true, volume: true, autoStateUp: true, reviseBuilding: true,
+      port: true, storage: true, env: true, command: true, pods: true };
     var action = arguments[1];
   
     switch (action.type) {
@@ -1272,7 +1257,7 @@ module.exports =
   }
   
   function repos() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1284,7 +1269,7 @@ module.exports =
   }
   
   function isLoading() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1296,7 +1281,7 @@ module.exports =
   }
   
   function imageList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1308,7 +1293,7 @@ module.exports =
   }
   
   function imageDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1320,7 +1305,7 @@ module.exports =
   }
   
   function user_info() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1332,7 +1317,7 @@ module.exports =
   }
   
   function breadcrumbList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1344,7 +1329,7 @@ module.exports =
   }
   
   function githubAuthURL() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
     var action = arguments[1];
   
     switch (action.type) {
@@ -1356,7 +1341,7 @@ module.exports =
   }
   
   function buildingImageList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1371,7 +1356,7 @@ module.exports =
     }
   }
   function buildingDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1383,7 +1368,7 @@ module.exports =
   }
   
   function deployData() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? serviceData : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : serviceData;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1452,7 +1437,7 @@ module.exports =
   }
   
   function logs() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1464,7 +1449,7 @@ module.exports =
   }
   
   function logs_xhr() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1479,7 +1464,7 @@ module.exports =
   }
   
   function notifications() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1492,7 +1477,7 @@ module.exports =
     }
   }
   function organizeList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1504,7 +1489,7 @@ module.exports =
     }
   }
   function organizeDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? { creation_time: "" } : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { creation_time: "" };
     var action = arguments[1];
   
     switch (action.type) {
@@ -1516,7 +1501,7 @@ module.exports =
     }
   }
   function organizeUserList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1528,7 +1513,7 @@ module.exports =
     }
   }
   function userList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1572,7 +1557,7 @@ module.exports =
   exports.default = rootReducer;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -1581,22 +1566,22 @@ module.exports =
     value: true
   });
   
-  var _defineProperty2 = __webpack_require__(35);
+  var _defineProperty2 = __webpack_require__(36);
   
   var _defineProperty3 = _interopRequireDefault(_defineProperty2);
   
-  var _extends3 = __webpack_require__(36);
+  var _extends3 = __webpack_require__(37);
   
   var _extends4 = _interopRequireDefault(_extends3);
   
   exports.default = runtime;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   function runtime() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1608,19 +1593,19 @@ module.exports =
   }
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/defineProperty");
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/extends");
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports) {
 
   'use strict';
@@ -1844,7 +1829,7 @@ module.exports =
   };
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -1853,25 +1838,25 @@ module.exports =
     value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _extends2 = __webpack_require__(37);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _regenerator = __webpack_require__(2);
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
   exports.default = createHelpers;
   
-  var _fetch = __webpack_require__(39);
+  var _fetch = __webpack_require__(40);
   
   var _fetch2 = _interopRequireDefault(_fetch);
   
@@ -1935,7 +1920,7 @@ module.exports =
   
     if (true) {
       return function (url) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   
         var isLocalUrl = /^\/($|[^\/])/.test(url);
   
@@ -1967,7 +1952,7 @@ module.exports =
   }
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -1977,15 +1962,15 @@ module.exports =
   });
   exports.Response = exports.Headers = exports.Request = exports.default = undefined;
   
-  var _bluebird = __webpack_require__(40);
+  var _bluebird = __webpack_require__(41);
   
   var _bluebird2 = _interopRequireDefault(_bluebird);
   
-  var _nodeFetch = __webpack_require__(41);
+  var _nodeFetch = __webpack_require__(42);
   
   var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
   
-  var _config = __webpack_require__(42);
+  var _config = __webpack_require__(43);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -2014,19 +1999,19 @@ module.exports =
   exports.Response = _nodeFetch.Response;
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
   module.exports = require("bluebird");
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports) {
 
   module.exports = require("node-fetch");
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports) {
 
   "use strict";
@@ -2084,7 +2069,7 @@ module.exports =
   // };
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2093,103 +2078,107 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _components = __webpack_require__(44);
+  var _components = __webpack_require__(45);
   
   var _components2 = _interopRequireDefault(_components);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _dashboard = __webpack_require__(86);
+  var _dashboard = __webpack_require__(87);
   
   var _dashboard2 = _interopRequireDefault(_dashboard);
   
-  var _imageCenter = __webpack_require__(99);
+  var _imageCenter = __webpack_require__(100);
   
   var _imageCenter2 = _interopRequireDefault(_imageCenter);
   
-  var _imageForPlatform = __webpack_require__(103);
+  var _imageForPlatform = __webpack_require__(104);
   
   var _imageForPlatform2 = _interopRequireDefault(_imageForPlatform);
   
-  var _imageForMy = __webpack_require__(108);
+  var _imageForMy = __webpack_require__(109);
   
   var _imageForMy2 = _interopRequireDefault(_imageForMy);
   
-  var _imageDetail = __webpack_require__(113);
+  var _imageDetail = __webpack_require__(114);
   
   var _imageDetail2 = _interopRequireDefault(_imageDetail);
   
-  var _createImage = __webpack_require__(125);
+  var _createImage = __webpack_require__(126);
   
   var _createImage2 = _interopRequireDefault(_createImage);
   
-  var _buildingDetail = __webpack_require__(133);
+  var _buildingDetail = __webpack_require__(134);
   
   var _buildingDetail2 = _interopRequireDefault(_buildingDetail);
   
-  var _building = __webpack_require__(138);
+  var _building = __webpack_require__(139);
   
   var _building2 = _interopRequireDefault(_building);
   
-  var _buildingCreate = __webpack_require__(142);
+  var _buildingCreate = __webpack_require__(143);
   
   var _buildingCreate2 = _interopRequireDefault(_buildingCreate);
   
-  var _error = __webpack_require__(146);
+  var _error = __webpack_require__(147);
   
   var _error2 = _interopRequireDefault(_error);
   
-  var _serviceList = __webpack_require__(147);
+  var _serviceList = __webpack_require__(148);
   
   var _serviceList2 = _interopRequireDefault(_serviceList);
   
-  var _addService = __webpack_require__(150);
+  var _addService = __webpack_require__(151);
   
   var _addService2 = _interopRequireDefault(_addService);
   
-  var _choseImage = __webpack_require__(158);
+  var _choseImage = __webpack_require__(159);
   
   var _choseImage2 = _interopRequireDefault(_choseImage);
   
-  var _configContainer = __webpack_require__(163);
+  var _configContainer = __webpack_require__(164);
   
   var _configContainer2 = _interopRequireDefault(_configContainer);
   
-  var _serviceDetail = __webpack_require__(173);
+  var _serviceDetail = __webpack_require__(174);
   
   var _serviceDetail2 = _interopRequireDefault(_serviceDetail);
   
-  var _dataVolumeList = __webpack_require__(192);
+  var _dataVolumeList = __webpack_require__(193);
   
   var _dataVolumeList2 = _interopRequireDefault(_dataVolumeList);
   
-  var _login = __webpack_require__(197);
+  var _login = __webpack_require__(198);
   
   var _login2 = _interopRequireDefault(_login);
   
-  var _signUp = __webpack_require__(199);
+  var _signUp = __webpack_require__(200);
   
   var _signUp2 = _interopRequireDefault(_signUp);
   
-  var _userCenter = __webpack_require__(202);
+  var _userCenter = __webpack_require__(203);
   
   var _userCenter2 = _interopRequireDefault(_userCenter);
   
-  var _reviseImage = __webpack_require__(212);
+  var _reviseImage = __webpack_require__(213);
   
   var _reviseImage2 = _interopRequireDefault(_reviseImage);
   
-  var _organize = __webpack_require__(215);
+  var _organize = __webpack_require__(216);
   
   var _organize2 = _interopRequireDefault(_organize);
   
@@ -2208,9 +2197,9 @@ module.exports =
     action: function action(_ref) {
       var _this = this;
   
-      var next = _ref.next;
-      var render = _ref.render;
-      var context = _ref.context;
+      var next = _ref.next,
+          render = _ref.render,
+          context = _ref.context;
       return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
         var component;
         return _regenerator2.default.wrap(function _callee$(_context) {
@@ -2239,11 +2228,9 @@ module.exports =
                 return _context.abrupt('return', component);
   
               case 7:
-                return _context.abrupt('return', render(_react2.default.createElement(
-                  _components2.default,
-                  { context: context },
-                  component
-                )));
+                return _context.abrupt('return', render((0, _jsx3.default)(_components2.default, {
+                  context: context
+                }, void 0, component)));
   
               case 8:
               case 'end':
@@ -2266,7 +2253,7 @@ module.exports =
    */
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2275,37 +2262,41 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _AppContainer = __webpack_require__(51);
+  var _AppContainer = __webpack_require__(52);
   
   var _AppContainer2 = _interopRequireDefault(_AppContainer);
   
-  var _emptyFunction = __webpack_require__(85);
+  var _emptyFunction = __webpack_require__(86);
   
   var _emptyFunction2 = _interopRequireDefault(_emptyFunction);
   
@@ -2316,7 +2307,7 @@ module.exports =
   
     function Root() {
       (0, _classCallCheck3.default)(this, Root);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Root).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Root.__proto__ || (0, _getPrototypeOf2.default)(Root)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Root, [{
@@ -2348,32 +2339,14 @@ module.exports =
         }
   
         var store = this.props.context.store;
-        return _react2.default.createElement(
-          _reactRedux.Provider,
-          { store: store },
-          _react2.default.createElement(
-            _AppContainer2.default,
-            null,
-            this.props.children
-          )
-        );
+        return (0, _jsx3.default)(_reactRedux.Provider, {
+          store: store
+        }, void 0, (0, _jsx3.default)(_AppContainer2.default, {}, void 0, this.props.children));
       }
     }]);
     return Root;
   }(_react.Component);
   
-  Root.propTypes = {
-    context: _react2.default.PropTypes.shape({
-      createHref: _react2.default.PropTypes.func.isRequired,
-      store: _react2.default.PropTypes.object.isRequired,
-      insertCss: _react2.default.PropTypes.func,
-      setTitle: _react2.default.PropTypes.func,
-      setMeta: _react2.default.PropTypes.func,
-      pathname: _react2.default.PropTypes.any
-    }),
-    children: _react2.default.PropTypes.element.isRequired,
-    error: _react2.default.PropTypes.object
-  };
   Root.childContextTypes = {
     createHref: _react2.default.PropTypes.func.isRequired,
     insertCss: _react2.default.PropTypes.func.isRequired,
@@ -2384,43 +2357,43 @@ module.exports =
   exports.default = Root;
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/core-js/object/get-prototype-of");
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/classCallCheck");
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/createClass");
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/possibleConstructorReturn");
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/inherits");
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports) {
 
   module.exports = require("react-redux");
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2429,21 +2402,21 @@ module.exports =
     value: true
   });
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _App = __webpack_require__(52);
+  var _App = __webpack_require__(53);
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _isSidebarOpenSelector = __webpack_require__(70);
+  var _isSidebarOpenSelector = __webpack_require__(71);
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
-  var _notificationsSelector = __webpack_require__(84);
+  var _notificationsSelector = __webpack_require__(85);
   
   var _notificationsSelector2 = _interopRequireDefault(_notificationsSelector);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -2470,7 +2443,7 @@ module.exports =
   exports.default = SidebarContainer;
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2479,54 +2452,64 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _BreadcrumbContainer = __webpack_require__(53);
+  var _BreadcrumbContainer = __webpack_require__(54);
   
   var _BreadcrumbContainer2 = _interopRequireDefault(_BreadcrumbContainer);
   
-  var _SidebarContainer = __webpack_require__(63);
+  var _SidebarContainer = __webpack_require__(64);
   
   var _SidebarContainer2 = _interopRequireDefault(_SidebarContainer);
   
-  var _HeaderContainer = __webpack_require__(72);
+  var _HeaderContainer = __webpack_require__(73);
   
   var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
   
-  var _Notification = __webpack_require__(83);
+  var _Notification = __webpack_require__(84);
   
   var _Notification2 = _interopRequireDefault(_Notification);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_HeaderContainer2.default, {});
+  
+  var _ref2 = (0, _jsx3.default)(_SidebarContainer2.default, {});
+  
+  var _ref3 = (0, _jsx3.default)(_BreadcrumbContainer2.default, {});
   
   var App = function (_Component) {
     (0, _inherits3.default)(App, _Component);
   
     function App() {
       (0, _classCallCheck3.default)(this, App);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(App).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (App.__proto__ || (0, _getPrototypeOf2.default)(App)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(App, [{
@@ -2549,28 +2532,22 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        var notification = this.props.notifications.message ? _react2.default.createElement(_Notification2.default, { show: true, obj: this.props.notifications }) : _react2.default.createElement(_Notification2.default, { show: false, obj: this.props.notifications });
-        return _react2.default.createElement(
-          'div',
-          { className: 'app ' + (this.props.isSidebarOpen ? "" : "sidebar-close") },
-          _react2.default.createElement(_HeaderContainer2.default, null),
-          _react2.default.createElement(_SidebarContainer2.default, null),
-          _react2.default.createElement(
-            'div',
-            { className: 'containerPack' },
-            _react2.default.createElement(
-              'div',
-              { className: 'containerInner' },
-              _react2.default.createElement(_BreadcrumbContainer2.default, null),
-              _react2.default.createElement(
-                'div',
-                { className: 'containerBody' },
-                this.props.children
-              )
-            )
-          ),
-          notification
-        );
+        var notification = this.props.notifications.message ? (0, _jsx3.default)(_Notification2.default, {
+          show: true,
+          obj: this.props.notifications
+        }) : (0, _jsx3.default)(_Notification2.default, {
+          show: false,
+          obj: this.props.notifications
+        });
+        return (0, _jsx3.default)('div', {
+          className: 'app ' + (this.props.isSidebarOpen ? "" : "sidebar-close")
+        }, void 0, _ref, _ref2, (0, _jsx3.default)('div', {
+          className: 'containerPack'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'containerInner'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'containerBody'
+        }, void 0, this.props.children))), notification);
       }
     }]);
     return App;
@@ -2579,15 +2556,10 @@ module.exports =
   App.contextTypes = {
     store: _react2.default.PropTypes.object
   };
-  App.propTypes = {
-    isSidebarOpen: _react2.default.PropTypes.bool,
-    notifications: _react2.default.PropTypes.object,
-    onInit: _react2.default.PropTypes.func
-  };
   exports.default = App;
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2596,13 +2568,13 @@ module.exports =
     value: true
   });
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _Breadcrumb = __webpack_require__(54);
+  var _Breadcrumb = __webpack_require__(55);
   
   var _Breadcrumb2 = _interopRequireDefault(_Breadcrumb);
   
-  var _breadcrumbSelector = __webpack_require__(61);
+  var _breadcrumbSelector = __webpack_require__(62);
   
   var _breadcrumbSelector2 = _interopRequireDefault(_breadcrumbSelector);
   
@@ -2620,7 +2592,7 @@ module.exports =
   exports.default = BreadcrumbContainer;
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2629,39 +2601,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Breadcrumb = __webpack_require__(59);
+  var _Breadcrumb = __webpack_require__(60);
   
   var _Breadcrumb2 = _interopRequireDefault(_Breadcrumb);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
@@ -2672,7 +2648,7 @@ module.exports =
   
     function Breadcrumb() {
       (0, _classCallCheck3.default)(this, Breadcrumb);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Breadcrumb).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Breadcrumb.__proto__ || (0, _getPrototypeOf2.default)(Breadcrumb)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Breadcrumb, [{
@@ -2681,65 +2657,40 @@ module.exports =
         // console.log('breadcrumbList>>',this.props.breadcrumbList);
         var list = this.props.breadcrumbList,
             len = list.length;
-        if (len <= 0) return _react2.default.createElement('ol', { className: _Breadcrumb2.default.root });
-        if (len == 1) return _react2.default.createElement(
-          'li',
-          null,
-          _react2.default.createElement(
-            'a',
-            { className: _Breadcrumb2.default.selected },
-            list[0].title
-          )
-        );
+        if (len <= 0) return (0, _jsx3.default)('ol', {
+          className: _Breadcrumb2.default.root
+        });
+        if (len == 1) return (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)('a', {
+          className: _Breadcrumb2.default.selected
+        }, void 0, list[0].title));
         var data = [];
         for (var i = 0; i < len - 1; i++) {
           var item = list[i];
-          data.push(_react2.default.createElement(
-            'li',
-            { key: i },
-            _react2.default.createElement(
-              _Link2.default,
-              { to: item.link },
-              i == 0 ? _react2.default.createElement(
-                'span',
-                { className: 'icon-console', style: { marginRight: "5px" } },
-                ' '
-              ) : "",
-              item.title
-            )
-          ));
-          data.push(_react2.default.createElement(
-            'li',
-            { key: i + "1", className: _Breadcrumb2.default.split },
-            '/'
-          ));
+          data.push((0, _jsx3.default)('li', {}, i, (0, _jsx3.default)(_Link2.default, {
+            to: item.link
+          }, void 0, i == 0 ? (0, _jsx3.default)('span', {
+            className: 'icon-console',
+            style: { marginRight: "5px" }
+          }, void 0, ' ') : "", item.title)));
+          data.push((0, _jsx3.default)('li', {
+            className: _Breadcrumb2.default.split
+          }, i + "1", '/'));
         }
-        data.push(_react2.default.createElement(
-          'li',
-          { key: len - 1 },
-          _react2.default.createElement(
-            'a',
-            { className: _Breadcrumb2.default.selected },
-            list[len - 1].title
-          )
-        ));
-        return _react2.default.createElement(
-          'ol',
-          { className: _Breadcrumb2.default.root },
-          data
-        );
+        data.push((0, _jsx3.default)('li', {}, len - 1, (0, _jsx3.default)('a', {
+          className: _Breadcrumb2.default.selected
+        }, void 0, list[len - 1].title)));
+        return (0, _jsx3.default)('ol', {
+          className: _Breadcrumb2.default.root
+        }, void 0, data);
       }
     }]);
     return Breadcrumb;
   }(_react.Component);
   
-  Breadcrumb.propTypes = {
-    breadcrumbList: _react2.default.PropTypes.array
-  };
   exports.default = (0, _withStyles2.default)(_Breadcrumb2.default)(Breadcrumb);
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2748,41 +2699,41 @@ module.exports =
     value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _extends2 = __webpack_require__(37);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _objectWithoutProperties2 = __webpack_require__(56);
+  var _objectWithoutProperties2 = __webpack_require__(57);
   
   var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -2805,7 +2756,7 @@ module.exports =
     (0, _inherits3.default)(Link, _Component);
   
     function Link() {
-      var _Object$getPrototypeO;
+      var _ref;
   
       var _temp, _this, _ret;
   
@@ -2815,7 +2766,7 @@ module.exports =
         args[_key] = arguments[_key];
       }
   
-      return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(Link)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleClick = function (event) {
+      return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Link.__proto__ || (0, _getPrototypeOf2.default)(Link)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (event) {
         var allowTransition = true;
   
         if (_this.props.onClick) {
@@ -2851,10 +2802,10 @@ module.exports =
     (0, _createClass3.default)(Link, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var to = _props.to;
-        var _ = _props.navigate;
-        var props = (0, _objectWithoutProperties3.default)(_props, ['to', 'navigate']); // eslint-disable-line no-unused-vars
+        var _props = this.props,
+            to = _props.to,
+            _ = _props.navigate,
+            props = (0, _objectWithoutProperties3.default)(_props, ['to', 'navigate']); // eslint-disable-line no-unused-vars
   
         return _react2.default.createElement('a', (0, _extends3.default)({ href: this.context.createHref(to) }, props, { onClick: this.handleClick }));
       }
@@ -2862,13 +2813,6 @@ module.exports =
     return Link;
   }(_react.Component);
   
-  Link.propTypes = {
-    to: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]).isRequired,
-    onClick: _react.PropTypes.func,
-  
-    // actions
-    navigate: _react.PropTypes.func
-  };
   Link.contextTypes = {
     createHref: _react.PropTypes.func.isRequired
   };
@@ -2883,13 +2827,13 @@ module.exports =
   exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Link);
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports) {
 
   module.exports = require("babel-runtime/helpers/objectWithoutProperties");
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2900,7 +2844,7 @@ module.exports =
   exports.redirect = redirect;
   exports.navigate = navigate;
   
-  var _toggleSidebar = __webpack_require__(58);
+  var _toggleSidebar = __webpack_require__(59);
   
   // Pseudo action. All is handled through history module
   function redirect(descriptor) {
@@ -2920,7 +2864,7 @@ module.exports =
   }
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -2931,7 +2875,7 @@ module.exports =
   exports.toggleSidebarAction = toggleSidebarAction;
   exports.onChangeSidebarActiveAction = onChangeSidebarActiveAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function toggleSidebarAction(status) {
     return {
@@ -2947,12 +2891,12 @@ module.exports =
   }
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(60);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(61);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -2962,43 +2906,26 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./Breadcrumb.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./Breadcrumb.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, "\n.Breadcrumb_root_oz8{\n  background-color: #ffffff;\n  margin-bottom: 15px;\n  padding: 10px 20px;\n\n}\n.Breadcrumb_root_oz8>li{\n  display: inline-block;\n  margin-right: 10px;\n}\n.Breadcrumb_root_oz8>li>a{\n  color: #333;\n}\n.Breadcrumb_root_oz8>li>a>span{\n  color: #666;\n  font-size:15px;\n  font-weight:bold;\n  position: relative;\n  top:1px;\n}\n.Breadcrumb_root_oz8>li>a.Breadcrumb_selected_1Ed{\n  color: #a7a7a7;\n}\n.Breadcrumb_root_oz8>li>a.Breadcrumb_selected_1Ed:hover{\n  color: #a7a7a7;\n}\n\n", "", {"version":3,"sources":["/./components/Breadcrumb/Breadcrumb.css"],"names":[],"mappings":";AACA;EACE,0BAA0B;EAC1B,oBAAoB;EACpB,mBAAmB;;CAEpB;AACD;EACE,sBAAsB;EACtB,mBAAmB;CACpB;AACD;EACE,YAAY;CACb;AACD;EACE,YAAY;EACZ,eAAe;EACf,iBAAiB;EACjB,mBAAmB;EACnB,QAAQ;CACT;AAED;EACE,eAAe;CAChB;AACD;EACE,eAAe;CAChB","file":"Breadcrumb.css","sourcesContent":["\n.root{\n  background-color: #ffffff;\n  margin-bottom: 15px;\n  padding: 10px 20px;\n\n}\n.root>li{\n  display: inline-block;\n  margin-right: 10px;\n}\n.root>li>a{\n  color: #333;\n}\n.root>li>a>span{\n  color: #666;\n  font-size:15px;\n  font-weight:bold;\n  position: relative;\n  top:1px;\n}\n\n.root>li>a.selected{\n  color: #a7a7a7;\n}\n.root>li>a.selected:hover{\n  color: #a7a7a7;\n}\n\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, ".oz8o{background-color:#fff;margin-bottom:15px;padding:10px 20px}.oz8o>li{display:inline-block;margin-right:10px}.oz8o>li>a{color:#333}.oz8o>li>a>span{color:#666;font-size:15px;font-weight:700;position:relative;top:1px}.oz8o>li>a._1EdZ,.oz8o>li>a._1EdZ:hover{color:#a7a7a7}", ""]);
   
   // exports
   exports.locals = {
-  	"root": "Breadcrumb_root_oz8",
-  	"selected": "Breadcrumb_selected_1Ed"
+  	"root": "oz8o",
+  	"selected": "_1EdZ"
   };
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3007,7 +2934,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getBreadcrumbList = function getBreadcrumbList(state) {
     return state.breadcrumbList;
@@ -3022,13 +2949,13 @@ module.exports =
   exports.default = makeBreadcrumbSelector;
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports) {
 
   module.exports = require("reselect");
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3037,21 +2964,21 @@ module.exports =
     value: true
   });
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _Sidebar = __webpack_require__(64);
+  var _Sidebar = __webpack_require__(65);
   
   var _Sidebar2 = _interopRequireDefault(_Sidebar);
   
-  var _isSidebarOpenSelector = __webpack_require__(70);
+  var _isSidebarOpenSelector = __webpack_require__(71);
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
-  var _sidebarActiveSelector = __webpack_require__(71);
+  var _sidebarActiveSelector = __webpack_require__(72);
   
   var _sidebarActiveSelector2 = _interopRequireDefault(_sidebarActiveSelector);
   
-  var _toggleSidebar = __webpack_require__(58);
+  var _toggleSidebar = __webpack_require__(59);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -3076,7 +3003,7 @@ module.exports =
   exports.default = SidebarContainer;
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3085,60 +3012,62 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _classnames = __webpack_require__(65);
+  var _classnames = __webpack_require__(66);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _Sidebar = __webpack_require__(66);
+  var _Sidebar = __webpack_require__(67);
   
   var _Sidebar2 = _interopRequireDefault(_Sidebar);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _reactCookie = __webpack_require__(68);
+  var _reactCookie = __webpack_require__(69);
   
   var _reactCookie2 = _interopRequireDefault(_reactCookie);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   function showIcon(className) {
-    return _react2.default.createElement(
-      'i',
-      { className: (0, _classnames2.default)(_Sidebar2.default.listFA, className) },
-      ' '
-    );
+    return (0, _jsx3.default)('i', {
+      className: (0, _classnames2.default)(_Sidebar2.default.listFA, className)
+    }, void 0, ' ');
   }
   
   var MenuListItem = function (_Component) {
@@ -3146,34 +3075,26 @@ module.exports =
   
     function MenuListItem() {
       (0, _classCallCheck3.default)(this, MenuListItem);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(MenuListItem).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (MenuListItem.__proto__ || (0, _getPrototypeOf2.default)(MenuListItem)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(MenuListItem, [{
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          _Link2.default,
-          { to: this.props.href, onClick: this.props.onClick },
-          this.props.icon,
-          this.props.children,
-          this.props.rightIcon
-        );
+        return (0, _jsx3.default)(_Link2.default, {
+          to: this.props.href,
+          onClick: this.props.onClick
+        }, void 0, this.props.icon, this.props.children, this.props.rightIcon);
       }
     }]);
     return MenuListItem;
   }(_react.Component);
   
-  MenuListItem.propTypes = {
-    href: _react2.default.PropTypes.string.isRequired,
-    icon: _react2.default.PropTypes.element.isRequired
-  };
-  
   var MenuList = function (_Component2) {
     (0, _inherits3.default)(MenuList, _Component2);
   
     function MenuList() {
-      var _Object$getPrototypeO;
+      var _ref;
   
       (0, _classCallCheck3.default)(this, MenuList);
   
@@ -3181,7 +3102,7 @@ module.exports =
         args[_key] = arguments[_key];
       }
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(MenuList)).call.apply(_Object$getPrototypeO, [this].concat(args)));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_ref = MenuList.__proto__ || (0, _getPrototypeOf2.default)(MenuList)).call.apply(_ref, [this].concat(args)));
   
       _this2.state = {
         open: true
@@ -3199,41 +3120,28 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'ul',
-          { className: _Sidebar2.default.list },
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              MenuListItem,
-              {
-                href: 'javascript:void(0)',
-                icon: this.props.icon,
-                rightIcon: _react2.default.createElement(
-                  'i',
-                  { className: (0, _classnames2.default)(_Sidebar2.default.toggler, this.state.open ? _Sidebar2.default.togglerOpen : '') },
-                  ' '
-                ),
-                onClick: this.handleClick.bind(this)
-              },
-              this.props.title
-            )
-          ),
-          _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactBootstrap.Collapse,
-              { 'in': this.state.open },
-              this.props.children
-            )
-          )
-        );
+        return (0, _jsx3.default)('ul', {
+          className: _Sidebar2.default.list
+        }, void 0, (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: 'javascript:void(0)',
+          icon: this.props.icon,
+          rightIcon: (0, _jsx3.default)('i', {
+            className: (0, _classnames2.default)(_Sidebar2.default.toggler, this.state.open ? _Sidebar2.default.togglerOpen : '')
+          }, void 0, ' '),
+          onClick: this.handleClick.bind(this)
+        }, void 0, this.props.title)), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_reactBootstrap.Collapse, {
+          'in': this.state.open
+        }, void 0, this.props.children)));
       }
     }]);
     return MenuList;
   }(_react.Component);
+  
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.Overlay, {
+    placement: 'right'
+  }, void 0, (0, _jsx3.default)(_reactBootstrap.Tooltip, {
+    id: 'overload-right'
+  }, void 0, 'Tooltip overload!'));
   
   var ThinItem = function (_Component3) {
     (0, _inherits3.default)(ThinItem, _Component3);
@@ -3241,7 +3149,7 @@ module.exports =
     function ThinItem(props) {
       (0, _classCallCheck3.default)(this, ThinItem);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ThinItem).call(this, props));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (ThinItem.__proto__ || (0, _getPrototypeOf2.default)(ThinItem)).call(this, props));
   
       _this3.state = {
         tipShow: false
@@ -3253,44 +3161,17 @@ module.exports =
     (0, _createClass3.default)(ThinItem, [{
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(
-            _Link2.default,
-            { to: this.props.href, onClick: this.props.onClick,
-              className: this.props.href == "javascript:;" && this.props.open ? "menu-item menuItemAction" : 'menu-item ' + this.props.className },
-            this.props.icon
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'thin-item-tip' },
-            this.props.tip
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.Overlay,
-            { placement: 'right' },
-            _react2.default.createElement(
-              _reactBootstrap.Tooltip,
-              { id: 'overload-right' },
-              'Tooltip overload!'
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: this.props.href,
+          onClick: this.props.onClick,
+          className: this.props.href == "javascript:;" && this.props.open ? "menu-item menuItemAction" : 'menu-item ' + this.props.className
+        }, void 0, this.props.icon), (0, _jsx3.default)('div', {
+          className: 'thin-item-tip'
+        }, void 0, this.props.tip), _ref2);
       }
     }]);
     return ThinItem;
   }(_react.Component);
-  
-  ThinItem.propTypes = {
-    icon: _react2.default.PropTypes.element.isRequired,
-    tip: _react2.default.PropTypes.string.isRequired,
-    href: _react2.default.PropTypes.string,
-    onClick: _react2.default.PropTypes.func,
-    open: _react2.default.PropTypes.bool,
-    isOpen: _react2.default.PropTypes.bool,
-    className: _react2.default.PropTypes.string
-  };
   
   var ThinList = function (_Component4) {
     (0, _inherits3.default)(ThinList, _Component4);
@@ -3298,7 +3179,7 @@ module.exports =
     function ThinList(props) {
       (0, _classCallCheck3.default)(this, ThinList);
   
-      var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ThinList).call(this, props));
+      var _this4 = (0, _possibleConstructorReturn3.default)(this, (ThinList.__proto__ || (0, _getPrototypeOf2.default)(ThinList)).call(this, props));
   
       _this4.state = {
         collapse: true
@@ -3317,45 +3198,84 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(ThinItem, { href: this.props.href != "javascript:;" ? this.props.href : "javascript:;",
-            open: this.state.collapse,
-            isOpen: this.props.isOpen,
-            onClick: this.handleClick.bind(this),
-            icon: this.props.icon,
-            tip: this.props.title,
-            className: this.props.className
-  
-          }),
-          _react2.default.createElement(
-            _reactBootstrap.Collapse,
-            { 'in': this.state.collapse },
-            _react2.default.createElement(
-              'div',
-              null,
-              this.props.children
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)(ThinItem, {
+          href: this.props.href != "javascript:;" ? this.props.href : "javascript:;",
+          open: this.state.collapse,
+          isOpen: this.props.isOpen,
+          onClick: this.handleClick.bind(this),
+          icon: this.props.icon,
+          tip: this.props.title,
+          className: this.props.className
+        }), (0, _jsx3.default)(_reactBootstrap.Collapse, {
+          'in': this.state.collapse
+        }, void 0, (0, _jsx3.default)('div', {}, void 0, this.props.children)));
       }
     }]);
     return ThinList;
   }(_react.Component);
   
-  ThinList.propTypes = {
-    href: _react2.default.PropTypes.string,
-    className: _react2.default.PropTypes.string,
-    onClick: _react2.default.PropTypes.func
-  };
+  var _ref3 = (0, _jsx3.default)('a', {
+    href: '/'
+  }, void 0, (0, _jsx3.default)('img', {
+    src: '/logo.png'
+  }));
+  
+  var _ref4 = (0, _jsx3.default)('a', {
+    href: '/'
+  }, void 0, (0, _jsx3.default)('img', {
+    src: '/logo-small.png'
+  }));
+  
+  var _ref5 = (0, _jsx3.default)('i', {
+    className: 'icon-console'
+  }, void 0, ' ');
+  
+  var _ref6 = (0, _jsx3.default)('i', {
+    className: 'icon-sanjiaoright'
+  }, void 0, ' ');
+  
+  var _ref7 = (0, _jsx3.default)('i', {
+    className: 'icon-New-service'
+  }, void 0, ' ');
+  
+  var _ref8 = (0, _jsx3.default)('i', {
+    className: 'icon-servicelist'
+  }, void 0, ' ');
+  
+  var _ref9 = (0, _jsx3.default)('i', {
+    className: 'icon-storagemanag'
+  }, void 0, ' ');
+  
+  var _ref10 = (0, _jsx3.default)('i', {
+    className: 'icon-sanjiaoright'
+  }, void 0, ' ');
+  
+  var _ref11 = (0, _jsx3.default)('i', {
+    className: 'icon-mymirror'
+  }, void 0, ' ');
+  
+  var _ref12 = (0, _jsx3.default)('i', {
+    className: 'icon-formmirror'
+  }, void 0, ' ');
+  
+  var _ref13 = (0, _jsx3.default)('i', {
+    className: 'icon-codeconstruct'
+  }, void 0, ' ');
+  
+  var _ref14 = (0, _jsx3.default)('i', {
+    className: 'icon-login'
+  }, void 0, ' ');
+  
+  var _ref15 = (0, _jsx3.default)('i', {
+    className: 'icon-login'
+  }, void 0, ' ');
   
   var Sidebar = function (_Component5) {
     (0, _inherits3.default)(Sidebar, _Component5);
   
     function Sidebar() {
       (0, _classCallCheck3.default)(this, Sidebar);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Sidebar).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Sidebar.__proto__ || (0, _getPrototypeOf2.default)(Sidebar)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Sidebar, [{
@@ -3370,290 +3290,178 @@ module.exports =
       key: 'getLogo',
       value: function getLogo() {
         var open = this.props.isSidebarOpen;
-        return open ? _react2.default.createElement(
-          'div',
-          { className: _Sidebar2.default.logo },
-          _react2.default.createElement(
-            'a',
-            { href: '/' },
-            _react2.default.createElement('img', { src: '/logo.png' })
-          )
-        ) : _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(_Sidebar2.default.logo, _Sidebar2.default.logoSmall) },
-          _react2.default.createElement(
-            'a',
-            { href: '/' },
-            _react2.default.createElement('img', { src: '/logo-small.png' })
-          )
-        );
+        return open ? (0, _jsx3.default)('div', {
+          className: _Sidebar2.default.logo
+        }, void 0, _ref3) : (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Sidebar2.default.logo, _Sidebar2.default.logoSmall)
+        }, void 0, _ref4);
       }
     }, {
       key: 'getList',
       value: function getList() {
         var open = this.props.isSidebarOpen;
         var is_user = this.context.store.getState().user_info.is_user;
-        return open ? _react2.default.createElement(
-          'div',
-          { className: _Sidebar2.default.listPack },
-          _react2.default.createElement(
-            'div',
-            { className: _Sidebar2.default.menuList },
-            _react2.default.createElement(
-              'ul',
-              { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
-              _react2.default.createElement(
-                'li',
-                { onClick: this.onChangeAction.bind(this, "/"),
-                  className: this.props.sidebarActive == "/" ? "subListAction" : "" },
-                _react2.default.createElement(
-                  MenuListItem,
-                  { href: '/', icon: showIcon("icon-console") },
-                  '控制台'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              MenuList,
-              { title: '服务中心', icon: showIcon("icon-servicecenter") },
-              _react2.default.createElement(
-                'ul',
-                { className: _Sidebar2.default.subList },
-                _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/choseImage"),
-                    className: this.props.sidebarActive == "/choseImage" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/choseImage', icon: showIcon("icon-New-service") },
-                    '新建服务'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/serviceList"),
-                    className: this.props.sidebarActive == "/serviceList" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/serviceList', icon: showIcon("icon-servicelist") },
-                    '服务列表'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/volumes"),
-                    className: this.props.sidebarActive == "/volumes" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/volumes', icon: showIcon("icon-storagemanag") },
-                    '存储卷管理'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              MenuList,
-              { title: '镜像中心', icon: showIcon("icon-mirrorceer") },
-              _react2.default.createElement(
-                'ul',
-                { className: _Sidebar2.default.subList },
-                _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/createImage"),
-                    className: this.props.sidebarActive == "/createImage" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/createImage', icon: showIcon("icon-mirrorhouse") },
-                    '新建镜像'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/imageForMy"),
-                    className: this.props.sidebarActive == "/imageForMy" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/imageForMy', icon: showIcon("icon-mymirror") },
-                    '我的镜像'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
-                    className: this.props.sidebarActive == "/imageForPlatform" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/imageForPlatform', icon: showIcon("icon-formmirror") },
-                    '平台镜像'
-                  )
-                ),
-                _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/building"),
-                    className: this.props.sidebarActive == "/building" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/building', icon: showIcon("icon-codeconstruct") },
-                    '代码构建'
-                  )
-                )
-              )
-            ),
-            is_user == 1 ? _react2.default.createElement(
-              'ul',
-              { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
-              _react2.default.createElement(
-                'li',
-                { onClick: this.onChangeAction.bind(this, "/user"),
-                  className: this.props.sidebarActive == "/user" ? "subListAction" : "" },
-                _react2.default.createElement(
-                  MenuListItem,
-                  { href: '/user', icon: showIcon("icon-login") },
-                  '用户中心'
-                )
-              )
-            ) : _react2.default.createElement(
-              'ul',
-              { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
-              _react2.default.createElement(
-                'li',
-                { onClick: this.onChangeAction.bind(this, "/organize"),
-                  className: this.props.sidebarActive == "/organize" ? "subListAction" : "" },
-                _react2.default.createElement(
-                  MenuListItem,
-                  { href: '/organize', icon: showIcon("icon-login") },
-                  '组织中心'
-                )
-              )
-            )
-          )
-        ) : _react2.default.createElement(
-          'div',
-          { className: 'sidebar-menu-thin' },
-          _react2.default.createElement(ThinList, {
-            href: '/',
-            title: '控制台',
-            isOpen: false,
-            icon: _react2.default.createElement(
-              'i',
-              { className: 'icon-console' },
-              ' '
-            ),
-            onClick: this.onChangeAction.bind(this, "/"),
-            className: this.props.sidebarActive == "/" ? "menuListAction" : ""
-          }),
-          _react2.default.createElement(
-            ThinList,
-            {
-              href: 'javascript:;',
-              title: '服务中心',
-              isOpen: true,
-              icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-sanjiaoright' },
-                ' '
-              ),
-              onClick: function onClick() {},
-              className: ''
-            },
-            _react2.default.createElement(ThinItem, { href: '/choseImage', icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-New-service' },
-                ' '
-              ), tip: '新建服务',
-              onClick: this.onChangeAction.bind(this, "/choseImage"),
-              className: this.props.sidebarActive == "/choseImage" ? "menuListAction" : ""
-            }),
-            _react2.default.createElement(ThinItem, { href: '/serviceList', icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-servicelist' },
-                ' '
-              ), tip: '服务列表',
-              onClick: this.onChangeAction.bind(this, "/serviceList"),
-              className: this.props.sidebarActive == "/serviceList" ? "menuListAction" : ""
-            }),
-            _react2.default.createElement(ThinItem, { href: '/volumes', icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-storagemanag' },
-                ' '
-              ), tip: '存储卷管理',
-              onClick: this.onChangeAction.bind(this, "/volumes"),
-              className: this.props.sidebarActive == "/volumes" ? "menuListAction" : ""
-            })
-          ),
-          _react2.default.createElement(
-            ThinList,
-            {
-              href: 'javascript:;',
-              title: '镜像中心',
-              isOpen: true,
-              icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-sanjiaoright' },
-                ' '
-              ),
-              onClick: function onClick() {},
-              className: ''
-            },
-            _react2.default.createElement(ThinItem, { href: '/imageForMy', icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-mymirror' },
-                ' '
-              ), tip: '我的镜像',
-              onClick: this.onChangeAction.bind(this, "/imageForMy"),
-              className: this.props.sidebarActive == "/imageForMy" ? "menuListAction" : ""
-            }),
-            _react2.default.createElement(ThinItem, { href: '/imageForPlatform', icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-formmirror' },
-                ' '
-              ), tip: '平台镜像',
-              onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
-              className: this.props.sidebarActive == "/imageForPlatform" ? "menuListAction" : ""
-            }),
-            _react2.default.createElement(ThinItem, { href: '/building', icon: _react2.default.createElement(
-                'i',
-                { className: 'icon-codeconstruct' },
-                ' '
-              ), tip: '构建镜像',
-              onClick: this.onChangeAction.bind(this, "/building"),
-              className: this.props.sidebarActive == "/building" ? "menuListAction" : ""
-            })
-          ),
-          is_user == 1 ? _react2.default.createElement(ThinList, {
-            href: '/user',
-            isOpen: false,
-            title: '用户中心',
-            icon: _react2.default.createElement(
-              'i',
-              { className: 'icon-login' },
-              ' '
-            ),
-            onClick: this.onChangeAction.bind(this, "/user"),
-            className: this.props.sidebarActive == "/user" ? "menuListAction" : ""
-          }) : _react2.default.createElement(ThinList, {
-            href: '/organize',
-            isOpen: false,
-            title: '组织中心',
-            icon: _react2.default.createElement(
-              'i',
-              { className: 'icon-login' },
-              ' '
-            ),
-            onClick: this.onChangeAction.bind(this, "/organize"),
-            className: this.props.sidebarActive == "/organize" ? "menuListAction" : ""
-          })
-        );
+        return open ? (0, _jsx3.default)('div', {
+          className: _Sidebar2.default.listPack
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Sidebar2.default.menuList
+        }, void 0, (0, _jsx3.default)('ul', {
+          className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list")
+        }, void 0, (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/"),
+          className: this.props.sidebarActive == "/" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/',
+          icon: showIcon("icon-console")
+        }, void 0, '\u63A7\u5236\u53F0'))), (0, _jsx3.default)(MenuList, {
+          title: '\u670D\u52A1\u4E2D\u5FC3',
+          icon: showIcon("icon-servicecenter")
+        }, void 0, (0, _jsx3.default)('ul', {
+          className: _Sidebar2.default.subList
+        }, void 0, (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/choseImage"),
+          className: this.props.sidebarActive == "/choseImage" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/choseImage',
+          icon: showIcon("icon-New-service")
+        }, void 0, '\u65B0\u5EFA\u670D\u52A1')), (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/serviceList"),
+          className: this.props.sidebarActive == "/serviceList" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/serviceList',
+          icon: showIcon("icon-servicelist")
+        }, void 0, '\u670D\u52A1\u5217\u8868')), (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/volumes"),
+          className: this.props.sidebarActive == "/volumes" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/volumes',
+          icon: showIcon("icon-storagemanag")
+        }, void 0, '\u5B58\u50A8\u5377\u7BA1\u7406')))), (0, _jsx3.default)(MenuList, {
+          title: '\u955C\u50CF\u4E2D\u5FC3',
+          icon: showIcon("icon-mirrorceer")
+        }, void 0, (0, _jsx3.default)('ul', {
+          className: _Sidebar2.default.subList
+        }, void 0, (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/createImage"),
+          className: this.props.sidebarActive == "/createImage" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/createImage',
+          icon: showIcon("icon-mirrorhouse")
+        }, void 0, '\u65B0\u5EFA\u955C\u50CF')), (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/imageForMy"),
+          className: this.props.sidebarActive == "/imageForMy" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/imageForMy',
+          icon: showIcon("icon-mymirror")
+        }, void 0, '\u6211\u7684\u955C\u50CF')), (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
+          className: this.props.sidebarActive == "/imageForPlatform" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/imageForPlatform',
+          icon: showIcon("icon-formmirror")
+        }, void 0, '\u5E73\u53F0\u955C\u50CF')), (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/building"),
+          className: this.props.sidebarActive == "/building" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/building',
+          icon: showIcon("icon-codeconstruct")
+        }, void 0, '\u4EE3\u7801\u6784\u5EFA')))), is_user == 1 ? (0, _jsx3.default)('ul', {
+          className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list")
+        }, void 0, (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/user"),
+          className: this.props.sidebarActive == "/user" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/user',
+          icon: showIcon("icon-login")
+        }, void 0, '\u7528\u6237\u4E2D\u5FC3'))) : (0, _jsx3.default)('ul', {
+          className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list")
+        }, void 0, (0, _jsx3.default)('li', {
+          onClick: this.onChangeAction.bind(this, "/organize"),
+          className: this.props.sidebarActive == "/organize" ? "subListAction" : ""
+        }, void 0, (0, _jsx3.default)(MenuListItem, {
+          href: '/organize',
+          icon: showIcon("icon-login")
+        }, void 0, '\u7EC4\u7EC7\u4E2D\u5FC3'))))) : (0, _jsx3.default)('div', {
+          className: 'sidebar-menu-thin'
+        }, void 0, (0, _jsx3.default)(ThinList, {
+          href: '/',
+          title: '\u63A7\u5236\u53F0',
+          isOpen: false,
+          icon: _ref5,
+          onClick: this.onChangeAction.bind(this, "/"),
+          className: this.props.sidebarActive == "/" ? "menuListAction" : ""
+        }, void 0), (0, _jsx3.default)(ThinList, {
+          href: 'javascript:;',
+          title: '\u670D\u52A1\u4E2D\u5FC3',
+          isOpen: true,
+          icon: _ref6,
+          onClick: function onClick() {},
+          className: ''
+        }, void 0, (0, _jsx3.default)(ThinItem, {
+          href: '/choseImage',
+          icon: _ref7,
+          tip: '\u65B0\u5EFA\u670D\u52A1',
+          onClick: this.onChangeAction.bind(this, "/choseImage"),
+          className: this.props.sidebarActive == "/choseImage" ? "menuListAction" : ""
+        }), (0, _jsx3.default)(ThinItem, {
+          href: '/serviceList',
+          icon: _ref8,
+          tip: '\u670D\u52A1\u5217\u8868',
+          onClick: this.onChangeAction.bind(this, "/serviceList"),
+          className: this.props.sidebarActive == "/serviceList" ? "menuListAction" : ""
+        }), (0, _jsx3.default)(ThinItem, {
+          href: '/volumes',
+          icon: _ref9,
+          tip: '\u5B58\u50A8\u5377\u7BA1\u7406',
+          onClick: this.onChangeAction.bind(this, "/volumes"),
+          className: this.props.sidebarActive == "/volumes" ? "menuListAction" : ""
+        })), (0, _jsx3.default)(ThinList, {
+          href: 'javascript:;',
+          title: '\u955C\u50CF\u4E2D\u5FC3',
+          isOpen: true,
+          icon: _ref10,
+          onClick: function onClick() {},
+          className: ''
+        }, void 0, (0, _jsx3.default)(ThinItem, {
+          href: '/imageForMy',
+          icon: _ref11,
+          tip: '\u6211\u7684\u955C\u50CF',
+          onClick: this.onChangeAction.bind(this, "/imageForMy"),
+          className: this.props.sidebarActive == "/imageForMy" ? "menuListAction" : ""
+        }), (0, _jsx3.default)(ThinItem, {
+          href: '/imageForPlatform',
+          icon: _ref12,
+          tip: '\u5E73\u53F0\u955C\u50CF',
+          onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
+          className: this.props.sidebarActive == "/imageForPlatform" ? "menuListAction" : ""
+        }), (0, _jsx3.default)(ThinItem, {
+          href: '/building',
+          icon: _ref13,
+          tip: '\u6784\u5EFA\u955C\u50CF',
+          onClick: this.onChangeAction.bind(this, "/building"),
+          className: this.props.sidebarActive == "/building" ? "menuListAction" : ""
+        })), is_user == 1 ? (0, _jsx3.default)(ThinList, {
+          href: '/user',
+          isOpen: false,
+          title: '\u7528\u6237\u4E2D\u5FC3',
+          icon: _ref14,
+          onClick: this.onChangeAction.bind(this, "/user"),
+          className: this.props.sidebarActive == "/user" ? "menuListAction" : ""
+        }, void 0) : (0, _jsx3.default)(ThinList, {
+          href: '/organize',
+          isOpen: false,
+          title: '\u7EC4\u7EC7\u4E2D\u5FC3',
+          icon: _ref15,
+          onClick: this.onChangeAction.bind(this, "/organize"),
+          className: this.props.sidebarActive == "/organize" ? "menuListAction" : ""
+        }, void 0));
       }
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(_Sidebar2.default.root, "app-sidebar") },
-          this.getLogo(),
-          this.getList()
-        );
+        return (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Sidebar2.default.root, "app-sidebar")
+        }, void 0, this.getLogo(), this.getList());
       }
     }]);
     return Sidebar;
@@ -3666,26 +3474,21 @@ module.exports =
   Sidebar.contextTypes = {
     store: _react2.default.PropTypes.object
   };
-  Sidebar.propTypes = {
-    isSidebarOpen: _react2.default.PropTypes.bool,
-    sidebarActive: _react2.default.PropTypes.string,
-    onChangeSidebarActive: _react2.default.PropTypes.func
-  };
   exports.default = (0, _withStyles2.default)(_Sidebar2.default)(Sidebar);
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports) {
 
   module.exports = require("classnames");
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(67);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(68);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -3695,63 +3498,46 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./Sidebar.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./Sidebar.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, "\n.Sidebar_root_2SE {\n  position: fixed;\n  z-index:1;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 180px;\n  background-color: #21314b;\n}\n.Sidebar_listPack_3C3{\n  position: absolute;\n  top: 60px;\n  left: 0;\n  bottom:0;\n  right:0;\n  overflow: auto;\n}\n.Sidebar_menuList_Aik{\n  margin-top: 50px;\n  margin-left: 15px;\n}\n.Sidebar_toggler_3IY{\n  float: right;\n  padding: 2px;\n  -webkit-transition: all .3s ease;\n  -o-transition: all .3s ease;\n  transition: all .3s ease;\n  -webkit-transform: rotate(0deg);\n      -ms-transform: rotate(0deg);\n       -o-transform: rotate(0deg);\n          transform: rotate(0deg);\n  display: block;\n  width: 14px;\n  height: 14px;\n  background-color: #444e5b;\n  margin-top: 2px;\n}\n.Sidebar_toggler_3IY:before{\n  content:\" \";\n  width: 2px;\n  height: 10px;\n  background-color: #fff;\n  left: 6px;\n  position: absolute;\n}\n.Sidebar_toggler_3IY:after{\n  content:\" \";\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n  top: 6px;\n  position: absolute;\n}\n.Sidebar_togglerOpen_203:before{\n  display: none;\n}\n.Sidebar_list_3AA li a:hover .Sidebar_toggler_3IY:after,.Sidebar_list_3AA li a:hover .Sidebar_toggler_3IY:before{\n  background-color: #1ba4c6;\n}\n.Sidebar_list_3AA{\n  margin-bottom: 15px;\n  border-top-left-radius: .4em;\n  border-bottom-left-radius: .4em;\n  background-color: #363f4e;\n}\n.Sidebar_list_3AA li a {\n  display: block;\n  padding: 15px 15px 15px 50px;\n  -webkit-transition: color ease .2s;\n  -o-transition: color ease .2s;\n  transition:color ease .2s;\n}\n.Sidebar_list_3AA li a,.Sidebar_list_3AA li a:active,.Sidebar_list_3AA li a:visited{\n  color: #fff;\n  font-size:16px;\n}\n.Sidebar_list_3AA li a:hover{\n   color: #09c8f4;\n }\n.Sidebar_list_3AA li:nth-child(2){\n  font-size:0;\n}\n.Sidebar_listFA_eCy{\n  float: left;\n  width: 20px;\n  height: 20px;\n  font-size: 1.4em;\n  margin-left: -30px;\n  color:#999;\n  -webkit-transition: color ease .2s;\n  -o-transition: color ease .2s;\n  transition:color ease .2s;\n}\n.Sidebar_list_3AA li a:hover .Sidebar_listFA_eCy{\n  color:#1ba4c6;\n}\n.Sidebar_subList_3sh>li>a{\n   padding-top: 8px;\n   padding-bottom: 8px;\n\n}\n.Sidebar_subList_3sh>li>a,.Sidebar_subList_3sh>li>a:active,.Sidebar_subList_3sh>li>a:visited{\n  color: #afafaf;\n  font-size:14px;\n}\n.Sidebar_subList_3sh>li>a:hover{\n  color: #09c8f4;\n}\n.Sidebar_logo_2cK{\n  max-height: 60px;\n  min-height: 60px;\n  background-color: #fff;\n  padding: 16px 30px;\n}\n.Sidebar_logo_2cK > a {\n  display: block;\n}\n.Sidebar_logo_2cK > a > img{\n  width: 100%;\n}\n.Sidebar_logoSmall_1za{\n  padding:17px 13px;\n}\n\n", "", {"version":3,"sources":["/./components/Sidebar/Sidebar.css"],"names":[],"mappings":";AACA;EACE,gBAAgB;EAChB,UAAU;EACV,QAAQ;EACR,OAAO;EACP,UAAU;EACV,aAAa;EACb,0BAA0B;CAC3B;AACD;EACE,mBAAmB;EACnB,UAAU;EACV,QAAQ;EACR,SAAS;EACT,QAAQ;EACR,eAAe;CAChB;AACD;EACE,iBAAiB;EACjB,kBAAkB;CACnB;AACD;EACE,aAAa;EACb,aAAa;EACb,iCAAyB;EAAzB,4BAAyB;EAAzB,yBAAyB;EACzB,gCAAwB;MAAxB,4BAAwB;OAAxB,2BAAwB;UAAxB,wBAAwB;EACxB,eAAe;EACf,YAAY;EACZ,aAAa;EACb,0BAA0B;EAC1B,gBAAgB;CACjB;AACD;EACE,YAAY;EACZ,WAAW;EACX,aAAa;EACb,uBAAuB;EACvB,UAAU;EACV,mBAAmB;CACpB;AACD;EACE,YAAY;EACZ,YAAY;EACZ,YAAY;EACZ,uBAAuB;EACvB,SAAS;EACT,mBAAmB;CACpB;AACD;EACE,cAAc;CACf;AACD;EACE,0BAA0B;CAC3B;AACD;EACE,oBAAoB;EACpB,6BAA6B;EAC7B,gCAAgC;EAChC,0BAA0B;CAC3B;AACD;EACE,eAAe;EACf,6BAA6B;EAC7B,mCAA0B;EAA1B,8BAA0B;EAA1B,0BAA0B;CAC3B;AAED;EACE,YAAY;EACZ,eAAe;CAChB;AACD;GACG,eAAe;EAChB;AACF;EACE,YAAY;CACb;AAED;EACE,YAAY;EACZ,YAAY;EACZ,aAAa;EACb,iBAAiB;EACjB,mBAAmB;EACnB,WAAW;EACX,mCAA0B;EAA1B,8BAA0B;EAA1B,0BAA0B;CAC3B;AACD;EACE,cAAc;CACf;AACD;GACG,iBAAiB;GACjB,oBAAoB;;CAEtB;AAED;EACE,eAAe;EACf,eAAe;CAChB;AACD;EACE,eAAe;CAChB;AAED;EACE,iBAAiB;EACjB,iBAAiB;EACjB,uBAAuB;EACvB,mBAAmB;CACpB;AACD;EACE,eAAe;CAChB;AACD;EACE,YAAY;CACb;AACD;EACE,kBAAkB;CACnB","file":"Sidebar.css","sourcesContent":["\n.root {\n  position: fixed;\n  z-index:1;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 180px;\n  background-color: #21314b;\n}\n.listPack{\n  position: absolute;\n  top: 60px;\n  left: 0;\n  bottom:0;\n  right:0;\n  overflow: auto;\n}\n.menuList{\n  margin-top: 50px;\n  margin-left: 15px;\n}\n.toggler{\n  float: right;\n  padding: 2px;\n  transition: all .3s ease;\n  transform: rotate(0deg);\n  display: block;\n  width: 14px;\n  height: 14px;\n  background-color: #444e5b;\n  margin-top: 2px;\n}\n.toggler:before{\n  content:\" \";\n  width: 2px;\n  height: 10px;\n  background-color: #fff;\n  left: 6px;\n  position: absolute;\n}\n.toggler:after{\n  content:\" \";\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n  top: 6px;\n  position: absolute;\n}\n.togglerOpen:before{\n  display: none;\n}\n.list li a:hover .toggler:after,.list li a:hover .toggler:before{\n  background-color: #1ba4c6;\n}\n.list{\n  margin-bottom: 15px;\n  border-top-left-radius: .4em;\n  border-bottom-left-radius: .4em;\n  background-color: #363f4e;\n}\n.list li a {\n  display: block;\n  padding: 15px 15px 15px 50px;\n  transition:color ease .2s;\n}\n\n.list li a,.list li a:active,.list li a:visited{\n  color: #fff;\n  font-size:16px;\n}\n.list li a:hover{\n   color: #09c8f4;\n }\n.list li:nth-child(2){\n  font-size:0;\n}\n\n.listFA{\n  float: left;\n  width: 20px;\n  height: 20px;\n  font-size: 1.4em;\n  margin-left: -30px;\n  color:#999;\n  transition:color ease .2s;\n}\n.list li a:hover .listFA{\n  color:#1ba4c6;\n}\n.subList>li>a{\n   padding-top: 8px;\n   padding-bottom: 8px;\n\n}\n\n.subList>li>a,.subList>li>a:active,.subList>li>a:visited{\n  color: #afafaf;\n  font-size:14px;\n}\n.subList>li>a:hover{\n  color: #09c8f4;\n}\n\n.logo{\n  max-height: 60px;\n  min-height: 60px;\n  background-color: #fff;\n  padding: 16px 30px;\n}\n.logo > a {\n  display: block;\n}\n.logo > a > img{\n  width: 100%;\n}\n.logoSmall{\n  padding:17px 13px;\n}\n\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "._2SEP{position:fixed;z-index:1;top:0;width:180px;background-color:#21314b}._2SEP,._3C3h{left:0;bottom:0}._3C3h{position:absolute;top:60px;right:0;overflow:auto}.Aika{margin-top:50px;margin-left:15px}._3IYu{float:right;padding:2px;-webkit-transition:all .3s ease;transition:all .3s ease;-webkit-transform:rotate(0deg);transform:rotate(0deg);display:block;width:14px;height:14px;background-color:#444e5b;margin-top:2px}._3IYu:before{width:2px;height:10px;left:6px}._3IYu:after,._3IYu:before{content:\" \";background-color:#fff;position:absolute}._3IYu:after{width:10px;height:2px;top:6px}._203M:before{display:none}._3AAl li a:hover ._3IYu:after,._3AAl li a:hover ._3IYu:before{background-color:#1ba4c6}._3AAl{margin-bottom:15px;border-top-left-radius:.4em;border-bottom-left-radius:.4em;background-color:#363f4e}._3AAl li a{display:block;padding:15px 15px 15px 50px;-webkit-transition:color .2s ease;transition:color .2s ease}._3AAl li a,._3AAl li a:active,._3AAl li a:visited{color:#fff;font-size:16px}._3AAl li a:hover{color:#09c8f4}._3AAl li:nth-child(2){font-size:0}.eCyD{float:left;width:20px;height:20px;font-size:1.4em;margin-left:-30px;color:#999;-webkit-transition:color .2s ease;transition:color .2s ease}._3AAl li a:hover .eCyD{color:#1ba4c6}._3shQ>li>a{padding-top:8px;padding-bottom:8px}._3shQ>li>a,._3shQ>li>a:active,._3shQ>li>a:visited{color:#afafaf;font-size:14px}._3shQ>li>a:hover{color:#09c8f4}._2cKZ{max-height:60px;min-height:60px;background-color:#fff;padding:16px 30px}._2cKZ>a{display:block}._2cKZ>a>img{width:100%}._1za2{padding:17px 13px}", ""]);
   
   // exports
   exports.locals = {
-  	"root": "Sidebar_root_2SE",
-  	"listPack": "Sidebar_listPack_3C3",
-  	"menuList": "Sidebar_menuList_Aik",
-  	"toggler": "Sidebar_toggler_3IY",
-  	"togglerOpen": "Sidebar_togglerOpen_203",
-  	"list": "Sidebar_list_3AA",
-  	"listFA": "Sidebar_listFA_eCy",
-  	"subList": "Sidebar_subList_3sh",
-  	"logo": "Sidebar_logo_2cK",
-  	"logoSmall": "Sidebar_logoSmall_1za"
+  	"root": "_2SEP",
+  	"listPack": "_3C3h",
+  	"menuList": "Aika",
+  	"toggler": "_3IYu",
+  	"togglerOpen": "_203M",
+  	"list": "_3AAl",
+  	"listFA": "eCyD",
+  	"subList": "_3shQ",
+  	"logo": "_2cKZ",
+  	"logoSmall": "_1za2"
   };
-
-/***/ },
-/* 68 */
-/***/ function(module, exports) {
-
-  module.exports = require("react-cookie");
 
 /***/ },
 /* 69 */
 /***/ function(module, exports) {
 
-  module.exports = require("react-bootstrap");
+  module.exports = require("react-cookie");
 
 /***/ },
 /* 70 */
+/***/ function(module, exports) {
+
+  module.exports = require("react-bootstrap");
+
+/***/ },
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3760,7 +3546,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getIsSidebarOpen = function getIsSidebarOpen(state) {
     return state.isSidebarOpen;
@@ -3775,7 +3561,7 @@ module.exports =
   exports.default = makeIsSidebarOpenSelector;
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3784,7 +3570,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getSidebarActive = function getSidebarActive(state) {
     return state.sidebarActive;
@@ -3799,7 +3585,7 @@ module.exports =
   exports.default = makeSidebarActiveSelector;
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3808,27 +3594,27 @@ module.exports =
     value: true
   });
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _toggleSidebar = __webpack_require__(58);
+  var _toggleSidebar = __webpack_require__(59);
   
-  var _Header = __webpack_require__(73);
+  var _Header = __webpack_require__(74);
   
   var _Header2 = _interopRequireDefault(_Header);
   
-  var _organize = __webpack_require__(75);
+  var _organize = __webpack_require__(76);
   
   var funOrganize = _interopRequireWildcard(_organize);
   
-  var _isSidebarOpenSelector = __webpack_require__(70);
+  var _isSidebarOpenSelector = __webpack_require__(71);
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
-  var _isLoadingSelector = __webpack_require__(81);
+  var _isLoadingSelector = __webpack_require__(82);
   
   var _isLoadingSelector2 = _interopRequireDefault(_isLoadingSelector);
   
-  var _organizeListSelector = __webpack_require__(82);
+  var _organizeListSelector = __webpack_require__(83);
   
   var _organizeListSelector2 = _interopRequireDefault(_organizeListSelector);
   
@@ -3866,7 +3652,7 @@ module.exports =
   exports.default = SidebarContainer;
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3875,48 +3661,108 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactLoading = __webpack_require__(74);
+  var _reactLoading = __webpack_require__(75);
   
   var _reactLoading2 = _interopRequireDefault(_reactLoading);
   
-  var _reactCookie = __webpack_require__(68);
+  var _reactCookie = __webpack_require__(69);
   
   var _reactCookie2 = _interopRequireDefault(_reactCookie);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('p', {}, void 0, '\u5207\u6362\u5230\u4E2A\u4EBA');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u5207\u6362\u5230\u8BE5\u7EC4\u7EC7');
+  
+  var _ref3 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 4.1
+  }, void 0, '\u9000\u51FA');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+    eventKey: 4.1,
+    title: '\u9000\u51FA',
+    id: 'header-nav-item-userinfo'
+  }, void 0, ' ');
+  
+  var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 4.1
+  }, void 0, '\u9000\u51FA');
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+    eventKey: 4.1,
+    title: '\u9000\u51FA',
+    id: 'header-nav-item-userinfo'
+  }, void 0, ' ');
+  
+  var _ref7 = (0, _jsx3.default)(_reactLoading2.default, {
+    type: 'bubbles',
+    color: '#fff',
+    height: '50px',
+    width: '50px'
+  });
+  
+  var _ref8 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 2
+  }, void 0, '\u521B\u5EFA\u7EC4\u7BA1\u7406');
+  
+  var _ref9 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 3
+  }, void 0, '\u7528\u6237\u4E2D\u5FC3');
+  
+  var _ref10 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 4.1
+  }, void 0, '\u9000\u51FA');
+  
+  var _ref11 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+    eventKey: 4.1,
+    title: '\u9000\u51FA',
+    id: 'header-nav-item-userinfo'
+  }, void 0);
+  
+  var _ref12 = (0, _jsx3.default)(_reactLoading2.default, {
+    type: 'bubbles',
+    color: '#fff',
+    height: '50px',
+    width: '50px'
+  });
   
   var Header = function (_Component) {
     (0, _inherits3.default)(Header, _Component);
   
     function Header() {
       (0, _classCallCheck3.default)(this, Header);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Header).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Header.__proto__ || (0, _getPrototypeOf2.default)(Header)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Header, [{
@@ -3980,160 +3826,86 @@ module.exports =
         var user_orga = this.context.store.getState().user_info.user_orga;
         var menuItem = this.props.organizeList.map(function (item, i) {
           if (item.orga_name == username && is_user == 0) {
-            return _react2.default.createElement(
-              _reactBootstrap.MenuItem,
-              { eventKey: i, key: i },
-              _react2.default.createElement(
-                'div',
-                { className: 'headerOrgList' },
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  item.orga_name
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  '切换到个人'
-                )
-              )
-            );
+            return (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+              eventKey: i
+            }, i, (0, _jsx3.default)('div', {
+              className: 'headerOrgList'
+            }, void 0, (0, _jsx3.default)('p', {}, void 0, item.orga_name), _ref));
           } else if (item.orga_name == user_orga) {} else {
-            return _react2.default.createElement(
-              _reactBootstrap.MenuItem,
-              { eventKey: i, key: i },
-              _react2.default.createElement(
-                'div',
-                { className: 'headerOrgList' },
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  item.orga_name
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  '切换到该组织'
-                )
-              )
-            );
+            return (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+              eventKey: i
+            }, i, (0, _jsx3.default)('div', {
+              className: 'headerOrgList'
+            }, void 0, (0, _jsx3.default)('p', {}, void 0, item.orga_name), _ref2));
           }
         });
         var dropdown = null;
         if (is_user == 0) {
-          dropdown = user_orga ? _react2.default.createElement(
-            _reactBootstrap.NavDropdown,
-            { eventKey: 4, title: user_orga, id: 'header-nav-item-userinfo' },
-            menuItem,
-            _react2.default.createElement(
-              _reactBootstrap.MenuItem,
-              { eventKey: 4.1 },
-              '退出'
-            )
-          ) : _react2.default.createElement(
-            _reactBootstrap.NavDropdown,
-            { eventKey: 4.1, title: '退出', id: 'header-nav-item-userinfo' },
-            ' '
-          );
+          dropdown = user_orga ? (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+            eventKey: 4,
+            title: user_orga,
+            id: 'header-nav-item-userinfo'
+          }, void 0, menuItem, _ref3) : _ref4;
         } else {
-          dropdown = username ? _react2.default.createElement(
-            _reactBootstrap.NavDropdown,
-            { eventKey: 4, title: username, id: 'header-nav-item-userinfo' },
-            menuItem,
-            _react2.default.createElement(
-              _reactBootstrap.MenuItem,
-              { eventKey: 4.1 },
-              '退出'
-            )
-          ) : _react2.default.createElement(
-            _reactBootstrap.NavDropdown,
-            { eventKey: 4.1, title: '退出', id: 'header-nav-item-userinfo' },
-            ' '
-          );
+          dropdown = username ? (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+            eventKey: 4,
+            title: username,
+            id: 'header-nav-item-userinfo'
+          }, void 0, menuItem, _ref5) : _ref6;
         }
-        return _react2.default.createElement(
-          _reactBootstrap.Navbar,
-          { fixedTop: true, className: 'app-navbar', style: { left: "180px" } },
-          _react2.default.createElement(
-            _reactBootstrap.Nav,
-            { onSelect: this.handleSelect.bind(this) },
-            _react2.default.createElement(
-              _reactBootstrap.NavItem,
-              { eventKey: 1.1, href: 'javascript:void(0)' },
-              _react2.default.createElement('i', { className: this.props.isSidebarOpen ? "icon-withdraw" : "icon-back", 'aria-hidden': 'true' })
-            )
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.Nav,
-            { pullRight: true, onSelect: this.handleSelect.bind(this), style: { marginRight: "0" } },
-            _react2.default.createElement(
-              _reactBootstrap.NavItem,
-              { className: 'loading-animation' },
-              this.props.isLoading ? _react2.default.createElement(_reactLoading2.default, { type: 'bubbles', color: '#fff', height: '50px', width: '50px' }) : null
-            ),
-            dropdown
-          )
-        );
+        return (0, _jsx3.default)(_reactBootstrap.Navbar, {
+          fixedTop: true,
+          className: 'app-navbar',
+          style: { left: "180px" }
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Nav, {
+          onSelect: this.handleSelect.bind(this)
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
+          eventKey: 1.1,
+          href: 'javascript:void(0)'
+        }, void 0, (0, _jsx3.default)('i', {
+          className: this.props.isSidebarOpen ? "icon-withdraw" : "icon-back",
+          'aria-hidden': 'true'
+        }))), (0, _jsx3.default)(_reactBootstrap.Nav, {
+          pullRight: true,
+          onSelect: this.handleSelect.bind(this),
+          style: { marginRight: "0" }
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
+          className: 'loading-animation'
+        }, void 0, this.props.isLoading ? _ref7 : null), dropdown));
       }
     }, {
       key: 'render1',
       value: function render1() {
         var username = this.context.store.getState().user_info.user_name;
-        var dropdown = username ? _react2.default.createElement(
-          _reactBootstrap.NavDropdown,
-          { eventKey: 4, title: username, id: 'header-nav-item-userinfo' },
-          _react2.default.createElement(
-            _reactBootstrap.MenuItem,
-            { eventKey: 2 },
-            '创建组管理'
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.MenuItem,
-            { eventKey: 3 },
-            '用户中心'
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.MenuItem,
-            { eventKey: 4.1 },
-            '退出'
-          )
-        ) : _react2.default.createElement(_reactBootstrap.NavDropdown, { eventKey: 4.1, title: '退出', id: 'header-nav-item-userinfo' });
-        return _react2.default.createElement(
-          _reactBootstrap.Navbar,
-          { fixedTop: true, className: 'app-navbar', style: { left: "180px" } },
-          _react2.default.createElement(
-            _reactBootstrap.Nav,
-            { onSelect: this.handleSelect.bind(this) },
-            _react2.default.createElement(
-              _reactBootstrap.NavItem,
-              { eventKey: 1, href: 'javascript:void(0)' },
-              _react2.default.createElement('i', { className: this.props.isSidebarOpen ? "icon-withdraw" : "icon-back", 'aria-hidden': 'true' })
-            )
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.Nav,
-            { pullRight: true, onSelect: this.handleSelect.bind(this), style: { marginRight: "0" } },
-            _react2.default.createElement(
-              _reactBootstrap.NavItem,
-              { className: 'loading-animation' },
-              this.props.isLoading ? _react2.default.createElement(_reactLoading2.default, { type: 'bubbles', color: '#fff', height: '50px', width: '50px' }) : null
-            ),
-            dropdown
-          )
-        );
+        var dropdown = username ? (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+          eventKey: 4,
+          title: username,
+          id: 'header-nav-item-userinfo'
+        }, void 0, _ref8, _ref9, _ref10) : _ref11;
+        return (0, _jsx3.default)(_reactBootstrap.Navbar, {
+          fixedTop: true,
+          className: 'app-navbar',
+          style: { left: "180px" }
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Nav, {
+          onSelect: this.handleSelect.bind(this)
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
+          eventKey: 1,
+          href: 'javascript:void(0)'
+        }, void 0, (0, _jsx3.default)('i', {
+          className: this.props.isSidebarOpen ? "icon-withdraw" : "icon-back",
+          'aria-hidden': 'true'
+        }))), (0, _jsx3.default)(_reactBootstrap.Nav, {
+          pullRight: true,
+          onSelect: this.handleSelect.bind(this),
+          style: { marginRight: "0" }
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
+          className: 'loading-animation'
+        }, void 0, this.props.isLoading ? _ref12 : null), dropdown));
       }
     }]);
     return Header;
   }(_react.Component);
   
-  Header.propTypes = {
-    isLoading: _react2.default.PropTypes.bool,
-    isSidebarOpen: _react2.default.PropTypes.bool.isRequired,
-    onSidebarToggleClick: _react2.default.PropTypes.func,
-    organizeList: _react2.default.PropTypes.array,
-    getOrganizeList: _react2.default.PropTypes.func,
-    changeAccount: _react2.default.PropTypes.func
-  };
   Header.contextTypes = {
     store: _react2.default.PropTypes.object
   };
@@ -4141,13 +3913,13 @@ module.exports =
   // export default withStyles(s)(Header);
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports) {
 
   module.exports = require("react-loading");
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4156,7 +3928,7 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
@@ -4173,21 +3945,21 @@ module.exports =
   exports.fetchChangeUserRoleAction = fetchChangeUserRoleAction;
   exports.fetchChangeOrganizeOwnerAction = fetchChangeOrganizeOwnerAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
-  var _reactCookie = __webpack_require__(68);
+  var _reactCookie = __webpack_require__(69);
   
   var _reactCookie2 = _interopRequireDefault(_reactCookie);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -4578,13 +4350,13 @@ module.exports =
   }
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports) {
 
   module.exports = require("isomorphic-fetch");
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4594,11 +4366,11 @@ module.exports =
   });
   exports.emit = exports.init = exports.clearNotification = exports.receiveNotification = undefined;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _serviceDetail = __webpack_require__(78);
+  var _serviceDetail = __webpack_require__(79);
   
-  var _socket = __webpack_require__(80);
+  var _socket = __webpack_require__(81);
   
   var _socket2 = _interopRequireDefault(_socket);
   
@@ -4650,7 +4422,7 @@ module.exports =
   };
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4659,7 +4431,7 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
@@ -4689,17 +4461,17 @@ module.exports =
   exports.fetchChangeReleaseAction = fetchChangeReleaseAction;
   exports.fetchSaveCommand = fetchSaveCommand;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -5218,7 +4990,7 @@ module.exports =
   }
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5228,9 +5000,9 @@ module.exports =
   });
   exports.isLoadingAction = isLoadingAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function isLoadingAction(flag) {
     return {
@@ -5240,13 +5012,13 @@ module.exports =
   }
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports) {
 
   module.exports = require("socket.io-client");
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5255,7 +5027,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getIsLoading = function getIsLoading(state) {
     return state.isLoading;
@@ -5270,7 +5042,7 @@ module.exports =
   exports.default = makeIsLoadingSelector;
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5279,7 +5051,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getOrganizeList = function getOrganizeList(state) {
     return state.organizeList;
@@ -5294,71 +5066,6 @@ module.exports =
   exports.default = makeGetOrganizeListSelector;
 
 /***/ },
-/* 83 */
-/***/ function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  
-  var _getPrototypeOf = __webpack_require__(45);
-  
-  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-  
-  var _classCallCheck2 = __webpack_require__(46);
-  
-  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-  
-  var _createClass2 = __webpack_require__(47);
-  
-  var _createClass3 = _interopRequireDefault(_createClass2);
-  
-  var _possibleConstructorReturn2 = __webpack_require__(48);
-  
-  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-  
-  var _inherits2 = __webpack_require__(49);
-  
-  var _inherits3 = _interopRequireDefault(_inherits2);
-  
-  var _react = __webpack_require__(9);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _reactBootstrap = __webpack_require__(69);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var _class = function (_React$Component) {
-    (0, _inherits3.default)(_class, _React$Component);
-  
-    function _class() {
-      (0, _classCallCheck3.default)(this, _class);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).apply(this, arguments));
-    }
-  
-    (0, _createClass3.default)(_class, [{
-      key: 'render',
-      value: function render() {
-        var text = this.props.obj.message;
-        return _react2.default.createElement(
-          _reactBootstrap.Alert,
-          { bsStyle: this.props.obj.level || "success", className: !this.props.show ? "notification" : "notification notificationShow" },
-          text
-        );
-      }
-    }]);
-    return _class;
-  }(_react2.default.Component);
-  
-  _class.propTypes = {
-    obj: _react2.default.PropTypes.object
-  };
-  exports.default = _class;
-
-/***/ },
 /* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -5368,7 +5075,72 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(47);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(48);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(49);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(50);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(10);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _reactBootstrap = __webpack_require__(70);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _class = function (_React$Component) {
+    (0, _inherits3.default)(_class, _React$Component);
+  
+    function _class() {
+      (0, _classCallCheck3.default)(this, _class);
+      return (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).apply(this, arguments));
+    }
+  
+    (0, _createClass3.default)(_class, [{
+      key: 'render',
+      value: function render() {
+        var text = this.props.obj.message;
+        return (0, _jsx3.default)(_reactBootstrap.Alert, {
+          bsStyle: this.props.obj.level || "success",
+          className: !this.props.show ? "notification" : "notification notificationShow"
+        }, void 0, text);
+      }
+    }]);
+    return _class;
+  }(_react2.default.Component);
+  
+  exports.default = _class;
+
+/***/ },
+/* 85 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _reselect = __webpack_require__(63);
   
   //logs
   var getLogs = function getLogs(state) {
@@ -5384,13 +5156,13 @@ module.exports =
   exports.default = makeGetNotificationsSelector;
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports) {
 
   module.exports = require("fbjs/lib/emptyFunction");
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5399,19 +5171,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _DashboardContainer = __webpack_require__(87);
+  var _DashboardContainer = __webpack_require__(88);
   
   var _DashboardContainer2 = _interopRequireDefault(_DashboardContainer);
   
@@ -5426,6 +5202,8 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+  var _ref = (0, _jsx3.default)(_DashboardContainer2.default, {});
+  
   exports.default = {
   
     path: '/',
@@ -5438,7 +5216,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_DashboardContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -5451,7 +5229,7 @@ module.exports =
   };
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5460,29 +5238,29 @@ module.exports =
     value: true
   });
   
-  var _Dashboard = __webpack_require__(88);
+  var _Dashboard = __webpack_require__(89);
   
   var _Dashboard2 = _interopRequireDefault(_Dashboard);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _services = __webpack_require__(93);
+  var _services = __webpack_require__(94);
   
-  var _serviceListSelector = __webpack_require__(94);
+  var _serviceListSelector = __webpack_require__(95);
   
   var _serviceListSelector2 = _interopRequireDefault(_serviceListSelector);
   
-  var _imageList = __webpack_require__(95);
+  var _imageList = __webpack_require__(96);
   
-  var _imageListSelector = __webpack_require__(96);
+  var _imageListSelector = __webpack_require__(97);
   
   var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
   
-  var _volumes = __webpack_require__(97);
+  var _volumes = __webpack_require__(98);
   
-  var _volumesListSelector = __webpack_require__(98);
+  var _volumesListSelector = __webpack_require__(99);
   
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
@@ -5521,7 +5299,7 @@ module.exports =
   exports.default = DashboardContainer;
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5530,136 +5308,118 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Dashboard = __webpack_require__(89);
+  var _Dashboard = __webpack_require__(90);
   
   var _Dashboard2 = _interopRequireDefault(_Dashboard);
   
-  var _classnames = __webpack_require__(65);
+  var _classnames = __webpack_require__(66);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var ReactHighcharts = __webpack_require__(91);
+  var ReactHighcharts = __webpack_require__(92);
+  
+  var _ref = (0, _jsx3.default)('span', {
+    className: 'bg_hover bg_detail'
+  }, void 0, '\u67E5\u770B\u8BE6\u60C5');
+  
+  var _ref2 = (0, _jsx3.default)('span', {
+    className: 'bg_hover bg_detail'
+  }, void 0, '\u67E5\u770B\u8BE6\u60C5');
   
   var Panel1Box = function (_Component) {
     (0, _inherits3.default)(Panel1Box, _Component);
   
     function Panel1Box() {
       (0, _classCallCheck3.default)(this, Panel1Box);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Panel1Box).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Panel1Box.__proto__ || (0, _getPrototypeOf2.default)(Panel1Box)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Panel1Box, [{
       key: 'render',
       value: function render() {
         var url = this.props.url;
-        return url ? _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(_Dashboard2.default.p1Box, this.props.theme) },
-          _react2.default.createElement(
-            _Link2.default,
-            { to: this.props.url },
-            _react2.default.createElement(
-              'div',
-              { className: (0, _classnames2.default)(_Dashboard2.default.p1BoxLeft, "p1box_left") },
-              _react2.default.createElement(
-                'i',
-                { className: (0, _classnames2.default)("bg_dis", this.props.className) },
-                ' '
-              ),
-              _react2.default.createElement(
-                'i',
-                { className: (0, _classnames2.default)("bg_hover", 'icon-link') },
-                ' '
-              ),
-              _react2.default.createElement(
-                'span',
-                { className: 'bg_hover bg_detail' },
-                '查看详情'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: _Dashboard2.default.p1BoxRight },
-            this.props.children
-          )
-        ) : _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(_Dashboard2.default.p1Box, this.props.theme) },
-          _react2.default.createElement(
-            'div',
-            { className: (0, _classnames2.default)(_Dashboard2.default.p1BoxLeft, "p1box_left") },
-            _react2.default.createElement(
-              'i',
-              { className: (0, _classnames2.default)("bg_dis", this.props.className) },
-              ' '
-            ),
-            _react2.default.createElement(
-              'i',
-              { className: (0, _classnames2.default)("bg_hover", 'icon-link') },
-              ' '
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'bg_hover bg_detail' },
-              '查看详情'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: _Dashboard2.default.p1BoxRight },
-            this.props.children
-          )
-        );
+        return url ? (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Dashboard2.default.p1Box, this.props.theme)
+        }, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: this.props.url
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Dashboard2.default.p1BoxLeft, "p1box_left")
+        }, void 0, (0, _jsx3.default)('i', {
+          className: (0, _classnames2.default)("bg_dis", this.props.className)
+        }, void 0, ' '), (0, _jsx3.default)('i', {
+          className: (0, _classnames2.default)("bg_hover", 'icon-link')
+        }, void 0, ' '), _ref)), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.p1BoxRight
+        }, void 0, this.props.children)) : (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Dashboard2.default.p1Box, this.props.theme)
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Dashboard2.default.p1BoxLeft, "p1box_left")
+        }, void 0, (0, _jsx3.default)('i', {
+          className: (0, _classnames2.default)("bg_dis", this.props.className)
+        }, void 0, ' '), (0, _jsx3.default)('i', {
+          className: (0, _classnames2.default)("bg_hover", 'icon-link')
+        }, void 0, ' '), _ref2), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.p1BoxRight
+        }, void 0, this.props.children));
       }
     }]);
     return Panel1Box;
   }(_react.Component);
+  
+  var _ref3 = (0, _jsx3.default)('i', {}, void 0, 'services');
+  
+  var _ref4 = (0, _jsx3.default)('i', {}, void 0, 'images');
+  
+  var _ref5 = (0, _jsx3.default)('i', {}, void 0, 'volumes');
   
   var ResourceDetail = function (_Component2) {
     (0, _inherits3.default)(ResourceDetail, _Component2);
   
     function ResourceDetail() {
       (0, _classCallCheck3.default)(this, ResourceDetail);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ResourceDetail).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ResourceDetail.__proto__ || (0, _getPrototypeOf2.default)(ResourceDetail)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ResourceDetail, [{
@@ -5668,137 +5428,50 @@ module.exports =
         var serviceLength = this.props.serviceList[0] == 1 ? 0 : this.props.serviceList.length;
         var imageLength = this.props.imageList[0] == 1 ? 0 : this.props.imageList.length;
         var volumesLength = this.props.volumesList[0] == 1 ? 0 : this.props.volumesList.length;
-        return _react2.default.createElement(
-          _reactBootstrap.Panel,
-          { header: '资源详细' },
-          _react2.default.createElement(
-            'ul',
-            { className: _Dashboard2.default.p1List },
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _Link2.default,
-                { to: '/serviceList' },
-                _react2.default.createElement(
-                  Panel1Box,
-                  { theme: 'p1box_svc', className: 'icon-service' },
-                  _react2.default.createElement(
-                    'p',
-                    { className: _Dashboard2.default.p1BoxRightTxt },
-                    '服务',
-                    _react2.default.createElement(
-                      'i',
-                      null,
-                      'services'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    _react2.default.createElement(
-                      'i',
-                      { className: _Dashboard2.default.p1BoxRightNum },
-                      serviceLength
-                    ),
-                    '个'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _Link2.default,
-                { to: '/imageForMy' },
-                _react2.default.createElement(
-                  Panel1Box,
-                  { theme: 'p1box_image', className: 'icon-mirrorceer' },
-                  _react2.default.createElement(
-                    'p',
-                    { className: _Dashboard2.default.p1BoxRightTxt },
-                    '镜像',
-                    _react2.default.createElement(
-                      'i',
-                      null,
-                      'images'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    _react2.default.createElement(
-                      'i',
-                      { className: _Dashboard2.default.p1BoxRightNum },
-                      imageLength
-                    ),
-                    '个'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _Link2.default,
-                { to: '/volumes' },
-                _react2.default.createElement(
-                  Panel1Box,
-                  { theme: 'p1box_pro', className: 'icon-project' },
-                  _react2.default.createElement(
-                    'p',
-                    { className: _Dashboard2.default.p1BoxRightTxt },
-                    '数据卷',
-                    _react2.default.createElement(
-                      'i',
-                      null,
-                      'volumes'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    _react2.default.createElement(
-                      'i',
-                      { className: _Dashboard2.default.p1BoxRightNum },
-                      volumesLength
-                    ),
-                    '个'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                Panel1Box,
-                { theme: 'p1box_new', className: 'icon-new', url: '/choseImage' },
-                _react2.default.createElement(
-                  _Link2.default,
-                  { to: '/choseImage' },
-                  _react2.default.createElement(
-                    'p',
-                    { className: _Dashboard2.default.p1BoxRightTxt },
-                    '新建服务',
-                    _react2.default.createElement(
-                      'i',
-                      { className: _Dashboard2.default.p1BoxNewSvcTip },
-                      'new service'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'a',
-                  { className: _Dashboard2.default.p1BoxDescTxt },
-                  '什么是容器云服务?'
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)(_reactBootstrap.Panel, {
+          header: '\u8D44\u6E90\u8BE6\u7EC6'
+        }, void 0, (0, _jsx3.default)('ul', {
+          className: _Dashboard2.default.p1List
+        }, void 0, (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: '/serviceList'
+        }, void 0, (0, _jsx3.default)(Panel1Box, {
+          theme: 'p1box_svc',
+          className: 'icon-service'
+        }, void 0, (0, _jsx3.default)('p', {
+          className: _Dashboard2.default.p1BoxRightTxt
+        }, void 0, '\u670D\u52A1', _ref3), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxRightNum
+        }, void 0, serviceLength), '\u4E2A')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: '/imageForMy'
+        }, void 0, (0, _jsx3.default)(Panel1Box, {
+          theme: 'p1box_image',
+          className: 'icon-mirrorceer'
+        }, void 0, (0, _jsx3.default)('p', {
+          className: _Dashboard2.default.p1BoxRightTxt
+        }, void 0, '\u955C\u50CF', _ref4), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxRightNum
+        }, void 0, imageLength), '\u4E2A')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: '/volumes'
+        }, void 0, (0, _jsx3.default)(Panel1Box, {
+          theme: 'p1box_pro',
+          className: 'icon-project'
+        }, void 0, (0, _jsx3.default)('p', {
+          className: _Dashboard2.default.p1BoxRightTxt
+        }, void 0, '\u6570\u636E\u5377', _ref5), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxRightNum
+        }, void 0, volumesLength), '\u4E2A')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(Panel1Box, {
+          theme: 'p1box_new',
+          className: 'icon-new',
+          url: '/choseImage'
+        }, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: '/choseImage'
+        }, void 0, (0, _jsx3.default)('p', {
+          className: _Dashboard2.default.p1BoxRightTxt
+        }, void 0, '\u65B0\u5EFA\u670D\u52A1', (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxNewSvcTip
+        }, void 0, 'new service'))), (0, _jsx3.default)('a', {
+          className: _Dashboard2.default.p1BoxDescTxt
+        }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u4E91\u670D\u52A1?')))));
       }
     }]);
     return ResourceDetail;
@@ -5807,18 +5480,60 @@ module.exports =
   // Highcharts.getOptions().plotOptions.pie.colors=["red","blue"]
   
   
-  ResourceDetail.propTypes = {
-    serviceList: _react2.default.PropTypes.array,
-    imageList: _react2.default.PropTypes.array,
-    volumesList: _react2.default.PropTypes.array
-  };
+  var _ref6 = (0, _jsx3.default)('p', {}, void 0, 'CPU\u603B\u5269\u4F59\u91CF', (0, _jsx3.default)('br', {}), (0, _jsx3.default)('span', {}, void 0, '30%'));
+  
+  var _ref7 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, 'CPU'), '\uFF08\u6838\uFF09\u4F7F\u7528\u60C5\u51B5');
+  
+  var _ref8 = (0, _jsx3.default)('p', {}, void 0, '\u603B\u6570\u91CF');
+  
+  var _ref9 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '10'), '\u6838');
+  
+  var _ref10 = (0, _jsx3.default)('p', {}, void 0, '\u5DF2\u4F7F\u7528');
+  
+  var _ref11 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '7'), '\u6838');
+  
+  var _ref12 = (0, _jsx3.default)('p', {}, void 0, '\u5269\u4F59\u6570');
+  
+  var _ref13 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '3'), '\u6838');
+  
+  var _ref14 = (0, _jsx3.default)('p', {}, void 0, '\u5185\u5B58\u603B\u5269\u4F59\u91CF', (0, _jsx3.default)('br', {}), (0, _jsx3.default)('span', {}, void 0, '50%'));
+  
+  var _ref15 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u5185\u5B58'), '\uFF08MB\uFF09\u4F7F\u7528\u60C5\u51B5');
+  
+  var _ref16 = (0, _jsx3.default)('p', {}, void 0, '\u603B\u6570\u91CF');
+  
+  var _ref17 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '10'), 'MB');
+  
+  var _ref18 = (0, _jsx3.default)('p', {}, void 0, '\u5DF2\u4F7F\u7528');
+  
+  var _ref19 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '5'), 'MB');
+  
+  var _ref20 = (0, _jsx3.default)('p', {}, void 0, '\u5269\u4F59\u6570');
+  
+  var _ref21 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '5'), 'MB');
+  
+  var _ref22 = (0, _jsx3.default)('p', {}, void 0, '\u6570\u636E\u5377\u603B\u5269\u4F59\u91CF', (0, _jsx3.default)('br', {}), (0, _jsx3.default)('span', {}, void 0, '70%'));
+  
+  var _ref23 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u6570\u636E\u5377'), '\uFF08G\uFF09\u4F7F\u7528\u60C5\u51B5');
+  
+  var _ref24 = (0, _jsx3.default)('p', {}, void 0, '\u603B\u6570\u91CF');
+  
+  var _ref25 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '10'), 'G');
+  
+  var _ref26 = (0, _jsx3.default)('p', {}, void 0, '\u5DF2\u4F7F\u7528');
+  
+  var _ref27 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '3'), 'G');
+  
+  var _ref28 = (0, _jsx3.default)('p', {}, void 0, '\u5269\u4F59\u6570');
+  
+  var _ref29 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '7'), 'G');
   
   var Monitor = function (_Component3) {
     (0, _inherits3.default)(Monitor, _Component3);
   
     function Monitor() {
       (0, _classCallCheck3.default)(this, Monitor);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Monitor).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Monitor.__proto__ || (0, _getPrototypeOf2.default)(Monitor)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Monitor, [{
@@ -5941,406 +5656,117 @@ module.exports =
           credits: { enabled: false }
   
         };
-        return _react2.default.createElement(
-          _reactBootstrap.Panel,
-          { header: '资源配额使用情况', className: _Dashboard2.default.monitor },
-          _react2.default.createElement(
-            'div',
-            { className: _Dashboard2.default.resourceBox },
-            _react2.default.createElement(
-              'div',
-              { className: _Dashboard2.default.resourceItem },
-              _react2.default.createElement(
-                'div',
-                { className: _Dashboard2.default.resourceLeft },
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  'CPU总剩余量',
-                  _react2.default.createElement('br', null),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    '30%'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.hcItem },
-                  _react2.default.createElement(
-                    ReactHighcharts,
-                    { config: config1 },
-                    ' '
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: _Dashboard2.default.resourceRight },
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.resourceHd },
-                  _react2.default.createElement(
-                    'p',
-                    null,
-                    _react2.default.createElement(
-                      'span',
-                      null,
-                      'CPU'
-                    ),
-                    '（核）使用情况'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.resourceBd },
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '总数量'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '10'
-                      ),
-                      '核'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '已使用'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '7'
-                      ),
-                      '核'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '剩余数'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '3'
-                      ),
-                      '核'
-                    )
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: _Dashboard2.default.resourceItem },
-              _react2.default.createElement(
-                'div',
-                { className: _Dashboard2.default.resourceLeft },
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  '内存总剩余量',
-                  _react2.default.createElement('br', null),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    '50%'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.hcItem },
-                  _react2.default.createElement(
-                    ReactHighcharts,
-                    { config: config2 },
-                    ' '
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: _Dashboard2.default.resourceRight },
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.resourceHd },
-                  _react2.default.createElement(
-                    'p',
-                    null,
-                    _react2.default.createElement(
-                      'span',
-                      null,
-                      '内存'
-                    ),
-                    '（MB）使用情况'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.resourceBd },
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '总数量'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '10'
-                      ),
-                      'MB'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '已使用'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '5'
-                      ),
-                      'MB'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '剩余数'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '5'
-                      ),
-                      'MB'
-                    )
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: _Dashboard2.default.resourceItem },
-              _react2.default.createElement(
-                'div',
-                { className: _Dashboard2.default.resourceLeft },
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  '数据卷总剩余量',
-                  _react2.default.createElement('br', null),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    '70%'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.hcItem },
-                  _react2.default.createElement(
-                    ReactHighcharts,
-                    { config: config3 },
-                    ' '
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: _Dashboard2.default.resourceRight },
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.resourceHd },
-                  _react2.default.createElement(
-                    'p',
-                    null,
-                    _react2.default.createElement(
-                      'span',
-                      null,
-                      '数据卷'
-                    ),
-                    '（G）使用情况'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _Dashboard2.default.resourceBd },
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '总数量'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '10'
-                      ),
-                      'G'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '已使用'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '3'
-                      ),
-                      'G'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: _Dashboard2.default.resourceInfo },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      '剩余数'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      _react2.default.createElement(
-                        'span',
-                        null,
-                        '7'
-                      ),
-                      'G'
-                    )
-                  )
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)(_reactBootstrap.Panel, {
+          header: '\u8D44\u6E90\u914D\u989D\u4F7F\u7528\u60C5\u51B5',
+          className: _Dashboard2.default.monitor
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceBox
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceItem
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceLeft
+        }, void 0, _ref6, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.hcItem
+        }, void 0, (0, _jsx3.default)(ReactHighcharts, {
+          config: config1
+        }, void 0, ' '))), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceRight
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceHd
+        }, void 0, _ref7), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceBd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref8, _ref9), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref10, _ref11), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref12, _ref13)))), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceItem
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceLeft
+        }, void 0, _ref14, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.hcItem
+        }, void 0, (0, _jsx3.default)(ReactHighcharts, {
+          config: config2
+        }, void 0, ' '))), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceRight
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceHd
+        }, void 0, _ref15), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceBd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref16, _ref17), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref18, _ref19), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref20, _ref21)))), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceItem
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceLeft
+        }, void 0, _ref22, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.hcItem
+        }, void 0, (0, _jsx3.default)(ReactHighcharts, {
+          config: config3
+        }, void 0, ' '))), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceRight
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceHd
+        }, void 0, _ref23), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceBd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref24, _ref25), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref26, _ref27), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref28, _ref29))))));
       }
     }]);
     return Monitor;
   }(_react.Component);
+  
+  var _ref30 = (0, _jsx3.default)(_reactBootstrap.Button, {
+    bsStyle: 'primary'
+  }, void 0, '\u5145\u503C');
+  
+  var _ref31 = (0, _jsx3.default)(_reactBootstrap.Button, {
+    bsStyle: 'primary',
+    className: 'pull-right'
+  }, void 0, '\u67E5\u770B');
   
   var AccountInfo = function (_Component4) {
     (0, _inherits3.default)(AccountInfo, _Component4);
   
     function AccountInfo() {
       (0, _classCallCheck3.default)(this, AccountInfo);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AccountInfo).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (AccountInfo.__proto__ || (0, _getPrototypeOf2.default)(AccountInfo)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(AccountInfo, [{
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          _reactBootstrap.Panel,
-          { header: '账户信息', className: _Dashboard2.default.accountInfo },
-          _react2.default.createElement(
-            'div',
-            { className: _Dashboard2.default.accountInfoBody },
-            _react2.default.createElement(
-              'p',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: _Dashboard2.default.accountInfoSubT },
-                '账户余额'
-              )
-            ),
-            _react2.default.createElement(
-              'p',
-              { className: _Dashboard2.default.accountInfoBalance },
-              _react2.default.createElement(
-                'span',
-                { className: _Dashboard2.default.accountInfoMoney },
-                '-123.07'
-              ),
-              '元',
-              _react2.default.createElement(
-                _reactBootstrap.Button,
-                { bsStyle: 'primary' },
-                '充值'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: _Dashboard2.default.accountInfoBody },
-            _react2.default.createElement(
-              'p',
-              { className: _Dashboard2.default.accountInfoBusiness },
-              '2016.8.19'
-            ),
-            _react2.default.createElement(
-              'p',
-              { style: { lineHeight: "34px" } },
-              _react2.default.createElement(
-                'span',
-                { className: _Dashboard2.default.accountInfoSubT },
-                '最近交易'
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Button,
-                { bsStyle: 'primary', className: 'pull-right' },
-                '查看'
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)(_reactBootstrap.Panel, {
+          header: '\u8D26\u6237\u4FE1\u606F',
+          className: _Dashboard2.default.accountInfo
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.accountInfoBody
+        }, void 0, (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {
+          className: _Dashboard2.default.accountInfoSubT
+        }, void 0, '\u8D26\u6237\u4F59\u989D')), (0, _jsx3.default)('p', {
+          className: _Dashboard2.default.accountInfoBalance
+        }, void 0, (0, _jsx3.default)('span', {
+          className: _Dashboard2.default.accountInfoMoney
+        }, void 0, '-123.07'), '\u5143', _ref30)), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.accountInfoBody
+        }, void 0, (0, _jsx3.default)('p', {
+          className: _Dashboard2.default.accountInfoBusiness
+        }, void 0, '2016.8.19'), (0, _jsx3.default)('p', {
+          style: { lineHeight: "34px" }
+        }, void 0, (0, _jsx3.default)('span', {
+          className: _Dashboard2.default.accountInfoSubT
+        }, void 0, '\u6700\u8FD1\u4EA4\u6613'), _ref31)));
       }
     }]);
     return AccountInfo;
@@ -6348,12 +5774,16 @@ module.exports =
   
   var title = '控制台';
   
+  var _ref32 = (0, _jsx3.default)(Monitor, {});
+  
+  var _ref33 = (0, _jsx3.default)(AccountInfo, {});
+  
   var Dashboard = function (_Component5) {
     (0, _inherits3.default)(Dashboard, _Component5);
   
     function Dashboard() {
       (0, _classCallCheck3.default)(this, Dashboard);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Dashboard).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Dashboard.__proto__ || (0, _getPrototypeOf2.default)(Dashboard)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Dashboard, [{
@@ -6371,21 +5801,15 @@ module.exports =
         var serviceList = this.props.serviceList;
         var imageList = this.props.imageList;
         var volumesList = this.props.volumesList;
-        return _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(_Dashboard2.default.root, "containerPadding") },
-          _react2.default.createElement(ResourceDetail, {
-            serviceList: serviceList,
-            imageList: imageList,
-            volumesList: volumesList
-          }),
-          _react2.default.createElement(
-            'div',
-            { className: _Dashboard2.default.row },
-            _react2.default.createElement(Monitor, null),
-            _react2.default.createElement(AccountInfo, null)
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Dashboard2.default.root, "containerPadding")
+        }, void 0, (0, _jsx3.default)(ResourceDetail, {
+          serviceList: serviceList,
+          imageList: imageList,
+          volumesList: volumesList
+        }), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.row
+        }, void 0, _ref32, _ref33));
       }
     }]);
     return Dashboard;
@@ -6394,24 +5818,15 @@ module.exports =
   Dashboard.contextTypes = {
     setTitle: _react.PropTypes.func.isRequired
   };
-  Dashboard.propTypes = {
-    setBreadcrumb: _react2.default.PropTypes.func,
-    serviceList: _react2.default.PropTypes.array,
-    onServiceListLoad: _react2.default.PropTypes.func,
-    imageList: _react2.default.PropTypes.array,
-    onImageListLoad: _react2.default.PropTypes.func,
-    volumesList: _react2.default.PropTypes.array,
-    onVolumesListLoad: _react2.default.PropTypes.func
-  };
   exports.default = (0, _withStyles2.default)(_Dashboard2.default)(Dashboard);
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(90);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(91);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -6421,73 +5836,56 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./Dashboard.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./Dashboard.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, "\n.Dashboard_root_hHQ{}\n\n.Dashboard_p1List_3ar >li{\n  display: inline-block;\n  margin-right: 15px;\n}\n\n.Dashboard_p1Box__Nl{\n  display: inline-block;\n  background: #f3f4f9;\n  border-radius: .4em;\n  overflow: hidden;\n  border-width: 1px;\n  border-style: solid;\n  /*border: 1px solid #57c8f2;*/\n  cursor: pointer;\n}\n\n.Dashboard_p1BoxLeft_3KS{\n  float: left;\n  text-align: center;\n  /*background: #57c8f2;*/\n  padding: 30px 25px;\n  height: 115px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n\n.Dashboard_p1BoxLeft_3KS > span{\n   display: block;\n   margin: 15px auto;\n   font-size: 40px;\n   color: white;\n }\n\n.Dashboard_p1BoxRight_1C5{\n  display: inline-block;\n  padding: 5px 20px;\n  height: 115px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n}\n\n.Dashboard_p1BoxRight_1C5>span{\n  color:#333;\n}\n\n.Dashboard_p1BoxRightNum_3iO{\n  font-style: normal;\n  font-size: 38px;\n  margin-right: 5px;\n}\n\n.Dashboard_p1BoxRightTxt_TzE{\n  margin: 15px 0 10px ;\n  font-size: 18px;\n  color:#333;\n}\n\n.Dashboard_p1BoxRightTxt_TzE>i{\n   font-size: 12px;\n   color: #b5b5b5;\n   margin-left: 5px;\n }\n\n.Dashboard_p1BoxDescTxt_1hx{\n  color: #b5b5b5;\n  font-style: italic;\n  display: inline-block;\n  margin-top: 10px;\n}\n\n.Dashboard_p1BoxNewSvcTip_2if{\n  display: block;\n  margin: 0 !important;\n}\n\n.Dashboard_row_3yW{\n  position: relative;\n}\n\n.Dashboard_accountInfo_2_K{\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 250px;\n}\n\n.Dashboard_accountInfoBody_2Jo{\n  border-bottom: 1px dashed #ccc;\n  padding: 15px;\n  margin: 0 -15px -15px;\n}\n\n.Dashboard_accountInfoBody_2Jo:first-child{\n  margin-top: -15px;\n}\n\n.Dashboard_accountInfoBody_2Jo:last-child{\n  border-bottom: 0;\n}\n\n.Dashboard_accountInfoSubT_3Lg{\n  color: #ccc;\n}\n\n.Dashboard_accountInfoBalance_1JR{\n  margin-top: 5px;\n}\n\n.Dashboard_accountInfoBusiness_eCG{\n  font-size: 16px;\n  margin: 20px 0 5px 0;\n}\n\n.Dashboard_accountInfoBalance_1JR>button{\n   float: right;\n   margin-top: 7px;\n }\n\n.Dashboard_accountInfoBalance_1JR:after{\n   clear: both;\n }\n\n.Dashboard_accountInfoMoney_1Bw{\n  font-size: 32px;\n  color: #fe6137;\n  margin-right: 5px;\n}\n\n.Dashboard_monitor_34J{\n  margin-right: 260px;\n}\n\n.Dashboard_chart_1O7{\n  width: 100%;\n  height: 300px;\n}\n\n.Dashboard_resourceBox_3MB{\n  padding:0 20px 30px 20px;\n  margin-top:-15px;\n}\n\n.Dashboard_resourceItem_2Iz{\n  position: relative;\n  border-bottom:1px solid #e8e8e8;\n  padding:15px 0;\n}\n\n.Dashboard_resourceItem_2Iz:last-child{\n  border:0;\n}\n\n.Dashboard_resourceItem_2Iz:nth-child(2) .Dashboard_resourceHd_1j1 p span{\n  color:#ff6c60;\n}\n\n.Dashboard_resourceItem_2Iz:nth-child(3) .Dashboard_resourceHd_1j1 p span{\n  color:#2ecc71;\n}\n\n.Dashboard_resourceItem_2Iz:nth-child(1) .Dashboard_resourceLeft_1pu>p>span{\n  color:#56c8f2;\n}\n\n.Dashboard_resourceItem_2Iz:nth-child(2) .Dashboard_resourceLeft_1pu>p>span{\n  color:#ff6c60;\n}\n\n.Dashboard_resourceItem_2Iz:nth-child(3) .Dashboard_resourceLeft_1pu>p>span{\n  color:#2ecc71;\n}\n\n.Dashboard_resourceLeft_1pu{\n  width:240px;\n  height:155px;\n  position: absolute;\n  top:10px;\n  left:0;\n  overflow:hidden;\n}\n\n.Dashboard_resourceLeft_1pu:after{\n  content:\"\";\n  display:inline-block;\n  width:1px;\n  background:#e8e8e8;\n  height:93px;\n  position: absolute;\n  right:0;\n  top:25px;\n}\n\n.Dashboard_resourceLeft_1pu>p{\n  position: absolute;\n  color:#333;\n  display: inline-block;\n  z-index:2;\n  top:80px;\n  left:24px;\n  text-align:center;\n  min-width:98px;\n}\n\n.Dashboard_resourceLeft_1pu>p>span{\n  font-size:20px;\n}\n\n.Dashboard_hcItem_1zh{\n  width:125px;\n  height:125px;\n  margin-top:20px;\n}\n\n.Dashboard_resourceRight_2EV{\n  margin-left:240px;\n  height:155px;\n  padding-left:70px;\n  padding-right:60px;\n}\n\n.Dashboard_resourceHd_1j1{\n  padding-bottom:10px;\n  border-bottom:1px solid #e8e8e8;\n}\n\n.Dashboard_resourceHd_1j1 p{\n  color:#666;\n  padding-top:7px;\n}\n\n.Dashboard_resourceHd_1j1 p span{\n  font-size:18px;\n  color:#56c8f2;\n}\n\n.Dashboard_resourceBd_1XI{\n}\n\n.Dashboard_resourceInfo_1vF{\n  width:45%;\n  display:inline-block;\n  position: relative;\n  padding-top:15px;\n  text-align: center;\n}\n\n.Dashboard_resourceInfo_1vF:after{\n  content: '';\n  width:1px;\n  height:58px;\n  position: absolute;\n  top:14px;\n  right:0;\n  background:#e8e8e8;\n}\n\n.Dashboard_resourceInfo_1vF:first-child{\n  text-align: left;\n  width:25%;\n}\n\n.Dashboard_resourceInfo_1vF:last-child{\n  width:30%;\n}\n\n.Dashboard_resourceInfo_1vF:last-child:after{\n  display:none;\n}\n\n.Dashboard_resourceInfo_1vF p{\n  color:#666;\n}\n\n.Dashboard_resourceInfo_1vF p:last-child{\n  color:#333;\n}\n\n.Dashboard_resourceInfo_1vF p span{\n  font-size:28px;\n}\n\n", "", {"version":3,"sources":["/./components/Dashboard/Dashboard.css"],"names":[],"mappings":";AACA,qBAAO;;AAEP;EACE,sBAAsB;EACtB,mBAAmB;CACpB;;AAED;EACE,sBAAsB;EACtB,oBAAoB;EACpB,oBAAoB;EACpB,iBAAiB;EACjB,kBAAkB;EAClB,oBAAoB;EACpB,8BAA8B;EAC9B,gBAAgB;CACjB;;AAED;EACE,YAAY;EACZ,mBAAmB;EACnB,wBAAwB;EACxB,mBAAmB;EACnB,cAAc;EACd,+BAAuB;UAAvB,uBAAuB;CACxB;;AACD;GACG,eAAe;GACf,kBAAkB;GAClB,gBAAgB;GAChB,aAAa;EACd;;AAEF;EACE,sBAAsB;EACtB,kBAAkB;EAClB,cAAc;EACd,+BAAuB;UAAvB,uBAAuB;CACxB;;AACD;EACE,WAAW;CACZ;;AACD;EACE,mBAAmB;EACnB,gBAAgB;EAChB,kBAAkB;CACnB;;AACD;EACE,qBAAqB;EACrB,gBAAgB;EAChB,WAAW;CACZ;;AACD;GACG,gBAAgB;GAChB,eAAe;GACf,iBAAiB;EAClB;;AACF;EACE,eAAe;EACf,mBAAmB;EACnB,sBAAsB;EACtB,iBAAiB;CAClB;;AACD;EACE,eAAe;EACf,qBAAqB;CACtB;;AAED;EACE,mBAAmB;CACpB;;AAED;EACE,mBAAmB;EACnB,OAAO;EACP,SAAS;EACT,aAAa;CACd;;AACD;EACE,+BAA+B;EAC/B,cAAc;EACd,sBAAsB;CACvB;;AAED;EACE,kBAAkB;CACnB;;AACD;EACE,iBAAiB;CAClB;;AACD;EACE,YAAY;CACb;;AACD;EACE,gBAAgB;CACjB;;AACD;EACE,gBAAgB;EAChB,qBAAqB;CACtB;;AACD;GACG,aAAa;GACb,gBAAgB;EACjB;;AACF;GACG,YAAY;EACb;;AACF;EACE,gBAAgB;EAChB,eAAe;EACf,kBAAkB;CACnB;;AAED;EACE,oBAAoB;CACrB;;AAED;EACE,YAAY;EACZ,cAAc;CACf;;AACD;EACE,yBAAyB;EACzB,iBAAiB;CAClB;;AACD;EACE,mBAAmB;EACnB,gCAAgC;EAChC,eAAe;CAChB;;AACD;EACE,SAAS;CACV;;AACD;EACE,cAAc;CACf;;AACD;EACE,cAAc;CACf;;AACD;EACE,cAAc;CACf;;AACD;EACE,cAAc;CACf;;AACD;EACE,cAAc;CACf;;AACD;EACE,YAAY;EACZ,aAAa;EACb,mBAAmB;EACnB,SAAS;EACT,OAAO;EACP,gBAAgB;CACjB;;AACD;EACE,WAAW;EACX,qBAAqB;EACrB,UAAU;EACV,mBAAmB;EACnB,YAAY;EACZ,mBAAmB;EACnB,QAAQ;EACR,SAAS;CACV;;AACD;EACE,mBAAmB;EACnB,WAAW;EACX,sBAAsB;EACtB,UAAU;EACV,SAAS;EACT,UAAU;EACV,kBAAkB;EAClB,eAAe;CAChB;;AACD;EACE,eAAe;CAChB;;AACD;EACE,YAAY;EACZ,aAAa;EACb,gBAAgB;CACjB;;AACD;EACE,kBAAkB;EAClB,aAAa;EACb,kBAAkB;EAClB,mBAAmB;CACpB;;AACD;EACE,oBAAoB;EACpB,gCAAgC;CACjC;;AACD;EACE,WAAW;EACX,gBAAgB;CACjB;;AACD;EACE,eAAe;EACf,cAAc;CACf;;AACD;CACC;;AACD;EACE,UAAU;EACV,qBAAqB;EACrB,mBAAmB;EACnB,iBAAiB;EACjB,mBAAmB;CACpB;;AACD;EACE,YAAY;EACZ,UAAU;EACV,YAAY;EACZ,mBAAmB;EACnB,SAAS;EACT,QAAQ;EACR,mBAAmB;CACpB;;AACD;EACE,iBAAiB;EACjB,UAAU;CACX;;AACD;EACE,UAAU;CACX;;AACD;EACE,aAAa;CACd;;AACD;EACE,WAAW;CACZ;;AACD;EACE,WAAW;CACZ;;AACD;EACE,eAAe;CAChB","file":"Dashboard.css","sourcesContent":["\n.root{}\n\n.p1List >li{\n  display: inline-block;\n  margin-right: 15px;\n}\n\n.p1Box{\n  display: inline-block;\n  background: #f3f4f9;\n  border-radius: .4em;\n  overflow: hidden;\n  border-width: 1px;\n  border-style: solid;\n  /*border: 1px solid #57c8f2;*/\n  cursor: pointer;\n}\n\n.p1BoxLeft{\n  float: left;\n  text-align: center;\n  /*background: #57c8f2;*/\n  padding: 30px 25px;\n  height: 115px;\n  box-sizing: border-box;\n}\n.p1BoxLeft > span{\n   display: block;\n   margin: 15px auto;\n   font-size: 40px;\n   color: white;\n }\n\n.p1BoxRight{\n  display: inline-block;\n  padding: 5px 20px;\n  height: 115px;\n  box-sizing: border-box;\n}\n.p1BoxRight>span{\n  color:#333;\n}\n.p1BoxRightNum{\n  font-style: normal;\n  font-size: 38px;\n  margin-right: 5px;\n}\n.p1BoxRightTxt{\n  margin: 15px 0 10px ;\n  font-size: 18px;\n  color:#333;\n}\n.p1BoxRightTxt>i{\n   font-size: 12px;\n   color: #b5b5b5;\n   margin-left: 5px;\n }\n.p1BoxDescTxt{\n  color: #b5b5b5;\n  font-style: italic;\n  display: inline-block;\n  margin-top: 10px;\n}\n.p1BoxNewSvcTip{\n  display: block;\n  margin: 0 !important;\n}\n\n.row{\n  position: relative;\n}\n\n.accountInfo{\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 250px;\n}\n.accountInfoBody{\n  border-bottom: 1px dashed #ccc;\n  padding: 15px;\n  margin: 0 -15px -15px;\n}\n\n.accountInfoBody:first-child{\n  margin-top: -15px;\n}\n.accountInfoBody:last-child{\n  border-bottom: 0;\n}\n.accountInfoSubT{\n  color: #ccc;\n}\n.accountInfoBalance{\n  margin-top: 5px;\n}\n.accountInfoBusiness{\n  font-size: 16px;\n  margin: 20px 0 5px 0;\n}\n.accountInfoBalance>button{\n   float: right;\n   margin-top: 7px;\n }\n.accountInfoBalance:after{\n   clear: both;\n }\n.accountInfoMoney{\n  font-size: 32px;\n  color: #fe6137;\n  margin-right: 5px;\n}\n\n.monitor{\n  margin-right: 260px;\n}\n\n.chart{\n  width: 100%;\n  height: 300px;\n}\n.resourceBox{\n  padding:0 20px 30px 20px;\n  margin-top:-15px;\n}\n.resourceItem{\n  position: relative;\n  border-bottom:1px solid #e8e8e8;\n  padding:15px 0;\n}\n.resourceItem:last-child{\n  border:0;\n}\n.resourceItem:nth-child(2) .resourceHd p span{\n  color:#ff6c60;\n}\n.resourceItem:nth-child(3) .resourceHd p span{\n  color:#2ecc71;\n}\n.resourceItem:nth-child(1) .resourceLeft>p>span{\n  color:#56c8f2;\n}\n.resourceItem:nth-child(2) .resourceLeft>p>span{\n  color:#ff6c60;\n}\n.resourceItem:nth-child(3) .resourceLeft>p>span{\n  color:#2ecc71;\n}\n.resourceLeft{\n  width:240px;\n  height:155px;\n  position: absolute;\n  top:10px;\n  left:0;\n  overflow:hidden;\n}\n.resourceLeft:after{\n  content:\"\";\n  display:inline-block;\n  width:1px;\n  background:#e8e8e8;\n  height:93px;\n  position: absolute;\n  right:0;\n  top:25px;\n}\n.resourceLeft>p{\n  position: absolute;\n  color:#333;\n  display: inline-block;\n  z-index:2;\n  top:80px;\n  left:24px;\n  text-align:center;\n  min-width:98px;\n}\n.resourceLeft>p>span{\n  font-size:20px;\n}\n.hcItem{\n  width:125px;\n  height:125px;\n  margin-top:20px;\n}\n.resourceRight{\n  margin-left:240px;\n  height:155px;\n  padding-left:70px;\n  padding-right:60px;\n}\n.resourceHd{\n  padding-bottom:10px;\n  border-bottom:1px solid #e8e8e8;\n}\n.resourceHd p{\n  color:#666;\n  padding-top:7px;\n}\n.resourceHd p span{\n  font-size:18px;\n  color:#56c8f2;\n}\n.resourceBd{\n}\n.resourceInfo{\n  width:45%;\n  display:inline-block;\n  position: relative;\n  padding-top:15px;\n  text-align: center;\n}\n.resourceInfo:after{\n  content: '';\n  width:1px;\n  height:58px;\n  position: absolute;\n  top:14px;\n  right:0;\n  background:#e8e8e8;\n}\n.resourceInfo:first-child{\n  text-align: left;\n  width:25%;\n}\n.resourceInfo:last-child{\n  width:30%;\n}\n.resourceInfo:last-child:after{\n  display:none;\n}\n.resourceInfo p{\n  color:#666;\n}\n.resourceInfo p:last-child{\n  color:#333;\n}\n.resourceInfo p span{\n  font-size:28px;\n}\n\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "._3are>li{margin-right:15px}._3are>li,._NlT{display:inline-block}._NlT{background:#f3f4f9;border-radius:.4em;overflow:hidden;border-width:1px;border-style:solid;cursor:pointer}._3KSh{float:left;text-align:center;padding:30px 25px;height:115px;box-sizing:border-box}._3KSh>span{display:block;margin:15px auto;font-size:40px;color:#fff}._1C5Y{display:inline-block;padding:5px 20px;height:115px;box-sizing:border-box}._1C5Y>span{color:#333}._3iO5{font-style:normal;font-size:38px;margin-right:5px}.TzEs{margin:15px 0 10px;font-size:18px;color:#333}.TzEs>i{font-size:12px;color:#b5b5b5;margin-left:5px}._1hxx{color:#b5b5b5;font-style:italic;display:inline-block;margin-top:10px}._2ifQ{display:block;margin:0!important}._3yW6{position:relative}._2_K6{position:absolute;top:0;right:0;width:250px}._2Joa{border-bottom:1px dashed #ccc;padding:15px;margin:0 -15px -15px}._2Joa:first-child{margin-top:-15px}._2Joa:last-child{border-bottom:0}._3LgG{color:#ccc}._1JRR{margin-top:5px}.eCGu{font-size:16px;margin:20px 0 5px}._1JRR>button{float:right;margin-top:7px}._1JRR:after{clear:both}._1BwL{font-size:32px;color:#fe6137;margin-right:5px}._34J7{margin-right:260px}._1O7d{width:100%;height:300px}._3MBy{padding:0 20px 30px;margin-top:-15px}._2Iz7{position:relative;border-bottom:1px solid #e8e8e8;padding:15px 0}._2Iz7:last-child{border:0}._2Iz7:nth-child(2) ._1j18 p span{color:#ff6c60}._2Iz7:nth-child(3) ._1j18 p span{color:#2ecc71}._2Iz7:nth-child(1) ._1pun>p>span{color:#56c8f2}._2Iz7:nth-child(2) ._1pun>p>span{color:#ff6c60}._2Iz7:nth-child(3) ._1pun>p>span{color:#2ecc71}._1pun{width:240px;height:155px;position:absolute;top:10px;left:0;overflow:hidden}._1pun:after{content:\"\";width:1px;background:#e8e8e8;height:93px;right:0;top:25px}._1pun:after,._1pun>p{display:inline-block;position:absolute}._1pun>p{color:#333;z-index:2;top:80px;left:24px;text-align:center;min-width:98px}._1pun>p>span{font-size:20px}._1zhx{width:125px;height:125px;margin-top:20px}._2EVm{margin-left:240px;height:155px;padding-left:70px;padding-right:60px}._1j18{padding-bottom:10px;border-bottom:1px solid #e8e8e8}._1j18 p{color:#666;padding-top:7px}._1j18 p span{font-size:18px;color:#56c8f2}._1vFz{width:45%;display:inline-block;position:relative;padding-top:15px;text-align:center}._1vFz:after{content:'';width:1px;height:58px;position:absolute;top:14px;right:0;background:#e8e8e8}._1vFz:first-child{text-align:left;width:25%}._1vFz:last-child{width:30%}._1vFz:last-child:after{display:none}._1vFz p{color:#666}._1vFz p:last-child{color:#333}._1vFz p span{font-size:28px}", ""]);
   
   // exports
   exports.locals = {
-  	"root": "Dashboard_root_hHQ",
-  	"p1List": "Dashboard_p1List_3ar",
-  	"p1Box": "Dashboard_p1Box__Nl",
-  	"p1BoxLeft": "Dashboard_p1BoxLeft_3KS",
-  	"p1BoxRight": "Dashboard_p1BoxRight_1C5",
-  	"p1BoxRightNum": "Dashboard_p1BoxRightNum_3iO",
-  	"p1BoxRightTxt": "Dashboard_p1BoxRightTxt_TzE",
-  	"p1BoxDescTxt": "Dashboard_p1BoxDescTxt_1hx",
-  	"p1BoxNewSvcTip": "Dashboard_p1BoxNewSvcTip_2if",
-  	"row": "Dashboard_row_3yW",
-  	"accountInfo": "Dashboard_accountInfo_2_K",
-  	"accountInfoBody": "Dashboard_accountInfoBody_2Jo",
-  	"accountInfoSubT": "Dashboard_accountInfoSubT_3Lg",
-  	"accountInfoBalance": "Dashboard_accountInfoBalance_1JR",
-  	"accountInfoBusiness": "Dashboard_accountInfoBusiness_eCG",
-  	"accountInfoMoney": "Dashboard_accountInfoMoney_1Bw",
-  	"monitor": "Dashboard_monitor_34J",
-  	"chart": "Dashboard_chart_1O7",
-  	"resourceBox": "Dashboard_resourceBox_3MB",
-  	"resourceItem": "Dashboard_resourceItem_2Iz",
-  	"resourceHd": "Dashboard_resourceHd_1j1",
-  	"resourceLeft": "Dashboard_resourceLeft_1pu",
-  	"hcItem": "Dashboard_hcItem_1zh",
-  	"resourceRight": "Dashboard_resourceRight_2EV",
-  	"resourceBd": "Dashboard_resourceBd_1XI",
-  	"resourceInfo": "Dashboard_resourceInfo_1vF"
+  	"root": "hHQa",
+  	"p1List": "_3are",
+  	"p1Box": "_NlT",
+  	"p1BoxLeft": "_3KSh",
+  	"p1BoxRight": "_1C5Y",
+  	"p1BoxRightNum": "_3iO5",
+  	"p1BoxRightTxt": "TzEs",
+  	"p1BoxDescTxt": "_1hxx",
+  	"p1BoxNewSvcTip": "_2ifQ",
+  	"row": "_3yW6",
+  	"accountInfo": "_2_K6",
+  	"accountInfoBody": "_2Joa",
+  	"accountInfoSubT": "_3LgG",
+  	"accountInfoBalance": "_1JRR",
+  	"accountInfoBusiness": "eCGu",
+  	"accountInfoMoney": "_1BwL",
+  	"monitor": "_34J7",
+  	"chart": "_1O7d",
+  	"resourceBox": "_3MBy",
+  	"resourceItem": "_2Iz7",
+  	"resourceHd": "_1j18",
+  	"resourceLeft": "_1pun",
+  	"hcItem": "_1zhx",
+  	"resourceRight": "_2EVm",
+  	"resourceBd": "_1XIm",
+  	"resourceInfo": "_1vFz"
   };
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports) {
 
   module.exports = require("react-highcharts");
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6497,7 +5895,7 @@ module.exports =
   });
   exports.setBreadcrumbAction = setBreadcrumbAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function setBreadcrumbAction() {
     for (var _len = arguments.length, names = Array(_len), _key = 0; _key < _len; _key++) {
@@ -6511,7 +5909,7 @@ module.exports =
   }
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6520,7 +5918,7 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
@@ -6529,19 +5927,19 @@ module.exports =
   exports.fetchChangeStateAction = fetchChangeStateAction;
   exports.refreshServiceList = refreshServiceList;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
-  var _serviceDetail = __webpack_require__(78);
+  var _serviceDetail = __webpack_require__(79);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -6661,7 +6059,7 @@ module.exports =
   }
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6670,7 +6068,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getServiceList
   var getServiceList = function getServiceList(state) {
@@ -6686,7 +6084,7 @@ module.exports =
   exports.default = makeGetServiceListSelector;
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6697,13 +6095,13 @@ module.exports =
   exports.receiveImageList = receiveImageList;
   exports.fetchImageListAction = fetchImageListAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -6740,7 +6138,7 @@ module.exports =
   }
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6749,7 +6147,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getImageList
   var getImageList = function getImageList(state) {
@@ -6765,7 +6163,7 @@ module.exports =
   exports.default = makeGetImageListSelector;
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6774,7 +6172,7 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
@@ -6785,15 +6183,15 @@ module.exports =
   exports.deleteVolume = deleteVolume;
   exports.fetchVolumesListAction = fetchVolumesListAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -6945,7 +6343,7 @@ module.exports =
   }
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6954,7 +6352,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getVolumesList = function getVolumesList(state) {
     return state.volumesList;
@@ -6969,7 +6367,7 @@ module.exports =
   exports.default = makeGetVolumesListSelector;
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6978,23 +6376,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ImageCenterContainer = __webpack_require__(100);
+  var _ImageCenterContainer = __webpack_require__(101);
   
   var _ImageCenterContainer2 = _interopRequireDefault(_ImageCenterContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_ImageCenterContainer2.default, {});
   
   exports.default = {
     path: '/imageCenter',
@@ -7007,7 +6411,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ImageCenterContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -7020,7 +6424,7 @@ module.exports =
   };
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7029,15 +6433,15 @@ module.exports =
     value: true
   });
   
-  var _ImageCenter = __webpack_require__(101);
+  var _ImageCenter = __webpack_require__(102);
   
   var _ImageCenter2 = _interopRequireDefault(_ImageCenter);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _imageList = __webpack_require__(95);
+  var _imageList = __webpack_require__(96);
   
-  var _imageListSelector = __webpack_require__(96);
+  var _imageListSelector = __webpack_require__(97);
   
   var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
   
@@ -7063,7 +6467,7 @@ module.exports =
   exports.default = ImageListContainer;
 
 /***/ },
-/* 101 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7072,42 +6476,87 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_reactBootstrap.Checkbox, {
+    readOnly: true
+  });
+  
+  var _ref2 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref3 = (0, _jsx3.default)('span', {
+    className: 'icon-collection'
+  }, void 0, '\u6536\u85CF');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.Button, {
+    bsStyle: 'primary',
+    bsSize: 'small'
+  }, void 0, '\u90E8\u7F72');
+  
+  var _ref5 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref6 = (0, _jsx3.default)('div', {
+    className: 'clearfix imgHd'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u955C\u50CF\u4ED3\u5E93'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u955C\u50CF\uFF1F'), (0, _jsx3.default)('div', {
+    className: 'imgDropBox'
+  }, void 0, (0, _jsx3.default)(_reactBootstrap.DropdownButton, {
+    bsSize: 'xs',
+    title: '\u64CD\u4F5C',
+    id: 'dropDown',
+    className: 'dropDownForOpt'
+  }, void 0, (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u5168\u9009'), (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u5220\u9664'), (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u7F6E\u9876'))));
+  
+  var _ref7 = (0, _jsx3.default)('a', {
+    type: 'button',
+    className: 'slSearchBtn icon-select'
+  }, void 0, ' ');
   
   var ImageCenter = function (_React$Component) {
     (0, _inherits3.default)(ImageCenter, _React$Component);
   
     function ImageCenter() {
       (0, _classCallCheck3.default)(this, ImageCenter);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageCenter).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ImageCenter.__proto__ || (0, _getPrototypeOf2.default)(ImageCenter)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ImageCenter, [{
@@ -7121,52 +6570,24 @@ module.exports =
       value: function getImageList() {
         var data = this.props.imageList;
         return data.map(function (item, i) {
-          return _react2.default.createElement(
-            'div',
-            { className: 'imagesListItem', key: i },
-            _react2.default.createElement(
-              'div',
-              { className: 'hd' },
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListHd' },
-                _react2.default.createElement(_reactBootstrap.Checkbox, { readOnly: true }),
-                _react2.default.createElement('img', { width: 40, height: 40, src: __webpack_require__(102), alt: 'img' })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListInfo' },
-                _react2.default.createElement(
-                  'h1',
-                  null,
-                  '镜像名称'
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  _react2.default.createElement(
-                    'a',
-                    { href: 'javascript:;' },
-                    item
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bd clearfix' },
-              _react2.default.createElement(
-                'span',
-                { className: 'icon-collection' },
-                '收藏'
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Button,
-                { bsStyle: 'primary', bsSize: 'small' },
-                '部署'
-              )
-            )
-          );
+          return (0, _jsx3.default)('div', {
+            className: 'imagesListItem'
+          }, i, (0, _jsx3.default)('div', {
+            className: 'hd'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'imagesListHd'
+          }, void 0, _ref, (0, _jsx3.default)('img', {
+            width: 40,
+            height: 40,
+            src: __webpack_require__(103),
+            alt: 'img'
+          })), (0, _jsx3.default)('div', {
+            className: 'imagesListInfo'
+          }, void 0, _ref2, (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('a', {
+            href: 'javascript:;'
+          }, void 0, item)))), (0, _jsx3.default)('div', {
+            className: 'bd clearfix'
+          }, void 0, _ref3, _ref4));
         });
       }
     }, {
@@ -7177,37 +6598,22 @@ module.exports =
           if (i >= n) {
             return false;
           } else {
-            return _react2.default.createElement(
-              'div',
-              { className: 'imagesListItem', key: i },
-              _react2.default.createElement(
-                'div',
-                { className: 'hd' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'imagesListHd' },
-                  _react2.default.createElement('img', { width: 40, height: 40, src: __webpack_require__(102), alt: 'img' })
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'imagesListInfo' },
-                  _react2.default.createElement(
-                    'h1',
-                    null,
-                    '镜像名称'
-                  ),
-                  _react2.default.createElement(
-                    'p',
-                    null,
-                    _react2.default.createElement(
-                      'a',
-                      { href: 'javascript:;' },
-                      item
-                    )
-                  )
-                )
-              )
-            );
+            return (0, _jsx3.default)('div', {
+              className: 'imagesListItem'
+            }, i, (0, _jsx3.default)('div', {
+              className: 'hd'
+            }, void 0, (0, _jsx3.default)('div', {
+              className: 'imagesListHd'
+            }, void 0, (0, _jsx3.default)('img', {
+              width: 40,
+              height: 40,
+              src: __webpack_require__(103),
+              alt: 'img'
+            })), (0, _jsx3.default)('div', {
+              className: 'imagesListInfo'
+            }, void 0, _ref5, (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('a', {
+              href: 'javascript:;'
+            }, void 0, item)))));
           }
         });
       }
@@ -7215,79 +6621,24 @@ module.exports =
       key: 'render',
       value: function render() {
         this.context.setTitle('镜像中心');
-        var panelHd = _react2.default.createElement(
-          'div',
-          { className: 'clearfix imgHd' },
-          _react2.default.createElement(
-            'span',
-            null,
-            '镜像仓库'
-          ),
-          _react2.default.createElement(
-            'a',
-            { href: 'javascript:;' },
-            '什么是容器镜像？'
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'imgDropBox' },
-            _react2.default.createElement(
-              _reactBootstrap.DropdownButton,
-              { bsSize: 'xs', title: '操作', id: 'dropDown', className: 'dropDownForOpt' },
-              _react2.default.createElement(
-                _reactBootstrap.MenuItem,
-                { eventKey: '1' },
-                '全选'
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.MenuItem,
-                { eventKey: '2' },
-                '删除'
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.MenuItem,
-                { eventKey: '2' },
-                '置顶'
-              )
-            )
-          )
-        );
-        return _react2.default.createElement(
-          'div',
-          { className: 'images containerPadding' },
-          _react2.default.createElement(
-            _reactBootstrap.Panel,
-            { className: 'image-left', header: panelHd },
-            _react2.default.createElement(
-              'div',
-              { className: 'imagesListBox' },
-              this.getImageList()
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'image-right' },
-            _react2.default.createElement(
-              'div',
-              { className: 'imageSearch' },
-              _react2.default.createElement(
-                'div',
-                { className: 'search' },
-                _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }),
-                _react2.default.createElement(
-                  'a',
-                  { type: 'button', className: 'slSearchBtn icon-select' },
-                  ' '
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.Panel,
-              { className: 'imagesRankingList', header: '排行榜' },
-              this.getImageTopTen(10)
-            )
-          )
-        );
+        var panelHd = _ref6;
+        return (0, _jsx3.default)('div', {
+          className: 'images containerPadding'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'image-left',
+          header: panelHd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'imagesListBox'
+        }, void 0, this.getImageList())), (0, _jsx3.default)('div', {
+          className: 'image-right'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'imageSearch'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'search'
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref7)), (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'imagesRankingList',
+          header: '\u6392\u884C\u699C'
+        }, void 0, this.getImageTopTen(10))));
       }
     }]);
     return ImageCenter;
@@ -7296,21 +6647,16 @@ module.exports =
   ImageCenter.contextTypes = {
     setTitle: _react2.default.PropTypes.func
   };
-  ImageCenter.propTypes = {
-    imageList: _react2.default.PropTypes.array,
-    onImageList: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func
-  };
   exports.default = ImageCenter;
 
 /***/ },
-/* 102 */
+/* 103 */
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphNmIzYTA5MS1mZTUwLTRkOGMtOGQ1NS1kYTcxMDUyYjdkMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0Q0OTkxN0E2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0Q0OTkxNzk2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphOThjNzgzOS1kYWE3LTQ3ZjgtODAzOS1jMzc0ZmIzYmI1ODUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTZiM2EwOTEtZmU1MC00ZDhjLThkNTUtZGE3MTA1MmI3ZDI2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+QujMrwAAEShJREFUeNoklwlwW9d1hu/b38PDvpAgQJAgARLcRdGUSEvULtoj2+NFdSUnTpzVcTqx04xqx0mbpO2kiVuntptmJq63xHXqZOptbMmSFduSbUqyJEoiKYukxJ0ECBD79vD2rVcpBjPA4A3uufec/57/O4hpmqV0/B8effTCx59u6qyP9odeeumTNR384blHBpyOyeNnTZIcR0sffHT1W4ObhvcMapJiwclaMpPJVSRNRRHU5rQ7vQ4Uw6UaTyCApdnrawlRqp5b2njjagYA8N+//nY00pktg46QVcccgc59LrcXEbnc8Zd+duTI83fu7fF1ugRO2dzT72moy01N5T+dcfaGUYJ5dfzK9pHub23biaPoeialKEYqkayVeBtDYhimKKqpqHarRdK0hXQhGvQVKrVkoex3EZdWMq9dSu24JfjDxw9fnY+7rZTL7saopgN3fw2vxC9m19MNTqs/4vIG/Y3WoKvBd+HdY34V7/nyqI+xrYpXHefTYa5DUqW15LpY4RDUxFFDR6RSVbNZGYCiMoryGgAIYiXxM7OLODAZhlYUent7c7bInbySvHd+ZaivV+P1pUwi6Eme+uhFVOdz8ZV0uM3vaw70tXSUeP4XTz5tqahbDo5aFGXuwuUC8Ox75MskyybOX+AW1tR4lspxUo4zaiaBAVM3EcS0kDRBIjRBRJvqBlsaw/UNGADrhY10gfvy7sFGAJ5//RyOoSiGRgMh3TBZYOJA1+eXkwDVtar8yceXfvXKyVd/eF9XX++1sfHZU+eGnvm322+7DVHNZGrl8/96JtrThKOYmi83IuhGhccU1QJQXpQMUwMGShKUrmk1iadxgiUJ3WSz1bIOtK+PRE+tZhYT61VJ3BJul2S8UitgdoUb//zqnYe2yaLy5vHxfS3uA9u2TF2crKXWAw8e3H7wXm49IdWKGGNdWV7sbg51bepBGYuVZZ1WhkIMRREFUTPhCTCcwDCSpHNlbmY9meNLmqoF3V5eUVVENCuSNejx+N0UgrtsjumlWXzq4sxXH7vXHWmcPTvT3ujc0xFJrG2oKEojwOv0M4ylqmqMhZVV9fPTn9A3GvA9u1OZtFLlDNUgEFORDRxDdAOKFyEIJFeqMCTZ4mkoCTXT1DYqJStFaSilySLCcQxtX9lI9kXavC4v9rdH7mno6ipXax4L2+WwuRiqwokkhlM4lcrFiXBbpD1qGubrL7z07u9O9fUGM+sJXhKZeq/FabfQsMigVIExYK1NeHBZVVYz+Y1yRZB5WHaWosuCkOE4VeFJigj1dUmiAEsTCTTj7tZIqVjEUSTg82iFWiVfZAN+XRIkgNgr3AdPHDm/d//yF5NHXzv72O3t/YEQ6rBYaLq8lkzmK1WoLHjbaJIgMVXXVU0Puj11bmeFl/LF7MR6AjNxv92FYchCtTB1ebFzT9rh8RQLhfnkGnbn7VsIgpSFmjCzRAiauzvCBv2Spoc6mm0EETQBNznJyNKj33/g7sMHm4f66ttaAUlpiqIgmIwhNENSJMKLoiqrqKEpKpSKhhgGTVlkycARE8Ogbk2X3ZZYq3j8lkA0oiuiZhg4AcMS+NhHl25h7aDOKxqIx+HAVTU3s2jqiD3S1tzVXqzkZ+fmv5iZRmi0nONKhYrLTmmqIfN8rVrDEAoBgKZp1kJGmkOqrH8yPaNpGrw+KGoYnGkYIBpsDPk20sl0LzA1HVCwlqzVfvbYybHPro5++6Az6AckUVpZk/Mc5ferLHl5ZpI1gc1AbR6vq96JaBoVwkmLlU/na/lSY7iJtjskHeqKhMXGCZwrVRauL9dZQqYqybDgQFyppSs8PLxc1VS3CjdhwMzDHOCVVOrK+FxbU9DrdaMGJlf4Klcp6qqZLlokoQ21dsTabQ47zlgFQ5dkmEu+LFXzZrlg0/JCDlM3+HyWL3FQaA4rwtV42dBaeygG6qCkLcxJmAYoDFTFmiIC1BCBYaAIZgAdV8s1imZjPhdAiclr10xSozHKFOW2UNBTH+YkaSG1Id24YUiVEi/UcAMD8gtH52/b4xndGRAFhQRouNUa9Pk9dvZGsjx9w8xw4kpGMDCxO2p74Js9mcVyKS78x0eL1wpqzFlHEaCGoYim4zhGEdTNjpOt5stimeJhreyM1b1eFj6cnJ1JljZyvIaAO/cH77urOdIYQAi/J/LBxfF4vSs8tDNULolOC7mWL7/69vyrxxLTmXyQZrd0s6Kkv300v2cHf3hfIBxETEMF1nBs5Et8Yc7jcpc5DLv/wLZEKtPAss3+BhS1tfR2lg25YqSTXO7SQj7SYh3Y5KUJ8Keja/EVnSaxwc6mgd27OuqRsxdmdIB5bfhSNv+jZy/++uhCkwv93v2h+w74RobqRnfW793m++J6cTXBbW53XpjKrOWLodaWs+fmq6kbg1v7sW8c2kdRVHo9TeMYT2rJYuLtd4/b3Wi2aO2N2h86NLBnODa8uakzavlwbP75E/PrMzNb+1qaWgZwkNN1yWZhjp9dfedk7rZea6QZpPLKK2+tvXAs+c6x+K097Df+uifLi4SAXFutLRWlicuTiysb49NpLrWMHb5jRBTltURW1KRz4+eOnVwM1wHWE6t3UQ9/5ZZ0rvrSq5++/valXC6bylS2trmurqBqcXZk9x4NYR1oNs8by0nOAdRCsbQmeI+Pb3AqCHg8eVE8fqGwvcXS0+1Px7mz1/Mp+ODm62Z3nYtz6NWJ6yJX23/Xrt6RW8PhWCQAbA6XnSEePNi/Fi888fOPf/v+0pmZytgEl82DxfnCoQMuymHkizWcdEEBw2zHImyxmPOF65/+yVfpv6z93cPDpjH28P07H3l6Sq1KdfV0rQbtGliJm0/rPM6HHv4men58Zmjb1q39PXKNJzHE0EG+rG7e1CCIwtQc9/3HHmp3AR2A/3z27zLmzMDQpqMf3hgaaIGgYwIMGBiK45WCWE7JX7q7jZNE6S+BP/t8BiDM3u0DHhcxey2FmoYsy/CXWBRaM+CqNZ+LQUdvHx7Z3itL0okT52ysDScQXQcBv/fUqUs7YA6a6q+XAFxuamIKCMX2WFMkGlZlQOGIoinQkSicNHVsqKO+lEhRGD8UjgzbwJWp1RC+5Ze/+sNTP95LGoZQ1opwCYpsibTCwKKq/en53+Iet4sr8haWcTkZHdUdrN3qtmq6EQwH7QQH8EB/nbUraP/s5Fjklf3tfR3P/fR+vjxblWBUFL4RE1jrbaFO9+p0wd28/J2/GTr/HrjdCc5M5+872BJwa7KNgF5VhgExxOW0w8/uZhds6thQW9Dp80F4mLh81emgOY4PBpzN4XqGtWWyie5I2NfUklwvNPgCkgmOfO/W/haHpOIGwsJeptZWUYyu8AJlpzXOSK0lXW4+ELYAxtg67G0J2SVRxK32bKL259mC1eVscLM3FuJtrcHl5QyumEi1UoVSW1xaGdlxEFp6YnnBzToZCzq9XL409flALOL37knEVx54sK3Fx2zwdk0vmpqAai5NQywkhgKMZMnoraH8SqGSr1mcdGPAouu4JnK4zUk6mhPp6/CgfLF8+sSZaKvf53VVNIB6nc5ildc0w+e08YJEUAxENBPBW4PhehvDS8r1hVk7XrxtS0PQZZWIKGRN3Cj6Gjpo2qKbKuQNj9MmiIpi6t5WT0trwGv30KTdQWnQMQ33LjVXmFrIw8CmJnX0Re6688B7H13ubWTQvk09xUIxXygCAmNZi83mMglHhSupuC0S3RoLNjT5PKipcYrNdA1DrMytX5tOaqlUSlf45sgITtIzN1YXZtKqZGqaCXEAwaAJcDhjlwMPbExOx698dv5mXDA6HNt/xx1vvvT7He30z556BFd1I76caGoM1bncOEb6fHar3Te/EI/FqvZAO2bxwJ1CGWGUy0BQsTRX5/ZxSu6t15+1Opyxvq6ZL64X5oUdo1GH08JVBBhA1wSCwPT60dXxi+b0sSzik7Ry/6buAwfvfvKHTw2GsSP//Jgi6/iZz85CRsRwXJA0nMS4qmS3Mpev5qPRKzEoIV+zKNJAl9VqRuHjqswRCBJrcA5/7ztLefvTv/ydgmFL08VYF+8P2FUrI9UkzCii3tGlqdna+f8N9bY/+9o83M09e3ufeeZFFoCHvjEKELxYKqK5dIWiGRxHaRJnaIuv3ldXb19YzS4tZBOrE4X4NQbwmgAdd0GXKgj0adNs69uvM73//uujm7od//LjBwd27fzFi9PH35jFFZ1mAG4NFEpGZfLjUHfk3ExlidNxxrGeLCQzhaE92xTUCk0dohq6ZXufqWhAN2xum6GbmqFbaIvX7ZpbE9IVZGXli6X5y4QpM7TVRGmAmq2x4XfOJP2Dh4zyxHe+Ntpky/30u92PPbb/hVPlt/44TaMKoN1cOm+lzMW08vLZFDyujTLm1m5+EUUDtYZNqSitjaFut5sXeRUKw0AU3Shm8jiJW20MRRKTE/Ga7klmUovL1ykILMD0uhumV6pPPvFPTz3U+veP37O8kri2lNVqyUfuDb/83MH1ijWfEWGRsY050QT/M5aWYIfG6KADTSzdTPjYhQtnzl3neVkVK2ilVGVIJpvJYChs4bCpKqogwDnFU+dQRfHDk1c1vGlmKT2zNGelGYrAT7x/4ruHO3/0xKPuxpGGxlhba4ygnYVydXePZddIQ65okpBVCvm3J8pzBQli2K1D/dlsZS3//9YEDmyv27Rl0IDUWC3XcAzLpDasrAUBaKksorpEYRBVdZfLms0VT5+asNgbEYsXko+hCk0BNhoJVjWfo64tV1h74913ltdzNGFNF4reAKjzOfJr1Tcvpc/HZRhm347BjfkbWfFmyD09AX79va//4Kcsou7r8sAJDnF57KU8x/OC3WqrVAWCpZ1OplqtwavR0uxfnrvx0Xt/ljUP7o7kaurmDo/LiW4kV9wO/NqS9oPfTFU5sa7JLRtoV2udVBT/8eXpC6mbLtXZ0UnIxUS+TDHYEw/vPX3thCW47+P3/1i7+FpFo+CojZIUo5sGSyA4jthsDgyT/A2W+GqKQSEfSvU+F2bwz/3imbv+6p7O3k6tJoZ8rYGAH5jS+lqunXV9PLaQzacxgOVW8899sFwW4RQKHI2Nm3tDk8tX+u/dva+z5aknvwnt6fTx58wrr7hamz65IuKGoVSLQq4gC4JB4qjTabs+NdcaiznczlopBwEYBbo/4Bdk6eXfvN7d27T9ttGq5njz/TehRFYWEtuHWjfS/BsnL/MAQCXhQW+TzPFl2ULBrd9oiHYX8vKt3U2og07nEuXEtV2x0IUsgHiJbh7saukItEU8Dhuxtr4RagpilJUr5D0eN4ITqqKSBMELIklZBoZbBXHjzyfe27xzp7eh8f23PnXXuVRD83mYvgAerSdiIx1BG41rBrTMdCqBAJlgPXql1FJPV4tFoSy09Awf+f38ic9T4UYPyrgCBCHfMdoFXX/s1BU4dPj8/rX4eqVYJBkGlhknSA3ecw1AlrezVkM1VQx7/F9/cujQ7tWFJZpG+apQlTWmvd2Cs7qqGghgCQxOU3Z3ncPOpHM5UcYEAcRXE32b+/1dO4uZTGv3KBrZPGqYFCQev68Osv6lMxOhQENLNFLOFVEThWhDEagiyoyNLOULLMHghPXi2HmA+Qf37BpfLXVu7mUpM6mBxkhLoM5pofFcVYUznwlAoVhVahWZYs9NTahCOpmKz61kvvKle3u7OtoGD6EWm3v/A487GzrrPe6vfOs+BI7rU9OmgcF/CjyPEdjG+sbAts37Dx4ONwSGRrYObR84/ck5AEo+rxveGLw+0H9LDBIVnFlIknK5WEGHcAMirR6OpvOZAkoQL756+uL5yzB/Fy9etvkaH/35O6zd938CDAB5qvlrJja8DwAAAABJRU5ErkJggg=="
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7319,23 +6665,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ImageForPlatformContainer = __webpack_require__(104);
+  var _ImageForPlatformContainer = __webpack_require__(105);
   
   var _ImageForPlatformContainer2 = _interopRequireDefault(_ImageForPlatformContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_ImageForPlatformContainer2.default, {});
   
   exports.default = {
     path: '/imageForPlatform',
@@ -7348,7 +6700,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ImageForPlatformContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -7361,7 +6713,7 @@ module.exports =
   };
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7370,19 +6722,19 @@ module.exports =
     value: true
   });
   
-  var _ImageForPlatform = __webpack_require__(105);
+  var _ImageForPlatform = __webpack_require__(106);
   
   var _ImageForPlatform2 = _interopRequireDefault(_ImageForPlatform);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _imageList = __webpack_require__(95);
+  var _imageList = __webpack_require__(96);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _deployService = __webpack_require__(107);
+  var _deployService = __webpack_require__(108);
   
-  var _imageListSelector = __webpack_require__(96);
+  var _imageListSelector = __webpack_require__(97);
   
   var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
   
@@ -7414,7 +6766,7 @@ module.exports =
   exports.default = ImageForPlatformContainer;
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7423,50 +6775,79 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('div', {}, void 0, '\u6682\u65E0\u6570\u636E~');
+  
+  var _ref2 = (0, _jsx3.default)('div', {
+    className: 'text-center'
+  }, void 0, (0, _jsx3.default)(_Loading2.default, {}));
+  
+  var _ref3 = (0, _jsx3.default)('span', {
+    className: 'icon-collection'
+  }, void 0, '\u6536\u85CF');
+  
+  var _ref4 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref5 = (0, _jsx3.default)('div', {
+    className: 'clearfix imgHd'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u955C\u50CF\u4ED3\u5E93'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u955C\u50CF\uFF1F'), (0, _jsx3.default)('div', {
+    className: 'imgDropBox'
+  }, void 0));
+  
+  var _ref6 = (0, _jsx3.default)('a', {
+    type: 'button',
+    className: 'slSearchBtn icon-select'
+  }, void 0, ' ');
   
   var ImageForPlatform = function (_React$Component) {
     (0, _inherits3.default)(ImageForPlatform, _React$Component);
   
     function ImageForPlatform() {
       (0, _classCallCheck3.default)(this, ImageForPlatform);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageForPlatform).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ImageForPlatform.__proto__ || (0, _getPrototypeOf2.default)(ImageForPlatform)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ImageForPlatform, [{
@@ -7490,66 +6871,32 @@ module.exports =
         var _this2 = this;
   
         var data = this.props.imageList;
-        if (!data || !data.length) return _react2.default.createElement(
-          'div',
-          null,
-          '暂无数据~'
-        );
-        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
-          'div',
-          { className: 'text-center' },
-          _react2.default.createElement(_Loading2.default, null)
-        );
+        if (!data || !data.length) return _ref;
+        if (data.length == 1 && data[0] == 1) return _ref2;
         var body = [];
         data.map(function (item, i) {
-          body.push(_react2.default.createElement(
-            'div',
-            { className: 'imagesListItem', key: i },
-            _react2.default.createElement(
-              'div',
-              { className: 'hd' },
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListHd' },
-                _react2.default.createElement('img', { width: 40, height: 40, src: __webpack_require__(102), alt: 'img' })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListInfo' },
-                _react2.default.createElement(
-                  'h1',
-                  null,
-                  '镜像名称 : ',
-                  _react2.default.createElement(
-                    _Link2.default,
-                    { to: '/imageDetail/' + item.uuid },
-                    item.repository
-                  )
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  '镜像简介 : ',
-                  item.detail
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bd clearfix' },
-              _react2.default.createElement(
-                'span',
-                { className: 'icon-collection' },
-                '收藏'
-              ),
-              _react2.default.createElement(
-                _Link2.default,
-                { to: '/configContainer', className: 'btn btn-sm btn-primary',
-                  onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid) },
-                '部署'
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('div', {
+            className: 'imagesListItem'
+          }, i, (0, _jsx3.default)('div', {
+            className: 'hd'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'imagesListHd'
+          }, void 0, (0, _jsx3.default)('img', {
+            width: 40,
+            height: 40,
+            src: __webpack_require__(103),
+            alt: 'img'
+          })), (0, _jsx3.default)('div', {
+            className: 'imagesListInfo'
+          }, void 0, (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0 : ', (0, _jsx3.default)(_Link2.default, {
+            to: '/imageDetail/' + item.uuid
+          }, void 0, item.repository)), (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u7B80\u4ECB : ', item.detail))), (0, _jsx3.default)('div', {
+            className: 'bd clearfix'
+          }, void 0, _ref3, (0, _jsx3.default)(_Link2.default, {
+            to: '/configContainer',
+            className: 'btn btn-sm btn-primary',
+            onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid)
+          }, void 0, '\u90E8\u7F72'))));
         });
         return body;
       }
@@ -7559,37 +6906,22 @@ module.exports =
         var data = this.props.imageList;
         var body = [];
         data.map(function (item, i) {
-          body.push(_react2.default.createElement(
-            'div',
-            { className: 'imagesListItem', key: i },
-            _react2.default.createElement(
-              'div',
-              { className: 'hd' },
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListHd' },
-                _react2.default.createElement('img', { width: 40, height: 40, src: __webpack_require__(102), alt: 'img' })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListInfo' },
-                _react2.default.createElement(
-                  'h1',
-                  null,
-                  '镜像名称'
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  _react2.default.createElement(
-                    _Link2.default,
-                    { to: '/imageDetail/' + item.uuid },
-                    item.repository
-                  )
-                )
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('div', {
+            className: 'imagesListItem'
+          }, i, (0, _jsx3.default)('div', {
+            className: 'hd'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'imagesListHd'
+          }, void 0, (0, _jsx3.default)('img', {
+            width: 40,
+            height: 40,
+            src: __webpack_require__(103),
+            alt: 'img'
+          })), (0, _jsx3.default)('div', {
+            className: 'imagesListInfo'
+          }, void 0, _ref4, (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+            to: '/imageDetail/' + item.uuid
+          }, void 0, item.repository))))));
         });
         return body.splice(0, n);
       }
@@ -7597,57 +6929,24 @@ module.exports =
       key: 'render',
       value: function render() {
         this.context.setTitle('平台镜像');
-        var panelHd = _react2.default.createElement(
-          'div',
-          { className: 'clearfix imgHd' },
-          _react2.default.createElement(
-            'span',
-            null,
-            '镜像仓库'
-          ),
-          _react2.default.createElement(
-            'a',
-            { href: 'javascript:;' },
-            '什么是容器镜像？'
-          ),
-          _react2.default.createElement('div', { className: 'imgDropBox' })
-        );
-        return _react2.default.createElement(
-          'div',
-          { className: 'images containerPadding' },
-          _react2.default.createElement(
-            _reactBootstrap.Panel,
-            { className: 'image-left', header: panelHd },
-            _react2.default.createElement(
-              'div',
-              { className: 'imagesListBox' },
-              this.getImageList()
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'image-right' },
-            _react2.default.createElement(
-              'div',
-              { className: 'imageSearch' },
-              _react2.default.createElement(
-                'div',
-                { className: 'search' },
-                _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }),
-                _react2.default.createElement(
-                  'a',
-                  { type: 'button', className: 'slSearchBtn icon-select' },
-                  ' '
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.Panel,
-              { className: 'imagesRankingList', header: '排行榜' },
-              this.getImageTopTen(10)
-            )
-          )
-        );
+        var panelHd = _ref5;
+        return (0, _jsx3.default)('div', {
+          className: 'images containerPadding'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'image-left',
+          header: panelHd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'imagesListBox'
+        }, void 0, this.getImageList())), (0, _jsx3.default)('div', {
+          className: 'image-right'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'imageSearch'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'search'
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref6)), (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'imagesRankingList',
+          header: '\u6392\u884C\u699C'
+        }, void 0, this.getImageTopTen(10))));
       }
     }]);
     return ImageForPlatform;
@@ -7656,16 +6955,10 @@ module.exports =
   ImageForPlatform.contextTypes = {
     setTitle: _react2.default.PropTypes.func
   };
-  ImageForPlatform.propTypes = {
-    imageList: _react2.default.PropTypes.array,
-    onImageList: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    deployImageName: _react2.default.PropTypes.func
-  };
   exports.default = ImageForPlatform;
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -7674,44 +6967,52 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)("div", {
+    className: "listRefresh icon-refresh"
+  }, void 0);
   
   var Loading = function (_Component) {
     (0, _inherits3.default)(Loading, _Component);
   
     function Loading() {
       (0, _classCallCheck3.default)(this, Loading);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Loading).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Loading.__proto__ || (0, _getPrototypeOf2.default)(Loading)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Loading, [{
       key: "render",
       value: function render() {
-        return _react2.default.createElement("div", { className: "listRefresh icon-refresh" });
+        return _ref;
       }
     }]);
     return Loading;
@@ -7720,7 +7021,7 @@ module.exports =
   exports.default = Loading;
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7729,7 +7030,7 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
@@ -7748,17 +7049,17 @@ module.exports =
   exports.clearDeployData = clearDeployData;
   exports.fetchDeployServiceAction = fetchDeployServiceAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -7895,7 +7196,7 @@ module.exports =
   }
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7904,23 +7205,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ImageForMyContainer = __webpack_require__(109);
+  var _ImageForMyContainer = __webpack_require__(110);
   
   var _ImageForMyContainer2 = _interopRequireDefault(_ImageForMyContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_ImageForMyContainer2.default, {});
   
   exports.default = {
     path: '/imageForMy',
@@ -7933,7 +7240,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ImageForMyContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -7946,7 +7253,7 @@ module.exports =
   };
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7955,23 +7262,23 @@ module.exports =
     value: true
   });
   
-  var _ImageForMy = __webpack_require__(110);
+  var _ImageForMy = __webpack_require__(111);
   
   var _ImageForMy2 = _interopRequireDefault(_ImageForMy);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _imageList = __webpack_require__(95);
+  var _imageList = __webpack_require__(96);
   
-  var _imageListSelector = __webpack_require__(96);
+  var _imageListSelector = __webpack_require__(97);
   
   var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _deployService = __webpack_require__(107);
+  var _deployService = __webpack_require__(108);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -8004,7 +7311,7 @@ module.exports =
   exports.default = ImageForMyContainer;
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8013,49 +7320,86 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _Confirm = __webpack_require__(111);
+  var _Confirm = __webpack_require__(112);
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('div', {}, void 0, '\u6682\u65E0\u6570\u636E~');
+  
+  var _ref2 = (0, _jsx3.default)('div', {
+    className: 'text-center'
+  }, void 0, (0, _jsx3.default)(_Loading2.default, {}));
+  
+  var _ref3 = (0, _jsx3.default)('span', {
+    className: 'icon-collection'
+  }, void 0, '\u6536\u85CF');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u7F16\u8F91');
+  
+  var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref6 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref7 = (0, _jsx3.default)('div', {
+    className: 'clearfix imgHd'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u955C\u50CF\u4ED3\u5E93'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u955C\u50CF\uFF1F'), (0, _jsx3.default)('div', {
+    className: 'imgDropBox'
+  }));
+  
+  var _ref8 = (0, _jsx3.default)('a', {
+    type: 'button',
+    className: 'slSearchBtn icon-select'
+  }, void 0, ' ');
   
   var ImageForMy = function (_React$Component) {
     (0, _inherits3.default)(ImageForMy, _React$Component);
@@ -8063,7 +7407,7 @@ module.exports =
     function ImageForMy() {
       (0, _classCallCheck3.default)(this, ImageForMy);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageForMy).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (ImageForMy.__proto__ || (0, _getPrototypeOf2.default)(ImageForMy)).call(this));
   
       _this.state = {
         delData: {}
@@ -8110,81 +7454,35 @@ module.exports =
         var _this2 = this;
   
         var data = this.props.imageList;
-        if (!data || !data.length) return _react2.default.createElement(
-          'div',
-          null,
-          '暂无数据~'
-        );
-        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
-          'div',
-          { className: 'text-center' },
-          _react2.default.createElement(_Loading2.default, null)
-        );
+        if (!data || !data.length) return _ref;
+        if (data.length == 1 && data[0] == 1) return _ref2;
         var body = [];
         data.map(function (item, i) {
-          body.push(_react2.default.createElement(
-            'div',
-            { className: 'imagesListItem', key: i },
-            _react2.default.createElement(
-              'div',
-              { className: 'hd' },
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListHd' },
-                _react2.default.createElement('img', { width: 40, height: 40, src: __webpack_require__(102), alt: 'img' })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListInfo' },
-                _react2.default.createElement(
-                  'h1',
-                  null,
-                  '镜像名称 : ',
-                  _react2.default.createElement(
-                    _Link2.default,
-                    { to: '/imageDetail/' + item.uuid },
-                    item.repository
-                  )
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  '镜像简介 : ',
-                  item.detail
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'bd clearfix' },
-              _react2.default.createElement(
-                'span',
-                { className: 'icon-collection' },
-                '收藏'
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  title: '部署',
-                  bsStyle: 'primary',
-                  bsSize: 'small',
-                  onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid),
-                  onSelect: _this2.onSelectBtn.bind(_this2, item.repository, item.uuid),
-                  id: 'deploy-' + i
-                },
-                _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '1' },
-                  '编辑'
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '2' },
-                  '删除'
-                )
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('div', {
+            className: 'imagesListItem'
+          }, i, (0, _jsx3.default)('div', {
+            className: 'hd'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'imagesListHd'
+          }, void 0, (0, _jsx3.default)('img', {
+            width: 40,
+            height: 40,
+            src: __webpack_require__(103),
+            alt: 'img'
+          })), (0, _jsx3.default)('div', {
+            className: 'imagesListInfo'
+          }, void 0, (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0 : ', (0, _jsx3.default)(_Link2.default, {
+            to: '/imageDetail/' + item.uuid
+          }, void 0, item.repository)), (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u7B80\u4ECB : ', item.detail))), (0, _jsx3.default)('div', {
+            className: 'bd clearfix'
+          }, void 0, _ref3, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+            title: '\u90E8\u7F72',
+            bsStyle: 'primary',
+            bsSize: 'small',
+            onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid),
+            onSelect: _this2.onSelectBtn.bind(_this2, item.repository, item.uuid),
+            id: 'deploy-' + i
+          }, void 0, _ref4, _ref5))));
         });
         return body;
       }
@@ -8194,37 +7492,22 @@ module.exports =
         var data = this.props.imageList;
         var body = [];
         data.map(function (item, i) {
-          body.push(_react2.default.createElement(
-            'div',
-            { className: 'imagesListItem', key: i },
-            _react2.default.createElement(
-              'div',
-              { className: 'hd' },
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListHd' },
-                _react2.default.createElement('img', { width: 40, height: 40, src: __webpack_require__(102), alt: 'img' })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'imagesListInfo' },
-                _react2.default.createElement(
-                  'h1',
-                  null,
-                  '镜像名称'
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  _react2.default.createElement(
-                    _Link2.default,
-                    { to: '/imageDetail/' + item.uuid },
-                    item.repository
-                  )
-                )
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('div', {
+            className: 'imagesListItem'
+          }, i, (0, _jsx3.default)('div', {
+            className: 'hd'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'imagesListHd'
+          }, void 0, (0, _jsx3.default)('img', {
+            width: 40,
+            height: 40,
+            src: __webpack_require__(103),
+            alt: 'img'
+          })), (0, _jsx3.default)('div', {
+            className: 'imagesListInfo'
+          }, void 0, _ref6, (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+            to: '/imageDetail/' + item.uuid
+          }, void 0, item.repository))))));
         });
         return body.splice(0, n);
       }
@@ -8237,86 +7520,45 @@ module.exports =
         var _this3 = this;
   
         this.context.setTitle('我的镜像');
-        var panelHd = _react2.default.createElement(
-          'div',
-          { className: 'clearfix imgHd' },
-          _react2.default.createElement(
-            'span',
-            null,
-            '镜像仓库'
-          ),
-          _react2.default.createElement(
-            'a',
-            { href: 'javascript:;' },
-            '什么是容器镜像？'
-          ),
-          _react2.default.createElement('div', { className: 'imgDropBox' })
-        );
-        return _react2.default.createElement(
-          'div',
-          { className: 'images containerPadding' },
-          _react2.default.createElement(
-            _reactBootstrap.Panel,
-            { className: 'image-left', header: panelHd },
-            _react2.default.createElement(
-              'div',
-              { className: 'imagesListBox asTabs' },
-              _react2.default.createElement(
-                _reactBootstrap.Tabs,
-                { defaultActiveKey: 1, onSelect: this.tabSelect.bind(this), id: 'asTabs' },
-                _react2.default.createElement(
-                  _reactBootstrap.Tab,
-                  { eventKey: 1, title: '我的镜像' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'asTableBox TableTextLeft' },
-                    this.getImageList()
-                  )
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Tab,
-                  { eventKey: 2, title: '我的收藏' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'asTableBox TableTextLeft' },
-                    this.getImageList()
-                  )
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'image-right' },
-            _react2.default.createElement(
-              'div',
-              { className: 'imageSearch' },
-              _react2.default.createElement(
-                'div',
-                { className: 'search' },
-                _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }),
-                _react2.default.createElement(
-                  'a',
-                  { type: 'button', className: 'slSearchBtn icon-select' },
-                  ' '
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.Panel,
-              { className: 'imagesRankingList', header: '排行榜' },
-              this.getImageTopTen(10)
-            )
-          ),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '确定要删除此镜像吗?',
-            func: function func() {
-              _this3.props.onDeleteImage(_this3.state.delData);
-            },
-            ref: 'confirmModal'
-          })
-        );
+        var panelHd = _ref7;
+        return (0, _jsx3.default)('div', {
+          className: 'images containerPadding'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'image-left',
+          header: panelHd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'imagesListBox asTabs'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tabs, {
+          defaultActiveKey: 1,
+          onSelect: this.tabSelect.bind(this),
+          id: 'asTabs'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 1,
+          title: '\u6211\u7684\u955C\u50CF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTableBox TableTextLeft'
+        }, void 0, this.getImageList())), (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 2,
+          title: '\u6211\u7684\u6536\u85CF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTableBox TableTextLeft'
+        }, void 0, this.getImageList()))))), (0, _jsx3.default)('div', {
+          className: 'image-right'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'imageSearch'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'search'
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref8)), (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'imagesRankingList',
+          header: '\u6392\u884C\u699C'
+        }, void 0, this.getImageTopTen(10))), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u786E\u5B9A\u8981\u5220\u9664\u6B64\u955C\u50CF\u5417?',
+          func: function func() {
+            _this3.props.onDeleteImage(_this3.state.delData);
+          },
+          ref: 'confirmModal'
+        }));
       }
     }]);
     return ImageForMy;
@@ -8326,17 +7568,10 @@ module.exports =
     setTitle: _react2.default.PropTypes.func,
     store: _react2.default.PropTypes.object
   };
-  ImageForMy.propTypes = {
-    imageList: _react2.default.PropTypes.array,
-    onImageList: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    goToConfigContainer: _react2.default.PropTypes.func,
-    onDeleteImage: _react2.default.PropTypes.func
-  };
   exports.default = ImageForMy;
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -8345,37 +7580,45 @@ module.exports =
     value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _extends2 = __webpack_require__(37);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)("span", {
+    "aria-hidden": "true"
+  }, void 0, "\xD7");
   
   var Confirm = function (_Component) {
     (0, _inherits3.default)(Confirm, _Component);
@@ -8383,7 +7626,7 @@ module.exports =
     function Confirm(props) {
       (0, _classCallCheck3.default)(this, Confirm);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Confirm).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (Confirm.__proto__ || (0, _getPrototypeOf2.default)(Confirm)).call(this, props));
   
       _this.state = {
         show: false
@@ -8421,60 +7664,41 @@ module.exports =
           (0, _extends3.default)({}, this.props, { show: this.state.show,
             onHide: this.hide.bind(this),
             bsSize: "sm", "aria-labelledby": "contained-modal-title-sm" }),
-          _react2.default.createElement(
-            "div",
-            { className: "modal-header" },
-            _react2.default.createElement(
-              "button",
-              { type: "button", onClick: this.hide.bind(this), className: "close", "aria-label": "Close" },
-              _react2.default.createElement(
-                "span",
-                { "aria-hidden": "true" },
-                "×"
-              )
-            ),
-            _react2.default.createElement(
-              "h4",
-              { className: "modal-title", id: "contained-modal-title-sm" },
-              this.props.title
-            )
-          ),
-          _react2.default.createElement(
-            "div",
-            { className: "modal-body" },
-            _react2.default.createElement(
-              "div",
-              { className: "modalItem" },
-              this.props.text
-            )
-          ),
-          _react2.default.createElement(
-            "div",
-            { className: "modal-footer" },
-            _react2.default.createElement(
-              "button",
-              { className: "btn btn-default", onClick: this.hide.bind(this) },
-              "取消"
-            ),
-            _react2.default.createElement(
-              "button",
-              { className: "btn btn-primary", onClick: this.isOk.bind(this) },
-              "确定"
-            )
-          )
+          (0, _jsx3.default)("div", {
+            className: "modal-header"
+          }, void 0, (0, _jsx3.default)("button", {
+            type: "button",
+            onClick: this.hide.bind(this),
+            className: "close",
+            "aria-label": "Close"
+          }, void 0, _ref), (0, _jsx3.default)("h4", {
+            className: "modal-title",
+            id: "contained-modal-title-sm"
+          }, void 0, this.props.title)),
+          (0, _jsx3.default)("div", {
+            className: "modal-body"
+          }, void 0, (0, _jsx3.default)("div", {
+            className: "modalItem"
+          }, void 0, this.props.text)),
+          (0, _jsx3.default)("div", {
+            className: "modal-footer"
+          }, void 0, (0, _jsx3.default)("button", {
+            className: "btn btn-default",
+            onClick: this.hide.bind(this)
+          }, void 0, "\u53D6\u6D88"), (0, _jsx3.default)("button", {
+            className: "btn btn-primary",
+            onClick: this.isOk.bind(this)
+          }, void 0, "\u786E\u5B9A"))
         );
       }
     }]);
     return Confirm;
   }(_react.Component);
   
-  Confirm.propTypes = {
-    func: _react2.default.PropTypes.func
-  };
   exports.default = Confirm;
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8483,7 +7707,7 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
@@ -8497,21 +7721,21 @@ module.exports =
   exports.fetchBuildDetail = fetchBuildDetail;
   exports.fetchReviseBuilding = fetchReviseBuilding;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
-  var _imageList = __webpack_require__(95);
+  var _imageList = __webpack_require__(96);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -8832,7 +8056,7 @@ module.exports =
   }
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8841,19 +8065,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ImageDetailContainer = __webpack_require__(114);
+  var _ImageDetailContainer = __webpack_require__(115);
   
   var _ImageDetailContainer2 = _interopRequireDefault(_ImageDetailContainer);
   
@@ -8880,7 +8108,9 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ImageDetailContainer2.default, { uuid: params.uuid }));
+                return _context.abrupt('return', (0, _jsx3.default)(_ImageDetailContainer2.default, {
+                  uuid: params.uuid
+                }));
   
               case 1:
               case 'end':
@@ -8893,7 +8123,7 @@ module.exports =
   };
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8902,27 +8132,27 @@ module.exports =
     value: true
   });
   
-  var _ImageDetail = __webpack_require__(115);
+  var _ImageDetail = __webpack_require__(116);
   
   var _ImageDetail2 = _interopRequireDefault(_ImageDetail);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _imageDetail = __webpack_require__(121);
+  var _imageDetail = __webpack_require__(122);
   
-  var _imageDetailSelector = __webpack_require__(122);
+  var _imageDetailSelector = __webpack_require__(123);
   
   var _imageDetailSelector2 = _interopRequireDefault(_imageDetailSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _deployService = __webpack_require__(107);
+  var _deployService = __webpack_require__(108);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
-  var _reviseImage = __webpack_require__(123);
+  var _reviseImage = __webpack_require__(124);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -8962,7 +8192,7 @@ module.exports =
   exports.default = ImageDetailContainer;
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8971,53 +8201,57 @@ module.exports =
     value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _extends2 = __webpack_require__(37);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _utils = __webpack_require__(116);
+  var _utils = __webpack_require__(117);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _Confirm = __webpack_require__(111);
+  var _Confirm = __webpack_require__(112);
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -9029,7 +8263,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -9051,7 +8285,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           disabled: this.props.disabled,
           defaultChecked: this.state.autoStart,
           onChange: this.handClick.bind(this)
@@ -9061,10 +8295,71 @@ module.exports =
     return IsPublicToggle;
   }(_react.Component);
   
-  IsPublicToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    state: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+    colSpan: '3'
+  }, void 0, '\u6682\u65E0\u6570\u636E~'));
+  
+  var _ref2 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '33%'
+  }, void 0, '\u955C\u50CF\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '33%'
+  }, void 0, '\u7248\u672C'), (0, _jsx3.default)('th', {
+    width: '34%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref3 = (0, _jsx3.default)('div', {
+    className: 'text-center'
+  }, void 0, (0, _jsx3.default)(_Loading2.default, {}));
+  
+  var _ref4 = (0, _jsx3.default)('div', {
+    className: 'sdImg'
+  }, void 0, (0, _jsx3.default)('img', {}));
+  
+  var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u7F16\u8F91');
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref7 = (0, _jsx3.default)('span', {
+    className: 'sdPItemName'
+  }, void 0, '\u955C\u50CF\u5730\u5740:');
+  
+  var _ref8 = (0, _jsx3.default)('span', {
+    className: 'sdPItemName'
+  }, void 0, '\u62C9\u53D6\u547D\u4EE4:');
+  
+  var _ref9 = (0, _jsx3.default)('span', {
+    className: 'sdPItemName'
+  }, void 0, '\u662F\u5426\u516C\u5F00:');
+  
+  var _ref10 = (0, _jsx3.default)('span', {
+    'aria-hidden': 'true'
+  }, void 0, '\xD7');
+  
+  var _ref11 = (0, _jsx3.default)('h4', {
+    className: 'modal-title',
+    id: 'contained-modal-title-sm'
+  }, void 0, '\u62C9\u53D6\u7248\u672C: latest\u6269\u5BB9');
+  
+  var _ref12 = (0, _jsx3.default)('p', {
+    className: 'idModalFirst'
+  }, void 0, '\u62C9\u53D6\u547D\u4EE4:');
+  
+  var _ref13 = (0, _jsx3.default)(_reactBootstrap.FormControl, {
+    type: 'text',
+    placeholder: ''
+  });
+  
+  var _ref14 = (0, _jsx3.default)('p', {
+    className: 'idModalLast'
+  }, void 0, '\u62C9\u53D6\u955C\u50CF\u524D\u8BF7\u5148\u767B\u5F55: docker login daocloud.io');
+  
+  var _ref15 = (0, _jsx3.default)(_reactBootstrap.Button, {
+    bsStyle: 'primary'
+  }, void 0, '\u590D\u5236');
   
   var ImageDetail = function (_Component2) {
     (0, _inherits3.default)(ImageDetail, _Component2);
@@ -9072,7 +8367,7 @@ module.exports =
     function ImageDetail(props) {
       (0, _classCallCheck3.default)(this, ImageDetail);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageDetail).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ImageDetail.__proto__ || (0, _getPrototypeOf2.default)(ImageDetail)).call(this, props));
   
       _this2.state = {
         show: false,
@@ -9133,86 +8428,27 @@ module.exports =
   
         var data = this.props.imageDetail;
         var tags = data.tags || [];
-        if (!tags.length) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '3' },
-            '暂无数据~'
-          )
-        );
+        if (!tags.length) return _ref;
         return tags.map(function (item, i) {
-          return _react2.default.createElement(
-            'tr',
-            { key: i },
-            _react2.default.createElement(
-              'td',
-              null,
-              data.repository
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              item.tag
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  onClick: _this3.deployImage.bind(_this3, data.repository),
-                  bsStyle: 'primary', title: '部署', id: 'building-table-line-' + i },
-                _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '1', onClick: _this3.showModal.bind(_this3) },
-                  '拉取'
-                )
-              )
-            )
-          );
+          return (0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, data.repository), (0, _jsx3.default)('td', {}, void 0, item.tag), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+            onClick: _this3.deployImage.bind(_this3, data.repository),
+            bsStyle: 'primary',
+            title: '\u90E8\u7F72',
+            id: 'building-table-line-' + i
+          }, void 0, (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+            eventKey: '1',
+            onClick: _this3.showModal.bind(_this3)
+          }, void 0, '\u62C9\u53D6'))));
         });
       }
     }, {
       key: 'getVersion',
       value: function getVersion() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'building-table' },
-          _react2.default.createElement(
-            'table',
-            { className: 'table table-hover table-bordered' },
-            _react2.default.createElement(
-              'thead',
-              null,
-              _react2.default.createElement(
-                'tr',
-                null,
-                _react2.default.createElement(
-                  'th',
-                  { width: '33%' },
-                  '镜像名称'
-                ),
-                _react2.default.createElement(
-                  'th',
-                  { width: '33%' },
-                  '版本'
-                ),
-                _react2.default.createElement(
-                  'th',
-                  { width: '34%' },
-                  '操作'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'tbody',
-              null,
-              this.getLines()
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'building-table'
+        }, void 0, (0, _jsx3.default)('table', {
+          className: 'table table-hover table-bordered'
+        }, void 0, _ref2, (0, _jsx3.default)('tbody', {}, void 0, this.getLines())));
       }
     }, {
       key: 'getToggleValue',
@@ -9247,221 +8483,94 @@ module.exports =
   
         this.context.setTitle(title);
         var data = this.props.imageDetail;
-        if (!data.repository) return _react2.default.createElement(
-          'div',
-          { className: 'text-center' },
-          _react2.default.createElement(_Loading2.default, null)
-        );
+        if (!data.repository) return _ref3;
         var tag = data.image_tag ? ':' + data.image_tag : ":latest";
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF containerPadding', key: data.is_public },
-          _react2.default.createElement(
-            'div',
-            { className: 'sdHd' },
-            _react2.default.createElement(
-              'div',
-              { className: 'sdImg' },
-              _react2.default.createElement('img', null)
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'sdInfo' },
-              _react2.default.createElement(
-                'div',
-                { className: 'sdTitle' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'sdTitleItem' },
-                  '镜像名称:',
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    data.repository
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'sdTitleItem' },
-                  '最近部署时间:',
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'color999' },
-                    (0, _utils.timeRange)(new Date(data.update_time))
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'sdTitleItem imageDetail_lastItem' },
-                  _react2.default.createElement(
-                    _reactBootstrap.SplitButton,
-                    {
-                      onClick: this.deployImage.bind(this, data.repository, data.uuid),
-                      onSelect: this.selectImage.bind(this, data.repository, data.uuid),
-                      bsStyle: 'primary', title: '部署最新版本', id: 'building-table-line' },
-                    _react2.default.createElement(
-                      _reactBootstrap.MenuItem,
-                      { eventKey: '1' },
-                      '编辑'
-                    ),
-                    _react2.default.createElement(
-                      _reactBootstrap.MenuItem,
-                      { eventKey: '2' },
-                      '删除'
-                    )
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'sdPBox' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'sdPItem' },
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'sdPItemName' },
-                    '镜像地址:'
-                  ),
-                  _react2.default.createElement(
-                    'a',
-                    { href: 'http://index.boxlinker.com/' + data.repository,
-                      target: '_blank', className: 'aLink' },
-                    'http://index.boxlinker.com/' + data.repository
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'sdPItem' },
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'sdPItemName' },
-                    '拉取命令:'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'aLink' },
-                    'docker pull index.boxlinker.com/' + data.repository + tag
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'sdPItem' },
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'sdPItemName' },
-                    '是否公开:'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    _react2.default.createElement(IsPublicToggle, {
-                      disabled: !this.props.isBtnState.building,
-                      state: data.is_public == 1,
-                      getToggle: this.getToggleValue.bind(this, data)
-                    })
-                  )
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'sdBd' },
-            _react2.default.createElement(
-              _reactBootstrap.Tabs,
-              { defaultActiveKey: 1, id: 'sdTabs' },
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 1, title: '概览' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'idTableBox' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'idOverview' },
-                    data.detail
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 2, title: '版本' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'idTableBox' },
-                  this.getVersion(),
-                  _react2.default.createElement(
-                    _reactBootstrap.Modal,
-                    (0, _extends3.default)({}, this.props, { show: this.state.show, onHide: this.hideModal.bind(this), bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'modal-header' },
-                      _react2.default.createElement(
-                        'button',
-                        { type: 'button', className: 'close', 'aria-label': 'Close', onClick: this.hideModal.bind(this) },
-                        _react2.default.createElement(
-                          'span',
-                          { 'aria-hidden': 'true' },
-                          '×'
-                        )
-                      ),
-                      _react2.default.createElement(
-                        'h4',
-                        { className: 'modal-title', id: 'contained-modal-title-sm' },
-                        '拉取版本: latest扩容'
-                      )
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'modal-body' },
-                      _react2.default.createElement(
-                        'div',
-                        { className: 'idModalBox' },
-                        _react2.default.createElement(
-                          'p',
-                          { className: 'idModalFirst' },
-                          '拉取命令:'
-                        ),
-                        _react2.default.createElement(_reactBootstrap.FormControl, {
-                          type: 'text',
-                          placeholder: ''
-                        }),
-                        _react2.default.createElement(
-                          'p',
-                          { className: 'idModalLast' },
-                          '拉取镜像前请先登录: docker login daocloud.io'
-                        ),
-                        _react2.default.createElement(
-                          'div',
-                          { className: 'idModalBtnBox' },
-                          _react2.default.createElement(
-                            _reactBootstrap.Button,
-                            { bsStyle: 'primary' },
-                            '复制'
-                          ),
-                          _react2.default.createElement(
-                            _reactBootstrap.Button,
-                            { bsStyle: 'default', onClick: this.hideModal.bind(this) },
-                            '取消'
-                          )
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '确定要删除此镜像吗?',
-            func: function func() {
-              _this4.props.onDeleteImage(_this4.state.delData);
-            },
-            ref: 'confirmModal'
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF containerPadding'
+        }, data.is_public, (0, _jsx3.default)('div', {
+          className: 'sdHd'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'sdInfo'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'sdTitle'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'sdTitleItem'
+        }, void 0, '\u955C\u50CF\u540D\u79F0:', (0, _jsx3.default)('span', {}, void 0, data.repository)), (0, _jsx3.default)('div', {
+          className: 'sdTitleItem'
+        }, void 0, '\u6700\u8FD1\u90E8\u7F72\u65F6\u95F4:', (0, _jsx3.default)('span', {
+          className: 'color999'
+        }, void 0, (0, _utils.timeRange)(new Date(data.update_time)))), (0, _jsx3.default)('div', {
+          className: 'sdTitleItem imageDetail_lastItem'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+          onClick: this.deployImage.bind(this, data.repository, data.uuid),
+          onSelect: this.selectImage.bind(this, data.repository, data.uuid),
+          bsStyle: 'primary',
+          title: '\u90E8\u7F72\u6700\u65B0\u7248\u672C',
+          id: 'building-table-line'
+        }, void 0, _ref5, _ref6))), (0, _jsx3.default)('div', {
+          className: 'sdPBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'sdPItem'
+        }, void 0, _ref7, (0, _jsx3.default)('a', {
+          href: 'http://index.boxlinker.com/' + data.repository,
+          target: '_blank',
+          className: 'aLink'
+        }, void 0, 'http://index.boxlinker.com/' + data.repository)), (0, _jsx3.default)('div', {
+          className: 'sdPItem'
+        }, void 0, _ref8, (0, _jsx3.default)('span', {
+          className: 'aLink'
+        }, void 0, 'docker pull index.boxlinker.com/' + data.repository + tag)), (0, _jsx3.default)('div', {
+          className: 'sdPItem'
+        }, void 0, _ref9, (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)(IsPublicToggle, {
+          disabled: !this.props.isBtnState.building,
+          state: data.is_public == 1,
+          getToggle: this.getToggleValue.bind(this, data)
+        })))))), (0, _jsx3.default)('div', {
+          className: 'sdBd'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tabs, {
+          defaultActiveKey: 1,
+          id: 'sdTabs'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 1,
+          title: '\u6982\u89C8'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'idTableBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'idOverview'
+        }, void 0, data.detail))), (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 2,
+          title: '\u7248\u672C'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'idTableBox'
+        }, void 0, this.getVersion(), _react2.default.createElement(
+          _reactBootstrap.Modal,
+          (0, _extends3.default)({}, this.props, { show: this.state.show, onHide: this.hideModal.bind(this), bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
+          (0, _jsx3.default)('div', {
+            className: 'modal-header'
+          }, void 0, (0, _jsx3.default)('button', {
+            type: 'button',
+            className: 'close',
+            'aria-label': 'Close',
+            onClick: this.hideModal.bind(this)
+          }, void 0, _ref10), _ref11),
+          (0, _jsx3.default)('div', {
+            className: 'modal-body'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'idModalBox'
+          }, void 0, _ref12, _ref13, _ref14, (0, _jsx3.default)('div', {
+            className: 'idModalBtnBox'
+          }, void 0, _ref15, (0, _jsx3.default)(_reactBootstrap.Button, {
+            bsStyle: 'default',
+            onClick: this.hideModal.bind(this)
+          }, void 0, '\u53D6\u6D88'))))
+        ))))), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u786E\u5B9A\u8981\u5220\u9664\u6B64\u955C\u50CF\u5417?',
+          func: function func() {
+            _this4.props.onDeleteImage(_this4.state.delData);
+          },
+          ref: 'confirmModal'
+        }));
       }
     }]);
     return ImageDetail;
@@ -9471,19 +8580,10 @@ module.exports =
     setTitle: _react.PropTypes.func.isRequired,
     store: _react.PropTypes.object
   };
-  ImageDetail.propTypes = {
-    setBreadcrumb: _react2.default.PropTypes.func,
-    imageDetail: _react2.default.PropTypes.object,
-    getImageDetail: _react2.default.PropTypes.func,
-    onDeleteImage: _react2.default.PropTypes.func,
-    goToConfigContainer: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object,
-    onReviseImage: _react2.default.PropTypes.func
-  };
   exports.default = ImageDetail;
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports) {
 
   "use strict";
@@ -9533,12 +8633,12 @@ module.exports =
   }
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
   
-  var _assign = __webpack_require__(19);
+  var _assign = __webpack_require__(20);
   
   var _assign2 = _interopRequireDefault(_assign);
   
@@ -9558,31 +8658,20 @@ module.exports =
     }return target;
   };
   
-  var React = _interopRequire(__webpack_require__(9));
+  var React = _interopRequire(__webpack_require__(10));
   
-  var classNames = _interopRequire(__webpack_require__(65));
+  var classNames = _interopRequire(__webpack_require__(66));
   
-  var Check = _interopRequire(__webpack_require__(118));
+  var Check = _interopRequire(__webpack_require__(119));
   
-  var X = _interopRequire(__webpack_require__(119));
+  var X = _interopRequire(__webpack_require__(120));
   
-  var PureRenderMixin = _interopRequire(__webpack_require__(120));
+  var PureRenderMixin = _interopRequire(__webpack_require__(121));
   
   module.exports = React.createClass({
     mixins: [PureRenderMixin],
   
     displayName: "Toggle",
-  
-    propTypes: {
-      checked: React.PropTypes.bool,
-      defaultChecked: React.PropTypes.bool,
-      onChange: React.PropTypes.func,
-      name: React.PropTypes.string,
-      value: React.PropTypes.string,
-      id: React.PropTypes.string,
-      "aria-labelledby": React.PropTypes.string,
-      "aria-label": React.PropTypes.string
-    },
   
     getInitialState: function getInitialState() {
       var checked = false;
@@ -9643,7 +8732,7 @@ module.exports =
   });
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -9652,7 +8741,7 @@ module.exports =
     return obj && obj.__esModule ? obj["default"] : obj;
   };
   
-  var React = _interopRequire(__webpack_require__(9));
+  var React = _interopRequire(__webpack_require__(10));
   
   module.exports = React.createClass({
     displayName: "check.es6",
@@ -9671,7 +8760,7 @@ module.exports =
   });
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -9680,7 +8769,7 @@ module.exports =
     return obj && obj.__esModule ? obj["default"] : obj;
   };
   
-  var React = _interopRequire(__webpack_require__(9));
+  var React = _interopRequire(__webpack_require__(10));
   
   module.exports = React.createClass({
     displayName: "x.es6",
@@ -9700,13 +8789,13 @@ module.exports =
   });
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports) {
 
   module.exports = require("react-addons-pure-render-mixin");
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9716,15 +8805,15 @@ module.exports =
   });
   exports.fetchImageDetailAction = fetchImageDetailAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -9763,7 +8852,7 @@ module.exports =
   }
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9772,7 +8861,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getImageDetail
   var getImageDetail = function getImageDetail(state) {
@@ -9788,7 +8877,7 @@ module.exports =
   exports.default = makeGetImageDetail;
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9797,23 +8886,23 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
   exports.fetchReviseImageAction = fetchReviseImageAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -9865,7 +8954,7 @@ module.exports =
   }
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9874,7 +8963,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getIsBtnState = function getIsBtnState(state) {
     return state.isBtnState;
@@ -9889,7 +8978,7 @@ module.exports =
   exports.default = makeIsBtnStateSelector;
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9898,23 +8987,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _CreateImageContainer = __webpack_require__(126);
+  var _CreateImageContainer = __webpack_require__(127);
   
   var _CreateImageContainer2 = _interopRequireDefault(_CreateImageContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_CreateImageContainer2.default, {});
   
   exports.default = {
     path: '/createImage',
@@ -9926,7 +9021,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_CreateImageContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -9939,7 +9034,7 @@ module.exports =
   };
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9948,19 +9043,19 @@ module.exports =
     value: true
   });
   
-  var _CreateImage = __webpack_require__(127);
+  var _CreateImage = __webpack_require__(128);
   
   var _CreateImage2 = _interopRequireDefault(_CreateImage);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _createImage = __webpack_require__(132);
+  var _createImage = __webpack_require__(133);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -9990,7 +9085,7 @@ module.exports =
   exports.default = CreateImageContainer;
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9999,43 +9094,47 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -10045,7 +9144,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -10064,7 +9163,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           defaultChecked: this.state.autoStart,
           onChange: this.handClick.bind(this)
         });
@@ -10073,10 +9172,33 @@ module.exports =
     return IsPublicToggle;
   }(_react.Component);
   
-  IsPublicToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    state: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)('h1', {}, void 0, '\u65B0\u5EFA\u955C\u50CF');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u662F\u670D\u52A1\u8FD0\u884C\u7684\u6A21\u677F, \u6765\u6E90\u4E8E\u4EE3\u7801, \u57FA\u4E8E Dockerfile \u6784\u5EFA, \u9ED8\u8BA4\u76EE\u5F55\u5728\u6839\'/\'\u4E0B, \u6587\u4EF6\u540D Dockerfile .');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u9ED8\u8BA4\u4F1A\u4E0E\u60A8\u4E0B\u65B9\u4EE3\u7801\u6E90\u7684\u9879\u76EE\u540D\u79F0\u76F8\u540C'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7B80\u4ECB',
+    titleEnglish: 'IMAGE SUMMARY',
+    titleInfo: '\u7B80\u5355\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8BE6\u7EC6\u63CF\u8FF0',
+    titleEnglish: 'IMAGE DETAIL',
+    titleInfo: '\u8BE6\u7EC6\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u516C\u5F00',
+    titleEnglish: 'IS PUBLIC',
+    titleInfo: '\u516C\u5F00\u540E\u90FD\u53EF\u4EE5\u8BBF\u95EE'
+  });
   
   var CreateImage = function (_React$Component) {
     (0, _inherits3.default)(CreateImage, _React$Component);
@@ -10084,7 +9206,7 @@ module.exports =
     function CreateImage() {
       (0, _classCallCheck3.default)(this, CreateImage);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CreateImage).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (CreateImage.__proto__ || (0, _getPrototypeOf2.default)(CreateImage)).call(this));
   
       _this2.state = {
         isImageName: false,
@@ -10155,116 +9277,58 @@ module.exports =
       key: 'render',
       value: function render() {
         this.context.setTitle('新建镜像');
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'acBox' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              '新建镜像'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              '镜像是服务运行的模板, 来源于代码, 基于 Dockerfile 构建, 默认目录在根\'/\'下, 文件名 Dockerfile .'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '镜像名称',
-                titleEnglish: 'IMAGE NAME',
-                titleInfo: '默认会与您下方代码源的项目名称相同'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox ' + (this.state.isImageName ? "has-error" : "") },
-                _react2.default.createElement('input', {
-                  type: 'text',
-                  placeholder: '',
-                  className: 'form-control',
-                  ref: 'repository',
-                  onChange: this.onImageNameChange.bind(this)
-                }),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'inputTip', ref: 'image_name_tip' },
-                  '镜像名称不能为空'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '镜像简介',
-                titleEnglish: 'IMAGE SUMMARY',
-                titleInfo: '简单介绍镜像的信息'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('textarea', {
-                  placeholder: '镜像简介',
-                  className: 'form-control',
-                  defaultValue: '',
-                  ref: 'image_detail'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '详细描述',
-                titleEnglish: 'IMAGE DETAIL',
-                titleInfo: '详细介绍镜像的信息'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('textarea', {
-                  placeholder: '详细描述',
-                  className: 'form-control',
-                  defaultValue: '',
-                  ref: 'short_description'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '是否公开',
-                titleEnglish: 'IS PUBLIC',
-                titleInfo: '公开后都可以访问'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement(IsPublicToggle, { state: true, getToggle: this.getToggleValue.bind(this) })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(
-                'div',
-                { className: 'acBtn' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary',
-                    onClick: this.building.bind(this),
-                    disabled: !this.props.isBtnState.building },
-                  this.props.isBtnState.building ? "新建" : "新建中..."
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'acBox'
+        }, void 0, _ref, _ref2, (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'assBox ' + (this.state.isImageName ? "has-error" : "")
+        }, void 0, _react2.default.createElement('input', {
+          type: 'text',
+          placeholder: '',
+          className: 'form-control',
+          ref: 'repository',
+          onChange: this.onImageNameChange.bind(this)
+        }), _react2.default.createElement(
+          'span',
+          { className: 'inputTip', ref: 'image_name_tip' },
+          '\u955C\u50CF\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A'
+        ))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement('textarea', {
+          placeholder: '\u955C\u50CF\u7B80\u4ECB',
+          className: 'form-control',
+          defaultValue: '',
+          ref: 'image_detail'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref5, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement('textarea', {
+          placeholder: '\u8BE6\u7EC6\u63CF\u8FF0',
+          className: 'form-control',
+          defaultValue: '',
+          ref: 'short_description'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref6, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)(IsPublicToggle, {
+          state: true,
+          getToggle: this.getToggleValue.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'acBtn'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.building.bind(this),
+          disabled: !this.props.isBtnState.building
+        }, void 0, this.props.isBtnState.building ? "新建" : "新建中...")))));
       }
     }]);
     return CreateImage;
@@ -10275,14 +9339,10 @@ module.exports =
     store: _react2.default.PropTypes.object,
     setBreadcrumb: _react2.default.PropTypes.func
   };
-  CreateImage.propTypes = {
-    isBtnState: _react2.default.PropTypes.object,
-    onCreateImage: _react2.default.PropTypes.func
-  };
   exports.default = CreateImage;
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10291,15 +9351,19 @@ module.exports =
     value: true
   });
   
-  var _react = __webpack_require__(9);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _HeadLine = __webpack_require__(129);
+  var _HeadLine = __webpack_require__(130);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -10316,29 +9380,17 @@ module.exports =
       };
     },
     render: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: _HeadLine2.default.hlBox },
-        _react2.default.createElement(
-          'h1',
-          { className: _HeadLine2.default.hlHd },
-          _react2.default.createElement(
-            'span',
-            { className: _HeadLine2.default.hlFirstTitle },
-            this.props.title
-          ),
-          _react2.default.createElement(
-            'span',
-            { className: _HeadLine2.default.hlSecondTitle },
-            this.props.titleEnglish
-          )
-        ),
-        _react2.default.createElement(
-          'p',
-          { className: _HeadLine2.default.hlPresent },
-          this.props.titleInfo
-        )
-      );
+      return (0, _jsx3.default)('div', {
+        className: _HeadLine2.default.hlBox
+      }, void 0, (0, _jsx3.default)('h1', {
+        className: _HeadLine2.default.hlHd
+      }, void 0, (0, _jsx3.default)('span', {
+        className: _HeadLine2.default.hlFirstTitle
+      }, void 0, this.props.title), (0, _jsx3.default)('span', {
+        className: _HeadLine2.default.hlSecondTitle
+      }, void 0, this.props.titleEnglish)), (0, _jsx3.default)('p', {
+        className: _HeadLine2.default.hlPresent
+      }, void 0, this.props.titleInfo));
     }
   }); /**
        * React Starter Kit (https://www.reactstarterkit.com/)
@@ -10352,12 +9404,12 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_HeadLine2.default)(HeadLine);
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(130);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(131);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -10367,52 +9419,35 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./HeadLine.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./HeadLine.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, ".HeadLine_hlBox_2bT{\n  height:40px;\n  padding-left:15px;\n  position: relative;\n}\n.HeadLine_hlBox_2bT:before{\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  height:35px;\n  width:5px;\n  background:#2dafdf;\n  left:0;\n  top:2px;\n}\n.HeadLine_hlHd_2xx{\n  height:18px;\n  line-height:18px;\n}\n.HeadLine_hlHd_2xx span{\n  vertical-align: top;\n}\n.HeadLine_hlFirstTitle_1Gp{\n  font-size:16px;\n  color:#333;\n}\n.HeadLine_hlSecondTitle_2l6{\n  margin-left:10px;\n  font-size:12px;\n  color:#999;\n}\n.HeadLine_hlPresent_n_8{\n  margin-top:5px;\n  font-size:12px;\n  color:#666;\n}\n", "", {"version":3,"sources":["/./components/HeadLine/HeadLine.css"],"names":[],"mappings":"AAAA;EACE,YAAY;EACZ,kBAAkB;EAClB,mBAAmB;CACpB;AACD;EACE,YAAY;EACZ,sBAAsB;EACtB,mBAAmB;EACnB,YAAY;EACZ,UAAU;EACV,mBAAmB;EACnB,OAAO;EACP,QAAQ;CACT;AACD;EACE,YAAY;EACZ,iBAAiB;CAClB;AACD;EACE,oBAAoB;CACrB;AACD;EACE,eAAe;EACf,WAAW;CACZ;AACD;EACE,iBAAiB;EACjB,eAAe;EACf,WAAW;CACZ;AACD;EACE,eAAe;EACf,eAAe;EACf,WAAW;CACZ","file":"HeadLine.css","sourcesContent":[".hlBox{\n  height:40px;\n  padding-left:15px;\n  position: relative;\n}\n.hlBox:before{\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  height:35px;\n  width:5px;\n  background:#2dafdf;\n  left:0;\n  top:2px;\n}\n.hlHd{\n  height:18px;\n  line-height:18px;\n}\n.hlHd span{\n  vertical-align: top;\n}\n.hlFirstTitle{\n  font-size:16px;\n  color:#333;\n}\n.hlSecondTitle{\n  margin-left:10px;\n  font-size:12px;\n  color:#999;\n}\n.hlPresent{\n  margin-top:5px;\n  font-size:12px;\n  color:#666;\n}\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "._2bTQ{height:40px;padding-left:15px;position:relative}._2bTQ:before{content:\"\";display:inline-block;position:absolute;height:35px;width:5px;background:#2dafdf;left:0;top:2px}._2xxL{height:18px;line-height:18px}._2xxL span{vertical-align:top}._1GpL{font-size:16px;color:#333}._2l6l{margin-left:10px;color:#999}._2l6l,.n_83{font-size:12px}.n_83{margin-top:5px;color:#666}", ""]);
   
   // exports
   exports.locals = {
-  	"hlBox": "HeadLine_hlBox_2bT",
-  	"hlHd": "HeadLine_hlHd_2xx",
-  	"hlFirstTitle": "HeadLine_hlFirstTitle_1Gp",
-  	"hlSecondTitle": "HeadLine_hlSecondTitle_2l6",
-  	"hlPresent": "HeadLine_hlPresent_n_8"
+  	"hlBox": "_2bTQ",
+  	"hlHd": "_2xxL",
+  	"hlFirstTitle": "_1GpL",
+  	"hlSecondTitle": "_2l6l",
+  	"hlPresent": "n_83"
   };
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports) {
 
   module.exports = require("react-dom");
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10421,23 +9456,23 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
   exports.fetchCreateImageAction = fetchCreateImageAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _header = __webpack_require__(79);
+  var _header = __webpack_require__(80);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -10490,7 +9525,7 @@ module.exports =
   }
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10499,19 +9534,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _BuildingDetailContainer = __webpack_require__(134);
+  var _BuildingDetailContainer = __webpack_require__(135);
   
   var _BuildingDetailContainer2 = _interopRequireDefault(_BuildingDetailContainer);
   
@@ -10528,7 +9567,9 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_BuildingDetailContainer2.default, { projectId: params.id }));
+                return _context.abrupt('return', (0, _jsx3.default)(_BuildingDetailContainer2.default, {
+                  projectId: params.id
+                }));
   
               case 1:
               case 'end':
@@ -10541,7 +9582,7 @@ module.exports =
   };
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10550,21 +9591,21 @@ module.exports =
     value: true
   });
   
-  var _BuildingDetail = __webpack_require__(135);
+  var _BuildingDetail = __webpack_require__(136);
   
   var _BuildingDetail2 = _interopRequireDefault(_BuildingDetail);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
-  var _buildingDetailSelector = __webpack_require__(137);
+  var _buildingDetailSelector = __webpack_require__(138);
   
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -10604,7 +9645,7 @@ module.exports =
   exports.default = BuildingDetailContainer;
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10613,47 +9654,51 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _Logs = __webpack_require__(136);
+  var _Logs = __webpack_require__(137);
   
   var _Logs2 = _interopRequireDefault(_Logs);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -10665,7 +9710,7 @@ module.exports =
     function IsAutoBuildToggle(props) {
       (0, _classCallCheck3.default)(this, IsAutoBuildToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsAutoBuildToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsAutoBuildToggle.__proto__ || (0, _getPrototypeOf2.default)(IsAutoBuildToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -10687,7 +9732,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           defaultChecked: this.state.autoStart,
           onChange: this.handClick.bind(this)
         });
@@ -10696,10 +9741,38 @@ module.exports =
     return IsAutoBuildToggle;
   }(_react.Component);
   
-  IsAutoBuildToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    state: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, 'Dockerfile\u4F4D\u7F6E');
+  
+  var _ref3 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, '\u9ED8\u8BA4\u4EE3\u7801\u5206\u652F');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, '\u81EA\u52A8\u6784\u5EFA');
+  
+  var _ref5 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0);
+  
+  var _ref6 = (0, _jsx3.default)('p', {}, void 0, '*\u5220\u9664\u9879\u76EE\u5C06\u6E05\u9664\u9879\u76EE\u76F8\u5173\u6570\u636E\uFF0C\u8BF7\u614E\u91CD\u9009\u62E9\uFF01 ');
+  
+  var _ref7 = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref8 = (0, _jsx3.default)('div', {
+    className: 'media-left'
+  }, void 0, (0, _jsx3.default)('img', {
+    width: 65,
+    height: 65,
+    src: '/avatar.png',
+    alt: 'Image'
+  }));
   
   var BuildingDetail = function (_React$Component) {
     (0, _inherits3.default)(BuildingDetail, _React$Component);
@@ -10707,7 +9780,7 @@ module.exports =
     function BuildingDetail(props) {
       (0, _classCallCheck3.default)(this, BuildingDetail);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BuildingDetail).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (BuildingDetail.__proto__ || (0, _getPrototypeOf2.default)(BuildingDetail)).call(this, props));
   
       _this2.state = {
         isAutoBuilding: 1
@@ -10782,107 +9855,46 @@ module.exports =
         //基本设置
         var data = [this.props.buildingDetail];
         var body = data.map(function (item) {
-          return _react2.default.createElement(
-            'div',
-            { className: 'baseSet', key: new Date(item.creation_time).getTime() },
-            _react2.default.createElement(
-              'div',
-              { className: 'baseItem' },
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'form' },
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 2 },
-                  '镜像名称'
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 5 },
-                  _react2.default.createElement(
-                    'p',
-                    null,
-                    item.repository
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'baseItem' },
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'form' },
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 2 },
-                  'Dockerfile位置'
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 5 },
-                  _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'dockerfile_path', defaultValue: item.dockerfile_path })
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'baseItem' },
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'form' },
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 2 },
-                  '默认代码分支'
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 5 },
-                  _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'repo_branch', defaultValue: item.repo_branch })
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'baseItem' },
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'form' },
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 2 },
-                  '自动构建'
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 5 },
-                  _react2.default.createElement(IsAutoBuildToggle, { state: item.auto_build == 1, getToggle: _this3.getToggleValue.bind(_this3) })
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'baseItem' },
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'form' },
-                _react2.default.createElement(_reactBootstrap.Col, { sm: 2 }),
-                _react2.default.createElement(
-                  _reactBootstrap.Col,
-                  { sm: 5 },
-                  _react2.default.createElement(
-                    'button',
-                    { className: 'btn btn-primary ' + (!_this3.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
-                      onClick: _this3.onReviseBuilding.bind(_this3),
-                      disabled: !_this3.props.isBtnState.reviseBuilding
-                    },
-                    '确认修改'
-                  )
-                )
-              )
-            )
-          );
+          return (0, _jsx3.default)('div', {
+            className: 'baseSet'
+          }, new Date(item.creation_time).getTime(), (0, _jsx3.default)('div', {
+            className: 'baseItem'
+          }, void 0, (0, _jsx3.default)(_reactBootstrap.FormGroup, {
+            controlId: 'form'
+          }, void 0, _ref, (0, _jsx3.default)(_reactBootstrap.Col, {
+            sm: 5
+          }, void 0, (0, _jsx3.default)('p', {}, void 0, item.repository)))), (0, _jsx3.default)('div', {
+            className: 'baseItem'
+          }, void 0, (0, _jsx3.default)(_reactBootstrap.FormGroup, {
+            controlId: 'form'
+          }, void 0, _ref2, (0, _jsx3.default)(_reactBootstrap.Col, {
+            sm: 5
+          }, void 0, _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'dockerfile_path', defaultValue: item.dockerfile_path })))), (0, _jsx3.default)('div', {
+            className: 'baseItem'
+          }, void 0, (0, _jsx3.default)(_reactBootstrap.FormGroup, {
+            controlId: 'form'
+          }, void 0, _ref3, (0, _jsx3.default)(_reactBootstrap.Col, {
+            sm: 5
+          }, void 0, _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'repo_branch', defaultValue: item.repo_branch })))), (0, _jsx3.default)('div', {
+            className: 'baseItem'
+          }, void 0, (0, _jsx3.default)(_reactBootstrap.FormGroup, {
+            controlId: 'form'
+          }, void 0, _ref4, (0, _jsx3.default)(_reactBootstrap.Col, {
+            sm: 5
+          }, void 0, (0, _jsx3.default)(IsAutoBuildToggle, {
+            state: item.auto_build == 1,
+            getToggle: _this3.getToggleValue.bind(_this3)
+          })))), (0, _jsx3.default)('div', {
+            className: 'baseItem'
+          }, void 0, (0, _jsx3.default)(_reactBootstrap.FormGroup, {
+            controlId: 'form'
+          }, void 0, _ref5, (0, _jsx3.default)(_reactBootstrap.Col, {
+            sm: 5
+          }, void 0, (0, _jsx3.default)('button', {
+            className: 'btn btn-primary ' + (!_this3.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
+            onClick: _this3.onReviseBuilding.bind(_this3),
+            disabled: !_this3.props.isBtnState.reviseBuilding
+          }, void 0, '\u786E\u8BA4\u4FEE\u6539')))));
         });
         return body;
       }
@@ -10895,20 +9907,12 @@ module.exports =
       key: 'handle',
       value: function handle() {
         //操作
-        return _react2.default.createElement(
-          'div',
-          { className: 'handleBox' },
-          _react2.default.createElement(
-            'button',
-            { className: 'btn btn-danger', onClick: this.onDeleteBuilding.bind(this, this.props.projectId) },
-            '删除项目'
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            '*删除项目将清除项目相关数据，请慎重选择！ '
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'handleBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-danger',
+          onClick: this.onDeleteBuilding.bind(this, this.props.projectId)
+        }, void 0, '\u5220\u9664\u9879\u76EE'), _ref6);
       }
     }, {
       key: 'render',
@@ -10919,94 +9923,52 @@ module.exports =
         var uuid = this.props.projectId;
         var build_status = buildDetail.build_status;
         if (buildDetail && !build_status) {
-          return _react2.default.createElement(
-            'div',
-            { style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          );
+          return (0, _jsx3.default)('div', {
+            style: { "textAlign": "center" }
+          }, void 0, _ref7);
         }
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'cdBd' },
-            _react2.default.createElement(
-              'div',
-              { className: 'cbCodeInfo' },
-              _react2.default.createElement(
-                _reactBootstrap.Media,
-                null,
-                _react2.default.createElement(
-                  'div',
-                  { className: 'media-left' },
-                  _react2.default.createElement('img', { width: 65, height: 65, src: '/avatar.png', alt: 'Image' })
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'media-body' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'media-heading' },
-                    '镜像名称 :',
-                    _react2.default.createElement(
-                      'a',
-                      { href: 'javascript:;', target: '_blank', className: 'aLink' },
-                      'index.boxlinker.com/' + buildDetail.repository + ':' + buildDetail.image_tag
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'p',
-                    null,
-                    _react2.default.createElement(
-                      'button',
-                      { className: 'btn btn-primary ' + (buildDetail.build_status == 2 ? "btn-loading" : ""),
-                        disabled: buildDetail.build_status == 2,
-                        onClick: this.fastBuilding.bind(this, uuid)
-                      },
-                      buildDetail.build_status == 2 ? "构建中" : "构建"
-                    )
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'cbTabs' },
-              _react2.default.createElement(
-                _reactBootstrap.Tabs,
-                { defaultActiveKey: 1, id: 'cbTabs' },
-                _react2.default.createElement(
-                  _reactBootstrap.Tab,
-                  { eventKey: 1, title: '构建日志' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'asTableBox', style: { "paddingTop": "30px" } },
-                    _react2.default.createElement(_Logs2.default, { logLabel: 'auto_build-' + username + '-' + this.props.projectId })
-                  )
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Tab,
-                  { eventKey: 2, title: '基本设置' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'asTableBox' },
-                    this.baseSeting()
-                  )
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.Tab,
-                  { eventKey: 3, title: '操作' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'asTableBox' },
-                    this.handle()
-                  )
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'cdBd'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'cbCodeInfo'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Media, {}, void 0, _ref8, (0, _jsx3.default)('div', {
+          className: 'media-body'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'media-heading'
+        }, void 0, '\u955C\u50CF\u540D\u79F0 :', (0, _jsx3.default)('a', {
+          href: 'javascript:;',
+          target: '_blank',
+          className: 'aLink'
+        }, void 0, 'index.boxlinker.com/' + buildDetail.repository + ':' + buildDetail.image_tag)), (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary ' + (buildDetail.build_status == 2 ? "btn-loading" : ""),
+          disabled: buildDetail.build_status == 2,
+          onClick: this.fastBuilding.bind(this, uuid)
+        }, void 0, buildDetail.build_status == 2 ? "构建中" : "构建"))))), (0, _jsx3.default)('div', {
+          className: 'cbTabs'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tabs, {
+          defaultActiveKey: 1,
+          id: 'cbTabs'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 1,
+          title: '\u6784\u5EFA\u65E5\u5FD7'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTableBox',
+          style: { "paddingTop": "30px" }
+        }, void 0, (0, _jsx3.default)(_Logs2.default, {
+          logLabel: 'auto_build-' + username + '-' + this.props.projectId
+        }))), (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 2,
+          title: '\u57FA\u672C\u8BBE\u7F6E'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTableBox'
+        }, void 0, this.baseSeting())), (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 3,
+          title: '\u64CD\u4F5C'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTableBox'
+        }, void 0, this.handle()))))));
       }
     }]);
     return BuildingDetail;
@@ -11016,20 +9978,10 @@ module.exports =
     setTitle: _react2.default.PropTypes.func,
     store: _react2.default.PropTypes.object
   };
-  BuildingDetail.propTypes = {
-    projectId: _react2.default.PropTypes.string.isRequired,
-    buildingDetail: _react2.default.PropTypes.object,
-    getBuildingDetail: _react2.default.PropTypes.func,
-    onFastBuilding: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    onDeleteImage: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object,
-    reviseBuilding: _react2.default.PropTypes.func
-  };
   exports.default = BuildingDetail;
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11038,47 +9990,51 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _reactCookie = __webpack_require__(68);
+  var _reactCookie = __webpack_require__(69);
   
   var _reactCookie2 = _interopRequireDefault(_reactCookie);
   
-  var _utils = __webpack_require__(116);
+  var _utils = __webpack_require__(117);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -11090,7 +10046,7 @@ module.exports =
     function _class() {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this));
   
       _this.shutByHand = false;
       _this.xhr = null;
@@ -11180,13 +10136,7 @@ module.exports =
         });
         var _items = this.state.items;
         var items = _items.slice(_items.length - 100).map(function (item, i) {
-          return _react2.default.createElement(
-            'div',
-            { key: i },
-            (0, _utils.timeFormat)(item.log_time),
-            ' ',
-            item.log_info
-          );
+          return (0, _jsx3.default)('div', {}, i, (0, _utils.timeFormat)(item.log_time), ' ', item.log_info);
         });
         return _react2.default.createElement(
           'pre',
@@ -11198,13 +10148,10 @@ module.exports =
     return _class;
   }(_react2.default.Component);
   
-  _class.propTypes = {
-    logLabel: _react2.default.PropTypes.string
-  };
   exports.default = _class;
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11213,7 +10160,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getBuildingDetail
   var getBuildingDetail = function getBuildingDetail(state) {
@@ -11229,7 +10176,7 @@ module.exports =
   exports.default = makeGetBuildingDetail;
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11238,23 +10185,32 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _BuildingContainer = __webpack_require__(139);
+  var _BuildingContainer = __webpack_require__(140);
   
   var _BuildingContainer2 = _interopRequireDefault(_BuildingContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_BuildingContainer2.default, {});
+  
+  // import CodeBuildList from './CodeBuildList'
+  
   
   exports.default = {
     path: '/building',
@@ -11266,7 +10222,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_BuildingContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -11277,11 +10233,9 @@ module.exports =
       }))();
     }
   };
-  
-  // import CodeBuildList from './CodeBuildList'
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11290,19 +10244,19 @@ module.exports =
     value: true
   });
   
-  var _Building = __webpack_require__(140);
+  var _Building = __webpack_require__(141);
   
   var _Building2 = _interopRequireDefault(_Building);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
-  var _buildingImageListSelector = __webpack_require__(141);
+  var _buildingImageListSelector = __webpack_require__(142);
   
   var _buildingImageListSelector2 = _interopRequireDefault(_buildingImageListSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -11338,7 +10292,7 @@ module.exports =
   exports.default = BuildingContainer;
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11347,53 +10301,92 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _classnames = __webpack_require__(65);
+  var _classnames = __webpack_require__(66);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _Confirm = __webpack_require__(111);
+  var _Confirm = __webpack_require__(112);
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
-  var _utils = __webpack_require__(116);
+  var _utils = __webpack_require__(117);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('p', {
+    className: "hbPName"
+  }, void 0, '\u4EE3\u7801\u6784\u5EFA');
+  
+  var _ref2 = (0, _jsx3.default)('p', {
+    className: "hbPInfo"
+  }, void 0, 'Code Build');
+  
+  var _ref3 = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref4 = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref5 = (0, _jsx3.default)('img', {
+    className: 'mediaImg',
+    src: '/slImgJx.png'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref7 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '30%'
+  }, void 0, '\u955C\u50CF\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '30%'
+  }, void 0, '\u4EE3\u7801\u6E90'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u6784\u5EFA\u72B6\u6001'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u4E0A\u6B21\u6784\u5EFA\u7528\u65F6'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u6700\u8FD1\u6784\u5EFA'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u64CD\u4F5C')));
   
   var Building = function (_Component) {
     (0, _inherits3.default)(Building, _Component);
@@ -11401,7 +10394,7 @@ module.exports =
     function Building() {
       (0, _classCallCheck3.default)(this, Building);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Building).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (Building.__proto__ || (0, _getPrototypeOf2.default)(Building)).call(this));
   
       _this.state = {
         githubModalShow: false,
@@ -11425,29 +10418,16 @@ module.exports =
     }, {
       key: 'getAddBtn',
       value: function getAddBtn() {
-        return _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)("hbAdd", "left") },
-          _react2.default.createElement(
-            _Link2.default,
-            { to: "/building/create", className: (0, _classnames2.default)("hbAddBtn", "clearfix") },
-            _react2.default.createElement('div', { className: (0, _classnames2.default)("hbPlus", "left") }),
-            _react2.default.createElement(
-              'div',
-              { className: (0, _classnames2.default)("hbPlusInfo", "left") },
-              _react2.default.createElement(
-                'p',
-                { className: "hbPName" },
-                '代码构建'
-              ),
-              _react2.default.createElement(
-                'p',
-                { className: "hbPInfo" },
-                'Code Build'
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbAdd", "left")
+        }, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: "/building/create",
+          className: (0, _classnames2.default)("hbAddBtn", "clearfix")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbPlus", "left")
+        }), (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbPlusInfo", "left")
+        }, void 0, _ref, _ref2)));
       }
     }, {
       key: 'deleteLine',
@@ -11470,12 +10450,10 @@ module.exports =
             verticalAlign: 'middle',
             marginRight: '5px'
           };
-          return _react2.default.createElement(
-            'span',
-            null,
-            _react2.default.createElement('i', { className: 'icon-console', style: style }),
-            _name[1]
-          );
+          return (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+            className: 'icon-console',
+            style: style
+          }), _name[1]);
         }
         return null;
       }
@@ -11485,96 +10463,36 @@ module.exports =
         var _this2 = this;
   
         var data = this.props.buildingImageList;
-        if (!data.length) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '6', style: { "textAlign": "center" } },
-            '暂无数据~'
-          )
-        );
-        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '6', style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
-        if (data.length == 1 && data[0] == 0) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '6', style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
+        if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '6',
+          style: { "textAlign": "center" }
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
+        if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '6',
+          style: { "textAlign": "center" }
+        }, void 0, _ref3));
+        if (data.length == 1 && data[0] == 0) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '6',
+          style: { "textAlign": "center" }
+        }, void 0, _ref4));
         var body = [];
         data.map(function (item, i) {
           var buildStatus = ["还未构建", "构建成功", "构建中", "构建失败"][item.build_status];
           var buildUserTime = buildStatus == "还未构建" ? "还未构建" : Math.floor(item.use_time) + "秒";
           var prevUserTime = buildStatus == "还未构建" ? "还未构建" : (0, _utils.timeRange)(new Date(item.last_build));
-          body.push(_react2.default.createElement(
-            'tr',
-            { key: i },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'mediaItem' },
-                _react2.default.createElement(
-                  _Link2.default,
-                  { to: '/building/' + item.uuid },
-                  _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'mediaTxt' },
-                    item.repository
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              item.src_url
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              buildStatus
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              buildUserTime
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              prevUserTime
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  onClick: _this2.fastBuilding.bind(_this2, item.uuid),
-                  onSelect: _this2.deleteLine.bind(_this2, item.repository),
-                  bsStyle: 'primary', title: '构建', id: 'building-table-line-' + i },
-                _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '1' },
-                  '删除'
-                )
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'mediaItem'
+          }, void 0, (0, _jsx3.default)(_Link2.default, {
+            to: '/building/' + item.uuid
+          }, void 0, _ref5, (0, _jsx3.default)('span', {
+            className: 'mediaTxt'
+          }, void 0, item.repository)))), (0, _jsx3.default)('td', {}, void 0, item.src_url), (0, _jsx3.default)('td', {}, void 0, buildStatus), (0, _jsx3.default)('td', {}, void 0, buildUserTime), (0, _jsx3.default)('td', {}, void 0, prevUserTime), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+            onClick: _this2.fastBuilding.bind(_this2, item.uuid),
+            onSelect: _this2.deleteLine.bind(_this2, item.repository),
+            bsStyle: 'primary',
+            title: '\u6784\u5EFA',
+            id: 'building-table-line-' + i
+          }, void 0, _ref6))));
         });
         return body;
       }
@@ -11599,83 +10517,28 @@ module.exports =
         var _this3 = this;
   
         this.context.setTitle('构建镜像');
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF building-list' },
-          _react2.default.createElement(
-            'div',
-            { className: (0, _classnames2.default)("hbHd", "hbHdNoMb", "clearfix") },
-            this.getAddBtn(),
-            _react2.default.createElement(
-              'div',
-              { className: 'right slSearch' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-default icon-refresh', onClick: this.refresh.bind(this), title: '刷新' },
-                ' '
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'building-table TableTextLeft' },
-            _react2.default.createElement(
-              'table',
-              { className: 'table table-hover table-bordered' },
-              _react2.default.createElement(
-                'thead',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'th',
-                    { width: '30%' },
-                    '镜像名称'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '30%' },
-                    '代码源'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '10%' },
-                    '构建状态'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '10%' },
-                    '上次构建用时'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '10%' },
-                    '最近构建'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '10%' },
-                    '操作'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'tbody',
-                null,
-                this.getLines()
-              )
-            )
-          ),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '确定要删除此镜像吗?',
-            func: function func() {
-              _this3.props.onDeleteImage(_this3.state.delData);
-            },
-            ref: 'confirmModal'
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF building-list'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbHd", "hbHdNoMb", "clearfix")
+        }, void 0, this.getAddBtn(), (0, _jsx3.default)('div', {
+          className: 'right slSearch'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-default icon-refresh',
+          onClick: this.refresh.bind(this),
+          title: '\u5237\u65B0'
+        }, void 0, ' '))), (0, _jsx3.default)('div', {
+          className: 'building-table TableTextLeft'
+        }, void 0, (0, _jsx3.default)('table', {
+          className: 'table table-hover table-bordered'
+        }, void 0, _ref7, (0, _jsx3.default)('tbody', {}, void 0, this.getLines()))), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u786E\u5B9A\u8981\u5220\u9664\u6B64\u955C\u50CF\u5417?',
+          func: function func() {
+            _this3.props.onDeleteImage(_this3.state.delData);
+          },
+          ref: 'confirmModal'
+        }));
       }
     }]);
     return Building;
@@ -11684,18 +10547,10 @@ module.exports =
   Building.contextTypes = {
     setTitle: _react2.default.PropTypes.func
   };
-  Building.propTypes = {
-    buildingImageList: _react2.default.PropTypes.array,
-    onImageList: _react2.default.PropTypes.func,
-    onFastBuilding: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    onClearImageList: _react2.default.PropTypes.func,
-    onDeleteImage: _react2.default.PropTypes.func
-  };
   exports.default = Building;
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11704,7 +10559,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getImageList
   var getImageList = function getImageList(state) {
@@ -11720,7 +10575,7 @@ module.exports =
   exports.default = buildingImageListSelector;
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11729,23 +10584,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _BuildingCreateContainer = __webpack_require__(143);
+  var _BuildingCreateContainer = __webpack_require__(144);
   
   var _BuildingCreateContainer2 = _interopRequireDefault(_BuildingCreateContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_BuildingCreateContainer2.default, {});
   
   exports.default = {
     path: '/building/create',
@@ -11758,7 +10619,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_BuildingCreateContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -11771,7 +10632,7 @@ module.exports =
   };
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11780,21 +10641,21 @@ module.exports =
     value: true
   });
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _BuildingCreate = __webpack_require__(144);
+  var _BuildingCreate = __webpack_require__(145);
   
   var _BuildingCreate2 = _interopRequireDefault(_BuildingCreate);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
-  var _BuildingCreateSelector = __webpack_require__(145);
+  var _BuildingCreateSelector = __webpack_require__(146);
   
   var _BuildingCreateSelector2 = _interopRequireDefault(_BuildingCreateSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -11833,7 +10694,7 @@ module.exports =
   exports.default = BuildingCreateContainer;
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11842,45 +10703,49 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -11888,26 +10753,75 @@ module.exports =
       DropdownMenu = _reactBootstrap.Dropdown.Menu;
   
   var CodeStore = {
-    "Default": _react2.default.createElement(
-      'span',
-      null,
-      '选择代码仓库'
-    ),
-    "Github": _react2.default.createElement(
-      'span',
-      null,
-      _react2.default.createElement(
-        'i',
-        { className: 'icon-github' },
-        ' '
-      ),
-      _react2.default.createElement(
-        'i',
-        null,
-        'Github'
-      )
-    )
+    "Default": (0, _jsx3.default)('span', {}, void 0, '\u9009\u62E9\u4EE3\u7801\u4ED3\u5E93'),
+    "Github": (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+      className: 'icon-github'
+    }, void 0, ' '), (0, _jsx3.default)('i', {}, void 0, 'Github'))
   };
+  
+  var _ref = (0, _jsx3.default)('h1', {}, void 0, '\u4EE3\u7801\u6784\u5EFA');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u662F\u670D\u52A1\u8FD0\u884C\u7684\u6A21\u677F, \u6765\u6E90\u4E8E\u4EE3\u7801, \u57FA\u4E8E Dockerfile \u6784\u5EFA, \u9ED8\u8BA4\u76EE\u5F55\u5728\u6839\'/\'\u4E0B, \u6587\u4EF6\u540D Dockerfile .');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u9ED8\u8BA4\u4F1A\u4E0E\u60A8\u4E0B\u65B9\u4EE3\u7801\u6E90\u7684\u9879\u76EE\u540D\u79F0\u76F8\u540C'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u6807\u7B7E',
+    titleEnglish: 'IMAGE TAG',
+    titleInfo: '\u9ED8\u8BA4\u4E3Alatest'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u4EE3\u7801\u6E90',
+    titleEnglish: 'CODE SOURCES',
+    titleInfo: '\u4EE3\u7801\u6E90\u7684\u63CF\u8FF0\u7B49'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 0
+  }, 0, '\u52A0\u8F7D\u4E2D...');
+  
+  var _ref7 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u6784\u5EFA\u4F4D\u7F6E',
+    titleEnglish: 'CONSTRUCTION POSITION',
+    titleInfo: 'Dockerfile\u662F\u6307\u5BFC\u955C\u50CF\u6784\u5EFA\u7684\u63CF\u8FF0\u6587\u4EF6\uFF0C\u7CFB\u7EDF\u4F1A\u6839\u636E\u60A8\u8BBE\u7F6E\u7684\u6784\u5EFA\u76EE\u5F55\u67E5\u627EDockerfile\u5E76\u5728\u8BE5\u76EE\u5F55\u4E0B\u6267\u884C\u955C\u50CF\u6784\u5EFA\u547D\u4EE4\u3002'
+  });
+  
+  var _ref8 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, '\u6784\u5EFA\u76EE\u5F55');
+  
+  var _ref9 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, 'Dockerfile \u8DEF\u5F84');
+  
+  var _ref10 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u81EA\u52A8\u6784\u5EFA',
+    titleEnglish: 'AUTO BUILDING',
+    titleInfo: '\u5F53\u4EE3\u7801\u4ED3\u5E93\u4E2D\u7684\u9879\u76EE\u6709 push \u64CD\u4F5C\u7684\u65F6\u5019, \u8BE5\u955C\u50CF\u4E5F\u4F1A\u540C\u6B65\u81EA\u52A8\u91CD\u65B0\u6784\u5EFA'
+  });
+  
+  var _ref11 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u516C\u5F00',
+    titleEnglish: 'IS PUBLIC',
+    titleInfo: '\u662F\u5426\u5BF9\u5916\u5F00\u653E\u60A8\u7684\u955C\u50CF'
+  });
+  
+  var _ref12 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7B80\u4ECB',
+    titleEnglish: 'IMAGE SUMMARY',
+    titleInfo: '\u7B80\u5355\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref13 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8BE6\u7EC6\u63CF\u8FF0',
+    titleEnglish: 'IMAGE DETAIL',
+    titleInfo: '\u8BE6\u7EC6\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
   
   var BuildingCreate = function (_React$Component) {
     (0, _inherits3.default)(BuildingCreate, _React$Component);
@@ -11915,7 +10829,7 @@ module.exports =
     function BuildingCreate() {
       (0, _classCallCheck3.default)(this, BuildingCreate);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BuildingCreate).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (BuildingCreate.__proto__ || (0, _getPrototypeOf2.default)(BuildingCreate)).call(this));
   
       _this.state = {
         codeStoreKey: "Default",
@@ -12043,276 +10957,125 @@ module.exports =
       value: function render() {
         this.context.setTitle('代码构建');
         var user = this.context.store.getState().user_info;
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'acBox' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              '代码构建'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              '镜像是服务运行的模板, 来源于代码, 基于 Dockerfile 构建, 默认目录在根\'/\'下, 文件名 Dockerfile .'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '镜像名称',
-                titleEnglish: 'IMAGE NAME',
-                titleInfo: '默认会与您下方代码源的项目名称相同'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox ' + (this.state.isImageName ? "has-error" : "") },
-                _react2.default.createElement('input', {
-                  type: 'text',
-                  placeholder: '',
-                  className: 'form-control',
-                  ref: 'image_name',
-                  onChange: this.onImageNameChange.bind(this)
-                }),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'inputTip', ref: 'image_name_tip' },
-                  '镜像名称不能为空'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '镜像标签',
-                titleEnglish: 'IMAGE TAG',
-                titleInfo: '默认为latest'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('input', {
-                  type: 'text',
-                  placeholder: '',
-                  className: 'form-control',
-                  ref: 'image_tag',
-                  defaultValue: 'latest'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '代码源',
-                titleEnglish: 'CODE SOURCES',
-                titleInfo: '代码源的描述等'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                !user.github ? _react2.default.createElement(
-                  'a',
-                  { className: 'btn btn-primary', href: this.props.githubAuthURL },
-                  'Github 授权'
-                ) : _react2.default.createElement(
-                  _reactBootstrap.ButtonGroup,
-                  null,
-                  _react2.default.createElement(
-                    _reactBootstrap.Dropdown,
-                    { bsStyle: 'default', ref: 'repo_name',
-                      onSelect: this.selectCodeStore.bind(this),
-                      id: 'building-create-source-codestore' },
-                    _react2.default.createElement(
-                      DropdownToggle,
-                      null,
-                      CodeStore[this.state.codeStoreKey]
-                    ),
-                    _react2.default.createElement(
-                      DropdownMenu,
-                      null,
-                      _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        { eventKey: 'Github' },
-                        CodeStore["Github"]
-                      ),
-                      _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        { eventKey: 'Coding' },
-                        CodeStore["Coding"]
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.DropdownButton,
-                    { bsStyle: 'default', title: this.state.repoKey || "选择项目", onSelect: this.selectRepo.bind(this), id: 'building-create-source-repos' },
-                    this.props.repos.length != 0 ? this.props.repos.map(function (item, i) {
-                      return _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        { key: i, eventKey: item.repo_name },
-                        item.repo_name
-                      );
-                    }) : _react2.default.createElement(
-                      _reactBootstrap.MenuItem,
-                      { key: 0, eventKey: 0 },
-                      '加载中...'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    _reactBootstrap.Button,
-                    { className: 'icon-refresh', onClick: this.selectCodeStore.bind(this, this.state.codeStoreKey, true) },
-                    ' '
-                  )
-                ),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'inputTip', ref: 'btn_group_tip' },
-                  '代码仓库和项目名称不能为空'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '构建位置',
-                titleEnglish: 'CONSTRUCTION POSITION',
-                titleInfo: 'Dockerfile是指导镜像构建的描述文件，系统会根据您设置的构建目录查找Dockerfile并在该目录下执行镜像构建命令。'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox assBoxW100' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assPosition' },
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'form' },
-                    _react2.default.createElement(
-                      _reactBootstrap.Col,
-                      { sm: 2 },
-                      '构建目录'
-                    ),
-                    _react2.default.createElement(
-                      _reactBootstrap.Col,
-                      { sm: 5 },
-                      _react2.default.createElement('input', { className: 'form-control', defaultValue: '/', ref: 'dockerfile_name', type: 'text', placeholder: '/' })
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assPosition' },
-                  _react2.default.createElement(
-                    _reactBootstrap.FormGroup,
-                    { controlId: 'form' },
-                    _react2.default.createElement(
-                      _reactBootstrap.Col,
-                      { sm: 2 },
-                      'Dockerfile 路径'
-                    ),
-                    _react2.default.createElement(
-                      _reactBootstrap.Col,
-                      { sm: 5 },
-                      _react2.default.createElement('input', { className: 'form-control', defaultValue: 'Dockerfile', ref: 'dockerfile_path', type: 'text', placeholder: 'Dockerfile' })
-                    )
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '是否自动构建',
-                titleEnglish: 'AUTO BUILDING',
-                titleInfo: '当代码仓库中的项目有 push 操作的时候, 该镜像也会同步自动重新构建'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement(_Toggle2.default, {
-                  defaultChecked: this.state.isAutoBuilding == 1,
-                  onChange: this.getToggleValue.bind(this)
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '是否公开',
-                titleEnglish: 'IS PUBLIC',
-                titleInfo: '是否对外开放您的镜像'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement(_Toggle2.default, {
-                  defaultChecked: this.state.isPublic == 1,
-                  onChange: this.changePublicToggleValue.bind(this)
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '镜像简介',
-                titleEnglish: 'IMAGE SUMMARY',
-                titleInfo: '简单介绍镜像的信息'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('textarea', {
-                  placeholder: '镜像简介',
-                  className: 'form-control',
-                  defaultValue: '',
-                  ref: 'detail'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '详细描述',
-                titleEnglish: 'IMAGE DETAIL',
-                titleInfo: '详细介绍镜像的信息'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('textarea', {
-                  placeholder: '详细描述',
-                  className: 'form-control',
-                  defaultValue: '',
-                  ref: 'short_description'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem assItemNoborder' },
-              _react2.default.createElement(
-                'div',
-                { className: 'acBtn' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary ' + (!this.props.isBtnState.building ? "btn-loading" : ""),
-                    onClick: this.building.bind(this),
-                    disabled: !this.props.isBtnState.building },
-                  this.props.isBtnState.building ? "开始构建" : "构建中..."
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'acBox'
+        }, void 0, _ref, _ref2, (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'assBox ' + (this.state.isImageName ? "has-error" : "")
+        }, void 0, _react2.default.createElement('input', {
+          type: 'text',
+          placeholder: '',
+          className: 'form-control',
+          ref: 'image_name',
+          onChange: this.onImageNameChange.bind(this)
+        }), _react2.default.createElement(
+          'span',
+          { className: 'inputTip', ref: 'image_name_tip' },
+          '\u955C\u50CF\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A'
+        ))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement('input', {
+          type: 'text',
+          placeholder: '',
+          className: 'form-control',
+          ref: 'image_tag',
+          defaultValue: 'latest'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref5, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, !user.github ? (0, _jsx3.default)('a', {
+          className: 'btn btn-primary',
+          href: this.props.githubAuthURL
+        }, void 0, 'Github \u6388\u6743') : (0, _jsx3.default)(_reactBootstrap.ButtonGroup, {}, void 0, _react2.default.createElement(
+          _reactBootstrap.Dropdown,
+          { bsStyle: 'default', ref: 'repo_name',
+            onSelect: this.selectCodeStore.bind(this),
+            id: 'building-create-source-codestore' },
+          (0, _jsx3.default)(DropdownToggle, {}, void 0, CodeStore[this.state.codeStoreKey]),
+          (0, _jsx3.default)(DropdownMenu, {}, void 0, (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+            eventKey: 'Github'
+          }, void 0, CodeStore["Github"]), (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+            eventKey: 'Coding'
+          }, void 0, CodeStore["Coding"]))
+        ), (0, _jsx3.default)(_reactBootstrap.DropdownButton, {
+          bsStyle: 'default',
+          title: this.state.repoKey || "选择项目",
+          onSelect: this.selectRepo.bind(this),
+          id: 'building-create-source-repos'
+        }, void 0, this.props.repos.length != 0 ? this.props.repos.map(function (item, i) {
+          return (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+            eventKey: item.repo_name
+          }, i, item.repo_name);
+        }) : _ref6), (0, _jsx3.default)(_reactBootstrap.Button, {
+          className: 'icon-refresh',
+          onClick: this.selectCodeStore.bind(this, this.state.codeStoreKey, true)
+        }, void 0, ' ')), _react2.default.createElement(
+          'span',
+          { className: 'inputTip', ref: 'btn_group_tip' },
+          '\u4EE3\u7801\u4ED3\u5E93\u548C\u9879\u76EE\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A'
+        ))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref7, (0, _jsx3.default)('div', {
+          className: 'assBox assBoxW100'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'assPosition'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.FormGroup, {
+          controlId: 'form'
+        }, void 0, _ref8, (0, _jsx3.default)(_reactBootstrap.Col, {
+          sm: 5
+        }, void 0, _react2.default.createElement('input', { className: 'form-control', defaultValue: '/', ref: 'dockerfile_name', type: 'text', placeholder: '/' })))), (0, _jsx3.default)('div', {
+          className: 'assPosition'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.FormGroup, {
+          controlId: 'form'
+        }, void 0, _ref9, (0, _jsx3.default)(_reactBootstrap.Col, {
+          sm: 5
+        }, void 0, _react2.default.createElement('input', { className: 'form-control', defaultValue: 'Dockerfile', ref: 'dockerfile_path', type: 'text', placeholder: 'Dockerfile' })))))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref10, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)(_Toggle2.default, {
+          defaultChecked: this.state.isAutoBuilding == 1,
+          onChange: this.getToggleValue.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref11, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)(_Toggle2.default, {
+          defaultChecked: this.state.isPublic == 1,
+          onChange: this.changePublicToggleValue.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref12, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement('textarea', {
+          placeholder: '\u955C\u50CF\u7B80\u4ECB',
+          className: 'form-control',
+          defaultValue: '',
+          ref: 'detail'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref13, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement('textarea', {
+          placeholder: '\u8BE6\u7EC6\u63CF\u8FF0',
+          className: 'form-control',
+          defaultValue: '',
+          ref: 'short_description'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem assItemNoborder'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'acBtn'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary ' + (!this.props.isBtnState.building ? "btn-loading" : ""),
+          onClick: this.building.bind(this),
+          disabled: !this.props.isBtnState.building
+        }, void 0, this.props.isBtnState.building ? "开始构建" : "构建中...")))));
       }
     }]);
     return BuildingCreate;
@@ -12323,18 +11086,10 @@ module.exports =
     store: _react2.default.PropTypes.object,
     setBreadcrumb: _react2.default.PropTypes.func
   };
-  BuildingCreate.propTypes = {
-    repos: _react2.default.PropTypes.array,
-    githubAuthURL: _react2.default.PropTypes.string,
-    onReposLoad: _react2.default.PropTypes.func,
-    getGithubAuthURL: _react2.default.PropTypes.func,
-    onBuilding: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object
-  };
   exports.default = BuildingCreate;
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12344,7 +11099,7 @@ module.exports =
   });
   exports.makeGetGithubAuthURLSelector = undefined;
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getRepos = function getRepos(state) {
     return state.repos;
@@ -12369,7 +11124,7 @@ module.exports =
   exports.default = makeGetReposSelector;
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12378,21 +11133,25 @@ module.exports =
     value: true
   });
   
-  var _react = __webpack_require__(9);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _App = __webpack_require__(52);
+  var _App = __webpack_require__(53);
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _ErrorPage = __webpack_require__(13);
+  var _ErrorPage = __webpack_require__(14);
   
   var _ErrorPage2 = _interopRequireDefault(_ErrorPage);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _ = __webpack_require__(43);
+  var _ = __webpack_require__(44);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -12400,19 +11159,18 @@ module.exports =
   
     path: '/error',
     action: function action(_ref) {
-      var render = _ref.render;
-      var context = _ref.context;
-      var error = _ref.error;
+      var render = _ref.render,
+          context = _ref.context,
+          error = _ref.error;
   
-      return render(_react2.default.createElement(
-        _reactRedux.Provider,
-        { store: _.store },
-        _react2.default.createElement(
-          _App2.default,
-          { context: context, error: error },
-          _react2.default.createElement(_ErrorPage2.default, { error: error })
-        )
-      ), 500
+      return render((0, _jsx3.default)(_reactRedux.Provider, {
+        store: _.store
+      }, void 0, (0, _jsx3.default)(_App2.default, {
+        context: context,
+        error: error
+      }, void 0, (0, _jsx3.default)(_ErrorPage2.default, {
+        error: error
+      }))), 500
       // error.status || 500
       );
     }
@@ -12426,7 +11184,7 @@ module.exports =
       */
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12435,19 +11193,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ServiceListContainer = __webpack_require__(148);
+  var _ServiceListContainer = __webpack_require__(149);
   
   var _ServiceListContainer2 = _interopRequireDefault(_ServiceListContainer);
   
@@ -12462,6 +11224,8 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+  var _ref = (0, _jsx3.default)(_ServiceListContainer2.default, {});
+  
   exports.default = {
   
     path: '/serviceList',
@@ -12474,7 +11238,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ServiceListContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -12487,7 +11251,7 @@ module.exports =
   };
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12496,23 +11260,23 @@ module.exports =
     value: true
   });
   
-  var _ServiceList = __webpack_require__(149);
+  var _ServiceList = __webpack_require__(150);
   
   var _ServiceList2 = _interopRequireDefault(_ServiceList);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _services = __webpack_require__(93);
+  var _services = __webpack_require__(94);
   
-  var _serviceListSelector = __webpack_require__(94);
+  var _serviceListSelector = __webpack_require__(95);
   
   var _serviceListSelector2 = _interopRequireDefault(_serviceListSelector);
   
-  var _isLoadingSelector = __webpack_require__(81);
+  var _isLoadingSelector = __webpack_require__(82);
   
   var _isLoadingSelector2 = _interopRequireDefault(_isLoadingSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -12550,7 +11314,7 @@ module.exports =
   exports.default = ServiceListContainer;
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12559,49 +11323,53 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _Confirm = __webpack_require__(111);
+  var _Confirm = __webpack_require__(112);
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
@@ -12620,13 +11388,59 @@ module.exports =
   
   var title = '服务列表';
   
+  var _ref = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref2 = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref3 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref5 = (0, _jsx3.default)('img', {
+    className: 'mediaImg',
+    src: '/slImgJx.png'
+  });
+  
+  var _ref6 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u670D\u52A1\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u90E8\u7F72\u65F6\u95F4'), (0, _jsx3.default)('th', {
+    width: '45%'
+  }, void 0, '\u57DF\u540D'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u72B6\u6001'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref7 = (0, _jsx3.default)('div', {
+    className: 'hbAddBtn clearfix'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'hbPlus left'
+  }), (0, _jsx3.default)('div', {
+    className: 'hbPlusInfo left'
+  }, void 0, (0, _jsx3.default)('p', {
+    className: 'hbPName'
+  }, void 0, '\u65B0\u5EFA\u670D\u52A1'), (0, _jsx3.default)('p', {
+    className: 'hbPInfo'
+  }, void 0, 'Create Service')));
+  
+  var _ref8 = (0, _jsx3.default)('a', {
+    href: 'javascript:;',
+    className: 'hbAddExplain'
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u4E91\u670D\u52A1\uFF1F');
+  
   var ServiceList = function (_Component) {
     (0, _inherits3.default)(ServiceList, _Component);
   
     function ServiceList() {
       (0, _classCallCheck3.default)(this, ServiceList);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ServiceList).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (ServiceList.__proto__ || (0, _getPrototypeOf2.default)(ServiceList)).call(this));
   
       _this.state = {
         isLoop: true,
@@ -12669,33 +11483,18 @@ module.exports =
         var _this2 = this;
   
         var data = this.props.serviceList;
-        if (!data.length) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '5', style: { "textAlign": "center" } },
-            '暂无数据~'
-          )
-        );
-        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '5', style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
-        if (data.length == 1 && data[0] == 0) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '5', style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
+        if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '5',
+          style: { "textAlign": "center" }
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
+        if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '5',
+          style: { "textAlign": "center" }
+        }, void 0, _ref));
+        if (data.length == 1 && data[0] == 0) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '5',
+          style: { "textAlign": "center" }
+        }, void 0, _ref2));
         var body = [];
         data.map(function (item, i) {
           var serviceState = "";
@@ -12703,42 +11502,32 @@ module.exports =
           switch (item.fservice_status.toLowerCase()) {
             case Const.SERVICE_STATE.Running:
               serviceState = "运行";
-              option = _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  onClick: _this2.changeState.bind(_this2, item.fservice_name, "stop"),
-                  onSelect: _this2.deleteService.bind(_this2, item.fservice_name),
-                  bsStyle: "default",
-                  title: '关闭', id: 'volumes-table-line-' + i },
-                _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '1' },
-                  '删除'
-                )
-              );
+              option = (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+                onClick: _this2.changeState.bind(_this2, item.fservice_name, "stop"),
+                onSelect: _this2.deleteService.bind(_this2, item.fservice_name),
+                bsStyle: "default",
+                title: '\u5173\u95ED',
+                id: 'volumes-table-line-' + i
+              }, void 0, _ref3);
               break;
             case Const.SERVICE_STATE.Stopping:
               serviceState = "停止";
-              option = _react2.default.createElement(
-                _reactBootstrap.SplitButton,
-                {
-                  onClick: _this2.changeState.bind(_this2, item.fservice_name, "start"),
-                  onSelect: _this2.deleteService.bind(_this2, item.fservice_name),
-                  bsStyle: "primary",
-                  title: '启动', id: 'volumes-table-line-' + i },
-                _react2.default.createElement(
-                  _reactBootstrap.MenuItem,
-                  { eventKey: '1' },
-                  '删除'
-                )
-              );
+              option = (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+                onClick: _this2.changeState.bind(_this2, item.fservice_name, "start"),
+                onSelect: _this2.deleteService.bind(_this2, item.fservice_name),
+                bsStyle: "primary",
+                title: '启动',
+                id: 'volumes-table-line-' + i
+              }, void 0, _ref4);
               break;
             case Const.SERVICE_STATE.Pending:
               serviceState = "创建中";
-              option = _react2.default.createElement(_reactBootstrap.SplitButton, {
+              option = (0, _jsx3.default)(_reactBootstrap.SplitButton, {
                 onClick: _this2.deleteService.bind(_this2, item.fservice_name),
                 bsStyle: "danger",
-                title: '删除', id: 'volumes-table-line-' + i });
+                title: '删除',
+                id: 'volumes-table-line-' + i
+              }, void 0);
               break;
             default:
               serviceState = "";
@@ -12748,123 +11537,38 @@ module.exports =
             var url = obj.http_domain == null ? obj.tcp_domain : obj.http_domain;
             domain.push(url);
           });
-          body.push(_react2.default.createElement(
-            'tr',
-            { key: i },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'mediaItem' },
-                _react2.default.createElement(
-                  _Link2.default,
-                  { to: '/serviceList/' + item.fservice_name + '/1' },
-                  _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'mediaTxt' },
-                    item.fservice_name
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: 'color333' },
-                item.ltime
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                null,
-                domain.map(function (url, j) {
-                  return _react2.default.createElement(
-                    'p',
-                    { key: j },
-                    _react2.default.createElement(
-                      'a',
-                      { href: 'http://' + url, target: '_blank', className: 'clLink' },
-                      url
-                    )
-                  );
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                {
-                  className: 'mirror-state ' + (serviceState == "运行" ? "on" : "off") + ' tablePaddingLeft' },
-                serviceState
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'btn-group' },
-                option
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'mediaItem'
+          }, void 0, (0, _jsx3.default)(_Link2.default, {
+            to: '/serviceList/' + item.fservice_name + '/1'
+          }, void 0, _ref5, (0, _jsx3.default)('span', {
+            className: 'mediaTxt'
+          }, void 0, item.fservice_name)))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('span', {
+            className: 'color333'
+          }, void 0, item.ltime)), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {}, void 0, domain.map(function (url, j) {
+            return (0, _jsx3.default)('p', {}, j, (0, _jsx3.default)('a', {
+              href: 'http://' + url,
+              target: '_blank',
+              className: 'clLink'
+            }, void 0, url));
+          }))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'mirror-state ' + (serviceState == "运行" ? "on" : "off") + ' tablePaddingLeft'
+          }, void 0, serviceState)), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'btn-group'
+          }, void 0, option))));
         });
         return body;
       }
     }, {
       key: 'getDemoTable',
       value: function getDemoTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-hover table-bordered services-table' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '服务名称'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '10%' },
-                '部署时间'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '45%' },
-                '域名'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '10%' },
-                '状态'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '15%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            { ref: 'tableBody' },
-            this.getTableBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-hover table-bordered services-table'
+        }, void 0, _ref6, _react2.default.createElement(
+          'tbody',
+          { ref: 'tableBody' },
+          this.getTableBody()
+        ));
       }
     }, {
       key: 'searchService',
@@ -12890,78 +11594,36 @@ module.exports =
         var _this3 = this;
   
         this.context.setTitle(title);
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'hbHd clearfix' },
-            _react2.default.createElement(
-              'div',
-              { className: 'hbAdd left' },
-              _react2.default.createElement(
-                _Link2.default,
-                { to: '/choseImage' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'hbAddBtn clearfix' },
-                  _react2.default.createElement('div', { className: 'hbPlus left' }),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'hbPlusInfo left' },
-                    _react2.default.createElement(
-                      'p',
-                      { className: 'hbPName' },
-                      '新建服务'
-                    ),
-                    _react2.default.createElement(
-                      'p',
-                      { className: 'hbPInfo' },
-                      'Create Service'
-                    )
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'hbAddExplain' },
-                '什么是容器云服务？'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'slSearch right' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-default icon-refresh', onClick: this.refresh.bind(this), title: '刷新' },
-                ' '
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'search' },
-                _react2.default.createElement('input', { type: 'text', placeholder: '搜索服务', ref: 'searchInput', className: "slSearchInp" }),
-                _react2.default.createElement(
-                  'a',
-                  { type: 'button', className: 'slSearchBtn icon-select', onClick: this.searchService.bind(this) },
-                  ' '
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'sl-bd TableTextLeft' },
-            this.getDemoTable()
-          ),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '您确定要删除此服务吗?',
-            ref: 'confirmModal',
-            func: function func() {
-              _this3.props.onDeleteService(_this3.state.delData);
-            }
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'hbHd clearfix'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'hbAdd left'
+        }, void 0, (0, _jsx3.default)(_Link2.default, {
+          to: '/choseImage'
+        }, void 0, _ref7), _ref8), (0, _jsx3.default)('div', {
+          className: 'slSearch right'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-default icon-refresh',
+          onClick: this.refresh.bind(this),
+          title: '\u5237\u65B0'
+        }, void 0, ' '), (0, _jsx3.default)('div', {
+          className: 'search'
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u670D\u52A1', ref: 'searchInput', className: "slSearchInp" }), (0, _jsx3.default)('a', {
+          type: 'button',
+          className: 'slSearchBtn icon-select',
+          onClick: this.searchService.bind(this)
+        }, void 0, ' ')))), (0, _jsx3.default)('div', {
+          className: 'sl-bd TableTextLeft'
+        }, void 0, this.getDemoTable()), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u5220\u9664\u6B64\u670D\u52A1\u5417?',
+          ref: 'confirmModal',
+          func: function func() {
+            _this3.props.onDeleteService(_this3.state.delData);
+          }
+        }));
       }
     }]);
     return ServiceList;
@@ -12971,20 +11633,10 @@ module.exports =
     setTitle: _react.PropTypes.func.isRequired,
     store: _react.PropTypes.object
   };
-  ServiceList.propTypes = {
-    serviceList: _react2.default.PropTypes.array,
-    onServiceListLoad: _react2.default.PropTypes.func,
-    onDeleteService: _react2.default.PropTypes.func,
-    stepFunc: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    onChangeState: _react2.default.PropTypes.func,
-    onClearServiceList: _react2.default.PropTypes.func,
-    isLoading: _react2.default.PropTypes.bool
-  };
   exports.default = ServiceList;
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12993,19 +11645,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _DeployServiceContainer = __webpack_require__(151);
+  var _DeployServiceContainer = __webpack_require__(152);
   
   var _DeployServiceContainer2 = _interopRequireDefault(_DeployServiceContainer);
   
@@ -13020,6 +11676,8 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+  var _ref = (0, _jsx3.default)(_DeployServiceContainer2.default, {});
+  
   exports.default = {
   
     path: '/addService',
@@ -13032,7 +11690,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_DeployServiceContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -13045,7 +11703,7 @@ module.exports =
   };
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13054,33 +11712,33 @@ module.exports =
     value: true
   });
   
-  var _DeployService = __webpack_require__(152);
+  var _DeployService = __webpack_require__(153);
   
   var _DeployService2 = _interopRequireDefault(_DeployService);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _deployService = __webpack_require__(107);
+  var _deployService = __webpack_require__(108);
   
-  var _volumes = __webpack_require__(97);
+  var _volumes = __webpack_require__(98);
   
-  var _volumesListSelector = __webpack_require__(98);
+  var _volumesListSelector = __webpack_require__(99);
   
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
-  var _deployDataSelector = __webpack_require__(157);
+  var _deployDataSelector = __webpack_require__(158);
   
   var _deployDataSelector2 = _interopRequireDefault(_deployDataSelector);
   
-  var _isSidebarOpenSelector = __webpack_require__(70);
+  var _isSidebarOpenSelector = __webpack_require__(71);
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -13138,7 +11796,7 @@ module.exports =
   exports.default = DeployServiceContainer;
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13147,59 +11805,63 @@ module.exports =
     value: true
   });
   
-  var _assign = __webpack_require__(19);
+  var _assign = __webpack_require__(20);
   
   var _assign2 = _interopRequireDefault(_assign);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ServiceStep = __webpack_require__(153);
+  var _ServiceStep = __webpack_require__(154);
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -13218,7 +11880,7 @@ module.exports =
     function AutoStartUpToggle(props) {
       (0, _classCallCheck3.default)(this, AutoStartUpToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AutoStartUpToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (AutoStartUpToggle.__proto__ || (0, _getPrototypeOf2.default)(AutoStartUpToggle)).call(this, props));
   
       _this.state = {
         autoStart: true
@@ -13244,7 +11906,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           defaultChecked: this.state.autoStart,
           onChange: this.handClick.bind(this)
         });
@@ -13253,10 +11915,91 @@ module.exports =
     return AutoStartUpToggle;
   }(_react.Component);
   
-  AutoStartUpToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    isState: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)('option', {
+    value: 'TCP'
+  }, void 0, 'TCP');
+  
+  var _ref2 = (0, _jsx3.default)('option', {
+    value: 'UDP'
+  }, void 0, 'UDP');
+  
+  var _ref3 = (0, _jsx3.default)('option', {
+    value: 'HTTP'
+  }, void 0, 'HTTP');
+  
+  var _ref4 = (0, _jsx3.default)('option', {
+    value: 'TCP'
+  }, void 0, 'TCP');
+  
+  var _ref5 = (0, _jsx3.default)('option', {
+    value: 'no'
+  }, void 0, '\u4E0D\u53EF\u8BBF\u95EE');
+  
+  var _ref6 = (0, _jsx3.default)('option', {
+    value: 'outsisde'
+  }, void 0, '\u5916\u90E8\u8303\u56F4');
+  
+  var _ref7 = (0, _jsx3.default)('option', {
+    value: 'inside'
+  }, void 0, '\u5185\u90E8\u8303\u56F4');
+  
+  var _ref8 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u5BB9\u5668\u7AEF\u53E3'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u534F\u8BAE'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u65B9\u5F0F'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u8303\u56F4'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref9 = (0, _jsx3.default)('option', {
+    value: '-1'
+  }, '-1', '\u8BF7\u9009\u62E9\u6570\u636E\u5377');
+  
+  var _ref10 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u6570\u636E\u5377\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u5BB9\u5668\u8DEF\u5F84'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u662F\u5426\u53EA\u8BFB'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref11 = (0, _jsx3.default)('div', {
+    className: 'astLine'
+  });
+  
+  var _ref12 = (0, _jsx3.default)(_ServiceStep2.default, {
+    dataActive: 'third'
+  });
+  
+  var _ref13 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7AEF\u53E3',
+    titleEnglish: 'PORT',
+    titleInfo: '\u5BB9\u5668\u7AEF\u53E3\u4F1A\u6620\u5C04\u5230\u4E3B\u673A\u7AEF\u53E3\u4E0A'
+  });
+  
+  var _ref14 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u73AF\u5883\u53D8\u91CF',
+    titleEnglish: 'ENVIRONMENT VARIABLE',
+    titleInfo: ''
+  });
+  
+  var _ref15 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u542F\u52A8\u547D\u4EE4',
+    titleEnglish: 'JRE',
+    titleInfo: '\u542F\u52A8\u547D\u4EE4\u89E3\u91CA\u8BF4\u660E '
+  });
+  
+  var _ref16 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u81EA\u52A8\u542F\u52A8',
+    titleEnglish: 'AUTO UPDATE SETTING',
+    titleInfo: '\u81EA\u52A8\u542F\u52A8\u8BBE\u7F6E'
+  });
   
   var AddService = function (_Component2) {
     (0, _inherits3.default)(AddService, _Component2);
@@ -13264,7 +12007,7 @@ module.exports =
     function AddService(props) {
       (0, _classCallCheck3.default)(this, AddService);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AddService).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (AddService.__proto__ || (0, _getPrototypeOf2.default)(AddService)).call(this, props));
   
       _this2.state = {
         isPort: false,
@@ -13434,161 +12177,56 @@ module.exports =
             sd = this.props.deployData;
         if (sd && sd.container && sd.container.length) data = this.props.deployData.container;
         var tr = data.map(function (item, i) {
-          return _react2.default.createElement(
-            'tr',
-            { key: item.at },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'iaBox' },
-                  _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this6.isPortRepeat.bind(_this6, i), className: 'form-control form-control-sm', defaultValue: item.container_port }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'iaOk icon-right', onClick: _this6.focusVal.bind(_this6, i) },
-                    ' '
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'iaDel icon-delete', onClick: _this6.delVal.bind(_this6, i) },
-                    ' '
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'protocol', selected: item.protocol },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'TCP' },
-                    'TCP'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'UDP' },
-                    'UDP'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'access_mode', selected: item.access_mode },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'HTTP' },
-                    'HTTP'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'TCP' },
-                    'TCP'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'no' },
-                    '不可访问'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'access_scope', selected: item.access_scope },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'outsisde' },
-                    '外部范围'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'inside' },
-                    '内部范围'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this6.delPortTr.bind(_this6, item.at) },
-                ' '
-              )
-            )
-          );
+          return (0, _jsx3.default)('tr', {}, item.at, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'iaBox'
+          }, void 0, _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this6.isPortRepeat.bind(_this6, i), className: 'form-control form-control-sm', defaultValue: item.container_port }), (0, _jsx3.default)('span', {
+            className: 'iaOk icon-right',
+            onClick: _this6.focusVal.bind(_this6, i)
+          }, void 0, ' '), (0, _jsx3.default)('span', {
+            className: 'iaDel icon-delete',
+            onClick: _this6.delVal.bind(_this6, i)
+          }, void 0, ' ')))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'protocol', selected: item.protocol },
+            _ref,
+            _ref2
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'access_mode', selected: item.access_mode },
+            _ref3,
+            _ref4,
+            _ref5
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'access_scope', selected: item.access_scope },
+            _ref6,
+            _ref7
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+            href: 'javascript:;',
+            className: 'delBtn',
+            onClick: _this6.delPortTr.bind(_this6, item.at)
+          }, void 0, ' ')));
         });
         return tr;
       }
     }, {
       key: 'getPortTable',
       value: function getPortTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-bordered' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '容器端口'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '协议'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '访问方式'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '访问范围'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            { ref: 'tab_container_body' },
-            this.getPortTableBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-bordered'
+        }, void 0, _ref8, _react2.default.createElement(
+          'tbody',
+          { ref: 'tab_container_body' },
+          this.getPortTableBody()
+        ));
       }
     }, {
       key: 'addPortTr',
@@ -13609,12 +12247,9 @@ module.exports =
         var volumeList = this.props.volumeList;
         var options = volumeList.map(function (item, i) {
           if (item.disk_status == "unused") {
-            return _react2.default.createElement(
-              'option',
-              { key: i, value: item.disk_name },
-              item.disk_name,
-              ' '
-            );
+            return (0, _jsx3.default)('option', {
+              value: item.disk_name
+            }, i, item.disk_name, ' ');
           } else {
             return;
           }
@@ -13623,63 +12258,28 @@ module.exports =
             sd = this.props.deployData;
         if (sd && sd.volume && sd.volume.length) data = this.props.deployData.volume;
         var tr = data.map(function (item, i) {
-          return _react2.default.createElement(
-            'tr',
-            { key: item.at },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'volumn_name', defaultValue: item.disk_name,
-                    onChange: _this7.isSaveRepeat.bind(_this7, i)
-                  },
-                  _react2.default.createElement(
-                    'option',
-                    { key: '-1', value: '-1' },
-                    '请选择数据卷'
-                  ),
-                  options
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement('input', { type: 'text', defaultValue: item.disk_path, className: 'form-control',
-                  onBlur: _this7.isPathValidata.bind(_this7), ref: 'container_path' })
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'label',
-                  null,
-                  _react2.default.createElement('input', { type: 'checkbox', defaultChecked: item.readonly == 1 }),
-                  ' 是否只读'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this7.delSaveTr.bind(_this7, item.at) },
-                ' '
-              )
-            )
-          );
+          return (0, _jsx3.default)('tr', {}, item.at, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'volumn_name', defaultValue: item.disk_name,
+              onChange: _this7.isSaveRepeat.bind(_this7, i)
+            },
+            _ref9,
+            options
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement('input', { type: 'text', defaultValue: item.disk_path, className: 'form-control',
+            onBlur: _this7.isPathValidata.bind(_this7), ref: 'container_path' }))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('input', {
+            type: 'checkbox',
+            defaultChecked: item.readonly == 1
+          }), ' \u662F\u5426\u53EA\u8BFB'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+            href: 'javascript:;',
+            className: 'delBtn',
+            onClick: _this7.delSaveTr.bind(_this7, item.at)
+          }, void 0, ' ')));
         });
   
         return tr;
@@ -13687,43 +12287,13 @@ module.exports =
     }, {
       key: 'getSaveTable',
       value: function getSaveTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-bordered' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '数据卷名称'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '容器路径'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '是否只读'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            { ref: 'tab_storage_body' },
-            this.getSaveTableBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-bordered'
+        }, void 0, _ref10, _react2.default.createElement(
+          'tbody',
+          { ref: 'tab_storage_body' },
+          this.getSaveTableBody()
+        ));
       }
     }, {
       key: 'addSaveTr',
@@ -13744,30 +12314,19 @@ module.exports =
             sd = this.props.deployData;
         if (sd && sd.env && sd.env.length) data = this.props.deployData.env;
         var keyBox = data.map(function (item, i) {
-          return _react2.default.createElement(
-            'div',
-            { key: item.at, className: 'astKeyItem' },
-            _react2.default.createElement(
-              'div',
-              { className: 'astInp' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvKey.bind(_this8, i), ref: 'env_key', placeholder: '键', defaultValue: item.env_key })
-            ),
-            _react2.default.createElement('div', { className: 'astLine' }),
-            _react2.default.createElement(
-              'div',
-              { className: 'astInp' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvValue.bind(_this8), ref: 'env_value', placeholder: '值', defaultValue: item.env_value })
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'astDel' },
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this8.delEnvironmentData.bind(_this8, item.at) },
-                ' '
-              )
-            )
-          );
+          return (0, _jsx3.default)('div', {
+            className: 'astKeyItem'
+          }, item.at, (0, _jsx3.default)('div', {
+            className: 'astInp'
+          }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvKey.bind(_this8, i), ref: 'env_key', placeholder: '\u952E', defaultValue: item.env_key })), _ref11, (0, _jsx3.default)('div', {
+            className: 'astInp'
+          }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvValue.bind(_this8), ref: 'env_value', placeholder: '\u503C', defaultValue: item.env_value })), (0, _jsx3.default)('div', {
+            className: 'astDel'
+          }, void 0, (0, _jsx3.default)('a', {
+            href: 'javascript:;',
+            className: 'delBtn',
+            onClick: _this8.delEnvironmentData.bind(_this8, item.at)
+          }, void 0, ' ')));
         });
         return keyBox;
       }
@@ -13935,140 +12494,74 @@ module.exports =
             n++;
           }
         });
-        var volumeLength = n == 0 ? "暂时没有数据卷" : '目前有' + n + '个数据卷';
-        return _react2.default.createElement(
+        var volumeLength = n == 0 ? "暂时没有数据卷" : '\u76EE\u524D\u6709' + n + '\u4E2A\u6570\u636E\u5377';
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTab'
+        }, void 0, _ref12, (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref13, (0, _jsx3.default)('div', {
+          className: 'astBox'
+        }, void 0, this.getPortTable()), (0, _jsx3.default)('div', {
+          className: 'assBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.addPortTr.bind(this)
+        }, void 0, '\u6DFB\u52A0'), _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+          title: '\u5B58\u50A8\u8BBE\u7F6E',
+          titleEnglish: 'SAVE SETTING',
+          titleInfo: volumeLength
+        }), _react2.default.createElement(
           'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'asTab' },
-            _react2.default.createElement(_ServiceStep2.default, { dataActive: 'third' }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '端口',
-                titleEnglish: 'PORT',
-                titleInfo: '容器端口会映射到主机端口上'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'astBox' },
-                this.getPortTable()
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBtnBox' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary', onClick: this.addPortTr.bind(this) },
-                  '添加'
-                ),
-                _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '存储设置',
-                titleEnglish: 'SAVE SETTING',
-                titleInfo: volumeLength
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'astBox', ref: 'tab_save_box' },
-                this.getSaveTable()
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBtnBox' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary', onClick: this.addSaveTr.bind(this) },
-                  '添加'
-                ),
-                _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '环境变量',
-                titleEnglish: 'ENVIRONMENT VARIABLE',
-                titleInfo: ''
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'astBox', ref: 'tab_env_box' },
-                this.getEnvironment()
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBtnBox' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary', onClick: this.addEnvironmentData.bind(this) },
-                  '添加'
-                ),
-                _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '启动命令',
-                titleEnglish: 'JRE',
-                titleInfo: '启动命令解释说明 '
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('input', { className: 'form-control',
-                  type: 'text',
-                  ref: 'command',
-                  placeholder: '如果输入，会覆盖镜像的默认启动命令'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem assItemNoborder' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '自动启动',
-                titleEnglish: 'AUTO UPDATE SETTING',
-                titleInfo: '自动启动设置'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement(AutoStartUpToggle, { isState: data.auto_startup == 1, getToggle: this.getIsStartUp.bind(this) })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'fixedBottom' },
-              _react2.default.createElement(
-                'div',
-                { style: { "marginLeft": this.props.isSidebarOpen ? "209px" : "79px" } },
-                _react2.default.createElement(
-                  _Link2.default,
-                  { className: 'btn btn-primary', to: '/configContainer', onClick: this.onChangeStep.bind(this) },
-                  '上一步'
-                ),
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary ' + (!this.props.isBtnState.deploy ? "btn-loading" : ""),
-                    onClick: this.deployService.bind(this),
-                    disabled: !this.props.isBtnState.deploy },
-                  this.props.isBtnState.deploy ? "部署" : "部署中..."
-                )
-              )
-            )
-          )
-        );
+          { className: 'astBox', ref: 'tab_save_box' },
+          this.getSaveTable()
+        ), (0, _jsx3.default)('div', {
+          className: 'assBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.addSaveTr.bind(this)
+        }, void 0, '\u6DFB\u52A0'), _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref14, _react2.default.createElement(
+          'div',
+          { className: 'astBox', ref: 'tab_env_box' },
+          this.getEnvironment()
+        ), (0, _jsx3.default)('div', {
+          className: 'assBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.addEnvironmentData.bind(this)
+        }, void 0, '\u6DFB\u52A0'), _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref15, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement('input', { className: 'form-control',
+          type: 'text',
+          ref: 'command',
+          placeholder: '\u5982\u679C\u8F93\u5165\uFF0C\u4F1A\u8986\u76D6\u955C\u50CF\u7684\u9ED8\u8BA4\u542F\u52A8\u547D\u4EE4'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem assItemNoborder'
+        }, void 0, _ref16, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)(AutoStartUpToggle, {
+          isState: data.auto_startup == 1,
+          getToggle: this.getIsStartUp.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'fixedBottom'
+        }, void 0, (0, _jsx3.default)('div', {
+          style: { "marginLeft": this.props.isSidebarOpen ? "209px" : "79px" }
+        }, void 0, (0, _jsx3.default)(_Link2.default, {
+          className: 'btn btn-primary',
+          to: '/configContainer',
+          onClick: this.onChangeStep.bind(this)
+        }, void 0, '\u4E0A\u4E00\u6B65'), (0, _jsx3.default)('button', {
+          className: 'btn btn-primary ' + (!this.props.isBtnState.deploy ? "btn-loading" : ""),
+          onClick: this.deployService.bind(this),
+          disabled: !this.props.isBtnState.deploy
+        }, void 0, this.props.isBtnState.deploy ? "部署" : "部署中...")))));
       }
     }]);
     return AddService;
@@ -14078,26 +12571,10 @@ module.exports =
     setTitle: _react.PropTypes.func.isRequired,
     store: _react.PropTypes.object
   };
-  AddService.propTypes = {
-    onDeployService: _react2.default.PropTypes.func,
-    volumeList: _react2.default.PropTypes.array,
-    onVolumeListLoad: _react2.default.PropTypes.func,
-    deployData: _react2.default.PropTypes.object,
-    onDeploySenior: _react2.default.PropTypes.func,
-    onAddPort: _react2.default.PropTypes.func,
-    onDelPort: _react2.default.PropTypes.func,
-    onAddSave: _react2.default.PropTypes.func,
-    onDelSave: _react2.default.PropTypes.func,
-    onAddEnv: _react2.default.PropTypes.func,
-    onDelEnv: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    isSidebarOpen: _react2.default.PropTypes.bool,
-    isBtnState: _react2.default.PropTypes.object
-  };
   exports.default = AddService;
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14106,19 +12583,23 @@ module.exports =
     value: true
   });
   
-  var _react = __webpack_require__(9);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ServiceStep = __webpack_require__(154);
+  var _ServiceStep = __webpack_require__(155);
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
-  var _classnames = __webpack_require__(65);
+  var _classnames = __webpack_require__(66);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
@@ -14132,6 +12613,18 @@ module.exports =
    * This source code is licensed under the MIT license found in the
    * LICENSE.txt file in the root directory of this source tree.
    */
+  
+  var _ref = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '1'), '\u955C\u50CF\u6765\u6E90');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, 'MIRRIR SOURCE');
+  
+  var _ref3 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '2'), '\u5BB9\u5668\u914D\u7F6E');
+  
+  var _ref4 = (0, _jsx3.default)('p', {}, void 0, 'CONFIGURATION');
+  
+  var _ref5 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '3'), '\u9AD8\u7EA7\u8BBE\u7F6E');
+  
+  var _ref6 = (0, _jsx3.default)('p', {}, void 0, 'ADVANCED SETUP');
   
   var ServiceStep = _react2.default.createClass({
     displayName: 'ServiceStep',
@@ -14157,97 +12650,45 @@ module.exports =
           break;
       }
   
-      return _react2.default.createElement(
-        'div',
-        { className: _ServiceStep2.default.ssHd },
-        _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(activeFirst) },
-          _react2.default.createElement('div', { className: (0, _classnames2.default)(_ServiceStep2.default.ssHdIcon, "icon-mirrorceer") }),
-          _react2.default.createElement(
-            'div',
-            { className: _ServiceStep2.default.ssHdName },
-            _react2.default.createElement(
-              'p',
-              null,
-              _react2.default.createElement(
-                'span',
-                null,
-                '1'
-              ),
-              '镜像来源'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'MIRRIR SOURCE'
-            )
-          ),
-          _react2.default.createElement('div', { className: _ServiceStep2.default.ssActiveIcon })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(activeSecond) },
-          _react2.default.createElement('div', { className: (0, _classnames2.default)(_ServiceStep2.default.ssHdIcon, "icon-containerconfig") }),
-          _react2.default.createElement(
-            'div',
-            { className: _ServiceStep2.default.ssHdName },
-            _react2.default.createElement(
-              'p',
-              null,
-              _react2.default.createElement(
-                'span',
-                null,
-                '2'
-              ),
-              '容器配置'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'CONFIGURATION'
-            )
-          ),
-          _react2.default.createElement('div', { className: _ServiceStep2.default.ssActiveIcon })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(activeThird) },
-          _react2.default.createElement('div', { className: (0, _classnames2.default)(_ServiceStep2.default.ssHdIcon, "icon-advancedset") }),
-          _react2.default.createElement(
-            'div',
-            { className: _ServiceStep2.default.ssHdName },
-            _react2.default.createElement(
-              'p',
-              null,
-              _react2.default.createElement(
-                'span',
-                null,
-                '3'
-              ),
-              '高级设置'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'ADVANCED SETUP'
-            )
-          ),
-          _react2.default.createElement('div', { className: _ServiceStep2.default.ssActiveIcon })
-        )
-      );
+      return (0, _jsx3.default)('div', {
+        className: _ServiceStep2.default.ssHd
+      }, void 0, (0, _jsx3.default)('div', {
+        className: (0, _classnames2.default)(activeFirst)
+      }, void 0, (0, _jsx3.default)('div', {
+        className: (0, _classnames2.default)(_ServiceStep2.default.ssHdIcon, "icon-mirrorceer")
+      }), (0, _jsx3.default)('div', {
+        className: _ServiceStep2.default.ssHdName
+      }, void 0, _ref, _ref2), (0, _jsx3.default)('div', {
+        className: _ServiceStep2.default.ssActiveIcon
+      })), (0, _jsx3.default)('div', {
+        className: (0, _classnames2.default)(activeSecond)
+      }, void 0, (0, _jsx3.default)('div', {
+        className: (0, _classnames2.default)(_ServiceStep2.default.ssHdIcon, "icon-containerconfig")
+      }), (0, _jsx3.default)('div', {
+        className: _ServiceStep2.default.ssHdName
+      }, void 0, _ref3, _ref4), (0, _jsx3.default)('div', {
+        className: _ServiceStep2.default.ssActiveIcon
+      })), (0, _jsx3.default)('div', {
+        className: (0, _classnames2.default)(activeThird)
+      }, void 0, (0, _jsx3.default)('div', {
+        className: (0, _classnames2.default)(_ServiceStep2.default.ssHdIcon, "icon-advancedset")
+      }), (0, _jsx3.default)('div', {
+        className: _ServiceStep2.default.ssHdName
+      }, void 0, _ref5, _ref6), (0, _jsx3.default)('div', {
+        className: _ServiceStep2.default.ssActiveIcon
+      })));
     }
   });
   
   exports.default = (0, _withStyles2.default)(_ServiceStep2.default)(ServiceStep);
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(155);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(156);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -14257,56 +12698,39 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ServiceStep.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ServiceStep.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, ".ServiceStep_ssHd_2b7{\n  height:80px;\n  border-bottom:1px solid #e0e0e0;\n  padding:25px 0 0 80px;\n}\n.ServiceStep_ssHdBox_pGl{\n  display:inline-block;\n  width:30%;\n  height:55px;\n  position: relative;\n}\n.ServiceStep_ssHdIcon_1W1{\n  width:45px;\n  height:43px;\n  display:inline-block;\n  position: relative;\n}\n.ServiceStep_ssHdIcon_1W1:before{\n  display:inline-block;\n  font-size:45px;\n  position: absolute;\n  color:#afafaf;\n}\n.ServiceStep_ssHdName_1W4{\n  display:inline-block;\n  margin-left:4px;\n  vertical-align: top;\n  margin-top:5px;\n}\n.ServiceStep_ssHdName_1W4 p{\n  color:#afafaf;\n  font-size:16px;\n  line-height:16px;\n}\n.ServiceStep_ssHdName_1W4 p:last-child{\n  font-size:10px;\n  margin-top:3px;\n}\n.ServiceStep_ssHdName_1W4 span{\n  display:inline-block;\n  font-size:20px;\n  position: relative;\n  top:2px;\n  margin-right:4px;\n}\n.ServiceStep_ssActiveIcon_jSI{\n  position: absolute;\n  height:20px;\n  width:160px;\n  background: url(" + __webpack_require__(156) + ") 0 -137px no-repeat;\n  top:53px;\n  left:-12px;\n  display: none;\n}\n.ServiceStep_ssHdBox_pGl.ServiceStep_ssActive_1cJ .ServiceStep_ssHdName_1W4 p{\n  color:#2dafdf;\n}\n.ServiceStep_ssHdFirst_1jI.ServiceStep_ssActive_1cJ .ServiceStep_ssHdIcon_1W1:before{\n  color:#2dafdf;\n}\n.ServiceStep_ssHdSecond_12T.ServiceStep_ssActive_1cJ .ServiceStep_ssHdIcon_1W1:before{\n  color:#2dafdf;\n}\n.ServiceStep_ssHdThird_3Pp.ServiceStep_ssActive_1cJ  .ServiceStep_ssHdIcon_1W1:before{\n  color:#2dafdf;\n}\n.ServiceStep_ssActive_1cJ .ServiceStep_ssActiveIcon_jSI{\n  display:block;\n}\n\n", "", {"version":3,"sources":["/./components/ServiceStep/ServiceStep.css"],"names":[],"mappings":"AAAA;EACE,YAAY;EACZ,gCAAgC;EAChC,sBAAsB;CACvB;AACD;EACE,qBAAqB;EACrB,UAAU;EACV,YAAY;EACZ,mBAAmB;CACpB;AACD;EACE,WAAW;EACX,YAAY;EACZ,qBAAqB;EACrB,mBAAmB;CACpB;AACD;EACE,qBAAqB;EACrB,eAAe;EACf,mBAAmB;EACnB,cAAc;CACf;AACD;EACE,qBAAqB;EACrB,gBAAgB;EAChB,oBAAoB;EACpB,eAAe;CAChB;AACD;EACE,cAAc;EACd,eAAe;EACf,iBAAiB;CAClB;AACD;EACE,eAAe;EACf,eAAe;CAChB;AACD;EACE,qBAAqB;EACrB,eAAe;EACf,mBAAmB;EACnB,QAAQ;EACR,iBAAiB;CAClB;AACD;EACE,mBAAmB;EACnB,YAAY;EACZ,YAAY;EACZ,6DAA4D;EAC5D,SAAS;EACT,WAAW;EACX,cAAc;CACf;AACD;EACE,cAAc;CACf;AACD;EACE,cAAc;CACf;AACD;EACE,cAAc;CACf;AACD;EACE,cAAc;CACf;AACD;EACE,cAAc;CACf","file":"ServiceStep.css","sourcesContent":[".ssHd{\n  height:80px;\n  border-bottom:1px solid #e0e0e0;\n  padding:25px 0 0 80px;\n}\n.ssHdBox{\n  display:inline-block;\n  width:30%;\n  height:55px;\n  position: relative;\n}\n.ssHdIcon{\n  width:45px;\n  height:43px;\n  display:inline-block;\n  position: relative;\n}\n.ssHdIcon:before{\n  display:inline-block;\n  font-size:45px;\n  position: absolute;\n  color:#afafaf;\n}\n.ssHdName{\n  display:inline-block;\n  margin-left:4px;\n  vertical-align: top;\n  margin-top:5px;\n}\n.ssHdName p{\n  color:#afafaf;\n  font-size:16px;\n  line-height:16px;\n}\n.ssHdName p:last-child{\n  font-size:10px;\n  margin-top:3px;\n}\n.ssHdName span{\n  display:inline-block;\n  font-size:20px;\n  position: relative;\n  top:2px;\n  margin-right:4px;\n}\n.ssActiveIcon{\n  position: absolute;\n  height:20px;\n  width:160px;\n  background: url(\"./serviceStepIcon.png\") 0 -137px no-repeat;\n  top:53px;\n  left:-12px;\n  display: none;\n}\n.ssHdBox.ssActive .ssHdName p{\n  color:#2dafdf;\n}\n.ssHdFirst.ssActive .ssHdIcon:before{\n  color:#2dafdf;\n}\n.ssHdSecond.ssActive .ssHdIcon:before{\n  color:#2dafdf;\n}\n.ssHdThird.ssActive  .ssHdIcon:before{\n  color:#2dafdf;\n}\n.ssActive .ssActiveIcon{\n  display:block;\n}\n\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "._2b75{height:80px;border-bottom:1px solid #e0e0e0;padding:25px 0 0 80px}.pGlS{width:30%;height:55px}._1W1I,.pGlS{display:inline-block;position:relative}._1W1I{width:45px;height:43px}._1W1I:before{display:inline-block;font-size:45px;position:absolute;color:#afafaf}._1W4-{display:inline-block;margin-left:4px;vertical-align:top;margin-top:5px}._1W4- p{color:#afafaf;font-size:16px;line-height:16px}._1W4- p:last-child{font-size:10px;margin-top:3px}._1W4- span{display:inline-block;font-size:20px;position:relative;top:2px;margin-right:4px}.jSIi{position:absolute;height:20px;width:160px;background:url(" + __webpack_require__(157) + ") 0 -137px no-repeat;top:53px;left:-12px;display:none}._1jIQ._1cJ9 ._1W1I:before,._3Ppd._1cJ9 ._1W1I:before,._12TS._1cJ9 ._1W1I:before,.pGlS._1cJ9 ._1W4- p{color:#2dafdf}._1cJ9 .jSIi{display:block}", ""]);
   
   // exports
   exports.locals = {
-  	"ssHd": "ServiceStep_ssHd_2b7",
-  	"ssHdBox": "ServiceStep_ssHdBox_pGl",
-  	"ssHdIcon": "ServiceStep_ssHdIcon_1W1",
-  	"ssHdName": "ServiceStep_ssHdName_1W4",
-  	"ssActiveIcon": "ServiceStep_ssActiveIcon_jSI",
-  	"ssActive": "ServiceStep_ssActive_1cJ",
-  	"ssHdFirst": "ServiceStep_ssHdFirst_1jI",
-  	"ssHdSecond": "ServiceStep_ssHdSecond_12T",
-  	"ssHdThird": "ServiceStep_ssHdThird_3Pp"
+  	"ssHd": "_2b75",
+  	"ssHdBox": "pGlS",
+  	"ssHdIcon": "_1W1I",
+  	"ssHdName": "_1W4-",
+  	"ssActiveIcon": "jSIi",
+  	"ssActive": "_1cJ9",
+  	"ssHdFirst": "_1jIQ",
+  	"ssHdSecond": "_12TS",
+  	"ssHdThird": "_3Ppd"
   };
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACcCAYAAAD4d6D7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphMjM4ZTVhYy1lMzYyLTQwYjctOTQzMy00ZTQ5ZjBlNWNiZjEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Mjc1QzIwQUQ1NkNBMTFFNjhGRjdDNUQzQTNENEZENUYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Mjc1QzIwQUM1NkNBMTFFNjhGRjdDNUQzQTNENEZENUYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphMjM4ZTVhYy1lMzYyLTQwYjctOTQzMy00ZTQ5ZjBlNWNiZjEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTIzOGU1YWMtZTM2Mi00MGI3LTk0MzMtNGU0OWYwZTVjYmYxIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+fMcl2gAAFK9JREFUeNrsXQmYVMURruUSUAQEREXx4oon3oJE0cQjmigSNWq8gLhGjSaCeCDxJoKCZ8SwGm/FaIwYc5h4ABEPPKKCGhCUQ+UQcEXOZVk2/e/7+9vex9vZmdk3s7P1ur6vvp3tee/1VPf/uqurqquL9n5unsREPzZ8jeHdDY83fIfhlfV96IwBu6R9bUlJSUHLUlxcLJ5qUpMYnnG84bcNv2D4UMOdDF9neB47sU0jag9NsqgH4HGG3zL8d8MHsexbDFr83N7wzYY/N3yl4a0KuB00yaIegOisNwz/0/AhLMP0dIPhXQ33NjzA8If8rqPh0YY/MzzUcKsCA54WWdQD8Bins/qw7DvDN7GzrueoUWn4ecP7GT7F8Ee8dlvD4ziKXGq4ZQPKrUkW9QD8oeFphv/ldNYqw6PYWdcaLo24D533rOF9DZ9heBbLtzN8l+G5hi8y3CKP8mqSRT0AjzL8muGXDB/GstWGb2FnjTT8TRp1bDL8lOE9DZ9j+FOWdzF8L//H8rB5DuXUJIt6APY3PNXwK4b7OZ01hp01wvCKLOpC5z3GzhvElSVoZ8MTDM9mebMY5dMki3oAHm54Mvlwlq0xfJvh3QxfZXh5DHVuNPyw4Z4cLRawHIB40PAnhs823LQedWiSRT0A9+IIMZUjhu2sseysKwwvy0Hd5YbvN9yD+tOXLO9u+FEq/Mdl+ExNsiQGgGOoI1l6ip013PDXefgNGwzfx866jgo/qJfhpzN8liZZEgPAFziVWDrJ8OWG2+Xxd7TgyHGJ4SKnfGKGz9EkS2IA+AfDexh+jm9sK44YMC0My7FpoQl1pDkS2NU6shxeiSMMX5Dh8zTJkqhFCBptoOG+hl9nWQfqTjAtnCHx+I1dgk70X+pIXVk2y/kd/8nyuZpkSZwZ5i2aK9Bw/3NMC08aftfwD2KoE77WVyXwQuzLssUcIfZ2Rq/6kiZZEgNAS2i4fQz/kg0KgjvqZTZ27yzq6mb4T4anGz6SZXB3jeR3JSH9LS7SJEsiANiZf9GAE2hagItqtTPdvCeB/atrGnXAXQUvAWxip1Exx2rxDq4W4QZby2vj9qlqkkU9APeg2WJRaGRAZ93EN3s8OxP3nUs959ZaVpkIWbqBOhlWhXBPwYPwOIGAaJLlztQI/QleiTvZ0fUhTbKoB2A36kUzDf+MZXDa/1pqhhstNXyx4e8Z/kuKVSb4VxJEilwr1bFzLxo+gCvFBc5zWxu+m+WtWe/nXDRsk8XUqEWWxADwP6GVoevjXBdxDzrop1zdTQutMjFCfGz4HgmiiUHvSGAc/pHhDyKet5b2OgQJTGZZK4JgQobyaJIlMQCcGyrbLc23FavM7xs+mTqRUI/q5nTu6RIEek5O43fsRnZpQYbyaJIlMQDEFHW5o8Pg7X2DU1OPNJ4xiSaIC6hzLeH0tidXinWZIexC4DHqT64NbXiG8miSJTEAxCpuHFdxt3KqKuJo8DFXfXUp0htpetjJ8I5U8DdkYEPrHZMNTZMsiVsFw46FDTdwnD/EVV4zrvrmhJTw2gj3VBSADU2TLImzAy40PFgCY+2LITMEXFkXSnaBlpnY0OIiTbIkBoDt+XcGV3twWb3Psu05Jc3ktJYOZWJD6xizfJpkUQ3AJlSU36DiPdZpwFdp8zpTqkPPe1Gxh7O/Ty3PzsSGBn3rj6wbppSj6ymTFlkSAcATJXDWP8sOaEG72SDnOijQE9lZw5y3vK+zyuzJsiLa4tK1oeF6eCKw7bEpzSH/5nP3y1AeTbIkBoCPOyYKdM6NtIHdVssq83bqOWOk2riLKQxh5whLR6TJkyEb2s9S2NBQJ7IO7Co1gzb7cPTKhDTJkhgAljgmArzBl9L21aqOVeZVEavMXxjen9dYGxr8sk/XYYaAPoYtkqc6ZQDEwxnKo0mWxADwcr7RU1jWjiMCDKjnSergTbvK7O2sMuHwv44jC5T88hT3t+OIgZGlmB2/iUAAIB7LUB5NsiRqEfIO7VgnSE1XFBoPkb517eiaSX2oF++7UapDnmpT6i/jahJZp1qz/G8SxO4NJiCyIU2yJM4M8w8JLPdDDH/FMrimYOF/JQ1FGhuyS+uo7yza4G6XzfdN/IQKfxykSZZE2QExbTzIaWckdSThqu89KuW7ZFFXlJ90tuR234QmWRIDQFdxHsXOu5urRmuWmB2yr6Wi2vykCJHHRvJ8+Ek1yZIYAFqCnQyBlXvStFBJvWcY9Z4ralllRvlJV3IkAhAQH5dvP6kmWRIDQHFsYGemscqszU96JzsSI9GaBpZbkyyJAWA6q8wZsrmf9AkJPAuXSTwJgeIkTbIkBoCpVpmY2lw/6YFcKc4v8HbQJEtiABi1yvyaZghEncCW9n4jagtNsjQaKqqs9Is2Tx6AnjwAPXnyAPTkAejJkwegJw9AT57yAMAYj2tFCBLsZwdLsMEHUcGvxfHgTI5snTRpUsHLM2DAAI88UhypahHahGMRpkiQGmNrCQy3CElC5Ej/RtYm2uRRC0Ac+IeMUgjuPNwpd8/hgJ91Mjv0qAJvC23yqAUgRgNsM8SBf4c55XBbwamPrKSIBn7H+e5wduw0dnQhkTZ51AIQznrEw8Fx727gRucdxzJ8h1XN36g7ncCOtHQYOxo61Z4NLLs2eVQDEFEh/2YnWIJCfrTTCVFkO9ceDG0JYeuIMGmoA5+1yaMegFC8bVqz16n/YBp6Oc377fSG6epNlu3IlWZDkDZ51ANwa+czdv3vk8Xb3prTnps5tKHyJmuTJ1GLkB0kCEmHAXGoVO+DTTXdXc7rx0n10QmFQtrkSYwZpjM7AB0xXDZP+NhGgpQXyCiF3CzbsrxQN+9ok0c9AC2hI25lx6CDcHz9NexIeA9sRils5sFhggcWeJtok6egKc4j5Tuxg24Jla+XIF/eaAkOcm7bSNpGmzzqARgmbAYv4XT1lYK20iaPagBiS+OxEqQ100Da5FGlA0bRF8o66wsPvoYF4I4x1uk+q0sDya1NHrUAhKUfLqoxMdS1uwT7bt2cylhtTpH8RZZok0ctAK2vEy6nfvWsAxu9H5Yg58qgCL0T7qtXCIxcRZZok0ctAG20B9KPhSNE8B1yoixK89nIoYJzc5Fz5Vyno2C6QO5mhDhNd67vR4DYaJQ4SJs8agGIFR7i3RB2dIjzvRshgkiQOzn1XMqGr41wPAGyg57tdBTS1CLRN7JK3cO6DpXNI0v6EDDTJfszNrTJoxqAyAZvk+9YshG/UREi69ng3dgBUfmP4exvys/zJUjgaBN9l4WutZElR0vNPRcH87vBGcqkTR71ABwZmpqgw/SXus/FLWMHdGeHLA19v5hgwLkdSOBY14mTLxMgR0l10Cfy8V2doUza5FEPwJ2d/3GEPfY9tMtQKUcHdwqVb8tndcvgWdvwnu85ZbtlKJM2eRK1CMHhftdzmrlRUse3IRbuGQm8BKdHPAtT1s8lOHUI6XBThax3kCDbKBz+v5Wa/tX6GMu1yZMYM0xbNtw8NmQH5zsk58Z5ah9KcCaafcY8iU7e2IQdOoMdvLfznXX4474RUh0oulpqbgKqL2mTRz0AXeV7BBsUTvjnJTjs5WTqM6DPqFj3lNTnYjRhB3/IDrexdwh5srF3q9iBmKYeyoG82uRp9JRuMIKNAnYJxxv8ToKzNjIJyiySzc/nXcmVKA58/iYPcmuTRz0AXcJxqDgTDccWVNSzfpxEdJcEZ3eUNlAbaJNHPQCxBfHbmOq/RILM8w1J2uRRpQNGUZzptAohNZc2edQD0JOnWAFYHtOz4AfdK6Zn4dDnE/i5LMN7tcmjHoBvxdC40Hvg9tq5ns/CuW1XSnAEqu2waRk+Q5s86gGIo6jmZ3EvMglcw8Y9U6rtaPOz/C0wZcDuht1m1o42l4p9JqRNHvUAhGtpDwmc+KszaNxZNF+4jYvzcnfl37lpPgt1w3EPY671s67m79mHZpJMSJs8iViE2PN00XgT61jNvcjG7cr/Ye2HURe+0edY9hz1p7pAgIBQeBJ+4KwiH5Eg4mQUf1c2pE2exKyCv+D0A9vY2ymUc5A9Ww0uK7ihwuFJZWz0HrwuCgSI2Wvm6G6o9zwJQp/iIG3yJMYMg8ZDJO+QWhrvTTb2kDQadzGv61vLAgHfn5Xi+zhImzzqAeiOCHjj4SMtpf6CEQURv+9nAYK+vB+K/grqXD246sy1EVebPCrInxPiyQPQkwegJ08egJ48AD158gD05AHoyZMHoKcEADCG41qx1xYhR6dKkB8P6Wv/LEEUSL025GRyTKulkpKSgpWnuLjYIy5E9U3Ri+SMUyRI8GMJ0SM45gARJP0lddKfQiNt8hQ81Tck/yGnsxAxcpVUR5DYBI6NibTJoxqAiBr5IT/fwhFiDP/aow2QIapXI2kLbfI0+ikYEcKI6jiCn2dwhLDpy9yUFOGRAedoXO1cN4ufEXOHrKIIzERsHNKmPS75iZPTJo9qAOItf0FqZoIayE443/BjUnO/xLLQ/cudzzbQ8xwJ0pq1dL5Dsp8rJMguOiuHcmqTR/UUjAb9q9NZCzlaIGvAFhJE+CKMaWyadYzl9Q/z2RV8nh15urG+ljmSUZs86gGIN7s7P2P1B1vIvhIEdCLYssjRg9axscNbDctYvs4ZgYp4fx8+bxeOFsL6zsmRjNrkUQ9Ae+jyLL7t1lKN9GJHstHnS7D7DIc+nyRBmluX1rN8O163kPcdKdVpyvDc25ypKleHPWuTR70OaKeOKKMrMkgdRB1pQxrP/87wfVTikTsv6oy1b0L15mIK1iSP+hHwI/5FUu2oo0i/SrOzXNpQS2cdyHrceuMmbfKoB+CD1HkwOj5P+1guqCf1qmasL1dGXm3yqAfgAgl2fUGnwXH2yC7fpY6Gx3bFlwy/y7+j6uhoPO9VCdJgVLK+BTmSUZs86gEIeoL6kZ1ulkdcAxPGeE41SHsLL8IB/DuC5eN5XZjwvHJncZDrnHra5FG7COlBk0JPxzQxOsIsgaQ7SD9hz11D42Nv7SKOMjBNNDd8oQSeA5xctDZk1hjDDsURBiMJEGQV+DRG+bTJo3YExBTyLzba04ZvcswPUW/zHU5nTaINDGaHM/h3F+pbwuvGRTzjccfccRPrnc3fsUM95dImj2oAIv5tikSf7IjGWxWhI13Az+iUgbL5gX/4/2Qq5aDzI3SoVXx+mPA7pkrqMz1SkTZ51AMQIUfdnJGgOxtrG44AYcIZGU05TV0ktWcAqOSUVc7rT4+45gynru6sX/h7rspSJm3yqAfgKfyMuLehEqQhKyVHRXXY0yfflLqPOl3E68Sxj7m0zqlrLuufxO9OzVImbfKoB6A1SUzPYIoDpRsZbK/rkOb1NqFPtnqTNnnUA/Cr0EhQF1lX044ZAmJFmtcf4ow22ZA2edQD8M/8DCX7dglCz9uTW0XcY/Ps9Unjrcb3fUP3udTKqWt31m9PHXomS5m0yaMegKOlOv3sZfz8DXlixD0oq6Bd7F6pzqUcpiLaxZrz+qcirnnSqWsu6xd+Hp2lTNrkUQ9ANFZ/CVxOYYLBtU2oDLatCfw8QIL0ttuHrtme5Sfx//ul2hNhqQ2fH6aX+Huy3QKpTR7V1MzRm46hbas3TQgwpiKkCGHmfwjdhzcb+yD6sdOO5+pwMTsL01kLXotjCYZF1P1zZ0q8VgKPwQcRHZutHqhJHrWUamP6JxK4lRawI8Puq5a0c/1CouMKceLkA4Z/E3HvFuwY7MNAePseUT8g5o3pDS6P35he+wgY9TZb3yne/I6yefwb3E4wzN5p+FzaxdpJcPAfFPRHUrz9HZ0RpRfry6UDX5s8qgG4M990u+fhSIkOvnR1qBFZTJF47mROcQ9wastFCJM2edQtQsI0mNMRppwTc6jDzObzN7K+wTmqR5s86gG4l2Pnejfi+y7OdJMutZDoINB3HXvaXjmSUZs86gFoQ4qiojd6soFnU19qU8fz2/C62bwvKqp4m1C9cZM2edQDcKqjTA+TasMsdo8h7BzeACxPYZRdKoGzvWXEinISvx/P6204/EF2BS7BkVi9QvXGTdrkUW+GQWNjp7/dzI09sDCiIhIYYUiVHAHcJD1YLa50/m/L1aOlWRwt0EnwIszkSGHTXMyRwA63PgdmmIKRx5th0p+CoUxbdxYatTc7q4wmCtjThqdZx3Befx6f3ZTPs501l/XlcgrWJI96M4x9w/EG22xSW0pg1XezSc13ru8UGjE6Op+tKeJRCSKVB7HD1kj+sklpk0c9AIWNeD85imaGTB2u7WxILdehs29oIFm1yaMegOnYvbCTDNsWr3ZWlPAgDOQ1L0vjSVOmTR71ABROP5iGdmcnDXS++4zfNybSJk+jXIRkQl9yhBhLHWoD/45leWNL6K1NnsI3w/hzQjx5AHryAPTkyQPQU/JWwftMmp9YBJ67Q5EMPairFBUV5aU+vOwLFy6UiUtEnlzsX/w4VsGNmh5dVFnlyM3bdGOA/o91bT34QlNwIlvjmfmr5OYPVggGv1H7d5ITdtoy53XeN+vbKm5i6hx9YCc5rsuWHoCVCVYCH5qzUu74uFSaG0SMO7iT9N+utQefB2B+6e5PSuWBT1dKy6ZF8vtDO8vBnVp68HkA5pdu/nCFPD1vlWzVvIlM6NtZ9m6/hQefB2D+CA0w4r1l8vcv1kj7LZrKA4d1lu5bt/Dg8wDMH1WYZrhs+jKZsmStdG7VTP7Yr7N03bK5B58HYP6orKJSLn5rqby9bH0V+ABCgLE+4BtjwHesB58HYLq0ZuMmKX59qcwsLauahjEdY1r24PMAzBt9u2GTDJm2ROZ8t6FqQYKFCRYoHnwegHmjZesrZNBrS2ThmvIq0wxMNDDVePB5AOaNvlyzUQaZkXDpuo1VRmoYq2G09uDzAMwbfbaqXAYbEJaWVVS56+C2czHowecBmHP6yCxIit9YKqvLN8lpu7aRa/btULUj3YPPAzBv9M7y9XLxm0tlfUWlDOnRVloY1HnweQDmlaYuWStD314m5ZuCJvPg8wDMO/3zyzVy9XvLqj578HkANgghlrBN8ybevRYD/V+AAQAbI/LsTYfpDAAAAABJRU5ErkJggg=="
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14315,7 +12739,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getServiceDetail
   var getDeployData = function getDeployData(state) {
@@ -14331,7 +12755,7 @@ module.exports =
   exports.default = makeGetDeployData;
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14340,19 +12764,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ChoseImageContainer = __webpack_require__(159);
+  var _ChoseImageContainer = __webpack_require__(160);
   
   var _ChoseImageContainer2 = _interopRequireDefault(_ChoseImageContainer);
   
@@ -14367,6 +12795,8 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+  var _ref = (0, _jsx3.default)(_ChoseImageContainer2.default, {});
+  
   exports.default = {
   
     path: '/choseImage',
@@ -14379,7 +12809,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ChoseImageContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -14392,7 +12822,7 @@ module.exports =
   };
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14401,25 +12831,25 @@ module.exports =
     value: true
   });
   
-  var _ChoseImage = __webpack_require__(160);
+  var _ChoseImage = __webpack_require__(161);
   
   var _ChoseImage2 = _interopRequireDefault(_ChoseImage);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _deployService = __webpack_require__(107);
+  var _deployService = __webpack_require__(108);
   
-  var _imageList = __webpack_require__(95);
+  var _imageList = __webpack_require__(96);
   
-  var _imageListSelector = __webpack_require__(96);
+  var _imageListSelector = __webpack_require__(97);
   
   var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
   
-  var _deployDataSelector = __webpack_require__(157);
+  var _deployDataSelector = __webpack_require__(158);
   
   var _deployDataSelector2 = _interopRequireDefault(_deployDataSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -14451,7 +12881,7 @@ module.exports =
   exports.default = ChoseImageContainer;
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14460,57 +12890,61 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ServiceStep = __webpack_require__(153);
+  var _ServiceStep = __webpack_require__(154);
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _Tabs = __webpack_require__(161);
+  var _Tabs = __webpack_require__(162);
   
   var _Tabs2 = _interopRequireDefault(_Tabs);
   
-  var _Tab = __webpack_require__(162);
+  var _Tab = __webpack_require__(163);
   
   var _Tab2 = _interopRequireDefault(_Tab);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _utils = __webpack_require__(116);
+  var _utils = __webpack_require__(117);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -14518,12 +12952,48 @@ module.exports =
                        * Created by zhangsai on 16/9/18.
                        */
   
+  var _ref = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref2 = (0, _jsx3.default)('img', {
+    className: 'mediaImg',
+    src: '/slImgJx.png'
+  });
+  
+  var _ref3 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u955C\u50CF\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u6700\u8FD1\u66F4\u65B0'), (0, _jsx3.default)('th', {
+    width: '35%'
+  }, void 0, '\u62C9\u53D6\u547D\u4EE4'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u955C\u50CF\u63CF\u8FF0'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref4 = (0, _jsx3.default)(_ServiceStep2.default, {
+    dataActive: 'first'
+  });
+  
+  var _ref5 = (0, _jsx3.default)('div', {
+    className: 'left'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u9009\u62E9\u955C\u50CF',
+    titleEnglish: 'SELECT MIRROR',
+    titleInfo: '\u8FD9\u91CC\u91CC\u6C47\u805A\u4E86\u6784\u5EFA\u4EA7\u751F\u7684\u6240\u6709\u5BB9\u5668\u4E91\u955C\u50CF'
+  }));
+  
+  var _ref6 = (0, _jsx3.default)('a', {
+    type: 'button',
+    className: 'slSearchBtn icon-select'
+  }, void 0, ' ');
+  
   var ChooseImage = function (_Component) {
     (0, _inherits3.default)(ChooseImage, _Component);
   
     function ChooseImage() {
       (0, _classCallCheck3.default)(this, ChooseImage);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ChooseImage).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ChooseImage.__proto__ || (0, _getPrototypeOf2.default)(ChooseImage)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ChooseImage, [{
@@ -14561,201 +13031,74 @@ module.exports =
   
         var data = this.props.imageList;
         if (!data.length) {
-          return _react2.default.createElement(
-            'tr',
-            null,
-            _react2.default.createElement(
-              'td',
-              { colSpan: '5', style: { "textAlign": "center" } },
-              '暂无数据~'
-            )
-          );
+          return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+            colSpan: '5',
+            style: { "textAlign": "center" }
+          }, void 0, '\u6682\u65E0\u6570\u636E~'));
         }
-        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '5', style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
+        if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '5',
+          style: { "textAlign": "center" }
+        }, void 0, _ref));
         var body = [];
         data.map(function (item, i) {
-          body.push(_react2.default.createElement(
-            'tr',
-            { key: i },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'mediaItem' },
-                _react2.default.createElement(
-                  _Link2.default,
-                  { to: '/imageDetail/' + item.uuid },
-                  _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'mediaTxt' },
-                    item.repository
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: 'cl6' },
-                (0, _utils.timeRange)(new Date(item.update_time))
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: 'cl6' },
-                'docker pull index.boxlinker.com/' + item.repository
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: 'cl3' },
-                item.short_description
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-sm btn-primary',
-                  onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid) },
-                '部署'
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'mediaItem'
+          }, void 0, (0, _jsx3.default)(_Link2.default, {
+            to: '/imageDetail/' + item.uuid
+          }, void 0, _ref2, (0, _jsx3.default)('span', {
+            className: 'mediaTxt'
+          }, void 0, item.repository)))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('span', {
+            className: 'cl6'
+          }, void 0, (0, _utils.timeRange)(new Date(item.update_time)))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('span', {
+            className: 'cl6'
+          }, void 0, 'docker pull index.boxlinker.com/' + item.repository)), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('span', {
+            className: 'cl3'
+          }, void 0, item.short_description)), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('button', {
+            className: 'btn btn-sm btn-primary',
+            onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid)
+          }, void 0, '\u90E8\u7F72'))));
         });
         return body;
       }
     }, {
       key: 'getDemoTable',
       value: function getDemoTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-hover table-bordered' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '镜像名称'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '10%' },
-                '最近更新'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '35%' },
-                '拉取命令'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '镜像描述'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '10%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            null,
-            this.getTableBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-hover table-bordered'
+        }, void 0, _ref3, (0, _jsx3.default)('tbody', {}, void 0, this.getTableBody()));
       }
     }, {
       key: 'render',
       value: function render() {
         this.context.setTitle(title);
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'asTab' },
-            _react2.default.createElement(_ServiceStep2.default, { dataActive: 'first' }),
-            _react2.default.createElement(
-              'div',
-              { className: 'asHd clearfix' },
-              _react2.default.createElement(
-                'div',
-                { className: 'left' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '选择镜像',
-                  titleEnglish: 'SELECT MIRROR',
-                  titleInfo: '这里里汇聚了构建产生的所有容器云镜像'
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'right' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'search' },
-                  _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }),
-                  _react2.default.createElement(
-                    'a',
-                    { type: 'button', className: 'slSearchBtn icon-select' },
-                    ' '
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'asTabs' },
-              _react2.default.createElement(
-                _Tabs2.default,
-                { defaultActiveKey: 1, onSelect: this.tabSelect.bind(this), id: 'asTabs' },
-                _react2.default.createElement(
-                  _Tab2.default,
-                  { eventKey: 1, title: '我的镜像' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'asTableBox TableTextLeft' },
-                    this.getDemoTable()
-                  )
-                ),
-                _react2.default.createElement(
-                  _Tab2.default,
-                  { eventKey: 3, title: '平台镜像' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'asTableBox TableTextLeft' },
-                    this.getDemoTable()
-                  )
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTab'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'asHd clearfix'
+        }, void 0, _ref5, (0, _jsx3.default)('div', {
+          className: 'right'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'search'
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref6))), (0, _jsx3.default)('div', {
+          className: 'asTabs'
+        }, void 0, (0, _jsx3.default)(_Tabs2.default, {
+          defaultActiveKey: 1,
+          onSelect: this.tabSelect.bind(this),
+          id: 'asTabs'
+        }, void 0, (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 1,
+          title: '\u6211\u7684\u955C\u50CF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTableBox TableTextLeft'
+        }, void 0, this.getDemoTable())), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 3,
+          title: '\u5E73\u53F0\u955C\u50CF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTableBox TableTextLeft'
+        }, void 0, this.getDemoTable()))))));
       }
     }]);
     return ChooseImage;
@@ -14765,29 +13108,22 @@ module.exports =
     setTitle: _react.PropTypes.func.isRequired,
     store: _react2.default.PropTypes.object
   };
-  ChooseImage.propTypes = {
-    imageList: _react2.default.PropTypes.array,
-    onImageListLoad: _react2.default.PropTypes.func,
-    deployData: _react2.default.PropTypes.object,
-    goToConfigContainer: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func
-  };
   exports.default = ChooseImage;
-
-/***/ },
-/* 161 */
-/***/ function(module, exports) {
-
-  module.exports = require("react-bootstrap/lib/Tabs");
 
 /***/ },
 /* 162 */
 /***/ function(module, exports) {
 
-  module.exports = require("react-bootstrap/lib/Tab");
+  module.exports = require("react-bootstrap/lib/Tabs");
 
 /***/ },
 /* 163 */
+/***/ function(module, exports) {
+
+  module.exports = require("react-bootstrap/lib/Tab");
+
+/***/ },
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14796,19 +13132,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ConfigContainer = __webpack_require__(164);
+  var _ConfigContainer = __webpack_require__(165);
   
   var _ConfigContainer2 = _interopRequireDefault(_ConfigContainer);
   
@@ -14823,6 +13163,8 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+  var _ref = (0, _jsx3.default)(_ConfigContainer2.default, {});
+  
   exports.default = {
   
     path: '/configContainer',
@@ -14835,7 +13177,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ConfigContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -14848,7 +13190,7 @@ module.exports =
   };
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14857,27 +13199,27 @@ module.exports =
     value: true
   });
   
-  var _ConfigContainer = __webpack_require__(165);
+  var _ConfigContainer = __webpack_require__(166);
   
   var _ConfigContainer2 = _interopRequireDefault(_ConfigContainer);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _deployService = __webpack_require__(107);
+  var _deployService = __webpack_require__(108);
   
-  var _deployDataSelector = __webpack_require__(157);
+  var _deployDataSelector = __webpack_require__(158);
   
   var _deployDataSelector2 = _interopRequireDefault(_deployDataSelector);
   
-  var _isSidebarOpenSelector = __webpack_require__(70);
+  var _isSidebarOpenSelector = __webpack_require__(71);
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
-  var _buildingDetailSelector = __webpack_require__(137);
+  var _buildingDetailSelector = __webpack_require__(138);
   
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
@@ -14916,7 +13258,7 @@ module.exports =
   exports.default = ConfigContainer;
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14925,65 +13267,69 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ServiceStep = __webpack_require__(153);
+  var _ServiceStep = __webpack_require__(154);
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _ContainerBox = __webpack_require__(166);
+  var _ContainerBox = __webpack_require__(167);
   
   var _ContainerBox2 = _interopRequireDefault(_ContainerBox);
   
-  var _reactInputRange = __webpack_require__(172);
+  var _reactInputRange = __webpack_require__(173);
   
   var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _index = __webpack_require__(37);
+  var _index = __webpack_require__(38);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -15004,7 +13350,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: _this.props.number
@@ -15024,28 +13370,20 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'formField' },
-          _react2.default.createElement(_reactInputRange2.default, {
-            className: 'formField',
-            maxValue: 10,
-            minValue: 0,
-            labelSuffix: '个',
-            value: this.state.value,
-            onChange: this.handleValueChange.bind(this)
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'formField'
+        }, void 0, (0, _jsx3.default)(_reactInputRange2.default, {
+          className: 'formField',
+          maxValue: 10,
+          minValue: 0,
+          labelSuffix: '\u4E2A',
+          value: this.state.value,
+          onChange: this.handleValueChange.bind(this)
+        }));
       }
     }]);
     return InputRangesBox;
   }(_react.Component);
-  
-  InputRangesBox.propTypes = {
-    getContianerNum: _react2.default.PropTypes.func,
-    number: _react2.default.PropTypes.number
-  
-  };
   
   var UpdateStartToggle = function (_Component2) {
     (0, _inherits3.default)(UpdateStartToggle, _Component2);
@@ -15053,7 +13391,7 @@ module.exports =
     function UpdateStartToggle(props) {
       (0, _classCallCheck3.default)(this, UpdateStartToggle);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(UpdateStartToggle).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (UpdateStartToggle.__proto__ || (0, _getPrototypeOf2.default)(UpdateStartToggle)).call(this, props));
   
       _this2.state = {
         autoStart: _this2.props.state
@@ -15072,7 +13410,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           defaultChecked: this.state.autoStart,
           onChange: this.handClick.bind(this)
         });
@@ -15081,10 +13419,49 @@ module.exports =
     return UpdateStartToggle;
   }(_react.Component);
   
-  UpdateStartToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    state: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)('option', {
+    value: 'latest'
+  }, 'latest', 'latest');
+  
+  var _ref2 = (0, _jsx3.default)(_ServiceStep2.default, {
+    dataActive: 'second'
+  });
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u670D\u52A1\u540D\u79F0',
+    titleEnglish: 'SERVICE NAME',
+    titleInfo: '\u89C4\u5219\u540E\u5B9A'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u63CF\u8FF0'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7248\u672C',
+    titleEnglish: 'MIRROR VERSION',
+    titleInfo: '\u66F4\u65B0\u4E8E\u4E24\u4E2A\u6708\u524D'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5BB9\u5668\u914D\u7F6E',
+    titleEnglish: 'CONTAINER CONFIGURATION',
+    titleInfo: '\u89C4\u5219\u540E\u5B9A'
+  });
+  
+  var _ref7 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5BB9\u5668\u4E2A\u6570',
+    titleEnglish: 'CONTAINER NUMBER',
+    titleInfo: '\u89C4\u5219\u540E\u5B9A'
+  });
+  
+  var _ref8 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u81EA\u52A8\u66F4\u65B0\u8BBE\u7F6E',
+    titleEnglish: 'AUTO UPDATE SETTINGS',
+    titleInfo: '\u5F53\u955C\u50CF\u6709\u66F4\u65B0\u65F6\u5BB9\u5668\u662F\u5426\u81EA\u52A8\u66F4\u65B0'
+  });
   
   var ConfigContainer = function (_Component3) {
     (0, _inherits3.default)(ConfigContainer, _Component3);
@@ -15092,7 +13469,7 @@ module.exports =
     function ConfigContainer() {
       (0, _classCallCheck3.default)(this, ConfigContainer);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ConfigContainer).call(this));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (ConfigContainer.__proto__ || (0, _getPrototypeOf2.default)(ConfigContainer)).call(this));
   
       _this3.state = {
         containerDeploy: 0,
@@ -15191,155 +13568,79 @@ module.exports =
         var tags = this.props.buildingDetail.tags;
         var option = [];
         if (!tags || !tags.length) {
-          option.push(_react2.default.createElement(
-            'option',
-            { key: 'latest', value: 'latest' },
-            'latest'
-          ));
+          option.push(_ref);
         } else {
           tags.map(function (item, i) {
-            option.push(_react2.default.createElement(
-              'option',
-              { value: item.tag, key: i },
-              item.tag
-            ));
+            option.push((0, _jsx3.default)('option', {
+              value: item.tag
+            }, i, item.tag));
           });
         }
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'asTab' },
-            _react2.default.createElement(_ServiceStep2.default, { dataActive: 'second' }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assHd' },
-              _react2.default.createElement(
-                'div',
-                { className: 'assItem' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '服务名称',
-                  titleEnglish: 'SERVICE NAME',
-                  titleInfo: '规则后定'
-                }),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assBox ' + (this.state.isServiceName ? "has-error" : "") },
-                  _react2.default.createElement('input', {
-                    className: 'form-control',
-                    ref: 'serviceName',
-                    type: 'text',
-                    placeholder: '',
-                    defaultValue: data.service_name,
-                    onChange: this.onServiceNameChange.bind(this)
-                  }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'inputTip', ref: 'serviceNameTip' },
-                    ' '
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assItem' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '镜像名称',
-                  titleEnglish: 'IMAGE NAME',
-                  titleInfo: '描述'
-                }),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assBox' },
-                  _react2.default.createElement(
-                    'p',
-                    null,
-                    data.image_name
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assItem' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '镜像版本',
-                  titleEnglish: 'MIRROR VERSION',
-                  titleInfo: '更新于两个月前'
-                }),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assBox' },
-                  _react2.default.createElement(
-                    'select',
-                    { className: 'form-control', ref: 'imageVersion', defaultValue: data.image_version },
-                    option
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assItem' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '容器配置',
-                  titleEnglish: 'CONTAINER CONFIGURATION',
-                  titleInfo: '规则后定'
-                }),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assBox assBoxAuto' },
-                  _react2.default.createElement(_ContainerBox2.default, { number: data.containerDeploy, getContainer: this.getContainer.bind(this) })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assItem' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '容器个数',
-                  titleEnglish: 'CONTAINER NUMBER',
-                  titleInfo: '规则后定'
-                }),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assBox formField' },
-                  _react2.default.createElement(InputRangesBox, { number: data.pods_num, getContianerNum: this.getContainerNum.bind(this) })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'assItem assItemNoborder' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '自动更新设置',
-                  titleEnglish: 'AUTO UPDATE SETTINGS',
-                  titleInfo: '当镜像有更新时容器是否自动更新'
-                }),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'assBox' },
-                  _react2.default.createElement(UpdateStartToggle, { state: data.policy == 1, getToggle: this.getToggleValue.bind(this) })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'fixedBottom' },
-                _react2.default.createElement(
-                  'div',
-                  { style: { "marginLeft": this.props.isSidebarOpen ? "209px" : "79px" } },
-                  _react2.default.createElement(
-                    _Link2.default,
-                    { className: 'btn btn-primary', to: '/choseImage' },
-                    '上一步'
-                  ),
-                  _react2.default.createElement(
-                    'button',
-                    { className: 'btn btn-primary', onClick: this.onNextStep.bind(this) },
-                    '下一步'
-                  )
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'asTab'
+        }, void 0, _ref2, (0, _jsx3.default)('div', {
+          className: 'assHd'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'assBox ' + (this.state.isServiceName ? "has-error" : "")
+        }, void 0, _react2.default.createElement('input', {
+          className: 'form-control',
+          ref: 'serviceName',
+          type: 'text',
+          placeholder: '',
+          defaultValue: data.service_name,
+          onChange: this.onServiceNameChange.bind(this)
+        }), _react2.default.createElement(
+          'span',
+          { className: 'inputTip', ref: 'serviceNameTip' },
+          ' '
+        ))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)('p', {}, void 0, data.image_name))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref5, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement(
+          'select',
+          { className: 'form-control', ref: 'imageVersion', defaultValue: data.image_version },
+          option
+        ))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref6, (0, _jsx3.default)('div', {
+          className: 'assBox assBoxAuto'
+        }, void 0, (0, _jsx3.default)(_ContainerBox2.default, {
+          number: data.containerDeploy,
+          getContainer: this.getContainer.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref7, (0, _jsx3.default)('div', {
+          className: 'assBox formField'
+        }, void 0, (0, _jsx3.default)(InputRangesBox, {
+          number: data.pods_num,
+          getContianerNum: this.getContainerNum.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem assItemNoborder'
+        }, void 0, _ref8, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)(UpdateStartToggle, {
+          state: data.policy == 1,
+          getToggle: this.getToggleValue.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'fixedBottom'
+        }, void 0, (0, _jsx3.default)('div', {
+          style: { "marginLeft": this.props.isSidebarOpen ? "209px" : "79px" }
+        }, void 0, (0, _jsx3.default)(_Link2.default, {
+          className: 'btn btn-primary',
+          to: '/choseImage'
+        }, void 0, '\u4E0A\u4E00\u6B65'), (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.onNextStep.bind(this)
+        }, void 0, '\u4E0B\u4E00\u6B65'))))));
       }
     }]);
     return ConfigContainer;
@@ -15349,19 +13650,10 @@ module.exports =
     setTitle: _react.PropTypes.func.isRequired,
     store: _react.PropTypes.object
   };
-  ConfigContainer.propTypes = {
-    deployData: _react2.default.PropTypes.object,
-    deployContainer: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    onGoToService: _react2.default.PropTypes.func,
-    isSidebarOpen: _react2.default.PropTypes.bool,
-    buildingDetail: _react2.default.PropTypes.object,
-    getBuildingDetail: _react2.default.PropTypes.func
-  };
   exports.default = ConfigContainer;
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -15370,39 +13662,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ContainerBox = __webpack_require__(167);
+  var _ContainerBox = __webpack_require__(168);
   
   var _ContainerBox2 = _interopRequireDefault(_ContainerBox);
   
-  var _ContainerItem = __webpack_require__(169);
+  var _ContainerItem = __webpack_require__(170);
   
   var _ContainerItem2 = _interopRequireDefault(_ContainerItem);
   
@@ -15417,13 +13713,15 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+  var _ref = (0, _jsx3.default)('span', {}, void 0, 'x');
+  
   var ContainerBox = function (_Component) {
     (0, _inherits3.default)(ContainerBox, _Component);
   
     function ContainerBox(props) {
       (0, _classCallCheck3.default)(this, ContainerBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ContainerBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (ContainerBox.__proto__ || (0, _getPrototypeOf2.default)(ContainerBox)).call(this, props));
   
       _this.state = {
         index: _this.props.number
@@ -15447,32 +13745,14 @@ module.exports =
             index = this.state.index;
         var data = [{ x: 1, m: "128M" }, { x: 2, m: "256M" }, { x: 4, m: "512M" }, { x: 8, m: "1024M" }, { x: 16, m: "2048M" }];
         var children = data.map(function (item, i) {
-          return _react2.default.createElement(
-            _ContainerItem2.default,
-            { key: i, index: i, active: i == index, onClick: me.handleClick.bind(me, i) },
-            _react2.default.createElement(
-              'span',
-              null,
-              item.x
-            ),
-            _react2.default.createElement(
-              'span',
-              null,
-              'x'
-            ),
-            _react2.default.createElement(
-              'span',
-              null,
-              item.m
-            )
-          );
+          return (0, _jsx3.default)(_ContainerItem2.default, {
+            index: i,
+            active: i == index,
+            onClick: me.handleClick.bind(me, i)
+          }, i, (0, _jsx3.default)('span', {}, void 0, item.x), _ref, (0, _jsx3.default)('span', {}, void 0, item.m));
         });
   
-        return _react2.default.createElement(
-          'div',
-          null,
-          children
-        );
+        return (0, _jsx3.default)('div', {}, void 0, children);
       }
     }]);
     return ContainerBox;
@@ -15525,19 +13805,15 @@ module.exports =
   //   }
   // })
   
-  ContainerBox.propTypes = {
-    getContainer: _react2.default.PropTypes.func,
-    number: _react2.default.PropTypes.number
-  };
   exports.default = (0, _withStyles2.default)(_ContainerBox2.default)(ContainerBox);
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(168);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(169);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -15547,40 +13823,23 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ContainerBox.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ContainerBox.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, "\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"ContainerBox.css","sourceRoot":"webpack://"}]);
+  exports.push([module.id, "", ""]);
   
   // exports
 
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -15589,19 +13848,23 @@ module.exports =
     value: true
   });
   
-  var _react = __webpack_require__(9);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ContainerItem = __webpack_require__(170);
+  var _ContainerItem = __webpack_require__(171);
   
   var _ContainerItem2 = _interopRequireDefault(_ContainerItem);
   
-  var _classnames = __webpack_require__(65);
+  var _classnames = __webpack_require__(66);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
@@ -15634,37 +13897,26 @@ module.exports =
       var sp2 = this.props.children[1].props.children;
       var sp3 = this.props.children[2].props.children;
       var style = this.props.active ? [_ContainerItem2.default.csItem, _ContainerItem2.default.csActive] : [_ContainerItem2.default.csItem];
-      return _react2.default.createElement(
-        'div',
-        { className: (0, _classnames2.default)(style), onClick: this.handleClick },
-        _react2.default.createElement(
-          'p',
-          { className: _ContainerItem2.default.csSize },
-          sp1,
-          _react2.default.createElement(
-            'span',
-            null,
-            sp2
-          )
-        ),
-        _react2.default.createElement(
-          'p',
-          { className: _ContainerItem2.default.csUnit },
-          sp3
-        )
-      );
+      return (0, _jsx3.default)('div', {
+        className: (0, _classnames2.default)(style),
+        onClick: this.handleClick
+      }, void 0, (0, _jsx3.default)('p', {
+        className: _ContainerItem2.default.csSize
+      }, void 0, sp1, (0, _jsx3.default)('span', {}, void 0, sp2)), (0, _jsx3.default)('p', {
+        className: _ContainerItem2.default.csUnit
+      }, void 0, sp3));
     }
   });
   
   exports.default = (0, _withStyles2.default)(_ContainerItem2.default)(ContainerItem);
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(171);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(172);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -15674,51 +13926,34 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ContainerItem.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ContainerItem.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, ".ContainerItem_csItem_3Tt{\n  width:100px;\n  height:103px;\n  background:#f2f4f8;\n  border-radius:4px 4px 7px 7px;\n  border-top:3px solid #f2f4f8;\n  border-bottom:3px solid #d7c698;\n  display:inline-block;\n  margin-right:42px;\n  cursor:pointer;\n}\n.ContainerItem_csItem_3Tt:hover{\n  -webkit-box-shadow:0 3px 5px rgba(215,198,152,.35);\n          box-shadow:0 3px 5px rgba(215,198,152,.35);\n}\n.ContainerItem_csSize_1vC{\n  height:59px;\n  line-height:59px;\n  border-bottom:1px solid #ccc;\n  margin:0 22px;\n  text-align: center;\n  font-size:35px;\n}\n.ContainerItem_csSize_1vC span{\n  font-size:30px;\n}\n.ContainerItem_csUnit_3IG{\n  margin-top:10px;\n  text-align: center;\n  color:#666;\n}\n.ContainerItem_csItem_3Tt:nth-child(2){\n  border-bottom-color:#5eafce;\n}\n.ContainerItem_csItem_3Tt:nth-child(2):hover{\n  -webkit-box-shadow:0 3px 5px rgba(39,154,197,.35);\n          box-shadow:0 3px 5px rgba(39,154,197,.35);\n}\n.ContainerItem_csItem_3Tt:nth-child(3){\n  border-bottom-color:#a8ce6b;\n}\n.ContainerItem_csItem_3Tt:nth-child(3):hover{\n  -webkit-box-shadow:0 3px 5px rgba(130,165,75,.35);\n          box-shadow:0 3px 5px rgba(130,165,75,.35);\n}\n.ContainerItem_csItem_3Tt:nth-child(4){\n  border-bottom-color:#889bcb;\n}\n.ContainerItem_csItem_3Tt:nth-child(4):hover{\n  -webkit-box-shadow:0 3px 5px rgba(94,117,174,.35);\n          box-shadow:0 3px 5px rgba(94,117,174,.35);\n}\n.ContainerItem_csItem_3Tt:nth-child(5){\n  border-bottom-color:#ef6256;\n}\n.ContainerItem_csItem_3Tt:nth-child(5):hover{\n  -webkit-box-shadow:0 3px 5px rgba(168,91,85,.35);\n          box-shadow:0 3px 5px rgba(168,91,85,.35);\n}\n.ContainerItem_csActive_1e8{\n  background:#c8b88f;\n  border-top:3px solid #a4873e;\n  color:#fff;\n  border-bottom:0;\n}\n.ContainerItem_csActive_1e8 .ContainerItem_csUnit_3IG{\n  color:#fff;\n}\n.ContainerItem_csActive_1e8 .ContainerItem_csSize_1vC{\n  border-color:#fff;\n}\n.ContainerItem_csItem_3Tt:nth-child(2).ContainerItem_csActive_1e8{\n  border-color:#439ec1;\n  background:#5eafce;\n}\n.ContainerItem_csItem_3Tt:nth-child(3).ContainerItem_csActive_1e8{\n  border-color:#80a643;\n  background:#a8ce6b;\n}\n.ContainerItem_csItem_3Tt:nth-child(4).ContainerItem_csActive_1e8{\n  border-color:#4666b7;\n  background:#889bcb;\n}\n.ContainerItem_csItem_3Tt:nth-child(5).ContainerItem_csActive_1e8{\n  border-color:#c34439;\n  background:#ef6256;\n}\n\n", "", {"version":3,"sources":["/./components/ContainerItem/ContainerItem.css"],"names":[],"mappings":"AAAA;EACE,YAAY;EACZ,aAAa;EACb,mBAAmB;EACnB,8BAA8B;EAC9B,6BAA6B;EAC7B,gCAAgC;EAChC,qBAAqB;EACrB,kBAAkB;EAClB,eAAe;CAChB;AACD;EACE,mDAA2C;UAA3C,2CAA2C;CAC5C;AACD;EACE,YAAY;EACZ,iBAAiB;EACjB,6BAA6B;EAC7B,cAAc;EACd,mBAAmB;EACnB,eAAe;CAChB;AACD;EACE,eAAe;CAChB;AACD;EACE,gBAAgB;EAChB,mBAAmB;EACnB,WAAW;CACZ;AACD;EACE,4BAA4B;CAC7B;AACD;EACE,kDAA0C;UAA1C,0CAA0C;CAC3C;AACD;EACE,4BAA4B;CAC7B;AACD;EACE,kDAA0C;UAA1C,0CAA0C;CAC3C;AACD;EACE,4BAA4B;CAC7B;AACD;EACE,kDAA0C;UAA1C,0CAA0C;CAC3C;AACD;EACE,4BAA4B;CAC7B;AACD;EACE,iDAAyC;UAAzC,yCAAyC;CAC1C;AACD;EACE,mBAAmB;EACnB,6BAA6B;EAC7B,WAAW;EACX,gBAAgB;CACjB;AACD;EACE,WAAW;CACZ;AACD;EACE,kBAAkB;CACnB;AACD;EACE,qBAAqB;EACrB,mBAAmB;CACpB;AACD;EACE,qBAAqB;EACrB,mBAAmB;CACpB;AACD;EACE,qBAAqB;EACrB,mBAAmB;CACpB;AACD;EACE,qBAAqB;EACrB,mBAAmB;CACpB","file":"ContainerItem.css","sourcesContent":[".csItem{\n  width:100px;\n  height:103px;\n  background:#f2f4f8;\n  border-radius:4px 4px 7px 7px;\n  border-top:3px solid #f2f4f8;\n  border-bottom:3px solid #d7c698;\n  display:inline-block;\n  margin-right:42px;\n  cursor:pointer;\n}\n.csItem:hover{\n  box-shadow:0 3px 5px rgba(215,198,152,.35);\n}\n.csSize{\n  height:59px;\n  line-height:59px;\n  border-bottom:1px solid #ccc;\n  margin:0 22px;\n  text-align: center;\n  font-size:35px;\n}\n.csSize span{\n  font-size:30px;\n}\n.csUnit{\n  margin-top:10px;\n  text-align: center;\n  color:#666;\n}\n.csItem:nth-child(2){\n  border-bottom-color:#5eafce;\n}\n.csItem:nth-child(2):hover{\n  box-shadow:0 3px 5px rgba(39,154,197,.35);\n}\n.csItem:nth-child(3){\n  border-bottom-color:#a8ce6b;\n}\n.csItem:nth-child(3):hover{\n  box-shadow:0 3px 5px rgba(130,165,75,.35);\n}\n.csItem:nth-child(4){\n  border-bottom-color:#889bcb;\n}\n.csItem:nth-child(4):hover{\n  box-shadow:0 3px 5px rgba(94,117,174,.35);\n}\n.csItem:nth-child(5){\n  border-bottom-color:#ef6256;\n}\n.csItem:nth-child(5):hover{\n  box-shadow:0 3px 5px rgba(168,91,85,.35);\n}\n.csActive{\n  background:#c8b88f;\n  border-top:3px solid #a4873e;\n  color:#fff;\n  border-bottom:0;\n}\n.csActive .csUnit{\n  color:#fff;\n}\n.csActive .csSize{\n  border-color:#fff;\n}\n.csItem:nth-child(2).csActive{\n  border-color:#439ec1;\n  background:#5eafce;\n}\n.csItem:nth-child(3).csActive{\n  border-color:#80a643;\n  background:#a8ce6b;\n}\n.csItem:nth-child(4).csActive{\n  border-color:#4666b7;\n  background:#889bcb;\n}\n.csItem:nth-child(5).csActive{\n  border-color:#c34439;\n  background:#ef6256;\n}\n\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "._3Tti{width:100px;height:103px;background:#f2f4f8;border-radius:4px 4px 7px 7px;border-top:3px solid #f2f4f8;border-bottom:3px solid #d7c698;display:inline-block;margin-right:42px;cursor:pointer}._3Tti:hover{box-shadow:0 3px 5px hsla(44,44%,72%,.35)}._1vCB{height:59px;line-height:59px;border-bottom:1px solid #ccc;margin:0 22px;text-align:center;font-size:35px}._1vCB span{font-size:30px}._3IGg{margin-top:10px;text-align:center;color:#666}._3Tti:nth-child(2){border-bottom-color:#5eafce}._3Tti:nth-child(2):hover{box-shadow:0 3px 5px rgba(39,154,197,.35)}._3Tti:nth-child(3){border-bottom-color:#a8ce6b}._3Tti:nth-child(3):hover{box-shadow:0 3px 5px rgba(130,165,75,.35)}._3Tti:nth-child(4){border-bottom-color:#889bcb}._3Tti:nth-child(4):hover{box-shadow:0 3px 5px rgba(94,117,174,.35)}._3Tti:nth-child(5){border-bottom-color:#ef6256}._3Tti:nth-child(5):hover{box-shadow:0 3px 5px rgba(168,91,85,.35)}._1e8q{background:#c8b88f;border-top:3px solid #a4873e;border-bottom:0}._1e8q,._1e8q ._3IGg{color:#fff}._1e8q ._1vCB{border-color:#fff}._3Tti:nth-child(2)._1e8q{border-color:#439ec1;background:#5eafce}._3Tti:nth-child(3)._1e8q{border-color:#80a643;background:#a8ce6b}._3Tti:nth-child(4)._1e8q{border-color:#4666b7;background:#889bcb}._3Tti:nth-child(5)._1e8q{border-color:#c34439;background:#ef6256}", ""]);
   
   // exports
   exports.locals = {
-  	"csItem": "ContainerItem_csItem_3Tt",
-  	"csSize": "ContainerItem_csSize_1vC",
-  	"csUnit": "ContainerItem_csUnit_3IG",
-  	"csActive": "ContainerItem_csActive_1e8"
+  	"csItem": "_3Tti",
+  	"csSize": "_1vCB",
+  	"csUnit": "_3IGg",
+  	"csActive": "_1e8q"
   };
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports) {
 
   module.exports = require("react-input-range");
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -15727,19 +13962,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ServiceDeatilContainer = __webpack_require__(174);
+  var _ServiceDeatilContainer = __webpack_require__(175);
   
   var _ServiceDeatilContainer2 = _interopRequireDefault(_ServiceDeatilContainer);
   
@@ -15766,7 +14005,10 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ServiceDeatilContainer2.default, { serviceName: params.serviceName, tabs: params.tabs }));
+                return _context.abrupt('return', (0, _jsx3.default)(_ServiceDeatilContainer2.default, {
+                  serviceName: params.serviceName,
+                  tabs: params.tabs
+                }));
   
               case 1:
               case 'end':
@@ -15779,7 +14021,7 @@ module.exports =
   };
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -15788,59 +14030,59 @@ module.exports =
     value: true
   });
   
-  var _ServiceDetail = __webpack_require__(175);
+  var _ServiceDetail = __webpack_require__(176);
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _serviceDetail = __webpack_require__(78);
+  var _serviceDetail = __webpack_require__(79);
   
   var actions = _interopRequireWildcard(_serviceDetail);
   
-  var _services = __webpack_require__(93);
+  var _services = __webpack_require__(94);
   
-  var _volumes = __webpack_require__(97);
+  var _volumes = __webpack_require__(98);
   
-  var _serviceDetailSelector = __webpack_require__(187);
+  var _serviceDetailSelector = __webpack_require__(188);
   
   var _serviceDetailSelector2 = _interopRequireDefault(_serviceDetailSelector);
   
-  var _volumesListSelector = __webpack_require__(98);
+  var _volumesListSelector = __webpack_require__(99);
   
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
-  var _logsSelector = __webpack_require__(188);
+  var _logsSelector = __webpack_require__(189);
   
   var _logsSelector2 = _interopRequireDefault(_logsSelector);
   
-  var _logs_shrSelector = __webpack_require__(189);
+  var _logs_shrSelector = __webpack_require__(190);
   
   var _logs_shrSelector2 = _interopRequireDefault(_logs_shrSelector);
   
-  var _notificationsSelector = __webpack_require__(84);
+  var _notificationsSelector = __webpack_require__(85);
   
   var _notificationsSelector2 = _interopRequireDefault(_notificationsSelector);
   
-  var _podListSelector = __webpack_require__(190);
+  var _podListSelector = __webpack_require__(191);
   
   var _podListSelector2 = _interopRequireDefault(_podListSelector);
   
-  var _buildingDetailSelector = __webpack_require__(137);
+  var _buildingDetailSelector = __webpack_require__(138);
   
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
-  var _monitorDataSelector = __webpack_require__(191);
+  var _monitorDataSelector = __webpack_require__(192);
   
   var _monitorDataSelector2 = _interopRequireDefault(_monitorDataSelector);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -15951,7 +14193,7 @@ module.exports =
   exports.default = ServiceDetailContainer;
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -15960,91 +14202,95 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(14);
+  var _withStyles = __webpack_require__(15);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ServiceDetail = __webpack_require__(176);
+  var _ServiceDetail = __webpack_require__(177);
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
-  var _Tabs = __webpack_require__(161);
+  var _Tabs = __webpack_require__(162);
   
   var _Tabs2 = _interopRequireDefault(_Tabs);
   
-  var _Tab = __webpack_require__(162);
+  var _Tab = __webpack_require__(163);
   
   var _Tab2 = _interopRequireDefault(_Tab);
   
-  var _reactInputRange = __webpack_require__(172);
+  var _reactInputRange = __webpack_require__(173);
   
   var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
   
-  var _GetDisposedTabs = __webpack_require__(178);
+  var _GetDisposedTabs = __webpack_require__(179);
   
   var _GetDisposedTabs2 = _interopRequireDefault(_GetDisposedTabs);
   
-  var _GetMonitorTabs = __webpack_require__(180);
+  var _GetMonitorTabs = __webpack_require__(181);
   
   var _GetMonitorTabs2 = _interopRequireDefault(_GetMonitorTabs);
   
-  var _GetReleaseTabs = __webpack_require__(182);
+  var _GetReleaseTabs = __webpack_require__(183);
   
   var _GetReleaseTabs2 = _interopRequireDefault(_GetReleaseTabs);
   
-  var _GetRealmNameTabs = __webpack_require__(184);
+  var _GetRealmNameTabs = __webpack_require__(185);
   
   var _GetRealmNameTabs2 = _interopRequireDefault(_GetRealmNameTabs);
   
-  var _GetContainerTabs = __webpack_require__(185);
+  var _GetContainerTabs = __webpack_require__(186);
   
   var _GetContainerTabs2 = _interopRequireDefault(_GetContainerTabs);
   
-  var _GetOptTabs = __webpack_require__(186);
+  var _GetOptTabs = __webpack_require__(187);
   
   var _GetOptTabs2 = _interopRequireDefault(_GetOptTabs);
   
-  var _Logs = __webpack_require__(136);
+  var _Logs = __webpack_require__(137);
   
   var _Logs2 = _interopRequireDefault(_Logs);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _Link = __webpack_require__(55);
+  var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _classnames = __webpack_require__(65);
+  var _classnames = __webpack_require__(66);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
@@ -16066,7 +14312,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: _this.props.number
@@ -16086,30 +14332,59 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'formField' },
-          _react2.default.createElement(_reactInputRange2.default, {
-            className: 'formField',
-            maxValue: 10,
-            minValue: 0,
-            labelSuffix: '个',
-            value: this.state.value || this.props.number,
-            onChange: this.handleValueChange.bind(this)
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'formField'
+        }, void 0, (0, _jsx3.default)(_reactInputRange2.default, {
+          className: 'formField',
+          maxValue: 10,
+          minValue: 0,
+          labelSuffix: '\u4E2A',
+          value: this.state.value || this.props.number,
+          onChange: this.handleValueChange.bind(this)
+        }));
       }
     }]);
     return InputRangesBox;
   }(_react.Component);
   
-  InputRangesBox.propTypes = {
-    number: _react2.default.PropTypes.number,
-    getContianerNum: _react2.default.PropTypes.func
-  };
-  
-  
   var title = '服务详情';
+  
+  var _ref = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref2 = (0, _jsx3.default)('span', {
+    className: 'text-success'
+  }, void 0, '\u8FD0\u884C');
+  
+  var _ref3 = (0, _jsx3.default)('span', {
+    className: 'text-info'
+  }, void 0, '\u521B\u5EFA\u4E2D');
+  
+  var _ref4 = (0, _jsx3.default)('span', {
+    className: 'text-danger'
+  }, void 0, '\u5173\u95ED');
+  
+  var _ref5 = (0, _jsx3.default)('span', {
+    className: 'text-danger'
+  }, void 0, '\u8FD0\u884C\u5931\u8D25');
+  
+  var _ref6 = (0, _jsx3.default)('div', {
+    className: 'assItem'
+  }, void 0, '\u8BE5\u670D\u52A1\u56E0\u6CA1\u6709\u542F\u52A8\uFF0C\u5C1A\u672A\u5360\u7528\u8D44\u6E90\uFF0C\u6682\u65E0\u5BB9\u5668\u5B9E\u4F8B\u3002');
+  
+  var _ref7 = (0, _jsx3.default)('div', {
+    className: 'assItem'
+  }, void 0, '\u8BE5\u670D\u52A1\u56E0\u6CA1\u6709\u542F\u52A8\uFF0C\u5C1A\u672A\u5360\u7528\u8D44\u6E90\uFF0C\u6682\u65E0\u5BB9\u5668\u5B9E\u4F8B\u3002');
+  
+  var _ref8 = (0, _jsx3.default)('img', {});
+  
+  var _ref9 = (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u7F6E\u4E8E\u9996\u9875');
+  
+  var _ref10 = (0, _jsx3.default)(_Link2.default, {
+    to: "/",
+    className: 'btn btn-default'
+  }, void 0, '\u8FDB\u5165\u63A7\u5236\u53F0');
   
   var ServiceDetail = function (_Component2) {
     (0, _inherits3.default)(ServiceDetail, _Component2);
@@ -16117,7 +14392,7 @@ module.exports =
     function ServiceDetail(props) {
       (0, _classCallCheck3.default)(this, ServiceDetail);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ServiceDetail).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ServiceDetail.__proto__ || (0, _getPrototypeOf2.default)(ServiceDetail)).call(this, props));
   
       _this2.state = {
         containerNum: 1,
@@ -16214,43 +14489,25 @@ module.exports =
         this.context.setTitle(title);
         var data = this.props.serviceDetail;
         if (data && !data.uuid) {
-          return _react2.default.createElement(
-            'div',
-            { style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          );
+          return (0, _jsx3.default)('div', {
+            style: { "textAlign": "center" }
+          }, void 0, _ref);
         }
         var serviceState = data.fservice_status.toLowerCase();
         var serviceStateTxt = "";
         var domain = [];
         switch (serviceState) {
           case Const.SERVICE_STATE.Running:
-            serviceStateTxt = _react2.default.createElement(
-              'span',
-              { className: 'text-success' },
-              '运行'
-            );
+            serviceStateTxt = _ref2;
             break;
           case Const.SERVICE_STATE.Pending:
-            serviceStateTxt = _react2.default.createElement(
-              'span',
-              { className: 'text-info' },
-              '创建中'
-            );
+            serviceStateTxt = _ref3;
             break;
           case Const.SERVICE_STATE.Stopping:
-            serviceStateTxt = _react2.default.createElement(
-              'span',
-              { className: 'text-danger' },
-              '关闭'
-            );
+            serviceStateTxt = _ref4;
             break;
           default:
-            serviceStateTxt = _react2.default.createElement(
-              'span',
-              { className: 'text-danger' },
-              '运行失败'
-            );
+            serviceStateTxt = _ref5;
             break;
         }
         data.container.map(function (item) {
@@ -16260,7 +14517,7 @@ module.exports =
         var tab = null;
         switch (Number(this.state.tabSelect)) {
           case 1:
-            tab = _react2.default.createElement(_GetDisposedTabs2.default, {
+            tab = (0, _jsx3.default)(_GetDisposedTabs2.default, {
               volumeList: this.props.volumeList,
               serviceDetail: this.props.serviceDetail,
               onSavePort: function onSavePort(data) {
@@ -16303,11 +14560,7 @@ module.exports =
             });
             break;
           case 2:
-            tab = this.props.podList.length == 0 ? _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              '该服务因没有启动，尚未占用资源，暂无容器实例。'
-            ) : _react2.default.createElement(_GetMonitorTabs2.default, {
+            tab = this.props.podList.length == 0 ? _ref6 : (0, _jsx3.default)(_GetMonitorTabs2.default, {
               serviceDetail: this.props.serviceDetail,
               podList: this.props.podList,
               getMonitorData: function getMonitorData(data) {
@@ -16317,14 +14570,15 @@ module.exports =
             });
             break;
           case 3:
-            tab = _react2.default.createElement(
-              'div',
-              { className: 'log', style: { paddingBottom: "100px" } },
-              _react2.default.createElement(_Logs2.default, { logLabel: data.logs_labels })
-            );
+            tab = (0, _jsx3.default)('div', {
+              className: 'log',
+              style: { paddingBottom: "100px" }
+            }, void 0, (0, _jsx3.default)(_Logs2.default, {
+              logLabel: data.logs_labels
+            }));
             break;
           case 4:
-            tab = _react2.default.createElement(_GetReleaseTabs2.default, {
+            tab = (0, _jsx3.default)(_GetReleaseTabs2.default, {
               serviceName: this.props.serviceName,
               serviceDetail: this.props.serviceDetail,
               buildingDetail: this.props.buildingDetail,
@@ -16338,21 +14592,17 @@ module.exports =
             });
             break;
           case 5:
-            tab = _react2.default.createElement(_GetRealmNameTabs2.default, {
+            tab = (0, _jsx3.default)(_GetRealmNameTabs2.default, {
               serviceDetail: this.props.serviceDetail
             });
             break;
           case 6:
-            tab = this.props.podList.length == 0 ? _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              '该服务因没有启动，尚未占用资源，暂无容器实例。'
-            ) : _react2.default.createElement(_GetContainerTabs2.default, {
+            tab = this.props.podList.length == 0 ? _ref7 : (0, _jsx3.default)(_GetContainerTabs2.default, {
               podList: this.props.podList
             });
             break;
           case 7:
-            tab = _react2.default.createElement(_GetOptTabs2.default, {
+            tab = (0, _jsx3.default)(_GetOptTabs2.default, {
               serviceName: this.props.serviceName,
               onDeleteService: function onDeleteService(name) {
                 _this3.props.onDeleteService(name);
@@ -16361,174 +14611,94 @@ module.exports =
             break;
   
         }
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF containerPadding' },
-          _react2.default.createElement(
-            'div',
-            { className: _ServiceDetail2.default.sdHd },
-            _react2.default.createElement(
-              'div',
-              { className: _ServiceDetail2.default.sdImg },
-              _react2.default.createElement('img', null),
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;' },
-                '置于首页'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: _ServiceDetail2.default.sdInfo },
-              _react2.default.createElement(
-                'div',
-                { className: _ServiceDetail2.default.sdTitle },
-                _react2.default.createElement(
-                  'div',
-                  { className: _ServiceDetail2.default.sdTitleItem },
-                  '服务名称:',
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    data.service_name
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _ServiceDetail2.default.sdTitleItem },
-                  '部署时间:',
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'cl9' },
-                    data.ltime
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _ServiceDetail2.default.sdTitleItem },
-                  '状态:',
-                  serviceStateTxt
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _ServiceDetail2.default.sdTitleItem },
-                  _react2.default.createElement(
-                    _Link2.default,
-                    { to: "/", className: 'btn btn-default' },
-                    '进入控制台'
-                  ),
-                  _react2.default.createElement(
-                    'button',
-                    {
-                      onClick: this.changeState.bind(this, data.fservice_name, serviceState == Const.SERVICE_STATE.Running),
-                      className: serviceState == Const.SERVICE_STATE.Running ? "btn btn-default" : "btn btn-primary", ref: 'startUpBtn',
-                      disabled: serviceState == Const.SERVICE_STATE.Pending
-                    },
-                    serviceState == Const.SERVICE_STATE.Running ? "关闭" : "启动"
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: _ServiceDetail2.default.sdPBox },
-                _react2.default.createElement(
-                  'div',
-                  { className: (0, _classnames2.default)(_ServiceDetail2.default.sdPItem, _ServiceDetail2.default.sdDomain) },
-                  _react2.default.createElement(
-                    'span',
-                    { className: _ServiceDetail2.default.sdPItemName },
-                    '域名:'
-                  ),
-                  domain.map(function (item, i) {
-                    return _react2.default.createElement(
-                      'a',
-                      { key: i, href: 'http://' + item, target: '_blank', className: 'clLink' },
-                      item
-                    );
-                  })
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _ServiceDetail2.default.sdPItem },
-                  _react2.default.createElement(
-                    'span',
-                    { className: _ServiceDetail2.default.sdPItemName },
-                    '所属镜像:'
-                  ),
-                  _react2.default.createElement(
-                    'a',
-                    { href: 'javascript:;', className: 'clLink' },
-                    data.image_name
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: _ServiceDetail2.default.sdPItem },
-                  _react2.default.createElement(
-                    'span',
-                    { className: _ServiceDetail2.default.sdPItemName },
-                    '容器个数:'
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: _ServiceDetail2.default.sdInputRanges },
-                    _react2.default.createElement(InputRangesBox, { number: data.spec_replicas, getContianerNum: this.getContainerNum.bind(this) })
-                  ),
-                  _react2.default.createElement(
-                    'button',
-                    { className: 'btn btn-default ' + (!this.props.isBtnState.pods ? "btn-loading" : ""),
-                      disabled: !this.props.isBtnState.pods,
-                      onClick: this.onSavePods.bind(this) },
-                    '保存'
-                  )
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'sdDetail' },
-            _react2.default.createElement(
-              _Tabs2.default,
-              { defaultActiveKey: Number(this.props.tabs), onSelect: this.tabSelect.bind(this), id: 'sdTabs' },
-              _react2.default.createElement(
-                _Tab2.default,
-                { eventKey: 1, title: '配置' },
-                this.state.tabSelect == 1 ? tab : null
-              ),
-              _react2.default.createElement(
-                _Tab2.default,
-                { eventKey: 2, title: '监控' },
-                this.state.tabSelect == 2 ? tab : null
-              ),
-              _react2.default.createElement(
-                _Tab2.default,
-                { eventKey: 3, title: '日志' },
-                this.state.tabSelect == 3 ? tab : null
-              ),
-              _react2.default.createElement(
-                _Tab2.default,
-                { eventKey: 4, title: '发布' },
-                this.state.tabSelect == 4 ? tab : null
-              ),
-              _react2.default.createElement(
-                _Tab2.default,
-                { eventKey: 5, title: '域名' },
-                this.state.tabSelect == 5 ? tab : null
-              ),
-              _react2.default.createElement(
-                _Tab2.default,
-                { eventKey: 6, title: '容器实例' },
-                this.state.tabSelect == 6 ? tab : null
-              ),
-              _react2.default.createElement(
-                _Tab2.default,
-                { eventKey: 7, title: '操作' },
-                this.state.tabSelect == 7 ? tab : null
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF containerPadding'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdHd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdImg
+        }, void 0, _ref8, _ref9), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdInfo
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdTitle
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdTitleItem
+        }, void 0, '\u670D\u52A1\u540D\u79F0:', (0, _jsx3.default)('span', {}, void 0, data.service_name)), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdTitleItem
+        }, void 0, '\u90E8\u7F72\u65F6\u95F4:', (0, _jsx3.default)('span', {
+          className: 'cl9'
+        }, void 0, data.ltime)), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdTitleItem
+        }, void 0, '\u72B6\u6001:', serviceStateTxt), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdTitleItem
+        }, void 0, _ref10, _react2.default.createElement(
+          'button',
+          {
+            onClick: this.changeState.bind(this, data.fservice_name, serviceState == Const.SERVICE_STATE.Running),
+            className: serviceState == Const.SERVICE_STATE.Running ? "btn btn-default" : "btn btn-primary", ref: 'startUpBtn',
+            disabled: serviceState == Const.SERVICE_STATE.Pending
+          },
+          serviceState == Const.SERVICE_STATE.Running ? "关闭" : "启动"
+        ))), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdPBox
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_ServiceDetail2.default.sdPItem, _ServiceDetail2.default.sdDomain)
+        }, void 0, (0, _jsx3.default)('span', {
+          className: _ServiceDetail2.default.sdPItemName
+        }, void 0, '\u57DF\u540D:'), domain.map(function (item, i) {
+          return (0, _jsx3.default)('a', {
+            href: 'http://' + item,
+            target: '_blank',
+            className: 'clLink'
+          }, i, item);
+        })), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdPItem
+        }, void 0, (0, _jsx3.default)('span', {
+          className: _ServiceDetail2.default.sdPItemName
+        }, void 0, '\u6240\u5C5E\u955C\u50CF:'), (0, _jsx3.default)('a', {
+          href: 'javascript:;',
+          className: 'clLink'
+        }, void 0, data.image_name)), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdPItem
+        }, void 0, (0, _jsx3.default)('span', {
+          className: _ServiceDetail2.default.sdPItemName
+        }, void 0, '\u5BB9\u5668\u4E2A\u6570:'), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdInputRanges
+        }, void 0, (0, _jsx3.default)(InputRangesBox, {
+          number: data.spec_replicas,
+          getContianerNum: this.getContainerNum.bind(this)
+        })), (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.pods ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.pods,
+          onClick: this.onSavePods.bind(this)
+        }, void 0, '\u4FDD\u5B58'))))), (0, _jsx3.default)('div', {
+          className: 'sdDetail'
+        }, void 0, (0, _jsx3.default)(_Tabs2.default, {
+          defaultActiveKey: Number(this.props.tabs),
+          onSelect: this.tabSelect.bind(this),
+          id: 'sdTabs'
+        }, void 0, (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 1,
+          title: '\u914D\u7F6E'
+        }, void 0, this.state.tabSelect == 1 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 2,
+          title: '\u76D1\u63A7'
+        }, void 0, this.state.tabSelect == 2 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 3,
+          title: '\u65E5\u5FD7'
+        }, void 0, this.state.tabSelect == 3 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 4,
+          title: '\u53D1\u5E03'
+        }, void 0, this.state.tabSelect == 4 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 5,
+          title: '\u57DF\u540D'
+        }, void 0, this.state.tabSelect == 5 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 6,
+          title: '\u5BB9\u5668\u5B9E\u4F8B'
+        }, void 0, this.state.tabSelect == 6 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 7,
+          title: '\u64CD\u4F5C'
+        }, void 0, this.state.tabSelect == 7 ? tab : null))));
       }
     }]);
     return ServiceDetail;
@@ -16538,50 +14708,15 @@ module.exports =
     setTitle: _react.PropTypes.func.isRequired,
     store: _react2.default.PropTypes.object
   };
-  ServiceDetail.propTypes = {
-    serviceName: _react2.default.PropTypes.string,
-    tabs: _react2.default.PropTypes.string,
-    volumeList: _react2.default.PropTypes.array,
-    serviceDetail: _react2.default.PropTypes.object,
-    onSavePort: _react2.default.PropTypes.func,
-    onSaveVolume: _react2.default.PropTypes.func,
-    onSaveEnvironment: _react2.default.PropTypes.func,
-    onServiceDetailLoad: _react2.default.PropTypes.func,
-    onVolumeListLoad: _react2.default.PropTypes.func,
-    onSaveContainerDeploy: _react2.default.PropTypes.func,
-    onAddPort: _react2.default.PropTypes.func,
-    onDelPort: _react2.default.PropTypes.func,
-    onAddSave: _react2.default.PropTypes.func,
-    onDelSave: _react2.default.PropTypes.func,
-    onAddEnv: _react2.default.PropTypes.func,
-    onDelEnv: _react2.default.PropTypes.func,
-    notifications: _react2.default.PropTypes.object,
-    serviceState: _react2.default.PropTypes.string,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    loadEndpoints: _react2.default.PropTypes.func,
-    onClearServiceDetail: _react2.default.PropTypes.func,
-    onPodListLoad: _react2.default.PropTypes.func,
-    podList: _react2.default.PropTypes.array,
-    onChangeState: _react2.default.PropTypes.func,
-    onAutoStateUp: _react2.default.PropTypes.func,
-    onSaveCommand: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object,
-    getMonitorData: _react2.default.PropTypes.func,
-    monitorData: _react2.default.PropTypes.object,
-    buildingDetail: _react2.default.PropTypes.object,
-    getBuildingDetail: _react2.default.PropTypes.func,
-    onChangeRelease: _react2.default.PropTypes.func,
-    onDeleteService: _react2.default.PropTypes.func
-  };
   exports.default = (0, _withStyles2.default)(_ServiceDetail2.default)(ServiceDetail);
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(177);
-      var insertCss = __webpack_require__(18);
+      var content = __webpack_require__(178);
+      var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
         content = [[module.id, content, '']];
@@ -16591,79 +14726,62 @@ module.exports =
       module.exports._getCss = function() { return content.toString(); };
       module.exports._insertCss = function(options) { return insertCss(content, options) };
     
-      // Hot Module Replacement
-      // https://webpack.github.io/docs/hot-module-replacement
-      // Only activated in browser context
-      if (false) {
-        var removeCss = function() {};
-        module.hot.accept("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ServiceDetail.css", function() {
-          content = require("!!./../../../node_modules/css-loader/index.js?{\"sourceMap\":true,\"modules\":true,\"localIdentName\":\"[name]_[local]_[hash:base64:3]\",\"minimize\":false}!./../../../node_modules/postcss-loader/index.js?pack=default!./ServiceDetail.css");
-  
-          if (typeof content === 'string') {
-            content = [[module.id, content, '']];
-          }
-  
-          removeCss = insertCss(content, { replace: true });
-        });
-        module.hot.dispose(function() { removeCss(); });
-      }
-    
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
-  exports = module.exports = __webpack_require__(17)();
+  exports = module.exports = __webpack_require__(18)();
   // imports
   
   
   // module
-  exports.push([module.id, "/**/\n.ServiceDetail_assItem_1XR{\n  margin:35px 25px 0;\n  padding-bottom:35px;\n  border-bottom:1px solid #ececec;\n}\n.ServiceDetail_assBox_3Dp{\n  width:90%;\n  margin-top:25px;\n}\n.ServiceDetail_assBoxAuto_36z{\n  width:auto;\n}\n.ServiceDetail_assItem_1XR>button{\n  margin-right:50px;\n}\n.ServiceDetail_assItemNoborder_1RE{\n  border-bottom:0;\n\n}\n.ServiceDetail_assItemLast_37F{\n  margin-top:10px;\n}\n.ServiceDetail_asTabThird_3sz{\n\n}\n.ServiceDetail_astBox_2Tq{\n  margin-top:30px;\n}\n.ServiceDetail_astBox_2Tq table{\n  margin-bottom:0;\n}\n.ServiceDetail_astTdBox_1EQ{\n  padding:0 20px;\n}\n.ServiceDetail_astTdBox_1EQ>div{\n  margin:10px 0;\n}\n.ServiceDetail_assBtnBox_hR2{\n  margin-top:25px;\n}\n.ServiceDetail_assBtnBox_hR2 button{\n  margin-right:35px;\n}\n.ServiceDetail_astKeyItem_BqR{\n  margin-bottom:5px;\n}\n.ServiceDetail_astInp_2Cg{\n  display: inline-block;\n  width:42.5%;\n}\n.ServiceDetail_astDel_eZ8{\n  display:inline-block;\n  width:8%;\n  vertical-align: middle;\n  margin-left:2%;\n}\n.ServiceDetail_astLine_2f4{\n  display:inline-block;\n  margin:0 1%;\n  width:3%;\n  border-top:1px solid #999;\n  vertical-align: middle;\n}\n/**/\n.ServiceDetail_sdHd_2Te{\n  position: relative;\n  padding-top:30px;\n}\n.ServiceDetail_sdImg_2LN{\n  width:120px;\n  position: absolute;\n  text-align:center;\n}\n.ServiceDetail_sdImg_2LN img{\n  width:66px;\n  height: 66px;\n  border-radius:4px;\n}\n.ServiceDetail_sdImg_2LN a{\n  display:inline-block;\n  font-size:12px;\n  color:#333;\n  padding-left:18px;\n  margin-top:13px;\n  -webkit-transition:color .3s ease;\n  -o-transition:color .3s ease;\n  transition:color .3s ease;\n  position: relative;\n}\n.ServiceDetail_sdImg_2LN a:before{\n  font-family:\"icomoon\";\n  display: inline-block;\n  position: absolute;\n  content: \"\\E913\";\n  font-size:14px;\n  color:#767676;\n  left:0;\n  top:-2px;\n\n}\n.ServiceDetail_sdImg_2LN a:hover{\n  color:#09c8f4;\n}\n.ServiceDetail_sdImg_2LN a:hover{\n  text-decoration: none;\n}\n.ServiceDetail_sdImg_2LN a:focus{\n  text-decoration: none;\n}\n.ServiceDetail_sdInfo_1k6{\n  margin:-7px 20px 0 120px;\n}\n.ServiceDetail_sdTitle_3it{\n  border-bottom:1px solid #e8e8e8;\n  padding-bottom:20px;\n}\n.ServiceDetail_sdTitleItem_157{\n  display:inline-block;\n  text-align:center;\n  position: relative;\n  color:#333;\n}\n.ServiceDetail_sdTitleItem_157:after{\n  display: inline-block;\n  content:\" \";\n  height:15px;\n  width:1px;\n  background:#ced3dd;\n  vertical-align: middle;\n  position: absolute;\n  right:0;\n  top:4px;\n}\n.ServiceDetail_sdTitleItem_157:nth-child(4):after{\n  display:none;\n}\n.ServiceDetail_sdTitleItem_157:first-child{\n  width:26%;\n  text-align: left;\n  padding-left:10px;\n}\n.ServiceDetail_sdTitleItem_157:first-child span{\n  color:#24a8d9\n}\n.ServiceDetail_sdTitleItem_157:nth-child(2){\n  width:23%;\n}\n.ServiceDetail_sdTitleItem_157:nth-child(3){\n  width:21%;\n}\n.ServiceDetail_sdTitleItem_157:nth-child(4){\n  width:30%;\n  text-align: right;\n  padding-right:0;\n}\n.ServiceDetail_sdTitleItem_157 button{\n  margin-left:27px;\n}\n.ServiceDetail_sdTitleItem_157 span{\n  margin-left:10px;\n}\n.ServiceDetail_sdBd_2_I{\n  border-top:17px solid #f2f4f8;\n  padding-top:30px;\n  min-height:300px;\n}\n.ServiceDetail_sdPBox_3c9{\n  padding:24px 0 30px;\n}\n.ServiceDetail_sdPItem_1eG {\n  padding:10px 0;\n}\n.ServiceDetail_sdPItem_1eG:nth-child(3){\n  margin-top:20px;\n}\n.ServiceDetail_sdPItemName_1we{\n  display: inline-block;\n  width:70px;\n  text-align:right;\n  color:#333;\n  margin-right:10px;\n}\n.ServiceDetail_sdInputRanges_1W7{\n  display: inline-block;\n  width:33%;\n  height:23px;\n  vertical-align: middle;\n  margin-right:80px;\n}\n.ServiceDetail_sdBd_2_I>div>ul>li>a:after{\n  font-family:\"icomoon\";\n  color:#999;\n  content: \"\\E918\";\n  display: inline-block;\n  position: absolute;\n  top: 12px;\n  left: 16px;\n  font-size:18px;\n}\n.ServiceDetail_sdBd_2_I>div>ul>li:nth-child(1)>a:after{\n  content: \"\\E918\";\n}\n.ServiceDetail_sdBd_2_I>div>ul>li:nth-child(2)>a:after{\n  content: \"\\E911\";\n}\n.ServiceDetail_sdBd_2_I>div>ul>li:nth-child(3)>a:after{\n  content: \"\\E917\";\n}\n.ServiceDetail_sdBd_2_I>div>ul>li:nth-child(4)>a:after{\n  content: \"\\E90D\";\n}\n.ServiceDetail_sdBd_2_I>div>ul>li:nth-child(5)>a:after{\n  content: \"\\E914\";\n}\n.ServiceDetail_sdBd_2_I>div>ul>li:nth-child(6)>a:after{\n  content: \"\\E915\";\n}\n.ServiceDetail_sdBd_2_I>div>ul>li:nth-child(7)>a:after{\n  content: \"\\E91C\";\n}\n.ServiceDetail_sdLastBtn_2Ud{\n  margin-top:30px;\n}\n.ServiceDetail_sdDomain_Rcb input{\n  border-radius:0;\n  border:0;\n  -webkit-box-shadow:none;\n          box-shadow:none;\n  background:transparent;\n  border-bottom:1px solid #b6b6b6;\n  font-size:12px;\n  outline:none;\n}\n.ServiceDetail_btnChoose_3HE{\n  margin:-10px 0 15px 15px;\n\n}\n/***\n  容器配置\n***/\n.ServiceDetail_containerItem_15z{\n  width:100px;\n  height:103px;\n  border:1px solid #f2f4f8;\n  background:#f2f4f8;\n  border-radius:4px 4px 7px 7px;\n  border-bottom:3px solid #d7c698;\n  display:inline-block;\n  margin-right:42px;\n  cursor:pointer;\n}\n.ServiceDetail_containerItem_15z:hover{\n  -webkit-box-shadow:0 3px 5px rgba(215,198,152,.35);\n          box-shadow:0 3px 5px rgba(215,198,152,.35);\n}\n.ServiceDetail_containerSize_36O{\n  height:59px;\n  line-height:59px;\n  border-bottom:1px solid #ccc;\n  margin:0 22px;\n  text-align: center;\n  font-size:35px;\n}\n.ServiceDetail_containerSize_36O span{\n  font-size:30px;\n}\n.ServiceDetail_containerUnit_OET{\n  margin-top:10px;\n  text-align: center;\n  color:#666;\n}\n.ServiceDetail_containerActive_2D0{\n  background:#ebebea;\n  border:1px solid #c8b88f;\n  border-top:3px solid #c8b88f;\n}\n.ServiceDetail_containerItem2_3c-{\n  border-color:#5eafce;\n}\n.ServiceDetail_containerItem2_3c-:hover{\n  -webkit-box-shadow:0 3px 5px rgba(39,154,197,.35);\n          box-shadow:0 3px 5px rgba(39,154,197,.35);\n}\n.ServiceDetail_containerItem3_3do{\n  border-color:#a8ce6b;\n}\n.ServiceDetail_containerItem3_3do:hover{\n  -webkit-box-shadow:0 3px 5px rgba(130,165,75,.35);\n          box-shadow:0 3px 5px rgba(130,165,75,.35);\n}\n.ServiceDetail_containerItem4_3MR{\n  border-color:#889bcb;\n}\n.ServiceDetail_containerItem4_3MR:hover{\n  -webkit-box-shadow:0 3px 5px rgba(94,117,174,.35);\n          box-shadow:0 3px 5px rgba(94,117,174,.35);\n}\n.ServiceDetail_containerItem5_mAb{\n  border-color:#ef6256;\n}\n.ServiceDetail_containerItem5_mAb:hover{\n  -webkit-box-shadow:0 3px 5px rgba(168,91,85,.35);\n          box-shadow:0 3px 5px rgba(168,91,85,.35);\n}\n.ServiceDetail_chooseContainer_2qk{\n  display:inline-block;\n  color:#1da1d2;\n  position: relative;\n  vertical-align: bottom;\n  margin-bottom:3px;\n  padding-left:20px;\n  cursor:pointer;\n}\n.ServiceDetail_chooseContainer_2qk:before{\n  position: absolute;\n  font-size:18px;\n  left:-3px;\n  top:-1px;\n}\n.ServiceDetail_modalItem_2P1{\n  padding:20px 0 0 30px;\n  vertical-align: top;\n}\n.ServiceDetail_modalItem_2P1>div>div{\n  margin-bottom:27px;\n  margin-right:40px;\n}\n.ServiceDetail_modalBtn_sel{\n  text-align: center;\n  padding-bottom:20px;\n}\n.ServiceDetail_modalBtn_sel button{\n  padding:5px 15px;\n}\n.ServiceDetail_modalBtn_sel button:last-child{\n  margin-left:60px;\n}\n.ServiceDetail_handleBox_1-8{\n  padding:46px 0 40px 32px;\n}\n.ServiceDetail_handleBox_1-8 button{\n  width:350px;\n  -webkit-box-shadow:none;\n          box-shadow:none;\n  background:#fff;\n  color:#cc0000;\n  border:1px solid #cc0000;\n  height:37px;\n}\n.ServiceDetail_handleBox_1-8 button:active,.ServiceDetail_handleBox_1-8 button:focus{\n  background:#bf0a0a;\n  border-color:#bf0a0a;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n.ServiceDetail_handleBox_1-8 button:active:focus{\n  background:#bf0a0a;\n  border-color:#bf0a0a;\n  -webkit-box-shadow: none;\n          box-shadow: none;\n}\n.ServiceDetail_handleBox_1-8 p{\n  font-size:12px;\n  color:#cc0000;\n  margin:13px 6px;\n}\n.ServiceDetail_sdDomain_Rcb a{\n  margin-right:10px;\n}\n\n\n", "", {"version":3,"sources":["/./components/ServiceDeatil/ServiceDetail.css"],"names":[],"mappings":"AAAA,IAAI;AACJ;EACE,mBAAmB;EACnB,oBAAoB;EACpB,gCAAgC;CACjC;AACD;EACE,UAAU;EACV,gBAAgB;CACjB;AACD;EACE,WAAW;CACZ;AACD;EACE,kBAAkB;CACnB;AACD;EACE,gBAAgB;;CAEjB;AACD;EACE,gBAAgB;CACjB;AACD;;CAEC;AACD;EACE,gBAAgB;CACjB;AACD;EACE,gBAAgB;CACjB;AACD;EACE,eAAe;CAChB;AACD;EACE,cAAc;CACf;AACD;EACE,gBAAgB;CACjB;AACD;EACE,kBAAkB;CACnB;AACD;EACE,kBAAkB;CACnB;AACD;EACE,sBAAsB;EACtB,YAAY;CACb;AACD;EACE,qBAAqB;EACrB,SAAS;EACT,uBAAuB;EACvB,eAAe;CAChB;AACD;EACE,qBAAqB;EACrB,YAAY;EACZ,SAAS;EACT,0BAA0B;EAC1B,uBAAuB;CACxB;AAED,IAAI;AACJ;EACE,mBAAmB;EACnB,iBAAiB;CAClB;AACD;EACE,YAAY;EACZ,mBAAmB;EACnB,kBAAkB;CACnB;AACD;EACE,WAAW;EACX,aAAa;EACb,kBAAkB;CACnB;AACD;EACE,qBAAqB;EACrB,eAAe;EACf,WAAW;EACX,kBAAkB;EAClB,gBAAgB;EAChB,kCAA0B;EAA1B,6BAA0B;EAA1B,0BAA0B;EAC1B,mBAAmB;CACpB;AACD;EACE,sBAAsB;EACtB,sBAAsB;EACtB,mBAAmB;EACnB,iBAAiB;EACjB,eAAe;EACf,cAAc;EACd,OAAO;EACP,SAAS;;CAEV;AACD;EACE,cAAc;CACf;AACD;EACE,sBAAsB;CACvB;AACD;EACE,sBAAsB;CACvB;AACD;EACE,yBAAyB;CAC1B;AACD;EACE,gCAAgC;EAChC,oBAAoB;CACrB;AACD;EACE,qBAAqB;EACrB,kBAAkB;EAClB,mBAAmB;EACnB,WAAW;CACZ;AACD;EACE,sBAAsB;EACtB,YAAY;EACZ,YAAY;EACZ,UAAU;EACV,mBAAmB;EACnB,uBAAuB;EACvB,mBAAmB;EACnB,QAAQ;EACR,QAAQ;CACT;AACD;EACE,aAAa;CACd;AACD;EACE,UAAU;EACV,iBAAiB;EACjB,kBAAkB;CACnB;AACD;EACE,aAAa;CACd;AACD;EACE,UAAU;CACX;AACD;EACE,UAAU;CACX;AACD;EACE,UAAU;EACV,kBAAkB;EAClB,gBAAgB;CACjB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,8BAA8B;EAC9B,iBAAiB;EACjB,iBAAiB;CAClB;AACD;EACE,oBAAoB;CACrB;AACD;EACE,eAAe;CAChB;AACD;EACE,gBAAgB;CACjB;AACD;EACE,sBAAsB;EACtB,WAAW;EACX,iBAAiB;EACjB,WAAW;EACX,kBAAkB;CACnB;AACD;EACE,sBAAsB;EACtB,UAAU;EACV,YAAY;EACZ,uBAAuB;EACvB,kBAAkB;CACnB;AACD;EACE,sBAAsB;EACtB,WAAW;EACX,iBAAiB;EACjB,sBAAsB;EACtB,mBAAmB;EACnB,UAAU;EACV,WAAW;EACX,eAAe;CAChB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,gBAAgB;CACjB;AACD;EACE,gBAAgB;EAChB,SAAS;EACT,wBAAgB;UAAhB,gBAAgB;EAChB,uBAAuB;EACvB,gCAAgC;EAChC,eAAe;EACf,aAAa;CACd;AACD;EACE,yBAAyB;;CAE1B;AAED;;IAEI;AACJ;EACE,YAAY;EACZ,aAAa;EACb,yBAAyB;EACzB,mBAAmB;EACnB,8BAA8B;EAC9B,gCAAgC;EAChC,qBAAqB;EACrB,kBAAkB;EAClB,eAAe;CAChB;AACD;EACE,mDAA2C;UAA3C,2CAA2C;CAC5C;AACD;EACE,YAAY;EACZ,iBAAiB;EACjB,6BAA6B;EAC7B,cAAc;EACd,mBAAmB;EACnB,eAAe;CAChB;AACD;EACE,eAAe;CAChB;AACD;EACE,gBAAgB;EAChB,mBAAmB;EACnB,WAAW;CACZ;AAED;EACE,mBAAmB;EACnB,yBAAyB;EACzB,6BAA6B;CAC9B;AACD;EACE,qBAAqB;CACtB;AACD;EACE,kDAA0C;UAA1C,0CAA0C;CAC3C;AACD;EACE,qBAAqB;CACtB;AACD;EACE,kDAA0C;UAA1C,0CAA0C;CAC3C;AACD;EACE,qBAAqB;CACtB;AACD;EACE,kDAA0C;UAA1C,0CAA0C;CAC3C;AACD;EACE,qBAAqB;CACtB;AACD;EACE,iDAAyC;UAAzC,yCAAyC;CAC1C;AACD;EACE,qBAAqB;EACrB,cAAc;EACd,mBAAmB;EACnB,uBAAuB;EACvB,kBAAkB;EAClB,kBAAkB;EAClB,eAAe;CAChB;AACD;EACE,mBAAmB;EACnB,eAAe;EACf,UAAU;EACV,SAAS;CACV;AACD;EACE,sBAAsB;EACtB,oBAAoB;CACrB;AACD;EACE,mBAAmB;EACnB,kBAAkB;CACnB;AACD;EACE,mBAAmB;EACnB,oBAAoB;CACrB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,iBAAiB;CAClB;AACD;EACE,yBAAyB;CAC1B;AACD;EACE,YAAY;EACZ,wBAAgB;UAAhB,gBAAgB;EAChB,gBAAgB;EAChB,cAAc;EACd,yBAAyB;EACzB,YAAY;CACb;AACD;EACE,mBAAmB;EACnB,qBAAqB;EACrB,yBAAiB;UAAjB,iBAAiB;CAClB;AACD;EACE,mBAAmB;EACnB,qBAAqB;EACrB,yBAAiB;UAAjB,iBAAiB;CAClB;AACD;EACE,eAAe;EACf,cAAc;EACd,gBAAgB;CACjB;AACD;EACE,kBAAkB;CACnB","file":"ServiceDetail.css","sourcesContent":["/**/\n.assItem{\n  margin:35px 25px 0;\n  padding-bottom:35px;\n  border-bottom:1px solid #ececec;\n}\n.assBox{\n  width:90%;\n  margin-top:25px;\n}\n.assBoxAuto{\n  width:auto;\n}\n.assItem>button{\n  margin-right:50px;\n}\n.assItemNoborder{\n  border-bottom:0;\n\n}\n.assItemLast{\n  margin-top:10px;\n}\n.asTabThird{\n\n}\n.astBox{\n  margin-top:30px;\n}\n.astBox table{\n  margin-bottom:0;\n}\n.astTdBox{\n  padding:0 20px;\n}\n.astTdBox>div{\n  margin:10px 0;\n}\n.assBtnBox{\n  margin-top:25px;\n}\n.assBtnBox button{\n  margin-right:35px;\n}\n.astKeyItem{\n  margin-bottom:5px;\n}\n.astInp{\n  display: inline-block;\n  width:42.5%;\n}\n.astDel{\n  display:inline-block;\n  width:8%;\n  vertical-align: middle;\n  margin-left:2%;\n}\n.astLine{\n  display:inline-block;\n  margin:0 1%;\n  width:3%;\n  border-top:1px solid #999;\n  vertical-align: middle;\n}\n\n/**/\n.sdHd{\n  position: relative;\n  padding-top:30px;\n}\n.sdImg{\n  width:120px;\n  position: absolute;\n  text-align:center;\n}\n.sdImg img{\n  width:66px;\n  height: 66px;\n  border-radius:4px;\n}\n.sdImg a{\n  display:inline-block;\n  font-size:12px;\n  color:#333;\n  padding-left:18px;\n  margin-top:13px;\n  transition:color .3s ease;\n  position: relative;\n}\n.sdImg a:before{\n  font-family:\"icomoon\";\n  display: inline-block;\n  position: absolute;\n  content: \"\\e913\";\n  font-size:14px;\n  color:#767676;\n  left:0;\n  top:-2px;\n\n}\n.sdImg a:hover{\n  color:#09c8f4;\n}\n.sdImg a:hover{\n  text-decoration: none;\n}\n.sdImg a:focus{\n  text-decoration: none;\n}\n.sdInfo{\n  margin:-7px 20px 0 120px;\n}\n.sdTitle{\n  border-bottom:1px solid #e8e8e8;\n  padding-bottom:20px;\n}\n.sdTitleItem{\n  display:inline-block;\n  text-align:center;\n  position: relative;\n  color:#333;\n}\n.sdTitleItem:after{\n  display: inline-block;\n  content:\" \";\n  height:15px;\n  width:1px;\n  background:#ced3dd;\n  vertical-align: middle;\n  position: absolute;\n  right:0;\n  top:4px;\n}\n.sdTitleItem:nth-child(4):after{\n  display:none;\n}\n.sdTitleItem:first-child{\n  width:26%;\n  text-align: left;\n  padding-left:10px;\n}\n.sdTitleItem:first-child span{\n  color:#24a8d9\n}\n.sdTitleItem:nth-child(2){\n  width:23%;\n}\n.sdTitleItem:nth-child(3){\n  width:21%;\n}\n.sdTitleItem:nth-child(4){\n  width:30%;\n  text-align: right;\n  padding-right:0;\n}\n.sdTitleItem button{\n  margin-left:27px;\n}\n.sdTitleItem span{\n  margin-left:10px;\n}\n.sdBd{\n  border-top:17px solid #f2f4f8;\n  padding-top:30px;\n  min-height:300px;\n}\n.sdPBox{\n  padding:24px 0 30px;\n}\n.sdPItem {\n  padding:10px 0;\n}\n.sdPItem:nth-child(3){\n  margin-top:20px;\n}\n.sdPItemName{\n  display: inline-block;\n  width:70px;\n  text-align:right;\n  color:#333;\n  margin-right:10px;\n}\n.sdInputRanges{\n  display: inline-block;\n  width:33%;\n  height:23px;\n  vertical-align: middle;\n  margin-right:80px;\n}\n.sdBd>div>ul>li>a:after{\n  font-family:\"icomoon\";\n  color:#999;\n  content: \"\\e918\";\n  display: inline-block;\n  position: absolute;\n  top: 12px;\n  left: 16px;\n  font-size:18px;\n}\n.sdBd>div>ul>li:nth-child(1)>a:after{\n  content: \"\\e918\";\n}\n.sdBd>div>ul>li:nth-child(2)>a:after{\n  content: \"\\e911\";\n}\n.sdBd>div>ul>li:nth-child(3)>a:after{\n  content: \"\\e917\";\n}\n.sdBd>div>ul>li:nth-child(4)>a:after{\n  content: \"\\e90d\";\n}\n.sdBd>div>ul>li:nth-child(5)>a:after{\n  content: \"\\e914\";\n}\n.sdBd>div>ul>li:nth-child(6)>a:after{\n  content: \"\\e915\";\n}\n.sdBd>div>ul>li:nth-child(7)>a:after{\n  content: \"\\e91c\";\n}\n.sdLastBtn{\n  margin-top:30px;\n}\n.sdDomain input{\n  border-radius:0;\n  border:0;\n  box-shadow:none;\n  background:transparent;\n  border-bottom:1px solid #b6b6b6;\n  font-size:12px;\n  outline:none;\n}\n.btnChoose{\n  margin:-10px 0 15px 15px;\n\n}\n\n/***\n  容器配置\n***/\n.containerItem{\n  width:100px;\n  height:103px;\n  border:1px solid #f2f4f8;\n  background:#f2f4f8;\n  border-radius:4px 4px 7px 7px;\n  border-bottom:3px solid #d7c698;\n  display:inline-block;\n  margin-right:42px;\n  cursor:pointer;\n}\n.containerItem:hover{\n  box-shadow:0 3px 5px rgba(215,198,152,.35);\n}\n.containerSize{\n  height:59px;\n  line-height:59px;\n  border-bottom:1px solid #ccc;\n  margin:0 22px;\n  text-align: center;\n  font-size:35px;\n}\n.containerSize span{\n  font-size:30px;\n}\n.containerUnit{\n  margin-top:10px;\n  text-align: center;\n  color:#666;\n}\n\n.containerActive{\n  background:#ebebea;\n  border:1px solid #c8b88f;\n  border-top:3px solid #c8b88f;\n}\n.containerItem2{\n  border-color:#5eafce;\n}\n.containerItem2:hover{\n  box-shadow:0 3px 5px rgba(39,154,197,.35);\n}\n.containerItem3{\n  border-color:#a8ce6b;\n}\n.containerItem3:hover{\n  box-shadow:0 3px 5px rgba(130,165,75,.35);\n}\n.containerItem4{\n  border-color:#889bcb;\n}\n.containerItem4:hover{\n  box-shadow:0 3px 5px rgba(94,117,174,.35);\n}\n.containerItem5{\n  border-color:#ef6256;\n}\n.containerItem5:hover{\n  box-shadow:0 3px 5px rgba(168,91,85,.35);\n}\n.chooseContainer{\n  display:inline-block;\n  color:#1da1d2;\n  position: relative;\n  vertical-align: bottom;\n  margin-bottom:3px;\n  padding-left:20px;\n  cursor:pointer;\n}\n.chooseContainer:before{\n  position: absolute;\n  font-size:18px;\n  left:-3px;\n  top:-1px;\n}\n.modalItem{\n  padding:20px 0 0 30px;\n  vertical-align: top;\n}\n.modalItem>div>div{\n  margin-bottom:27px;\n  margin-right:40px;\n}\n.modalBtn{\n  text-align: center;\n  padding-bottom:20px;\n}\n.modalBtn button{\n  padding:5px 15px;\n}\n.modalBtn button:last-child{\n  margin-left:60px;\n}\n.handleBox{\n  padding:46px 0 40px 32px;\n}\n.handleBox button{\n  width:350px;\n  box-shadow:none;\n  background:#fff;\n  color:#cc0000;\n  border:1px solid #cc0000;\n  height:37px;\n}\n.handleBox button:active,.handleBox button:focus{\n  background:#bf0a0a;\n  border-color:#bf0a0a;\n  box-shadow: none;\n}\n.handleBox button:active:focus{\n  background:#bf0a0a;\n  border-color:#bf0a0a;\n  box-shadow: none;\n}\n.handleBox p{\n  font-size:12px;\n  color:#cc0000;\n  margin:13px 6px;\n}\n.sdDomain a{\n  margin-right:10px;\n}\n\n\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "._1XRt{margin:35px 25px 0;padding-bottom:35px;border-bottom:1px solid #ececec}._3Dp7{width:90%;margin-top:25px}._36zY{width:auto}._1XRt>button{margin-right:50px}._1REZ{border-bottom:0}._37FG{margin-top:10px}._2TqT{margin-top:30px}._2TqT table{margin-bottom:0}._1EQ1{padding:0 20px}._1EQ1>div{margin:10px 0}.hR2k{margin-top:25px}.hR2k button{margin-right:35px}.BqRJ{margin-bottom:5px}._2CgZ{display:inline-block;width:42.5%}.eZ8F{width:8%;margin-left:2%}._2f4m,.eZ8F{display:inline-block;vertical-align:middle}._2f4m{margin:0 1%;width:3%;border-top:1px solid #999}._2Ter{position:relative;padding-top:30px}._2LNi{width:120px;position:absolute;text-align:center}._2LNi img{width:66px;height:66px;border-radius:4px}._2LNi a{display:inline-block;font-size:12px;color:#333;padding-left:18px;margin-top:13px;-webkit-transition:color .3s ease;transition:color .3s ease;position:relative}._2LNi a:before{font-family:icomoon;display:inline-block;position:absolute;content:\"\\E913\";font-size:14px;color:#767676;left:0;top:-2px}._2LNi a:hover{color:#09c8f4}._2LNi a:focus,._2LNi a:hover{text-decoration:none}._1k6T{margin:-7px 20px 0 120px}._3itp{border-bottom:1px solid #e8e8e8;padding-bottom:20px}._157J{text-align:center;position:relative;color:#333}._157J,._157J:after{display:inline-block}._157J:after{content:\" \";height:15px;width:1px;background:#ced3dd;vertical-align:middle;position:absolute;right:0;top:4px}._157J:nth-child(4):after{display:none}._157J:first-child{width:26%;text-align:left;padding-left:10px}._157J:first-child span{color:#24a8d9}._157J:nth-child(2){width:23%}._157J:nth-child(3){width:21%}._157J:nth-child(4){width:30%;text-align:right;padding-right:0}._157J button{margin-left:27px}._157J span{margin-left:10px}._2_Ij{border-top:17px solid #f2f4f8;padding-top:30px;min-height:300px}._3c9o{padding:24px 0 30px}._1eGt{padding:10px 0}._1eGt:nth-child(3){margin-top:20px}._1weR{width:70px;text-align:right;color:#333;margin-right:10px}._1W7b,._1weR{display:inline-block}._1W7b{width:33%;height:23px;vertical-align:middle;margin-right:80px}._2_Ij>div>ul>li>a:after{font-family:icomoon;color:#999;content:\"\\E918\";display:inline-block;position:absolute;top:12px;left:16px;font-size:18px}._2_Ij>div>ul>li:nth-child(1)>a:after{content:\"\\E918\"}._2_Ij>div>ul>li:nth-child(2)>a:after{content:\"\\E911\"}._2_Ij>div>ul>li:nth-child(3)>a:after{content:\"\\E917\"}._2_Ij>div>ul>li:nth-child(4)>a:after{content:\"\\E90D\"}._2_Ij>div>ul>li:nth-child(5)>a:after{content:\"\\E914\"}._2_Ij>div>ul>li:nth-child(6)>a:after{content:\"\\E915\"}._2_Ij>div>ul>li:nth-child(7)>a:after{content:\"\\E91C\"}._2UdE{margin-top:30px}.Rcba input{border-radius:0;border:0;box-shadow:none;background:transparent;border-bottom:1px solid #b6b6b6;font-size:12px;outline:none}._3HEx{margin:-10px 0 15px 15px}._15zE{width:100px;height:103px;border:1px solid #f2f4f8;background:#f2f4f8;border-radius:4px 4px 7px 7px;border-bottom:3px solid #d7c698;display:inline-block;margin-right:42px;cursor:pointer}._15zE:hover{box-shadow:0 3px 5px hsla(44,44%,72%,.35)}._36Or{height:59px;line-height:59px;border-bottom:1px solid #ccc;margin:0 22px;text-align:center;font-size:35px}._36Or span{font-size:30px}.OETX{margin-top:10px;text-align:center;color:#666}._2D0-{background:#ebebea;border:1px solid #c8b88f;border-top:3px solid #c8b88f}._3c-z{border-color:#5eafce}._3c-z:hover{box-shadow:0 3px 5px rgba(39,154,197,.35)}._3doo{border-color:#a8ce6b}._3doo:hover{box-shadow:0 3px 5px rgba(130,165,75,.35)}._3MRU{border-color:#889bcb}._3MRU:hover{box-shadow:0 3px 5px rgba(94,117,174,.35)}.mAb1{border-color:#ef6256}.mAb1:hover{box-shadow:0 3px 5px rgba(168,91,85,.35)}._2qkh{display:inline-block;color:#1da1d2;position:relative;vertical-align:bottom;margin-bottom:3px;padding-left:20px;cursor:pointer}._2qkh:before{position:absolute;font-size:18px;left:-3px;top:-1px}._2P1K{padding:20px 0 0 30px;vertical-align:top}._2P1K>div>div{margin-bottom:27px;margin-right:40px}.selR{text-align:center;padding-bottom:20px}.selR button{padding:5px 15px}.selR button:last-child{margin-left:60px}._1-8R{padding:46px 0 40px 32px}._1-8R button{width:350px;box-shadow:none;background:#fff;color:#c00;border:1px solid #c00;height:37px}._1-8R button:active,._1-8R button:active:focus,._1-8R button:focus{background:#bf0a0a;border-color:#bf0a0a;box-shadow:none}._1-8R p{font-size:12px;color:#c00;margin:13px 6px}.Rcba a{margin-right:10px}", ""]);
   
   // exports
   exports.locals = {
-  	"assItem": "ServiceDetail_assItem_1XR",
-  	"assBox": "ServiceDetail_assBox_3Dp",
-  	"assBoxAuto": "ServiceDetail_assBoxAuto_36z",
-  	"assItemNoborder": "ServiceDetail_assItemNoborder_1RE",
-  	"assItemLast": "ServiceDetail_assItemLast_37F",
-  	"asTabThird": "ServiceDetail_asTabThird_3sz",
-  	"astBox": "ServiceDetail_astBox_2Tq",
-  	"astTdBox": "ServiceDetail_astTdBox_1EQ",
-  	"assBtnBox": "ServiceDetail_assBtnBox_hR2",
-  	"astKeyItem": "ServiceDetail_astKeyItem_BqR",
-  	"astInp": "ServiceDetail_astInp_2Cg",
-  	"astDel": "ServiceDetail_astDel_eZ8",
-  	"astLine": "ServiceDetail_astLine_2f4",
-  	"sdHd": "ServiceDetail_sdHd_2Te",
-  	"sdImg": "ServiceDetail_sdImg_2LN",
-  	"sdInfo": "ServiceDetail_sdInfo_1k6",
-  	"sdTitle": "ServiceDetail_sdTitle_3it",
-  	"sdTitleItem": "ServiceDetail_sdTitleItem_157",
-  	"sdBd": "ServiceDetail_sdBd_2_I",
-  	"sdPBox": "ServiceDetail_sdPBox_3c9",
-  	"sdPItem": "ServiceDetail_sdPItem_1eG",
-  	"sdPItemName": "ServiceDetail_sdPItemName_1we",
-  	"sdInputRanges": "ServiceDetail_sdInputRanges_1W7",
-  	"sdLastBtn": "ServiceDetail_sdLastBtn_2Ud",
-  	"sdDomain": "ServiceDetail_sdDomain_Rcb",
-  	"btnChoose": "ServiceDetail_btnChoose_3HE",
-  	"containerItem": "ServiceDetail_containerItem_15z",
-  	"containerSize": "ServiceDetail_containerSize_36O",
-  	"containerUnit": "ServiceDetail_containerUnit_OET",
-  	"containerActive": "ServiceDetail_containerActive_2D0",
-  	"containerItem2": "ServiceDetail_containerItem2_3c-",
-  	"containerItem3": "ServiceDetail_containerItem3_3do",
-  	"containerItem4": "ServiceDetail_containerItem4_3MR",
-  	"containerItem5": "ServiceDetail_containerItem5_mAb",
-  	"chooseContainer": "ServiceDetail_chooseContainer_2qk",
-  	"modalItem": "ServiceDetail_modalItem_2P1",
-  	"modalBtn": "ServiceDetail_modalBtn_sel",
-  	"handleBox": "ServiceDetail_handleBox_1-8"
+  	"assItem": "_1XRt",
+  	"assBox": "_3Dp7",
+  	"assBoxAuto": "_36zY",
+  	"assItemNoborder": "_1REZ",
+  	"assItemLast": "_37FG",
+  	"asTabThird": "_3szN",
+  	"astBox": "_2TqT",
+  	"astTdBox": "_1EQ1",
+  	"assBtnBox": "hR2k",
+  	"astKeyItem": "BqRJ",
+  	"astInp": "_2CgZ",
+  	"astDel": "eZ8F",
+  	"astLine": "_2f4m",
+  	"sdHd": "_2Ter",
+  	"sdImg": "_2LNi",
+  	"sdInfo": "_1k6T",
+  	"sdTitle": "_3itp",
+  	"sdTitleItem": "_157J",
+  	"sdBd": "_2_Ij",
+  	"sdPBox": "_3c9o",
+  	"sdPItem": "_1eGt",
+  	"sdPItemName": "_1weR",
+  	"sdInputRanges": "_1W7b",
+  	"sdLastBtn": "_2UdE",
+  	"sdDomain": "Rcba",
+  	"btnChoose": "_3HEx",
+  	"containerItem": "_15zE",
+  	"containerSize": "_36Or",
+  	"containerUnit": "OETX",
+  	"containerActive": "_2D0-",
+  	"containerItem2": "_3c-z",
+  	"containerItem3": "_3doo",
+  	"containerItem4": "_3MRU",
+  	"containerItem5": "mAb1",
+  	"chooseContainer": "_2qkh",
+  	"modalItem": "_2P1K",
+  	"modalBtn": "selR",
+  	"handleBox": "_1-8R"
   };
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16672,59 +14790,63 @@ module.exports =
     value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _extends2 = __webpack_require__(37);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _ContainerBox = __webpack_require__(166);
+  var _ContainerBox = __webpack_require__(167);
   
   var _ContainerBox2 = _interopRequireDefault(_ContainerBox);
   
-  var _ContainerItem = __webpack_require__(169);
+  var _ContainerItem = __webpack_require__(170);
   
   var _ContainerItem2 = _interopRequireDefault(_ContainerItem);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _lib = __webpack_require__(179);
+  var _lib = __webpack_require__(180);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _deployService = __webpack_require__(107);
+  var _deployService = __webpack_require__(108);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -16734,7 +14856,7 @@ module.exports =
     function AutoStartUpToggle(props) {
       (0, _classCallCheck3.default)(this, AutoStartUpToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AutoStartUpToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (AutoStartUpToggle.__proto__ || (0, _getPrototypeOf2.default)(AutoStartUpToggle)).call(this, props));
   
       _this.state = {
         autoStart: true
@@ -16760,7 +14882,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           disabled: this.props.disabled,
           defaultChecked: this.state.autoStart,
           onChange: this.handClick.bind(this)
@@ -16773,11 +14895,16 @@ module.exports =
                         */
   
   
-  AutoStartUpToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    isState: _react2.default.PropTypes.bool,
-    disabled: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)('span', {}, void 0, '\u66F4\u6539');
+  
+  var _ref2 = (0, _jsx3.default)('span', {
+    'aria-hidden': 'true'
+  }, void 0, '\xD7');
+  
+  var _ref3 = (0, _jsx3.default)('h4', {
+    className: 'modal-title',
+    id: 'contained-modal-title-sm'
+  }, void 0, '\u5BB9\u5668\u914D\u7F6E');
   
   var ChooseContainerBtn = function (_Component2) {
     (0, _inherits3.default)(ChooseContainerBtn, _Component2);
@@ -16785,7 +14912,7 @@ module.exports =
     function ChooseContainerBtn(props) {
       (0, _classCallCheck3.default)(this, ChooseContainerBtn);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ChooseContainerBtn).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ChooseContainerBtn.__proto__ || (0, _getPrototypeOf2.default)(ChooseContainerBtn)).call(this, props));
   
       _this2.state = {
         modalShow: false,
@@ -16825,71 +14952,130 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'chooseContainer icon-operation', onClick: this.showModal.bind(this) },
-          _react2.default.createElement(
-            'span',
-            null,
-            '更改'
-          ),
-          _react2.default.createElement(
-            _lib.Modal,
-            (0, _extends3.default)({}, this.props, { show: this.state.show, onHide: this.hideModal.bind(this), bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
-            _react2.default.createElement(
-              'div',
-              { className: 'modal-header' },
-              _react2.default.createElement(
-                'button',
-                { type: 'button', onClick: this.hideModal.bind(this), className: 'close', 'aria-label': 'Close' },
-                _react2.default.createElement(
-                  'span',
-                  { 'aria-hidden': 'true' },
-                  '×'
-                )
-              ),
-              _react2.default.createElement(
-                'h4',
-                { className: 'modal-title', id: 'contained-modal-title-sm' },
-                '容器配置'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'modal-body' },
-              _react2.default.createElement(
-                'div',
-                { className: 'modalItem' },
-                _react2.default.createElement(_ContainerBox2.default, {
-                  getContainer: this.getContainer.bind(this)
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'modalBtn' },
-                _react2.default.createElement(
-                  _lib.Button,
-                  { bsStyle: 'primary', onClick: this.saveContainerDeploy.bind(this) },
-                  '保存'
-                ),
-                _react2.default.createElement(
-                  _lib.Button,
-                  { bsStyle: 'default', onClick: this.hideModal.bind(this) },
-                  '取消'
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'chooseContainer icon-operation',
+          onClick: this.showModal.bind(this)
+        }, void 0, _ref, _react2.default.createElement(
+          _lib.Modal,
+          (0, _extends3.default)({}, this.props, { show: this.state.show, onHide: this.hideModal.bind(this), bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
+          (0, _jsx3.default)('div', {
+            className: 'modal-header'
+          }, void 0, (0, _jsx3.default)('button', {
+            type: 'button',
+            onClick: this.hideModal.bind(this),
+            className: 'close',
+            'aria-label': 'Close'
+          }, void 0, _ref2), _ref3),
+          (0, _jsx3.default)('div', {
+            className: 'modal-body'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'modalItem'
+          }, void 0, (0, _jsx3.default)(_ContainerBox2.default, {
+            getContainer: this.getContainer.bind(this)
+          })), (0, _jsx3.default)('div', {
+            className: 'modalBtn'
+          }, void 0, (0, _jsx3.default)(_lib.Button, {
+            bsStyle: 'primary',
+            onClick: this.saveContainerDeploy.bind(this)
+          }, void 0, '\u4FDD\u5B58'), (0, _jsx3.default)(_lib.Button, {
+            bsStyle: 'default',
+            onClick: this.hideModal.bind(this)
+          }, void 0, '\u53D6\u6D88')))
+        ));
       }
     }]);
     return ChooseContainerBtn;
   }(_react.Component);
   
-  ChooseContainerBtn.propTypes = {
-    onSaveContainerDeploy: _react2.default.PropTypes.func,
-    serviceName: _react2.default.PropTypes.string
-  };
+  var _ref4 = (0, _jsx3.default)('option', {
+    value: 'TCP'
+  }, void 0, 'TCP');
+  
+  var _ref5 = (0, _jsx3.default)('option', {
+    value: 'UDP'
+  }, void 0, 'UDP');
+  
+  var _ref6 = (0, _jsx3.default)('option', {
+    value: 'HTTP'
+  }, void 0, 'HTTP');
+  
+  var _ref7 = (0, _jsx3.default)('option', {
+    value: 'TCP'
+  }, void 0, 'TCP');
+  
+  var _ref8 = (0, _jsx3.default)('option', {
+    value: 'no'
+  }, void 0, '\u4E0D\u53EF\u8BBF\u95EE');
+  
+  var _ref9 = (0, _jsx3.default)('option', {
+    value: 'outsisde'
+  }, void 0, '\u5916\u90E8\u8303\u56F4');
+  
+  var _ref10 = (0, _jsx3.default)('option', {
+    value: 'inside'
+  }, void 0, '\u5185\u90E8\u8303\u56F4');
+  
+  var _ref11 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u5BB9\u5668\u7AEF\u53E3'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u534F\u8BAE'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u65B9\u5F0F'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u8303\u56F4'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref12 = (0, _jsx3.default)('option', {
+    value: '-1'
+  }, void 0, '\u8BF7\u9009\u62E9\u6570\u636E\u5377');
+  
+  var _ref13 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u6570\u636E\u5377\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u5BB9\u5668\u8DEF\u5F84'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u662F\u5426\u53EA\u8BFB'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref14 = (0, _jsx3.default)('div', {
+    className: 'astLine'
+  });
+  
+  var _ref15 = (0, _jsx3.default)('span', {}, void 0, 'x');
+  
+  var _ref16 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7AEF\u53E3',
+    titleEnglish: 'PORT',
+    titleInfo: '\u5BB9\u5668\u7AEF\u53E3\u4F1A\u6620\u5C04\u5230\u4E3B\u673A\u7AEF\u53E3\u4E0A'
+  });
+  
+  var _ref17 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u73AF\u5883\u53D8\u91CF',
+    titleEnglish: 'ENVIRONMENT VARIABLE',
+    titleInfo: ''
+  });
+  
+  var _ref18 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5BB9\u5668\u914D\u7F6E',
+    titleEnglish: 'CONTAINER CONFIGURATION',
+    titleInfo: '\u5BB9\u5668\u914D\u7F6E\u8BF4\u660E'
+  });
+  
+  var _ref19 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u542F\u52A8\u547D\u4EE4',
+    titleEnglish: 'JRE',
+    titleInfo: '\u542F\u52A8\u547D\u4EE4\u89E3\u91CA\u8BF4\u660E '
+  });
+  
+  var _ref20 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u81EA\u52A8\u542F\u52A8',
+    titleEnglish: 'AUTO UPDATE SETTING',
+    titleInfo: '\u81EA\u52A8\u542F\u52A8\u8BBE\u7F6E'
+  });
   
   var GetDisposedTabs = function (_Component3) {
     (0, _inherits3.default)(GetDisposedTabs, _Component3);
@@ -16897,7 +15083,7 @@ module.exports =
     function GetDisposedTabs(props) {
       (0, _classCallCheck3.default)(this, GetDisposedTabs);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetDisposedTabs).call(this, props));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (GetDisposedTabs.__proto__ || (0, _getPrototypeOf2.default)(GetDisposedTabs)).call(this, props));
   
       _this3.state = {
         isStateUp: 1,
@@ -17065,161 +15251,56 @@ module.exports =
             sd = this.props.serviceDetail;
         if (sd && sd.container && sd.container.length) data = this.props.serviceDetail.container;
         var tr = data.map(function (item, i) {
-          return _react2.default.createElement(
-            'tr',
-            { key: item.at },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'div',
-                  { className: "iaBox" },
-                  _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this7.isPortRepeat.bind(_this7, i), className: 'form-control form-control-sm', defaultValue: item.container_port }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'iaOk icon-right', onClick: _this7.focusVal.bind(_this7, i) },
-                    ' '
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'iaDel icon-delete', onClick: _this7.delVal.bind(_this7, i) },
-                    ' '
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'protocol', defaultValue: item.protocol },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'TCP' },
-                    'TCP'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'UDP' },
-                    'UDP'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'access_mode', defaultValue: item.access_mode },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'HTTP' },
-                    'HTTP'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'TCP' },
-                    'TCP'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'no' },
-                    '不可访问'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'access_scope', defaultValue: item.access_scope },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'outsisde' },
-                    '外部范围'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'inside' },
-                    '内部范围'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this7.delPortTr.bind(_this7, item.at) },
-                ' '
-              )
-            )
-          );
+          return (0, _jsx3.default)('tr', {}, item.at, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: "iaBox"
+          }, void 0, _react2.default.createElement('input', { type: 'number', ref: 'container_port', onBlur: _this7.isPortRepeat.bind(_this7, i), className: 'form-control form-control-sm', defaultValue: item.container_port }), (0, _jsx3.default)('span', {
+            className: 'iaOk icon-right',
+            onClick: _this7.focusVal.bind(_this7, i)
+          }, void 0, ' '), (0, _jsx3.default)('span', {
+            className: 'iaDel icon-delete',
+            onClick: _this7.delVal.bind(_this7, i)
+          }, void 0, ' ')))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'protocol', defaultValue: item.protocol },
+            _ref4,
+            _ref5
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'access_mode', defaultValue: item.access_mode },
+            _ref6,
+            _ref7,
+            _ref8
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'access_scope', defaultValue: item.access_scope },
+            _ref9,
+            _ref10
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+            href: 'javascript:;',
+            className: 'delBtn',
+            onClick: _this7.delPortTr.bind(_this7, item.at)
+          }, void 0, ' ')));
         });
         return tr;
       }
     }, {
       key: 'getPortTable',
       value: function getPortTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-bordered' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '容器端口'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '协议'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '访问方式'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '访问范围'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '20%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            { ref: 'tab_container_body' },
-            this.getPortTableBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-bordered'
+        }, void 0, _ref11, _react2.default.createElement(
+          'tbody',
+          { ref: 'tab_container_body' },
+          this.getPortTableBody()
+        ));
       }
     }, {
       key: 'addPortTr',
@@ -17274,74 +15355,36 @@ module.exports =
         var tr = data.map(function (item, i) {
           var options = my.props.volumeList.map(function (obj, i) {
             if (item.disk_name == obj.disk_name || obj.disk_status == "unused") {
-              return _react2.default.createElement(
-                'option',
-                { key: i, value: obj.disk_name },
-                obj.disk_name,
-                ' '
-              );
+              return (0, _jsx3.default)('option', {
+                value: obj.disk_name
+              }, i, obj.disk_name, ' ');
             } else {
               return false;
             }
           });
-          return _react2.default.createElement(
-            'tr',
-            { key: item.at },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'select',
-                  { className: 'form-control', ref: 'volumnName', defaultValue: item.disk_name,
-                    onChange: _this8.isSaveRepeat.bind(_this8, i)
-                  },
-                  _react2.default.createElement(
-                    'option',
-                    { value: '-1' },
-                    '请选择数据卷'
-                  ),
-                  options
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement('input', { type: 'text', className: 'form-control', ref: 'container_path', defaultValue: item.disk_path,
-                  onBlur: _this8.isPathValidata.bind(_this8)
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'astTdBox' },
-                _react2.default.createElement(
-                  'label',
-                  null,
-                  _react2.default.createElement('input', { type: 'checkbox', defaultChecked: item.readonly == "True" }),
-                  ' 是否只读'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this8.delSaveTr.bind(_this8, item.at) },
-                ' '
-              )
-            )
-          );
+          return (0, _jsx3.default)('tr', {}, item.at, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement(
+            'select',
+            { className: 'form-control', ref: 'volumnName', defaultValue: item.disk_name,
+              onChange: _this8.isSaveRepeat.bind(_this8, i)
+            },
+            _ref12,
+            options
+          ))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control', ref: 'container_path', defaultValue: item.disk_path,
+            onBlur: _this8.isPathValidata.bind(_this8)
+          }))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'astTdBox'
+          }, void 0, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('input', {
+            type: 'checkbox',
+            defaultChecked: item.readonly == "True"
+          }), ' \u662F\u5426\u53EA\u8BFB'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+            href: 'javascript:;',
+            className: 'delBtn',
+            onClick: _this8.delSaveTr.bind(_this8, item.at)
+          }, void 0, ' ')));
         });
   
         return tr;
@@ -17349,43 +15392,13 @@ module.exports =
     }, {
       key: 'getSaveTable',
       value: function getSaveTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-bordered' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '数据卷名称'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '容器路径'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '是否只读'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            { ref: 'tab_storage_body' },
-            this.getSaveTableBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-bordered'
+        }, void 0, _ref13, _react2.default.createElement(
+          'tbody',
+          { ref: 'tab_storage_body' },
+          this.getSaveTableBody()
+        ));
       }
     }, {
       key: 'addSaveTr',
@@ -17439,30 +15452,31 @@ module.exports =
             sd = this.props.serviceDetail;
         if (sd && sd.env && sd.env.length) data = this.props.serviceDetail.env;
         var keyBox = data.map(function (item, i) {
-          return _react2.default.createElement(
-            'div',
-            { key: item.at, className: 'astKeyItem' },
-            _react2.default.createElement(
-              'div',
-              { className: 'astInp' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this9.isEnvKeyRepeat.bind(_this9, i), placeholder: '键', defaultValue: item.env_key })
-            ),
-            _react2.default.createElement('div', { className: 'astLine' }),
-            _react2.default.createElement(
-              'div',
-              { className: 'astInp' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this9.isEnvValue.bind(_this9), placeholder: '值', defaultValue: item.env_value })
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'astDel' },
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: 'delBtn', onClick: _this9.delEnvironmentData.bind(_this9, item.at) },
-                ' '
-              )
-            )
-          );
+          return (0, _jsx3.default)('div', {
+            className: 'astKeyItem'
+          }, item.at, (0, _jsx3.default)('div', {
+            className: 'astInp'
+          }, void 0, (0, _jsx3.default)('input', {
+            type: 'text',
+            className: 'form-control',
+            onBlur: _this9.isEnvKeyRepeat.bind(_this9, i),
+            placeholder: '\u952E',
+            defaultValue: item.env_key
+          })), _ref14, (0, _jsx3.default)('div', {
+            className: 'astInp'
+          }, void 0, (0, _jsx3.default)('input', {
+            type: 'text',
+            className: 'form-control',
+            onBlur: _this9.isEnvValue.bind(_this9),
+            placeholder: '\u503C',
+            defaultValue: item.env_value
+          })), (0, _jsx3.default)('div', {
+            className: 'astDel'
+          }, void 0, (0, _jsx3.default)('a', {
+            href: 'javascript:;',
+            className: 'delBtn',
+            onClick: _this9.delEnvironmentData.bind(_this9, item.at)
+          }, void 0, ' ')));
         });
         return keyBox;
       }
@@ -17515,29 +15529,11 @@ module.exports =
             style = styleArr[n];
         newData.push(_constants.CPU[n]);
         var children = newData.map(function (item, i) {
-          return _react2.default.createElement(
-            'div',
-            { className: style, key: i },
-            _react2.default.createElement(
-              _ContainerItem2.default,
-              { key: i, classNumber: i },
-              _react2.default.createElement(
-                'span',
-                null,
-                item.x
-              ),
-              _react2.default.createElement(
-                'span',
-                null,
-                'x'
-              ),
-              _react2.default.createElement(
-                'span',
-                null,
-                item.m
-              )
-            )
-          );
+          return (0, _jsx3.default)('div', {
+            className: style
+          }, i, (0, _jsx3.default)(_ContainerItem2.default, {
+            classNumber: i
+          }, i, (0, _jsx3.default)('span', {}, void 0, item.x), _ref15, (0, _jsx3.default)('span', {}, void 0, item.m)));
         });
         return children;
       }
@@ -17582,173 +15578,89 @@ module.exports =
             n++;
           }
         });
-        var volumeLength = n == 0 ? "暂时没有数据卷" : '目前有' + n + '个数据卷';
-        return _react2.default.createElement(
+        var volumeLength = n == 0 ? "暂时没有数据卷" : '\u76EE\u524D\u6709' + n + '\u4E2A\u6570\u636E\u5377';
+        return (0, _jsx3.default)('div', {
+          className: 'asTabThird'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref16, (0, _jsx3.default)('div', {
+          className: 'astBox'
+        }, void 0, this.getPortTable()), (0, _jsx3.default)('div', {
+          className: 'assBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.addPortTr.bind(this)
+        }, void 0, '\u6DFB\u52A0'), (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.port ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.port,
+          onClick: this.savePort.bind(this)
+        }, void 0, '\u4FDD\u5B58'), _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+          title: '\u5B58\u50A8\u8BBE\u7F6E',
+          titleEnglish: 'SAVE SETTING',
+          titleInfo: volumeLength
+        }), _react2.default.createElement(
           'div',
-          { className: 'asTabThird' },
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '端口',
-              titleEnglish: 'PORT',
-              titleInfo: '容器端口会映射到主机端口上'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'astBox' },
-              this.getPortTable()
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBtnBox' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary',
-                  onClick: this.addPortTr.bind(this)
-                },
-                '添加'
-              ),
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-default ' + (!this.props.isBtnState.port ? "btn-loading" : ""),
-                  disabled: !this.props.isBtnState.port,
-                  onClick: this.savePort.bind(this) },
-                '保存'
-              ),
-              _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '存储设置',
-              titleEnglish: 'SAVE SETTING',
-              titleInfo: volumeLength
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'astBox', ref: 'tab_save_box' },
-              this.getSaveTable()
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBtnBox' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary', onClick: this.addSaveTr.bind(this) },
-                '添加'
-              ),
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-default ' + (!this.props.isBtnState.storage ? "btn-loading" : ""),
-                  disabled: !this.props.isBtnState.storage,
-                  onClick: this.saveStorage.bind(this)
-                },
-                '保存'
-              ),
-              _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '环境变量',
-              titleEnglish: 'ENVIRONMENT VARIABLE',
-              titleInfo: ''
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'astBox', ref: 'tab_env_box' },
-              this.getEnvironment()
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBtnBox' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary', onClick: this.addEnvironmentData.bind(this) },
-                '添加'
-              ),
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-default ' + (!this.props.isBtnState.env ? "btn-loading" : ""),
-                  disabled: !this.props.isBtnState.env,
-                  onClick: this.saveEnvironment.bind(this)
-                },
-                '保存'
-              ),
-              _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '容器配置',
-              titleEnglish: 'CONTAINER CONFIGURATION',
-              titleInfo: '容器配置说明'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              this.getContainerBox(data.containerDeploy),
-              _react2.default.createElement(ChooseContainerBtn, {
-                serviceName: this.props.serviceDetail.fservice_name,
-                onSaveContainerDeploy: function onSaveContainerDeploy(data) {
-                  _this10.props.onSaveContainerDeploy(data);
-                }
-              })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '启动命令',
-              titleEnglish: 'JRE',
-              titleInfo: '启动命令解释说明 '
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              _react2.default.createElement('input', { className: 'form-control',
-                type: 'text',
-                placeholder: '',
-                ref: 'command',
-                defaultValue: data.command
-              })
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBtnBox' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-default ' + (!this.props.isBtnState.command ? "btn-loading" : ""),
-                  disabled: !this.props.isBtnState.command,
-                  onClick: this.saveCommand.bind(this)
-                },
-                '保存'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem assItemNoborder' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '自动启动',
-              titleEnglish: 'AUTO UPDATE SETTING',
-              titleInfo: '自动启动设置'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              _react2.default.createElement(AutoStartUpToggle, { disabled: !this.props.isBtnState.autoStateUp, isState: data.auto_startup == 1, getToggle: this.getIsStartUp.bind(this) })
-            )
-          )
-        );
+          { className: 'astBox', ref: 'tab_save_box' },
+          this.getSaveTable()
+        ), (0, _jsx3.default)('div', {
+          className: 'assBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.addSaveTr.bind(this)
+        }, void 0, '\u6DFB\u52A0'), (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.storage ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.storage,
+          onClick: this.saveStorage.bind(this)
+        }, void 0, '\u4FDD\u5B58'), _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref17, _react2.default.createElement(
+          'div',
+          { className: 'astBox', ref: 'tab_env_box' },
+          this.getEnvironment()
+        ), (0, _jsx3.default)('div', {
+          className: 'assBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.addEnvironmentData.bind(this)
+        }, void 0, '\u6DFB\u52A0'), (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.env ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.env,
+          onClick: this.saveEnvironment.bind(this)
+        }, void 0, '\u4FDD\u5B58'), _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref18, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, this.getContainerBox(data.containerDeploy), (0, _jsx3.default)(ChooseContainerBtn, {
+          serviceName: this.props.serviceDetail.fservice_name,
+          onSaveContainerDeploy: function onSaveContainerDeploy(data) {
+            _this10.props.onSaveContainerDeploy(data);
+          }
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref19, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement('input', { className: 'form-control',
+          type: 'text',
+          placeholder: '',
+          ref: 'command',
+          defaultValue: data.command
+        })), (0, _jsx3.default)('div', {
+          className: 'assBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.command ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.command,
+          onClick: this.saveCommand.bind(this)
+        }, void 0, '\u4FDD\u5B58'))), (0, _jsx3.default)('div', {
+          className: 'assItem assItemNoborder'
+        }, void 0, _ref20, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)(AutoStartUpToggle, {
+          disabled: !this.props.isBtnState.autoStateUp,
+          isState: data.auto_startup == 1,
+          getToggle: this.getIsStartUp.bind(this)
+        }))));
       }
     }]);
     return GetDisposedTabs;
@@ -17757,35 +15669,16 @@ module.exports =
   GetDisposedTabs.contextTypes = {
     store: _react.PropTypes.object
   };
-  GetDisposedTabs.propTypes = {
-    serviceDetail: _react2.default.PropTypes.object,
-    onServiceDetailLoad: _react2.default.PropTypes.func,
-    onSavePort: _react2.default.PropTypes.func,
-    onSaveVolume: _react2.default.PropTypes.func,
-    onSaveEnvironment: _react2.default.PropTypes.func,
-    getServiceFun: _react2.default.PropTypes.func,
-    volumeList: _react2.default.PropTypes.array,
-    onSaveContainerDeploy: _react2.default.PropTypes.func,
-    onAddPort: _react2.default.PropTypes.func,
-    onDelPort: _react2.default.PropTypes.func,
-    onAddSave: _react2.default.PropTypes.func,
-    onDelSave: _react2.default.PropTypes.func,
-    onAddEnv: _react2.default.PropTypes.func,
-    onDelEnv: _react2.default.PropTypes.func,
-    onSaveCommand: _react2.default.PropTypes.func,
-    onAutoStateUp: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object
-  };
   exports.default = GetDisposedTabs;
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports) {
 
   module.exports = require("react-bootstrap/lib");
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -17794,39 +15687,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _Monitor = __webpack_require__(181);
+  var _Monitor = __webpack_require__(182);
   
   var _Monitor2 = _interopRequireDefault(_Monitor);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -17835,13 +15732,37 @@ module.exports =
   /**
    * Created by zhangsai on 16/9/2.
    */
+  var _ref = (0, _jsx3.default)('div', {
+    className: 'text-center'
+  }, void 0, (0, _jsx3.default)(_Loading2.default, {}, void 0, ' '));
+  
+  var _ref2 = (0, _jsx3.default)('label', {}, void 0, '\u8BF7\u9009\u62E9\u5BB9\u5668\u5B9E\u4F8B:');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: 'CPU\u76D1\u63A7',
+    titleEnglish: 'CPU MONITOR',
+    titleInfo: '24\u5C0F\u65F6'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5185\u5B58\u76D1\u63A7',
+    titleEnglish: 'MEMORY MONITOR',
+    titleInfo: '24\u5C0F\u65F6'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7F51\u7EDC\u76D1\u63A7',
+    titleEnglish: 'NETWORK MONITOR',
+    titleInfo: '24\u5C0F\u65F6'
+  });
+  
   var GetMonitorTabs = function (_Component) {
     (0, _inherits3.default)(GetMonitorTabs, _Component);
   
     function GetMonitorTabs(props) {
       (0, _classCallCheck3.default)(this, GetMonitorTabs);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetMonitorTabs).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetMonitorTabs.__proto__ || (0, _getPrototypeOf2.default)(GetMonitorTabs)).call(this, props));
   
       _this.state = {
         pod_name: _this.props.podList[0].pod_name
@@ -17868,15 +15789,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        if (!this.state.pod_name || !this.props.serviceDetail) return _react2.default.createElement(
-          'div',
-          { className: 'text-center' },
-          _react2.default.createElement(
-            _Loading2.default,
-            null,
-            ' '
-          )
-        );
+        if (!this.state.pod_name || !this.props.serviceDetail) return _ref;
         var limits_cpu = this.props.serviceDetail.limits_cpu;
         switch (Number(limits_cpu)) {
           case 8:
@@ -17910,93 +15823,49 @@ module.exports =
           time_span: "1m"
         };
         var option = this.props.podList.map(function (item, i) {
-          return _react2.default.createElement(
-            'option',
-            { value: item.pod_name, key: i },
-            item.pod_name
-          );
+          return (0, _jsx3.default)('option', {
+            value: item.pod_name
+          }, i, item.pod_name);
         });
-        return _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(
-            'div',
-            { className: 'choosePods' },
-            _react2.default.createElement(
-              'label',
-              null,
-              '请选择容器实例:'
-            ),
-            _react2.default.createElement(
-              'select',
-              { className: 'form-control', onChange: this.changePods.bind(this) },
-              option
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: 'CPU监控',
-              titleEnglish: 'CPU MONITOR',
-              titleInfo: '24小时'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              _react2.default.createElement(_Monitor2.default, {
-                ref: 'cpu',
-                payload: cpu,
-                color: ["#7ed9fc"],
-                legend: false,
-                divisor: limits_cpu,
-                valueSuffix: '%'
-              })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '内存监控',
-              titleEnglish: 'MEMORY MONITOR',
-              titleInfo: '24小时'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              _react2.default.createElement(_Monitor2.default, {
-                ref: 'memory',
-                payload: memory,
-                color: ["#b7e769"],
-                legend: false,
-                divisor: '1000000',
-                valueSuffix: 'M'
-              })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '网络监控',
-              titleEnglish: 'NETWORK MONITOR',
-              titleInfo: '24小时'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              _react2.default.createElement(_Monitor2.default, {
-                ref: 'network',
-                payload: network,
-                color: ["#f7a397", "#b7e769"],
-                legend: true,
-                divisor: '1000',
-                valueSuffix: 'kBps'
-              })
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)('div', {
+          className: 'choosePods'
+        }, void 0, _ref2, (0, _jsx3.default)('select', {
+          className: 'form-control',
+          onChange: this.changePods.bind(this)
+        }, void 0, option)), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement(_Monitor2.default, {
+          ref: 'cpu',
+          payload: cpu,
+          color: ["#7ed9fc"],
+          legend: false,
+          divisor: limits_cpu,
+          valueSuffix: '%'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement(_Monitor2.default, {
+          ref: 'memory',
+          payload: memory,
+          color: ["#b7e769"],
+          legend: false,
+          divisor: '1000000',
+          valueSuffix: 'M'
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref5, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement(_Monitor2.default, {
+          ref: 'network',
+          payload: network,
+          color: ["#f7a397", "#b7e769"],
+          legend: true,
+          divisor: '1000',
+          valueSuffix: 'kBps'
+        }))));
       }
     }]);
     return GetMonitorTabs;
@@ -18005,16 +15874,10 @@ module.exports =
   GetMonitorTabs.contextTypes = {
     store: _react.PropTypes.object
   };
-  GetMonitorTabs.propTypes = {
-    serviceDetail: _react2.default.PropTypes.object,
-    podList: _react2.default.PropTypes.array,
-    getMonitorData: _react2.default.PropTypes.func,
-    monitorData: _react2.default.PropTypes.object
-  };
   exports.default = GetMonitorTabs;
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18023,43 +15886,47 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _utils = __webpack_require__(116);
+  var _utils = __webpack_require__(117);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -18071,7 +15938,7 @@ module.exports =
     function BtnGroup(props) {
       (0, _classCallCheck3.default)(this, BtnGroup);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BtnGroup).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (BtnGroup.__proto__ || (0, _getPrototypeOf2.default)(BtnGroup)).call(this, props));
   
       _this.state = {
         active: _this.props.activeKey
@@ -18107,33 +15974,20 @@ module.exports =
         var _this2 = this;
   
         var html = this.props.prop.map(function (item, i) {
-          return _react2.default.createElement(
-            'button',
-            { key: i, className: 'btn btn-default btn-xs ' + (_this2.state.active == i ? "btn-primary" : ""),
-              onClick: _this2.handelSelect.bind(_this2, i)
-            },
-            item
-          );
+          return (0, _jsx3.default)('button', {
+            className: 'btn btn-default btn-xs ' + (_this2.state.active == i ? "btn-primary" : ""),
+            onClick: _this2.handelSelect.bind(_this2, i)
+          }, i, item);
         });
-        return _react2.default.createElement(
-          'div',
-          { className: 'btnGroup' },
-          html
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'btnGroup'
+        }, void 0, html);
       }
     }]);
     return BtnGroup;
   }(_react.Component);
   
-  BtnGroup.propTypes = {
-    prop: _react2.default.PropTypes.array,
-    type: _react2.default.PropTypes.string,
-    onSelect: _react2.default.PropTypes.func,
-    activeKey: _react2.default.PropTypes.number
-  };
-  
-  
-  var ReactHighcharts = __webpack_require__(91);
+  var ReactHighcharts = __webpack_require__(92);
   
   var _class = function (_React$Component) {
     (0, _inherits3.default)(_class, _React$Component);
@@ -18141,7 +15995,7 @@ module.exports =
     function _class(props) {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this, props));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this, props));
   
       _this3.state = {
         data: { xAxis: [], series: [] },
@@ -18307,40 +16161,29 @@ module.exports =
           series: my.state.data.series
   
         };
-        return _react2.default.createElement(
-          'div',
-          { className: 'assBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'btnChoose' },
-            _react2.default.createElement(BtnGroup, {
-              activeKey: 0,
-              prop: ["1小时", "6小时", "1天"],
-              type: 'memory',
-              onSelect: this.changeTime.bind(this)
-            })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'monitorBox' },
-            !this.state.data.xAxis.length ? "监控信息传输中,请稍后再试" : _react2.default.createElement(ReactHighcharts, { config: config })
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'btnChoose'
+        }, void 0, (0, _jsx3.default)(BtnGroup, {
+          activeKey: 0,
+          prop: ["1小时", "6小时", "1天"],
+          type: 'memory',
+          onSelect: this.changeTime.bind(this)
+        }, void 0)), (0, _jsx3.default)('div', {
+          className: 'monitorBox'
+        }, void 0, !this.state.data.xAxis.length ? "监控信息传输中,请稍后再试" : (0, _jsx3.default)(ReactHighcharts, {
+          config: config
+        })));
       }
     }]);
     return _class;
   }(_react2.default.Component);
   
-  _class.propTypes = {
-    payload: _react2.default.PropTypes.object,
-    color: _react2.default.PropTypes.array,
-    legend: _react2.default.PropTypes.bool,
-    valueSuffix: _react2.default.PropTypes.string
-  };
   exports.default = _class;
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18349,39 +16192,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactToggle = __webpack_require__(183);
+  var _reactToggle = __webpack_require__(184);
   
   var _reactToggle2 = _interopRequireDefault(_reactToggle);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -18396,7 +16243,7 @@ module.exports =
     function UpdateStartToggle(props) {
       (0, _classCallCheck3.default)(this, UpdateStartToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(UpdateStartToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (UpdateStartToggle.__proto__ || (0, _getPrototypeOf2.default)(UpdateStartToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -18415,7 +16262,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_reactToggle2.default, {
+        return (0, _jsx3.default)(_reactToggle2.default, {
           defaultChecked: this.state.autoStart,
           onChange: this.handClick.bind(this)
         });
@@ -18424,10 +16271,21 @@ module.exports =
     return UpdateStartToggle;
   }(_react.Component);
   
-  UpdateStartToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    state: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)('option', {
+    value: 'latest'
+  }, 'latest', 'latest');
+  
+  var _ref2 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u81EA\u52A8\u53D1\u5E03',
+    titleEnglish: 'AUTOMATIC SENDING',
+    titleInfo: '\u5F53\u955C\u50CF\u6709\u66F4\u65B0\u65F6\u5BB9\u5668\u662F\u5426\u81EA\u52A8\u66F4\u65B0,\u5F00\u542F\u81EA\u52A8\u66F4\u65B0\u65F6\u4F1A\u8986\u76D6\u624B\u52A8\u9009\u62E9\u7684\u7248\u672C'
+  });
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u624B\u52A8\u53D1\u5E03',
+    titleEnglish: 'MANUAL RELEASE',
+    titleInfo: '\u5C06\u670D\u52A1\u66F4\u65B0\u5230\u6307\u5B9A\u7684\u955C\u50CF\u7248\u672C'
+  });
   
   var GetReleaseTabs = function (_Component2) {
     (0, _inherits3.default)(GetReleaseTabs, _Component2);
@@ -18435,7 +16293,7 @@ module.exports =
     function GetReleaseTabs(props) {
       (0, _classCallCheck3.default)(this, GetReleaseTabs);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetReleaseTabs).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (GetReleaseTabs.__proto__ || (0, _getPrototypeOf2.default)(GetReleaseTabs)).call(this, props));
   
       _this2.state = {
         isUpdate: _this2.props.serviceDetail.policy
@@ -18477,90 +16335,51 @@ module.exports =
         var tags = this.props.buildingDetail.tags;
         var option = [];
         if (!tags || !tags.length) {
-          option.push(_react2.default.createElement(
-            'option',
-            { key: 'latest', value: 'latest' },
-            'latest'
-          ));
+          option.push(_ref);
         } else {
           tags.map(function (item, i) {
-            option.push(_react2.default.createElement(
-              'option',
-              { value: item.tag, key: i },
-              item.tag
-            ));
+            option.push((0, _jsx3.default)('option', {
+              value: item.tag
+            }, i, item.tag));
           });
         }
-        return _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '自动发布',
-              titleEnglish: 'AUTOMATIC SENDING',
-              titleInfo: '当镜像有更新时容器是否自动更新,开启自动更新时会覆盖手动选择的版本'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              _react2.default.createElement(UpdateStartToggle, { state: this.state.isUpdate == 1, getToggle: this.getToggleValue.bind(this) })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '手动发布',
-              titleEnglish: 'MANUAL RELEASE',
-              titleInfo: '将服务更新到指定的镜像版本'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox' },
-              _react2.default.createElement(
-                'select',
-                { className: 'form-control', ref: 'imageVersion', defaultValue: data.image_version },
-                option
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assBox sdLastBtn' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary ' + (!this.props.isBtnState.deploy ? "btn-loading" : ""),
-                  disabled: !this.props.isBtnState.deploy,
-                  onClick: this.changeRelease.bind(this) },
-                '更新发布'
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref2, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, (0, _jsx3.default)(UpdateStartToggle, {
+          state: this.state.isUpdate == 1,
+          getToggle: this.getToggleValue.bind(this)
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, _react2.default.createElement(
+          'select',
+          { className: 'form-control', ref: 'imageVersion', defaultValue: data.image_version },
+          option
+        )), (0, _jsx3.default)('div', {
+          className: 'assBox sdLastBtn'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary ' + (!this.props.isBtnState.deploy ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.deploy,
+          onClick: this.changeRelease.bind(this)
+        }, void 0, '\u66F4\u65B0\u53D1\u5E03'))));
       }
     }]);
     return GetReleaseTabs;
   }(_react.Component);
   
-  GetReleaseTabs.propTypes = {
-    serviceName: _react2.default.PropTypes.string,
-    serviceDetail: _react2.default.PropTypes.object,
-    buildingDetail: _react2.default.PropTypes.object,
-    getBuildingDetail: _react2.default.PropTypes.func,
-    onChangeRelease: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object
-  };
   exports.default = GetReleaseTabs;
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports) {
 
   module.exports = require("react-toggle");
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18569,31 +16388,35 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -18602,120 +16425,65 @@ module.exports =
   /**
    * Created by zhangsai on 16/9/2.
    */
+  var _ref = (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+    className: 'astTdBox sdDomain'
+  }, void 0, (0, _jsx3.default)('input', {
+    type: 'text',
+    placeholder: '\u8BF7\u8F93\u5165\u65B0\u57DF\u540D'
+  }))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+    className: 'astTdBox'
+  })), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+    className: 'astTdBox'
+  }, void 0, (0, _jsx3.default)('span', {
+    className: 'color999'
+  }, void 0, '\u662F'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('button', {
+    className: 'btn btn-primary'
+  }, void 0, '\u6DFB\u52A0')));
+  
+  var _ref2 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u81EA\u6709\u57DF\u540D'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, 'CNAME\u5730\u5740'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u57DF\u540D\u9A8C\u8BC1'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref3 = (0, _jsx3.default)('div', {
+    className: 'assItem'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7ED1\u5B9A\u81EA\u6709\u57DF\u540D',
+    titleEnglish: 'BIND OWN DOMAIN',
+    titleInfo: '\u57DF\u540D\u7ED1\u5B9A\u8BF4\u660E'
+  }));
+  
   var GetRealmNameTabs = function (_Component) {
     (0, _inherits3.default)(GetRealmNameTabs, _Component);
   
     function GetRealmNameTabs() {
       (0, _classCallCheck3.default)(this, GetRealmNameTabs);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetRealmNameTabs).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetRealmNameTabs.__proto__ || (0, _getPrototypeOf2.default)(GetRealmNameTabs)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetRealmNameTabs, [{
       key: 'getRealmNameTableBody',
       value: function getRealmNameTableBody() {
-        return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            null,
-            _react2.default.createElement(
-              'div',
-              { className: 'astTdBox sdDomain' },
-              _react2.default.createElement('input', { type: 'text', placeholder: '请输入新域名' })
-            )
-          ),
-          _react2.default.createElement(
-            'td',
-            null,
-            _react2.default.createElement('div', { className: 'astTdBox' })
-          ),
-          _react2.default.createElement(
-            'td',
-            null,
-            _react2.default.createElement(
-              'div',
-              { className: 'astTdBox' },
-              _react2.default.createElement(
-                'span',
-                { className: 'color999' },
-                '是'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'td',
-            null,
-            _react2.default.createElement(
-              'button',
-              { className: 'btn btn-primary' },
-              '添加'
-            )
-          )
-        );
+        return _ref;
       }
     }, {
       key: 'getRealmNameTable',
       value: function getRealmNameTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-hover table-bordered' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '自有域名'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                'CNAME地址'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '域名验证'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '25%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            null,
-            this.getRealmNameTableBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-hover table-bordered'
+        }, void 0, _ref2, (0, _jsx3.default)('tbody', {}, void 0, this.getRealmNameTableBody()));
       }
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '绑定自有域名',
-              titleEnglish: 'BIND OWN DOMAIN',
-              titleInfo: '域名绑定说明'
-            })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'assItem' },
-            this.getRealmNameTable()
-          )
-        );
+        return (0, _jsx3.default)('div', {}, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, this.getRealmNameTable()));
       }
     }]);
     return GetRealmNameTabs;
@@ -18724,7 +16492,7 @@ module.exports =
   exports.default = GetRealmNameTabs;
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -18733,38 +16501,48 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)("tr", {}, void 0, (0, _jsx3.default)("td", {
+    colSpan: "4"
+  }, void 0, "\u6682\u65E0\u6570\u636E~"));
+  
+  var _ref2 = (0, _jsx3.default)("thead", {}, void 0, (0, _jsx3.default)("tr", {}, void 0, (0, _jsx3.default)("th", {}, void 0, "\u540D\u79F0"), (0, _jsx3.default)("th", {}, void 0, "IP"), (0, _jsx3.default)("th", {}, void 0, "\u7AEF\u53E3"), (0, _jsx3.default)("th", {}, void 0, "\u72B6\u6001")));
   
   var GetContainerTabs = function (_React$Component) {
     (0, _inherits3.default)(GetContainerTabs, _React$Component);
   
     function GetContainerTabs() {
       (0, _classCallCheck3.default)(this, GetContainerTabs);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetContainerTabs).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetContainerTabs.__proto__ || (0, _getPrototypeOf2.default)(GetContainerTabs)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetContainerTabs, [{
@@ -18774,15 +16552,7 @@ module.exports =
       key: "getTableLine",
       value: function getTableLine() {
         var podList = this.props.podList;
-        if (!podList || !podList.length) return _react2.default.createElement(
-          "tr",
-          null,
-          _react2.default.createElement(
-            "td",
-            { colSpan: "4" },
-            "暂无数据~"
-          )
-        );
+        if (!podList || !podList.length) return _ref;
         var body = [];
         podList.map(function (item, i) {
           var n = item.containers.length;
@@ -18790,94 +16560,29 @@ module.exports =
             var d = n == j + 1 ? "" : ",";
             return obj.container_port + "/" + obj.access_mode + d;
           });
-          body.push(_react2.default.createElement(
-            "tr",
-            { key: i },
-            _react2.default.createElement(
-              "td",
-              null,
-              item.pod_name
-            ),
-            _react2.default.createElement(
-              "td",
-              null,
-              item.pod_ip
-            ),
-            _react2.default.createElement(
-              "td",
-              null,
-              port
-            ),
-            _react2.default.createElement(
-              "td",
-              null,
-              _react2.default.createElement(
-                "div",
-                {
-                  className: "mirror-state " + (item.pod_phase == "Running" ? "on" : "off") + " tablePaddingLeft" },
-                item.pod_phase == "Running" ? '运行中' : '已停止'
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)("tr", {}, i, (0, _jsx3.default)("td", {}, void 0, item.pod_name), (0, _jsx3.default)("td", {}, void 0, item.pod_ip), (0, _jsx3.default)("td", {}, void 0, port), (0, _jsx3.default)("td", {}, void 0, (0, _jsx3.default)("div", {
+            className: "mirror-state " + (item.pod_phase == "Running" ? "on" : "off") + " tablePaddingLeft"
+          }, void 0, item.pod_phase == "Running" ? '运行中' : '已停止'))));
         });
         return body;
       }
     }, {
       key: "render",
       value: function render() {
-        return _react2.default.createElement(
-          "div",
-          { style: { padding: "15px" } },
-          _react2.default.createElement(
-            "table",
-            { className: "table table-hover table-bordered volumes-table" },
-            _react2.default.createElement(
-              "thead",
-              null,
-              _react2.default.createElement(
-                "tr",
-                null,
-                _react2.default.createElement(
-                  "th",
-                  null,
-                  "名称"
-                ),
-                _react2.default.createElement(
-                  "th",
-                  null,
-                  "IP"
-                ),
-                _react2.default.createElement(
-                  "th",
-                  null,
-                  "端口"
-                ),
-                _react2.default.createElement(
-                  "th",
-                  null,
-                  "状态"
-                )
-              )
-            ),
-            _react2.default.createElement(
-              "tbody",
-              null,
-              this.getTableLine()
-            )
-          )
-        );
+        return (0, _jsx3.default)("div", {
+          style: { padding: "15px" }
+        }, void 0, (0, _jsx3.default)("table", {
+          className: "table table-hover table-bordered volumes-table"
+        }, void 0, _ref2, (0, _jsx3.default)("tbody", {}, void 0, this.getTableLine())));
       }
     }]);
     return GetContainerTabs;
   }(_react2.default.Component);
   
-  GetContainerTabs.propTypes = {
-    podList: _react2.default.PropTypes.array
-  };
   exports.default = GetContainerTabs;
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -18886,38 +16591,47 @@ module.exports =
       value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)("p", {}, void 0, "*\u5220\u9664\u5E94\u7528\u5C06\u6E05\u9664\u8BE5\u5E94\u7528\u7684\u6240\u6709\u6570\u636E\uFF0C\u4E14\u8BE5\u64CD\u4F5C\u4E0D\u80FD\u88AB\u6062\u590D\uFF0C\u8BF7\u614E\u91CD\u9009\u62E9\uFF01 "); /**
+                                                                                                                                                                                                                                                         * Created by zhangsai on 16/9/2.
+                                                                                                                                                                                                                                                         */
+  
   
   var GetOptTabs = function (_Component) {
       (0, _inherits3.default)(GetOptTabs, _Component);
   
       function GetOptTabs() {
           (0, _classCallCheck3.default)(this, GetOptTabs);
-          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOptTabs).apply(this, arguments));
+          return (0, _possibleConstructorReturn3.default)(this, (GetOptTabs.__proto__ || (0, _getPrototypeOf2.default)(GetOptTabs)).apply(this, arguments));
       }
   
       (0, _createClass3.default)(GetOptTabs, [{
@@ -18930,35 +16644,21 @@ module.exports =
       }, {
           key: "render",
           value: function render() {
-              return _react2.default.createElement(
-                  "div",
-                  { className: "handleBox" },
-                  _react2.default.createElement(
-                      "button",
-                      { className: "btn btn-danger", onClick: this.deleteService.bind(this) },
-                      "删除应用"
-                  ),
-                  _react2.default.createElement(
-                      "p",
-                      null,
-                      "*删除应用将清除该应用的所有数据，且该操作不能被恢复，请慎重选择！ "
-                  )
-              );
+              return (0, _jsx3.default)("div", {
+                  className: "handleBox"
+              }, void 0, (0, _jsx3.default)("button", {
+                  className: "btn btn-danger",
+                  onClick: this.deleteService.bind(this)
+              }, void 0, "\u5220\u9664\u5E94\u7528"), _ref);
           }
       }]);
       return GetOptTabs;
-  }(_react.Component); /**
-                        * Created by zhangsai on 16/9/2.
-                        */
+  }(_react.Component);
   
-  
-  GetOptTabs.propTypes = {
-      onDeleteService: _react2.default.PropTypes.func
-  };
   exports.default = GetOptTabs;
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18967,7 +16667,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getServiceDetail
   var getServiceDetail = function getServiceDetail(state) {
@@ -18983,7 +16683,7 @@ module.exports =
   exports.default = makeGetServiceDetail;
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18992,7 +16692,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //logs
   var getLogs = function getLogs(state) {
@@ -19008,7 +16708,7 @@ module.exports =
   exports.default = makeGetLogsSelector;
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19017,7 +16717,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //logs_xhr
   var getLogs_xhr = function getLogs_xhr(state) {
@@ -19033,7 +16733,7 @@ module.exports =
   exports.default = maleLogs_xhrSelector;
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19042,7 +16742,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getPodList = function getPodList(state) {
     return state.podList;
@@ -19057,7 +16757,7 @@ module.exports =
   exports.default = makeGetPodListSelector;
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19066,7 +16766,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getMonitorData
   var getMonitorData = function getMonitorData(state) {
@@ -19082,7 +16782,7 @@ module.exports =
   exports.default = makeGetMonitorDataSelector;
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19091,19 +16791,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _VolumeListContainer = __webpack_require__(193);
+  var _VolumeListContainer = __webpack_require__(194);
   
   var _VolumeListContainer2 = _interopRequireDefault(_VolumeListContainer);
   
@@ -19118,6 +16822,8 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+  var _ref = (0, _jsx3.default)(_VolumeListContainer2.default, {});
+  
   exports.default = {
   
     path: '/volumes',
@@ -19130,7 +16836,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_VolumeListContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -19143,7 +16849,7 @@ module.exports =
   };
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19152,21 +16858,21 @@ module.exports =
     value: true
   });
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _VolumeList = __webpack_require__(194);
+  var _VolumeList = __webpack_require__(195);
   
   var _VolumeList2 = _interopRequireDefault(_VolumeList);
   
-  var _volumes = __webpack_require__(97);
+  var _volumes = __webpack_require__(98);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _volumesListSelector = __webpack_require__(98);
+  var _volumesListSelector = __webpack_require__(99);
   
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -19210,7 +16916,7 @@ module.exports =
   exports.default = VolumeTableContainer;
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19219,51 +16925,55 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _classnames = __webpack_require__(65);
+  var _classnames = __webpack_require__(66);
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _VolumeCreateModal = __webpack_require__(195);
+  var _VolumeCreateModal = __webpack_require__(196);
   
   var _VolumeCreateModal2 = _interopRequireDefault(_VolumeCreateModal);
   
-  var _VolumeScaleModal = __webpack_require__(196);
+  var _VolumeScaleModal = __webpack_require__(197);
   
   var _VolumeScaleModal2 = _interopRequireDefault(_VolumeScaleModal);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _Confirm = __webpack_require__(111);
+  var _Confirm = __webpack_require__(112);
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
@@ -19280,13 +16990,53 @@ module.exports =
   
   var title = '数据卷列表';
   
+  var _ref = (0, _jsx3.default)('p', {
+    className: "hbPName"
+  }, void 0, '\u521B\u5EFA\u5B58\u50A8\u5377');
+  
+  var _ref2 = (0, _jsx3.default)('p', {
+    className: "hbPInfo"
+  }, void 0, 'Create a volume');
+  
+  var _ref3 = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref4 = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref5 = (0, _jsx3.default)('img', {
+    className: 'mediaImg',
+    src: '/slImgJx.png'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref7 = (0, _jsx3.default)('a', {
+    href: 'javascript:;',
+    className: "hbAddExplain"
+  }, void 0, '\u4EC0\u4E48\u662F\u5B58\u50A8\u5377\uFF1F');
+  
+  var _ref8 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u5B58\u50A8\u5377\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u521B\u5EFA\u65F6\u95F4'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u5B58\u50A8\u683C\u5F0F'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u72B6\u6001'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u5BB9\u91CF'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u64CD\u4F5C')));
+  
   var VolumeList = function (_Component) {
     (0, _inherits3.default)(VolumeList, _Component);
   
     function VolumeList() {
       (0, _classCallCheck3.default)(this, VolumeList);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(VolumeList).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (VolumeList.__proto__ || (0, _getPrototypeOf2.default)(VolumeList)).call(this));
   
       _this.state = {
         diskName: ""
@@ -19299,27 +17049,16 @@ module.exports =
       value: function getCreateBtn() {
         var _this2 = this;
   
-        return _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)("hbAddBtn", "clearfix"), onClick: function onClick() {
-              _this2.refs.createModal.open();
-            } },
-          _react2.default.createElement('div', { className: (0, _classnames2.default)("hbPlus", "left") }),
-          _react2.default.createElement(
-            'div',
-            { className: (0, _classnames2.default)("hbPlusInfo", "left") },
-            _react2.default.createElement(
-              'p',
-              { className: "hbPName" },
-              '创建存储卷'
-            ),
-            _react2.default.createElement(
-              'p',
-              { className: "hbPInfo" },
-              'Create a volume'
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbAddBtn", "clearfix"),
+          onClick: function onClick() {
+            _this2.refs.createModal.open();
+          }
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbPlus", "left")
+        }), (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbPlusInfo", "left")
+        }, void 0, _ref, _ref2));
       }
     }, {
       key: 'deleteLine',
@@ -19352,108 +17091,41 @@ module.exports =
         var _this3 = this;
   
         var data = this.props.volumesList;
-        if (!data.length) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '6', style: { "textAlign": "center" } },
-            '暂无数据~'
-          )
-        );
-        if (data.length == 1 && data[0] == 1) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '6', style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
-        if (data.length == 1 && data[0] == 0) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '6', style: { "textAlign": "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
+        if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '6',
+          style: { "textAlign": "center" }
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
+        if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '6',
+          style: { "textAlign": "center" }
+        }, void 0, _ref3));
+        if (data.length == 1 && data[0] == 0) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '6',
+          style: { "textAlign": "center" }
+        }, void 0, _ref4));
         var body = [];
         data.map(function (item, i) {
-          body.push(_react2.default.createElement(
-            'tr',
-            { key: i },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'mediaItem' },
-                _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'mediaTxt' },
-                  item.disk_name
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: 'cl3' },
-                item.create_time
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              item.fs_type
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                {
-                  className: (0, _classnames2.default)("mirror-state", item.disk_status == "unused" ? "off" : "on") },
-                item.disk_status == "unused" ? '未使用' : '使用中'
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'span',
-                { className: 'cl3' },
-                _this3.getDiskSize(item.disk_size)
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'btn-group' },
-                _react2.default.createElement(
-                  _reactBootstrap.SplitButton,
-                  {
-                    onClick: function onClick() {
-                      _this3.refs.scaleModal.open(item);
-                    },
-                    onSelect: _this3.deleteLine.bind(_this3, item.disk_name),
-                    bsStyle: 'primary', title: '扩容', id: 'volumes-table-line-' + i },
-                  _react2.default.createElement(
-                    _reactBootstrap.MenuItem,
-                    { eventKey: '1' },
-                    '删除'
-                  )
-                )
-              )
-            )
-          ));
+          body.push((0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'mediaItem'
+          }, void 0, _ref5, (0, _jsx3.default)('span', {
+            className: 'mediaTxt'
+          }, void 0, item.disk_name))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('span', {
+            className: 'cl3'
+          }, void 0, item.create_time)), (0, _jsx3.default)('td', {}, void 0, item.fs_type), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: (0, _classnames2.default)("mirror-state", item.disk_status == "unused" ? "off" : "on")
+          }, void 0, item.disk_status == "unused" ? '未使用' : '使用中')), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('span', {
+            className: 'cl3'
+          }, void 0, _this3.getDiskSize(item.disk_size))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'btn-group'
+          }, void 0, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+            onClick: function onClick() {
+              _this3.refs.scaleModal.open(item);
+            },
+            onSelect: _this3.deleteLine.bind(_this3, item.disk_name),
+            bsStyle: 'primary',
+            title: '\u6269\u5BB9',
+            id: 'volumes-table-line-' + i
+          }, void 0, _ref6)))));
         });
         return body;
       }
@@ -19481,114 +17153,41 @@ module.exports =
         var _this4 = this;
   
         this.context.setTitle(title);
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: (0, _classnames2.default)("hbHd", "clearfix") },
-            _react2.default.createElement(
-              'div',
-              { className: (0, _classnames2.default)("hbAdd", "left") },
-              this.getCreateBtn(),
-              _react2.default.createElement(
-                'a',
-                { href: 'javascript:;', className: "hbAddExplain" },
-                '什么是存储卷？'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'right slSearch' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-default icon-refresh', onClick: this.refresh.bind(this), title: '刷新' },
-                ' '
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'TableTextLeft', style: { padding: "15px" } },
-            _react2.default.createElement(
-              'table',
-              { className: 'table table-hover table-bordered volumes-table' },
-              _react2.default.createElement(
-                'thead',
-                null,
-                _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                    'th',
-                    { width: '20%' },
-                    '存储卷名称'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '20%' },
-                    '创建时间'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '15%' },
-                    '存储格式'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '15%' },
-                    '状态'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '15%' },
-                    '容量'
-                  ),
-                  _react2.default.createElement(
-                    'th',
-                    { width: '15%' },
-                    '操作'
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'tbody',
-                null,
-                this.getTableLine()
-              )
-            )
-          ),
-          _react2.default.createElement(_VolumeScaleModal2.default, { ref: 'scaleModal', onSave: this.scaleVolume.bind(this) }),
-          _react2.default.createElement(_VolumeCreateModal2.default, { ref: 'createModal', isBtnState: this.props.isBtnState, onVolumeCreate: this.createVolume.bind(this) }),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '您确定要删除此数据卷吗?',
-            ref: 'confirmModal',
-            func: function func() {
-              _this4.props.onVolumeDelete(_this4.state.diskName);
-            }
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbHd", "clearfix")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)("hbAdd", "left")
+        }, void 0, this.getCreateBtn(), _ref7), (0, _jsx3.default)('div', {
+          className: 'right slSearch'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-default icon-refresh',
+          onClick: this.refresh.bind(this),
+          title: '\u5237\u65B0'
+        }, void 0, ' '))), (0, _jsx3.default)('div', {
+          className: 'TableTextLeft',
+          style: { padding: "15px" }
+        }, void 0, (0, _jsx3.default)('table', {
+          className: 'table table-hover table-bordered volumes-table'
+        }, void 0, _ref8, (0, _jsx3.default)('tbody', {}, void 0, this.getTableLine()))), _react2.default.createElement(_VolumeScaleModal2.default, { ref: 'scaleModal', onSave: this.scaleVolume.bind(this) }), _react2.default.createElement(_VolumeCreateModal2.default, { ref: 'createModal', isBtnState: this.props.isBtnState, onVolumeCreate: this.createVolume.bind(this) }), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u5220\u9664\u6B64\u6570\u636E\u5377\u5417?',
+          ref: 'confirmModal',
+          func: function func() {
+            _this4.props.onVolumeDelete(_this4.state.diskName);
+          }
+        }));
       }
     }]);
     return VolumeList;
   }(_react.Component);
   
   VolumeList.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
-  VolumeList.propTypes = {
-    onVolumeDelete: _react2.default.PropTypes.func,
-    onVolumeCreate: _react2.default.PropTypes.func,
-    onVolumeScale: _react2.default.PropTypes.func,
-    onVolumesListLoad: _react2.default.PropTypes.func,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    volumesList: _react2.default.PropTypes.array,
-    onClearVolumesList: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object
-  };
   exports.default = VolumeList;
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19597,37 +17196,41 @@ module.exports =
     value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _extends2 = __webpack_require__(37);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactInputRange = __webpack_require__(172);
+  var _reactInputRange = __webpack_require__(173);
   
   var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
   
@@ -19640,7 +17243,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: 10
@@ -19663,24 +17266,49 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'formField' },
-          _react2.default.createElement(_reactInputRange2.default, {
-            className: 'formField',
-            maxValue: 100,
-            minValue: 10,
-            step: 10,
-            labelPrefix: '',
-            labelSuffix: 'G',
-            value: this.state.value,
-            onChange: this.handleValueChange.bind(this)
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'formField'
+        }, void 0, (0, _jsx3.default)(_reactInputRange2.default, {
+          className: 'formField',
+          maxValue: 100,
+          minValue: 10,
+          step: 10,
+          labelPrefix: '',
+          labelSuffix: 'G',
+          value: this.state.value,
+          onChange: this.handleValueChange.bind(this)
+        }));
       }
     }]);
     return InputRangesBox;
   }(_react.Component);
+  
+  var _ref = (0, _jsx3.default)('span', {
+    'aria-hidden': 'true'
+  }, void 0, '\xD7');
+  
+  var _ref2 = (0, _jsx3.default)('h4', {
+    className: 'modal-title',
+    id: 'contained-modal-title-sm'
+  }, void 0, '\u521B\u5EFA\u5B58\u50A8\u5377');
+  
+  var _ref3 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u540D\u79F0'));
+  
+  var _ref4 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u5927\u5C0F'));
+  
+  var _ref5 = (0, _jsx3.default)('span', {}, void 0, '\u5145\u503C\u7528\u6237\u53EF\u4EE5\u521B\u5EFA\u66F4\u5927\u5B58\u50A8\u5377');
+  
+  var _ref6 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u683C\u5F0F'));
+  
+  var _ref7 = (0, _jsx3.default)('option', {
+    value: 'xfs'
+  }, void 0, 'xfs');
+  
+  var _ref8 = (0, _jsx3.default)('option', {
+    value: 'ext4'
+  }, void 0, 'ext4');
+  
+  var _ref9 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, ' '));
   
   var _class = function (_Component2) {
     (0, _inherits3.default)(_class, _Component2);
@@ -19688,7 +17316,7 @@ module.exports =
     function _class() {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this));
   
       _this2.state = {
         show: false
@@ -19741,147 +17369,48 @@ module.exports =
           (0, _extends3.default)({}, this.props, { show: this.state.show,
             onHide: this.hide.bind(this),
             bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
-          _react2.default.createElement(
-            'div',
-            { className: 'modal-header' },
-            _react2.default.createElement(
-              'button',
-              { type: 'button', onClick: this.hide.bind(this), className: 'close', 'aria-label': 'Close' },
-              _react2.default.createElement(
-                'span',
-                { 'aria-hidden': 'true' },
-                '×'
-              )
-            ),
-            _react2.default.createElement(
-              'h4',
-              { className: 'modal-title', id: 'contained-modal-title-sm' },
-              '创建存储卷'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'modal-body' },
-            _react2.default.createElement(
-              'div',
-              { className: 'modalItem' },
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  '名称'
-                )
-              ),
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement('input', { onChange: this.changeName.bind(this), className: 'form-control form-control-sm', type: 'input', placeholder: '请输入名称', ref: 'disk_name' })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'modalItem' },
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  '大小'
-                )
-              ),
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'div',
-                  { className: 'modelInputRange' },
-                  _react2.default.createElement(InputRangesBox, { ref: 'disk_size' }),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    '充值用户可以创建更大存储卷'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'modalItem' },
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  '格式'
-                )
-              ),
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'select',
-                  { ref: 'fs_type', className: 'form-control' },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'xfs' },
-                    'xfs'
-                  ),
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'ext4' },
-                    'ext4'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: this.state.isName ? "volumeTip volumeTipShow" : "volumeTip" },
-              '数据卷名称格式不正确'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'modalItem modelItemLast' },
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  ' '
-                )
-              ),
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  _reactBootstrap.Button,
-                  { bsStyle: 'primary',
-                    disabled: !this.props.isBtnState.volume,
-                    onClick: this.createVolume.bind(this) },
-                  '创建存储卷'
-                )
-              )
-            )
-          )
+          (0, _jsx3.default)('div', {
+            className: 'modal-header'
+          }, void 0, (0, _jsx3.default)('button', {
+            type: 'button',
+            onClick: this.hide.bind(this),
+            className: 'close',
+            'aria-label': 'Close'
+          }, void 0, _ref), _ref2),
+          (0, _jsx3.default)('div', {
+            className: 'modal-body'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'modalItem'
+          }, void 0, _ref3, (0, _jsx3.default)('label', {}, void 0, _react2.default.createElement('input', { onChange: this.changeName.bind(this), className: 'form-control form-control-sm', type: 'input', placeholder: '\u8BF7\u8F93\u5165\u540D\u79F0', ref: 'disk_name' }))), (0, _jsx3.default)('div', {
+            className: 'modalItem'
+          }, void 0, _ref4, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'modelInputRange'
+          }, void 0, _react2.default.createElement(InputRangesBox, { ref: 'disk_size' }), _ref5))), (0, _jsx3.default)('div', {
+            className: 'modalItem'
+          }, void 0, _ref6, (0, _jsx3.default)('label', {}, void 0, _react2.default.createElement(
+            'select',
+            { ref: 'fs_type', className: 'form-control' },
+            _ref7,
+            _ref8
+          ))), (0, _jsx3.default)('div', {
+            className: this.state.isName ? "volumeTip volumeTipShow" : "volumeTip"
+          }, void 0, '\u6570\u636E\u5377\u540D\u79F0\u683C\u5F0F\u4E0D\u6B63\u786E'), (0, _jsx3.default)('div', {
+            className: 'modalItem modelItemLast'
+          }, void 0, _ref9, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)(_reactBootstrap.Button, {
+            bsStyle: 'primary',
+            disabled: !this.props.isBtnState.volume,
+            onClick: this.createVolume.bind(this)
+          }, void 0, '\u521B\u5EFA\u5B58\u50A8\u5377'))))
         );
       }
     }]);
     return _class;
   }(_react.Component);
-  
-  _class.propTypes = {
-    onVolumeCreate: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object
-  };
+
   exports.default = _class;
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19890,37 +17419,41 @@ module.exports =
     value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _extends2 = __webpack_require__(37);
   
   var _extends3 = _interopRequireDefault(_extends2);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactInputRange = __webpack_require__(172);
+  var _reactInputRange = __webpack_require__(173);
   
   var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
   
@@ -19932,7 +17465,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: _this.props.value
@@ -19956,28 +17489,37 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'formField' },
-          _react2.default.createElement(_reactInputRange2.default, {
-            className: 'formField',
-            maxValue: 100,
-            minValue: this.props.value || 10,
-            step: 10,
-            labelPrefix: '',
-            labelSuffix: 'G',
-            value: this.state.value,
-            onChange: this.handleValueChange.bind(this)
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'formField'
+        }, void 0, (0, _jsx3.default)(_reactInputRange2.default, {
+          className: 'formField',
+          maxValue: 100,
+          minValue: this.props.value || 10,
+          step: 10,
+          labelPrefix: '',
+          labelSuffix: 'G',
+          value: this.state.value,
+          onChange: this.handleValueChange.bind(this)
+        }));
       }
     }]);
     return InputRangesBox;
   }(_react.Component);
   
-  InputRangesBox.propTypes = {
-    value: _react2.default.PropTypes.number
-  };
+  var _ref = (0, _jsx3.default)('span', {
+    'aria-hidden': 'true'
+  }, void 0, '\xD7');
+  
+  var _ref2 = (0, _jsx3.default)('h4', {
+    className: 'modal-title',
+    id: 'contained-modal-title-sm'
+  }, void 0, '\u6269\u5BB9');
+  
+  var _ref3 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u5927\u5C0F'));
+  
+  var _ref4 = (0, _jsx3.default)('span', {}, void 0, '\u5145\u503C\u7528\u6237\u53EF\u4EE5\u521B\u5EFA\u66F4\u5927\u5B58\u50A8\u5377');
+  
+  var _ref5 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, ' '));
   
   var _class = function (_Component2) {
     (0, _inherits3.default)(_class, _Component2);
@@ -19985,7 +17527,7 @@ module.exports =
     function _class() {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this));
   
       _this2.state = {
         show: false,
@@ -20019,90 +17561,36 @@ module.exports =
           _reactBootstrap.Modal,
           (0, _extends3.default)({}, this.props, { show: this.state.show, onHide: this.hide.bind(this),
             bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
-          _react2.default.createElement(
-            'div',
-            { className: 'modal-header' },
-            _react2.default.createElement(
-              'button',
-              { type: 'button', onClick: this.hide.bind(this), className: 'close', 'aria-label': 'Close' },
-              _react2.default.createElement(
-                'span',
-                { 'aria-hidden': 'true' },
-                '×'
-              )
-            ),
-            _react2.default.createElement(
-              'h4',
-              { className: 'modal-title', id: 'contained-modal-title-sm' },
-              '扩容'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'modal-body' },
-            _react2.default.createElement(
-              'div',
-              { className: 'modalItem dilatationModalItem' },
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  '大小'
-                )
-              ),
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'div',
-                  { className: 'modelInputRange' },
-                  _react2.default.createElement(InputRangesBox, { ref: 'diskSize', value: this.state.data.disk_size / 1024 << 0 }),
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    '充值用户可以创建更大存储卷'
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'modalItem modelItemLast dilatationModalItem' },
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  ' '
-                )
-              ),
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary', onClick: this.save.bind(this) },
-                  '保存'
-                )
-              )
-            )
-          )
+          (0, _jsx3.default)('div', {
+            className: 'modal-header'
+          }, void 0, (0, _jsx3.default)('button', {
+            type: 'button',
+            onClick: this.hide.bind(this),
+            className: 'close',
+            'aria-label': 'Close'
+          }, void 0, _ref), _ref2),
+          (0, _jsx3.default)('div', {
+            className: 'modal-body'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'modalItem dilatationModalItem'
+          }, void 0, _ref3, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'modelInputRange'
+          }, void 0, _react2.default.createElement(InputRangesBox, { ref: 'diskSize', value: this.state.data.disk_size / 1024 << 0 }), _ref4))), (0, _jsx3.default)('div', {
+            className: 'modalItem modelItemLast dilatationModalItem'
+          }, void 0, _ref5, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('button', {
+            className: 'btn btn-primary',
+            onClick: this.save.bind(this)
+          }, void 0, '\u4FDD\u5B58'))))
         );
       }
     }]);
     return _class;
   }(_react.Component);
-  
-  _class.propTypes = {
-    onSave: _react2.default.PropTypes.func
-  };
+
   exports.default = _class;
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20111,23 +17599,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Login = __webpack_require__(198);
+  var _Login = __webpack_require__(199);
   
   var _Login2 = _interopRequireDefault(_Login);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_Login2.default, {});
   
   exports.default = {
     path: '/login',
@@ -20140,7 +17634,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_Login2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -20153,7 +17647,7 @@ module.exports =
   };
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20162,49 +17656,119 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactCookie = __webpack_require__(68);
+  var _reactCookie = __webpack_require__(69);
   
   var _reactCookie2 = _interopRequireDefault(_reactCookie);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _Notification = __webpack_require__(83);
+  var _Notification = __webpack_require__(84);
   
   var _Notification2 = _interopRequireDefault(_Notification);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('a', {
+    href: 'javascript:;',
+    className: 'entryLogo'
+  }, void 0, (0, _jsx3.default)('image', {
+    src: '/logo.png'
+  }));
+  
+  var _ref2 = (0, _jsx3.default)('div', {
+    className: 'entryHdBtn'
+  }, void 0, (0, _jsx3.default)('a', {
+    href: '/signUp'
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: '/login'
+  }, void 0, '\u767B\u5F55'));
+  
+  var _ref3 = (0, _jsx3.default)('div', {
+    className: 'entryModelBg'
+  }, void 0, 'Make it simple   make it fast');
+  
+  var _ref4 = (0, _jsx3.default)('div', {
+    className: 'title'
+  }, void 0, '\u7528\u6237\u767B\u5F55');
+  
+  var _ref5 = (0, _jsx3.default)('div', {
+    className: 'entryFromFt'
+  }, void 0, (0, _jsx3.default)('a', {
+    href: '/signUp'
+  }, void 0, '\u7ACB\u5373\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u5FD8\u8BB0\u5BC6\u7801'));
+  
+  var _ref6 = (0, _jsx3.default)('div', {
+    className: 'entryBg'
+  });
+  
+  var _ref7 = (0, _jsx3.default)('a', {
+    href: 'javascript:;',
+    className: 'entryLogo'
+  }, void 0, (0, _jsx3.default)('image', {
+    src: '/logo.png'
+  }));
+  
+  var _ref8 = (0, _jsx3.default)('div', {
+    className: 'entryHdBtn'
+  }, void 0, (0, _jsx3.default)('a', {
+    href: '/signUp'
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: '/login'
+  }, void 0, '\u767B\u5F55'));
+  
+  var _ref9 = (0, _jsx3.default)('div', {
+    className: 'title'
+  }, void 0, '\u7528\u6237\u767B\u5F55');
+  
+  var _ref10 = (0, _jsx3.default)('div', {
+    className: 'entryFromFt'
+  }, void 0, '\u6CA1\u6709\u8D26\u6237? ', (0, _jsx3.default)('a', {
+    href: '/signUp'
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u5FD8\u8BB0\u5BC6\u7801'));
+  
+  var _ref11 = (0, _jsx3.default)('div', {
+    className: 'entryBg'
+  });
   
   var Login = function (_React$Component) {
     (0, _inherits3.default)(Login, _React$Component);
@@ -20212,7 +17776,7 @@ module.exports =
     function Login(props) {
       (0, _classCallCheck3.default)(this, Login);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Login).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (Login.__proto__ || (0, _getPrototypeOf2.default)(Login)).call(this, props));
   
       _this.state = {
         uName: false,
@@ -20348,253 +17912,106 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { show: true, obj: this.state.notifications }) : _react2.default.createElement(_Notification2.default, { show: false, obj: this.state.notifications });
+        var notification = this.state.notifications.message ? (0, _jsx3.default)(_Notification2.default, {
+          show: true,
+          obj: this.state.notifications
+        }) : (0, _jsx3.default)(_Notification2.default, {
+          show: false,
+          obj: this.state.notifications
+        });
         this.context.setTitle("登录");
-        return _react2.default.createElement(
-          'div',
-          { className: 'entryBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'entryHd' },
-            _react2.default.createElement(
-              'div',
-              { className: 'w1200 clearfix' },
-              _react2.default.createElement(
-                'div',
-                { className: 'entryHdLogo' },
-                _react2.default.createElement(
-                  'a',
-                  { href: 'javascript:;', className: 'entryLogo' },
-                  _react2.default.createElement('image', { src: '/logo.png' })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'entryHdBtn' },
-                _react2.default.createElement(
-                  'a',
-                  { href: '/signUp' },
-                  '注册'
-                ),
-                _react2.default.createElement(
-                  'a',
-                  { href: '/login' },
-                  '登录'
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'entryBd' },
-            _react2.default.createElement(
-              'div',
-              { className: 'entryModel' },
-              _react2.default.createElement(
-                'div',
-                { className: 'entryModelBg' },
-                'Make it simple   make it fast'
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'entryFrom' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'title' },
-                  '用户登录'
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryItemBox' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryItem ' + (this.state.uName ? "entryItemError" : "") },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryInputBox icon-username' },
-                      _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名或邮箱' })
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryTip' },
-                      _react2.default.createElement(
-                        'p',
-                        { ref: 'userTip' },
-                        '用户名错误'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "") },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryInputBox icon-mima' },
-                      _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryTip' },
-                      _react2.default.createElement(
-                        'p',
-                        { ref: 'passwordTip' },
-                        '密码错误'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryBtnBox' },
-                    _react2.default.createElement(
-                      'button',
-                      { className: 'btn btn-primary entryBtn ' + (!this.state.isLogin ? "btn-loading" : ""),
-                        disabled: !this.state.isLogin,
-                        onClick: this.login.bind(this) },
-                      this.state.isLogin ? "登录" : "登录中"
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryFromFt' },
-                    _react2.default.createElement(
-                      'a',
-                      { href: '/signUp' },
-                      '立即注册'
-                    ),
-                    _react2.default.createElement(
-                      'a',
-                      { href: 'javascript:;' },
-                      '忘记密码'
-                    )
-                  )
-                )
-              )
-            )
-          ),
-          _react2.default.createElement('div', { className: 'entryBg' }),
-          notification
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'entryBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryHd'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'w1200 clearfix'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryHdLogo'
+        }, void 0, _ref), _ref2)), (0, _jsx3.default)('div', {
+          className: 'entryBd'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryModel'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'entryFrom'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'entryItemBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryItem ' + (this.state.uName ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox icon-username'
+        }, void 0, _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '\u7528\u6237\u540D\u6216\u90AE\u7BB1' })), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'userTip' },
+          '\u7528\u6237\u540D\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox icon-mima'
+        }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '\u5BC6\u7801' })), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'passwordTip' },
+          '\u5BC6\u7801\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary entryBtn ' + (!this.state.isLogin ? "btn-loading" : ""),
+          disabled: !this.state.isLogin,
+          onClick: this.login.bind(this)
+        }, void 0, this.state.isLogin ? "登录" : "登录中")), _ref5)))), _ref6, notification);
       }
     }, {
       key: 'render1',
       value: function render1() {
-        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { obj: this.state.notifications }) : null;
+        var notification = this.state.notifications.message ? (0, _jsx3.default)(_Notification2.default, {
+          obj: this.state.notifications
+        }) : null;
         this.context.setTitle("登录");
-        return _react2.default.createElement(
-          'div',
-          { className: 'entryBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'entryHd' },
-            _react2.default.createElement(
-              'div',
-              { className: 'w1200 clearfix' },
-              _react2.default.createElement(
-                'div',
-                { className: 'entryHdLogo' },
-                _react2.default.createElement(
-                  'a',
-                  { href: 'javascript:;', className: 'entryLogo' },
-                  _react2.default.createElement('image', { src: '/logo.png' })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'entryHdBtn' },
-                _react2.default.createElement(
-                  'a',
-                  { href: '/signUp' },
-                  '注册'
-                ),
-                _react2.default.createElement(
-                  'a',
-                  { href: '/login' },
-                  '登录'
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'entryBd' },
-            _react2.default.createElement(
-              'div',
-              { className: 'entryModel' },
-              _react2.default.createElement(
-                'div',
-                { className: 'title' },
-                '用户登录'
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'entryFrom' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryItem ' + (this.state.uName ? "entryItemError" : "") },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryInputBox icon-username' },
-                    _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名或邮箱' })
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryTip' },
-                    _react2.default.createElement(
-                      'p',
-                      { ref: 'userTip' },
-                      '用户名错误'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "") },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryInputBox icon-mima' },
-                    _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryTip' },
-                    _react2.default.createElement(
-                      'p',
-                      { ref: 'passwordTip' },
-                      '密码错误'
-                    )
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryBtnBox' },
-                  _react2.default.createElement(
-                    'button',
-                    { className: 'btn btn-primary entryBtn', disabled: !this.state.isLogin,
-                      onClick: this.login.bind(this) },
-                    this.state.isLogin ? "登录" : "登录中..."
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryFromFt' },
-                  '没有账户? ',
-                  _react2.default.createElement(
-                    'a',
-                    { href: '/signUp' },
-                    '注册'
-                  ),
-                  _react2.default.createElement(
-                    'a',
-                    { href: 'javascript:;' },
-                    '忘记密码'
-                  )
-                )
-              )
-            )
-          ),
-          _react2.default.createElement('div', { className: 'entryBg' }),
-          notification
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'entryBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryHd'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'w1200 clearfix'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryHdLogo'
+        }, void 0, _ref7), _ref8)), (0, _jsx3.default)('div', {
+          className: 'entryBd'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryModel'
+        }, void 0, _ref9, (0, _jsx3.default)('div', {
+          className: 'entryFrom'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryItem ' + (this.state.uName ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox icon-username'
+        }, void 0, _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '\u7528\u6237\u540D\u6216\u90AE\u7BB1' })), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'userTip' },
+          '\u7528\u6237\u540D\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox icon-mima'
+        }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '\u5BC6\u7801' })), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'passwordTip' },
+          '\u5BC6\u7801\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary entryBtn',
+          disabled: !this.state.isLogin,
+          onClick: this.login.bind(this)
+        }, void 0, this.state.isLogin ? "登录" : "登录中...")), _ref10))), _ref11, notification);
       }
     }]);
     return Login;
@@ -20606,7 +18023,7 @@ module.exports =
   exports.default = Login;
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20615,23 +18032,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _SignUp = __webpack_require__(200);
+  var _SignUp = __webpack_require__(201);
   
   var _SignUp2 = _interopRequireDefault(_SignUp);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_SignUp2.default, {});
   
   exports.default = {
     path: '/signUp',
@@ -20644,7 +18067,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_SignUp2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -20657,7 +18080,7 @@ module.exports =
   };
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20666,51 +18089,55 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _Notification = __webpack_require__(83);
+  var _Notification = __webpack_require__(84);
   
   var _Notification2 = _interopRequireDefault(_Notification);
   
-  var _uuid = __webpack_require__(201);
+  var _uuid = __webpack_require__(202);
   
   var _uuid2 = _interopRequireDefault(_uuid);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
@@ -20718,13 +18145,46 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
+  var _ref = (0, _jsx3.default)('a', {
+    href: 'javascript:;',
+    className: 'entryLogo'
+  }, void 0, (0, _jsx3.default)('image', {
+    src: '/logo.png'
+  }));
+  
+  var _ref2 = (0, _jsx3.default)('div', {
+    className: 'entryHdBtn'
+  }, void 0, (0, _jsx3.default)('a', {
+    href: '/signUp'
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: '/login'
+  }, void 0, '\u767B\u5F55'));
+  
+  var _ref3 = (0, _jsx3.default)('div', {
+    className: 'entryModelBg'
+  }, void 0, 'Make it simple   make it fast');
+  
+  var _ref4 = (0, _jsx3.default)('div', {
+    className: 'title'
+  }, void 0, '\u7528\u6237\u6CE8\u518C');
+  
+  var _ref5 = (0, _jsx3.default)('div', {
+    className: 'entryFromFt'
+  }, void 0, (0, _jsx3.default)('a', {
+    href: '/login'
+  }, void 0, '\u5DF2\u6709\u8D26\u6237   \u767B\u5F55'));
+  
+  var _ref6 = (0, _jsx3.default)('div', {
+    className: 'entryBg'
+  });
+  
   var SignUp = function (_React$Component) {
     (0, _inherits3.default)(SignUp, _React$Component);
   
     function SignUp(props) {
       (0, _classCallCheck3.default)(this, SignUp);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(SignUp).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (SignUp.__proto__ || (0, _getPrototypeOf2.default)(SignUp)).call(this, props));
   
       _this.state = {
         uName: false,
@@ -20944,173 +18404,84 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        var notification = this.state.notifications.message ? _react2.default.createElement(_Notification2.default, { show: true, obj: this.state.notifications }) : _react2.default.createElement(_Notification2.default, { show: false, obj: this.state.notifications });
+        var notification = this.state.notifications.message ? (0, _jsx3.default)(_Notification2.default, {
+          show: true,
+          obj: this.state.notifications
+        }) : (0, _jsx3.default)(_Notification2.default, {
+          show: false,
+          obj: this.state.notifications
+        });
         this.context.setTitle("注册");
-        return _react2.default.createElement(
-          'div',
-          { className: 'entryBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'entryHd' },
-            _react2.default.createElement(
-              'div',
-              { className: 'w1200 clearfix' },
-              _react2.default.createElement(
-                'div',
-                { className: 'entryHdLogo' },
-                _react2.default.createElement(
-                  'a',
-                  { href: 'javascript:;', className: 'entryLogo' },
-                  _react2.default.createElement('image', { src: '/logo.png' })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'entryHdBtn' },
-                _react2.default.createElement(
-                  'a',
-                  { href: '/signUp' },
-                  '注册'
-                ),
-                _react2.default.createElement(
-                  'a',
-                  { href: '/login' },
-                  '登录'
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'entryBd signUp' },
-            _react2.default.createElement(
-              'div',
-              { className: 'entryModel' },
-              _react2.default.createElement(
-                'div',
-                { className: 'entryModelBg' },
-                'Make it simple   make it fast'
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'entryFrom' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'title' },
-                  '用户注册'
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'entryItemBox' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryItem ' + (this.state.uName ? "entryItemError" : "") },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryInputBox icon-username' },
-                      _react2.default.createElement('input', { onChange: this.changeUserName.bind(this),
-                        className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名' })
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryTip' },
-                      _react2.default.createElement(
-                        'p',
-                        { ref: 'userTip' },
-                        '用户名错误'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryItem ' + (this.state.uEmail ? "entryItemError" : "") },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryInputBox icon-email' },
-                      _react2.default.createElement('input', { onChange: this.changeEmail.bind(this),
-                        className: 'entryInput', ref: 'email', type: 'text', placeholder: '邮箱' })
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryTip' },
-                      _react2.default.createElement(
-                        'p',
-                        { ref: 'emailTip' },
-                        '邮箱错误'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "") },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryInputBox icon-mima' },
-                      _react2.default.createElement('input', { onInput: this.changePassword.bind(this),
-                        className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryTip' },
-                      _react2.default.createElement(
-                        'p',
-                        { ref: 'passwordTip' },
-                        '密码错误'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryItem entryItemCode ' + (this.state.uCode ? "entryItemError" : "") },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryInputBox  icon-mima' },
-                      _react2.default.createElement('input', { onInput: this.changeCode.bind(this),
-                        className: 'entryInput', ref: 'code', type: 'text', placeholder: '验证码' }),
-                      _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' }),
-                      _react2.default.createElement(
-                        'span',
-                        { className: 'icon-refresh', onClick: this.changeImageSrc.bind(this) },
-                        ' '
-                      )
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'entryTip' },
-                      _react2.default.createElement(
-                        'p',
-                        { ref: 'codeTip' },
-                        '验证码错误'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryBtnBox' },
-                    _react2.default.createElement(
-                      'button',
-                      { className: 'btn btn-primary entryBtn ' + (!this.state.isSignUp ? "btn-loading" : ""),
-                        disabled: !this.state.isSignUp,
-                        onClick: this.signUp.bind(this) },
-                      this.state.isSignUp ? "注册" : "注册中..."
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'entryFromFt' },
-                    _react2.default.createElement(
-                      'a',
-                      { href: '/login' },
-                      '已有账户   登录'
-                    )
-                  )
-                )
-              )
-            )
-          ),
-          _react2.default.createElement('div', { className: 'entryBg' }),
-          notification
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'entryBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryHd'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'w1200 clearfix'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryHdLogo'
+        }, void 0, _ref), _ref2)), (0, _jsx3.default)('div', {
+          className: 'entryBd signUp'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryModel'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'entryFrom'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'entryItemBox'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryItem ' + (this.state.uName ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox icon-username'
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeUserName.bind(this),
+          className: 'entryInput', ref: 'username', type: 'text', placeholder: '\u7528\u6237\u540D' })), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'userTip' },
+          '\u7528\u6237\u540D\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryItem ' + (this.state.uEmail ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox icon-email'
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeEmail.bind(this),
+          className: 'entryInput', ref: 'email', type: 'text', placeholder: '\u90AE\u7BB1' })), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'emailTip' },
+          '\u90AE\u7BB1\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox icon-mima'
+        }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this),
+          className: 'entryInput', ref: 'password', type: 'password', placeholder: '\u5BC6\u7801' })), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'passwordTip' },
+          '\u5BC6\u7801\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryItem entryItemCode ' + (this.state.uCode ? "entryItemError" : "")
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'entryInputBox  icon-mima'
+        }, void 0, _react2.default.createElement('input', { onInput: this.changeCode.bind(this),
+          className: 'entryInput', ref: 'code', type: 'text', placeholder: '\u9A8C\u8BC1\u7801' }), _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' }), (0, _jsx3.default)('span', {
+          className: 'icon-refresh',
+          onClick: this.changeImageSrc.bind(this)
+        }, void 0, ' ')), (0, _jsx3.default)('div', {
+          className: 'entryTip'
+        }, void 0, _react2.default.createElement(
+          'p',
+          { ref: 'codeTip' },
+          '\u9A8C\u8BC1\u7801\u9519\u8BEF'
+        ))), (0, _jsx3.default)('div', {
+          className: 'entryBtnBox'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary entryBtn ' + (!this.state.isSignUp ? "btn-loading" : ""),
+          disabled: !this.state.isSignUp,
+          onClick: this.signUp.bind(this)
+        }, void 0, this.state.isSignUp ? "注册" : "注册中...")), _ref5)))), _ref6, notification);
       }
     }]);
     return SignUp;
@@ -21122,13 +18493,13 @@ module.exports =
   exports.default = SignUp;
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports) {
 
   module.exports = require("uuid");
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21137,23 +18508,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _UserCenterContainer = __webpack_require__(203);
+  var _UserCenterContainer = __webpack_require__(204);
   
   var _UserCenterContainer2 = _interopRequireDefault(_UserCenterContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_UserCenterContainer2.default, {});
   
   exports.default = {
     path: '/user',
@@ -21166,7 +18543,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_UserCenterContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -21179,7 +18556,7 @@ module.exports =
   };
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21188,27 +18565,27 @@ module.exports =
     value: true
   });
   
-  var _UserCenter = __webpack_require__(204);
+  var _UserCenter = __webpack_require__(205);
   
   var _UserCenter2 = _interopRequireDefault(_UserCenter);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _building = __webpack_require__(112);
+  var _building = __webpack_require__(113);
   
-  var _BuildingCreateSelector = __webpack_require__(145);
+  var _BuildingCreateSelector = __webpack_require__(146);
   
-  var _users = __webpack_require__(211);
+  var _users = __webpack_require__(212);
   
   var funUser = _interopRequireWildcard(_users);
   
-  var _organize = __webpack_require__(75);
+  var _organize = __webpack_require__(76);
   
   var funOrganize = _interopRequireWildcard(_organize);
   
-  var _organizeListSelector = __webpack_require__(82);
+  var _organizeListSelector = __webpack_require__(83);
   
   var _organizeListSelector2 = _interopRequireDefault(_organizeListSelector);
   
@@ -21256,7 +18633,7 @@ module.exports =
   exports.default = UserCenterContainer;
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21265,64 +18642,78 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _GetPersonalInfo = __webpack_require__(205);
+  var _GetPersonalInfo = __webpack_require__(206);
   
   var _GetPersonalInfo2 = _interopRequireDefault(_GetPersonalInfo);
   
-  var _GetMyAccount = __webpack_require__(206);
+  var _GetMyAccount = __webpack_require__(207);
   
   var _GetMyAccount2 = _interopRequireDefault(_GetMyAccount);
   
-  var _GetAccountManage = __webpack_require__(207);
+  var _GetAccountManage = __webpack_require__(208);
   
   var _GetAccountManage2 = _interopRequireDefault(_GetAccountManage);
   
-  var _GetCertificateMange = __webpack_require__(209);
+  var _GetCertificateMange = __webpack_require__(210);
   
   var _GetCertificateMange2 = _interopRequireDefault(_GetCertificateMange);
   
-  var _GetOrganize = __webpack_require__(210);
+  var _GetOrganize = __webpack_require__(211);
   
   var _GetOrganize2 = _interopRequireDefault(_GetOrganize);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var title = '个人中心';
+  
+  var _ref = (0, _jsx3.default)(_reactBootstrap.Tab, {
+    eventKey: 2,
+    title: '\u6211\u7684\u8D26\u6237'
+  }, void 0, (0, _jsx3.default)(_GetMyAccount2.default, {}));
+  
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.Tab, {
+    eventKey: 4,
+    title: '\u793C\u5238\u7BA1\u7406'
+  }, void 0, (0, _jsx3.default)(_GetCertificateMange2.default, {}));
   
   var UserCenter = function (_Component) {
     (0, _inherits3.default)(UserCenter, _Component);
   
     function UserCenter() {
       (0, _classCallCheck3.default)(this, UserCenter);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(UserCenter).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (UserCenter.__proto__ || (0, _getPrototypeOf2.default)(UserCenter)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(UserCenter, [{
@@ -21337,84 +18728,53 @@ module.exports =
         var _this2 = this;
   
         this.context.setTitle(title);
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'userTab' },
-            _react2.default.createElement(
-              _reactBootstrap.Tabs,
-              { defaultActiveKey: 5, id: 'userTabs' },
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 1, title: '个人信息' },
-                _react2.default.createElement(_GetPersonalInfo2.default, {
-                  onRevisePassword: function onRevisePassword(passwordObj) {
-                    return _this2.props.onRevisePassword(passwordObj);
-                  }
-                })
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 2, title: '我的账户' },
-                _react2.default.createElement(_GetMyAccount2.default, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 3, title: '账户管理' },
-                _react2.default.createElement(_GetAccountManage2.default, {
-                  githubAuthURL: this.props.githubAuthURL
-                })
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 4, title: '礼券管理' },
-                _react2.default.createElement(_GetCertificateMange2.default, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 5, title: '组管理' },
-                _react2.default.createElement(_GetOrganize2.default, {
-                  createOrganize: function createOrganize(org_name) {
-                    _this2.props.createOrganize(org_name);
-                  },
-                  getOrganizeList: function getOrganizeList() {
-                    _this2.props.getOrganizeList();
-                  },
-                  organizeList: this.props.organizeList,
-                  leaveOrganize: function leaveOrganize(id) {
-                    return _this2.props.leaveOrganize(id);
-                  },
-                  deleteOrganize: function deleteOrganize(id) {
-                    return _this2.props.deleteOrganize(id);
-                  }
-                })
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'userTab'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tabs, {
+          defaultActiveKey: 5,
+          id: 'userTabs'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 1,
+          title: '\u4E2A\u4EBA\u4FE1\u606F'
+        }, void 0, (0, _jsx3.default)(_GetPersonalInfo2.default, {
+          onRevisePassword: function onRevisePassword(passwordObj) {
+            return _this2.props.onRevisePassword(passwordObj);
+          }
+        })), _ref, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 3,
+          title: '\u8D26\u6237\u7BA1\u7406'
+        }, void 0, (0, _jsx3.default)(_GetAccountManage2.default, {
+          githubAuthURL: this.props.githubAuthURL
+        })), _ref2, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 5,
+          title: '\u7EC4\u7BA1\u7406'
+        }, void 0, (0, _jsx3.default)(_GetOrganize2.default, {
+          createOrganize: function createOrganize(org_name) {
+            _this2.props.createOrganize(org_name);
+          },
+          getOrganizeList: function getOrganizeList() {
+            _this2.props.getOrganizeList();
+          },
+          organizeList: this.props.organizeList,
+          leaveOrganize: function leaveOrganize(id) {
+            return _this2.props.leaveOrganize(id);
+          },
+          deleteOrganize: function deleteOrganize(id) {
+            return _this2.props.deleteOrganize(id);
+          }
+        })))));
       }
     }]);
     return UserCenter;
   }(_react.Component);
   
   UserCenter.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
-  UserCenter.propTypes = {
-    setBreadcrumb: _react2.default.PropTypes.func,
-    githubAuthURL: _react2.default.PropTypes.string,
-    getGithubAuthURL: _react2.default.PropTypes.func,
-    onRevisePassword: _react2.default.PropTypes.func,
-    createOrganize: _react2.default.PropTypes.func,
-    organizeList: _react2.default.PropTypes.array,
-    getOrganizeList: _react2.default.PropTypes.func,
-    leaveOrganize: _react2.default.PropTypes.func,
-    deleteOrganize: _react2.default.PropTypes.func
-  };
   exports.default = UserCenter;
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21423,39 +18783,91 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('div', {
+    className: 'userItem'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u4E2A\u4EBA\u5934\u50CF',
+    titleEnglish: '',
+    titleInfo: 'PERSONAL HEAD'
+  }), (0, _jsx3.default)('div', {
+    className: 'userHead'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'userHeadBox'
+  }, void 0, (0, _jsx3.default)('img', {})), (0, _jsx3.default)('div', {
+    className: 'choose icon-operation'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u66F4\u6539\u5934\u50CF'))));
+  
+  var _ref2 = (0, _jsx3.default)('div', {
+    className: 'userItem'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7ED1\u5B9A\u624B\u673A',
+    titleEnglish: '',
+    titleInfo: 'BINDING CELLPHONE'
+  }), (0, _jsx3.default)('div', {
+    className: 'userPhone'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'userInputItem'
+  }, void 0, (0, _jsx3.default)('input', {
+    type: 'text',
+    className: 'form-control'
+  }), (0, _jsx3.default)('i', {
+    className: 'userTip'
+  }, void 0, '\u7ED1\u5B9A\u624B\u673A\u53F7\u53EF\u63A5\u53D7\u7CFB\u7EDF\u91CD\u8981\u901A\u77E5')), (0, _jsx3.default)('div', {
+    className: 'userInputItem'
+  }, void 0, (0, _jsx3.default)('input', {
+    type: 'text',
+    className: 'form-control userInputLittle'
+  }), (0, _jsx3.default)('button', {
+    className: 'userButtonLittle'
+  }, void 0, '\u77ED\u4FE1\u9A8C\u8BC1\u7801')), (0, _jsx3.default)('div', {
+    className: 'userInputItem'
+  }, void 0, (0, _jsx3.default)('button', {
+    className: 'btn btn-warning'
+  }, void 0, '\u7ED1\u5B9A'))));
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u4FEE\u6539\u5BC6\u7801',
+    titleEnglish: '',
+    titleInfo: 'MODIFY PASSWORD'
+  });
   
   var GetPersonalInfo = function (_Component) {
     (0, _inherits3.default)(GetPersonalInfo, _Component);
@@ -21463,7 +18875,7 @@ module.exports =
     function GetPersonalInfo(props) {
       (0, _classCallCheck3.default)(this, GetPersonalInfo);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetPersonalInfo).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetPersonalInfo.__proto__ || (0, _getPrototypeOf2.default)(GetPersonalInfo)).call(this, props));
   
       _this.state = {
         oldP: false,
@@ -21563,500 +18975,42 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'userTabBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'userItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '个人头像',
-              titleEnglish: '',
-              titleInfo: 'PERSONAL HEAD'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'userHead' },
-              _react2.default.createElement(
-                'div',
-                { className: 'userHeadBox' },
-                _react2.default.createElement('img', null)
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'choose icon-operation' },
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  '更改头像'
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'userItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '绑定手机',
-              titleEnglish: '',
-              titleInfo: 'BINDING CELLPHONE'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'userPhone' },
-              _react2.default.createElement(
-                'div',
-                { className: 'userInputItem' },
-                _react2.default.createElement('input', { type: 'text', className: 'form-control' }),
-                _react2.default.createElement(
-                  'i',
-                  { className: 'userTip' },
-                  '绑定手机号可接受系统重要通知'
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'userInputItem' },
-                _react2.default.createElement('input', { type: 'text', className: 'form-control userInputLittle' }),
-                _react2.default.createElement(
-                  'button',
-                  { className: 'userButtonLittle' },
-                  '短信验证码'
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'userInputItem' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-warning' },
-                  '绑定'
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'userItem' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '修改密码',
-              titleEnglish: '',
-              titleInfo: 'MODIFY PASSWORD'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'userPhone' },
-              _react2.default.createElement(
-                'div',
-                { className: 'userInputItem ' + (this.state.oldP ? "userInputItemError" : "") },
-                _react2.default.createElement('input', { onChange: this.changeOldPassword.bind(this), type: 'password', className: 'form-control', ref: 'old_p', placeholder: '原始密码' }),
-                _react2.default.createElement(
-                  'i',
-                  { className: 'userTip', ref: 'oldTip' },
-                  ' '
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'userInputItem ' + (this.state.newP ? "userInputItemError" : "") },
-                _react2.default.createElement('input', { onChange: this.changeNewPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p', placeholder: '新密码' }),
-                _react2.default.createElement(
-                  'i',
-                  { className: 'userTip', ref: 'newTip' },
-                  ' '
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'userInputItem ' + (this.state.newAgain ? "userInputItemError" : "") },
-                _react2.default.createElement('input', { onChange: this.changeNewAgainPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p_again', placeholder: '确认新密码' }),
-                _react2.default.createElement(
-                  'i',
-                  { className: 'userTip', ref: 'newTipAgain' },
-                  ' '
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'userInputItem' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-warning', onClick: this.revisePassword.bind(this) },
-                  '确定'
-                )
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'userTabBox'
+        }, void 0, _ref, _ref2, (0, _jsx3.default)('div', {
+          className: 'userItem'
+        }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: 'userPhone'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'userInputItem ' + (this.state.oldP ? "userInputItemError" : "")
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeOldPassword.bind(this), type: 'password', className: 'form-control', ref: 'old_p', placeholder: '\u539F\u59CB\u5BC6\u7801' }), _react2.default.createElement(
+          'i',
+          { className: 'userTip', ref: 'oldTip' },
+          ' '
+        )), (0, _jsx3.default)('div', {
+          className: 'userInputItem ' + (this.state.newP ? "userInputItemError" : "")
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeNewPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p', placeholder: '\u65B0\u5BC6\u7801' }), _react2.default.createElement(
+          'i',
+          { className: 'userTip', ref: 'newTip' },
+          ' '
+        )), (0, _jsx3.default)('div', {
+          className: 'userInputItem ' + (this.state.newAgain ? "userInputItemError" : "")
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeNewAgainPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p_again', placeholder: '\u786E\u8BA4\u65B0\u5BC6\u7801' }), _react2.default.createElement(
+          'i',
+          { className: 'userTip', ref: 'newTipAgain' },
+          ' '
+        )), (0, _jsx3.default)('div', {
+          className: 'userInputItem'
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-warning',
+          onClick: this.revisePassword.bind(this)
+        }, void 0, '\u786E\u5B9A')))));
       }
     }]);
     return GetPersonalInfo;
   }(_react.Component);
   
-  GetPersonalInfo.propTypes = {
-    onRevisePassword: _react2.default.PropTypes.func
-  };
   exports.default = GetPersonalInfo;
-
-/***/ },
-/* 206 */
-/***/ function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  
-  var _getPrototypeOf = __webpack_require__(45);
-  
-  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-  
-  var _classCallCheck2 = __webpack_require__(46);
-  
-  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-  
-  var _createClass2 = __webpack_require__(47);
-  
-  var _createClass3 = _interopRequireDefault(_createClass2);
-  
-  var _possibleConstructorReturn2 = __webpack_require__(48);
-  
-  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-  
-  var _inherits2 = __webpack_require__(49);
-  
-  var _inherits3 = _interopRequireDefault(_inherits2);
-  
-  var _react = __webpack_require__(9);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _HeadLine = __webpack_require__(128);
-  
-  var _HeadLine2 = _interopRequireDefault(_HeadLine);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var GetMyAccount = function (_Component) {
-    (0, _inherits3.default)(GetMyAccount, _Component);
-  
-    function GetMyAccount() {
-      (0, _classCallCheck3.default)(this, GetMyAccount);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetMyAccount).apply(this, arguments));
-    }
-  
-    (0, _createClass3.default)(GetMyAccount, [{
-      key: 'getTableBody',
-      value: function getTableBody() {
-        var data = [{ name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }];
-        return data.map(function (item, i) {
-          return _react2.default.createElement(
-            'tr',
-            { key: i },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'tablePaddingLeft' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'mediaItem' },
-                  _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'mediaTxt' },
-                    item.name
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'tablePaddingLeft' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'color333' },
-                  item.type
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'tablePaddingLeft' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'color333' },
-                  item.time
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'tablePaddingLeft' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'color333' },
-                  item.money
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'tablePaddingLeft' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'color333' },
-                  item.way
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'tablePaddingLeft' },
-                _react2.default.createElement('span', { className: 'icon-right' })
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'tablePaddingLeft' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'color333' },
-                  item.odd
-                )
-              )
-            )
-          );
-        });
-      }
-    }, {
-      key: 'getDemoTable',
-      value: function getDemoTable() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table recordTable' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '15%' },
-                '服务名称'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '15%' },
-                '类型'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '15%' },
-                '时间'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '15%' },
-                '金额'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '15%' },
-                '扣款方式'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '10%' },
-                '是否完成'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '15%' },
-                '单号'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            null,
-            this.getTableBody()
-          )
-        );
-      }
-    }, {
-      key: 'render',
-      value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'userTabBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'userItem accountBg' },
-            _react2.default.createElement(
-              'div',
-              { className: 'accountHd clearfix' },
-              _react2.default.createElement(
-                'div',
-                { className: 'left' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '账户余额',
-                  titleEnglish: '',
-                  titleInfo: 'ACCOUNT BALANCE'
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'right userHeadTip' },
-                '  关注微信公众号，平台免费为您提供3个月的账户试用奖励。 '
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'accountBd' },
-              _react2.default.createElement(
-                'div',
-                { className: 'accountItem' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'aiName' },
-                  '账户余额 :'
-                ),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'aiInfo' },
-                  _react2.default.createElement(
-                    'i',
-                    null,
-                    '-1550'
-                  ),
-                  ' 元'
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'accountItem' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'aiName' },
-                  '支付金额 :'
-                ),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'aiInfo' },
-                  _react2.default.createElement('input', { type: 'number', className: 'form-control' }),
-                  ' 元'
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'accountItem' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'aiName' },
-                  '支付方式 :'
-                ),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'aiInfo' },
-                  _react2.default.createElement(
-                    'a',
-                    { href: 'javascript:;', className: 'accountPay accountPayZfb active' },
-                    ' '
-                  ),
-                  _react2.default.createElement(
-                    'a',
-                    { href: 'javascript:;', className: 'accountPay accountPayWx' },
-                    ' '
-                  )
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'accountFt clearfix' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-danger' },
-                '充值'
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'accountFtTip right' },
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  ' 提示：累计充值金额满',
-                  _react2.default.createElement(
-                    'span',
-                    null,
-                    '￥200'
-                  ),
-                  '后可提交工单申请发票。'
-                ),
-                _react2.default.createElement(
-                  'a',
-                  { href: 'javascript:;' },
-                  ' '
-                )
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'userItem' },
-            _react2.default.createElement(
-              'div',
-              { className: 'accountHd clearfix' },
-              _react2.default.createElement(
-                'div',
-                { className: 'left' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '充值记录',
-                  titleEnglish: '',
-                  titleInfo: 'RECHARGE RECORD'
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'right userHeadTip' },
-                '提示：仅显示最近5笔交易，如需了解全部记录请提交 工单，我们会在24小时内发送您邮箱'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'userPayRecord' },
-              this.getDemoTable()
-            )
-          )
-        );
-      }
-    }]);
-    return GetMyAccount;
-  }(_react.Component);
-  
-  exports.default = GetMyAccount;
 
 /***/ },
 /* 207 */
@@ -22068,42 +19022,258 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('img', {
+    className: 'mediaImg',
+    src: '/slImgJx.png'
+  });
+  
+  var _ref2 = (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+    className: 'tablePaddingLeft'
+  }, void 0, (0, _jsx3.default)('span', {
+    className: 'icon-right'
+  })));
+  
+  var _ref3 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u670D\u52A1\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u7C7B\u578B'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u65F6\u95F4'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u91D1\u989D'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u6263\u6B3E\u65B9\u5F0F'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u662F\u5426\u5B8C\u6210'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u5355\u53F7')));
+  
+  var _ref4 = (0, _jsx3.default)('div', {
+    className: 'userItem accountBg'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'accountHd clearfix'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'left'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8D26\u6237\u4F59\u989D',
+    titleEnglish: '',
+    titleInfo: 'ACCOUNT BALANCE'
+  })), (0, _jsx3.default)('div', {
+    className: 'right userHeadTip'
+  }, void 0, '  \u5173\u6CE8\u5FAE\u4FE1\u516C\u4F17\u53F7\uFF0C\u5E73\u53F0\u514D\u8D39\u4E3A\u60A8\u63D0\u4F9B3\u4E2A\u6708\u7684\u8D26\u6237\u8BD5\u7528\u5956\u52B1\u3002 ')), (0, _jsx3.default)('div', {
+    className: 'accountBd'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'accountItem'
+  }, void 0, (0, _jsx3.default)('span', {
+    className: 'aiName'
+  }, void 0, '\u8D26\u6237\u4F59\u989D :'), (0, _jsx3.default)('span', {
+    className: 'aiInfo'
+  }, void 0, (0, _jsx3.default)('i', {}, void 0, '-1550'), ' \u5143')), (0, _jsx3.default)('div', {
+    className: 'accountItem'
+  }, void 0, (0, _jsx3.default)('span', {
+    className: 'aiName'
+  }, void 0, '\u652F\u4ED8\u91D1\u989D :'), (0, _jsx3.default)('span', {
+    className: 'aiInfo'
+  }, void 0, (0, _jsx3.default)('input', {
+    type: 'number',
+    className: 'form-control'
+  }), ' \u5143')), (0, _jsx3.default)('div', {
+    className: 'accountItem'
+  }, void 0, (0, _jsx3.default)('span', {
+    className: 'aiName'
+  }, void 0, '\u652F\u4ED8\u65B9\u5F0F :'), (0, _jsx3.default)('span', {
+    className: 'aiInfo'
+  }, void 0, (0, _jsx3.default)('a', {
+    href: 'javascript:;',
+    className: 'accountPay accountPayZfb active'
+  }, void 0, ' '), (0, _jsx3.default)('a', {
+    href: 'javascript:;',
+    className: 'accountPay accountPayWx'
+  }, void 0, ' ')))), (0, _jsx3.default)('div', {
+    className: 'accountFt clearfix'
+  }, void 0, (0, _jsx3.default)('button', {
+    className: 'btn btn-danger'
+  }, void 0, '\u5145\u503C'), (0, _jsx3.default)('div', {
+    className: 'accountFtTip right'
+  }, void 0, (0, _jsx3.default)('p', {}, void 0, ' \u63D0\u793A\uFF1A\u7D2F\u8BA1\u5145\u503C\u91D1\u989D\u6EE1', (0, _jsx3.default)('span', {}, void 0, '\uFFE5200'), '\u540E\u53EF\u63D0\u4EA4\u5DE5\u5355\u7533\u8BF7\u53D1\u7968\u3002'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, ' '))));
+  
+  var _ref5 = (0, _jsx3.default)('div', {
+    className: 'accountHd clearfix'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'left'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5145\u503C\u8BB0\u5F55',
+    titleEnglish: '',
+    titleInfo: 'RECHARGE RECORD'
+  })), (0, _jsx3.default)('div', {
+    className: 'right userHeadTip'
+  }, void 0, '\u63D0\u793A\uFF1A\u4EC5\u663E\u793A\u6700\u8FD15\u7B14\u4EA4\u6613\uFF0C\u5982\u9700\u4E86\u89E3\u5168\u90E8\u8BB0\u5F55\u8BF7\u63D0\u4EA4 \u5DE5\u5355\uFF0C\u6211\u4EEC\u4F1A\u572824\u5C0F\u65F6\u5185\u53D1\u9001\u60A8\u90AE\u7BB1'));
+  
+  var GetMyAccount = function (_Component) {
+    (0, _inherits3.default)(GetMyAccount, _Component);
+  
+    function GetMyAccount() {
+      (0, _classCallCheck3.default)(this, GetMyAccount);
+      return (0, _possibleConstructorReturn3.default)(this, (GetMyAccount.__proto__ || (0, _getPrototypeOf2.default)(GetMyAccount)).apply(this, arguments));
+    }
+  
+    (0, _createClass3.default)(GetMyAccount, [{
+      key: 'getTableBody',
+      value: function getTableBody() {
+        var data = [{ name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }, { name: "服务名称", type: "数据卷扩容", time: "20160223", money: "200.00", way: "支付宝", pay: "已完成", odd: "123543" }];
+        return data.map(function (item, i) {
+          return (0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'tablePaddingLeft'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'mediaItem'
+          }, void 0, _ref, (0, _jsx3.default)('span', {
+            className: 'mediaTxt'
+          }, void 0, item.name)))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'tablePaddingLeft'
+          }, void 0, (0, _jsx3.default)('span', {
+            className: 'color333'
+          }, void 0, item.type))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'tablePaddingLeft'
+          }, void 0, (0, _jsx3.default)('span', {
+            className: 'color333'
+          }, void 0, item.time))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'tablePaddingLeft'
+          }, void 0, (0, _jsx3.default)('span', {
+            className: 'color333'
+          }, void 0, item.money))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'tablePaddingLeft'
+          }, void 0, (0, _jsx3.default)('span', {
+            className: 'color333'
+          }, void 0, item.way))), _ref2, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'tablePaddingLeft'
+          }, void 0, (0, _jsx3.default)('span', {
+            className: 'color333'
+          }, void 0, item.odd))));
+        });
+      }
+    }, {
+      key: 'getDemoTable',
+      value: function getDemoTable() {
+        return (0, _jsx3.default)('table', {
+          className: 'table recordTable'
+        }, void 0, _ref3, (0, _jsx3.default)('tbody', {}, void 0, this.getTableBody()));
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return (0, _jsx3.default)('div', {
+          className: 'userTabBox'
+        }, void 0, _ref4, (0, _jsx3.default)('div', {
+          className: 'userItem'
+        }, void 0, _ref5, (0, _jsx3.default)('div', {
+          className: 'userPayRecord'
+        }, void 0, this.getDemoTable())));
+      }
+    }]);
+    return GetMyAccount;
+  }(_react.Component);
+  
+  exports.default = GetMyAccount;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(47);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(48);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(49);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(50);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(10);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('div', {
+    className: 'accountManageHd'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8D26\u53F7\u7BA1\u7406',
+    titleEnglish: '',
+    titleInfo: 'ACCOUNT MANAGEMENT'
+  }));
+  
+  var _ref2 = (0, _jsx3.default)('div', {
+    className: 'ambInfo'
+  }, void 0, (0, _jsx3.default)('h1', {}, void 0, 'Github'), (0, _jsx3.default)('p', {}, void 0, 'Github\u4E8E2008\u5E74\u4E0A\u7EBF\uFF0C\u7528\u4E8EGit\u4EE3\u7801\u4ED3\u5E93\u6258\u7BA1\u53CA\u57FA\u672C\u7684Web\u7BA1\u7406\u754C\u9762'));
   
   var GetAccountManage = function (_Component) {
     (0, _inherits3.default)(GetAccountManage, _Component);
   
     function GetAccountManage() {
       (0, _classCallCheck3.default)(this, GetAccountManage);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetAccountManage).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetAccountManage.__proto__ || (0, _getPrototypeOf2.default)(GetAccountManage)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetAccountManage, [{
@@ -22113,47 +19283,23 @@ module.exports =
       key: 'render',
       value: function render() {
         var user = this.context.store.getState().user_info;
-        return _react2.default.createElement(
-          'div',
-          { className: 'userTabBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'accountManageHd' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '账号管理',
-              titleEnglish: '',
-              titleInfo: 'ACCOUNT MANAGEMENT'
-            })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'accountManageItem' },
-            _react2.default.createElement(
-              'div',
-              { className: 'accountManageBox icon-github' },
-              _react2.default.createElement('img', { width: 60, height: 60, src: __webpack_require__(208), alt: 'img' }),
-              _react2.default.createElement(
-                'div',
-                { className: 'ambInfo' },
-                _react2.default.createElement(
-                  'h1',
-                  null,
-                  'Github'
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  'Github于2008年上线，用于Git代码仓库托管及基本的Web管理界面'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'a',
-              { href: user.github ? "javascript:;" : this.props.githubAuthURL, target: '_blank', className: 'btn btn-warning', disabled: user.github },
-              user.github ? "已绑定" : "绑定"
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'userTabBox'
+        }, void 0, _ref, (0, _jsx3.default)('div', {
+          className: 'accountManageItem'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'accountManageBox icon-github'
+        }, void 0, (0, _jsx3.default)('img', {
+          width: 60,
+          height: 60,
+          src: __webpack_require__(209),
+          alt: 'img'
+        }), _ref2), (0, _jsx3.default)('a', {
+          href: user.github ? "javascript:;" : this.props.githubAuthURL,
+          target: '_blank',
+          className: 'btn btn-warning',
+          disabled: user.github
+        }, void 0, user.github ? "已绑定" : "绑定")));
       }
     }]);
     return GetAccountManage;
@@ -22162,111 +19308,13 @@ module.exports =
   GetAccountManage.contextTypes = {
     store: _react2.default.PropTypes.object
   };
-  GetAccountManage.propTypes = {
-    githubAuthURL: _react2.default.PropTypes.string
-  };
   exports.default = GetAccountManage;
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphNmIzYTA5MS1mZTUwLTRkOGMtOGQ1NS1kYTcxMDUyYjdkMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0Q0OTkxN0E2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0Q0OTkxNzk2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphOThjNzgzOS1kYWE3LTQ3ZjgtODAzOS1jMzc0ZmIzYmI1ODUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTZiM2EwOTEtZmU1MC00ZDhjLThkNTUtZGE3MTA1MmI3ZDI2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+QujMrwAAEShJREFUeNoklwlwW9d1hu/b38PDvpAgQJAgARLcRdGUSEvULtoj2+NFdSUnTpzVcTqx04xqx0mbpO2kiVuntptmJq63xHXqZOptbMmSFduSbUqyJEoiKYukxJ0ECBD79vD2rVcpBjPA4A3uufec/57/O4hpmqV0/B8effTCx59u6qyP9odeeumTNR384blHBpyOyeNnTZIcR0sffHT1W4ObhvcMapJiwclaMpPJVSRNRRHU5rQ7vQ4Uw6UaTyCApdnrawlRqp5b2njjagYA8N+//nY00pktg46QVcccgc59LrcXEbnc8Zd+duTI83fu7fF1ugRO2dzT72moy01N5T+dcfaGUYJ5dfzK9pHub23biaPoeialKEYqkayVeBtDYhimKKqpqHarRdK0hXQhGvQVKrVkoex3EZdWMq9dSu24JfjDxw9fnY+7rZTL7saopgN3fw2vxC9m19MNTqs/4vIG/Y3WoKvBd+HdY34V7/nyqI+xrYpXHefTYa5DUqW15LpY4RDUxFFDR6RSVbNZGYCiMoryGgAIYiXxM7OLODAZhlYUent7c7bInbySvHd+ZaivV+P1pUwi6Eme+uhFVOdz8ZV0uM3vaw70tXSUeP4XTz5tqahbDo5aFGXuwuUC8Ox75MskyybOX+AW1tR4lspxUo4zaiaBAVM3EcS0kDRBIjRBRJvqBlsaw/UNGADrhY10gfvy7sFGAJ5//RyOoSiGRgMh3TBZYOJA1+eXkwDVtar8yceXfvXKyVd/eF9XX++1sfHZU+eGnvm322+7DVHNZGrl8/96JtrThKOYmi83IuhGhccU1QJQXpQMUwMGShKUrmk1iadxgiUJ3WSz1bIOtK+PRE+tZhYT61VJ3BJul2S8UitgdoUb//zqnYe2yaLy5vHxfS3uA9u2TF2crKXWAw8e3H7wXm49IdWKGGNdWV7sbg51bepBGYuVZZ1WhkIMRREFUTPhCTCcwDCSpHNlbmY9meNLmqoF3V5eUVVENCuSNejx+N0UgrtsjumlWXzq4sxXH7vXHWmcPTvT3ujc0xFJrG2oKEojwOv0M4ylqmqMhZVV9fPTn9A3GvA9u1OZtFLlDNUgEFORDRxDdAOKFyEIJFeqMCTZ4mkoCTXT1DYqJStFaSilySLCcQxtX9lI9kXavC4v9rdH7mno6ipXax4L2+WwuRiqwokkhlM4lcrFiXBbpD1qGubrL7z07u9O9fUGM+sJXhKZeq/FabfQsMigVIExYK1NeHBZVVYz+Y1yRZB5WHaWosuCkOE4VeFJigj1dUmiAEsTCTTj7tZIqVjEUSTg82iFWiVfZAN+XRIkgNgr3AdPHDm/d//yF5NHXzv72O3t/YEQ6rBYaLq8lkzmK1WoLHjbaJIgMVXXVU0Puj11bmeFl/LF7MR6AjNxv92FYchCtTB1ebFzT9rh8RQLhfnkGnbn7VsIgpSFmjCzRAiauzvCBv2Spoc6mm0EETQBNznJyNKj33/g7sMHm4f66ttaAUlpiqIgmIwhNENSJMKLoiqrqKEpKpSKhhgGTVlkycARE8Ogbk2X3ZZYq3j8lkA0oiuiZhg4AcMS+NhHl25h7aDOKxqIx+HAVTU3s2jqiD3S1tzVXqzkZ+fmv5iZRmi0nONKhYrLTmmqIfN8rVrDEAoBgKZp1kJGmkOqrH8yPaNpGrw+KGoYnGkYIBpsDPk20sl0LzA1HVCwlqzVfvbYybHPro5++6Az6AckUVpZk/Mc5ferLHl5ZpI1gc1AbR6vq96JaBoVwkmLlU/na/lSY7iJtjskHeqKhMXGCZwrVRauL9dZQqYqybDgQFyppSs8PLxc1VS3CjdhwMzDHOCVVOrK+FxbU9DrdaMGJlf4Klcp6qqZLlokoQ21dsTabQ47zlgFQ5dkmEu+LFXzZrlg0/JCDlM3+HyWL3FQaA4rwtV42dBaeygG6qCkLcxJmAYoDFTFmiIC1BCBYaAIZgAdV8s1imZjPhdAiclr10xSozHKFOW2UNBTH+YkaSG1Id24YUiVEi/UcAMD8gtH52/b4xndGRAFhQRouNUa9Pk9dvZGsjx9w8xw4kpGMDCxO2p74Js9mcVyKS78x0eL1wpqzFlHEaCGoYim4zhGEdTNjpOt5stimeJhreyM1b1eFj6cnJ1JljZyvIaAO/cH77urOdIYQAi/J/LBxfF4vSs8tDNULolOC7mWL7/69vyrxxLTmXyQZrd0s6Kkv300v2cHf3hfIBxETEMF1nBs5Et8Yc7jcpc5DLv/wLZEKtPAss3+BhS1tfR2lg25YqSTXO7SQj7SYh3Y5KUJ8Keja/EVnSaxwc6mgd27OuqRsxdmdIB5bfhSNv+jZy/++uhCkwv93v2h+w74RobqRnfW793m++J6cTXBbW53XpjKrOWLodaWs+fmq6kbg1v7sW8c2kdRVHo9TeMYT2rJYuLtd4/b3Wi2aO2N2h86NLBnODa8uakzavlwbP75E/PrMzNb+1qaWgZwkNN1yWZhjp9dfedk7rZea6QZpPLKK2+tvXAs+c6x+K097Df+uifLi4SAXFutLRWlicuTiysb49NpLrWMHb5jRBTltURW1KRz4+eOnVwM1wHWE6t3UQ9/5ZZ0rvrSq5++/valXC6bylS2trmurqBqcXZk9x4NYR1oNs8by0nOAdRCsbQmeI+Pb3AqCHg8eVE8fqGwvcXS0+1Px7mz1/Mp+ODm62Z3nYtz6NWJ6yJX23/Xrt6RW8PhWCQAbA6XnSEePNi/Fi888fOPf/v+0pmZytgEl82DxfnCoQMuymHkizWcdEEBw2zHImyxmPOF65/+yVfpv6z93cPDpjH28P07H3l6Sq1KdfV0rQbtGliJm0/rPM6HHv4men58Zmjb1q39PXKNJzHE0EG+rG7e1CCIwtQc9/3HHmp3AR2A/3z27zLmzMDQpqMf3hgaaIGgYwIMGBiK45WCWE7JX7q7jZNE6S+BP/t8BiDM3u0DHhcxey2FmoYsy/CXWBRaM+CqNZ+LQUdvHx7Z3itL0okT52ysDScQXQcBv/fUqUs7YA6a6q+XAFxuamIKCMX2WFMkGlZlQOGIoinQkSicNHVsqKO+lEhRGD8UjgzbwJWp1RC+5Ze/+sNTP95LGoZQ1opwCYpsibTCwKKq/en53+Iet4sr8haWcTkZHdUdrN3qtmq6EQwH7QQH8EB/nbUraP/s5Fjklf3tfR3P/fR+vjxblWBUFL4RE1jrbaFO9+p0wd28/J2/GTr/HrjdCc5M5+872BJwa7KNgF5VhgExxOW0w8/uZhds6thQW9Dp80F4mLh81emgOY4PBpzN4XqGtWWyie5I2NfUklwvNPgCkgmOfO/W/haHpOIGwsJeptZWUYyu8AJlpzXOSK0lXW4+ELYAxtg67G0J2SVRxK32bKL259mC1eVscLM3FuJtrcHl5QyumEi1UoVSW1xaGdlxEFp6YnnBzToZCzq9XL409flALOL37knEVx54sK3Fx2zwdk0vmpqAai5NQywkhgKMZMnoraH8SqGSr1mcdGPAouu4JnK4zUk6mhPp6/CgfLF8+sSZaKvf53VVNIB6nc5ildc0w+e08YJEUAxENBPBW4PhehvDS8r1hVk7XrxtS0PQZZWIKGRN3Cj6Gjpo2qKbKuQNj9MmiIpi6t5WT0trwGv30KTdQWnQMQ33LjVXmFrIw8CmJnX0Re6688B7H13ubWTQvk09xUIxXygCAmNZi83mMglHhSupuC0S3RoLNjT5PKipcYrNdA1DrMytX5tOaqlUSlf45sgITtIzN1YXZtKqZGqaCXEAwaAJcDhjlwMPbExOx698dv5mXDA6HNt/xx1vvvT7He30z556BFd1I76caGoM1bncOEb6fHar3Te/EI/FqvZAO2bxwJ1CGWGUy0BQsTRX5/ZxSu6t15+1Opyxvq6ZL64X5oUdo1GH08JVBBhA1wSCwPT60dXxi+b0sSzik7Ry/6buAwfvfvKHTw2GsSP//Jgi6/iZz85CRsRwXJA0nMS4qmS3Mpev5qPRKzEoIV+zKNJAl9VqRuHjqswRCBJrcA5/7ztLefvTv/ydgmFL08VYF+8P2FUrI9UkzCii3tGlqdna+f8N9bY/+9o83M09e3ufeeZFFoCHvjEKELxYKqK5dIWiGRxHaRJnaIuv3ldXb19YzS4tZBOrE4X4NQbwmgAdd0GXKgj0adNs69uvM73//uujm7od//LjBwd27fzFi9PH35jFFZ1mAG4NFEpGZfLjUHfk3ExlidNxxrGeLCQzhaE92xTUCk0dohq6ZXufqWhAN2xum6GbmqFbaIvX7ZpbE9IVZGXli6X5y4QpM7TVRGmAmq2x4XfOJP2Dh4zyxHe+Ntpky/30u92PPbb/hVPlt/44TaMKoN1cOm+lzMW08vLZFDyujTLm1m5+EUUDtYZNqSitjaFut5sXeRUKw0AU3Shm8jiJW20MRRKTE/Ga7klmUovL1ykILMD0uhumV6pPPvFPTz3U+veP37O8kri2lNVqyUfuDb/83MH1ijWfEWGRsY050QT/M5aWYIfG6KADTSzdTPjYhQtnzl3neVkVK2ilVGVIJpvJYChs4bCpKqogwDnFU+dQRfHDk1c1vGlmKT2zNGelGYrAT7x/4ruHO3/0xKPuxpGGxlhba4ygnYVydXePZddIQ65okpBVCvm3J8pzBQli2K1D/dlsZS3//9YEDmyv27Rl0IDUWC3XcAzLpDasrAUBaKksorpEYRBVdZfLms0VT5+asNgbEYsXko+hCk0BNhoJVjWfo64tV1h74913ltdzNGFNF4reAKjzOfJr1Tcvpc/HZRhm347BjfkbWfFmyD09AX79va//4Kcsou7r8sAJDnF57KU8x/OC3WqrVAWCpZ1OplqtwavR0uxfnrvx0Xt/ljUP7o7kaurmDo/LiW4kV9wO/NqS9oPfTFU5sa7JLRtoV2udVBT/8eXpC6mbLtXZ0UnIxUS+TDHYEw/vPX3thCW47+P3/1i7+FpFo+CojZIUo5sGSyA4jthsDgyT/A2W+GqKQSEfSvU+F2bwz/3imbv+6p7O3k6tJoZ8rYGAH5jS+lqunXV9PLaQzacxgOVW8899sFwW4RQKHI2Nm3tDk8tX+u/dva+z5aknvwnt6fTx58wrr7hamz65IuKGoVSLQq4gC4JB4qjTabs+NdcaiznczlopBwEYBbo/4Bdk6eXfvN7d27T9ttGq5njz/TehRFYWEtuHWjfS/BsnL/MAQCXhQW+TzPFl2ULBrd9oiHYX8vKt3U2og07nEuXEtV2x0IUsgHiJbh7saukItEU8Dhuxtr4RagpilJUr5D0eN4ITqqKSBMELIklZBoZbBXHjzyfe27xzp7eh8f23PnXXuVRD83mYvgAerSdiIx1BG41rBrTMdCqBAJlgPXql1FJPV4tFoSy09Awf+f38ic9T4UYPyrgCBCHfMdoFXX/s1BU4dPj8/rX4eqVYJBkGlhknSA3ecw1AlrezVkM1VQx7/F9/cujQ7tWFJZpG+apQlTWmvd2Cs7qqGghgCQxOU3Z3ncPOpHM5UcYEAcRXE32b+/1dO4uZTGv3KBrZPGqYFCQev68Osv6lMxOhQENLNFLOFVEThWhDEagiyoyNLOULLMHghPXi2HmA+Qf37BpfLXVu7mUpM6mBxkhLoM5pofFcVYUznwlAoVhVahWZYs9NTahCOpmKz61kvvKle3u7OtoGD6EWm3v/A487GzrrPe6vfOs+BI7rU9OmgcF/CjyPEdjG+sbAts37Dx4ONwSGRrYObR84/ck5AEo+rxveGLw+0H9LDBIVnFlIknK5WEGHcAMirR6OpvOZAkoQL756+uL5yzB/Fy9etvkaH/35O6zd938CDAB5qvlrJja8DwAAAABJRU5ErkJggg=="
-
-/***/ },
-/* 209 */
-/***/ function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  
-  var _getPrototypeOf = __webpack_require__(45);
-  
-  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-  
-  var _classCallCheck2 = __webpack_require__(46);
-  
-  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-  
-  var _createClass2 = __webpack_require__(47);
-  
-  var _createClass3 = _interopRequireDefault(_createClass2);
-  
-  var _possibleConstructorReturn2 = __webpack_require__(48);
-  
-  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-  
-  var _inherits2 = __webpack_require__(49);
-  
-  var _inherits3 = _interopRequireDefault(_inherits2);
-  
-  var _react = __webpack_require__(9);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _HeadLine = __webpack_require__(128);
-  
-  var _HeadLine2 = _interopRequireDefault(_HeadLine);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var GetCertificateMange = function (_Component) {
-    (0, _inherits3.default)(GetCertificateMange, _Component);
-  
-    function GetCertificateMange() {
-      (0, _classCallCheck3.default)(this, GetCertificateMange);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetCertificateMange).apply(this, arguments));
-    }
-  
-    (0, _createClass3.default)(GetCertificateMange, [{
-      key: 'render',
-      value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'userTabBox' },
-          _react2.default.createElement(
-            'div',
-            { className: 'certificateMangeItem' },
-            _react2.default.createElement(
-              'div',
-              { className: 'accountHd clearfix' },
-              _react2.default.createElement(
-                'div',
-                { className: 'left' },
-                _react2.default.createElement(_HeadLine2.default, {
-                  title: '我的礼券',
-                  titleEnglish: '',
-                  titleInfo: 'MY CERTIFICATE'
-                })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'right userHeadTip redTip' },
-                '提示：礼券在激活后才可使用。'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'userInputItem' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: '请输入礼券八位码' }),
-              _react2.default.createElement('br', null),
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-danger' },
-                '激活'
-              )
-            )
-          )
-        );
-      }
-    }]);
-    return GetCertificateMange;
-  }(_react.Component);
-  
-  exports.default = GetCertificateMange;
 
 /***/ },
 /* 210 */
@@ -22275,54 +19323,182 @@ module.exports =
   'use strict';
   
   Object.defineProperty(exports, "__esModule", {
-      value: true
+    value: true
   });
   
-  var _extends2 = __webpack_require__(36);
+  var _jsx2 = __webpack_require__(1);
   
-  var _extends3 = _interopRequireDefault(_extends2);
+  var _jsx3 = _interopRequireDefault(_jsx2);
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactBootstrap = __webpack_require__(69);
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var _Loading = __webpack_require__(106);
+  var _ref = (0, _jsx3.default)('div', {
+    className: 'userTabBox'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'certificateMangeItem'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'accountHd clearfix'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'left'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u6211\u7684\u793C\u5238',
+    titleEnglish: '',
+    titleInfo: 'MY CERTIFICATE'
+  })), (0, _jsx3.default)('div', {
+    className: 'right userHeadTip redTip'
+  }, void 0, '\u63D0\u793A\uFF1A\u793C\u5238\u5728\u6FC0\u6D3B\u540E\u624D\u53EF\u4F7F\u7528\u3002')), (0, _jsx3.default)('div', {
+    className: 'userInputItem'
+  }, void 0, (0, _jsx3.default)('input', {
+    type: 'text',
+    className: 'form-control',
+    placeholder: '\u8BF7\u8F93\u5165\u793C\u5238\u516B\u4F4D\u7801'
+  }), (0, _jsx3.default)('br', {}), (0, _jsx3.default)('button', {
+    className: 'btn btn-danger'
+  }, void 0, '\u6FC0\u6D3B'))));
+  
+  var GetCertificateMange = function (_Component) {
+    (0, _inherits3.default)(GetCertificateMange, _Component);
+  
+    function GetCertificateMange() {
+      (0, _classCallCheck3.default)(this, GetCertificateMange);
+      return (0, _possibleConstructorReturn3.default)(this, (GetCertificateMange.__proto__ || (0, _getPrototypeOf2.default)(GetCertificateMange)).apply(this, arguments));
+    }
+  
+    (0, _createClass3.default)(GetCertificateMange, [{
+      key: 'render',
+      value: function render() {
+        return _ref;
+      }
+    }]);
+    return GetCertificateMange;
+  }(_react.Component);
+  
+  exports.default = GetCertificateMange;
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+      value: true
+  });
+  
+  var _extends2 = __webpack_require__(37);
+  
+  var _extends3 = _interopRequireDefault(_extends2);
+  
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(47);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(48);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(49);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(50);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(10);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactBootstrap = __webpack_require__(70);
+  
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _Confirm = __webpack_require__(111);
+  var _Confirm = __webpack_require__(112);
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref2 = (0, _jsx3.default)('img', {
+      className: 'mediaImg',
+      src: '/slImgJx.png'
+  });
+  
+  var _ref3 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+      width: '25%'
+  }, void 0, '\u7EC4\u7EC7\u540D\u79F0'), (0, _jsx3.default)('th', {
+      width: '25%'
+  }, void 0, '\u7EC4\u7EC7\u7B80\u4ECB'), (0, _jsx3.default)('th', {
+      width: '25%'
+  }, void 0, '\u7EC4\u7EC7\u6743\u9650'), (0, _jsx3.default)('th', {
+      width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref4 = (0, _jsx3.default)('div', {
+      className: 'left'
+  }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+      title: '\u6211\u7684\u7EC4\u7EC7',
+      titleEnglish: 'MY ORGANIZE',
+      titleInfo: '\u6240\u6709\u6211\u52A0\u5165\u7684\u7EC4\u7EC7\u7684\u5217\u8868'
+  }));
+  
+  var _ref5 = (0, _jsx3.default)('div', {
+      className: 'hbPlus left'
+  });
+  
+  var _ref6 = (0, _jsx3.default)('div', {
+      className: 'hbPlusInfo left'
+  }, void 0, (0, _jsx3.default)('p', {
+      className: 'hbPName'
+  }, void 0, '\u65B0\u5EFA\u7EC4\u7EC7'), (0, _jsx3.default)('p', {
+      className: 'hbPInfo'
+  }, void 0, 'Create Organize'));
   
   var GetOrganize = function (_Component) {
       (0, _inherits3.default)(GetOrganize, _Component);
@@ -22330,7 +19506,7 @@ module.exports =
       function GetOrganize() {
           (0, _classCallCheck3.default)(this, GetOrganize);
   
-          var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrganize).call(this));
+          var _this = (0, _possibleConstructorReturn3.default)(this, (GetOrganize.__proto__ || (0, _getPrototypeOf2.default)(GetOrganize)).call(this));
   
           _this.state = {
               orgData: {
@@ -22376,40 +19552,28 @@ module.exports =
   
               var data = this.props.organizeList;
               var user_name = this.context.store.getState().user_info.user_name;
-              if (data[0] == 1) return _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                      'td',
-                      { colSpan: '5', style: { textAlign: "center" } },
-                      _react2.default.createElement(_Loading2.default, null)
-                  )
-              );
-              if (data.length == 1 && data[0].orga_name == user_name) return _react2.default.createElement(
-                  'tr',
-                  null,
-                  _react2.default.createElement(
-                      'td',
-                      { colSpan: '5', style: { textAlign: "center" } },
-                      '暂无数据~'
-                  )
-              );
+              if (data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+                  colSpan: '5',
+                  style: { textAlign: "center" }
+              }, void 0, _ref));
+              if (data.length == 1 && data[0].orga_name == user_name) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+                  colSpan: '5',
+                  style: { textAlign: "center" }
+              }, void 0, '\u6682\u65E0\u6570\u636E~'));
               var role = "";
               return data.map(function (item, i) {
                   if (item.orga_name == user_name) return false;
-                  var opt = _react2.default.createElement(
-                      'button',
-                      { className: 'btn btn-danger', onClick: _this2.leaveOrganize.bind(_this2, item.org_id) },
-                      '退出组织'
-                  );
+                  var opt = (0, _jsx3.default)('button', {
+                      className: 'btn btn-danger',
+                      onClick: _this2.leaveOrganize.bind(_this2, item.org_id)
+                  }, void 0, '\u9000\u51FA\u7EC4\u7EC7');
                   switch (Number(item.role)) {
                       case 200:
                           role = "组织拥有者";
-                          opt = _react2.default.createElement(
-                              'button',
-                              { className: 'btn btn-danger', onClick: _this2.deleteOrganize.bind(_this2, item.org_id) },
-                              '解散组织'
-                          );
+                          opt = (0, _jsx3.default)('button', {
+                              className: 'btn btn-danger',
+                              onClick: _this2.deleteOrganize.bind(_this2, item.org_id)
+                          }, void 0, '\u89E3\u6563\u7EC4\u7EC7');
                           break;
                       case 210:
                           role = "管理员";
@@ -22420,81 +19584,19 @@ module.exports =
                       default:
                           role = "成员";
                   }
-                  return _react2.default.createElement(
-                      'tr',
-                      { key: i },
-                      _react2.default.createElement(
-                          'td',
-                          null,
-                          _react2.default.createElement(
-                              'div',
-                              { className: 'mediaItem' },
-                              _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
-                              _react2.default.createElement(
-                                  'span',
-                                  { className: 'mediaTxt' },
-                                  item.orga_name
-                              )
-                          )
-                      ),
-                      _react2.default.createElement(
-                          'td',
-                          null,
-                          item.org_detail || "暂无简介"
-                      ),
-                      _react2.default.createElement(
-                          'td',
-                          null,
-                          role
-                      ),
-                      _react2.default.createElement(
-                          'td',
-                          null,
-                          opt
-                      )
-                  );
+                  return (0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+                      className: 'mediaItem'
+                  }, void 0, _ref2, (0, _jsx3.default)('span', {
+                      className: 'mediaTxt'
+                  }, void 0, item.orga_name))), (0, _jsx3.default)('td', {}, void 0, item.org_detail || "暂无简介"), (0, _jsx3.default)('td', {}, void 0, role), (0, _jsx3.default)('td', {}, void 0, opt));
               });
           }
       }, {
           key: 'getTableDemo',
           value: function getTableDemo() {
-              return _react2.default.createElement(
-                  'table',
-                  { className: 'table table-hover table-bordered' },
-                  _react2.default.createElement(
-                      'thead',
-                      null,
-                      _react2.default.createElement(
-                          'tr',
-                          null,
-                          _react2.default.createElement(
-                              'th',
-                              { width: '25%' },
-                              '组织名称'
-                          ),
-                          _react2.default.createElement(
-                              'th',
-                              { width: '25%' },
-                              '组织简介'
-                          ),
-                          _react2.default.createElement(
-                              'th',
-                              { width: '25%' },
-                              '组织权限'
-                          ),
-                          _react2.default.createElement(
-                              'th',
-                              { width: '25%' },
-                              '操作'
-                          )
-                      )
-                  ),
-                  _react2.default.createElement(
-                      'tbody',
-                      null,
-                      this.getOrganizeBody()
-                  )
-              );
+              return (0, _jsx3.default)('table', {
+                  className: 'table table-hover table-bordered'
+              }, void 0, _ref3, (0, _jsx3.default)('tbody', {}, void 0, this.getOrganizeBody()));
           }
       }, {
           key: 'componentDidMount',
@@ -22516,70 +19618,34 @@ module.exports =
           value: function render() {
               var _this3 = this;
   
-              return _react2.default.createElement(
-                  'div',
-                  { className: 'organize' },
-                  _react2.default.createElement(
-                      'div',
-                      { className: 'organizeHd hbHd clearfix' },
-                      _react2.default.createElement(
-                          'div',
-                          { className: 'left' },
-                          _react2.default.createElement(_HeadLine2.default, {
-                              title: '我的组织',
-                              titleEnglish: 'MY ORGANIZE',
-                              titleInfo: '所有我加入的组织的列表'
-                          })
-                      ),
-                      _react2.default.createElement(
-                          'div',
-                          { className: 'hbAdd right' },
-                          _react2.default.createElement(
-                              'div',
-                              { className: 'hbAddBtn clearfix', onClick: function onClick() {
-                                      _this3.refs.createOrgModel.open();
-                                  } },
-                              _react2.default.createElement('div', { className: 'hbPlus left' }),
-                              _react2.default.createElement(
-                                  'div',
-                                  { className: 'hbPlusInfo left' },
-                                  _react2.default.createElement(
-                                      'p',
-                                      { className: 'hbPName' },
-                                      '新建组织'
-                                  ),
-                                  _react2.default.createElement(
-                                      'p',
-                                      { className: 'hbPInfo' },
-                                      'Create Organize'
-                                  )
-                              )
-                          )
-                      )
-                  ),
-                  _react2.default.createElement(
-                      'div',
-                      { className: 'organizeBd sl-bd TableTextLeft' },
-                      this.getTableDemo()
-                  ),
-                  _react2.default.createElement(CreateOrganize, { onCreateOrganize: this.createOrganize.bind(this), ref: 'createOrgModel' }),
-                  _react2.default.createElement(_Confirm2.default, {
-                      title: '警告',
-                      text: '您确定要离开此组织吗?',
-                      ref: 'confirmModalLeave',
-                      func: function func() {
-                          _this3.props.leaveOrganize(_this3.state.orgData);
-                      }
-                  }),
-                  _react2.default.createElement(_Confirm2.default, {
-                      title: '警告',
-                      text: '您确定要解散此组织吗?',
-                      ref: 'confirmModalDelete',
-                      func: function func() {
-                          _this3.props.deleteOrganize(_this3.state.orgData);
-                      }
-                  })
-              );
+              return (0, _jsx3.default)('div', {
+                  className: 'organize'
+              }, void 0, (0, _jsx3.default)('div', {
+                  className: 'organizeHd hbHd clearfix'
+              }, void 0, _ref4, (0, _jsx3.default)('div', {
+                  className: 'hbAdd right'
+              }, void 0, (0, _jsx3.default)('div', {
+                  className: 'hbAddBtn clearfix',
+                  onClick: function onClick() {
+                      _this3.refs.createOrgModel.open();
+                  }
+              }, void 0, _ref5, _ref6))), (0, _jsx3.default)('div', {
+                  className: 'organizeBd sl-bd TableTextLeft'
+              }, void 0, this.getTableDemo()), _react2.default.createElement(CreateOrganize, { onCreateOrganize: this.createOrganize.bind(this), ref: 'createOrgModel' }), _react2.default.createElement(_Confirm2.default, {
+                  title: '\u8B66\u544A',
+                  text: '\u60A8\u786E\u5B9A\u8981\u79BB\u5F00\u6B64\u7EC4\u7EC7\u5417?',
+                  ref: 'confirmModalLeave',
+                  func: function func() {
+                      _this3.props.leaveOrganize(_this3.state.orgData);
+                  }
+              }), _react2.default.createElement(_Confirm2.default, {
+                  title: '\u8B66\u544A',
+                  text: '\u60A8\u786E\u5B9A\u8981\u89E3\u6563\u6B64\u7EC4\u7EC7\u5417?',
+                  ref: 'confirmModalDelete',
+                  func: function func() {
+                      _this3.props.deleteOrganize(_this3.state.orgData);
+                  }
+              }));
           }
       }]);
       return GetOrganize;
@@ -22588,13 +19654,19 @@ module.exports =
   GetOrganize.contextTypes = {
       store: _react2.default.PropTypes.object
   };
-  GetOrganize.propTypes = {
-      createOrganize: _react2.default.PropTypes.func,
-      organizeList: _react2.default.PropTypes.array,
-      getOrganizeList: _react2.default.PropTypes.func,
-      leaveOrganize: _react2.default.PropTypes.func,
-      deleteOrganize: _react2.default.PropTypes.func
-  };
+  
+  var _ref7 = (0, _jsx3.default)('span', {
+      'aria-hidden': 'true'
+  }, void 0, '\xD7');
+  
+  var _ref8 = (0, _jsx3.default)('h4', {
+      className: 'modal-title',
+      id: 'contained-modal-title-sm'
+  }, void 0, '\u65B0\u5EFA\u7EC4\u7EC7');
+  
+  var _ref9 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u7EC4\u7EC7\u540D\u79F0'));
+  
+  var _ref10 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, ' '));
   
   var CreateOrganize = function (_Component2) {
       (0, _inherits3.default)(CreateOrganize, _Component2);
@@ -22602,7 +19674,7 @@ module.exports =
       function CreateOrganize(props) {
           (0, _classCallCheck3.default)(this, CreateOrganize);
   
-          var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CreateOrganize).call(this, props));
+          var _this4 = (0, _possibleConstructorReturn3.default)(this, (CreateOrganize.__proto__ || (0, _getPrototypeOf2.default)(CreateOrganize)).call(this, props));
   
           _this4.state = {
               show: false,
@@ -22672,90 +19744,41 @@ module.exports =
                   (0, _extends3.default)({}, this.props, { show: this.state.show,
                       onHide: this.hide.bind(this),
                       bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
-                  _react2.default.createElement(
+                  (0, _jsx3.default)('div', {
+                      className: 'modal-header'
+                  }, void 0, (0, _jsx3.default)('button', {
+                      type: 'button',
+                      onClick: this.hide.bind(this),
+                      className: 'close',
+                      'aria-label': 'Close'
+                  }, void 0, _ref7), _ref8),
+                  (0, _jsx3.default)('div', {
+                      className: this.state.orgName ? "modal-body has-error" : "modal-body"
+                  }, void 0, (0, _jsx3.default)('div', {
+                      className: 'modalItem'
+                  }, void 0, _ref9, (0, _jsx3.default)('label', {}, void 0, _react2.default.createElement('input', { onInput: this.organizeName.bind(this),
+                      className: 'form-control form-control-sm',
+                      type: 'input', placeholder: '\u8BF7\u8F93\u5165\u540D\u79F0',
+                      ref: 'org_name' }))), _react2.default.createElement(
                       'div',
-                      { className: 'modal-header' },
-                      _react2.default.createElement(
-                          'button',
-                          { type: 'button', onClick: this.hide.bind(this), className: 'close', 'aria-label': 'Close' },
-                          _react2.default.createElement(
-                              'span',
-                              { 'aria-hidden': 'true' },
-                              '×'
-                          )
-                      ),
-                      _react2.default.createElement(
-                          'h4',
-                          { className: 'modal-title', id: 'contained-modal-title-sm' },
-                          '新建组织'
-                      )
-                  ),
-                  _react2.default.createElement(
-                      'div',
-                      { className: this.state.orgName ? "modal-body has-error" : "modal-body" },
-                      _react2.default.createElement(
-                          'div',
-                          { className: 'modalItem' },
-                          _react2.default.createElement(
-                              'label',
-                              null,
-                              _react2.default.createElement(
-                                  'span',
-                                  null,
-                                  '组织名称'
-                              )
-                          ),
-                          _react2.default.createElement(
-                              'label',
-                              null,
-                              _react2.default.createElement('input', { onInput: this.organizeName.bind(this),
-                                  className: 'form-control form-control-sm',
-                                  type: 'input', placeholder: '请输入名称',
-                                  ref: 'org_name' })
-                          )
-                      ),
-                      _react2.default.createElement(
-                          'div',
-                          { ref: 'org_tip', className: 'volumeTip' },
-                          '组织名称不正确'
-                      ),
-                      _react2.default.createElement(
-                          'div',
-                          { className: 'modalItem modelItemLast' },
-                          _react2.default.createElement(
-                              'label',
-                              null,
-                              _react2.default.createElement(
-                                  'span',
-                                  null,
-                                  ' '
-                              )
-                          ),
-                          _react2.default.createElement(
-                              'label',
-                              null,
-                              _react2.default.createElement(
-                                  'button',
-                                  { className: 'btn btn-primary',
-                                      onClick: this.createOrganize.bind(this) },
-                                  '创建组织'
-                              )
-                          )
-                      )
-                  )
+                      { ref: 'org_tip', className: 'volumeTip' },
+                      '\u7EC4\u7EC7\u540D\u79F0\u4E0D\u6B63\u786E'
+                  ), (0, _jsx3.default)('div', {
+                      className: 'modalItem modelItemLast'
+                  }, void 0, _ref10, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('button', {
+                      className: 'btn btn-primary',
+                      onClick: this.createOrganize.bind(this)
+                  }, void 0, '\u521B\u5EFA\u7EC4\u7EC7'))))
               );
           }
       }]);
       return CreateOrganize;
   }(_react.Component);
   
-  CreateOrganize.propTypes = {
-      onCreateOrganize: _react2.default.PropTypes.func
-  };
   exports.default = GetOrganize;
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -22764,7 +19787,7 @@ module.exports =
     value: true
   });
   
-  var _stringify = __webpack_require__(12);
+  var _stringify = __webpack_require__(13);
   
   var _stringify2 = _interopRequireDefault(_stringify);
   
@@ -22772,17 +19795,17 @@ module.exports =
   exports.fetchUserInfo = fetchUserInfo;
   exports.fetchRevisePasswordAction = fetchRevisePasswordAction;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   var Const = _interopRequireWildcard(_constants);
   
-  var _isomorphicFetch = __webpack_require__(76);
+  var _isomorphicFetch = __webpack_require__(77);
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -22796,7 +19819,7 @@ module.exports =
   }
   
   function fetchUserInfo(token) {
-    var development = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+    var development = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   
     return function (dispatch) {
       var url = '' + (development ? _constants.FETCH_URL.USER_INFO : _constants.FETCH_URL.USER_INFO_INTERNAL);
@@ -22849,7 +19872,7 @@ module.exports =
   }
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -22858,19 +19881,23 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _ReviseImageContainer = __webpack_require__(213);
+  var _ReviseImageContainer = __webpack_require__(214);
   
   var _ReviseImageContainer2 = _interopRequireDefault(_ReviseImageContainer);
   
@@ -22886,7 +19913,9 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_ReviseImageContainer2.default, { uuid: params.uuid }));
+                return _context.abrupt('return', (0, _jsx3.default)(_ReviseImageContainer2.default, {
+                  uuid: params.uuid
+                }));
   
               case 1:
               case 'end':
@@ -22901,7 +19930,7 @@ module.exports =
   // import CodeBuildList from './CodeBuildList'
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -22910,25 +19939,25 @@ module.exports =
     value: true
   });
   
-  var _ReviseImage = __webpack_require__(214);
+  var _ReviseImage = __webpack_require__(215);
   
   var _ReviseImage2 = _interopRequireDefault(_ReviseImage);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _isBtnStateSelector = __webpack_require__(124);
+  var _isBtnStateSelector = __webpack_require__(125);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
-  var _imageDetailSelector = __webpack_require__(122);
+  var _imageDetailSelector = __webpack_require__(123);
   
   var _imageDetailSelector2 = _interopRequireDefault(_imageDetailSelector);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _imageDetail = __webpack_require__(121);
+  var _imageDetail = __webpack_require__(122);
   
-  var _reviseImage = __webpack_require__(123);
+  var _reviseImage = __webpack_require__(124);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -22963,7 +19992,7 @@ module.exports =
   exports.default = ReviseImageContainer;
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -22972,43 +20001,47 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _reactDom = __webpack_require__(131);
+  var _reactDom = __webpack_require__(132);
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -23018,7 +20051,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         is_public: _this.props.state
@@ -23040,7 +20073,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           defaultChecked: this.state.is_public,
           onChange: this.handClick.bind(this)
         });
@@ -23049,10 +20082,33 @@ module.exports =
     return IsPublicToggle;
   }(_react.Component);
   
-  IsPublicToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    state: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)('h1', {}, void 0, '\u4FEE\u6539\u955C\u50CF');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u662F\u670D\u52A1\u8FD0\u884C\u7684\u6A21\u677F, \u6765\u6E90\u4E8E\u4EE3\u7801, \u57FA\u4E8E Dockerfile \u6784\u5EFA, \u9ED8\u8BA4\u76EE\u5F55\u5728\u6839\'/\'\u4E0B, \u6587\u4EF6\u540D Dockerfile .');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u9ED8\u8BA4\u4F1A\u4E0E\u60A8\u4E0B\u65B9\u4EE3\u7801\u6E90\u7684\u9879\u76EE\u540D\u79F0\u76F8\u540C'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7B80\u4ECB',
+    titleEnglish: 'IMAGE SUMMARY',
+    titleInfo: '\u7B80\u5355\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8BE6\u7EC6\u63CF\u8FF0',
+    titleEnglish: 'IMAGE DETAIL',
+    titleInfo: '\u8BE6\u7EC6\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u516C\u5F00',
+    titleEnglish: 'IS PUBLIC',
+    titleInfo: '\u516C\u5F00\u540E\u90FD\u53EF\u4EE5\u8BBF\u95EE'
+  });
   
   var ReviseImage = function (_React$Component) {
     (0, _inherits3.default)(ReviseImage, _React$Component);
@@ -23060,7 +20116,7 @@ module.exports =
     function ReviseImage() {
       (0, _classCallCheck3.default)(this, ReviseImage);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ReviseImage).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ReviseImage.__proto__ || (0, _getPrototypeOf2.default)(ReviseImage)).call(this));
   
       _this2.state = {
         isImageName: false,
@@ -23127,105 +20183,50 @@ module.exports =
         var name = arr[0].repository || "";
         name = name.split("/")[1];
         var dataBox = arr.map(function (item, i) {
-          return _react2.default.createElement(
-            'div',
-            { className: 'acBox', key: new Date(item.creation_time).getTime() },
-            _react2.default.createElement(
-              'h1',
-              null,
-              '修改镜像'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              '镜像是服务运行的模板, 来源于代码, 基于 Dockerfile 构建, 默认目录在根\'/\'下, 文件名 Dockerfile .'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '镜像名称',
-                titleEnglish: 'IMAGE NAME',
-                titleInfo: '默认会与您下方代码源的项目名称相同'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox ' + (my.state.isImageName ? "has-error" : "") },
-                _react2.default.createElement(
-                  'span',
-                  { ref: 'repository' },
-                  name
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '镜像简介',
-                titleEnglish: 'IMAGE SUMMARY',
-                titleInfo: '简单介绍镜像的信息'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('textarea', {
-                  placeholder: '镜像简介',
-                  className: 'form-control',
-                  defaultValue: item.detail,
-                  ref: 'image_detail'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '详细描述',
-                titleEnglish: 'IMAGE DETAIL',
-                titleInfo: '详细介绍镜像的信息'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement('textarea', {
-                  placeholder: '详细描述',
-                  className: 'form-control',
-                  defaultValue: item.short_description,
-                  ref: 'short_description'
-                })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(_HeadLine2.default, {
-                title: '是否公开',
-                titleEnglish: 'IS PUBLIC',
-                titleInfo: '公开后都可以访问'
-              }),
-              _react2.default.createElement(
-                'div',
-                { className: 'assBox' },
-                _react2.default.createElement(IsPublicToggle, { state: item.is_public == 1, getToggle: my.getToggleValue.bind(_this3) })
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'assItem' },
-              _react2.default.createElement(
-                'div',
-                { className: 'acBtn' },
-                _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-primary',
-                    onClick: my.building.bind(_this3),
-                    disabled: !my.props.isBtnState.building },
-                  my.props.isBtnState.building ? "修改" : "修改中..."
-                )
-              )
-            )
-          );
+          return (0, _jsx3.default)('div', {
+            className: 'acBox'
+          }, new Date(item.creation_time).getTime(), _ref, _ref2, (0, _jsx3.default)('div', {
+            className: 'assItem'
+          }, void 0, _ref3, (0, _jsx3.default)('div', {
+            className: 'assBox ' + (my.state.isImageName ? "has-error" : "")
+          }, void 0, _react2.default.createElement(
+            'span',
+            { ref: 'repository' },
+            name
+          ))), (0, _jsx3.default)('div', {
+            className: 'assItem'
+          }, void 0, _ref4, (0, _jsx3.default)('div', {
+            className: 'assBox'
+          }, void 0, _react2.default.createElement('textarea', {
+            placeholder: '\u955C\u50CF\u7B80\u4ECB',
+            className: 'form-control',
+            defaultValue: item.detail,
+            ref: 'image_detail'
+          }))), (0, _jsx3.default)('div', {
+            className: 'assItem'
+          }, void 0, _ref5, (0, _jsx3.default)('div', {
+            className: 'assBox'
+          }, void 0, _react2.default.createElement('textarea', {
+            placeholder: '\u8BE6\u7EC6\u63CF\u8FF0',
+            className: 'form-control',
+            defaultValue: item.short_description,
+            ref: 'short_description'
+          }))), (0, _jsx3.default)('div', {
+            className: 'assItem'
+          }, void 0, _ref6, (0, _jsx3.default)('div', {
+            className: 'assBox'
+          }, void 0, (0, _jsx3.default)(IsPublicToggle, {
+            state: item.is_public == 1,
+            getToggle: my.getToggleValue.bind(_this3)
+          }))), (0, _jsx3.default)('div', {
+            className: 'assItem'
+          }, void 0, (0, _jsx3.default)('div', {
+            className: 'acBtn'
+          }, void 0, (0, _jsx3.default)('button', {
+            className: 'btn btn-primary',
+            onClick: my.building.bind(_this3),
+            disabled: !my.props.isBtnState.building
+          }, void 0, my.props.isBtnState.building ? "修改" : "修改中..."))));
         });
         return dataBox;
       }
@@ -23233,11 +20234,9 @@ module.exports =
       key: 'render',
       value: function render() {
         this.context.setTitle('修改镜像');
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          this.getDate()
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, this.getDate());
       }
     }]);
     return ReviseImage;
@@ -23247,18 +20246,10 @@ module.exports =
     setTitle: _react2.default.PropTypes.func,
     store: _react2.default.PropTypes.object
   };
-  ReviseImage.propTypes = {
-    uuid: _react2.default.PropTypes.string,
-    setBreadcrumb: _react2.default.PropTypes.func,
-    isBtnState: _react2.default.PropTypes.object,
-    imageDetail: _react2.default.PropTypes.object,
-    getImageDetail: _react2.default.PropTypes.func,
-    onReviseImage: _react2.default.PropTypes.func
-  };
   exports.default = ReviseImage;
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -23267,23 +20258,29 @@ module.exports =
     value: true
   });
   
-  var _regenerator = __webpack_require__(2);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
   
-  var _asyncToGenerator2 = __webpack_require__(3);
+  var _asyncToGenerator2 = __webpack_require__(4);
   
   var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _OrganizeContainer = __webpack_require__(216);
+  var _OrganizeContainer = __webpack_require__(217);
   
   var _OrganizeContainer2 = _interopRequireDefault(_OrganizeContainer);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_OrganizeContainer2.default, {});
   
   exports.default = {
     path: '/organize',
@@ -23296,7 +20293,7 @@ module.exports =
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt('return', _react2.default.createElement(_OrganizeContainer2.default, null));
+                return _context.abrupt('return', _ref);
   
               case 1:
               case 'end':
@@ -23309,7 +20306,7 @@ module.exports =
   };
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -23318,27 +20315,27 @@ module.exports =
     value: true
   });
   
-  var _Organize = __webpack_require__(217);
+  var _Organize = __webpack_require__(218);
   
   var _Organize2 = _interopRequireDefault(_Organize);
   
-  var _reactRedux = __webpack_require__(50);
+  var _reactRedux = __webpack_require__(51);
   
-  var _breadcumb = __webpack_require__(92);
+  var _breadcumb = __webpack_require__(93);
   
-  var _organize = __webpack_require__(75);
+  var _organize = __webpack_require__(76);
   
   var fun = _interopRequireWildcard(_organize);
   
-  var _organizeDetailSelector = __webpack_require__(222);
+  var _organizeDetailSelector = __webpack_require__(223);
   
   var _organizeDetailSelector2 = _interopRequireDefault(_organizeDetailSelector);
   
-  var _organizeUserListSelector = __webpack_require__(223);
+  var _organizeUserListSelector = __webpack_require__(224);
   
   var _organizeUserListSelector2 = _interopRequireDefault(_organizeUserListSelector);
   
-  var _userListSelector = __webpack_require__(224);
+  var _userListSelector = __webpack_require__(225);
   
   var _userListSelector2 = _interopRequireDefault(_userListSelector);
   
@@ -23397,7 +20394,7 @@ module.exports =
   exports.default = OrganizeContainer;
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -23406,43 +20403,47 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
-  var _GetOrgInfo = __webpack_require__(218);
+  var _GetOrgInfo = __webpack_require__(219);
   
   var _GetOrgInfo2 = _interopRequireDefault(_GetOrgInfo);
   
-  var _GetOrgDeal = __webpack_require__(219);
+  var _GetOrgDeal = __webpack_require__(220);
   
   var _GetOrgDeal2 = _interopRequireDefault(_GetOrgDeal);
   
-  var _GetOrgAdmin = __webpack_require__(220);
+  var _GetOrgAdmin = __webpack_require__(221);
   
   var _GetOrgAdmin2 = _interopRequireDefault(_GetOrgAdmin);
   
@@ -23450,12 +20451,22 @@ module.exports =
   
   var title = '组织中心';
   
+  var _ref = (0, _jsx3.default)(_reactBootstrap.Tab, {
+    eventKey: 1,
+    title: '\u8D26\u6237\u4FE1\u606F'
+  }, void 0);
+  
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.Tab, {
+    eventKey: 3,
+    title: '\u4EA4\u6613\u8BB0\u5F55'
+  }, void 0, (0, _jsx3.default)(_GetOrgDeal2.default, {}));
+  
   var Organize = function (_Component) {
     (0, _inherits3.default)(Organize, _Component);
   
     function Organize() {
       (0, _classCallCheck3.default)(this, Organize);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Organize).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Organize.__proto__ || (0, _getPrototypeOf2.default)(Organize)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Organize, [{
@@ -23469,66 +20480,52 @@ module.exports =
         var _this2 = this;
   
         this.context.setTitle(title);
-        return _react2.default.createElement(
-          'div',
-          { className: 'containerBgF' },
-          _react2.default.createElement(
-            'div',
-            { className: 'userTab' },
-            _react2.default.createElement(
-              _reactBootstrap.Tabs,
-              { defaultActiveKey: 2, id: 'userTabs' },
-              _react2.default.createElement(_reactBootstrap.Tab, { eventKey: 1, title: '账户信息' }),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 2, title: '组织信息' },
-                _react2.default.createElement(_GetOrgInfo2.default, {
-                  getOrganizeDetail: function getOrganizeDetail(id) {
-                    _this2.props.getOrganizeDetail(id);
-                  },
-                  organizeDetail: this.props.organizeDetail,
-                  setOrganizeDetail: function setOrganizeDetail(data) {
-                    _this2.props.setOrganizeDetail(data);
-                  }
-                })
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 3, title: '交易记录' },
-                _react2.default.createElement(_GetOrgDeal2.default, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Tab,
-                { eventKey: 4, title: '组织管理' },
-                _react2.default.createElement(_GetOrgAdmin2.default, {
-                  organizeUserList: this.props.organizeUserList,
-                  getOrganizeUserList: function getOrganizeUserList(id) {
-                    _this2.props.getOrganizeUserList(id);
-                  },
-                  userList: this.props.userList,
-                  getUserList: function getUserList(name) {
-                    _this2.props.getUserList(name);
-                  },
-                  inviteUser: function inviteUser(data) {
-                    _this2.props.inviteUser(data);
-                  },
-                  changeUserRole: function changeUserRole(data) {
-                    _this2.props.changeUserRole(data);
-                  },
-                  changeOrganizeOwner: function changeOrganizeOwner(data) {
-                    _this2.props.changeOrganizeOwner(data);
-                  },
-                  deleteOrganize: function deleteOrganize(id, flag) {
-                    _this2.props.deleteOrganize(id, flag);
-                  },
-                  leaveOrganize: function leaveOrganize(data) {
-                    _this2.props.leaveOrganize(data);
-                  }
-                })
-              )
-            )
-          )
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'containerBgF'
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'userTab'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tabs, {
+          defaultActiveKey: 2,
+          id: 'userTabs'
+        }, void 0, _ref, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 2,
+          title: '\u7EC4\u7EC7\u4FE1\u606F'
+        }, void 0, (0, _jsx3.default)(_GetOrgInfo2.default, {
+          getOrganizeDetail: function getOrganizeDetail(id) {
+            _this2.props.getOrganizeDetail(id);
+          },
+          organizeDetail: this.props.organizeDetail,
+          setOrganizeDetail: function setOrganizeDetail(data) {
+            _this2.props.setOrganizeDetail(data);
+          }
+        })), _ref2, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 4,
+          title: '\u7EC4\u7EC7\u7BA1\u7406'
+        }, void 0, (0, _jsx3.default)(_GetOrgAdmin2.default, {
+          organizeUserList: this.props.organizeUserList,
+          getOrganizeUserList: function getOrganizeUserList(id) {
+            _this2.props.getOrganizeUserList(id);
+          },
+          userList: this.props.userList,
+          getUserList: function getUserList(name) {
+            _this2.props.getUserList(name);
+          },
+          inviteUser: function inviteUser(data) {
+            _this2.props.inviteUser(data);
+          },
+          changeUserRole: function changeUserRole(data) {
+            _this2.props.changeUserRole(data);
+          },
+          changeOrganizeOwner: function changeOrganizeOwner(data) {
+            _this2.props.changeOrganizeOwner(data);
+          },
+          deleteOrganize: function deleteOrganize(id, flag) {
+            _this2.props.deleteOrganize(id, flag);
+          },
+          leaveOrganize: function leaveOrganize(data) {
+            _this2.props.leaveOrganize(data);
+          }
+        })))));
       }
     }]);
     return Organize;
@@ -23538,24 +20535,10 @@ module.exports =
     setTitle: _react.PropTypes.func.isRequired,
     store: _react2.default.PropTypes.object
   };
-  Organize.propTypes = {
-    setBreadcrumb: _react2.default.PropTypes.func,
-    getOrganizeDetail: _react2.default.PropTypes.func,
-    organizeDetail: _react2.default.PropTypes.object,
-    setOrganizeDetail: _react2.default.PropTypes.func,
-    organizeUserList: _react2.default.PropTypes.array,
-    getOrganizeUserList: _react2.default.PropTypes.func,
-    userList: _react2.default.PropTypes.array,
-    getUserList: _react2.default.PropTypes.func,
-    inviteUser: _react2.default.PropTypes.func,
-    changeOrganizeOwner: _react2.default.PropTypes.func,
-    deleteOrganize: _react2.default.PropTypes.func,
-    leaveOrganize: _react2.default.PropTypes.func
-  };
   exports.default = Organize;
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -23564,39 +20547,43 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _Toggle = __webpack_require__(117);
+  var _Toggle = __webpack_require__(118);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
-  var _Loading = __webpack_require__(106);
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -23608,7 +20595,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         is_public: _this.props.state
@@ -23630,7 +20617,7 @@ module.exports =
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(_Toggle2.default, {
+        return (0, _jsx3.default)(_Toggle2.default, {
           defaultChecked: this.state.is_public,
           onChange: this.handClick.bind(this)
         });
@@ -23639,10 +20626,33 @@ module.exports =
     return IsPublicToggle;
   }(_react.Component);
   
-  IsPublicToggle.propTypes = {
-    getToggle: _react2.default.PropTypes.func,
-    state: _react2.default.PropTypes.bool
-  };
+  var _ref = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref2 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7EC4\u7EC7\u5934\u50CF',
+    titleEnglish: '',
+    titleInfo: 'ORGANIZE HEAD'
+  });
+  
+  var _ref3 = (0, _jsx3.default)('div', {
+    className: 'userHead organizeItem'
+  }, void 0, (0, _jsx3.default)('div', {
+    className: 'userHeadBox'
+  }, void 0, (0, _jsx3.default)('img', {})), (0, _jsx3.default)('div', {
+    className: 'choose icon-operation'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u66F4\u6539\u5934\u50CF')));
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7EC4\u7EC7\u63CF\u8FF0',
+    titleEnglish: '',
+    titleInfo: 'ORGANIZE '
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u516C\u5F00',
+    titleEnglish: '',
+    titleInfo: 'IS PUBLIC'
+  });
   
   var GetOrgInfo = function (_Component2) {
     (0, _inherits3.default)(GetOrgInfo, _Component2);
@@ -23650,7 +20660,7 @@ module.exports =
     function GetOrgInfo(props) {
       (0, _classCallCheck3.default)(this, GetOrgInfo);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgInfo).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (GetOrgInfo.__proto__ || (0, _getPrototypeOf2.default)(GetOrgInfo)).call(this, props));
   
       _this2.state = {
         is_public: 0
@@ -23690,74 +20700,26 @@ module.exports =
       key: 'render',
       value: function render() {
         var data = this.props.organizeDetail;
-        if (data.creation_time == "") return _react2.default.createElement(
-          'div',
-          { style: { textAlign: "center" } },
-          _react2.default.createElement(_Loading2.default, null)
-        );
-        return _react2.default.createElement(
-          'div',
-          { className: 'userTabBox', key: new Date(data.creation_time).getTime() },
-          _react2.default.createElement(
-            'div',
-            { className: 'userItem organizeBox' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '组织头像',
-              titleEnglish: '',
-              titleInfo: 'ORGANIZE HEAD'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'userHead organizeItem' },
-              _react2.default.createElement(
-                'div',
-                { className: 'userHeadBox' },
-                _react2.default.createElement('img', null)
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'choose icon-operation' },
-                _react2.default.createElement(
-                  'span',
-                  null,
-                  '更改头像'
-                )
-              )
-            ),
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '组织描述',
-              titleEnglish: '',
-              titleInfo: 'ORGANIZE '
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'organizeItem' },
-              _react2.default.createElement('textarea', { type: 'text', className: 'form-control', ref: 'orga_detail', defaultValue: data.orga_detail })
-            ),
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '是否公开',
-              titleEnglish: '',
-              titleInfo: 'IS PUBLIC'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'organizeItem' },
-              _react2.default.createElement(IsPublicToggle, {
-                state: data.is_public == 1,
-                getToggle: this.getToggleValue.bind(this)
-              })
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'organizeItem organizeItemBtn ' },
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary', onClick: this.setOrganizeDetail.bind(this) },
-                '保存'
-              )
-            )
-          )
-        );
+        if (data.creation_time == "") return (0, _jsx3.default)('div', {
+          style: { textAlign: "center" }
+        }, void 0, _ref);
+        return (0, _jsx3.default)('div', {
+          className: 'userTabBox'
+        }, new Date(data.creation_time).getTime(), (0, _jsx3.default)('div', {
+          className: 'userItem organizeBox'
+        }, void 0, _ref2, _ref3, _ref4, (0, _jsx3.default)('div', {
+          className: 'organizeItem'
+        }, void 0, _react2.default.createElement('textarea', { type: 'text', className: 'form-control', ref: 'orga_detail', defaultValue: data.orga_detail })), _ref5, (0, _jsx3.default)('div', {
+          className: 'organizeItem'
+        }, void 0, (0, _jsx3.default)(IsPublicToggle, {
+          state: data.is_public == 1,
+          getToggle: this.getToggleValue.bind(this)
+        })), (0, _jsx3.default)('div', {
+          className: 'organizeItem organizeItemBtn '
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.setOrganizeDetail.bind(this)
+        }, void 0, '\u4FDD\u5B58'))));
       }
     }]);
     return GetOrgInfo;
@@ -23766,84 +20728,7 @@ module.exports =
   GetOrgInfo.contextTypes = {
     store: _react2.default.PropTypes.object
   };
-  GetOrgInfo.propTypes = {
-    getOrganizeDetail: _react2.default.PropTypes.func,
-    organizeDetail: _react2.default.PropTypes.object,
-    setOrganizeDetail: _react2.default.PropTypes.func
-  };
   exports.default = GetOrgInfo;
-
-/***/ },
-/* 219 */
-/***/ function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  
-  var _getPrototypeOf = __webpack_require__(45);
-  
-  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-  
-  var _classCallCheck2 = __webpack_require__(46);
-  
-  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-  
-  var _createClass2 = __webpack_require__(47);
-  
-  var _createClass3 = _interopRequireDefault(_createClass2);
-  
-  var _possibleConstructorReturn2 = __webpack_require__(48);
-  
-  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-  
-  var _inherits2 = __webpack_require__(49);
-  
-  var _inherits3 = _interopRequireDefault(_inherits2);
-  
-  var _react = __webpack_require__(9);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _HeadLine = __webpack_require__(128);
-  
-  var _HeadLine2 = _interopRequireDefault(_HeadLine);
-  
-  var _reactDom = __webpack_require__(131);
-  
-  var _reactDom2 = _interopRequireDefault(_reactDom);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var GetOrgDeal = function (_Component) {
-    (0, _inherits3.default)(GetOrgDeal, _Component);
-  
-    function GetOrgDeal(props) {
-      (0, _classCallCheck3.default)(this, GetOrgDeal);
-  
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgDeal).call(this, props));
-  
-      _this.state = {};
-      return _this;
-    }
-  
-    (0, _createClass3.default)(GetOrgDeal, [{
-      key: 'render',
-      value: function render() {
-        return _react2.default.createElement(
-          'div',
-          { className: 'userTabBox' },
-          '123'
-        );
-      }
-    }]);
-    return GetOrgDeal;
-  }(_react.Component);
-  
-  GetOrgDeal.propTypes = {};
-  exports.default = GetOrgDeal;
 
 /***/ },
 /* 220 */
@@ -23855,49 +20740,189 @@ module.exports =
     value: true
   });
   
-  var _getPrototypeOf = __webpack_require__(45);
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
   
   var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
   
-  var _classCallCheck2 = __webpack_require__(46);
+  var _classCallCheck2 = __webpack_require__(47);
   
   var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
   
-  var _createClass2 = __webpack_require__(47);
+  var _createClass2 = __webpack_require__(48);
   
   var _createClass3 = _interopRequireDefault(_createClass2);
   
-  var _possibleConstructorReturn2 = __webpack_require__(48);
+  var _possibleConstructorReturn2 = __webpack_require__(49);
   
   var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
   
-  var _inherits2 = __webpack_require__(49);
+  var _inherits2 = __webpack_require__(50);
   
   var _inherits3 = _interopRequireDefault(_inherits2);
   
-  var _react = __webpack_require__(9);
+  var _react = __webpack_require__(10);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _HeadLine = __webpack_require__(128);
+  var _HeadLine = __webpack_require__(129);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
-  var _Loading = __webpack_require__(106);
+  var _reactDom = __webpack_require__(132);
+  
+  var _reactDom2 = _interopRequireDefault(_reactDom);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)('div', {
+    className: 'userTabBox'
+  }, void 0, '123');
+  
+  var GetOrgDeal = function (_Component) {
+    (0, _inherits3.default)(GetOrgDeal, _Component);
+  
+    function GetOrgDeal(props) {
+      (0, _classCallCheck3.default)(this, GetOrgDeal);
+  
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetOrgDeal.__proto__ || (0, _getPrototypeOf2.default)(GetOrgDeal)).call(this, props));
+  
+      _this.state = {};
+      return _this;
+    }
+  
+    (0, _createClass3.default)(GetOrgDeal, [{
+      key: 'render',
+      value: function render() {
+        return _ref;
+      }
+    }]);
+    return GetOrgDeal;
+  }(_react.Component);
+  
+  exports.default = GetOrgDeal;
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(47);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(48);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(49);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(50);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(10);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _Loading = __webpack_require__(107);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
-  var _reactBootstrap = __webpack_require__(69);
+  var _reactBootstrap = __webpack_require__(70);
   
-  var _Confirm = __webpack_require__(111);
+  var _Confirm = __webpack_require__(112);
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
-  var _route = __webpack_require__(57);
+  var _route = __webpack_require__(58);
   
-  var _notification = __webpack_require__(77);
+  var _notification = __webpack_require__(78);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)(_Loading2.default, {});
+  
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '400'
+  }, void 0, '\u7528\u6237');
+  
+  var _ref3 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '520'
+  }, void 0, '\u7EC4\u7EC7\u521B\u5EFA\u8005');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '210'
+  }, void 0, '\u7BA1\u7406\u5458');
+  
+  var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '520'
+  }, void 0, '\u7EC4\u7EC7\u521B\u5EFA\u8005');
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '210'
+  }, void 0, '\u7BA1\u7406\u5458');
+  
+  var _ref7 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '520'
+  }, void 0, '\u7EC4\u7EC7\u521B\u5EFA\u8005');
+  
+  var _ref8 = (0, _jsx3.default)('button', {
+    className: 'btn btn-danger'
+  }, void 0, '\u79BB\u5F00\u7EC4\u7EC7');
+  
+  var _ref9 = (0, _jsx3.default)('button', {
+    className: 'btn btn-danger'
+  }, void 0, '\u79FB\u9664\u7EC4\u7EC7');
+  
+  var _ref10 = (0, _jsx3.default)('img', {
+    className: 'mediaImg',
+    src: '/slImgJx.png'
+  });
+  
+  var _ref11 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '33%'
+  }, void 0, '\u7528\u6237\u540D'), (0, _jsx3.default)('th', {
+    width: '33%'
+  }, void 0, '\u6743\u9650\u4FE1\u606F'), (0, _jsx3.default)('th', {
+    width: '34%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref12 = (0, _jsx3.default)('li', {}, void 0, '\u6682\u65E0\u6570\u636E');
+  
+  var _ref13 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u9080\u8BF7\u65B0\u6210\u5458',
+    titleEnglish: 'INVITE USER',
+    titleInfo: '\u9080\u8BF7\u65B0\u6210\u5458'
+  });
+  
+  var _ref14 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7EC4\u7EC7\u6210\u5458',
+    titleEnglish: 'ORGANIZE USER LIST',
+    titleInfo: '\u7EC4\u7EC7\u6210\u5458\u5217\u8868'
+  });
   
   var GetOrgAdmin = function (_Component) {
     (0, _inherits3.default)(GetOrgAdmin, _Component);
@@ -23905,7 +20930,7 @@ module.exports =
     function GetOrgAdmin(props) {
       (0, _classCallCheck3.default)(this, GetOrgAdmin);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgAdmin).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetOrgAdmin.__proto__ || (0, _getPrototypeOf2.default)(GetOrgAdmin)).call(this, props));
   
       _this.state = {
         inviteBox: false,
@@ -23938,220 +20963,92 @@ module.exports =
         var user_name = this.context.store.getState().user_info.user_name;
         var orgRole = Number(this.context.store.getState().user_info.role_uuid);
         var data = this.props.organizeUserList;
-        if (data[0] == 1) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '3', style: { textAlign: "center" } },
-            _react2.default.createElement(_Loading2.default, null)
-          )
-        );
-        if (!data.length) return _react2.default.createElement(
-          'tr',
-          null,
-          _react2.default.createElement(
-            'td',
-            { colSpan: '3', style: { textAlign: "center" } },
-            '暂无数据~'
-          )
-        );
+        if (data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '3',
+          style: { textAlign: "center" }
+        }, void 0, _ref));
+        if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
+          colSpan: '3',
+          style: { textAlign: "center" }
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
         return data.map(function (item, i) {
           var role = "";
           var buttonGroup = "";
           switch (Number(item.role)) {
             case 200:
               role = "组织创建者";
-              buttonGroup = _react2.default.createElement(
-                'div',
-                { className: 'roleBox' },
-                _react2.default.createElement(
-                  'button',
-                  { disabled: orgRole != 200,
-                    onClick: _this2.onDeleteOrganize.bind(_this2),
-                    className: 'btn btn-danger' },
-                  '解散组织'
-                )
-              );
+              buttonGroup = (0, _jsx3.default)('div', {
+                className: 'roleBox'
+              }, void 0, (0, _jsx3.default)('button', {
+                disabled: orgRole != 200,
+                onClick: _this2.onDeleteOrganize.bind(_this2),
+                className: 'btn btn-danger'
+              }, void 0, '\u89E3\u6563\u7EC4\u7EC7'));
               break;
             case 210:
               role = "管理员";
-              buttonGroup = _react2.default.createElement(
-                'div',
-                { className: 'roleBox' },
-                _react2.default.createElement(
-                  _reactBootstrap.DropdownButton,
-                  {
-                    onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
-                    bsStyle: "primary",
-                    disabled: orgRole != 200 && user_name != item.user_name,
-                    title: '更改权限', id: 'volumes-table-line-' + i },
-                  _react2.default.createElement(
-                    _reactBootstrap.MenuItem,
-                    { eventKey: '400' },
-                    '用户'
-                  ),
-                  orgRole == 200 ? _react2.default.createElement(
-                    _reactBootstrap.MenuItem,
-                    { eventKey: '520' },
-                    '组织创建者'
-                  ) : ""
-                ),
-                user_name == item.user_name ? _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-danger',
-                    onClick: _this2.onLeaveOrganize.bind(_this2)
-                  },
-                  '离开组织'
-                ) : _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-danger',
-                    onClick: _this2.onDeleteUser.bind(_this2, item.uid),
-                    disabled: orgRole != 200 },
-                  '移除组织'
-                )
-              );
+              buttonGroup = (0, _jsx3.default)('div', {
+                className: 'roleBox'
+              }, void 0, (0, _jsx3.default)(_reactBootstrap.DropdownButton, {
+                onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
+                bsStyle: "primary",
+                disabled: orgRole != 200 && user_name != item.user_name,
+                title: '更改权限',
+                id: 'volumes-table-line-' + i
+              }, void 0, _ref2, orgRole == 200 ? _ref3 : ""), user_name == item.user_name ? (0, _jsx3.default)('button', {
+                className: 'btn btn-danger',
+                onClick: _this2.onLeaveOrganize.bind(_this2)
+              }, void 0, '\u79BB\u5F00\u7EC4\u7EC7') : (0, _jsx3.default)('button', {
+                className: 'btn btn-danger',
+                onClick: _this2.onDeleteUser.bind(_this2, item.uid),
+                disabled: orgRole != 200
+              }, void 0, '\u79FB\u9664\u7EC4\u7EC7'));
               break;
             case 400:
               role = "成员";
-              buttonGroup = _react2.default.createElement(
-                'div',
-                { className: 'roleBox' },
-                _react2.default.createElement(
-                  _reactBootstrap.DropdownButton,
-                  {
-                    onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
-                    bsStyle: "primary",
-                    disabled: orgRole != 200,
-                    title: '更改权限', id: 'volumes-table-line-' + i },
-                  orgRole == 200 ? _react2.default.createElement(
-                    _reactBootstrap.MenuItem,
-                    { eventKey: '210' },
-                    '管理员'
-                  ) : "",
-                  orgRole == 200 ? _react2.default.createElement(
-                    _reactBootstrap.MenuItem,
-                    { eventKey: '520' },
-                    '组织创建者'
-                  ) : ""
-                ),
-                user_name == item.user_name ? _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-danger',
-                    onClick: _this2.onLeaveOrganize.bind(_this2)
-                  },
-                  '离开组织'
-                ) : _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-danger',
-                    disabled: orgRole == 400,
-                    onClick: _this2.onDeleteUser.bind(_this2, item.uid)
-                  },
-                  '移除组织'
-                )
-              );
+              buttonGroup = (0, _jsx3.default)('div', {
+                className: 'roleBox'
+              }, void 0, (0, _jsx3.default)(_reactBootstrap.DropdownButton, {
+                onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
+                bsStyle: "primary",
+                disabled: orgRole != 200,
+                title: '更改权限',
+                id: 'volumes-table-line-' + i
+              }, void 0, orgRole == 200 ? _ref4 : "", orgRole == 200 ? _ref5 : ""), user_name == item.user_name ? (0, _jsx3.default)('button', {
+                className: 'btn btn-danger',
+                onClick: _this2.onLeaveOrganize.bind(_this2)
+              }, void 0, '\u79BB\u5F00\u7EC4\u7EC7') : (0, _jsx3.default)('button', {
+                className: 'btn btn-danger',
+                disabled: orgRole == 400,
+                onClick: _this2.onDeleteUser.bind(_this2, item.uid)
+              }, void 0, '\u79FB\u9664\u7EC4\u7EC7'));
               break;
             default:
               role = "成员";
-              buttonGroup = _react2.default.createElement(
-                'div',
-                { className: 'roleBox' },
-                _react2.default.createElement(
-                  _reactBootstrap.DropdownButton,
-                  {
-                    onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
-                    bsStyle: "primary",
-                    disabled: orgRole == 400 && user_name != item.user_name,
-                    title: '更改权限', id: 'volumes-table-line-' + i },
-                  orgRole == 200 ? _react2.default.createElement(
-                    _reactBootstrap.MenuItem,
-                    { eventKey: '210' },
-                    '管理员'
-                  ) : "",
-                  orgRole == 200 ? _react2.default.createElement(
-                    _reactBootstrap.MenuItem,
-                    { eventKey: '520' },
-                    '组织创建者'
-                  ) : ""
-                ),
-                user_name == item.user_name ? _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-danger' },
-                  '离开组织'
-                ) : "",
-                orgRole == 200 || orgRole == 210 ? _react2.default.createElement(
-                  'button',
-                  { className: 'btn btn-danger' },
-                  '移除组织'
-                ) : ""
-              );
+              buttonGroup = (0, _jsx3.default)('div', {
+                className: 'roleBox'
+              }, void 0, (0, _jsx3.default)(_reactBootstrap.DropdownButton, {
+                onSelect: _this2.onChangeUserRole.bind(_this2, item.uid),
+                bsStyle: "primary",
+                disabled: orgRole == 400 && user_name != item.user_name,
+                title: '更改权限',
+                id: 'volumes-table-line-' + i
+              }, void 0, orgRole == 200 ? _ref6 : "", orgRole == 200 ? _ref7 : ""), user_name == item.user_name ? _ref8 : "", orgRole == 200 || orgRole == 210 ? _ref9 : "");
   
           }
-          return _react2.default.createElement(
-            'tr',
-            { key: i },
-            _react2.default.createElement(
-              'td',
-              null,
-              _react2.default.createElement(
-                'div',
-                { className: 'mediaItem' },
-                _react2.default.createElement('img', { className: 'mediaImg', src: '/slImgJx.png' }),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'mediaTxt' },
-                  item.user_name
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              role
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              buttonGroup
-            )
-          );
+          return (0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
+            className: 'mediaItem'
+          }, void 0, _ref10, (0, _jsx3.default)('span', {
+            className: 'mediaTxt'
+          }, void 0, item.user_name))), (0, _jsx3.default)('td', {}, void 0, role), (0, _jsx3.default)('td', {}, void 0, buttonGroup));
         });
       }
     }, {
       key: 'getTableDemo',
       value: function getTableDemo() {
-        return _react2.default.createElement(
-          'table',
-          { className: 'table table-hover table-bordered' },
-          _react2.default.createElement(
-            'thead',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                { width: '33%' },
-                '用户名'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '33%' },
-                '权限信息'
-              ),
-              _react2.default.createElement(
-                'th',
-                { width: '34%' },
-                '操作'
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'tbody',
-            null,
-            this.getOrganizeUserBody()
-          )
-        );
+        return (0, _jsx3.default)('table', {
+          className: 'table table-hover table-bordered'
+        }, void 0, _ref11, (0, _jsx3.default)('tbody', {}, void 0, this.getOrganizeUserBody()));
       }
     }, {
       key: 'getUserListFun',
@@ -24171,29 +21068,17 @@ module.exports =
         var my = this;
         if (userList && userList.length) {
           var body = userList.map(function (item, i) {
-            return _react2.default.createElement(
-              'li',
-              { key: i, onClick: my.choseInviteName.bind(my, item.username) },
-              _react2.default.createElement('img', { width: 40, height: 40, src: item.logo || __webpack_require__(221) }),
-              _react2.default.createElement(
-                'p',
-                null,
-                item.username
-              ),
-              _react2.default.createElement(
-                'p',
-                null,
-                item.email
-              )
-            );
+            return (0, _jsx3.default)('li', {
+              onClick: my.choseInviteName.bind(my, item.username)
+            }, i, (0, _jsx3.default)('img', {
+              width: 40,
+              height: 40,
+              src: item.logo || __webpack_require__(222)
+            }), (0, _jsx3.default)('p', {}, void 0, item.username), (0, _jsx3.default)('p', {}, void 0, item.email));
           });
           return body;
         } else {
-          return _react2.default.createElement(
-            'li',
-            null,
-            '暂无数据'
-          );
+          return _ref12;
         }
       }
     }, {
@@ -24302,76 +21187,47 @@ module.exports =
         var _this4 = this;
   
         var role = this.context.store.getState().user_info.role_uuid;
-        return _react2.default.createElement(
-          'div',
-          { className: 'organize' },
-          role == 400 ? "" : _react2.default.createElement(
-            'div',
-            { className: 'organizeHd' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '邀请新成员',
-              titleEnglish: 'INVITE USER',
-              titleInfo: '邀请新成员'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'inviteUser' },
-              _react2.default.createElement('input', { type: 'text', className: 'form-control inviteUserInput',
-                ref: 'username',
-                onInput: this.getUserListFun.bind(this),
-                onBlur: this.inviteInputBlur.bind(this)
-              }),
-              _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary', onClick: this.onInviteUser.bind(this) },
-                '邀请'
-              ),
-              _react2.default.createElement(
-                'ul',
-                { className: this.state.inviteBox ? "inviteShow" : "inviteHide" },
-                this.getUserListBody()
-              )
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'organizeBd sl-bd TableTextLeft' },
-            _react2.default.createElement(_HeadLine2.default, {
-              title: '组织成员',
-              titleEnglish: 'ORGANIZE USER LIST',
-              titleInfo: '组织成员列表'
-            }),
-            _react2.default.createElement(
-              'div',
-              { className: 'organizeUserTab' },
-              this.getTableDemo()
-            )
-          ),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '您确定要移除此用户吗?',
-            ref: 'confirmModal',
-            func: function func() {
-              _this4.props.changeUserRole(_this4.state.roleData);
-            }
-          }),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '您确定要离开此组织吗?',
-            ref: 'confirmModalLeave',
-            func: function func() {
-              _this4.props.leaveOrganize(_this4.state.leaveData);
-            }
-          }),
-          _react2.default.createElement(_Confirm2.default, {
-            title: '警告',
-            text: '您确定要解散此组织吗?',
-            ref: 'confirmModalDelete',
-            func: function func() {
-              _this4.props.deleteOrganize(_this4.state.orgData);
-            }
-          })
-        );
+        return (0, _jsx3.default)('div', {
+          className: 'organize'
+        }, void 0, role == 400 ? "" : (0, _jsx3.default)('div', {
+          className: 'organizeHd'
+        }, void 0, _ref13, (0, _jsx3.default)('div', {
+          className: 'inviteUser'
+        }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control inviteUserInput',
+          ref: 'username',
+          onInput: this.getUserListFun.bind(this),
+          onBlur: this.inviteInputBlur.bind(this)
+        }), (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.onInviteUser.bind(this)
+        }, void 0, '\u9080\u8BF7'), (0, _jsx3.default)('ul', {
+          className: this.state.inviteBox ? "inviteShow" : "inviteHide"
+        }, void 0, this.getUserListBody()))), (0, _jsx3.default)('div', {
+          className: 'organizeBd sl-bd TableTextLeft'
+        }, void 0, _ref14, (0, _jsx3.default)('div', {
+          className: 'organizeUserTab'
+        }, void 0, this.getTableDemo())), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u79FB\u9664\u6B64\u7528\u6237\u5417?',
+          ref: 'confirmModal',
+          func: function func() {
+            _this4.props.changeUserRole(_this4.state.roleData);
+          }
+        }), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u79BB\u5F00\u6B64\u7EC4\u7EC7\u5417?',
+          ref: 'confirmModalLeave',
+          func: function func() {
+            _this4.props.leaveOrganize(_this4.state.leaveData);
+          }
+        }), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u89E3\u6563\u6B64\u7EC4\u7EC7\u5417?',
+          ref: 'confirmModalDelete',
+          func: function func() {
+            _this4.props.deleteOrganize(_this4.state.orgData);
+          }
+        }));
       }
     }]);
     return GetOrgAdmin;
@@ -24380,27 +21236,16 @@ module.exports =
   GetOrgAdmin.contextTypes = {
     store: _react2.default.PropTypes.object
   };
-  GetOrgAdmin.propTypes = {
-    organizeUserList: _react2.default.PropTypes.array,
-    getOrganizeUserList: _react2.default.PropTypes.func,
-    getUserList: _react2.default.PropTypes.func,
-    userList: _react2.default.PropTypes.array,
-    inviteUser: _react2.default.PropTypes.func,
-    changeUserRole: _react2.default.PropTypes.func,
-    changeOrganizeOwner: _react2.default.PropTypes.func,
-    deleteOrganize: _react2.default.PropTypes.func,
-    leaveOrganize: _react2.default.PropTypes.func
-  };
   exports.default = GetOrgAdmin;
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphNmIzYTA5MS1mZTUwLTRkOGMtOGQ1NS1kYTcxMDUyYjdkMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0Q0OTkxN0E2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0Q0OTkxNzk2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphOThjNzgzOS1kYWE3LTQ3ZjgtODAzOS1jMzc0ZmIzYmI1ODUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTZiM2EwOTEtZmU1MC00ZDhjLThkNTUtZGE3MTA1MmI3ZDI2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+QujMrwAAEShJREFUeNoklwlwW9d1hu/b38PDvpAgQJAgARLcRdGUSEvULtoj2+NFdSUnTpzVcTqx04xqx0mbpO2kiVuntptmJq63xHXqZOptbMmSFduSbUqyJEoiKYukxJ0ECBD79vD2rVcpBjPA4A3uufec/57/O4hpmqV0/B8effTCx59u6qyP9odeeumTNR384blHBpyOyeNnTZIcR0sffHT1W4ObhvcMapJiwclaMpPJVSRNRRHU5rQ7vQ4Uw6UaTyCApdnrawlRqp5b2njjagYA8N+//nY00pktg46QVcccgc59LrcXEbnc8Zd+duTI83fu7fF1ugRO2dzT72moy01N5T+dcfaGUYJ5dfzK9pHub23biaPoeialKEYqkayVeBtDYhimKKqpqHarRdK0hXQhGvQVKrVkoex3EZdWMq9dSu24JfjDxw9fnY+7rZTL7saopgN3fw2vxC9m19MNTqs/4vIG/Y3WoKvBd+HdY34V7/nyqI+xrYpXHefTYa5DUqW15LpY4RDUxFFDR6RSVbNZGYCiMoryGgAIYiXxM7OLODAZhlYUent7c7bInbySvHd+ZaivV+P1pUwi6Eme+uhFVOdz8ZV0uM3vaw70tXSUeP4XTz5tqahbDo5aFGXuwuUC8Ox75MskyybOX+AW1tR4lspxUo4zaiaBAVM3EcS0kDRBIjRBRJvqBlsaw/UNGADrhY10gfvy7sFGAJ5//RyOoSiGRgMh3TBZYOJA1+eXkwDVtar8yceXfvXKyVd/eF9XX++1sfHZU+eGnvm322+7DVHNZGrl8/96JtrThKOYmi83IuhGhccU1QJQXpQMUwMGShKUrmk1iadxgiUJ3WSz1bIOtK+PRE+tZhYT61VJ3BJul2S8UitgdoUb//zqnYe2yaLy5vHxfS3uA9u2TF2crKXWAw8e3H7wXm49IdWKGGNdWV7sbg51bepBGYuVZZ1WhkIMRREFUTPhCTCcwDCSpHNlbmY9meNLmqoF3V5eUVVENCuSNejx+N0UgrtsjumlWXzq4sxXH7vXHWmcPTvT3ujc0xFJrG2oKEojwOv0M4ylqmqMhZVV9fPTn9A3GvA9u1OZtFLlDNUgEFORDRxDdAOKFyEIJFeqMCTZ4mkoCTXT1DYqJStFaSilySLCcQxtX9lI9kXavC4v9rdH7mno6ipXax4L2+WwuRiqwokkhlM4lcrFiXBbpD1qGubrL7z07u9O9fUGM+sJXhKZeq/FabfQsMigVIExYK1NeHBZVVYz+Y1yRZB5WHaWosuCkOE4VeFJigj1dUmiAEsTCTTj7tZIqVjEUSTg82iFWiVfZAN+XRIkgNgr3AdPHDm/d//yF5NHXzv72O3t/YEQ6rBYaLq8lkzmK1WoLHjbaJIgMVXXVU0Puj11bmeFl/LF7MR6AjNxv92FYchCtTB1ebFzT9rh8RQLhfnkGnbn7VsIgpSFmjCzRAiauzvCBv2Spoc6mm0EETQBNznJyNKj33/g7sMHm4f66ttaAUlpiqIgmIwhNENSJMKLoiqrqKEpKpSKhhgGTVlkycARE8Ogbk2X3ZZYq3j8lkA0oiuiZhg4AcMS+NhHl25h7aDOKxqIx+HAVTU3s2jqiD3S1tzVXqzkZ+fmv5iZRmi0nONKhYrLTmmqIfN8rVrDEAoBgKZp1kJGmkOqrH8yPaNpGrw+KGoYnGkYIBpsDPk20sl0LzA1HVCwlqzVfvbYybHPro5++6Az6AckUVpZk/Mc5ferLHl5ZpI1gc1AbR6vq96JaBoVwkmLlU/na/lSY7iJtjskHeqKhMXGCZwrVRauL9dZQqYqybDgQFyppSs8PLxc1VS3CjdhwMzDHOCVVOrK+FxbU9DrdaMGJlf4Klcp6qqZLlokoQ21dsTabQ47zlgFQ5dkmEu+LFXzZrlg0/JCDlM3+HyWL3FQaA4rwtV42dBaeygG6qCkLcxJmAYoDFTFmiIC1BCBYaAIZgAdV8s1imZjPhdAiclr10xSozHKFOW2UNBTH+YkaSG1Id24YUiVEi/UcAMD8gtH52/b4xndGRAFhQRouNUa9Pk9dvZGsjx9w8xw4kpGMDCxO2p74Js9mcVyKS78x0eL1wpqzFlHEaCGoYim4zhGEdTNjpOt5stimeJhreyM1b1eFj6cnJ1JljZyvIaAO/cH77urOdIYQAi/J/LBxfF4vSs8tDNULolOC7mWL7/69vyrxxLTmXyQZrd0s6Kkv300v2cHf3hfIBxETEMF1nBs5Et8Yc7jcpc5DLv/wLZEKtPAss3+BhS1tfR2lg25YqSTXO7SQj7SYh3Y5KUJ8Keja/EVnSaxwc6mgd27OuqRsxdmdIB5bfhSNv+jZy/++uhCkwv93v2h+w74RobqRnfW793m++J6cTXBbW53XpjKrOWLodaWs+fmq6kbg1v7sW8c2kdRVHo9TeMYT2rJYuLtd4/b3Wi2aO2N2h86NLBnODa8uakzavlwbP75E/PrMzNb+1qaWgZwkNN1yWZhjp9dfedk7rZea6QZpPLKK2+tvXAs+c6x+K097Df+uifLi4SAXFutLRWlicuTiysb49NpLrWMHb5jRBTltURW1KRz4+eOnVwM1wHWE6t3UQ9/5ZZ0rvrSq5++/valXC6bylS2trmurqBqcXZk9x4NYR1oNs8by0nOAdRCsbQmeI+Pb3AqCHg8eVE8fqGwvcXS0+1Px7mz1/Mp+ODm62Z3nYtz6NWJ6yJX23/Xrt6RW8PhWCQAbA6XnSEePNi/Fi888fOPf/v+0pmZytgEl82DxfnCoQMuymHkizWcdEEBw2zHImyxmPOF65/+yVfpv6z93cPDpjH28P07H3l6Sq1KdfV0rQbtGliJm0/rPM6HHv4men58Zmjb1q39PXKNJzHE0EG+rG7e1CCIwtQc9/3HHmp3AR2A/3z27zLmzMDQpqMf3hgaaIGgYwIMGBiK45WCWE7JX7q7jZNE6S+BP/t8BiDM3u0DHhcxey2FmoYsy/CXWBRaM+CqNZ+LQUdvHx7Z3itL0okT52ysDScQXQcBv/fUqUs7YA6a6q+XAFxuamIKCMX2WFMkGlZlQOGIoinQkSicNHVsqKO+lEhRGD8UjgzbwJWp1RC+5Ze/+sNTP95LGoZQ1opwCYpsibTCwKKq/en53+Iet4sr8haWcTkZHdUdrN3qtmq6EQwH7QQH8EB/nbUraP/s5Fjklf3tfR3P/fR+vjxblWBUFL4RE1jrbaFO9+p0wd28/J2/GTr/HrjdCc5M5+872BJwa7KNgF5VhgExxOW0w8/uZhds6thQW9Dp80F4mLh81emgOY4PBpzN4XqGtWWyie5I2NfUklwvNPgCkgmOfO/W/haHpOIGwsJeptZWUYyu8AJlpzXOSK0lXW4+ELYAxtg67G0J2SVRxK32bKL259mC1eVscLM3FuJtrcHl5QyumEi1UoVSW1xaGdlxEFp6YnnBzToZCzq9XL409flALOL37knEVx54sK3Fx2zwdk0vmpqAai5NQywkhgKMZMnoraH8SqGSr1mcdGPAouu4JnK4zUk6mhPp6/CgfLF8+sSZaKvf53VVNIB6nc5ildc0w+e08YJEUAxENBPBW4PhehvDS8r1hVk7XrxtS0PQZZWIKGRN3Cj6Gjpo2qKbKuQNj9MmiIpi6t5WT0trwGv30KTdQWnQMQ33LjVXmFrIw8CmJnX0Re6688B7H13ubWTQvk09xUIxXygCAmNZi83mMglHhSupuC0S3RoLNjT5PKipcYrNdA1DrMytX5tOaqlUSlf45sgITtIzN1YXZtKqZGqaCXEAwaAJcDhjlwMPbExOx698dv5mXDA6HNt/xx1vvvT7He30z556BFd1I76caGoM1bncOEb6fHar3Te/EI/FqvZAO2bxwJ1CGWGUy0BQsTRX5/ZxSu6t15+1Opyxvq6ZL64X5oUdo1GH08JVBBhA1wSCwPT60dXxi+b0sSzik7Ry/6buAwfvfvKHTw2GsSP//Jgi6/iZz85CRsRwXJA0nMS4qmS3Mpev5qPRKzEoIV+zKNJAl9VqRuHjqswRCBJrcA5/7ztLefvTv/ydgmFL08VYF+8P2FUrI9UkzCii3tGlqdna+f8N9bY/+9o83M09e3ufeeZFFoCHvjEKELxYKqK5dIWiGRxHaRJnaIuv3ldXb19YzS4tZBOrE4X4NQbwmgAdd0GXKgj0adNs69uvM73//uujm7od//LjBwd27fzFi9PH35jFFZ1mAG4NFEpGZfLjUHfk3ExlidNxxrGeLCQzhaE92xTUCk0dohq6ZXufqWhAN2xum6GbmqFbaIvX7ZpbE9IVZGXli6X5y4QpM7TVRGmAmq2x4XfOJP2Dh4zyxHe+Ntpky/30u92PPbb/hVPlt/44TaMKoN1cOm+lzMW08vLZFDyujTLm1m5+EUUDtYZNqSitjaFut5sXeRUKw0AU3Shm8jiJW20MRRKTE/Ga7klmUovL1ykILMD0uhumV6pPPvFPTz3U+veP37O8kri2lNVqyUfuDb/83MH1ijWfEWGRsY050QT/M5aWYIfG6KADTSzdTPjYhQtnzl3neVkVK2ilVGVIJpvJYChs4bCpKqogwDnFU+dQRfHDk1c1vGlmKT2zNGelGYrAT7x/4ruHO3/0xKPuxpGGxlhba4ygnYVydXePZddIQ65okpBVCvm3J8pzBQli2K1D/dlsZS3//9YEDmyv27Rl0IDUWC3XcAzLpDasrAUBaKksorpEYRBVdZfLms0VT5+asNgbEYsXko+hCk0BNhoJVjWfo64tV1h74913ltdzNGFNF4reAKjzOfJr1Tcvpc/HZRhm347BjfkbWfFmyD09AX79va//4Kcsou7r8sAJDnF57KU8x/OC3WqrVAWCpZ1OplqtwavR0uxfnrvx0Xt/ljUP7o7kaurmDo/LiW4kV9wO/NqS9oPfTFU5sa7JLRtoV2udVBT/8eXpC6mbLtXZ0UnIxUS+TDHYEw/vPX3thCW47+P3/1i7+FpFo+CojZIUo5sGSyA4jthsDgyT/A2W+GqKQSEfSvU+F2bwz/3imbv+6p7O3k6tJoZ8rYGAH5jS+lqunXV9PLaQzacxgOVW8899sFwW4RQKHI2Nm3tDk8tX+u/dva+z5aknvwnt6fTx58wrr7hamz65IuKGoVSLQq4gC4JB4qjTabs+NdcaiznczlopBwEYBbo/4Bdk6eXfvN7d27T9ttGq5njz/TehRFYWEtuHWjfS/BsnL/MAQCXhQW+TzPFl2ULBrd9oiHYX8vKt3U2og07nEuXEtV2x0IUsgHiJbh7saukItEU8Dhuxtr4RagpilJUr5D0eN4ITqqKSBMELIklZBoZbBXHjzyfe27xzp7eh8f23PnXXuVRD83mYvgAerSdiIx1BG41rBrTMdCqBAJlgPXql1FJPV4tFoSy09Awf+f38ic9T4UYPyrgCBCHfMdoFXX/s1BU4dPj8/rX4eqVYJBkGlhknSA3ecw1AlrezVkM1VQx7/F9/cujQ7tWFJZpG+apQlTWmvd2Cs7qqGghgCQxOU3Z3ncPOpHM5UcYEAcRXE32b+/1dO4uZTGv3KBrZPGqYFCQev68Osv6lMxOhQENLNFLOFVEThWhDEagiyoyNLOULLMHghPXi2HmA+Qf37BpfLXVu7mUpM6mBxkhLoM5pofFcVYUznwlAoVhVahWZYs9NTahCOpmKz61kvvKle3u7OtoGD6EWm3v/A487GzrrPe6vfOs+BI7rU9OmgcF/CjyPEdjG+sbAts37Dx4ONwSGRrYObR84/ck5AEo+rxveGLw+0H9LDBIVnFlIknK5WEGHcAMirR6OpvOZAkoQL756+uL5yzB/Fy9etvkaH/35O6zd938CDAB5qvlrJja8DwAAAABJRU5ErkJggg=="
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -24409,7 +21254,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getOrganizeDetail
   var getOrganizeDetail = function getOrganizeDetail(state) {
@@ -24425,7 +21270,7 @@ module.exports =
   exports.default = makeGetOrganizeDetail;
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -24434,7 +21279,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   var getOrganizeUserList = function getOrganizeUserList(state) {
     return state.organizeUserList;
@@ -24449,7 +21294,7 @@ module.exports =
   exports.default = makeGetOrganizeUserListSelector;
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -24458,7 +21303,7 @@ module.exports =
     value: true
   });
   
-  var _reselect = __webpack_require__(62);
+  var _reselect = __webpack_require__(63);
   
   //getUserList
   var getUserList = function getUserList(state) {
@@ -24474,13 +21319,13 @@ module.exports =
   exports.default = makeGetUserListSelector;
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -24490,11 +21335,11 @@ module.exports =
   });
   exports.setRuntimeVariable = setRuntimeVariable;
   
-  var _constants = __webpack_require__(37);
+  var _constants = __webpack_require__(38);
   
   function setRuntimeVariable(_ref) {
-    var name = _ref.name;
-    var value = _ref.value;
+    var name = _ref.name,
+        value = _ref.value;
   
     return {
       type: _constants.SET_RUNTIME_VARIABLE,
