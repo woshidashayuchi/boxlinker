@@ -16,7 +16,7 @@ caches = LocalCache(100)
 url = os.environ.get('TOKEN_AUTH_API')
 
 
-def u_token_auth(token):
+def token_auth(token):
 
     token_info = caches.get(token)
     log.debug('token_info = %s' % (token_info))
@@ -52,7 +52,7 @@ def token_check(func):
 
             log.debug('token=%s' % (token))
 
-            userinfo_auth = u_token_auth(token)
+            userinfo_auth = token_auth(token)
             if userinfo_auth == 0:
                 result = func(*args, **kwargs)
             else:

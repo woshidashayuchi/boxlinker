@@ -12,6 +12,7 @@ import orders_manager
 from common.logs import logging as log
 from common.code import request_result
 from common.token_auth import token_check
+from common.parameters import parameter_check
 
 
 class BillingManagerAPI(object):
@@ -35,6 +36,14 @@ class BillingManagerAPI(object):
             resource_status = parameters['resource_status']
             resource_orga = parameters['resource_orga']
             resource_user = parameters['resource_user']
+
+            resource_uuid = parameter_check(resource_uuid, ptype='pstr')
+            resource_name = parameter_check(resource_name, ptype='pnam')
+            resource_type = parameter_check(resource_type, ptype='pstr')
+            resource_conf = parameter_check(resource_conf, ptype='pstr')
+            resource_status = parameter_check(resource_status, ptype='pstr')
+            resource_orga = parameter_check(resource_orga, ptype='pstr')
+            resource_user = parameter_check(resource_user, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -66,6 +75,11 @@ class BillingManagerAPI(object):
             resource_status = parameters['resource_status']
             resource_orga = parameters['resource_orga']
             resource_user = parameters['resource_user']
+
+            resource_conf = parameter_check(resource_conf, ptype='pstr')
+            resource_status = parameter_check(resource_status, ptype='pstr')
+            resource_orga = parameter_check(resource_orga, ptype='pstr')
+            resource_user = parameter_check(resource_user, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -100,6 +114,9 @@ class BillingManagerAPI(object):
             user_uuid = user_info['user_uuid']
             denomination = parameters['denomination']
             invalid_time = parameters['invalid_time']
+
+            denomination = parameter_check(denomination, ptype='pint')
+            invalid_time = parameter_check(invalid_time, ptype='pflt')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -116,6 +133,8 @@ class BillingManagerAPI(object):
             orga_uuid = user_info['orga_uuid']
             user_uuid = user_info['user_uuid']
             voucher_uuid = parameters['voucher_uuid']
+
+            voucher_uuid = parameter_check(voucher_uuid, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -134,6 +153,9 @@ class BillingManagerAPI(object):
             role_uuid = user_info['role_uuid']
             start_time = parameters['start_time']
             end_time = parameters['end_time']
+
+            start_time = parameter_check(start_time, ptype='pflt')
+            end_time = parameter_check(end_time, ptype='pflt')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -153,6 +175,9 @@ class BillingManagerAPI(object):
             role_uuid = user_info['role_uuid']
             start_time = parameters['start_time']
             end_time = parameters['end_time']
+
+            start_time = parameter_check(start_time, ptype='pflt')
+            end_time = parameter_check(end_time, ptype='pflt')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -184,6 +209,8 @@ class BillingManagerAPI(object):
             user_uuid = user_info['user_uuid']
             orga_uuid = user_info['orga_uuid']
             amount = parameters['amount']
+
+            amount = parameter_check(amount, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -215,6 +242,10 @@ class BillingManagerAPI(object):
             resource_uuid = parameters['resource_uuid']
             cost = parameters['cost']
             status = parameters['status']
+
+            resource_uuid = parameter_check(resource_uuid, ptype='pstr')
+            cost = parameter_check(cost, ptype='pflt')
+            status = parameter_check(status, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -231,6 +262,9 @@ class BillingManagerAPI(object):
             order_uuid = context['resource_uuid']
             cost = parameters['cost']
             status = parameters['status']
+
+            cost = parameter_check(cost, ptype='pflt')
+            status = parameter_check(status, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -249,6 +283,9 @@ class BillingManagerAPI(object):
             role_uuid = user_info['role_uuid']
             start_time = parameters['start_time']
             end_time = parameters['end_time']
+
+            start_time = parameter_check(start_time, ptype='pflt')
+            end_time = parameter_check(end_time, ptype='pflt')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
