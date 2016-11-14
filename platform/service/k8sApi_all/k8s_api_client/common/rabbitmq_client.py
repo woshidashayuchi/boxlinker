@@ -11,6 +11,7 @@ import uuid
 from time import sleep
 from common.logs import logging as log
 from common.single import Singleton
+from code import request_result
 
 
 class RabbitmqClient(object):
@@ -80,15 +81,15 @@ class RabbitmqClient(object):
 
     def get_response(self, timeout,queue_name):
         cnt = 0
-        self.connection.process_data_events()
+        timeout = int(timeout) * 10
         while self.response is None:
             cnt += 1
             if cnt >= timeout:
                 log.warning('RPC client exec time out, queue = %s'
                             % (queue_name))
-                self.response = 'timeout'
+                self.response = request_result(597)
                 return
-            self.connection.sleep(1)
+            self.connection.sleep(0.1)
             self.connection.process_data_events()
 
     def rpc_call_client(self, queue_name, timeout, json_data):
@@ -128,22 +129,4 @@ class RabbitmqClient(object):
             raise
 
 
-if __name__ == "__main__":
 
-    if (len(sys.argv) == 4):
-        rpc_type = sys.argv[1]
-        queue_name = sys.argv[2]
-        json_data = sys.argv[3]
-
-        rbtmq = RabbitmqClient()
-        timeout = 60
-
-        if rpc_type == 'call':
-            result = rbtmq.rpc_call_client(queue_name, timeout, json_data)
-            print result
-        elif rpc_type == 'cast':
-            rbtmq.rpc_cast_client(queue_name, json_data)
-        else:
-            print '参数错误'
-    else:
-        print '参数错误'

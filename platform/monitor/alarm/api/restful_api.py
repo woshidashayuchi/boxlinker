@@ -20,7 +20,7 @@ app = Flask(__name__)
 def get_msg(rtype):
     time_long = request.values.get("time_long")
     log.info("time_long=========%s" % time_long)
-    json_data = {"rtype": rtype, "time_long":time_long}
+    json_data = {"rtype": rtype, "time_long": time_long, "app": "rest"}
     mon = MonitorAct()
     rest = mon.count_msg(json_data)
     return json.dumps(rest)

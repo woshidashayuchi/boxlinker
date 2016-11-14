@@ -120,6 +120,7 @@ module.exports =
   
   var _routes2 = _interopRequireDefault(_routes);
   
+<<<<<<< HEAD
   var _assets = __webpack_require__(228);
   
   var _assets2 = _interopRequireDefault(_assets);
@@ -127,6 +128,15 @@ module.exports =
   var _runtime = __webpack_require__(229);
   
   var _users = __webpack_require__(213);
+=======
+  var _assets = __webpack_require__(226);
+  
+  var _assets2 = _interopRequireDefault(_assets);
+  
+  var _runtime = __webpack_require__(227);
+  
+  var _users = __webpack_require__(212);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _toggleSidebar = __webpack_require__(59);
   
@@ -251,7 +261,7 @@ module.exports =
                             pathname: req.path
                           },
                           render: function render(component) {
-                            var status = arguments.length <= 1 || arguments[1] === undefined ? 200 : arguments[1];
+                            var status = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
   
                             css = [];
                             statusCode = status;
@@ -467,6 +477,7 @@ module.exports =
     href: "/icomoon/style.css"
   });
   
+<<<<<<< HEAD
   var _ref7 = (0, _jsx3.default)("script", {
     id: "script"
   });
@@ -479,6 +490,16 @@ module.exports =
     var script = _ref.script;
     var children = _ref.children;
     var state = _ref.state;
+=======
+  function Html(_ref) {
+    var title = _ref.title,
+        description = _ref.description,
+        bootstrapCss = _ref.bootstrapCss,
+        style = _ref.style,
+        script = _ref.script,
+        children = _ref.children,
+        state = _ref.state;
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
     return (0, _jsx3.default)("html", {
       className: "no-js",
@@ -492,7 +513,11 @@ module.exports =
     }), (0, _jsx3.default)("style", {
       id: "css",
       dangerouslySetInnerHTML: { __html: style }
+<<<<<<< HEAD
     }), _ref7), (0, _jsx3.default)("body", {}, void 0, (0, _jsx3.default)("div", {
+=======
+    })), (0, _jsx3.default)("body", {}, void 0, (0, _jsx3.default)("div", {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       id: "app",
       dangerouslySetInnerHTML: { __html: children }
     }), script && (0, _jsx3.default)("script", {
@@ -1063,7 +1088,7 @@ module.exports =
   };
   
   function isSidebarOpen() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? _constants.SIDEBAR_STATUS.OPEN : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _constants.SIDEBAR_STATUS.OPEN;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1075,7 +1100,7 @@ module.exports =
   }
   
   function sidebarActive() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
     var action = arguments[1];
   
     switch (action.type) {
@@ -1087,7 +1112,7 @@ module.exports =
   }
   
   function serviceList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1103,7 +1128,7 @@ module.exports =
   }
   
   function podList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1115,7 +1140,7 @@ module.exports =
   }
   
   function serviceDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? serviceData : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : serviceData;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1177,7 +1202,7 @@ module.exports =
   }
   
   function monitorData() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? { memory: {}, network: {}, cpu: {} } : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { memory: {}, network: {}, cpu: {} };
     var action = arguments[1];
   
     switch (action.type) {
@@ -1199,7 +1224,7 @@ module.exports =
   }
   
   function volumesList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1218,8 +1243,13 @@ module.exports =
   }
   
   function isBtnState() {
+<<<<<<< HEAD
     var state = arguments.length <= 0 || arguments[0] === undefined ? { deploy: true, building: true, volume: true, autoStateUp: true, reviseBuilding: true,
       port: true, storage: true, env: true, command: true, pods: true, setOrg: true } : arguments[0];
+=======
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { deploy: true, building: true, volume: true, autoStateUp: true, reviseBuilding: true,
+      port: true, storage: true, env: true, command: true, pods: true };
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     var action = arguments[1];
   
     switch (action.type) {
@@ -1262,7 +1292,7 @@ module.exports =
   }
   
   function repos() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1274,7 +1304,7 @@ module.exports =
   }
   
   function isLoading() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1286,7 +1316,7 @@ module.exports =
   }
   
   function imageList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1298,7 +1328,7 @@ module.exports =
   }
   
   function imageDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1310,7 +1340,7 @@ module.exports =
   }
   
   function user_info() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1322,7 +1352,7 @@ module.exports =
   }
   
   function breadcrumbList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1333,8 +1363,13 @@ module.exports =
     }
   }
   
+<<<<<<< HEAD
   function authUrl() {
     var state = arguments.length <= 0 || arguments[0] === undefined ? { github: "", coding: "" } : arguments[0];
+=======
+  function githubAuthURL() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     var action = arguments[1];
   
     switch (action.type) {
@@ -1352,7 +1387,7 @@ module.exports =
   }
   
   function buildingImageList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1367,7 +1402,7 @@ module.exports =
     }
   }
   function buildingDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1379,7 +1414,7 @@ module.exports =
   }
   
   function deployData() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? serviceData : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : serviceData;
     var action = arguments[1];
   
     switch (action.type) {
@@ -1448,7 +1483,7 @@ module.exports =
   }
   
   function logs() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1460,7 +1495,7 @@ module.exports =
   }
   
   function logs_xhr() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1475,7 +1510,7 @@ module.exports =
   }
   
   function notifications() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1488,7 +1523,7 @@ module.exports =
     }
   }
   function organizeList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1500,7 +1535,7 @@ module.exports =
     }
   }
   function organizeDetail() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? { creation_time: "" } : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { creation_time: "" };
     var action = arguments[1];
   
     switch (action.type) {
@@ -1512,7 +1547,7 @@ module.exports =
     }
   }
   function organizeUserList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [1] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [1];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1543,7 +1578,7 @@ module.exports =
     }
   }
   function userList() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var action = arguments[1];
   
     switch (action.type) {
@@ -1625,7 +1660,7 @@ module.exports =
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   function runtime() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
   
     switch (action.type) {
@@ -1971,7 +2006,7 @@ module.exports =
   
     if (true) {
       return function (url) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   
         var isLocalUrl = /^\/($|[^\/])/.test(url);
   
@@ -2153,6 +2188,7 @@ module.exports =
   
   var _dashboard2 = _interopRequireDefault(_dashboard);
   
+<<<<<<< HEAD
   var _imageCenter = __webpack_require__(103);
   
   var _imageCenter2 = _interopRequireDefault(_imageCenter);
@@ -2230,6 +2266,85 @@ module.exports =
   var _reviseImage2 = _interopRequireDefault(_reviseImage);
   
   var _organize = __webpack_require__(218);
+=======
+  var _imageCenter = __webpack_require__(100);
+  
+  var _imageCenter2 = _interopRequireDefault(_imageCenter);
+  
+  var _imageForPlatform = __webpack_require__(104);
+  
+  var _imageForPlatform2 = _interopRequireDefault(_imageForPlatform);
+  
+  var _imageForMy = __webpack_require__(109);
+  
+  var _imageForMy2 = _interopRequireDefault(_imageForMy);
+  
+  var _imageDetail = __webpack_require__(114);
+  
+  var _imageDetail2 = _interopRequireDefault(_imageDetail);
+  
+  var _createImage = __webpack_require__(126);
+  
+  var _createImage2 = _interopRequireDefault(_createImage);
+  
+  var _buildingDetail = __webpack_require__(134);
+  
+  var _buildingDetail2 = _interopRequireDefault(_buildingDetail);
+  
+  var _building = __webpack_require__(139);
+  
+  var _building2 = _interopRequireDefault(_building);
+  
+  var _buildingCreate = __webpack_require__(143);
+  
+  var _buildingCreate2 = _interopRequireDefault(_buildingCreate);
+  
+  var _error = __webpack_require__(147);
+  
+  var _error2 = _interopRequireDefault(_error);
+  
+  var _serviceList = __webpack_require__(148);
+  
+  var _serviceList2 = _interopRequireDefault(_serviceList);
+  
+  var _addService = __webpack_require__(151);
+  
+  var _addService2 = _interopRequireDefault(_addService);
+  
+  var _choseImage = __webpack_require__(159);
+  
+  var _choseImage2 = _interopRequireDefault(_choseImage);
+  
+  var _configContainer = __webpack_require__(164);
+  
+  var _configContainer2 = _interopRequireDefault(_configContainer);
+  
+  var _serviceDetail = __webpack_require__(174);
+  
+  var _serviceDetail2 = _interopRequireDefault(_serviceDetail);
+  
+  var _dataVolumeList = __webpack_require__(193);
+  
+  var _dataVolumeList2 = _interopRequireDefault(_dataVolumeList);
+  
+  var _login = __webpack_require__(198);
+  
+  var _login2 = _interopRequireDefault(_login);
+  
+  var _signUp = __webpack_require__(200);
+  
+  var _signUp2 = _interopRequireDefault(_signUp);
+  
+  var _userCenter = __webpack_require__(203);
+  
+  var _userCenter2 = _interopRequireDefault(_userCenter);
+  
+  var _reviseImage = __webpack_require__(213);
+  
+  var _reviseImage2 = _interopRequireDefault(_reviseImage);
+  
+  var _organize = __webpack_require__(216);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _organize2 = _interopRequireDefault(_organize);
   
@@ -2248,9 +2363,9 @@ module.exports =
     action: function action(_ref) {
       var _this = this;
   
-      var next = _ref.next;
-      var render = _ref.render;
-      var context = _ref.context;
+      var next = _ref.next,
+          render = _ref.render,
+          context = _ref.context;
       return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
         var component;
         return _regenerator2.default.wrap(function _callee$(_context) {
@@ -2358,7 +2473,7 @@ module.exports =
   
     function Root() {
       (0, _classCallCheck3.default)(this, Root);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Root).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Root.__proto__ || (0, _getPrototypeOf2.default)(Root)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Root, [{
@@ -2560,7 +2675,7 @@ module.exports =
   
     function App() {
       (0, _classCallCheck3.default)(this, App);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(App).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (App.__proto__ || (0, _getPrototypeOf2.default)(App)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(App, [{
@@ -2699,7 +2814,7 @@ module.exports =
   
     function Breadcrumb() {
       (0, _classCallCheck3.default)(this, Breadcrumb);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Breadcrumb).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Breadcrumb.__proto__ || (0, _getPrototypeOf2.default)(Breadcrumb)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Breadcrumb, [{
@@ -2807,7 +2922,7 @@ module.exports =
     (0, _inherits3.default)(Link, _Component);
   
     function Link() {
-      var _Object$getPrototypeO;
+      var _ref;
   
       var _temp, _this, _ret;
   
@@ -2817,7 +2932,7 @@ module.exports =
         args[_key] = arguments[_key];
       }
   
-      return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(Link)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleClick = function (event) {
+      return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Link.__proto__ || (0, _getPrototypeOf2.default)(Link)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (event) {
         var allowTransition = true;
   
         if (_this.props.onClick) {
@@ -2853,10 +2968,10 @@ module.exports =
     (0, _createClass3.default)(Link, [{
       key: 'render',
       value: function render() {
-        var _props = this.props;
-        var to = _props.to;
-        var _ = _props.navigate;
-        var props = (0, _objectWithoutProperties3.default)(_props, ['to', 'navigate']); // eslint-disable-line no-unused-vars
+        var _props = this.props,
+            to = _props.to,
+            _ = _props.navigate,
+            props = (0, _objectWithoutProperties3.default)(_props, ['to', 'navigate']); // eslint-disable-line no-unused-vars
   
         return _react2.default.createElement('a', (0, _extends3.default)({ href: this.context.createHref(to) }, props, { onClick: this.handleClick }));
       }
@@ -3126,7 +3241,7 @@ module.exports =
   
     function MenuListItem() {
       (0, _classCallCheck3.default)(this, MenuListItem);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(MenuListItem).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (MenuListItem.__proto__ || (0, _getPrototypeOf2.default)(MenuListItem)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(MenuListItem, [{
@@ -3145,7 +3260,7 @@ module.exports =
     (0, _inherits3.default)(MenuList, _Component2);
   
     function MenuList() {
-      var _Object$getPrototypeO;
+      var _ref;
   
       (0, _classCallCheck3.default)(this, MenuList);
   
@@ -3153,7 +3268,7 @@ module.exports =
         args[_key] = arguments[_key];
       }
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(MenuList)).call.apply(_Object$getPrototypeO, [this].concat(args)));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_ref = MenuList.__proto__ || (0, _getPrototypeOf2.default)(MenuList)).call.apply(_ref, [this].concat(args)));
   
       _this2.state = {
         open: true
@@ -3188,7 +3303,11 @@ module.exports =
     return MenuList;
   }(_react.Component);
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)(_reactBootstrap.Overlay, {
+=======
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.Overlay, {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     placement: 'right'
   }, void 0, (0, _jsx3.default)(_reactBootstrap.Tooltip, {
     id: 'overload-right'
@@ -3200,7 +3319,7 @@ module.exports =
     function ThinItem(props) {
       (0, _classCallCheck3.default)(this, ThinItem);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ThinItem).call(this, props));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (ThinItem.__proto__ || (0, _getPrototypeOf2.default)(ThinItem)).call(this, props));
   
       _this3.state = {
         tipShow: false
@@ -3218,7 +3337,11 @@ module.exports =
           className: this.props.href == "javascript:;" && this.props.open ? "menu-item menuItemAction" : 'menu-item ' + this.props.className
         }, void 0, this.props.icon), (0, _jsx3.default)('div', {
           className: 'thin-item-tip'
+<<<<<<< HEAD
         }, void 0, this.props.tip), _ref);
+=======
+        }, void 0, this.props.tip), _ref2);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return ThinItem;
@@ -3230,7 +3353,7 @@ module.exports =
     function ThinList(props) {
       (0, _classCallCheck3.default)(this, ThinList);
   
-      var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ThinList).call(this, props));
+      var _this4 = (0, _possibleConstructorReturn3.default)(this, (ThinList.__proto__ || (0, _getPrototypeOf2.default)(ThinList)).call(this, props));
   
       _this4.state = {
         collapse: true
@@ -3265,18 +3388,27 @@ module.exports =
     return ThinList;
   }(_react.Component);
   
+<<<<<<< HEAD
   var _ref2 = (0, _jsx3.default)('a', {
+=======
+  var _ref3 = (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     href: '/'
   }, void 0, (0, _jsx3.default)('img', {
     src: '/logo.png'
   }));
   
+<<<<<<< HEAD
   var _ref3 = (0, _jsx3.default)('a', {
+=======
+  var _ref4 = (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     href: '/'
   }, void 0, (0, _jsx3.default)('img', {
     src: '/logo-small.png'
   }));
   
+<<<<<<< HEAD
   var _ref4 = (0, _jsx3.default)('i', {
     className: 'icon-console'
   }, void 0, ' ');
@@ -3318,6 +3450,49 @@ module.exports =
   }, void 0, ' ');
   
   var _ref14 = (0, _jsx3.default)('i', {
+=======
+  var _ref5 = (0, _jsx3.default)('i', {
+    className: 'icon-console'
+  }, void 0, ' ');
+  
+  var _ref6 = (0, _jsx3.default)('i', {
+    className: 'icon-sanjiaoright'
+  }, void 0, ' ');
+  
+  var _ref7 = (0, _jsx3.default)('i', {
+    className: 'icon-New-service'
+  }, void 0, ' ');
+  
+  var _ref8 = (0, _jsx3.default)('i', {
+    className: 'icon-servicelist'
+  }, void 0, ' ');
+  
+  var _ref9 = (0, _jsx3.default)('i', {
+    className: 'icon-storagemanag'
+  }, void 0, ' ');
+  
+  var _ref10 = (0, _jsx3.default)('i', {
+    className: 'icon-sanjiaoright'
+  }, void 0, ' ');
+  
+  var _ref11 = (0, _jsx3.default)('i', {
+    className: 'icon-mymirror'
+  }, void 0, ' ');
+  
+  var _ref12 = (0, _jsx3.default)('i', {
+    className: 'icon-formmirror'
+  }, void 0, ' ');
+  
+  var _ref13 = (0, _jsx3.default)('i', {
+    className: 'icon-codeconstruct'
+  }, void 0, ' ');
+  
+  var _ref14 = (0, _jsx3.default)('i', {
+    className: 'icon-login'
+  }, void 0, ' ');
+  
+  var _ref15 = (0, _jsx3.default)('i', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'icon-login'
   }, void 0, ' ');
   
@@ -3326,7 +3501,7 @@ module.exports =
   
     function Sidebar() {
       (0, _classCallCheck3.default)(this, Sidebar);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Sidebar).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Sidebar.__proto__ || (0, _getPrototypeOf2.default)(Sidebar)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Sidebar, [{
@@ -3343,9 +3518,15 @@ module.exports =
         var open = this.props.isSidebarOpen;
         return open ? (0, _jsx3.default)('div', {
           className: _Sidebar2.default.logo
+<<<<<<< HEAD
         }, void 0, _ref2) : (0, _jsx3.default)('div', {
           className: (0, _classnames2.default)(_Sidebar2.default.logo, _Sidebar2.default.logoSmall)
         }, void 0, _ref3);
+=======
+        }, void 0, _ref3) : (0, _jsx3.default)('div', {
+          className: (0, _classnames2.default)(_Sidebar2.default.logo, _Sidebar2.default.logoSmall)
+        }, void 0, _ref4);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }, {
       key: 'getList',
@@ -3364,8 +3545,13 @@ module.exports =
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/',
           icon: showIcon("icon-console")
+<<<<<<< HEAD
         }, void 0, '控制台'))), (0, _jsx3.default)(MenuList, {
           title: '服务中心',
+=======
+        }, void 0, '\u63A7\u5236\u53F0'))), (0, _jsx3.default)(MenuList, {
+          title: '\u670D\u52A1\u4E2D\u5FC3',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           icon: showIcon("icon-servicecenter")
         }, void 0, (0, _jsx3.default)('ul', {
           className: _Sidebar2.default.subList
@@ -3375,20 +3561,33 @@ module.exports =
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/choseImage',
           icon: showIcon("icon-New-service")
+<<<<<<< HEAD
         }, void 0, '新建服务')), (0, _jsx3.default)('li', {
+=======
+        }, void 0, '\u65B0\u5EFA\u670D\u52A1')), (0, _jsx3.default)('li', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/serviceList"),
           className: this.props.sidebarActive == "/serviceList" ? "subListAction" : ""
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/serviceList',
           icon: showIcon("icon-servicelist")
+<<<<<<< HEAD
         }, void 0, '服务列表')), (0, _jsx3.default)('li', {
+=======
+        }, void 0, '\u670D\u52A1\u5217\u8868')), (0, _jsx3.default)('li', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/volumes"),
           className: this.props.sidebarActive == "/volumes" ? "subListAction" : ""
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/volumes',
           icon: showIcon("icon-storagemanag")
+<<<<<<< HEAD
         }, void 0, '存储卷管理')))), (0, _jsx3.default)(MenuList, {
           title: '镜像中心',
+=======
+        }, void 0, '\u5B58\u50A8\u5377\u7BA1\u7406')))), (0, _jsx3.default)(MenuList, {
+          title: '\u955C\u50CF\u4E2D\u5FC3',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           icon: showIcon("icon-mirrorceer")
         }, void 0, (0, _jsx3.default)('ul', {
           className: _Sidebar2.default.subList
@@ -3398,25 +3597,41 @@ module.exports =
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/createImage',
           icon: showIcon("icon-mirrorhouse")
+<<<<<<< HEAD
         }, void 0, '新建镜像')), (0, _jsx3.default)('li', {
+=======
+        }, void 0, '\u65B0\u5EFA\u955C\u50CF')), (0, _jsx3.default)('li', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/imageForMy"),
           className: this.props.sidebarActive == "/imageForMy" ? "subListAction" : ""
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/imageForMy',
           icon: showIcon("icon-mymirror")
+<<<<<<< HEAD
         }, void 0, '我的镜像')), (0, _jsx3.default)('li', {
+=======
+        }, void 0, '\u6211\u7684\u955C\u50CF')), (0, _jsx3.default)('li', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
           className: this.props.sidebarActive == "/imageForPlatform" ? "subListAction" : ""
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/imageForPlatform',
           icon: showIcon("icon-formmirror")
+<<<<<<< HEAD
         }, void 0, '平台镜像')), (0, _jsx3.default)('li', {
+=======
+        }, void 0, '\u5E73\u53F0\u955C\u50CF')), (0, _jsx3.default)('li', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/building"),
           className: this.props.sidebarActive == "/building" ? "subListAction" : ""
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/building',
           icon: showIcon("icon-codeconstruct")
+<<<<<<< HEAD
         }, void 0, '代码构建')))), is_user == 1 ? (0, _jsx3.default)('ul', {
+=======
+        }, void 0, '\u4EE3\u7801\u6784\u5EFA')))), is_user == 1 ? (0, _jsx3.default)('ul', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list")
         }, void 0, (0, _jsx3.default)('li', {
           onClick: this.onChangeAction.bind(this, "/user"),
@@ -3424,7 +3639,11 @@ module.exports =
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/user',
           icon: showIcon("icon-login")
+<<<<<<< HEAD
         }, void 0, '用户中心'))) : (0, _jsx3.default)('ul', {
+=======
+        }, void 0, '\u7528\u6237\u4E2D\u5FC3'))) : (0, _jsx3.default)('ul', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list")
         }, void 0, (0, _jsx3.default)('li', {
           onClick: this.onChangeAction.bind(this, "/organize"),
@@ -3432,6 +3651,7 @@ module.exports =
         }, void 0, (0, _jsx3.default)(MenuListItem, {
           href: '/organize',
           icon: showIcon("icon-login")
+<<<<<<< HEAD
         }, void 0, '组织中心'))))) : (0, _jsx3.default)('div', {
           className: 'sidebar-menu-thin'
         }, void 0, (0, _jsx3.default)(ThinList, {
@@ -3439,70 +3659,131 @@ module.exports =
           title: '控制台',
           isOpen: false,
           icon: _ref4,
+=======
+        }, void 0, '\u7EC4\u7EC7\u4E2D\u5FC3'))))) : (0, _jsx3.default)('div', {
+          className: 'sidebar-menu-thin'
+        }, void 0, (0, _jsx3.default)(ThinList, {
+          href: '/',
+          title: '\u63A7\u5236\u53F0',
+          isOpen: false,
+          icon: _ref5,
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/"),
           className: this.props.sidebarActive == "/" ? "menuListAction" : ""
         }, void 0), (0, _jsx3.default)(ThinList, {
           href: 'javascript:;',
+<<<<<<< HEAD
           title: '服务中心',
           isOpen: true,
           icon: _ref5,
+=======
+          title: '\u670D\u52A1\u4E2D\u5FC3',
+          isOpen: true,
+          icon: _ref6,
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: function onClick() {},
           className: ''
         }, void 0, (0, _jsx3.default)(ThinItem, {
           href: '/choseImage',
+<<<<<<< HEAD
           icon: _ref6,
           tip: '新建服务',
+=======
+          icon: _ref7,
+          tip: '\u65B0\u5EFA\u670D\u52A1',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/choseImage"),
           className: this.props.sidebarActive == "/choseImage" ? "menuListAction" : ""
         }), (0, _jsx3.default)(ThinItem, {
           href: '/serviceList',
+<<<<<<< HEAD
           icon: _ref7,
           tip: '服务列表',
+=======
+          icon: _ref8,
+          tip: '\u670D\u52A1\u5217\u8868',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/serviceList"),
           className: this.props.sidebarActive == "/serviceList" ? "menuListAction" : ""
         }), (0, _jsx3.default)(ThinItem, {
           href: '/volumes',
+<<<<<<< HEAD
           icon: _ref8,
           tip: '存储卷管理',
+=======
+          icon: _ref9,
+          tip: '\u5B58\u50A8\u5377\u7BA1\u7406',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/volumes"),
           className: this.props.sidebarActive == "/volumes" ? "menuListAction" : ""
         })), (0, _jsx3.default)(ThinList, {
           href: 'javascript:;',
+<<<<<<< HEAD
           title: '镜像中心',
           isOpen: true,
           icon: _ref9,
+=======
+          title: '\u955C\u50CF\u4E2D\u5FC3',
+          isOpen: true,
+          icon: _ref10,
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: function onClick() {},
           className: ''
         }, void 0, (0, _jsx3.default)(ThinItem, {
           href: '/imageForMy',
+<<<<<<< HEAD
           icon: _ref10,
           tip: '我的镜像',
+=======
+          icon: _ref11,
+          tip: '\u6211\u7684\u955C\u50CF',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/imageForMy"),
           className: this.props.sidebarActive == "/imageForMy" ? "menuListAction" : ""
         }), (0, _jsx3.default)(ThinItem, {
           href: '/imageForPlatform',
+<<<<<<< HEAD
           icon: _ref11,
           tip: '平台镜像',
+=======
+          icon: _ref12,
+          tip: '\u5E73\u53F0\u955C\u50CF',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
           className: this.props.sidebarActive == "/imageForPlatform" ? "menuListAction" : ""
         }), (0, _jsx3.default)(ThinItem, {
           href: '/building',
+<<<<<<< HEAD
           icon: _ref12,
           tip: '构建镜像',
+=======
+          icon: _ref13,
+          tip: '\u6784\u5EFA\u955C\u50CF',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/building"),
           className: this.props.sidebarActive == "/building" ? "menuListAction" : ""
         })), is_user == 1 ? (0, _jsx3.default)(ThinList, {
           href: '/user',
           isOpen: false,
+<<<<<<< HEAD
           title: '用户中心',
           icon: _ref13,
+=======
+          title: '\u7528\u6237\u4E2D\u5FC3',
+          icon: _ref14,
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/user"),
           className: this.props.sidebarActive == "/user" ? "menuListAction" : ""
         }, void 0) : (0, _jsx3.default)(ThinList, {
           href: '/organize',
           isOpen: false,
+<<<<<<< HEAD
           title: '组织中心',
           icon: _ref14,
+=======
+          title: '\u7EC4\u7EC7\u4E2D\u5FC3',
+          icon: _ref15,
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.onChangeAction.bind(this, "/organize"),
           className: this.props.sidebarActive == "/organize" ? "menuListAction" : ""
         }, void 0));
@@ -3752,6 +4033,7 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)('p', {}, void 0, '切换到个人');
   
   var _ref2 = (0, _jsx3.default)('p', {}, void 0, '切换到该组织');
@@ -3763,16 +4045,37 @@ module.exports =
   var _ref4 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
     eventKey: 4.1,
     title: '退出',
+=======
+  var _ref = (0, _jsx3.default)('p', {}, void 0, '\u5207\u6362\u5230\u4E2A\u4EBA');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u5207\u6362\u5230\u8BE5\u7EC4\u7EC7');
+  
+  var _ref3 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 4.1
+  }, void 0, '\u9000\u51FA');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+    eventKey: 4.1,
+    title: '\u9000\u51FA',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     id: 'header-nav-item-userinfo'
   }, void 0, ' ');
   
   var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: 4.1
+<<<<<<< HEAD
   }, void 0, '退出');
   
   var _ref6 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
     eventKey: 4.1,
     title: '退出',
+=======
+  }, void 0, '\u9000\u51FA');
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+    eventKey: 4.1,
+    title: '\u9000\u51FA',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     id: 'header-nav-item-userinfo'
   }, void 0, ' ');
   
@@ -3783,12 +4086,40 @@ module.exports =
     width: '50px'
   });
   
+<<<<<<< HEAD
+=======
+  var _ref8 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 2
+  }, void 0, '\u521B\u5EFA\u7EC4\u7BA1\u7406');
+  
+  var _ref9 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 3
+  }, void 0, '\u7528\u6237\u4E2D\u5FC3');
+  
+  var _ref10 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: 4.1
+  }, void 0, '\u9000\u51FA');
+  
+  var _ref11 = (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+    eventKey: 4.1,
+    title: '\u9000\u51FA',
+    id: 'header-nav-item-userinfo'
+  }, void 0);
+  
+  var _ref12 = (0, _jsx3.default)(_reactLoading2.default, {
+    type: 'bubbles',
+    color: '#fff',
+    height: '50px',
+    width: '50px'
+  });
+  
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   var Header = function (_Component) {
     (0, _inherits3.default)(Header, _Component);
   
     function Header() {
       (0, _classCallCheck3.default)(this, Header);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Header).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Header.__proto__ || (0, _getPrototypeOf2.default)(Header)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Header, [{
@@ -3873,8 +4204,12 @@ module.exports =
         return (0, _jsx3.default)(_reactBootstrap.Navbar, {
           fixedTop: true,
           className: 'app-navbar',
+<<<<<<< HEAD
           style: { left: "180px" },
           onClick: this.handleClick.bind(this)
+=======
+          style: { left: "180px" }
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)(_reactBootstrap.Nav, {
           onSelect: this.handleSelect.bind(this)
         }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
@@ -3890,6 +4225,38 @@ module.exports =
         }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
           className: 'loading-animation'
         }, void 0, this.props.isLoading ? _ref7 : null), dropdown));
+<<<<<<< HEAD
+=======
+      }
+    }, {
+      key: 'render1',
+      value: function render1() {
+        var username = this.context.store.getState().user_info.user_name;
+        var dropdown = username ? (0, _jsx3.default)(_reactBootstrap.NavDropdown, {
+          eventKey: 4,
+          title: username,
+          id: 'header-nav-item-userinfo'
+        }, void 0, _ref8, _ref9, _ref10) : _ref11;
+        return (0, _jsx3.default)(_reactBootstrap.Navbar, {
+          fixedTop: true,
+          className: 'app-navbar',
+          style: { left: "180px" }
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Nav, {
+          onSelect: this.handleSelect.bind(this)
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
+          eventKey: 1,
+          href: 'javascript:void(0)'
+        }, void 0, (0, _jsx3.default)('i', {
+          className: this.props.isSidebarOpen ? "icon-withdraw" : "icon-back",
+          'aria-hidden': 'true'
+        }))), (0, _jsx3.default)(_reactBootstrap.Nav, {
+          pullRight: true,
+          onSelect: this.handleSelect.bind(this),
+          style: { marginRight: "0" }
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.NavItem, {
+          className: 'loading-animation'
+        }, void 0, this.props.isLoading ? _ref12 : null), dropdown));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return Header;
@@ -5119,7 +5486,7 @@ module.exports =
   
     function _class() {
       (0, _classCallCheck3.default)(this, _class);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(_class, [{
@@ -5251,6 +5618,7 @@ module.exports =
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _breadcumb = __webpack_require__(94);
   
   var _services = __webpack_require__(95);
@@ -5268,6 +5636,25 @@ module.exports =
   var _volumes = __webpack_require__(99);
   
   var _volumesListSelector = __webpack_require__(100);
+=======
+  var _breadcumb = __webpack_require__(93);
+  
+  var _services = __webpack_require__(94);
+  
+  var _serviceListSelector = __webpack_require__(95);
+  
+  var _serviceListSelector2 = _interopRequireDefault(_serviceListSelector);
+  
+  var _imageList = __webpack_require__(96);
+  
+  var _imageListSelector = __webpack_require__(97);
+  
+  var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
+  
+  var _volumes = __webpack_require__(98);
+  
+  var _volumesListSelector = __webpack_require__(99);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
@@ -5370,16 +5757,20 @@ module.exports =
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
+=======
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   var _Link = __webpack_require__(56);
   
   var _Link2 = _interopRequireDefault(_Link);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
+<<<<<<< HEAD
   var ReactHighcharts = __webpack_require__(93);
   
   var _ref = (0, _jsx3.default)('span', {
@@ -5389,13 +5780,24 @@ module.exports =
   var _ref2 = (0, _jsx3.default)('span', {
     className: 'bg_hover bg_detail'
   }, void 0, '查看详情');
+=======
+  var ReactHighcharts = __webpack_require__(92);
+  
+  var _ref = (0, _jsx3.default)('span', {
+    className: 'bg_hover bg_detail'
+  }, void 0, '\u67E5\u770B\u8BE6\u60C5');
+  
+  var _ref2 = (0, _jsx3.default)('span', {
+    className: 'bg_hover bg_detail'
+  }, void 0, '\u67E5\u770B\u8BE6\u60C5');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var Panel1Box = function (_Component) {
     (0, _inherits3.default)(Panel1Box, _Component);
   
     function Panel1Box() {
       (0, _classCallCheck3.default)(this, Panel1Box);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Panel1Box).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Panel1Box.__proto__ || (0, _getPrototypeOf2.default)(Panel1Box)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Panel1Box, [{
@@ -5441,7 +5843,7 @@ module.exports =
   
     function ResourceDetail() {
       (0, _classCallCheck3.default)(this, ResourceDetail);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ResourceDetail).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ResourceDetail.__proto__ || (0, _getPrototypeOf2.default)(ResourceDetail)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ResourceDetail, [{
@@ -5451,7 +5853,11 @@ module.exports =
         var imageLength = this.props.imageList[0] == 1 ? 0 : this.props.imageList.length;
         var volumesLength = this.props.volumesList[0] == 1 ? 0 : this.props.volumesList.length;
         return (0, _jsx3.default)(_reactBootstrap.Panel, {
+<<<<<<< HEAD
           header: '资源详细'
+=======
+          header: '\u8D44\u6E90\u8BE6\u7EC6'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('ul', {
           className: _Dashboard2.default.p1List
         }, void 0, (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
@@ -5461,27 +5867,45 @@ module.exports =
           className: 'icon-service'
         }, void 0, (0, _jsx3.default)('p', {
           className: _Dashboard2.default.p1BoxRightTxt
+<<<<<<< HEAD
         }, void 0, '服务', _ref3), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
           className: _Dashboard2.default.p1BoxRightNum
         }, void 0, serviceLength), '个')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+=======
+        }, void 0, '\u670D\u52A1', _ref3), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxRightNum
+        }, void 0, serviceLength), '\u4E2A')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           to: '/imageForMy'
         }, void 0, (0, _jsx3.default)(Panel1Box, {
           theme: 'p1box_image',
           className: 'icon-mirrorceer'
         }, void 0, (0, _jsx3.default)('p', {
           className: _Dashboard2.default.p1BoxRightTxt
+<<<<<<< HEAD
         }, void 0, '镜像', _ref4), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
           className: _Dashboard2.default.p1BoxRightNum
         }, void 0, imageLength), '个')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+=======
+        }, void 0, '\u955C\u50CF', _ref4), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxRightNum
+        }, void 0, imageLength), '\u4E2A')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(_Link2.default, {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           to: '/volumes'
         }, void 0, (0, _jsx3.default)(Panel1Box, {
           theme: 'p1box_pro',
           className: 'icon-project'
         }, void 0, (0, _jsx3.default)('p', {
           className: _Dashboard2.default.p1BoxRightTxt
+<<<<<<< HEAD
         }, void 0, '数据卷', _ref5), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
           className: _Dashboard2.default.p1BoxRightNum
         }, void 0, volumesLength), '个')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(Panel1Box, {
+=======
+        }, void 0, '\u6570\u636E\u5377', _ref5), (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxRightNum
+        }, void 0, volumesLength), '\u4E2A')))), (0, _jsx3.default)('li', {}, void 0, (0, _jsx3.default)(Panel1Box, {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           theme: 'p1box_new',
           className: 'icon-new',
           url: '/choseImage'
@@ -5489,11 +5913,19 @@ module.exports =
           to: '/choseImage'
         }, void 0, (0, _jsx3.default)('p', {
           className: _Dashboard2.default.p1BoxRightTxt
+<<<<<<< HEAD
         }, void 0, '新建服务', (0, _jsx3.default)('i', {
           className: _Dashboard2.default.p1BoxNewSvcTip
         }, void 0, 'new service'))), (0, _jsx3.default)('a', {
           className: _Dashboard2.default.p1BoxDescTxt
         }, void 0, '什么是容器云服务?')))));
+=======
+        }, void 0, '\u65B0\u5EFA\u670D\u52A1', (0, _jsx3.default)('i', {
+          className: _Dashboard2.default.p1BoxNewSvcTip
+        }, void 0, 'new service'))), (0, _jsx3.default)('a', {
+          className: _Dashboard2.default.p1BoxDescTxt
+        }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u4E91\u670D\u52A1?')))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return ResourceDetail;
@@ -5502,6 +5934,7 @@ module.exports =
   // Highcharts.getOptions().plotOptions.pie.colors=["red","blue"]
   
   
+<<<<<<< HEAD
   var _ref6 = (0, _jsx3.default)(_Loading2.default, {});
   
   var _ref7 = (0, _jsx3.default)('br', {});
@@ -5539,13 +5972,62 @@ module.exports =
   var _ref23 = (0, _jsx3.default)('p', {}, void 0, '剩余数');
   
   var _ref24 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '7'), 'G');
+=======
+  var _ref6 = (0, _jsx3.default)('p', {}, void 0, 'CPU\u603B\u5269\u4F59\u91CF', (0, _jsx3.default)('br', {}), (0, _jsx3.default)('span', {}, void 0, '30%'));
+  
+  var _ref7 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, 'CPU'), '\uFF08\u6838\uFF09\u4F7F\u7528\u60C5\u51B5');
+  
+  var _ref8 = (0, _jsx3.default)('p', {}, void 0, '\u603B\u6570\u91CF');
+  
+  var _ref9 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '10'), '\u6838');
+  
+  var _ref10 = (0, _jsx3.default)('p', {}, void 0, '\u5DF2\u4F7F\u7528');
+  
+  var _ref11 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '7'), '\u6838');
+  
+  var _ref12 = (0, _jsx3.default)('p', {}, void 0, '\u5269\u4F59\u6570');
+  
+  var _ref13 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '3'), '\u6838');
+  
+  var _ref14 = (0, _jsx3.default)('p', {}, void 0, '\u5185\u5B58\u603B\u5269\u4F59\u91CF', (0, _jsx3.default)('br', {}), (0, _jsx3.default)('span', {}, void 0, '50%'));
+  
+  var _ref15 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u5185\u5B58'), '\uFF08MB\uFF09\u4F7F\u7528\u60C5\u51B5');
+  
+  var _ref16 = (0, _jsx3.default)('p', {}, void 0, '\u603B\u6570\u91CF');
+  
+  var _ref17 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '10'), 'MB');
+  
+  var _ref18 = (0, _jsx3.default)('p', {}, void 0, '\u5DF2\u4F7F\u7528');
+  
+  var _ref19 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '5'), 'MB');
+  
+  var _ref20 = (0, _jsx3.default)('p', {}, void 0, '\u5269\u4F59\u6570');
+  
+  var _ref21 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '5'), 'MB');
+  
+  var _ref22 = (0, _jsx3.default)('p', {}, void 0, '\u6570\u636E\u5377\u603B\u5269\u4F59\u91CF', (0, _jsx3.default)('br', {}), (0, _jsx3.default)('span', {}, void 0, '70%'));
+  
+  var _ref23 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u6570\u636E\u5377'), '\uFF08G\uFF09\u4F7F\u7528\u60C5\u51B5');
+  
+  var _ref24 = (0, _jsx3.default)('p', {}, void 0, '\u603B\u6570\u91CF');
+  
+  var _ref25 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '10'), 'G');
+  
+  var _ref26 = (0, _jsx3.default)('p', {}, void 0, '\u5DF2\u4F7F\u7528');
+  
+  var _ref27 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '3'), 'G');
+  
+  var _ref28 = (0, _jsx3.default)('p', {}, void 0, '\u5269\u4F59\u6570');
+  
+  var _ref29 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '7'), 'G');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var Monitor = function (_Component3) {
     (0, _inherits3.default)(Monitor, _Component3);
   
     function Monitor() {
       (0, _classCallCheck3.default)(this, Monitor);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Monitor).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Monitor.__proto__ || (0, _getPrototypeOf2.default)(Monitor)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Monitor, [{
@@ -5677,7 +6159,11 @@ module.exports =
   
         };
         return (0, _jsx3.default)(_reactBootstrap.Panel, {
+<<<<<<< HEAD
           header: '资源配额使用情况',
+=======
+          header: '\u8D44\u6E90\u914D\u989D\u4F7F\u7528\u60C5\u51B5',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _Dashboard2.default.monitor
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceBox
@@ -5685,7 +6171,11 @@ module.exports =
           className: _Dashboard2.default.resourceItem
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceLeft
+<<<<<<< HEAD
         }, void 0, (0, _jsx3.default)('p', {}, void 0, 'CPU总剩余量', _ref7, (0, _jsx3.default)('span', {}, void 0, cpu_b, '%')), (0, _jsx3.default)('div', {
+=======
+        }, void 0, _ref6, (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _Dashboard2.default.hcItem
         }, void 0, (0, _jsx3.default)(ReactHighcharts, {
           config: config1
@@ -5693,6 +6183,7 @@ module.exports =
           className: _Dashboard2.default.resourceRight
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceHd
+<<<<<<< HEAD
         }, void 0, _ref8), (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceBd
         }, void 0, (0, _jsx3.default)('div', {
@@ -5706,6 +6197,21 @@ module.exports =
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceLeft
         }, void 0, (0, _jsx3.default)('p', {}, void 0, '内存总剩余量', _ref12, (0, _jsx3.default)('span', {}, void 0, memory_b, '%')), (0, _jsx3.default)('div', {
+=======
+        }, void 0, _ref7), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceBd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref8, _ref9), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref10, _ref11), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref12, _ref13)))), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceItem
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceLeft
+        }, void 0, _ref14, (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _Dashboard2.default.hcItem
         }, void 0, (0, _jsx3.default)(ReactHighcharts, {
           config: config2
@@ -5713,6 +6219,7 @@ module.exports =
           className: _Dashboard2.default.resourceRight
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceHd
+<<<<<<< HEAD
         }, void 0, _ref13), (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceBd
         }, void 0, (0, _jsx3.default)('div', {
@@ -5726,6 +6233,21 @@ module.exports =
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceLeft
         }, void 0, _ref17, (0, _jsx3.default)('div', {
+=======
+        }, void 0, _ref15), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceBd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref16, _ref17), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref18, _ref19), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref20, _ref21)))), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceItem
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceLeft
+        }, void 0, _ref22, (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _Dashboard2.default.hcItem
         }, void 0, (0, _jsx3.default)(ReactHighcharts, {
           config: config3
@@ -5733,6 +6255,7 @@ module.exports =
           className: _Dashboard2.default.resourceRight
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceHd
+<<<<<<< HEAD
         }, void 0, _ref18), (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceBd
         }, void 0, (0, _jsx3.default)('div', {
@@ -5742,11 +6265,23 @@ module.exports =
         }, void 0, _ref21, _ref22), (0, _jsx3.default)('div', {
           className: _Dashboard2.default.resourceInfo
         }, void 0, _ref23, _ref24))))));
+=======
+        }, void 0, _ref23), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceBd
+        }, void 0, (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref24, _ref25), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref26, _ref27), (0, _jsx3.default)('div', {
+          className: _Dashboard2.default.resourceInfo
+        }, void 0, _ref28, _ref29))))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return Monitor;
   }(_react.Component);
   
+<<<<<<< HEAD
   var _ref25 = (0, _jsx3.default)(_reactBootstrap.Button, {
     bsStyle: 'primary'
   }, void 0, '充值');
@@ -5755,30 +6290,52 @@ module.exports =
     bsStyle: 'primary',
     className: 'pull-right'
   }, void 0, '查看');
+=======
+  var _ref30 = (0, _jsx3.default)(_reactBootstrap.Button, {
+    bsStyle: 'primary'
+  }, void 0, '\u5145\u503C');
+  
+  var _ref31 = (0, _jsx3.default)(_reactBootstrap.Button, {
+    bsStyle: 'primary',
+    className: 'pull-right'
+  }, void 0, '\u67E5\u770B');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var AccountInfo = function (_Component4) {
     (0, _inherits3.default)(AccountInfo, _Component4);
   
     function AccountInfo() {
       (0, _classCallCheck3.default)(this, AccountInfo);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AccountInfo).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (AccountInfo.__proto__ || (0, _getPrototypeOf2.default)(AccountInfo)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(AccountInfo, [{
       key: 'render',
       value: function render() {
         return (0, _jsx3.default)(_reactBootstrap.Panel, {
+<<<<<<< HEAD
           header: '账户信息',
+=======
+          header: '\u8D26\u6237\u4FE1\u606F',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _Dashboard2.default.accountInfo
         }, void 0, (0, _jsx3.default)('div', {
           className: _Dashboard2.default.accountInfoBody
         }, void 0, (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {
           className: _Dashboard2.default.accountInfoSubT
+<<<<<<< HEAD
         }, void 0, '账户余额')), (0, _jsx3.default)('p', {
           className: _Dashboard2.default.accountInfoBalance
         }, void 0, (0, _jsx3.default)('span', {
           className: _Dashboard2.default.accountInfoMoney
         }, void 0, '-123.07'), '元', _ref25)), (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u8D26\u6237\u4F59\u989D')), (0, _jsx3.default)('p', {
+          className: _Dashboard2.default.accountInfoBalance
+        }, void 0, (0, _jsx3.default)('span', {
+          className: _Dashboard2.default.accountInfoMoney
+        }, void 0, '-123.07'), '\u5143', _ref30)), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _Dashboard2.default.accountInfoBody
         }, void 0, (0, _jsx3.default)('p', {
           className: _Dashboard2.default.accountInfoBusiness
@@ -5786,7 +6343,11 @@ module.exports =
           style: { lineHeight: "34px" }
         }, void 0, (0, _jsx3.default)('span', {
           className: _Dashboard2.default.accountInfoSubT
+<<<<<<< HEAD
         }, void 0, '最近交易'), _ref26)));
+=======
+        }, void 0, '\u6700\u8FD1\u4EA4\u6613'), _ref31)));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return AccountInfo;
@@ -5794,14 +6355,20 @@ module.exports =
   
   var title = '控制台';
   
+<<<<<<< HEAD
   var _ref27 = (0, _jsx3.default)(AccountInfo, {});
+=======
+  var _ref32 = (0, _jsx3.default)(Monitor, {});
+  
+  var _ref33 = (0, _jsx3.default)(AccountInfo, {});
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var Dashboard = function (_Component5) {
     (0, _inherits3.default)(Dashboard, _Component5);
   
     function Dashboard() {
       (0, _classCallCheck3.default)(this, Dashboard);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Dashboard).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Dashboard.__proto__ || (0, _getPrototypeOf2.default)(Dashboard)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Dashboard, [{
@@ -5820,7 +6387,10 @@ module.exports =
         var serviceList = this.props.serviceList;
         var imageList = this.props.imageList;
         var volumesList = this.props.volumesList;
+<<<<<<< HEAD
         var data = this.props.dashboard;
+=======
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         return (0, _jsx3.default)('div', {
           className: (0, _classnames2.default)(_Dashboard2.default.root, "containerPadding")
         }, void 0, (0, _jsx3.default)(ResourceDetail, {
@@ -5829,9 +6399,13 @@ module.exports =
           volumesList: volumesList
         }), (0, _jsx3.default)('div', {
           className: _Dashboard2.default.row
+<<<<<<< HEAD
         }, void 0, (0, _jsx3.default)(Monitor, {
           dashboard: data
         }), _ref27));
+=======
+        }, void 0, _ref32, _ref33));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return Dashboard;
@@ -5868,7 +6442,11 @@ module.exports =
   
   
   // module
+<<<<<<< HEAD
   exports.push([module.id, "._3are>li{margin-right:15px}._3are>li,._NlT{display:inline-block}._NlT{background:#f3f4f9;border-radius:.4em;overflow:hidden;border-width:1px;border-style:solid;cursor:pointer}._3KSh{float:left;text-align:center;padding:30px 25px;height:115px;box-sizing:border-box}._3KSh>span{display:block;margin:15px auto;font-size:40px;color:#fff}._1C5Y{display:inline-block;padding:5px 20px;height:115px;box-sizing:border-box}._1C5Y>span{color:#333}._3iO5{font-style:normal;font-size:38px;margin-right:5px}.TzEs{margin:15px 0 10px;font-size:18px;color:#333}.TzEs>i{font-size:12px;color:#b5b5b5;margin-left:5px}._1hxx{color:#b5b5b5;font-style:italic;display:inline-block;margin-top:10px}._2ifQ{display:block;margin:0!important}._3yW6{position:relative}._2_K6{position:absolute;top:0;right:0;width:250px}._2Joa{border-bottom:1px dashed #ccc;padding:15px;margin:0 -15px -15px}._2Joa:first-child{margin-top:-15px}._2Joa:last-child{border-bottom:0}._3LgG{color:#ccc}._1JRR{margin-top:5px}.eCGu{font-size:16px;margin:20px 0 5px}._1JRR>button{float:right;margin-top:7px}._1JRR:after{clear:both}._1BwL{font-size:32px;color:#fe6137;margin-right:5px}._34J7{margin-right:260px}._1O7d{width:100%;height:300px}._3MBy{padding:0 20px 30px;margin-top:-15px}._2Iz7{position:relative;border-bottom:1px solid #e8e8e8;padding:15px 0}._2Iz7:last-child{border:0}._2Iz7:nth-child(2) ._1j18 p span{color:#ff6c60}._2Iz7:nth-child(3) ._1j18 p span{color:#2ecc71}._2Iz7:nth-child(1) ._1pun>p>span{color:#56c8f2}._2Iz7:nth-child(2) ._1pun>p>span{color:#ff6c60}._2Iz7:nth-child(3) ._1pun>p>span{color:#2ecc71}._1pun{width:240px;height:155px;position:absolute;top:10px;left:0;overflow:hidden}._1pun:after{content:\"\";width:1px;background:#e8e8e8;height:93px;right:0;top:25px}._1pun:after,._1pun>p{display:inline-block;position:absolute}._1pun>p{color:#333;z-index:2;top:75px;left:24px;text-align:center;min-width:98px}._1pun>p>span{font-size:20px}._1zhx{width:125px;height:125px;margin-top:20px}._2EVm{margin-left:240px;height:155px;padding-left:70px;padding-right:60px}._1j18{padding-bottom:10px;border-bottom:1px solid #e8e8e8}._1j18 p{color:#666;padding-top:7px}._1j18 p span{font-size:18px;color:#56c8f2}._1vFz{width:35%;display:inline-block;position:relative;padding-top:15px;text-align:center}._1vFz:after{content:'';width:1px;height:58px;position:absolute;top:14px;right:0;background:#e8e8e8}._1vFz:first-child{text-align:left;width:32%}._1vFz:last-child{width:30%}._1vFz:last-child:after{display:none}._1vFz p{color:#666}._1vFz p:last-child{color:#333}._1vFz p span{font-size:28px}", ""]);
+=======
+  exports.push([module.id, "._3are>li{margin-right:15px}._3are>li,._NlT{display:inline-block}._NlT{background:#f3f4f9;border-radius:.4em;overflow:hidden;border-width:1px;border-style:solid;cursor:pointer}._3KSh{float:left;text-align:center;padding:30px 25px;height:115px;box-sizing:border-box}._3KSh>span{display:block;margin:15px auto;font-size:40px;color:#fff}._1C5Y{display:inline-block;padding:5px 20px;height:115px;box-sizing:border-box}._1C5Y>span{color:#333}._3iO5{font-style:normal;font-size:38px;margin-right:5px}.TzEs{margin:15px 0 10px;font-size:18px;color:#333}.TzEs>i{font-size:12px;color:#b5b5b5;margin-left:5px}._1hxx{color:#b5b5b5;font-style:italic;display:inline-block;margin-top:10px}._2ifQ{display:block;margin:0!important}._3yW6{position:relative}._2_K6{position:absolute;top:0;right:0;width:250px}._2Joa{border-bottom:1px dashed #ccc;padding:15px;margin:0 -15px -15px}._2Joa:first-child{margin-top:-15px}._2Joa:last-child{border-bottom:0}._3LgG{color:#ccc}._1JRR{margin-top:5px}.eCGu{font-size:16px;margin:20px 0 5px}._1JRR>button{float:right;margin-top:7px}._1JRR:after{clear:both}._1BwL{font-size:32px;color:#fe6137;margin-right:5px}._34J7{margin-right:260px}._1O7d{width:100%;height:300px}._3MBy{padding:0 20px 30px;margin-top:-15px}._2Iz7{position:relative;border-bottom:1px solid #e8e8e8;padding:15px 0}._2Iz7:last-child{border:0}._2Iz7:nth-child(2) ._1j18 p span{color:#ff6c60}._2Iz7:nth-child(3) ._1j18 p span{color:#2ecc71}._2Iz7:nth-child(1) ._1pun>p>span{color:#56c8f2}._2Iz7:nth-child(2) ._1pun>p>span{color:#ff6c60}._2Iz7:nth-child(3) ._1pun>p>span{color:#2ecc71}._1pun{width:240px;height:155px;position:absolute;top:10px;left:0;overflow:hidden}._1pun:after{content:\"\";width:1px;background:#e8e8e8;height:93px;right:0;top:25px}._1pun:after,._1pun>p{display:inline-block;position:absolute}._1pun>p{color:#333;z-index:2;top:80px;left:24px;text-align:center;min-width:98px}._1pun>p>span{font-size:20px}._1zhx{width:125px;height:125px;margin-top:20px}._2EVm{margin-left:240px;height:155px;padding-left:70px;padding-right:60px}._1j18{padding-bottom:10px;border-bottom:1px solid #e8e8e8}._1j18 p{color:#666;padding-top:7px}._1j18 p span{font-size:18px;color:#56c8f2}._1vFz{width:45%;display:inline-block;position:relative;padding-top:15px;text-align:center}._1vFz:after{content:'';width:1px;height:58px;position:absolute;top:14px;right:0;background:#e8e8e8}._1vFz:first-child{text-align:left;width:25%}._1vFz:last-child{width:30%}._1vFz:last-child:after{display:none}._1vFz p{color:#666}._1vFz p:last-child{color:#333}._1vFz p span{font-size:28px}", ""]);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   // exports
   exports.locals = {
@@ -5902,6 +6480,7 @@ module.exports =
 
 /***/ },
 /* 92 */
+<<<<<<< HEAD
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -5965,12 +6544,18 @@ module.exports =
 
 /***/ },
 /* 93 */
+=======
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-highcharts");
 
 /***/ },
+<<<<<<< HEAD
 /* 94 */
+=======
+/* 93 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5994,7 +6579,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 95 */
+=======
+/* 94 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6148,7 +6737,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 96 */
+=======
+/* 95 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6173,7 +6766,11 @@ module.exports =
   exports.default = makeGetServiceListSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 97 */
+=======
+/* 96 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6227,7 +6824,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 98 */
+=======
+/* 97 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6252,7 +6853,11 @@ module.exports =
   exports.default = makeGetImageListSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 99 */
+=======
+/* 98 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6437,7 +7042,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 100 */
+=======
+/* 99 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6461,6 +7070,7 @@ module.exports =
   exports.default = makeGetVolumesListSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6542,6 +7152,9 @@ module.exports =
 
 /***/ },
 /* 103 */
+=======
+/* 100 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6566,7 +7179,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ImageCenterContainer = __webpack_require__(104);
+=======
+  var _ImageCenterContainer = __webpack_require__(101);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageCenterContainer2 = _interopRequireDefault(_ImageCenterContainer);
   
@@ -6598,7 +7215,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 104 */
+=======
+/* 101 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6607,15 +7228,25 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ImageCenter = __webpack_require__(105);
+=======
+  var _ImageCenter = __webpack_require__(102);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageCenter2 = _interopRequireDefault(_ImageCenter);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _imageList = __webpack_require__(97);
   
   var _imageListSelector = __webpack_require__(98);
+=======
+  var _imageList = __webpack_require__(96);
+  
+  var _imageListSelector = __webpack_require__(97);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
   
@@ -6641,7 +7272,11 @@ module.exports =
   exports.default = ImageListContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 105 */
+=======
+/* 102 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6688,15 +7323,24 @@ module.exports =
     readOnly: true
   });
   
+<<<<<<< HEAD
   var _ref2 = (0, _jsx3.default)('h1', {}, void 0, '镜像名称');
   
   var _ref3 = (0, _jsx3.default)('span', {
     className: 'icon-collection'
   }, void 0, '收藏');
+=======
+  var _ref2 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref3 = (0, _jsx3.default)('span', {
+    className: 'icon-collection'
+  }, void 0, '\u6536\u85CF');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref4 = (0, _jsx3.default)(_reactBootstrap.Button, {
     bsStyle: 'primary',
     bsSize: 'small'
+<<<<<<< HEAD
   }, void 0, '部署');
   
   var _ref5 = (0, _jsx3.default)('h1', {}, void 0, '镜像名称');
@@ -6710,15 +7354,38 @@ module.exports =
   }, void 0, (0, _jsx3.default)(_reactBootstrap.DropdownButton, {
     bsSize: 'xs',
     title: '操作',
+=======
+  }, void 0, '\u90E8\u7F72');
+  
+  var _ref5 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref6 = (0, _jsx3.default)('div', {
+    className: 'clearfix imgHd'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u955C\u50CF\u4ED3\u5E93'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u955C\u50CF\uFF1F'), (0, _jsx3.default)('div', {
+    className: 'imgDropBox'
+  }, void 0, (0, _jsx3.default)(_reactBootstrap.DropdownButton, {
+    bsSize: 'xs',
+    title: '\u64CD\u4F5C',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     id: 'dropDown',
     className: 'dropDownForOpt'
   }, void 0, (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '1'
+<<<<<<< HEAD
   }, void 0, '全选'), (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '2'
   }, void 0, '删除'), (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '2'
   }, void 0, '置顶'))));
+=======
+  }, void 0, '\u5168\u9009'), (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u5220\u9664'), (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u7F6E\u9876'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref7 = (0, _jsx3.default)('a', {
     type: 'button',
@@ -6730,7 +7397,7 @@ module.exports =
   
     function ImageCenter() {
       (0, _classCallCheck3.default)(this, ImageCenter);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageCenter).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ImageCenter.__proto__ || (0, _getPrototypeOf2.default)(ImageCenter)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ImageCenter, [{
@@ -6753,7 +7420,11 @@ module.exports =
           }, void 0, _ref, (0, _jsx3.default)('img', {
             width: 40,
             height: 40,
+<<<<<<< HEAD
             src: __webpack_require__(106),
+=======
+            src: __webpack_require__(103),
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             alt: 'img'
           })), (0, _jsx3.default)('div', {
             className: 'imagesListInfo'
@@ -6781,7 +7452,11 @@ module.exports =
             }, void 0, (0, _jsx3.default)('img', {
               width: 40,
               height: 40,
+<<<<<<< HEAD
               src: __webpack_require__(106),
+=======
+              src: __webpack_require__(103),
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
               alt: 'img'
             })), (0, _jsx3.default)('div', {
               className: 'imagesListInfo'
@@ -6809,9 +7484,15 @@ module.exports =
           className: 'imageSearch'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'search'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }), _ref7)), (0, _jsx3.default)(_reactBootstrap.Panel, {
           className: 'imagesRankingList',
           header: '排行榜'
+=======
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref7)), (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'imagesRankingList',
+          header: '\u6392\u884C\u699C'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, this.getImageTopTen(10))));
       }
     }]);
@@ -6824,13 +7505,21 @@ module.exports =
   exports.default = ImageCenter;
 
 /***/ },
+<<<<<<< HEAD
 /* 106 */
+=======
+/* 103 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphNmIzYTA5MS1mZTUwLTRkOGMtOGQ1NS1kYTcxMDUyYjdkMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0Q0OTkxN0E2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0Q0OTkxNzk2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphOThjNzgzOS1kYWE3LTQ3ZjgtODAzOS1jMzc0ZmIzYmI1ODUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTZiM2EwOTEtZmU1MC00ZDhjLThkNTUtZGE3MTA1MmI3ZDI2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"
 
 /***/ },
+<<<<<<< HEAD
 /* 107 */
+=======
+/* 104 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6855,7 +7544,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ImageForPlatformContainer = __webpack_require__(108);
+=======
+  var _ImageForPlatformContainer = __webpack_require__(105);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageForPlatformContainer2 = _interopRequireDefault(_ImageForPlatformContainer);
   
@@ -6887,7 +7580,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 108 */
+=======
+/* 105 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6896,12 +7593,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ImageForPlatform = __webpack_require__(109);
+=======
+  var _ImageForPlatform = __webpack_require__(106);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageForPlatform2 = _interopRequireDefault(_ImageForPlatform);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _imageList = __webpack_require__(97);
   
   var _breadcumb = __webpack_require__(94);
@@ -6909,6 +7611,15 @@ module.exports =
   var _deployService = __webpack_require__(110);
   
   var _imageListSelector = __webpack_require__(98);
+=======
+  var _imageList = __webpack_require__(96);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _deployService = __webpack_require__(108);
+  
+  var _imageListSelector = __webpack_require__(97);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
   
@@ -6940,7 +7651,11 @@ module.exports =
   exports.default = ImageForPlatformContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 109 */
+=======
+/* 106 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -6985,13 +7700,21 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
+=======
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)('div', {}, void 0, '暂无数据~');
+=======
+  var _ref = (0, _jsx3.default)('div', {}, void 0, '\u6682\u65E0\u6570\u636E~');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref2 = (0, _jsx3.default)('div', {
     className: 'text-center'
@@ -6999,6 +7722,7 @@ module.exports =
   
   var _ref3 = (0, _jsx3.default)('span', {
     className: 'icon-collection'
+<<<<<<< HEAD
   }, void 0, '收藏');
   
   var _ref4 = (0, _jsx3.default)('h1', {}, void 0, '镜像名称');
@@ -7008,6 +7732,17 @@ module.exports =
   }, void 0, (0, _jsx3.default)('span', {}, void 0, '镜像仓库'), (0, _jsx3.default)('a', {
     href: 'javascript:;'
   }, void 0, '什么是容器镜像？'), (0, _jsx3.default)('div', {
+=======
+  }, void 0, '\u6536\u85CF');
+  
+  var _ref4 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref5 = (0, _jsx3.default)('div', {
+    className: 'clearfix imgHd'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u955C\u50CF\u4ED3\u5E93'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u955C\u50CF\uFF1F'), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'imgDropBox'
   }, void 0));
   
@@ -7021,7 +7756,7 @@ module.exports =
   
     function ImageForPlatform() {
       (0, _classCallCheck3.default)(this, ImageForPlatform);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageForPlatform).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ImageForPlatform.__proto__ || (0, _getPrototypeOf2.default)(ImageForPlatform)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ImageForPlatform, [{
@@ -7058,6 +7793,7 @@ module.exports =
           }, void 0, (0, _jsx3.default)('img', {
             width: 40,
             height: 40,
+<<<<<<< HEAD
             src: __webpack_require__(106),
             alt: 'img'
           })), (0, _jsx3.default)('div', {
@@ -7065,12 +7801,25 @@ module.exports =
           }, void 0, (0, _jsx3.default)('h1', {}, void 0, '镜像名称 : ', (0, _jsx3.default)(_Link2.default, {
             to: '/imageDetail/' + item.uuid
           }, void 0, item.repository)), (0, _jsx3.default)('p', {}, void 0, '镜像简介 : ', item.detail))), (0, _jsx3.default)('div', {
+=======
+            src: __webpack_require__(103),
+            alt: 'img'
+          })), (0, _jsx3.default)('div', {
+            className: 'imagesListInfo'
+          }, void 0, (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0 : ', (0, _jsx3.default)(_Link2.default, {
+            to: '/imageDetail/' + item.uuid
+          }, void 0, item.repository)), (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u7B80\u4ECB : ', item.detail))), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             className: 'bd clearfix'
           }, void 0, _ref3, (0, _jsx3.default)(_Link2.default, {
             to: '/configContainer',
             className: 'btn btn-sm btn-primary',
             onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid)
+<<<<<<< HEAD
           }, void 0, '部署'))));
+=======
+          }, void 0, '\u90E8\u7F72'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         });
         return body;
       }
@@ -7089,7 +7838,11 @@ module.exports =
           }, void 0, (0, _jsx3.default)('img', {
             width: 40,
             height: 40,
+<<<<<<< HEAD
             src: __webpack_require__(106),
+=======
+            src: __webpack_require__(103),
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             alt: 'img'
           })), (0, _jsx3.default)('div', {
             className: 'imagesListInfo'
@@ -7117,9 +7870,15 @@ module.exports =
           className: 'imageSearch'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'search'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }), _ref6)), (0, _jsx3.default)(_reactBootstrap.Panel, {
           className: 'imagesRankingList',
           header: '排行榜'
+=======
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref6)), (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'imagesRankingList',
+          header: '\u6392\u884C\u699C'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, this.getImageTopTen(10))));
       }
     }]);
@@ -7132,7 +7891,74 @@ module.exports =
   exports.default = ImageForPlatform;
 
 /***/ },
+<<<<<<< HEAD
 /* 110 */
+=======
+/* 107 */
+/***/ function(module, exports, __webpack_require__) {
+
+  "use strict";
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _jsx2 = __webpack_require__(1);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(46);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(47);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(48);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(49);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(50);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(10);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var _ref = (0, _jsx3.default)("div", {
+    className: "listRefresh icon-refresh"
+  }, void 0);
+  
+  var Loading = function (_Component) {
+    (0, _inherits3.default)(Loading, _Component);
+  
+    function Loading() {
+      (0, _classCallCheck3.default)(this, Loading);
+      return (0, _possibleConstructorReturn3.default)(this, (Loading.__proto__ || (0, _getPrototypeOf2.default)(Loading)).apply(this, arguments));
+    }
+  
+    (0, _createClass3.default)(Loading, [{
+      key: "render",
+      value: function render() {
+        return _ref;
+      }
+    }]);
+    return Loading;
+  }(_react.Component);
+  
+  exports.default = Loading;
+
+/***/ },
+/* 108 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7307,7 +8133,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 111 */
+=======
+/* 109 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7332,7 +8162,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ImageForMyContainer = __webpack_require__(112);
+=======
+  var _ImageForMyContainer = __webpack_require__(110);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageForMyContainer2 = _interopRequireDefault(_ImageForMyContainer);
   
@@ -7364,7 +8198,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 112 */
+=======
+/* 110 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7373,12 +8211,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ImageForMy = __webpack_require__(113);
+=======
+  var _ImageForMy = __webpack_require__(111);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageForMy2 = _interopRequireDefault(_ImageForMy);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _imageList = __webpack_require__(97);
   
   var _imageListSelector = __webpack_require__(98);
@@ -7390,6 +8233,19 @@ module.exports =
   var _deployService = __webpack_require__(110);
   
   var _building = __webpack_require__(115);
+=======
+  var _imageList = __webpack_require__(96);
+  
+  var _imageListSelector = __webpack_require__(97);
+  
+  var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _deployService = __webpack_require__(108);
+  
+  var _building = __webpack_require__(113);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -7422,7 +8278,11 @@ module.exports =
   exports.default = ImageForMyContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 113 */
+=======
+/* 111 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7467,11 +8327,19 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _Confirm = __webpack_require__(114);
+=======
+  var _Loading = __webpack_require__(107);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
+  var _Confirm = __webpack_require__(112);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
@@ -7479,7 +8347,11 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)('div', {}, void 0, '暂无数据~');
+=======
+  var _ref = (0, _jsx3.default)('div', {}, void 0, '\u6682\u65E0\u6570\u636E~');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref2 = (0, _jsx3.default)('div', {
     className: 'text-center'
@@ -7487,6 +8359,7 @@ module.exports =
   
   var _ref3 = (0, _jsx3.default)('span', {
     className: 'icon-collection'
+<<<<<<< HEAD
   }, void 0, '收藏');
   
   var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
@@ -7504,6 +8377,25 @@ module.exports =
   }, void 0, (0, _jsx3.default)('span', {}, void 0, '镜像仓库'), (0, _jsx3.default)('a', {
     href: 'javascript:;'
   }, void 0, '什么是容器镜像？'), (0, _jsx3.default)('div', {
+=======
+  }, void 0, '\u6536\u85CF');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u7F16\u8F91');
+  
+  var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref6 = (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref7 = (0, _jsx3.default)('div', {
+    className: 'clearfix imgHd'
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u955C\u50CF\u4ED3\u5E93'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u955C\u50CF\uFF1F'), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'imgDropBox'
   }));
   
@@ -7518,7 +8410,7 @@ module.exports =
     function ImageForMy() {
       (0, _classCallCheck3.default)(this, ImageForMy);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageForMy).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (ImageForMy.__proto__ || (0, _getPrototypeOf2.default)(ImageForMy)).call(this));
   
       _this.state = {
         delData: {}
@@ -7578,6 +8470,7 @@ module.exports =
           }, void 0, (0, _jsx3.default)('img', {
             width: 40,
             height: 40,
+<<<<<<< HEAD
             src: __webpack_require__(106),
             alt: 'img'
           })), (0, _jsx3.default)('div', {
@@ -7588,6 +8481,18 @@ module.exports =
             className: 'bd clearfix'
           }, void 0, _ref3, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
             title: '部署',
+=======
+            src: __webpack_require__(103),
+            alt: 'img'
+          })), (0, _jsx3.default)('div', {
+            className: 'imagesListInfo'
+          }, void 0, (0, _jsx3.default)('h1', {}, void 0, '\u955C\u50CF\u540D\u79F0 : ', (0, _jsx3.default)(_Link2.default, {
+            to: '/imageDetail/' + item.uuid
+          }, void 0, item.repository)), (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u7B80\u4ECB : ', item.detail))), (0, _jsx3.default)('div', {
+            className: 'bd clearfix'
+          }, void 0, _ref3, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
+            title: '\u90E8\u7F72',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             bsStyle: 'primary',
             bsSize: 'small',
             onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid),
@@ -7612,7 +8517,11 @@ module.exports =
           }, void 0, (0, _jsx3.default)('img', {
             width: 40,
             height: 40,
+<<<<<<< HEAD
             src: __webpack_require__(106),
+=======
+            src: __webpack_require__(103),
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             alt: 'img'
           })), (0, _jsx3.default)('div', {
             className: 'imagesListInfo'
@@ -7645,12 +8554,20 @@ module.exports =
           id: 'asTabs'
         }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 1,
+<<<<<<< HEAD
           title: '我的镜像'
+=======
+          title: '\u6211\u7684\u955C\u50CF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'asTableBox TableTextLeft'
         }, void 0, this.getImageList())), (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 2,
+<<<<<<< HEAD
           title: '我的收藏'
+=======
+          title: '\u6211\u7684\u6536\u85CF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'asTableBox TableTextLeft'
         }, void 0, this.getImageList()))))), (0, _jsx3.default)('div', {
@@ -7659,12 +8576,21 @@ module.exports =
           className: 'imageSearch'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'search'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }), _ref8)), (0, _jsx3.default)(_reactBootstrap.Panel, {
           className: 'imagesRankingList',
           header: '排行榜'
         }, void 0, this.getImageTopTen(10))), _react2.default.createElement(_Confirm2.default, {
           title: '警告',
           text: '确定要删除此镜像吗?',
+=======
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref8)), (0, _jsx3.default)(_reactBootstrap.Panel, {
+          className: 'imagesRankingList',
+          header: '\u6392\u884C\u699C'
+        }, void 0, this.getImageTopTen(10))), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u786E\u5B9A\u8981\u5220\u9664\u6B64\u955C\u50CF\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           func: function func() {
             _this3.props.onDeleteImage(_this3.state.delData);
           },
@@ -7682,7 +8608,11 @@ module.exports =
   exports.default = ImageForMy;
 
 /***/ },
+<<<<<<< HEAD
 /* 114 */
+=======
+/* 112 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -7729,7 +8659,11 @@ module.exports =
   
   var _ref = (0, _jsx3.default)("span", {
     "aria-hidden": "true"
+<<<<<<< HEAD
   }, void 0, "×");
+=======
+  }, void 0, "\xD7");
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var Confirm = function (_Component) {
     (0, _inherits3.default)(Confirm, _Component);
@@ -7737,7 +8671,7 @@ module.exports =
     function Confirm(props) {
       (0, _classCallCheck3.default)(this, Confirm);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Confirm).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (Confirm.__proto__ || (0, _getPrototypeOf2.default)(Confirm)).call(this, props));
   
       _this.state = {
         show: false
@@ -7796,10 +8730,17 @@ module.exports =
           }, void 0, (0, _jsx3.default)("button", {
             className: "btn btn-default",
             onClick: this.hide.bind(this)
+<<<<<<< HEAD
           }, void 0, "取消"), (0, _jsx3.default)("button", {
             className: "btn btn-primary",
             onClick: this.isOk.bind(this)
           }, void 0, "确定"))
+=======
+          }, void 0, "\u53D6\u6D88"), (0, _jsx3.default)("button", {
+            className: "btn btn-primary",
+            onClick: this.isOk.bind(this)
+          }, void 0, "\u786E\u5B9A"))
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         );
       }
     }]);
@@ -7809,7 +8750,11 @@ module.exports =
   exports.default = Confirm;
 
 /***/ },
+<<<<<<< HEAD
 /* 115 */
+=======
+/* 113 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -7846,7 +8791,11 @@ module.exports =
   
   var _notification = __webpack_require__(78);
   
+<<<<<<< HEAD
   var _imageList = __webpack_require__(97);
+=======
+  var _imageList = __webpack_require__(96);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -8188,7 +9137,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 116 */
+=======
+/* 114 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8213,7 +9166,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ImageDetailContainer = __webpack_require__(117);
+=======
+  var _ImageDetailContainer = __webpack_require__(115);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageDetailContainer2 = _interopRequireDefault(_ImageDetailContainer);
   
@@ -8255,7 +9212,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 117 */
+=======
+/* 115 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8264,12 +9225,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ImageDetail = __webpack_require__(118);
+=======
+  var _ImageDetail = __webpack_require__(116);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ImageDetail2 = _interopRequireDefault(_ImageDetail);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _imageDetail = __webpack_require__(124);
   
   var _imageDetailSelector = __webpack_require__(125);
@@ -8285,6 +9251,23 @@ module.exports =
   var _reviseImage = __webpack_require__(126);
   
   var _isBtnStateSelector = __webpack_require__(127);
+=======
+  var _imageDetail = __webpack_require__(122);
+  
+  var _imageDetailSelector = __webpack_require__(123);
+  
+  var _imageDetailSelector2 = _interopRequireDefault(_imageDetailSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _deployService = __webpack_require__(108);
+  
+  var _building = __webpack_require__(113);
+  
+  var _reviseImage = __webpack_require__(124);
+  
+  var _isBtnStateSelector = __webpack_require__(125);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -8324,7 +9307,11 @@ module.exports =
   exports.default = ImageDetailContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 118 */
+=======
+/* 116 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8367,6 +9354,7 @@ module.exports =
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _utils = __webpack_require__(119);
   
   var _reactBootstrap = __webpack_require__(70);
@@ -8380,6 +9368,21 @@ module.exports =
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
   var _Loading = __webpack_require__(92);
+=======
+  var _utils = __webpack_require__(117);
+  
+  var _reactBootstrap = __webpack_require__(70);
+  
+  var _Toggle = __webpack_require__(118);
+  
+  var _Toggle2 = _interopRequireDefault(_Toggle);
+  
+  var _Confirm = __webpack_require__(112);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -8395,7 +9398,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -8429,6 +9432,7 @@ module.exports =
   
   var _ref = (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
     colSpan: '3'
+<<<<<<< HEAD
   }, void 0, '暂无数据~'));
   
   var _ref2 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
@@ -8438,6 +9442,17 @@ module.exports =
   }, void 0, '版本'), (0, _jsx3.default)('th', {
     width: '34%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u6682\u65E0\u6570\u636E~'));
+  
+  var _ref2 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '33%'
+  }, void 0, '\u955C\u50CF\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '33%'
+  }, void 0, '\u7248\u672C'), (0, _jsx3.default)('th', {
+    width: '34%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref3 = (0, _jsx3.default)('div', {
     className: 'text-center'
@@ -8449,6 +9464,7 @@ module.exports =
   
   var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '1'
+<<<<<<< HEAD
   }, void 0, '编辑');
   
   var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
@@ -8470,15 +9486,46 @@ module.exports =
   var _ref10 = (0, _jsx3.default)('span', {
     'aria-hidden': 'true'
   }, void 0, '×');
+=======
+  }, void 0, '\u7F16\u8F91');
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '2'
+  }, void 0, '\u5220\u9664');
+  
+  var _ref7 = (0, _jsx3.default)('span', {
+    className: 'sdPItemName'
+  }, void 0, '\u955C\u50CF\u5730\u5740:');
+  
+  var _ref8 = (0, _jsx3.default)('span', {
+    className: 'sdPItemName'
+  }, void 0, '\u62C9\u53D6\u547D\u4EE4:');
+  
+  var _ref9 = (0, _jsx3.default)('span', {
+    className: 'sdPItemName'
+  }, void 0, '\u662F\u5426\u516C\u5F00:');
+  
+  var _ref10 = (0, _jsx3.default)('span', {
+    'aria-hidden': 'true'
+  }, void 0, '\xD7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref11 = (0, _jsx3.default)('h4', {
     className: 'modal-title',
     id: 'contained-modal-title-sm'
+<<<<<<< HEAD
   }, void 0, '拉取版本: latest扩容');
   
   var _ref12 = (0, _jsx3.default)('p', {
     className: 'idModalFirst'
   }, void 0, '拉取命令:');
+=======
+  }, void 0, '\u62C9\u53D6\u7248\u672C: latest\u6269\u5BB9');
+  
+  var _ref12 = (0, _jsx3.default)('p', {
+    className: 'idModalFirst'
+  }, void 0, '\u62C9\u53D6\u547D\u4EE4:');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref13 = (0, _jsx3.default)(_reactBootstrap.FormControl, {
     type: 'text',
@@ -8487,11 +9534,19 @@ module.exports =
   
   var _ref14 = (0, _jsx3.default)('p', {
     className: 'idModalLast'
+<<<<<<< HEAD
   }, void 0, '拉取镜像前请先登录: docker login daocloud.io');
   
   var _ref15 = (0, _jsx3.default)(_reactBootstrap.Button, {
     bsStyle: 'primary'
   }, void 0, '复制');
+=======
+  }, void 0, '\u62C9\u53D6\u955C\u50CF\u524D\u8BF7\u5148\u767B\u5F55: docker login daocloud.io');
+  
+  var _ref15 = (0, _jsx3.default)(_reactBootstrap.Button, {
+    bsStyle: 'primary'
+  }, void 0, '\u590D\u5236');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var ImageDetail = function (_Component2) {
     (0, _inherits3.default)(ImageDetail, _Component2);
@@ -8499,7 +9554,7 @@ module.exports =
     function ImageDetail(props) {
       (0, _classCallCheck3.default)(this, ImageDetail);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageDetail).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ImageDetail.__proto__ || (0, _getPrototypeOf2.default)(ImageDetail)).call(this, props));
   
       _this2.state = {
         show: false,
@@ -8565,12 +9620,20 @@ module.exports =
           return (0, _jsx3.default)('tr', {}, i, (0, _jsx3.default)('td', {}, void 0, data.repository), (0, _jsx3.default)('td', {}, void 0, item.tag), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)(_reactBootstrap.SplitButton, {
             onClick: _this3.deployImage.bind(_this3, data.repository),
             bsStyle: 'primary',
+<<<<<<< HEAD
             title: '部署',
+=======
+            title: '\u90E8\u7F72',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             id: 'building-table-line-' + i
           }, void 0, (0, _jsx3.default)(_reactBootstrap.MenuItem, {
             eventKey: '1',
             onClick: _this3.showModal.bind(_this3)
+<<<<<<< HEAD
           }, void 0, '拉取'))));
+=======
+          }, void 0, '\u62C9\u53D6'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         });
       }
     }, {
@@ -8617,8 +9680,11 @@ module.exports =
         var data = this.props.imageDetail;
         if (!data.repository) return _ref3;
         var tag = data.image_tag ? ':' + data.image_tag : ":latest";
+<<<<<<< HEAD
         var userName = this.context.store.getState().user_info.user_name;
         var isMy = userName == data.user_name;
+=======
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         return (0, _jsx3.default)('div', {
           className: 'containerBgF containerPadding'
         }, data.is_public, (0, _jsx3.default)('div', {
@@ -8629,9 +9695,15 @@ module.exports =
           className: 'sdTitle'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'sdTitleItem'
+<<<<<<< HEAD
         }, void 0, '镜像名称:', (0, _jsx3.default)('span', {}, void 0, data.repository)), (0, _jsx3.default)('div', {
           className: 'sdTitleItem'
         }, void 0, '最近部署时间:', (0, _jsx3.default)('span', {
+=======
+        }, void 0, '\u955C\u50CF\u540D\u79F0:', (0, _jsx3.default)('span', {}, void 0, data.repository)), (0, _jsx3.default)('div', {
+          className: 'sdTitleItem'
+        }, void 0, '\u6700\u8FD1\u90E8\u7F72\u65F6\u95F4:', (0, _jsx3.default)('span', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'color999'
         }, void 0, (0, _utils.timeRange)(new Date(data.update_time)))), (0, _jsx3.default)('div', {
           className: 'sdTitleItem imageDetail_lastItem'
@@ -8639,7 +9711,11 @@ module.exports =
           onClick: this.deployImage.bind(this, data.repository, data.uuid),
           onSelect: this.selectImage.bind(this, data.repository, data.uuid),
           bsStyle: 'primary',
+<<<<<<< HEAD
           title: '部署最新版本',
+=======
+          title: '\u90E8\u7F72\u6700\u65B0\u7248\u672C',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           id: 'building-table-line'
         }, void 0, _ref5, _ref6))), (0, _jsx3.default)('div', {
           className: 'sdPBox'
@@ -8666,14 +9742,22 @@ module.exports =
           id: 'sdTabs'
         }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 1,
+<<<<<<< HEAD
           title: '概览'
+=======
+          title: '\u6982\u89C8'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'idTableBox'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'idOverview'
         }, void 0, data.detail))), (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 2,
+<<<<<<< HEAD
           title: '版本'
+=======
+          title: '\u7248\u672C'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'idTableBox'
         }, void 0, this.getVersion(), _react2.default.createElement(
@@ -8696,10 +9780,17 @@ module.exports =
           }, void 0, _ref15, (0, _jsx3.default)(_reactBootstrap.Button, {
             bsStyle: 'default',
             onClick: this.hideModal.bind(this)
+<<<<<<< HEAD
           }, void 0, '取消'))))
         ))))), _react2.default.createElement(_Confirm2.default, {
           title: '警告',
           text: '确定要删除此镜像吗?',
+=======
+          }, void 0, '\u53D6\u6D88'))))
+        ))))), _react2.default.createElement(_Confirm2.default, {
+          title: '\u8B66\u544A',
+          text: '\u786E\u5B9A\u8981\u5220\u9664\u6B64\u955C\u50CF\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           func: function func() {
             _this4.props.onDeleteImage(_this4.state.delData);
           },
@@ -8717,7 +9808,11 @@ module.exports =
   exports.default = ImageDetail;
 
 /***/ },
+<<<<<<< HEAD
 /* 119 */
+=======
+/* 117 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   "use strict";
@@ -8767,7 +9862,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 120 */
+=======
+/* 118 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -8796,11 +9895,19 @@ module.exports =
   
   var classNames = _interopRequire(__webpack_require__(66));
   
+<<<<<<< HEAD
   var Check = _interopRequire(__webpack_require__(121));
   
   var X = _interopRequire(__webpack_require__(122));
   
   var PureRenderMixin = _interopRequire(__webpack_require__(123));
+=======
+  var Check = _interopRequire(__webpack_require__(119));
+  
+  var X = _interopRequire(__webpack_require__(120));
+  
+  var PureRenderMixin = _interopRequire(__webpack_require__(121));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   module.exports = React.createClass({
     mixins: [PureRenderMixin],
@@ -8866,7 +9973,11 @@ module.exports =
   });
 
 /***/ },
+<<<<<<< HEAD
 /* 121 */
+=======
+/* 119 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -8894,7 +10005,11 @@ module.exports =
   });
 
 /***/ },
+<<<<<<< HEAD
 /* 122 */
+=======
+/* 120 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -8923,13 +10038,21 @@ module.exports =
   });
 
 /***/ },
+<<<<<<< HEAD
 /* 123 */
+=======
+/* 121 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-addons-pure-render-mixin");
 
 /***/ },
+<<<<<<< HEAD
 /* 124 */
+=======
+/* 122 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -8986,7 +10109,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 125 */
+=======
+/* 123 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9011,7 +10138,11 @@ module.exports =
   exports.default = makeGetImageDetail;
 
 /***/ },
+<<<<<<< HEAD
 /* 126 */
+=======
+/* 124 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9088,7 +10219,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 127 */
+=======
+/* 125 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9112,7 +10247,11 @@ module.exports =
   exports.default = makeIsBtnStateSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 128 */
+=======
+/* 126 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9137,7 +10276,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _CreateImageContainer = __webpack_require__(129);
+=======
+  var _CreateImageContainer = __webpack_require__(127);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _CreateImageContainer2 = _interopRequireDefault(_CreateImageContainer);
   
@@ -9168,7 +10311,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 129 */
+=======
+/* 127 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9177,12 +10324,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _CreateImage = __webpack_require__(130);
+=======
+  var _CreateImage = __webpack_require__(128);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _CreateImage2 = _interopRequireDefault(_CreateImage);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _isBtnStateSelector = __webpack_require__(127);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
@@ -9190,6 +10342,15 @@ module.exports =
   var _breadcumb = __webpack_require__(94);
   
   var _createImage = __webpack_require__(135);
+=======
+  var _isBtnStateSelector = __webpack_require__(125);
+  
+  var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _createImage = __webpack_require__(133);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -9219,7 +10380,11 @@ module.exports =
   exports.default = CreateImageContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 130 */
+=======
+/* 128 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9256,6 +10421,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
@@ -9265,6 +10431,17 @@ module.exports =
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
   var _Toggle = __webpack_require__(120);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactDom = __webpack_require__(132);
+  
+  var _reactDom2 = _interopRequireDefault(_reactDom);
+  
+  var _Toggle = __webpack_require__(118);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
@@ -9278,7 +10455,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -9306,6 +10483,7 @@ module.exports =
     return IsPublicToggle;
   }(_react.Component);
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)('h1', {}, void 0, '新建镜像');
   
   var _ref2 = (0, _jsx3.default)('p', {}, void 0, '镜像是服务运行的模板, 来源于代码, 基于 Dockerfile 构建, 默认目录在根\'/\'下, 文件名 Dockerfile .');
@@ -9332,6 +10510,34 @@ module.exports =
     title: '是否公开',
     titleEnglish: 'IS PUBLIC',
     titleInfo: '公开后都可以访问'
+=======
+  var _ref = (0, _jsx3.default)('h1', {}, void 0, '\u65B0\u5EFA\u955C\u50CF');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u662F\u670D\u52A1\u8FD0\u884C\u7684\u6A21\u677F, \u6765\u6E90\u4E8E\u4EE3\u7801, \u57FA\u4E8E Dockerfile \u6784\u5EFA, \u9ED8\u8BA4\u76EE\u5F55\u5728\u6839\'/\'\u4E0B, \u6587\u4EF6\u540D Dockerfile .');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u9ED8\u8BA4\u4F1A\u4E0E\u60A8\u4E0B\u65B9\u4EE3\u7801\u6E90\u7684\u9879\u76EE\u540D\u79F0\u76F8\u540C'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7B80\u4ECB',
+    titleEnglish: 'IMAGE SUMMARY',
+    titleInfo: '\u7B80\u5355\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8BE6\u7EC6\u63CF\u8FF0',
+    titleEnglish: 'IMAGE DETAIL',
+    titleInfo: '\u8BE6\u7EC6\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u516C\u5F00',
+    titleEnglish: 'IS PUBLIC',
+    titleInfo: '\u516C\u5F00\u540E\u90FD\u53EF\u4EE5\u8BBF\u95EE'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var CreateImage = function (_React$Component) {
@@ -9340,7 +10546,7 @@ module.exports =
     function CreateImage() {
       (0, _classCallCheck3.default)(this, CreateImage);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CreateImage).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (CreateImage.__proto__ || (0, _getPrototypeOf2.default)(CreateImage)).call(this));
   
       _this2.state = {
         isImageName: false,
@@ -9428,13 +10634,21 @@ module.exports =
         }), _react2.default.createElement(
           'span',
           { className: 'inputTip', ref: 'image_name_tip' },
+<<<<<<< HEAD
           '镜像名称不能为空'
+=======
+          '\u955C\u50CF\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'assItem'
         }, void 0, _ref4, (0, _jsx3.default)('div', {
           className: 'assBox'
         }, void 0, _react2.default.createElement('textarea', {
+<<<<<<< HEAD
           placeholder: '镜像简介',
+=======
+          placeholder: '\u955C\u50CF\u7B80\u4ECB',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'form-control',
           defaultValue: '',
           ref: 'image_detail'
@@ -9443,7 +10657,11 @@ module.exports =
         }, void 0, _ref5, (0, _jsx3.default)('div', {
           className: 'assBox'
         }, void 0, _react2.default.createElement('textarea', {
+<<<<<<< HEAD
           placeholder: '详细描述',
+=======
+          placeholder: '\u8BE6\u7EC6\u63CF\u8FF0',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'form-control',
           defaultValue: '',
           ref: 'short_description'
@@ -9459,7 +10677,11 @@ module.exports =
         }, void 0, (0, _jsx3.default)('div', {
           className: 'acBtn'
         }, void 0, (0, _jsx3.default)('button', {
+<<<<<<< HEAD
           className: 'btn btn-primary ' + (!this.props.isBtnState ? "btn-loading" : ""),
+=======
+          className: 'btn btn-primary',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           onClick: this.building.bind(this),
           disabled: !this.props.isBtnState.building
         }, void 0, this.props.isBtnState.building ? "新建" : "新建中...")))));
@@ -9476,7 +10698,11 @@ module.exports =
   exports.default = CreateImage;
 
 /***/ },
+<<<<<<< HEAD
 /* 131 */
+=======
+/* 129 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9497,7 +10723,11 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(132);
+=======
+  var _HeadLine = __webpack_require__(130);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -9538,11 +10768,19 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_HeadLine2.default)(HeadLine);
 
 /***/ },
+<<<<<<< HEAD
 /* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
   
       var content = __webpack_require__(133);
+=======
+/* 130 */
+/***/ function(module, exports, __webpack_require__) {
+
+  
+      var content = __webpack_require__(131);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
@@ -9555,7 +10793,11 @@ module.exports =
     
 
 /***/ },
+<<<<<<< HEAD
 /* 133 */
+=======
+/* 131 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(18)();
@@ -9575,13 +10817,21 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 134 */
+=======
+/* 132 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-dom");
 
 /***/ },
+<<<<<<< HEAD
 /* 135 */
+=======
+/* 133 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9659,7 +10909,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 136 */
+=======
+/* 134 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9684,7 +10938,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _BuildingDetailContainer = __webpack_require__(137);
+=======
+  var _BuildingDetailContainer = __webpack_require__(135);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _BuildingDetailContainer2 = _interopRequireDefault(_BuildingDetailContainer);
   
@@ -9716,7 +10974,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 137 */
+=======
+/* 135 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9725,12 +10987,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _BuildingDetail = __webpack_require__(138);
+=======
+  var _BuildingDetail = __webpack_require__(136);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _BuildingDetail2 = _interopRequireDefault(_BuildingDetail);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _breadcumb = __webpack_require__(94);
   
   var _building = __webpack_require__(115);
@@ -9740,6 +11007,17 @@ module.exports =
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
   var _isBtnStateSelector = __webpack_require__(127);
+=======
+  var _breadcumb = __webpack_require__(93);
+  
+  var _building = __webpack_require__(113);
+  
+  var _buildingDetailSelector = __webpack_require__(138);
+  
+  var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
+  
+  var _isBtnStateSelector = __webpack_require__(125);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -9779,7 +11057,11 @@ module.exports =
   exports.default = BuildingDetailContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 138 */
+=======
+/* 136 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -9818,21 +11100,37 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(70);
   
+<<<<<<< HEAD
   var _Logs = __webpack_require__(139);
   
   var _Logs2 = _interopRequireDefault(_Logs);
   
   var _Loading = __webpack_require__(92);
+=======
+  var _Logs = __webpack_require__(137);
+  
+  var _Logs2 = _interopRequireDefault(_Logs);
+  
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _Toggle = __webpack_require__(120);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _Toggle = __webpack_require__(118);
+  
+  var _Toggle2 = _interopRequireDefault(_Toggle);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -9844,7 +11142,7 @@ module.exports =
     function IsAutoBuildToggle(props) {
       (0, _classCallCheck3.default)(this, IsAutoBuildToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsAutoBuildToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsAutoBuildToggle.__proto__ || (0, _getPrototypeOf2.default)(IsAutoBuildToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -9877,6 +11175,7 @@ module.exports =
   
   var _ref = (0, _jsx3.default)(_reactBootstrap.Col, {
     sm: 2
+<<<<<<< HEAD
   }, void 0, '镜像名称');
   
   var _ref2 = (0, _jsx3.default)(_reactBootstrap.Col, {
@@ -9890,12 +11189,31 @@ module.exports =
   var _ref4 = (0, _jsx3.default)(_reactBootstrap.Col, {
     sm: 2
   }, void 0, '自动构建');
+=======
+  }, void 0, '\u955C\u50CF\u540D\u79F0');
+  
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, 'Dockerfile\u4F4D\u7F6E');
+  
+  var _ref3 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, '\u9ED8\u8BA4\u4EE3\u7801\u5206\u652F');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, '\u81EA\u52A8\u6784\u5EFA');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref5 = (0, _jsx3.default)(_reactBootstrap.Col, {
     sm: 2
   }, void 0);
   
+<<<<<<< HEAD
   var _ref6 = (0, _jsx3.default)('p', {}, void 0, '*删除项目将清除项目相关数据，请慎重选择！ ');
+=======
+  var _ref6 = (0, _jsx3.default)('p', {}, void 0, '*\u5220\u9664\u9879\u76EE\u5C06\u6E05\u9664\u9879\u76EE\u76F8\u5173\u6570\u636E\uFF0C\u8BF7\u614E\u91CD\u9009\u62E9\uFF01 ');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref7 = (0, _jsx3.default)(_Loading2.default, {});
   
@@ -9914,7 +11232,7 @@ module.exports =
     function BuildingDetail(props) {
       (0, _classCallCheck3.default)(this, BuildingDetail);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BuildingDetail).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (BuildingDetail.__proto__ || (0, _getPrototypeOf2.default)(BuildingDetail)).call(this, props));
   
       _this2.state = {
         isAutoBuilding: 1
@@ -10028,7 +11346,11 @@ module.exports =
             className: 'btn btn-primary ' + (!_this3.props.isBtnState.reviseBuilding ? "btn-loading" : ""),
             onClick: _this3.onReviseBuilding.bind(_this3),
             disabled: !_this3.props.isBtnState.reviseBuilding
+<<<<<<< HEAD
           }, void 0, '确认修改')))));
+=======
+          }, void 0, '\u786E\u8BA4\u4FEE\u6539')))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         });
         return body;
       }
@@ -10046,7 +11368,11 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-danger',
           onClick: this.onDeleteBuilding.bind(this, this.props.projectId)
+<<<<<<< HEAD
         }, void 0, '删除项目'), _ref6);
+=======
+        }, void 0, '\u5220\u9664\u9879\u76EE'), _ref6);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }, {
       key: 'render',
@@ -10071,7 +11397,11 @@ module.exports =
           className: 'media-body'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'media-heading'
+<<<<<<< HEAD
         }, void 0, '镜像名称 :', (0, _jsx3.default)('a', {
+=======
+        }, void 0, '\u955C\u50CF\u540D\u79F0 :', (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           href: 'javascript:;',
           target: '_blank',
           className: 'aLink'
@@ -10086,7 +11416,11 @@ module.exports =
           id: 'cbTabs'
         }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 1,
+<<<<<<< HEAD
           title: '构建日志'
+=======
+          title: '\u6784\u5EFA\u65E5\u5FD7'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'asTableBox',
           style: { "paddingTop": "30px" }
@@ -10094,12 +11428,20 @@ module.exports =
           logLabel: 'auto_build-' + username + '-' + this.props.projectId
         }))), (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 2,
+<<<<<<< HEAD
           title: '基本设置'
+=======
+          title: '\u57FA\u672C\u8BBE\u7F6E'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'asTableBox'
         }, void 0, this.baseSeting())), (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 3,
+<<<<<<< HEAD
           title: '操作'
+=======
+          title: '\u64CD\u4F5C'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'asTableBox'
         }, void 0, this.handle()))))));
@@ -10115,7 +11457,11 @@ module.exports =
   exports.default = BuildingDetail;
 
 /***/ },
+<<<<<<< HEAD
 /* 139 */
+=======
+/* 137 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10156,7 +11502,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _reactDom = __webpack_require__(134);
+=======
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -10168,7 +11518,11 @@ module.exports =
   
   var _reactCookie2 = _interopRequireDefault(_reactCookie);
   
+<<<<<<< HEAD
   var _utils = __webpack_require__(119);
+=======
+  var _utils = __webpack_require__(117);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -10180,7 +11534,7 @@ module.exports =
     function _class() {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this));
   
       _this.shutByHand = false;
       _this.xhr = null;
@@ -10285,7 +11639,11 @@ module.exports =
   exports.default = _class;
 
 /***/ },
+<<<<<<< HEAD
 /* 140 */
+=======
+/* 138 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10310,7 +11668,11 @@ module.exports =
   exports.default = makeGetBuildingDetail;
 
 /***/ },
+<<<<<<< HEAD
 /* 141 */
+=======
+/* 139 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10335,7 +11697,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _BuildingContainer = __webpack_require__(142);
+=======
+  var _BuildingContainer = __webpack_require__(140);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _BuildingContainer2 = _interopRequireDefault(_BuildingContainer);
   
@@ -10369,7 +11735,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 142 */
+=======
+/* 140 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10378,12 +11748,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _Building = __webpack_require__(143);
+=======
+  var _Building = __webpack_require__(141);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Building2 = _interopRequireDefault(_Building);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _building = __webpack_require__(115);
   
   var _buildingImageListSelector = __webpack_require__(144);
@@ -10391,6 +11766,15 @@ module.exports =
   var _buildingImageListSelector2 = _interopRequireDefault(_buildingImageListSelector);
   
   var _breadcumb = __webpack_require__(94);
+=======
+  var _building = __webpack_require__(113);
+  
+  var _buildingImageListSelector = __webpack_require__(142);
+  
+  var _buildingImageListSelector2 = _interopRequireDefault(_buildingImageListSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -10426,7 +11810,11 @@ module.exports =
   exports.default = BuildingContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 143 */
+=======
+/* 141 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10473,6 +11861,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
   
   var _Loading2 = _interopRequireDefault(_Loading);
@@ -10482,6 +11871,17 @@ module.exports =
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
   var _utils = __webpack_require__(119);
+=======
+  var _Loading = __webpack_require__(107);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
+  var _Confirm = __webpack_require__(112);
+  
+  var _Confirm2 = _interopRequireDefault(_Confirm);
+  
+  var _utils = __webpack_require__(117);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _constants = __webpack_require__(38);
   
@@ -10489,7 +11889,11 @@ module.exports =
   
   var _ref = (0, _jsx3.default)('p', {
     className: "hbPName"
+<<<<<<< HEAD
   }, void 0, '代码构建');
+=======
+  }, void 0, '\u4EE3\u7801\u6784\u5EFA');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref2 = (0, _jsx3.default)('p', {
     className: "hbPInfo"
@@ -10506,6 +11910,7 @@ module.exports =
   
   var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '1'
+<<<<<<< HEAD
   }, void 0, '删除');
   
   var _ref7 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
@@ -10521,6 +11926,23 @@ module.exports =
   }, void 0, '最近构建'), (0, _jsx3.default)('th', {
     width: '10%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u5220\u9664');
+  
+  var _ref7 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '30%'
+  }, void 0, '\u955C\u50CF\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '30%'
+  }, void 0, '\u4EE3\u7801\u6E90'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u6784\u5EFA\u72B6\u6001'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u4E0A\u6B21\u6784\u5EFA\u7528\u65F6'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u6700\u8FD1\u6784\u5EFA'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var Building = function (_Component) {
     (0, _inherits3.default)(Building, _Component);
@@ -10528,7 +11950,7 @@ module.exports =
     function Building() {
       (0, _classCallCheck3.default)(this, Building);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Building).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (Building.__proto__ || (0, _getPrototypeOf2.default)(Building)).call(this));
   
       _this.state = {
         githubModalShow: false,
@@ -10600,7 +12022,11 @@ module.exports =
         if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '6',
           style: { "textAlign": "center" }
+<<<<<<< HEAD
         }, void 0, '暂无数据~'));
+=======
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '6',
           style: { "textAlign": "center" }
@@ -10624,7 +12050,11 @@ module.exports =
             onClick: _this2.fastBuilding.bind(_this2, item.uuid),
             onSelect: _this2.deleteLine.bind(_this2, item.repository),
             bsStyle: 'primary',
+<<<<<<< HEAD
             title: '构建',
+=======
+            title: '\u6784\u5EFA',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             id: 'building-table-line-' + i
           }, void 0, _ref6))));
         });
@@ -10660,14 +12090,23 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-default icon-refresh',
           onClick: this.refresh.bind(this),
+<<<<<<< HEAD
           title: '刷新'
+=======
+          title: '\u5237\u65B0'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, ' '))), (0, _jsx3.default)('div', {
           className: 'building-table TableTextLeft'
         }, void 0, (0, _jsx3.default)('table', {
           className: 'table table-hover table-bordered'
         }, void 0, _ref7, (0, _jsx3.default)('tbody', {}, void 0, this.getLines()))), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
           title: '警告',
           text: '确定要删除此镜像吗?',
+=======
+          title: '\u8B66\u544A',
+          text: '\u786E\u5B9A\u8981\u5220\u9664\u6B64\u955C\u50CF\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           func: function func() {
             _this3.props.onDeleteImage(_this3.state.delData);
           },
@@ -10684,7 +12123,11 @@ module.exports =
   exports.default = Building;
 
 /***/ },
+<<<<<<< HEAD
 /* 144 */
+=======
+/* 142 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10709,7 +12152,11 @@ module.exports =
   exports.default = buildingImageListSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 145 */
+=======
+/* 143 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10734,7 +12181,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _BuildingCreateContainer = __webpack_require__(146);
+=======
+  var _BuildingCreateContainer = __webpack_require__(144);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _BuildingCreateContainer2 = _interopRequireDefault(_BuildingCreateContainer);
   
@@ -10766,7 +12217,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 146 */
+=======
+/* 144 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10777,6 +12232,7 @@ module.exports =
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _BuildingCreate = __webpack_require__(147);
   
   var _BuildingCreate2 = _interopRequireDefault(_BuildingCreate);
@@ -10790,6 +12246,21 @@ module.exports =
   var _breadcumb = __webpack_require__(94);
   
   var _isBtnStateSelector = __webpack_require__(127);
+=======
+  var _BuildingCreate = __webpack_require__(145);
+  
+  var _BuildingCreate2 = _interopRequireDefault(_BuildingCreate);
+  
+  var _building = __webpack_require__(113);
+  
+  var _BuildingCreateSelector = __webpack_require__(146);
+  
+  var _BuildingCreateSelector2 = _interopRequireDefault(_BuildingCreateSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _isBtnStateSelector = __webpack_require__(125);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -10828,7 +12299,11 @@ module.exports =
   exports.default = BuildingCreateContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 147 */
+=======
+/* 145 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -10867,6 +12342,7 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(70);
   
+<<<<<<< HEAD
   var _Toggle = __webpack_require__(120);
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
@@ -10876,6 +12352,17 @@ module.exports =
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _Toggle = __webpack_require__(118);
+  
+  var _Toggle2 = _interopRequireDefault(_Toggle);
+  
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -10887,6 +12374,7 @@ module.exports =
       DropdownMenu = _reactBootstrap.Dropdown.Menu;
   
   var CodeStore = {
+<<<<<<< HEAD
     "Default": (0, _jsx3.default)('span', {}, void 0, '选择代码仓库'),
     "Github": (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
       className: 'icon-github'
@@ -10916,20 +12404,58 @@ module.exports =
     title: '代码源',
     titleEnglish: 'CODE SOURCES',
     titleInfo: '代码源的描述等'
+=======
+    "Default": (0, _jsx3.default)('span', {}, void 0, '\u9009\u62E9\u4EE3\u7801\u4ED3\u5E93'),
+    "Github": (0, _jsx3.default)('span', {}, void 0, (0, _jsx3.default)('i', {
+      className: 'icon-github'
+    }, void 0, ' '), (0, _jsx3.default)('i', {}, void 0, 'Github'))
+  };
+  
+  var _ref = (0, _jsx3.default)('h1', {}, void 0, '\u4EE3\u7801\u6784\u5EFA');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u662F\u670D\u52A1\u8FD0\u884C\u7684\u6A21\u677F, \u6765\u6E90\u4E8E\u4EE3\u7801, \u57FA\u4E8E Dockerfile \u6784\u5EFA, \u9ED8\u8BA4\u76EE\u5F55\u5728\u6839\'/\'\u4E0B, \u6587\u4EF6\u540D Dockerfile .');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u9ED8\u8BA4\u4F1A\u4E0E\u60A8\u4E0B\u65B9\u4EE3\u7801\u6E90\u7684\u9879\u76EE\u540D\u79F0\u76F8\u540C'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u6807\u7B7E',
+    titleEnglish: 'IMAGE TAG',
+    titleInfo: '\u9ED8\u8BA4\u4E3Alatest'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u4EE3\u7801\u6E90',
+    titleEnglish: 'CODE SOURCES',
+    titleInfo: '\u4EE3\u7801\u6E90\u7684\u63CF\u8FF0\u7B49'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: 0
+<<<<<<< HEAD
   }, 0, '加载中...');
   
   var _ref7 = (0, _jsx3.default)(_HeadLine2.default, {
     title: '构建位置',
     titleEnglish: 'CONSTRUCTION POSITION',
     titleInfo: 'Dockerfile是指导镜像构建的描述文件，系统会根据您设置的构建目录查找Dockerfile并在该目录下执行镜像构建命令。'
+=======
+  }, 0, '\u52A0\u8F7D\u4E2D...');
+  
+  var _ref7 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u6784\u5EFA\u4F4D\u7F6E',
+    titleEnglish: 'CONSTRUCTION POSITION',
+    titleInfo: 'Dockerfile\u662F\u6307\u5BFC\u955C\u50CF\u6784\u5EFA\u7684\u63CF\u8FF0\u6587\u4EF6\uFF0C\u7CFB\u7EDF\u4F1A\u6839\u636E\u60A8\u8BBE\u7F6E\u7684\u6784\u5EFA\u76EE\u5F55\u67E5\u627EDockerfile\u5E76\u5728\u8BE5\u76EE\u5F55\u4E0B\u6267\u884C\u955C\u50CF\u6784\u5EFA\u547D\u4EE4\u3002'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var _ref8 = (0, _jsx3.default)(_reactBootstrap.Col, {
     sm: 2
+<<<<<<< HEAD
   }, void 0, '构建目录');
   
   var _ref9 = (0, _jsx3.default)(_reactBootstrap.Col, {
@@ -10958,6 +12484,36 @@ module.exports =
     title: '详细描述',
     titleEnglish: 'IMAGE DETAIL',
     titleInfo: '详细介绍镜像的信息'
+=======
+  }, void 0, '\u6784\u5EFA\u76EE\u5F55');
+  
+  var _ref9 = (0, _jsx3.default)(_reactBootstrap.Col, {
+    sm: 2
+  }, void 0, 'Dockerfile \u8DEF\u5F84');
+  
+  var _ref10 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u81EA\u52A8\u6784\u5EFA',
+    titleEnglish: 'AUTO BUILDING',
+    titleInfo: '\u5F53\u4EE3\u7801\u4ED3\u5E93\u4E2D\u7684\u9879\u76EE\u6709 push \u64CD\u4F5C\u7684\u65F6\u5019, \u8BE5\u955C\u50CF\u4E5F\u4F1A\u540C\u6B65\u81EA\u52A8\u91CD\u65B0\u6784\u5EFA'
+  });
+  
+  var _ref11 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u516C\u5F00',
+    titleEnglish: 'IS PUBLIC',
+    titleInfo: '\u662F\u5426\u5BF9\u5916\u5F00\u653E\u60A8\u7684\u955C\u50CF'
+  });
+  
+  var _ref12 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7B80\u4ECB',
+    titleEnglish: 'IMAGE SUMMARY',
+    titleInfo: '\u7B80\u5355\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref13 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8BE6\u7EC6\u63CF\u8FF0',
+    titleEnglish: 'IMAGE DETAIL',
+    titleInfo: '\u8BE6\u7EC6\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var BuildingCreate = function (_React$Component) {
@@ -10966,7 +12522,7 @@ module.exports =
     function BuildingCreate() {
       (0, _classCallCheck3.default)(this, BuildingCreate);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BuildingCreate).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (BuildingCreate.__proto__ || (0, _getPrototypeOf2.default)(BuildingCreate)).call(this));
   
       _this.state = {
         codeStoreKey: "Default",
@@ -11111,7 +12667,11 @@ module.exports =
         }), _react2.default.createElement(
           'span',
           { className: 'inputTip', ref: 'image_name_tip' },
+<<<<<<< HEAD
           '镜像名称不能为空'
+=======
+          '\u955C\u50CF\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'assItem'
         }, void 0, _ref4, (0, _jsx3.default)('div', {
@@ -11129,7 +12689,11 @@ module.exports =
         }, void 0, !user.github ? (0, _jsx3.default)('a', {
           className: 'btn btn-primary',
           href: this.props.githubAuthURL
+<<<<<<< HEAD
         }, void 0, 'Github 授权') : (0, _jsx3.default)(_reactBootstrap.ButtonGroup, {}, void 0, _react2.default.createElement(
+=======
+        }, void 0, 'Github \u6388\u6743') : (0, _jsx3.default)(_reactBootstrap.ButtonGroup, {}, void 0, _react2.default.createElement(
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           _reactBootstrap.Dropdown,
           { bsStyle: 'default', ref: 'repo_name',
             onSelect: this.selectCodeStore.bind(this),
@@ -11155,7 +12719,11 @@ module.exports =
         }, void 0, ' ')), _react2.default.createElement(
           'span',
           { className: 'inputTip', ref: 'btn_group_tip' },
+<<<<<<< HEAD
           '代码仓库和项目名称不能为空'
+=======
+          '\u4EE3\u7801\u4ED3\u5E93\u548C\u9879\u76EE\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'assItem'
         }, void 0, _ref7, (0, _jsx3.default)('div', {
@@ -11191,7 +12759,11 @@ module.exports =
         }, void 0, _ref12, (0, _jsx3.default)('div', {
           className: 'assBox'
         }, void 0, _react2.default.createElement('textarea', {
+<<<<<<< HEAD
           placeholder: '镜像简介',
+=======
+          placeholder: '\u955C\u50CF\u7B80\u4ECB',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'form-control',
           defaultValue: '',
           ref: 'detail'
@@ -11200,7 +12772,11 @@ module.exports =
         }, void 0, _ref13, (0, _jsx3.default)('div', {
           className: 'assBox'
         }, void 0, _react2.default.createElement('textarea', {
+<<<<<<< HEAD
           placeholder: '详细描述',
+=======
+          placeholder: '\u8BE6\u7EC6\u63CF\u8FF0',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'form-control',
           defaultValue: '',
           ref: 'short_description'
@@ -11226,7 +12802,11 @@ module.exports =
   exports.default = BuildingCreate;
 
 /***/ },
+<<<<<<< HEAD
 /* 148 */
+=======
+/* 146 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11261,7 +12841,11 @@ module.exports =
   exports.default = makeGetReposSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 149 */
+=======
+/* 147 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11296,9 +12880,15 @@ module.exports =
   
     path: '/error',
     action: function action(_ref) {
+<<<<<<< HEAD
       var render = _ref.render;
       var context = _ref.context;
       var error = _ref.error;
+=======
+      var render = _ref.render,
+          context = _ref.context,
+          error = _ref.error;
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
       return render((0, _jsx3.default)(_reactRedux.Provider, {
         store: _.store
@@ -11321,7 +12911,11 @@ module.exports =
       */
 
 /***/ },
+<<<<<<< HEAD
 /* 150 */
+=======
+/* 148 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11346,7 +12940,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ServiceListContainer = __webpack_require__(151);
+=======
+  var _ServiceListContainer = __webpack_require__(149);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ServiceListContainer2 = _interopRequireDefault(_ServiceListContainer);
   
@@ -11388,7 +12986,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 151 */
+=======
+/* 149 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11397,15 +12999,25 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ServiceList = __webpack_require__(152);
+=======
+  var _ServiceList = __webpack_require__(150);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ServiceList2 = _interopRequireDefault(_ServiceList);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _services = __webpack_require__(95);
   
   var _serviceListSelector = __webpack_require__(96);
+=======
+  var _services = __webpack_require__(94);
+  
+  var _serviceListSelector = __webpack_require__(95);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _serviceListSelector2 = _interopRequireDefault(_serviceListSelector);
   
@@ -11413,7 +13025,11 @@ module.exports =
   
   var _isLoadingSelector2 = _interopRequireDefault(_isLoadingSelector);
   
+<<<<<<< HEAD
   var _breadcumb = __webpack_require__(94);
+=======
+  var _breadcumb = __webpack_require__(93);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -11451,7 +13067,11 @@ module.exports =
   exports.default = ServiceListContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 152 */
+=======
+/* 150 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11490,7 +13110,11 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(70);
   
+<<<<<<< HEAD
   var _reactDom = __webpack_require__(134);
+=======
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -11498,11 +13122,19 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _Confirm = __webpack_require__(114);
+=======
+  var _Loading = __webpack_require__(107);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
+  var _Confirm = __webpack_require__(112);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
@@ -11531,11 +13163,19 @@ module.exports =
   
   var _ref3 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '1'
+<<<<<<< HEAD
   }, void 0, '删除');
   
   var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '1'
   }, void 0, '删除');
+=======
+  }, void 0, '\u5220\u9664');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '1'
+  }, void 0, '\u5220\u9664');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref5 = (0, _jsx3.default)('img', {
     className: 'mediaImg',
@@ -11544,6 +13184,7 @@ module.exports =
   
   var _ref6 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
     width: '20%'
+<<<<<<< HEAD
   }, void 0, '服务名称'), (0, _jsx3.default)('th', {
     width: '10%'
   }, void 0, '部署时间'), (0, _jsx3.default)('th', {
@@ -11553,6 +13194,17 @@ module.exports =
   }, void 0, '状态'), (0, _jsx3.default)('th', {
     width: '15%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u670D\u52A1\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u90E8\u7F72\u65F6\u95F4'), (0, _jsx3.default)('th', {
+    width: '45%'
+  }, void 0, '\u57DF\u540D'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u72B6\u6001'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref7 = (0, _jsx3.default)('div', {
     className: 'hbAddBtn clearfix'
@@ -11562,14 +13214,22 @@ module.exports =
     className: 'hbPlusInfo left'
   }, void 0, (0, _jsx3.default)('p', {
     className: 'hbPName'
+<<<<<<< HEAD
   }, void 0, '新建服务'), (0, _jsx3.default)('p', {
+=======
+  }, void 0, '\u65B0\u5EFA\u670D\u52A1'), (0, _jsx3.default)('p', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'hbPInfo'
   }, void 0, 'Create Service')));
   
   var _ref8 = (0, _jsx3.default)('a', {
     href: 'javascript:;',
     className: 'hbAddExplain'
+<<<<<<< HEAD
   }, void 0, '什么是容器云服务？');
+=======
+  }, void 0, '\u4EC0\u4E48\u662F\u5BB9\u5668\u4E91\u670D\u52A1\uFF1F');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var ServiceList = function (_Component) {
     (0, _inherits3.default)(ServiceList, _Component);
@@ -11577,7 +13237,7 @@ module.exports =
     function ServiceList() {
       (0, _classCallCheck3.default)(this, ServiceList);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ServiceList).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (ServiceList.__proto__ || (0, _getPrototypeOf2.default)(ServiceList)).call(this));
   
       _this.state = {
         isLoop: true,
@@ -11623,7 +13283,11 @@ module.exports =
         if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '5',
           style: { "textAlign": "center" }
+<<<<<<< HEAD
         }, void 0, '暂无数据~'));
+=======
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '5',
           style: { "textAlign": "center" }
@@ -11643,7 +13307,11 @@ module.exports =
                 onClick: _this2.changeState.bind(_this2, item.fservice_name, "stop"),
                 onSelect: _this2.deleteService.bind(_this2, item.fservice_name),
                 bsStyle: "default",
+<<<<<<< HEAD
                 title: '关闭',
+=======
+                title: '\u5173\u95ED',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
                 id: 'volumes-table-line-' + i
               }, void 0, _ref3);
               break;
@@ -11744,18 +13412,30 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-default icon-refresh',
           onClick: this.refresh.bind(this),
+<<<<<<< HEAD
           title: '刷新'
         }, void 0, ' '), (0, _jsx3.default)('div', {
           className: 'search'
         }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '搜索服务', ref: 'searchInput', className: "slSearchInp" }), (0, _jsx3.default)('a', {
+=======
+          title: '\u5237\u65B0'
+        }, void 0, ' '), (0, _jsx3.default)('div', {
+          className: 'search'
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u670D\u52A1', ref: 'searchInput', className: "slSearchInp" }), (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           type: 'button',
           className: 'slSearchBtn icon-select',
           onClick: this.searchService.bind(this)
         }, void 0, ' ')))), (0, _jsx3.default)('div', {
           className: 'sl-bd TableTextLeft'
         }, void 0, this.getDemoTable()), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
           title: '警告',
           text: '您确定要删除此服务吗?',
+=======
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u5220\u9664\u6B64\u670D\u52A1\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           ref: 'confirmModal',
           func: function func() {
             _this3.props.onDeleteService(_this3.state.delData);
@@ -11773,7 +13453,11 @@ module.exports =
   exports.default = ServiceList;
 
 /***/ },
+<<<<<<< HEAD
 /* 153 */
+=======
+/* 151 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11798,7 +13482,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _DeployServiceContainer = __webpack_require__(154);
+=======
+  var _DeployServiceContainer = __webpack_require__(152);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _DeployServiceContainer2 = _interopRequireDefault(_DeployServiceContainer);
   
@@ -11840,7 +13528,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 154 */
+=======
+/* 152 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11849,12 +13541,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _DeployService = __webpack_require__(155);
+=======
+  var _DeployService = __webpack_require__(153);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _DeployService2 = _interopRequireDefault(_DeployService);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _deployService = __webpack_require__(110);
   
   var _volumes = __webpack_require__(99);
@@ -11864,6 +13561,17 @@ module.exports =
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
   var _deployDataSelector = __webpack_require__(160);
+=======
+  var _deployService = __webpack_require__(108);
+  
+  var _volumes = __webpack_require__(98);
+  
+  var _volumesListSelector = __webpack_require__(99);
+  
+  var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
+  
+  var _deployDataSelector = __webpack_require__(158);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _deployDataSelector2 = _interopRequireDefault(_deployDataSelector);
   
@@ -11871,11 +13579,19 @@ module.exports =
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
+<<<<<<< HEAD
   var _isBtnStateSelector = __webpack_require__(127);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
   var _breadcumb = __webpack_require__(94);
+=======
+  var _isBtnStateSelector = __webpack_require__(125);
+  
+  var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -11933,7 +13649,11 @@ module.exports =
   exports.default = DeployServiceContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 155 */
+=======
+/* 153 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -11974,6 +13694,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ServiceStep = __webpack_require__(156);
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
@@ -11983,6 +13704,17 @@ module.exports =
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _ServiceStep = __webpack_require__(154);
+  
+  var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
+  
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -11990,7 +13722,11 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+<<<<<<< HEAD
   var _Toggle = __webpack_require__(120);
+=======
+  var _Toggle = __webpack_require__(118);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
@@ -12017,7 +13753,7 @@ module.exports =
     function AutoStartUpToggle(props) {
       (0, _classCallCheck3.default)(this, AutoStartUpToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AutoStartUpToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (AutoStartUpToggle.__proto__ || (0, _getPrototypeOf2.default)(AutoStartUpToggle)).call(this, props));
   
       _this.state = {
         autoStart: true
@@ -12070,6 +13806,7 @@ module.exports =
   
   var _ref5 = (0, _jsx3.default)('option', {
     value: 'no'
+<<<<<<< HEAD
   }, void 0, '不可访问');
   
   var _ref6 = (0, _jsx3.default)('option', {
@@ -12105,6 +13842,43 @@ module.exports =
   }, void 0, '是否只读'), (0, _jsx3.default)('th', {
     width: '25%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u4E0D\u53EF\u8BBF\u95EE');
+  
+  var _ref6 = (0, _jsx3.default)('option', {
+    value: 'outsisde'
+  }, void 0, '\u5916\u90E8\u8303\u56F4');
+  
+  var _ref7 = (0, _jsx3.default)('option', {
+    value: 'inside'
+  }, void 0, '\u5185\u90E8\u8303\u56F4');
+  
+  var _ref8 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u5BB9\u5668\u7AEF\u53E3'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u534F\u8BAE'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u65B9\u5F0F'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u8303\u56F4'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref9 = (0, _jsx3.default)('option', {
+    value: '-1'
+  }, '-1', '\u8BF7\u9009\u62E9\u6570\u636E\u5377');
+  
+  var _ref10 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u6570\u636E\u5377\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u5BB9\u5668\u8DEF\u5F84'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u662F\u5426\u53EA\u8BFB'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref11 = (0, _jsx3.default)('div', {
     className: 'astLine'
@@ -12115,6 +13889,7 @@ module.exports =
   });
   
   var _ref13 = (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '端口',
     titleEnglish: 'PORT',
     titleInfo: '容器端口会映射到主机端口上'
@@ -12122,11 +13897,21 @@ module.exports =
   
   var _ref14 = (0, _jsx3.default)(_HeadLine2.default, {
     title: '环境变量',
+=======
+    title: '\u7AEF\u53E3',
+    titleEnglish: 'PORT',
+    titleInfo: '\u5BB9\u5668\u7AEF\u53E3\u4F1A\u6620\u5C04\u5230\u4E3B\u673A\u7AEF\u53E3\u4E0A'
+  });
+  
+  var _ref14 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u73AF\u5883\u53D8\u91CF',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: 'ENVIRONMENT VARIABLE',
     titleInfo: ''
   });
   
   var _ref15 = (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '启动命令',
     titleEnglish: 'JRE',
     titleInfo: '启动命令解释说明 '
@@ -12136,6 +13921,17 @@ module.exports =
     title: '自动启动',
     titleEnglish: 'AUTO UPDATE SETTING',
     titleInfo: '自动启动设置'
+=======
+    title: '\u542F\u52A8\u547D\u4EE4',
+    titleEnglish: 'JRE',
+    titleInfo: '\u542F\u52A8\u547D\u4EE4\u89E3\u91CA\u8BF4\u660E '
+  });
+  
+  var _ref16 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u81EA\u52A8\u542F\u52A8',
+    titleEnglish: 'AUTO UPDATE SETTING',
+    titleInfo: '\u81EA\u52A8\u542F\u52A8\u8BBE\u7F6E'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var AddService = function (_Component2) {
@@ -12144,7 +13940,7 @@ module.exports =
     function AddService(props) {
       (0, _classCallCheck3.default)(this, AddService);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AddService).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (AddService.__proto__ || (0, _getPrototypeOf2.default)(AddService)).call(this, props));
   
       _this2.state = {
         isPort: false,
@@ -12412,7 +14208,11 @@ module.exports =
           }, void 0, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('input', {
             type: 'checkbox',
             defaultChecked: item.readonly == 1
+<<<<<<< HEAD
           }), ' 是否只读'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+=======
+          }), ' \u662F\u5426\u53EA\u8BFB'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             href: 'javascript:;',
             className: 'delBtn',
             onClick: _this7.delSaveTr.bind(_this7, item.at)
@@ -12455,9 +14255,15 @@ module.exports =
             className: 'astKeyItem'
           }, item.at, (0, _jsx3.default)('div', {
             className: 'astInp'
+<<<<<<< HEAD
           }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvKey.bind(_this8, i), ref: 'env_key', placeholder: '键', defaultValue: item.env_key })), _ref11, (0, _jsx3.default)('div', {
             className: 'astInp'
           }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvValue.bind(_this8), ref: 'env_value', placeholder: '值', defaultValue: item.env_value })), (0, _jsx3.default)('div', {
+=======
+          }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvKey.bind(_this8, i), ref: 'env_key', placeholder: '\u952E', defaultValue: item.env_key })), _ref11, (0, _jsx3.default)('div', {
+            className: 'astInp'
+          }, void 0, _react2.default.createElement('input', { type: 'text', className: 'form-control', onBlur: _this8.isEnvValue.bind(_this8), ref: 'env_value', placeholder: '\u503C', defaultValue: item.env_value })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             className: 'astDel'
           }, void 0, (0, _jsx3.default)('a', {
             href: 'javascript:;',
@@ -12631,7 +14437,11 @@ module.exports =
             n++;
           }
         });
+<<<<<<< HEAD
         var volumeLength = n == 0 ? "暂时没有数据卷" : '目前有' + n + '个数据卷';
+=======
+        var volumeLength = n == 0 ? "暂时没有数据卷" : '\u76EE\u524D\u6709' + n + '\u4E2A\u6570\u636E\u5377';
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         return (0, _jsx3.default)('div', {
           className: 'containerBgF'
         }, void 0, (0, _jsx3.default)('div', {
@@ -12645,10 +14455,17 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.addPortTr.bind(this)
+<<<<<<< HEAD
         }, void 0, '添加'), _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' }))), (0, _jsx3.default)('div', {
           className: 'assItem'
         }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
           title: '存储设置',
+=======
+        }, void 0, '\u6DFB\u52A0'), _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+          title: '\u5B58\u50A8\u8BBE\u7F6E',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           titleEnglish: 'SAVE SETTING',
           titleInfo: volumeLength
         }), _react2.default.createElement(
@@ -12660,7 +14477,11 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.addSaveTr.bind(this)
+<<<<<<< HEAD
         }, void 0, '添加'), _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' }))), (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u6DFB\u52A0'), _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' }))), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'assItem'
         }, void 0, _ref14, _react2.default.createElement(
           'div',
@@ -12671,14 +14492,22 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.addEnvironmentData.bind(this)
+<<<<<<< HEAD
         }, void 0, '添加'), _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' }))), (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u6DFB\u52A0'), _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' }))), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'assItem'
         }, void 0, _ref15, (0, _jsx3.default)('div', {
           className: 'assBox'
         }, void 0, _react2.default.createElement('input', { className: 'form-control',
           type: 'text',
           ref: 'command',
+<<<<<<< HEAD
           placeholder: '如果输入，会覆盖镜像的默认启动命令'
+=======
+          placeholder: '\u5982\u679C\u8F93\u5165\uFF0C\u4F1A\u8986\u76D6\u955C\u50CF\u7684\u9ED8\u8BA4\u542F\u52A8\u547D\u4EE4'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }))), (0, _jsx3.default)('div', {
           className: 'assItem assItemNoborder'
         }, void 0, _ref16, (0, _jsx3.default)('div', {
@@ -12694,7 +14523,11 @@ module.exports =
           className: 'btn btn-primary',
           to: '/configContainer',
           onClick: this.onChangeStep.bind(this)
+<<<<<<< HEAD
         }, void 0, '上一步'), (0, _jsx3.default)('button', {
+=======
+        }, void 0, '\u4E0A\u4E00\u6B65'), (0, _jsx3.default)('button', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'btn btn-primary ' + (!this.props.isBtnState.deploy ? "btn-loading" : ""),
           onClick: this.deployService.bind(this),
           disabled: !this.props.isBtnState.deploy
@@ -12711,7 +14544,11 @@ module.exports =
   exports.default = AddService;
 
 /***/ },
+<<<<<<< HEAD
 /* 156 */
+=======
+/* 154 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12732,7 +14569,11 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
+<<<<<<< HEAD
   var _ServiceStep = __webpack_require__(157);
+=======
+  var _ServiceStep = __webpack_require__(155);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
   
@@ -12751,6 +14592,7 @@ module.exports =
    * LICENSE.txt file in the root directory of this source tree.
    */
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '1'), '镜像来源');
   
   var _ref2 = (0, _jsx3.default)('p', {}, void 0, 'MIRRIR SOURCE');
@@ -12760,6 +14602,17 @@ module.exports =
   var _ref4 = (0, _jsx3.default)('p', {}, void 0, 'CONFIGURATION');
   
   var _ref5 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '3'), '高级设置');
+=======
+  var _ref = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '1'), '\u955C\u50CF\u6765\u6E90');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, 'MIRRIR SOURCE');
+  
+  var _ref3 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '2'), '\u5BB9\u5668\u914D\u7F6E');
+  
+  var _ref4 = (0, _jsx3.default)('p', {}, void 0, 'CONFIGURATION');
+  
+  var _ref5 = (0, _jsx3.default)('p', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '3'), '\u9AD8\u7EA7\u8BBE\u7F6E');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref6 = (0, _jsx3.default)('p', {}, void 0, 'ADVANCED SETUP');
   
@@ -12820,11 +14673,19 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_ServiceStep2.default)(ServiceStep);
 
 /***/ },
+<<<<<<< HEAD
 /* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
   
       var content = __webpack_require__(158);
+=======
+/* 155 */
+/***/ function(module, exports, __webpack_require__) {
+
+  
+      var content = __webpack_require__(156);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
@@ -12837,7 +14698,11 @@ module.exports =
     
 
 /***/ },
+<<<<<<< HEAD
 /* 158 */
+=======
+/* 156 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(18)();
@@ -12845,7 +14710,11 @@ module.exports =
   
   
   // module
+<<<<<<< HEAD
   exports.push([module.id, "._2b75{height:80px;border-bottom:1px solid #e0e0e0;padding:25px 0 0 80px}.pGlS{width:30%;height:55px}._1W1I,.pGlS{display:inline-block;position:relative}._1W1I{width:45px;height:43px}._1W1I:before{display:inline-block;font-size:45px;position:absolute;color:#afafaf}._1W4-{display:inline-block;margin-left:4px;vertical-align:top;margin-top:5px}._1W4- p{color:#afafaf;font-size:16px;line-height:16px}._1W4- p:last-child{font-size:10px;margin-top:3px}._1W4- span{display:inline-block;font-size:20px;position:relative;top:2px;margin-right:4px}.jSIi{position:absolute;height:20px;width:160px;background:url(" + __webpack_require__(159) + ") 0 -137px no-repeat;top:53px;left:-12px;display:none}._1jIQ._1cJ9 ._1W1I:before,._3Ppd._1cJ9 ._1W1I:before,._12TS._1cJ9 ._1W1I:before,.pGlS._1cJ9 ._1W4- p{color:#2dafdf}._1cJ9 .jSIi{display:block}", ""]);
+=======
+  exports.push([module.id, "._2b75{height:80px;border-bottom:1px solid #e0e0e0;padding:25px 0 0 80px}.pGlS{width:30%;height:55px}._1W1I,.pGlS{display:inline-block;position:relative}._1W1I{width:45px;height:43px}._1W1I:before{display:inline-block;font-size:45px;position:absolute;color:#afafaf}._1W4-{display:inline-block;margin-left:4px;vertical-align:top;margin-top:5px}._1W4- p{color:#afafaf;font-size:16px;line-height:16px}._1W4- p:last-child{font-size:10px;margin-top:3px}._1W4- span{display:inline-block;font-size:20px;position:relative;top:2px;margin-right:4px}.jSIi{position:absolute;height:20px;width:160px;background:url(" + __webpack_require__(157) + ") 0 -137px no-repeat;top:53px;left:-12px;display:none}._1jIQ._1cJ9 ._1W1I:before,._3Ppd._1cJ9 ._1W1I:before,._12TS._1cJ9 ._1W1I:before,.pGlS._1cJ9 ._1W4- p{color:#2dafdf}._1cJ9 .jSIi{display:block}", ""]);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   // exports
   exports.locals = {
@@ -12861,13 +14730,21 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 159 */
+=======
+/* 157 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACcCAYAAAD4d6D7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphMjM4ZTVhYy1lMzYyLTQwYjctOTQzMy00ZTQ5ZjBlNWNiZjEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Mjc1QzIwQUQ1NkNBMTFFNjhGRjdDNUQzQTNENEZENUYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Mjc1QzIwQUM1NkNBMTFFNjhGRjdDNUQzQTNENEZENUYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphMjM4ZTVhYy1lMzYyLTQwYjctOTQzMy00ZTQ5ZjBlNWNiZjEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTIzOGU1YWMtZTM2Mi00MGI3LTk0MzMtNGU0OWYwZTVjYmYx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"
 
 /***/ },
+<<<<<<< HEAD
 /* 160 */
+=======
+/* 158 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12892,7 +14769,11 @@ module.exports =
   exports.default = makeGetDeployData;
 
 /***/ },
+<<<<<<< HEAD
 /* 161 */
+=======
+/* 159 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12917,7 +14798,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ChoseImageContainer = __webpack_require__(162);
+=======
+  var _ChoseImageContainer = __webpack_require__(160);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ChoseImageContainer2 = _interopRequireDefault(_ChoseImageContainer);
   
@@ -12959,7 +14844,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 162 */
+=======
+/* 160 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -12968,12 +14857,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ChoseImage = __webpack_require__(163);
+=======
+  var _ChoseImage = __webpack_require__(161);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ChoseImage2 = _interopRequireDefault(_ChoseImage);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _deployService = __webpack_require__(110);
   
   var _imageList = __webpack_require__(97);
@@ -12987,6 +14881,21 @@ module.exports =
   var _deployDataSelector2 = _interopRequireDefault(_deployDataSelector);
   
   var _breadcumb = __webpack_require__(94);
+=======
+  var _deployService = __webpack_require__(108);
+  
+  var _imageList = __webpack_require__(96);
+  
+  var _imageListSelector = __webpack_require__(97);
+  
+  var _imageListSelector2 = _interopRequireDefault(_imageListSelector);
+  
+  var _deployDataSelector = __webpack_require__(158);
+  
+  var _deployDataSelector2 = _interopRequireDefault(_deployDataSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -13018,7 +14927,11 @@ module.exports =
   exports.default = ChoseImageContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 163 */
+=======
+/* 161 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13055,6 +14968,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ServiceStep = __webpack_require__(156);
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
@@ -13068,6 +14982,21 @@ module.exports =
   var _Tabs2 = _interopRequireDefault(_Tabs);
   
   var _Tab = __webpack_require__(165);
+=======
+  var _ServiceStep = __webpack_require__(154);
+  
+  var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
+  
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _Tabs = __webpack_require__(162);
+  
+  var _Tabs2 = _interopRequireDefault(_Tabs);
+  
+  var _Tab = __webpack_require__(163);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Tab2 = _interopRequireDefault(_Tab);
   
@@ -13075,13 +15004,21 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
+=======
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _utils = __webpack_require__(119);
+=======
+  var _utils = __webpack_require__(117);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -13098,6 +15035,7 @@ module.exports =
   
   var _ref3 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
     width: '25%'
+<<<<<<< HEAD
   }, void 0, '镜像名称'), (0, _jsx3.default)('th', {
     width: '10%'
   }, void 0, '最近更新'), (0, _jsx3.default)('th', {
@@ -13107,6 +15045,17 @@ module.exports =
   }, void 0, '镜像描述'), (0, _jsx3.default)('th', {
     width: '10%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u955C\u50CF\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u6700\u8FD1\u66F4\u65B0'), (0, _jsx3.default)('th', {
+    width: '35%'
+  }, void 0, '\u62C9\u53D6\u547D\u4EE4'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u955C\u50CF\u63CF\u8FF0'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref4 = (0, _jsx3.default)(_ServiceStep2.default, {
     dataActive: 'first'
@@ -13115,9 +15064,15 @@ module.exports =
   var _ref5 = (0, _jsx3.default)('div', {
     className: 'left'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '选择镜像',
     titleEnglish: 'SELECT MIRROR',
     titleInfo: '这里里汇聚了构建产生的所有容器云镜像'
+=======
+    title: '\u9009\u62E9\u955C\u50CF',
+    titleEnglish: 'SELECT MIRROR',
+    titleInfo: '\u8FD9\u91CC\u91CC\u6C47\u805A\u4E86\u6784\u5EFA\u4EA7\u751F\u7684\u6240\u6709\u5BB9\u5668\u4E91\u955C\u50CF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   }));
   
   var _ref6 = (0, _jsx3.default)('a', {
@@ -13130,7 +15085,7 @@ module.exports =
   
     function ChooseImage() {
       (0, _classCallCheck3.default)(this, ChooseImage);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ChooseImage).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (ChooseImage.__proto__ || (0, _getPrototypeOf2.default)(ChooseImage)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(ChooseImage, [{
@@ -13171,7 +15126,11 @@ module.exports =
           return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
             colSpan: '5',
             style: { "textAlign": "center" }
+<<<<<<< HEAD
           }, void 0, '暂无数据~'));
+=======
+          }, void 0, '\u6682\u65E0\u6570\u636E~'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }
         if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '5',
@@ -13194,7 +15153,11 @@ module.exports =
           }, void 0, item.short_description)), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('button', {
             className: 'btn btn-sm btn-primary',
             onClick: _this2.deployImage.bind(_this2, item.repository, item.uuid)
+<<<<<<< HEAD
           }, void 0, '部署'))));
+=======
+          }, void 0, '\u90E8\u7F72'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         });
         return body;
       }
@@ -13219,7 +15182,11 @@ module.exports =
           className: 'right'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'search'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '搜索镜像', ref: 'searchInput', className: 'slSearchInp' }), _ref6))), (0, _jsx3.default)('div', {
+=======
+        }, void 0, _react2.default.createElement('input', { type: 'text', placeholder: '\u641C\u7D22\u955C\u50CF', ref: 'searchInput', className: 'slSearchInp' }), _ref6))), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'asTabs'
         }, void 0, (0, _jsx3.default)(_Tabs2.default, {
           defaultActiveKey: 1,
@@ -13227,12 +15194,20 @@ module.exports =
           id: 'asTabs'
         }, void 0, (0, _jsx3.default)(_Tab2.default, {
           eventKey: 1,
+<<<<<<< HEAD
           title: '我的镜像'
+=======
+          title: '\u6211\u7684\u955C\u50CF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'asTableBox TableTextLeft'
         }, void 0, this.getDemoTable())), (0, _jsx3.default)(_Tab2.default, {
           eventKey: 3,
+<<<<<<< HEAD
           title: '平台镜像'
+=======
+          title: '\u5E73\u53F0\u955C\u50CF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)('div', {
           className: 'asTableBox TableTextLeft'
         }, void 0, this.getDemoTable()))))));
@@ -13248,19 +15223,31 @@ module.exports =
   exports.default = ChooseImage;
 
 /***/ },
+<<<<<<< HEAD
 /* 164 */
+=======
+/* 162 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-bootstrap/lib/Tabs");
 
 /***/ },
+<<<<<<< HEAD
 /* 165 */
+=======
+/* 163 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-bootstrap/lib/Tab");
 
 /***/ },
+<<<<<<< HEAD
 /* 166 */
+=======
+/* 164 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13285,7 +15272,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ConfigContainer = __webpack_require__(167);
+=======
+  var _ConfigContainer = __webpack_require__(165);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ConfigContainer2 = _interopRequireDefault(_ConfigContainer);
   
@@ -13327,7 +15318,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 167 */
+=======
+/* 165 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13336,15 +15331,25 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ConfigContainer = __webpack_require__(168);
+=======
+  var _ConfigContainer = __webpack_require__(166);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ConfigContainer2 = _interopRequireDefault(_ConfigContainer);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _deployService = __webpack_require__(110);
   
   var _deployDataSelector = __webpack_require__(160);
+=======
+  var _deployService = __webpack_require__(108);
+  
+  var _deployDataSelector = __webpack_require__(158);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _deployDataSelector2 = _interopRequireDefault(_deployDataSelector);
   
@@ -13352,11 +15357,19 @@ module.exports =
   
   var _isSidebarOpenSelector2 = _interopRequireDefault(_isSidebarOpenSelector);
   
+<<<<<<< HEAD
   var _breadcumb = __webpack_require__(94);
   
   var _building = __webpack_require__(115);
   
   var _buildingDetailSelector = __webpack_require__(140);
+=======
+  var _breadcumb = __webpack_require__(93);
+  
+  var _building = __webpack_require__(113);
+  
+  var _buildingDetailSelector = __webpack_require__(138);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
   
@@ -13395,7 +15408,11 @@ module.exports =
   exports.default = ConfigContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 168 */
+=======
+/* 166 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13432,6 +15449,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ServiceStep = __webpack_require__(156);
   
   var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
@@ -13453,6 +15471,29 @@ module.exports =
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _ServiceStep = __webpack_require__(154);
+  
+  var _ServiceStep2 = _interopRequireDefault(_ServiceStep);
+  
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _ContainerBox = __webpack_require__(167);
+  
+  var _ContainerBox2 = _interopRequireDefault(_ContainerBox);
+  
+  var _reactInputRange = __webpack_require__(173);
+  
+  var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
+  
+  var _Toggle = __webpack_require__(118);
+  
+  var _Toggle2 = _interopRequireDefault(_Toggle);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -13487,7 +15528,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: _this.props.number
@@ -13513,7 +15554,11 @@ module.exports =
           className: 'formField',
           maxValue: 10,
           minValue: 0,
+<<<<<<< HEAD
           labelSuffix: '个',
+=======
+          labelSuffix: '\u4E2A',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           value: this.state.value,
           onChange: this.handleValueChange.bind(this)
         }));
@@ -13528,7 +15573,7 @@ module.exports =
     function UpdateStartToggle(props) {
       (0, _classCallCheck3.default)(this, UpdateStartToggle);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(UpdateStartToggle).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (UpdateStartToggle.__proto__ || (0, _getPrototypeOf2.default)(UpdateStartToggle)).call(this, props));
   
       _this2.state = {
         autoStart: _this2.props.state
@@ -13565,6 +15610,7 @@ module.exports =
   });
   
   var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '服务名称',
     titleEnglish: 'SERVICE NAME',
     titleInfo: '规则后定'
@@ -13598,6 +15644,41 @@ module.exports =
     title: '自动更新设置',
     titleEnglish: 'AUTO UPDATE SETTINGS',
     titleInfo: '当镜像有更新时容器是否自动更新'
+=======
+    title: '\u670D\u52A1\u540D\u79F0',
+    titleEnglish: 'SERVICE NAME',
+    titleInfo: '\u89C4\u5219\u540E\u5B9A'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u63CF\u8FF0'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7248\u672C',
+    titleEnglish: 'MIRROR VERSION',
+    titleInfo: '\u66F4\u65B0\u4E8E\u4E24\u4E2A\u6708\u524D'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5BB9\u5668\u914D\u7F6E',
+    titleEnglish: 'CONTAINER CONFIGURATION',
+    titleInfo: '\u89C4\u5219\u540E\u5B9A'
+  });
+  
+  var _ref7 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5BB9\u5668\u4E2A\u6570',
+    titleEnglish: 'CONTAINER NUMBER',
+    titleInfo: '\u89C4\u5219\u540E\u5B9A'
+  });
+  
+  var _ref8 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u81EA\u52A8\u66F4\u65B0\u8BBE\u7F6E',
+    titleEnglish: 'AUTO UPDATE SETTINGS',
+    titleInfo: '\u5F53\u955C\u50CF\u6709\u66F4\u65B0\u65F6\u5BB9\u5668\u662F\u5426\u81EA\u52A8\u66F4\u65B0'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var ConfigContainer = function (_Component3) {
@@ -13606,7 +15687,7 @@ module.exports =
     function ConfigContainer() {
       (0, _classCallCheck3.default)(this, ConfigContainer);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ConfigContainer).call(this));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (ConfigContainer.__proto__ || (0, _getPrototypeOf2.default)(ConfigContainer)).call(this));
   
       _this3.state = {
         containerDeploy: 0,
@@ -13774,10 +15855,17 @@ module.exports =
         }, void 0, (0, _jsx3.default)(_Link2.default, {
           className: 'btn btn-primary',
           to: '/choseImage'
+<<<<<<< HEAD
         }, void 0, '上一步'), (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.onNextStep.bind(this)
         }, void 0, '下一步'))))));
+=======
+        }, void 0, '\u4E0A\u4E00\u6B65'), (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.onNextStep.bind(this)
+        }, void 0, '\u4E0B\u4E00\u6B65'))))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return ConfigContainer;
@@ -13790,7 +15878,11 @@ module.exports =
   exports.default = ConfigContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 169 */
+=======
+/* 167 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13831,11 +15923,19 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
+<<<<<<< HEAD
   var _ContainerBox = __webpack_require__(170);
   
   var _ContainerBox2 = _interopRequireDefault(_ContainerBox);
   
   var _ContainerItem = __webpack_require__(172);
+=======
+  var _ContainerBox = __webpack_require__(168);
+  
+  var _ContainerBox2 = _interopRequireDefault(_ContainerBox);
+  
+  var _ContainerItem = __webpack_require__(170);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ContainerItem2 = _interopRequireDefault(_ContainerItem);
   
@@ -13854,13 +15954,15 @@ module.exports =
   
   var _ref2 = (0, _jsx3.default)('span', {}, void 0, '(公测)');
   
+  var _ref = (0, _jsx3.default)('span', {}, void 0, 'x');
+  
   var ContainerBox = function (_Component) {
     (0, _inherits3.default)(ContainerBox, _Component);
   
     function ContainerBox(props) {
       (0, _classCallCheck3.default)(this, ContainerBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ContainerBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (ContainerBox.__proto__ || (0, _getPrototypeOf2.default)(ContainerBox)).call(this, props));
   
       _this.state = {
         index: _this.props.number
@@ -13888,7 +15990,11 @@ module.exports =
             index: i,
             active: i == index,
             onClick: me.handleClick.bind(me, i)
+<<<<<<< HEAD
           }, i, (0, _jsx3.default)('span', {}, void 0, item.x), _ref, (0, _jsx3.default)('span', {}, void 0, item.m, _ref2));
+=======
+          }, i, (0, _jsx3.default)('span', {}, void 0, item.x), _ref, (0, _jsx3.default)('span', {}, void 0, item.m));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         });
   
         return (0, _jsx3.default)('div', {}, void 0, children);
@@ -13897,6 +16003,7 @@ module.exports =
     return ContainerBox;
   }(_react.Component);
   
+<<<<<<< HEAD
   exports.default = (0, _withStyles2.default)(_ContainerBox2.default)(ContainerBox);
 
 /***/ },
@@ -13905,6 +16012,63 @@ module.exports =
 
   
       var content = __webpack_require__(171);
+=======
+  // var ContainerBox = React.createClass({
+  //   getDefaultProps:function(){
+  //     return{
+  //       getContainer:function(){},
+  //       number:0
+  //     }
+  //   },
+  //   getInitialState:function(){
+  //     console.log(this.props.number);
+  //     return{
+  //       index: this.props.number
+  //     }
+  //   },
+  //   handleClick:function(index){
+  //     this.setState({
+  //       index: index
+  //     });
+  //     this.props.getContainer(index);
+  //   },
+  //   render:function() {
+  //     let me = this, index = this.state.index;
+  //     let data = [
+  //       {x:1,m:"128M"},
+  //       {x:2,m:"256M"},
+  //       {x:4,m:"512M"},
+  //       {x:5,m:"1024M"},
+  //       {x:16,m:"2048M"},
+  //     ];
+  //
+  //     let children = data.map(function(item,i){
+  //       return (
+  //         <ContainerItem key={i} index={i} active={i == index} onClick={me.handleClick}>
+  //           <span>{item.x}</span>
+  //           <span>x</span>
+  //           <span>{item.m}</span>
+  //         </ContainerItem>
+  //       );
+  //     });
+  //
+  //     return (
+  //       <div>
+  //         {children}
+  //       </div>
+  //     )
+  //   }
+  // })
+  
+  exports.default = (0, _withStyles2.default)(_ContainerBox2.default)(ContainerBox);
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+  
+      var content = __webpack_require__(169);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
@@ -13917,7 +16081,11 @@ module.exports =
     
 
 /***/ },
+<<<<<<< HEAD
 /* 171 */
+=======
+/* 169 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(18)();
@@ -13931,7 +16099,11 @@ module.exports =
 
 
 /***/ },
+<<<<<<< HEAD
 /* 172 */
+=======
+/* 170 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -13952,7 +16124,11 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
+<<<<<<< HEAD
   var _ContainerItem = __webpack_require__(173);
+=======
+  var _ContainerItem = __webpack_require__(171);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ContainerItem2 = _interopRequireDefault(_ContainerItem);
   
@@ -14003,11 +16179,19 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_ContainerItem2.default)(ContainerItem);
 
 /***/ },
+<<<<<<< HEAD
 /* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
   
       var content = __webpack_require__(174);
+=======
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+  
+      var content = __webpack_require__(172);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
@@ -14020,7 +16204,11 @@ module.exports =
     
 
 /***/ },
+<<<<<<< HEAD
 /* 174 */
+=======
+/* 172 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(18)();
@@ -14028,7 +16216,11 @@ module.exports =
   
   
   // module
+<<<<<<< HEAD
   exports.push([module.id, "._3Tti{width:100px;height:103px;background:#f2f4f8;border-radius:4px 4px 7px 7px;border-top:3px solid #f2f4f8;border-bottom:3px solid #d7c698;display:inline-block;margin-right:42px;cursor:pointer}._3Tti:hover{box-shadow:0 3px 5px hsla(44,44%,72%,.35)}._1vCB{height:59px;line-height:59px;border-bottom:1px solid #ccc;margin:0 22px;text-align:center;font-size:35px}._1vCB span{font-size:30px}._3IGg{margin-top:10px;text-align:center;color:#666}._3Tti:nth-child(2){border-bottom-color:#5eafce}._3Tti:nth-child(2):hover{box-shadow:0 3px 5px rgba(39,154,197,.35)}._3Tti:nth-child(3){border-bottom-color:#a8ce6b}._3Tti:nth-child(3):hover{box-shadow:0 3px 5px rgba(130,165,75,.35)}._3Tti:nth-child(4){border-bottom-color:#889bcb}._3Tti:nth-child(4):hover{box-shadow:0 3px 5px rgba(94,117,174,.35)}._3Tti:nth-child(5){border-bottom-color:#ef6256}._3Tti:nth-child(5):hover{box-shadow:0 3px 5px rgba(168,91,85,.35)}._1e8q{background:#c8b88f;border-top:3px solid #a4873e;border-bottom:0}._1e8q,._1e8q ._3IGg{color:#fff}._1e8q ._1vCB{border-color:#fff}._3IGg span{font-size:12px}._3Tti:nth-child(2)._1e8q{border-color:#439ec1;background:#5eafce}._3Tti:nth-child(3)._1e8q{border-color:#80a643;background:#a8ce6b}._3Tti:nth-child(4)._1e8q{border-color:#4666b7;background:#889bcb}._3Tti:nth-child(5)._1e8q{border-color:#c34439;background:#ef6256}", ""]);
+=======
+  exports.push([module.id, "._3Tti{width:100px;height:103px;background:#f2f4f8;border-radius:4px 4px 7px 7px;border-top:3px solid #f2f4f8;border-bottom:3px solid #d7c698;display:inline-block;margin-right:42px;cursor:pointer}._3Tti:hover{box-shadow:0 3px 5px hsla(44,44%,72%,.35)}._1vCB{height:59px;line-height:59px;border-bottom:1px solid #ccc;margin:0 22px;text-align:center;font-size:35px}._1vCB span{font-size:30px}._3IGg{margin-top:10px;text-align:center;color:#666}._3Tti:nth-child(2){border-bottom-color:#5eafce}._3Tti:nth-child(2):hover{box-shadow:0 3px 5px rgba(39,154,197,.35)}._3Tti:nth-child(3){border-bottom-color:#a8ce6b}._3Tti:nth-child(3):hover{box-shadow:0 3px 5px rgba(130,165,75,.35)}._3Tti:nth-child(4){border-bottom-color:#889bcb}._3Tti:nth-child(4):hover{box-shadow:0 3px 5px rgba(94,117,174,.35)}._3Tti:nth-child(5){border-bottom-color:#ef6256}._3Tti:nth-child(5):hover{box-shadow:0 3px 5px rgba(168,91,85,.35)}._1e8q{background:#c8b88f;border-top:3px solid #a4873e;border-bottom:0}._1e8q,._1e8q ._3IGg{color:#fff}._1e8q ._1vCB{border-color:#fff}._3Tti:nth-child(2)._1e8q{border-color:#439ec1;background:#5eafce}._3Tti:nth-child(3)._1e8q{border-color:#80a643;background:#a8ce6b}._3Tti:nth-child(4)._1e8q{border-color:#4666b7;background:#889bcb}._3Tti:nth-child(5)._1e8q{border-color:#c34439;background:#ef6256}", ""]);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   // exports
   exports.locals = {
@@ -14039,13 +16231,21 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 175 */
+=======
+/* 173 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-input-range");
 
 /***/ },
+<<<<<<< HEAD
 /* 176 */
+=======
+/* 174 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14070,7 +16270,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ServiceDeatilContainer = __webpack_require__(177);
+=======
+  var _ServiceDeatilContainer = __webpack_require__(175);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ServiceDeatilContainer2 = _interopRequireDefault(_ServiceDeatilContainer);
   
@@ -14113,7 +16317,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 177 */
+=======
+/* 175 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14122,7 +16330,11 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ServiceDetail = __webpack_require__(178);
+=======
+  var _ServiceDetail = __webpack_require__(176);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
   
@@ -14132,6 +16344,7 @@ module.exports =
   
   var actions = _interopRequireWildcard(_serviceDetail);
   
+<<<<<<< HEAD
   var _services = __webpack_require__(95);
   
   var _volumes = __webpack_require__(99);
@@ -14149,6 +16362,25 @@ module.exports =
   var _logsSelector2 = _interopRequireDefault(_logsSelector);
   
   var _logs_shrSelector = __webpack_require__(192);
+=======
+  var _services = __webpack_require__(94);
+  
+  var _volumes = __webpack_require__(98);
+  
+  var _serviceDetailSelector = __webpack_require__(188);
+  
+  var _serviceDetailSelector2 = _interopRequireDefault(_serviceDetailSelector);
+  
+  var _volumesListSelector = __webpack_require__(99);
+  
+  var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
+  
+  var _logsSelector = __webpack_require__(189);
+  
+  var _logsSelector2 = _interopRequireDefault(_logsSelector);
+  
+  var _logs_shrSelector = __webpack_require__(190);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _logs_shrSelector2 = _interopRequireDefault(_logs_shrSelector);
   
@@ -14156,6 +16388,7 @@ module.exports =
   
   var _notificationsSelector2 = _interopRequireDefault(_notificationsSelector);
   
+<<<<<<< HEAD
   var _podListSelector = __webpack_require__(193);
   
   var _podListSelector2 = _interopRequireDefault(_podListSelector);
@@ -14175,6 +16408,27 @@ module.exports =
   var _monitorDataSelector2 = _interopRequireDefault(_monitorDataSelector);
   
   var _building = __webpack_require__(115);
+=======
+  var _podListSelector = __webpack_require__(191);
+  
+  var _podListSelector2 = _interopRequireDefault(_podListSelector);
+  
+  var _buildingDetailSelector = __webpack_require__(138);
+  
+  var _buildingDetailSelector2 = _interopRequireDefault(_buildingDetailSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _isBtnStateSelector = __webpack_require__(125);
+  
+  var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
+  
+  var _monitorDataSelector = __webpack_require__(192);
+  
+  var _monitorDataSelector2 = _interopRequireDefault(_monitorDataSelector);
+  
+  var _building = __webpack_require__(113);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -14285,7 +16539,11 @@ module.exports =
   exports.default = ServiceDetailContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 178 */
+=======
+/* 176 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14326,6 +16584,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
+<<<<<<< HEAD
   var _ServiceDetail = __webpack_require__(179);
   
   var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
@@ -14367,6 +16626,49 @@ module.exports =
   var _GetOptTabs2 = _interopRequireDefault(_GetOptTabs);
   
   var _Logs = __webpack_require__(139);
+=======
+  var _ServiceDetail = __webpack_require__(177);
+  
+  var _ServiceDetail2 = _interopRequireDefault(_ServiceDetail);
+  
+  var _Tabs = __webpack_require__(162);
+  
+  var _Tabs2 = _interopRequireDefault(_Tabs);
+  
+  var _Tab = __webpack_require__(163);
+  
+  var _Tab2 = _interopRequireDefault(_Tab);
+  
+  var _reactInputRange = __webpack_require__(173);
+  
+  var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
+  
+  var _GetDisposedTabs = __webpack_require__(179);
+  
+  var _GetDisposedTabs2 = _interopRequireDefault(_GetDisposedTabs);
+  
+  var _GetMonitorTabs = __webpack_require__(181);
+  
+  var _GetMonitorTabs2 = _interopRequireDefault(_GetMonitorTabs);
+  
+  var _GetReleaseTabs = __webpack_require__(183);
+  
+  var _GetReleaseTabs2 = _interopRequireDefault(_GetReleaseTabs);
+  
+  var _GetRealmNameTabs = __webpack_require__(185);
+  
+  var _GetRealmNameTabs2 = _interopRequireDefault(_GetRealmNameTabs);
+  
+  var _GetContainerTabs = __webpack_require__(186);
+  
+  var _GetContainerTabs2 = _interopRequireDefault(_GetContainerTabs);
+  
+  var _GetOptTabs = __webpack_require__(187);
+  
+  var _GetOptTabs2 = _interopRequireDefault(_GetOptTabs);
+  
+  var _Logs = __webpack_require__(137);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Logs2 = _interopRequireDefault(_Logs);
   
@@ -14378,7 +16680,11 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
+=======
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -14404,7 +16710,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: _this.props.number
@@ -14430,7 +16736,11 @@ module.exports =
           className: 'formField',
           maxValue: 10,
           minValue: 0,
+<<<<<<< HEAD
           labelSuffix: '个',
+=======
+          labelSuffix: '\u4E2A',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           value: this.state.value || this.props.number,
           onChange: this.handleValueChange.bind(this)
         }));
@@ -14445,6 +16755,7 @@ module.exports =
   
   var _ref2 = (0, _jsx3.default)('span', {
     className: 'text-success'
+<<<<<<< HEAD
   }, void 0, '运行');
   
   var _ref3 = (0, _jsx3.default)('span', {
@@ -14466,17 +16777,48 @@ module.exports =
   var _ref7 = (0, _jsx3.default)('div', {
     className: 'assItem'
   }, void 0, '该服务因没有启动，尚未占用资源，暂无容器实例。');
+=======
+  }, void 0, '\u8FD0\u884C');
+  
+  var _ref3 = (0, _jsx3.default)('span', {
+    className: 'text-info'
+  }, void 0, '\u521B\u5EFA\u4E2D');
+  
+  var _ref4 = (0, _jsx3.default)('span', {
+    className: 'text-danger'
+  }, void 0, '\u5173\u95ED');
+  
+  var _ref5 = (0, _jsx3.default)('span', {
+    className: 'text-danger'
+  }, void 0, '\u8FD0\u884C\u5931\u8D25');
+  
+  var _ref6 = (0, _jsx3.default)('div', {
+    className: 'assItem'
+  }, void 0, '\u8BE5\u670D\u52A1\u56E0\u6CA1\u6709\u542F\u52A8\uFF0C\u5C1A\u672A\u5360\u7528\u8D44\u6E90\uFF0C\u6682\u65E0\u5BB9\u5668\u5B9E\u4F8B\u3002');
+  
+  var _ref7 = (0, _jsx3.default)('div', {
+    className: 'assItem'
+  }, void 0, '\u8BE5\u670D\u52A1\u56E0\u6CA1\u6709\u542F\u52A8\uFF0C\u5C1A\u672A\u5360\u7528\u8D44\u6E90\uFF0C\u6682\u65E0\u5BB9\u5668\u5B9E\u4F8B\u3002');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref8 = (0, _jsx3.default)('img', {});
   
   var _ref9 = (0, _jsx3.default)('a', {
     href: 'javascript:;'
+<<<<<<< HEAD
   }, void 0, '置于首页');
+=======
+  }, void 0, '\u7F6E\u4E8E\u9996\u9875');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref10 = (0, _jsx3.default)(_Link2.default, {
     to: "/",
     className: 'btn btn-default'
+<<<<<<< HEAD
   }, void 0, '进入控制台');
+=======
+  }, void 0, '\u8FDB\u5165\u63A7\u5236\u53F0');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var ServiceDetail = function (_Component2) {
     (0, _inherits3.default)(ServiceDetail, _Component2);
@@ -14484,7 +16826,7 @@ module.exports =
     function ServiceDetail(props) {
       (0, _classCallCheck3.default)(this, ServiceDetail);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ServiceDetail).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ServiceDetail.__proto__ || (0, _getPrototypeOf2.default)(ServiceDetail)).call(this, props));
   
       _this2.state = {
         containerNum: 1,
@@ -14715,6 +17057,7 @@ module.exports =
           className: _ServiceDetail2.default.sdTitle
         }, void 0, (0, _jsx3.default)('div', {
           className: _ServiceDetail2.default.sdTitleItem
+<<<<<<< HEAD
         }, void 0, '服务名称:', (0, _jsx3.default)('span', {}, void 0, data.service_name)), (0, _jsx3.default)('div', {
           className: _ServiceDetail2.default.sdTitleItem
         }, void 0, '部署时间:', (0, _jsx3.default)('span', {
@@ -14722,6 +17065,15 @@ module.exports =
         }, void 0, data.ltime)), (0, _jsx3.default)('div', {
           className: _ServiceDetail2.default.sdTitleItem
         }, void 0, '状态:', serviceStateTxt), (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u670D\u52A1\u540D\u79F0:', (0, _jsx3.default)('span', {}, void 0, data.service_name)), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdTitleItem
+        }, void 0, '\u90E8\u7F72\u65F6\u95F4:', (0, _jsx3.default)('span', {
+          className: 'cl9'
+        }, void 0, data.ltime)), (0, _jsx3.default)('div', {
+          className: _ServiceDetail2.default.sdTitleItem
+        }, void 0, '\u72B6\u6001:', serviceStateTxt), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _ServiceDetail2.default.sdTitleItem
         }, void 0, _ref10, _react2.default.createElement(
           'button',
@@ -14737,7 +17089,11 @@ module.exports =
           className: (0, _classnames2.default)(_ServiceDetail2.default.sdPItem, _ServiceDetail2.default.sdDomain)
         }, void 0, (0, _jsx3.default)('span', {
           className: _ServiceDetail2.default.sdPItemName
+<<<<<<< HEAD
         }, void 0, '域名:'), domain.map(function (item, i) {
+=======
+        }, void 0, '\u57DF\u540D:'), domain.map(function (item, i) {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           return (0, _jsx3.default)('a', {
             href: 'http://' + item,
             target: '_blank',
@@ -14747,14 +17103,22 @@ module.exports =
           className: _ServiceDetail2.default.sdPItem
         }, void 0, (0, _jsx3.default)('span', {
           className: _ServiceDetail2.default.sdPItemName
+<<<<<<< HEAD
         }, void 0, '所属镜像:'), (0, _jsx3.default)('a', {
+=======
+        }, void 0, '\u6240\u5C5E\u955C\u50CF:'), (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           href: 'javascript:;',
           className: 'clLink'
         }, void 0, data.image_name)), (0, _jsx3.default)('div', {
           className: _ServiceDetail2.default.sdPItem
         }, void 0, (0, _jsx3.default)('span', {
           className: _ServiceDetail2.default.sdPItemName
+<<<<<<< HEAD
         }, void 0, '容器个数:'), (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u5BB9\u5668\u4E2A\u6570:'), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: _ServiceDetail2.default.sdInputRanges
         }, void 0, (0, _jsx3.default)(InputRangesBox, {
           number: data.spec_replicas,
@@ -14763,7 +17127,11 @@ module.exports =
           className: 'btn btn-default ' + (!this.props.isBtnState.pods ? "btn-loading" : ""),
           disabled: !this.props.isBtnState.pods,
           onClick: this.onSavePods.bind(this)
+<<<<<<< HEAD
         }, void 0, '保存'))))), (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u4FDD\u5B58'))))), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'sdDetail'
         }, void 0, (0, _jsx3.default)(_Tabs2.default, {
           defaultActiveKey: Number(this.props.tabs),
@@ -14771,6 +17139,7 @@ module.exports =
           id: 'sdTabs'
         }, void 0, (0, _jsx3.default)(_Tab2.default, {
           eventKey: 1,
+<<<<<<< HEAD
           title: '配置'
         }, void 0, this.state.tabSelect == 1 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
           eventKey: 2,
@@ -14790,6 +17159,27 @@ module.exports =
         }, void 0, this.state.tabSelect == 6 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
           eventKey: 7,
           title: '操作'
+=======
+          title: '\u914D\u7F6E'
+        }, void 0, this.state.tabSelect == 1 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 2,
+          title: '\u76D1\u63A7'
+        }, void 0, this.state.tabSelect == 2 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 3,
+          title: '\u65E5\u5FD7'
+        }, void 0, this.state.tabSelect == 3 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 4,
+          title: '\u53D1\u5E03'
+        }, void 0, this.state.tabSelect == 4 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 5,
+          title: '\u57DF\u540D'
+        }, void 0, this.state.tabSelect == 5 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 6,
+          title: '\u5BB9\u5668\u5B9E\u4F8B'
+        }, void 0, this.state.tabSelect == 6 ? tab : null), (0, _jsx3.default)(_Tab2.default, {
+          eventKey: 7,
+          title: '\u64CD\u4F5C'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, this.state.tabSelect == 7 ? tab : null))));
       }
     }]);
@@ -14803,11 +17193,19 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_ServiceDetail2.default)(ServiceDetail);
 
 /***/ },
+<<<<<<< HEAD
 /* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
   
       var content = __webpack_require__(180);
+=======
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+  
+      var content = __webpack_require__(178);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       var insertCss = __webpack_require__(19);
   
       if (typeof content === 'string') {
@@ -14820,7 +17218,11 @@ module.exports =
     
 
 /***/ },
+<<<<<<< HEAD
 /* 180 */
+=======
+/* 178 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(18)();
@@ -14873,7 +17275,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 181 */
+=======
+/* 179 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -14914,6 +17320,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
@@ -14933,12 +17340,37 @@ module.exports =
   var _lib = __webpack_require__(182);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _ContainerBox = __webpack_require__(167);
+  
+  var _ContainerBox2 = _interopRequireDefault(_ContainerBox);
+  
+  var _ContainerItem = __webpack_require__(170);
+  
+  var _ContainerItem2 = _interopRequireDefault(_ContainerItem);
+  
+  var _Toggle = __webpack_require__(118);
+  
+  var _Toggle2 = _interopRequireDefault(_Toggle);
+  
+  var _lib = __webpack_require__(180);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _deployService = __webpack_require__(110);
+=======
+  var _deployService = __webpack_require__(108);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -14948,7 +17380,7 @@ module.exports =
     function AutoStartUpToggle(props) {
       (0, _classCallCheck3.default)(this, AutoStartUpToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(AutoStartUpToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (AutoStartUpToggle.__proto__ || (0, _getPrototypeOf2.default)(AutoStartUpToggle)).call(this, props));
   
       _this.state = {
         autoStart: true
@@ -14987,16 +17419,28 @@ module.exports =
                         */
   
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)('span', {}, void 0, '更改');
   
   var _ref2 = (0, _jsx3.default)('span', {
     'aria-hidden': 'true'
   }, void 0, '×');
+=======
+  var _ref = (0, _jsx3.default)('span', {}, void 0, '\u66F4\u6539');
+  
+  var _ref2 = (0, _jsx3.default)('span', {
+    'aria-hidden': 'true'
+  }, void 0, '\xD7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref3 = (0, _jsx3.default)('h4', {
     className: 'modal-title',
     id: 'contained-modal-title-sm'
+<<<<<<< HEAD
   }, void 0, '容器配置');
+=======
+  }, void 0, '\u5BB9\u5668\u914D\u7F6E');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var ChooseContainerBtn = function (_Component2) {
     (0, _inherits3.default)(ChooseContainerBtn, _Component2);
@@ -15004,7 +17448,7 @@ module.exports =
     function ChooseContainerBtn(props) {
       (0, _classCallCheck3.default)(this, ChooseContainerBtn);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ChooseContainerBtn).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ChooseContainerBtn.__proto__ || (0, _getPrototypeOf2.default)(ChooseContainerBtn)).call(this, props));
   
       _this2.state = {
         modalShow: false,
@@ -15049,8 +17493,12 @@ module.exports =
           onClick: this.showModal.bind(this)
         }, void 0, _ref, _react2.default.createElement(
           _lib.Modal,
+<<<<<<< HEAD
           (0, _extends3.default)({}, this.props, { show: this.state.show, onHide: this.hideModal.bind(this), bsSize: 'sm',
             'aria-labelledby': 'contained-modal-title-sm' }),
+=======
+          (0, _extends3.default)({}, this.props, { show: this.state.show, onHide: this.hideModal.bind(this), bsSize: 'sm', 'aria-labelledby': 'contained-modal-title-sm' }),
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           (0, _jsx3.default)('div', {
             className: 'modal-header'
           }, void 0, (0, _jsx3.default)('button', {
@@ -15070,10 +17518,17 @@ module.exports =
           }, void 0, (0, _jsx3.default)(_lib.Button, {
             bsStyle: 'primary',
             onClick: this.saveContainerDeploy.bind(this)
+<<<<<<< HEAD
           }, void 0, '保存'), (0, _jsx3.default)(_lib.Button, {
             bsStyle: 'default',
             onClick: this.hideModal.bind(this)
           }, void 0, '取消')))
+=======
+          }, void 0, '\u4FDD\u5B58'), (0, _jsx3.default)(_lib.Button, {
+            bsStyle: 'default',
+            onClick: this.hideModal.bind(this)
+          }, void 0, '\u53D6\u6D88')))
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ));
       }
     }]);
@@ -15098,6 +17553,7 @@ module.exports =
   
   var _ref8 = (0, _jsx3.default)('option', {
     value: 'no'
+<<<<<<< HEAD
   }, void 0, '不可访问');
   
   var _ref9 = (0, _jsx3.default)('option', {
@@ -15133,6 +17589,43 @@ module.exports =
   }, void 0, '是否只读'), (0, _jsx3.default)('th', {
     width: '25%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u4E0D\u53EF\u8BBF\u95EE');
+  
+  var _ref9 = (0, _jsx3.default)('option', {
+    value: 'outsisde'
+  }, void 0, '\u5916\u90E8\u8303\u56F4');
+  
+  var _ref10 = (0, _jsx3.default)('option', {
+    value: 'inside'
+  }, void 0, '\u5185\u90E8\u8303\u56F4');
+  
+  var _ref11 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u5BB9\u5668\u7AEF\u53E3'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u534F\u8BAE'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u65B9\u5F0F'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u8BBF\u95EE\u8303\u56F4'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref12 = (0, _jsx3.default)('option', {
+    value: '-1'
+  }, void 0, '\u8BF7\u9009\u62E9\u6570\u636E\u5377');
+  
+  var _ref13 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u6570\u636E\u5377\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u5BB9\u5668\u8DEF\u5F84'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u662F\u5426\u53EA\u8BFB'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref14 = (0, _jsx3.default)('div', {
     className: 'astLine'
@@ -15140,6 +17633,7 @@ module.exports =
   
   var _ref15 = (0, _jsx3.default)('span', {}, void 0, 'x');
   
+<<<<<<< HEAD
   var _ref16 = (0, _jsx3.default)('span', {}, void 0, '(公测)');
   
   var _ref17 = (0, _jsx3.default)(_HeadLine2.default, {
@@ -15150,10 +17644,21 @@ module.exports =
   
   var _ref18 = (0, _jsx3.default)(_HeadLine2.default, {
     title: '环境变量',
+=======
+  var _ref16 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7AEF\u53E3',
+    titleEnglish: 'PORT',
+    titleInfo: '\u5BB9\u5668\u7AEF\u53E3\u4F1A\u6620\u5C04\u5230\u4E3B\u673A\u7AEF\u53E3\u4E0A'
+  });
+  
+  var _ref17 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u73AF\u5883\u53D8\u91CF',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: 'ENVIRONMENT VARIABLE',
     titleInfo: ''
   });
   
+<<<<<<< HEAD
   var _ref19 = (0, _jsx3.default)(_HeadLine2.default, {
     title: '容器配置',
     titleEnglish: 'CONTAINER CONFIGURATION',
@@ -15170,6 +17675,24 @@ module.exports =
     title: '自动启动',
     titleEnglish: 'AUTO UPDATE SETTING',
     titleInfo: '自动启动设置'
+=======
+  var _ref18 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5BB9\u5668\u914D\u7F6E',
+    titleEnglish: 'CONTAINER CONFIGURATION',
+    titleInfo: '\u5BB9\u5668\u914D\u7F6E\u8BF4\u660E'
+  });
+  
+  var _ref19 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u542F\u52A8\u547D\u4EE4',
+    titleEnglish: 'JRE',
+    titleInfo: '\u542F\u52A8\u547D\u4EE4\u89E3\u91CA\u8BF4\u660E '
+  });
+  
+  var _ref20 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u81EA\u52A8\u542F\u52A8',
+    titleEnglish: 'AUTO UPDATE SETTING',
+    titleInfo: '\u81EA\u52A8\u542F\u52A8\u8BBE\u7F6E'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var GetDisposedTabs = function (_Component3) {
@@ -15178,7 +17701,7 @@ module.exports =
     function GetDisposedTabs(props) {
       (0, _classCallCheck3.default)(this, GetDisposedTabs);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetDisposedTabs).call(this, props));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (GetDisposedTabs.__proto__ || (0, _getPrototypeOf2.default)(GetDisposedTabs)).call(this, props));
   
       _this3.state = {
         isStateUp: 1,
@@ -15475,7 +17998,11 @@ module.exports =
           }, void 0, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('input', {
             type: 'checkbox',
             defaultChecked: item.readonly == "True"
+<<<<<<< HEAD
           }), ' 是否只读'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+=======
+          }), ' \u662F\u5426\u53EA\u8BFB'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             href: 'javascript:;',
             className: 'delBtn',
             onClick: _this8.delSaveTr.bind(_this8, item.at)
@@ -15557,7 +18084,11 @@ module.exports =
             type: 'text',
             className: 'form-control',
             onBlur: _this9.isEnvKeyRepeat.bind(_this9, i),
+<<<<<<< HEAD
             placeholder: '键',
+=======
+            placeholder: '\u952E',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             defaultValue: item.env_key
           })), _ref14, (0, _jsx3.default)('div', {
             className: 'astInp'
@@ -15565,7 +18096,11 @@ module.exports =
             type: 'text',
             className: 'form-control',
             onBlur: _this9.isEnvValue.bind(_this9),
+<<<<<<< HEAD
             placeholder: '值',
+=======
+            placeholder: '\u503C',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             defaultValue: item.env_value
           })), (0, _jsx3.default)('div', {
             className: 'astDel'
@@ -15629,9 +18164,14 @@ module.exports =
           return (0, _jsx3.default)('div', {
             className: style
           }, i, (0, _jsx3.default)(_ContainerItem2.default, {
+<<<<<<< HEAD
             classNumber: i,
             active: true
           }, i, (0, _jsx3.default)('span', {}, void 0, item.x), _ref15, (0, _jsx3.default)('span', {}, void 0, item.m, _ref16)));
+=======
+            classNumber: i
+          }, i, (0, _jsx3.default)('span', {}, void 0, item.x), _ref15, (0, _jsx3.default)('span', {}, void 0, item.m)));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         });
         return children;
       }
@@ -15674,18 +18214,27 @@ module.exports =
             n++;
           }
         });
+<<<<<<< HEAD
         var volumeLength = n == 0 ? "暂时没有数据卷" : '目前有' + n + '个数据卷';
+=======
+        var volumeLength = n == 0 ? "暂时没有数据卷" : '\u76EE\u524D\u6709' + n + '\u4E2A\u6570\u636E\u5377';
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         return (0, _jsx3.default)('div', {
           className: 'asTabThird'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'assItem'
+<<<<<<< HEAD
         }, void 0, _ref17, (0, _jsx3.default)('div', {
+=======
+        }, void 0, _ref16, (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'astBox'
         }, void 0, this.getPortTable()), (0, _jsx3.default)('div', {
           className: 'assBtnBox'
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.addPortTr.bind(this)
+<<<<<<< HEAD
         }, void 0, '添加'), (0, _jsx3.default)('button', {
           className: 'btn btn-default ' + (!this.props.isBtnState.port ? "btn-loading" : ""),
           disabled: !this.props.isBtnState.port,
@@ -15694,6 +18243,16 @@ module.exports =
           className: 'assItem'
         }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
           title: '存储设置',
+=======
+        }, void 0, '\u6DFB\u52A0'), (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.port ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.port,
+          onClick: this.savePort.bind(this)
+        }, void 0, '\u4FDD\u5B58'), _react2.default.createElement('span', { className: this.state.port ? "inputTip inputTipShow" : "inputTip", ref: 'portTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+          title: '\u5B58\u50A8\u8BBE\u7F6E',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           titleEnglish: 'SAVE SETTING',
           titleInfo: volumeLength
         }), _react2.default.createElement(
@@ -15705,6 +18264,7 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.addSaveTr.bind(this)
+<<<<<<< HEAD
         }, void 0, '添加'), (0, _jsx3.default)('button', {
           className: 'btn btn-default ' + (!this.props.isBtnState.storage ? "btn-loading" : ""),
           disabled: !this.props.isBtnState.storage,
@@ -15712,6 +18272,15 @@ module.exports =
         }, void 0, '保存'), _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' }))), (0, _jsx3.default)('div', {
           className: 'assItem'
         }, void 0, _ref18, _react2.default.createElement(
+=======
+        }, void 0, '\u6DFB\u52A0'), (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.storage ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.storage,
+          onClick: this.saveStorage.bind(this)
+        }, void 0, '\u4FDD\u5B58'), _react2.default.createElement('span', { className: this.state.volume ? "inputTip inputTipShow" : "inputTip", ref: 'volumeTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref17, _react2.default.createElement(
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           'div',
           { className: 'astBox', ref: 'tab_env_box' },
           this.getEnvironment()
@@ -15720,6 +18289,7 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.addEnvironmentData.bind(this)
+<<<<<<< HEAD
         }, void 0, '添加'), (0, _jsx3.default)('button', {
           className: 'btn btn-default ' + (!this.props.isBtnState.env ? "btn-loading" : ""),
           disabled: !this.props.isBtnState.env,
@@ -15731,6 +18301,24 @@ module.exports =
         }, void 0, this.getContainerBox(data.containerDeploy))), (0, _jsx3.default)('div', {
           className: 'assItem'
         }, void 0, _ref20, (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u6DFB\u52A0'), (0, _jsx3.default)('button', {
+          className: 'btn btn-default ' + (!this.props.isBtnState.env ? "btn-loading" : ""),
+          disabled: !this.props.isBtnState.env,
+          onClick: this.saveEnvironment.bind(this)
+        }, void 0, '\u4FDD\u5B58'), _react2.default.createElement('span', { className: this.state.env ? "inputTip inputTipShow" : "inputTip", ref: 'envTip' }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref18, (0, _jsx3.default)('div', {
+          className: 'assBox'
+        }, void 0, this.getContainerBox(data.containerDeploy), (0, _jsx3.default)(ChooseContainerBtn, {
+          serviceName: this.props.serviceDetail.fservice_name,
+          onSaveContainerDeploy: function onSaveContainerDeploy(data) {
+            _this10.props.onSaveContainerDeploy(data);
+          }
+        }))), (0, _jsx3.default)('div', {
+          className: 'assItem'
+        }, void 0, _ref19, (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'assBox'
         }, void 0, _react2.default.createElement('input', { className: 'form-control',
           type: 'text',
@@ -15743,9 +18331,15 @@ module.exports =
           className: 'btn btn-default ' + (!this.props.isBtnState.command ? "btn-loading" : ""),
           disabled: !this.props.isBtnState.command,
           onClick: this.saveCommand.bind(this)
+<<<<<<< HEAD
         }, void 0, '保存'))), (0, _jsx3.default)('div', {
           className: 'assItem assItemNoborder'
         }, void 0, _ref21, (0, _jsx3.default)('div', {
+=======
+        }, void 0, '\u4FDD\u5B58'))), (0, _jsx3.default)('div', {
+          className: 'assItem assItemNoborder'
+        }, void 0, _ref20, (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'assBox'
         }, void 0, (0, _jsx3.default)(AutoStartUpToggle, {
           disabled: !this.props.isBtnState.autoStateUp,
@@ -15763,13 +18357,21 @@ module.exports =
   exports.default = GetDisposedTabs;
 
 /***/ },
+<<<<<<< HEAD
 /* 182 */
+=======
+/* 180 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-bootstrap/lib");
 
 /***/ },
+<<<<<<< HEAD
 /* 183 */
+=======
+/* 181 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -15806,6 +18408,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
@@ -15815,6 +18418,17 @@ module.exports =
   var _Monitor2 = _interopRequireDefault(_Monitor);
   
   var _Loading = __webpack_require__(92);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _Monitor = __webpack_require__(182);
+  
+  var _Monitor2 = _interopRequireDefault(_Monitor);
+  
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -15827,6 +18441,7 @@ module.exports =
     className: 'text-center'
   }, void 0, (0, _jsx3.default)(_Loading2.default, {}, void 0, ' '));
   
+<<<<<<< HEAD
   var _ref2 = (0, _jsx3.default)('label', {}, void 0, '请选择容器实例:');
   
   var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
@@ -15845,6 +18460,26 @@ module.exports =
     title: '网络监控',
     titleEnglish: 'NETWORK MONITOR',
     titleInfo: '24小时'
+=======
+  var _ref2 = (0, _jsx3.default)('label', {}, void 0, '\u8BF7\u9009\u62E9\u5BB9\u5668\u5B9E\u4F8B:');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: 'CPU\u76D1\u63A7',
+    titleEnglish: 'CPU MONITOR',
+    titleInfo: '24\u5C0F\u65F6'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u5185\u5B58\u76D1\u63A7',
+    titleEnglish: 'MEMORY MONITOR',
+    titleInfo: '24\u5C0F\u65F6'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7F51\u7EDC\u76D1\u63A7',
+    titleEnglish: 'NETWORK MONITOR',
+    titleInfo: '24\u5C0F\u65F6'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var GetMonitorTabs = function (_Component) {
@@ -15853,7 +18488,7 @@ module.exports =
     function GetMonitorTabs(props) {
       (0, _classCallCheck3.default)(this, GetMonitorTabs);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetMonitorTabs).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetMonitorTabs.__proto__ || (0, _getPrototypeOf2.default)(GetMonitorTabs)).call(this, props));
   
       _this.state = {
         pod_name: _this.props.podList[0].pod_name
@@ -15968,7 +18603,11 @@ module.exports =
   exports.default = GetMonitorTabs;
 
 /***/ },
+<<<<<<< HEAD
 /* 184 */
+=======
+/* 182 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16005,7 +18644,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _reactDom = __webpack_require__(134);
+=======
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -16017,9 +18660,13 @@ module.exports =
   
   var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
   
+<<<<<<< HEAD
   var _utils = __webpack_require__(119);
   
   var _header = __webpack_require__(80);
+=======
+  var _utils = __webpack_require__(117);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
   
@@ -16031,7 +18678,7 @@ module.exports =
     function BtnGroup(props) {
       (0, _classCallCheck3.default)(this, BtnGroup);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(BtnGroup).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (BtnGroup.__proto__ || (0, _getPrototypeOf2.default)(BtnGroup)).call(this, props));
   
       _this.state = {
         active: _this.props.activeKey
@@ -16080,7 +18727,11 @@ module.exports =
     return BtnGroup;
   }(_react.Component);
   
+<<<<<<< HEAD
   var ReactHighcharts = __webpack_require__(93);
+=======
+  var ReactHighcharts = __webpack_require__(92);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _class = function (_React$Component) {
     (0, _inherits3.default)(_class, _React$Component);
@@ -16088,7 +18739,7 @@ module.exports =
     function _class(props) {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this3 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this, props));
+      var _this3 = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this, props));
   
       _this3.state = {
         data: { xAxis: [], series: [] },
@@ -16275,6 +18926,7 @@ module.exports =
     return _class;
   }(_react2.default.Component);
   
+<<<<<<< HEAD
   _class.contextTypes = {
     store: _react2.default.PropTypes.object
   };
@@ -16282,6 +18934,12 @@ module.exports =
 
 /***/ },
 /* 185 */
+=======
+  exports.default = _class;
+
+/***/ },
+/* 183 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16318,6 +18976,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
@@ -16327,6 +18986,17 @@ module.exports =
   var _reactToggle2 = _interopRequireDefault(_reactToggle);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactToggle = __webpack_require__(184);
+  
+  var _reactToggle2 = _interopRequireDefault(_reactToggle);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -16341,7 +19011,7 @@ module.exports =
     function UpdateStartToggle(props) {
       (0, _classCallCheck3.default)(this, UpdateStartToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(UpdateStartToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (UpdateStartToggle.__proto__ || (0, _getPrototypeOf2.default)(UpdateStartToggle)).call(this, props));
   
       _this.state = {
         autoStart: _this.props.state
@@ -16374,6 +19044,7 @@ module.exports =
   }, 'latest', 'latest');
   
   var _ref2 = (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '自动发布',
     titleEnglish: 'AUTOMATIC SENDING',
     titleInfo: '当镜像有更新时容器是否自动更新,开启自动更新时会覆盖手动选择的版本'
@@ -16383,6 +19054,17 @@ module.exports =
     title: '手动发布',
     titleEnglish: 'MANUAL RELEASE',
     titleInfo: '将服务更新到指定的镜像版本'
+=======
+    title: '\u81EA\u52A8\u53D1\u5E03',
+    titleEnglish: 'AUTOMATIC SENDING',
+    titleInfo: '\u5F53\u955C\u50CF\u6709\u66F4\u65B0\u65F6\u5BB9\u5668\u662F\u5426\u81EA\u52A8\u66F4\u65B0,\u5F00\u542F\u81EA\u52A8\u66F4\u65B0\u65F6\u4F1A\u8986\u76D6\u624B\u52A8\u9009\u62E9\u7684\u7248\u672C'
+  });
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u624B\u52A8\u53D1\u5E03',
+    titleEnglish: 'MANUAL RELEASE',
+    titleInfo: '\u5C06\u670D\u52A1\u66F4\u65B0\u5230\u6307\u5B9A\u7684\u955C\u50CF\u7248\u672C'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var GetReleaseTabs = function (_Component2) {
@@ -16391,7 +19073,7 @@ module.exports =
     function GetReleaseTabs(props) {
       (0, _classCallCheck3.default)(this, GetReleaseTabs);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetReleaseTabs).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (GetReleaseTabs.__proto__ || (0, _getPrototypeOf2.default)(GetReleaseTabs)).call(this, props));
   
       _this2.state = {
         isUpdate: _this2.props.serviceDetail.policy
@@ -16462,7 +19144,11 @@ module.exports =
           className: 'btn btn-primary ' + (!this.props.isBtnState.deploy ? "btn-loading" : ""),
           disabled: !this.props.isBtnState.deploy,
           onClick: this.changeRelease.bind(this)
+<<<<<<< HEAD
         }, void 0, '更新发布'))));
+=======
+        }, void 0, '\u66F4\u65B0\u53D1\u5E03'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return GetReleaseTabs;
@@ -16471,13 +19157,21 @@ module.exports =
   exports.default = GetReleaseTabs;
 
 /***/ },
+<<<<<<< HEAD
 /* 186 */
+=======
+/* 184 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("react-toggle");
 
 /***/ },
+<<<<<<< HEAD
 /* 187 */
+=======
+/* 185 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16514,7 +19208,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
+=======
+  var _HeadLine = __webpack_require__(129);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -16527,13 +19225,18 @@ module.exports =
     className: 'astTdBox sdDomain'
   }, void 0, (0, _jsx3.default)('input', {
     type: 'text',
+<<<<<<< HEAD
     placeholder: '请输入新域名'
+=======
+    placeholder: '\u8BF7\u8F93\u5165\u65B0\u57DF\u540D'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   }))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
     className: 'astTdBox'
   })), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('div', {
     className: 'astTdBox'
   }, void 0, (0, _jsx3.default)('span', {
     className: 'color999'
+<<<<<<< HEAD
   }, void 0, '是'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('button', {
     className: 'btn btn-primary'
   }, void 0, '添加')));
@@ -16547,13 +19250,34 @@ module.exports =
   }, void 0, '域名验证'), (0, _jsx3.default)('th', {
     width: '25%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u662F'))), (0, _jsx3.default)('td', {}, void 0, (0, _jsx3.default)('button', {
+    className: 'btn btn-primary'
+  }, void 0, '\u6DFB\u52A0')));
+  
+  var _ref2 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u81EA\u6709\u57DF\u540D'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, 'CNAME\u5730\u5740'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u57DF\u540D\u9A8C\u8BC1'), (0, _jsx3.default)('th', {
+    width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref3 = (0, _jsx3.default)('div', {
     className: 'assItem'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '绑定自有域名',
     titleEnglish: 'BIND OWN DOMAIN',
     titleInfo: '域名绑定说明'
+=======
+    title: '\u7ED1\u5B9A\u81EA\u6709\u57DF\u540D',
+    titleEnglish: 'BIND OWN DOMAIN',
+    titleInfo: '\u57DF\u540D\u7ED1\u5B9A\u8BF4\u660E'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   }));
   
   var GetRealmNameTabs = function (_Component) {
@@ -16561,7 +19285,7 @@ module.exports =
   
     function GetRealmNameTabs() {
       (0, _classCallCheck3.default)(this, GetRealmNameTabs);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetRealmNameTabs).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetRealmNameTabs.__proto__ || (0, _getPrototypeOf2.default)(GetRealmNameTabs)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetRealmNameTabs, [{
@@ -16590,7 +19314,11 @@ module.exports =
   exports.default = GetRealmNameTabs;
 
 /***/ },
+<<<<<<< HEAD
 /* 188 */
+=======
+/* 186 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -16631,16 +19359,22 @@ module.exports =
   
   var _ref = (0, _jsx3.default)("tr", {}, void 0, (0, _jsx3.default)("td", {
     colSpan: "4"
+<<<<<<< HEAD
   }, void 0, "暂无数据~"));
   
   var _ref2 = (0, _jsx3.default)("thead", {}, void 0, (0, _jsx3.default)("tr", {}, void 0, (0, _jsx3.default)("th", {}, void 0, "名称"), (0, _jsx3.default)("th", {}, void 0, "IP"), (0, _jsx3.default)("th", {}, void 0, "端口"), (0, _jsx3.default)("th", {}, void 0, "状态")));
+=======
+  }, void 0, "\u6682\u65E0\u6570\u636E~"));
+  
+  var _ref2 = (0, _jsx3.default)("thead", {}, void 0, (0, _jsx3.default)("tr", {}, void 0, (0, _jsx3.default)("th", {}, void 0, "\u540D\u79F0"), (0, _jsx3.default)("th", {}, void 0, "IP"), (0, _jsx3.default)("th", {}, void 0, "\u7AEF\u53E3"), (0, _jsx3.default)("th", {}, void 0, "\u72B6\u6001")));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var GetContainerTabs = function (_React$Component) {
     (0, _inherits3.default)(GetContainerTabs, _React$Component);
   
     function GetContainerTabs() {
       (0, _classCallCheck3.default)(this, GetContainerTabs);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetContainerTabs).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetContainerTabs.__proto__ || (0, _getPrototypeOf2.default)(GetContainerTabs)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetContainerTabs, [{
@@ -16680,7 +19414,11 @@ module.exports =
   exports.default = GetContainerTabs;
 
 /***/ },
+<<<<<<< HEAD
 /* 189 */
+=======
+/* 187 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   "use strict";
@@ -16719,9 +19457,15 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)("p", {}, void 0, "*删除应用将清除该应用的所有数据，且该操作不能被恢复，请慎重选择！ "); /**
                                                                                          * Created by zhangsai on 16/9/2.
                                                                                          */
+=======
+  var _ref = (0, _jsx3.default)("p", {}, void 0, "*\u5220\u9664\u5E94\u7528\u5C06\u6E05\u9664\u8BE5\u5E94\u7528\u7684\u6240\u6709\u6570\u636E\uFF0C\u4E14\u8BE5\u64CD\u4F5C\u4E0D\u80FD\u88AB\u6062\u590D\uFF0C\u8BF7\u614E\u91CD\u9009\u62E9\uFF01 "); /**
+                                                                                                                                                                                                                                                         * Created by zhangsai on 16/9/2.
+                                                                                                                                                                                                                                                         */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   
   var GetOptTabs = function (_Component) {
@@ -16729,7 +19473,7 @@ module.exports =
   
       function GetOptTabs() {
           (0, _classCallCheck3.default)(this, GetOptTabs);
-          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOptTabs).apply(this, arguments));
+          return (0, _possibleConstructorReturn3.default)(this, (GetOptTabs.__proto__ || (0, _getPrototypeOf2.default)(GetOptTabs)).apply(this, arguments));
       }
   
       (0, _createClass3.default)(GetOptTabs, [{
@@ -16747,7 +19491,11 @@ module.exports =
               }, void 0, (0, _jsx3.default)("button", {
                   className: "btn btn-danger",
                   onClick: this.deleteService.bind(this)
+<<<<<<< HEAD
               }, void 0, "删除应用"), _ref);
+=======
+              }, void 0, "\u5220\u9664\u5E94\u7528"), _ref);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           }
       }]);
       return GetOptTabs;
@@ -16756,7 +19504,11 @@ module.exports =
   exports.default = GetOptTabs;
 
 /***/ },
+<<<<<<< HEAD
 /* 190 */
+=======
+/* 188 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16781,7 +19533,11 @@ module.exports =
   exports.default = makeGetServiceDetail;
 
 /***/ },
+<<<<<<< HEAD
 /* 191 */
+=======
+/* 189 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16806,7 +19562,11 @@ module.exports =
   exports.default = makeGetLogsSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 192 */
+=======
+/* 190 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16831,7 +19591,11 @@ module.exports =
   exports.default = maleLogs_xhrSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 193 */
+=======
+/* 191 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16855,7 +19619,11 @@ module.exports =
   exports.default = makeGetPodListSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 194 */
+=======
+/* 192 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16880,7 +19648,11 @@ module.exports =
   exports.default = makeGetMonitorDataSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 195 */
+=======
+/* 193 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16905,7 +19677,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _VolumeListContainer = __webpack_require__(196);
+=======
+  var _VolumeListContainer = __webpack_require__(194);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _VolumeListContainer2 = _interopRequireDefault(_VolumeListContainer);
   
@@ -16947,7 +19723,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 196 */
+=======
+/* 194 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -16958,6 +19738,7 @@ module.exports =
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _VolumeList = __webpack_require__(197);
   
   var _VolumeList2 = _interopRequireDefault(_VolumeList);
@@ -16971,6 +19752,21 @@ module.exports =
   var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
   
   var _isBtnStateSelector = __webpack_require__(127);
+=======
+  var _VolumeList = __webpack_require__(195);
+  
+  var _VolumeList2 = _interopRequireDefault(_VolumeList);
+  
+  var _volumes = __webpack_require__(98);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _volumesListSelector = __webpack_require__(99);
+  
+  var _volumesListSelector2 = _interopRequireDefault(_volumesListSelector);
+  
+  var _isBtnStateSelector = __webpack_require__(125);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
   
@@ -17014,7 +19810,11 @@ module.exports =
   exports.default = VolumeTableContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 197 */
+=======
+/* 195 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -17055,11 +19855,19 @@ module.exports =
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
+<<<<<<< HEAD
   var _VolumeCreateModal = __webpack_require__(198);
   
   var _VolumeCreateModal2 = _interopRequireDefault(_VolumeCreateModal);
   
   var _VolumeScaleModal = __webpack_require__(199);
+=======
+  var _VolumeCreateModal = __webpack_require__(196);
+  
+  var _VolumeCreateModal2 = _interopRequireDefault(_VolumeCreateModal);
+  
+  var _VolumeScaleModal = __webpack_require__(197);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _VolumeScaleModal2 = _interopRequireDefault(_VolumeScaleModal);
   
@@ -17067,11 +19875,19 @@ module.exports =
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _Confirm = __webpack_require__(114);
+=======
+  var _Loading = __webpack_require__(107);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
+  var _Confirm = __webpack_require__(112);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
@@ -17090,7 +19906,11 @@ module.exports =
   
   var _ref = (0, _jsx3.default)('p', {
     className: "hbPName"
+<<<<<<< HEAD
   }, void 0, '创建存储卷');
+=======
+  }, void 0, '\u521B\u5EFA\u5B58\u50A8\u5377');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref2 = (0, _jsx3.default)('p', {
     className: "hbPInfo"
@@ -17107,11 +19927,16 @@ module.exports =
   
   var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '1'
+<<<<<<< HEAD
   }, void 0, '删除');
+=======
+  }, void 0, '\u5220\u9664');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref7 = (0, _jsx3.default)('a', {
     href: 'javascript:;',
     className: "hbAddExplain"
+<<<<<<< HEAD
   }, void 0, '什么是存储卷？');
   
   var _ref8 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
@@ -17127,6 +19952,23 @@ module.exports =
   }, void 0, '容量'), (0, _jsx3.default)('th', {
     width: '15%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u4EC0\u4E48\u662F\u5B58\u50A8\u5377\uFF1F');
+  
+  var _ref8 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u5B58\u50A8\u5377\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '20%'
+  }, void 0, '\u521B\u5EFA\u65F6\u95F4'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u5B58\u50A8\u683C\u5F0F'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u72B6\u6001'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u5BB9\u91CF'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var VolumeList = function (_Component) {
     (0, _inherits3.default)(VolumeList, _Component);
@@ -17134,7 +19976,7 @@ module.exports =
     function VolumeList() {
       (0, _classCallCheck3.default)(this, VolumeList);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(VolumeList).call(this));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (VolumeList.__proto__ || (0, _getPrototypeOf2.default)(VolumeList)).call(this));
   
       _this.state = {
         diskName: ""
@@ -17192,7 +20034,11 @@ module.exports =
         if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '6',
           style: { "textAlign": "center" }
+<<<<<<< HEAD
         }, void 0, '暂无数据~'));
+=======
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         if (data.length == 1 && data[0] == 1) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '6',
           style: { "textAlign": "center" }
@@ -17221,7 +20067,11 @@ module.exports =
             },
             onSelect: _this3.deleteLine.bind(_this3, item.disk_name),
             bsStyle: 'primary',
+<<<<<<< HEAD
             title: '扩容',
+=======
+            title: '\u6269\u5BB9',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             id: 'volumes-table-line-' + i
           }, void 0, _ref6)))));
         });
@@ -17262,15 +20112,24 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-default icon-refresh',
           onClick: this.refresh.bind(this),
+<<<<<<< HEAD
           title: '刷新'
+=======
+          title: '\u5237\u65B0'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, ' '))), (0, _jsx3.default)('div', {
           className: 'TableTextLeft',
           style: { padding: "15px" }
         }, void 0, (0, _jsx3.default)('table', {
           className: 'table table-hover table-bordered volumes-table'
         }, void 0, _ref8, (0, _jsx3.default)('tbody', {}, void 0, this.getTableLine()))), _react2.default.createElement(_VolumeScaleModal2.default, { ref: 'scaleModal', onSave: this.scaleVolume.bind(this) }), _react2.default.createElement(_VolumeCreateModal2.default, { ref: 'createModal', isBtnState: this.props.isBtnState, onVolumeCreate: this.createVolume.bind(this) }), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
           title: '警告',
           text: '您确定要删除此数据卷吗?',
+=======
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u5220\u9664\u6B64\u6570\u636E\u5377\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           ref: 'confirmModal',
           func: function func() {
             _this4.props.onVolumeDelete(_this4.state.diskName);
@@ -17285,7 +20144,11 @@ module.exports =
   exports.default = VolumeList;
 
 /***/ },
+<<<<<<< HEAD
 /* 198 */
+=======
+/* 196 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -17328,7 +20191,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _reactInputRange = __webpack_require__(175);
+=======
+  var _reactInputRange = __webpack_require__(173);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
   
@@ -17341,7 +20208,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: 2
@@ -17368,9 +20235,15 @@ module.exports =
           className: 'formField'
         }, void 0, (0, _jsx3.default)(_reactInputRange2.default, {
           className: 'formField',
+<<<<<<< HEAD
           maxValue: 2,
           minValue: 1,
           step: 1,
+=======
+          maxValue: 100,
+          minValue: 10,
+          step: 10,
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           labelPrefix: '',
           labelSuffix: 'G',
           value: this.state.value,
@@ -17383,11 +20256,16 @@ module.exports =
   
   var _ref = (0, _jsx3.default)('span', {
     'aria-hidden': 'true'
+<<<<<<< HEAD
   }, void 0, '×');
+=======
+  }, void 0, '\xD7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref2 = (0, _jsx3.default)('h4', {
     className: 'modal-title',
     id: 'contained-modal-title-sm'
+<<<<<<< HEAD
   }, void 0, '创建存储卷');
   
   var _ref3 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '名称'));
@@ -17397,6 +20275,17 @@ module.exports =
   var _ref5 = (0, _jsx3.default)('span', {}, void 0, '充值用户可以创建更大存储卷');
   
   var _ref6 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '格式'));
+=======
+  }, void 0, '\u521B\u5EFA\u5B58\u50A8\u5377');
+  
+  var _ref3 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u540D\u79F0'));
+  
+  var _ref4 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u5927\u5C0F'));
+  
+  var _ref5 = (0, _jsx3.default)('span', {}, void 0, '\u5145\u503C\u7528\u6237\u53EF\u4EE5\u521B\u5EFA\u66F4\u5927\u5B58\u50A8\u5377');
+  
+  var _ref6 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u683C\u5F0F'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref7 = (0, _jsx3.default)('option', {
     value: 'xfs'
@@ -17414,7 +20303,7 @@ module.exports =
     function _class() {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this));
   
       _this2.state = {
         show: false
@@ -17479,7 +20368,11 @@ module.exports =
             className: 'modal-body'
           }, void 0, (0, _jsx3.default)('div', {
             className: 'modalItem'
+<<<<<<< HEAD
           }, void 0, _ref3, (0, _jsx3.default)('label', {}, void 0, _react2.default.createElement('input', { onChange: this.changeName.bind(this), className: 'form-control form-control-sm', type: 'input', placeholder: '请输入名称', ref: 'disk_name' }))), (0, _jsx3.default)('div', {
+=======
+          }, void 0, _ref3, (0, _jsx3.default)('label', {}, void 0, _react2.default.createElement('input', { onChange: this.changeName.bind(this), className: 'form-control form-control-sm', type: 'input', placeholder: '\u8BF7\u8F93\u5165\u540D\u79F0', ref: 'disk_name' }))), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             className: 'modalItem'
           }, void 0, _ref4, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('div', {
             className: 'modelInputRange'
@@ -17492,13 +20385,21 @@ module.exports =
             _ref8
           ))), (0, _jsx3.default)('div', {
             className: this.state.isName ? "volumeTip volumeTipShow" : "volumeTip"
+<<<<<<< HEAD
           }, void 0, '数据卷名称格式不正确'), (0, _jsx3.default)('div', {
+=======
+          }, void 0, '\u6570\u636E\u5377\u540D\u79F0\u683C\u5F0F\u4E0D\u6B63\u786E'), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             className: 'modalItem modelItemLast'
           }, void 0, _ref9, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)(_reactBootstrap.Button, {
             bsStyle: 'primary',
             disabled: !this.props.isBtnState.volume,
             onClick: this.createVolume.bind(this)
+<<<<<<< HEAD
           }, void 0, '创建存储卷'))))
+=======
+          }, void 0, '\u521B\u5EFA\u5B58\u50A8\u5377'))))
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         );
       }
     }]);
@@ -17508,7 +20409,11 @@ module.exports =
   exports.default = _class;
 
 /***/ },
+<<<<<<< HEAD
 /* 199 */
+=======
+/* 197 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -17551,7 +20456,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _reactInputRange = __webpack_require__(175);
+=======
+  var _reactInputRange = __webpack_require__(173);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactInputRange2 = _interopRequireDefault(_reactInputRange);
   
@@ -17563,7 +20472,7 @@ module.exports =
     function InputRangesBox(props) {
       (0, _classCallCheck3.default)(this, InputRangesBox);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(InputRangesBox).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (InputRangesBox.__proto__ || (0, _getPrototypeOf2.default)(InputRangesBox)).call(this, props));
   
       _this.state = {
         value: 2
@@ -17591,9 +20500,15 @@ module.exports =
           className: 'formField'
         }, void 0, (0, _jsx3.default)(_reactInputRange2.default, {
           className: 'formField',
+<<<<<<< HEAD
           maxValue: 2,
           minValue: 1,
           step: 1,
+=======
+          maxValue: 100,
+          minValue: this.props.value || 10,
+          step: 10,
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           labelPrefix: '',
           labelSuffix: 'G',
           value: this.state.value,
@@ -17606,16 +20521,28 @@ module.exports =
   
   var _ref = (0, _jsx3.default)('span', {
     'aria-hidden': 'true'
+<<<<<<< HEAD
   }, void 0, '×');
+=======
+  }, void 0, '\xD7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref2 = (0, _jsx3.default)('h4', {
     className: 'modal-title',
     id: 'contained-modal-title-sm'
+<<<<<<< HEAD
   }, void 0, '扩容');
   
   var _ref3 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '大小'));
   
   var _ref4 = (0, _jsx3.default)('span', {}, void 0, '充值用户可以创建更大存储卷');
+=======
+  }, void 0, '\u6269\u5BB9');
+  
+  var _ref3 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u5927\u5C0F'));
+  
+  var _ref4 = (0, _jsx3.default)('span', {}, void 0, '\u5145\u503C\u7528\u6237\u53EF\u4EE5\u521B\u5EFA\u66F4\u5927\u5B58\u50A8\u5377');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref5 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, ' '));
   
@@ -17625,7 +20552,7 @@ module.exports =
     function _class() {
       (0, _classCallCheck3.default)(this, _class);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(_class).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call(this));
   
       _this2.state = {
         show: false,
@@ -17678,7 +20605,11 @@ module.exports =
           }, void 0, _ref5, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('button', {
             className: 'btn btn-primary',
             onClick: this.save.bind(this)
+<<<<<<< HEAD
           }, void 0, '保存'))))
+=======
+          }, void 0, '\u4FDD\u5B58'))))
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         );
       }
     }]);
@@ -17688,7 +20619,11 @@ module.exports =
   exports.default = _class;
 
 /***/ },
+<<<<<<< HEAD
 /* 200 */
+=======
+/* 198 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -17713,7 +20648,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _Login = __webpack_require__(201);
+=======
+  var _Login = __webpack_require__(199);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Login2 = _interopRequireDefault(_Login);
   
@@ -17745,7 +20684,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 201 */
+=======
+/* 199 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -17792,7 +20735,11 @@ module.exports =
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _reactDom = __webpack_require__(134);
+=======
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -17813,9 +20760,15 @@ module.exports =
     className: 'entryHdBtn'
   }, void 0, (0, _jsx3.default)('a', {
     href: '/signUp'
+<<<<<<< HEAD
   }, void 0, '注册'), (0, _jsx3.default)('a', {
     href: '/login'
   }, void 0, '登录'));
+=======
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: '/login'
+  }, void 0, '\u767B\u5F55'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref3 = (0, _jsx3.default)('div', {
     className: 'entryModelBg'
@@ -17823,15 +20776,25 @@ module.exports =
   
   var _ref4 = (0, _jsx3.default)('div', {
     className: 'title'
+<<<<<<< HEAD
   }, void 0, '用户登录');
+=======
+  }, void 0, '\u7528\u6237\u767B\u5F55');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref5 = (0, _jsx3.default)('div', {
     className: 'entryFromFt'
   }, void 0, (0, _jsx3.default)('a', {
     href: '/signUp'
+<<<<<<< HEAD
   }, void 0, '立即注册'), (0, _jsx3.default)('a', {
     href: 'javascript:;'
   }, void 0, '忘记密码'));
+=======
+  }, void 0, '\u7ACB\u5373\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u5FD8\u8BB0\u5BC6\u7801'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref6 = (0, _jsx3.default)('div', {
     className: 'entryBg'
@@ -17848,6 +20811,7 @@ module.exports =
     className: 'entryHdBtn'
   }, void 0, (0, _jsx3.default)('a', {
     href: '/signUp'
+<<<<<<< HEAD
   }, void 0, '注册'), (0, _jsx3.default)('a', {
     href: '/login'
   }, void 0, '登录'));
@@ -17863,6 +20827,23 @@ module.exports =
   }, void 0, '注册'), (0, _jsx3.default)('a', {
     href: 'javascript:;'
   }, void 0, '忘记密码'));
+=======
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: '/login'
+  }, void 0, '\u767B\u5F55'));
+  
+  var _ref9 = (0, _jsx3.default)('div', {
+    className: 'title'
+  }, void 0, '\u7528\u6237\u767B\u5F55');
+  
+  var _ref10 = (0, _jsx3.default)('div', {
+    className: 'entryFromFt'
+  }, void 0, '\u6CA1\u6709\u8D26\u6237? ', (0, _jsx3.default)('a', {
+    href: '/signUp'
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: 'javascript:;'
+  }, void 0, '\u5FD8\u8BB0\u5BC6\u7801'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref11 = (0, _jsx3.default)('div', {
     className: 'entryBg'
@@ -17874,7 +20855,7 @@ module.exports =
     function Login(props) {
       (0, _classCallCheck3.default)(this, Login);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Login).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (Login.__proto__ || (0, _getPrototypeOf2.default)(Login)).call(this, props));
   
       _this.state = {
         uName: false,
@@ -18038,22 +21019,38 @@ module.exports =
           className: 'entryItem ' + (this.state.uName ? "entryItemError" : "")
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox icon-username'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名或邮箱' })), (0, _jsx3.default)('div', {
+=======
+        }, void 0, _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '\u7528\u6237\u540D\u6216\u90AE\u7BB1' })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'entryTip'
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'userTip' },
+<<<<<<< HEAD
           '用户名错误'
+=======
+          '\u7528\u6237\u540D\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "")
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox icon-mima'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })), (0, _jsx3.default)('div', {
+=======
+        }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '\u5BC6\u7801' })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'entryTip'
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'passwordTip' },
+<<<<<<< HEAD
           '密码错误'
+=======
+          '\u5BC6\u7801\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryBtnBox'
         }, void 0, (0, _jsx3.default)('button', {
@@ -18087,22 +21084,38 @@ module.exports =
           className: 'entryItem ' + (this.state.uName ? "entryItemError" : "")
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox icon-username'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名或邮箱' })), (0, _jsx3.default)('div', {
+=======
+        }, void 0, _react2.default.createElement('input', { onInput: this.changeUserName.bind(this), className: 'entryInput', ref: 'username', type: 'text', placeholder: '\u7528\u6237\u540D\u6216\u90AE\u7BB1' })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'entryTip'
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'userTip' },
+<<<<<<< HEAD
           '用户名错误'
+=======
+          '\u7528\u6237\u540D\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "")
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox icon-mima'
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })), (0, _jsx3.default)('div', {
+=======
+        }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this), className: 'entryInput', ref: 'password', type: 'password', placeholder: '\u5BC6\u7801' })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'entryTip'
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'passwordTip' },
+<<<<<<< HEAD
           '密码错误'
+=======
+          '\u5BC6\u7801\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryBtnBox'
         }, void 0, (0, _jsx3.default)('button', {
@@ -18121,7 +21134,11 @@ module.exports =
   exports.default = Login;
 
 /***/ },
+<<<<<<< HEAD
 /* 202 */
+=======
+/* 200 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18146,7 +21163,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _SignUp = __webpack_require__(203);
+=======
+  var _SignUp = __webpack_require__(201);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _SignUp2 = _interopRequireDefault(_SignUp);
   
@@ -18178,7 +21199,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 203 */
+=======
+/* 201 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18219,7 +21244,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _reactDom = __webpack_require__(134);
+=======
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -18231,7 +21260,11 @@ module.exports =
   
   var _Notification2 = _interopRequireDefault(_Notification);
   
+<<<<<<< HEAD
   var _uuid = __webpack_require__(204);
+=======
+  var _uuid = __webpack_require__(202);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _uuid2 = _interopRequireDefault(_uuid);
   
@@ -18254,9 +21287,15 @@ module.exports =
     className: 'entryHdBtn'
   }, void 0, (0, _jsx3.default)('a', {
     href: '/signUp'
+<<<<<<< HEAD
   }, void 0, '注册'), (0, _jsx3.default)('a', {
     href: '/login'
   }, void 0, '登录'));
+=======
+  }, void 0, '\u6CE8\u518C'), (0, _jsx3.default)('a', {
+    href: '/login'
+  }, void 0, '\u767B\u5F55'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref3 = (0, _jsx3.default)('div', {
     className: 'entryModelBg'
@@ -18264,13 +21303,21 @@ module.exports =
   
   var _ref4 = (0, _jsx3.default)('div', {
     className: 'title'
+<<<<<<< HEAD
   }, void 0, '用户注册');
+=======
+  }, void 0, '\u7528\u6237\u6CE8\u518C');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref5 = (0, _jsx3.default)('div', {
     className: 'entryFromFt'
   }, void 0, (0, _jsx3.default)('a', {
     href: '/login'
+<<<<<<< HEAD
   }, void 0, '已有账户   登录'));
+=======
+  }, void 0, '\u5DF2\u6709\u8D26\u6237   \u767B\u5F55'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref6 = (0, _jsx3.default)('div', {
     className: 'entryBg'
@@ -18282,7 +21329,7 @@ module.exports =
     function SignUp(props) {
       (0, _classCallCheck3.default)(this, SignUp);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(SignUp).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (SignUp.__proto__ || (0, _getPrototypeOf2.default)(SignUp)).call(this, props));
   
       _this.state = {
         uName: false,
@@ -18531,40 +21578,68 @@ module.exports =
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox icon-username'
         }, void 0, _react2.default.createElement('input', { onChange: this.changeUserName.bind(this),
+<<<<<<< HEAD
           className: 'entryInput', ref: 'username', type: 'text', placeholder: '用户名' })), (0, _jsx3.default)('div', {
+=======
+          className: 'entryInput', ref: 'username', type: 'text', placeholder: '\u7528\u6237\u540D' })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'entryTip'
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'userTip' },
+<<<<<<< HEAD
           '用户名错误'
+=======
+          '\u7528\u6237\u540D\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryItem ' + (this.state.uEmail ? "entryItemError" : "")
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox icon-email'
         }, void 0, _react2.default.createElement('input', { onChange: this.changeEmail.bind(this),
+<<<<<<< HEAD
           className: 'entryInput', ref: 'email', type: 'text', placeholder: '邮箱' })), (0, _jsx3.default)('div', {
+=======
+          className: 'entryInput', ref: 'email', type: 'text', placeholder: '\u90AE\u7BB1' })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'entryTip'
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'emailTip' },
+<<<<<<< HEAD
           '邮箱错误'
+=======
+          '\u90AE\u7BB1\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryItem ' + (this.state.uPassword ? "entryItemError" : "")
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox icon-mima'
         }, void 0, _react2.default.createElement('input', { onInput: this.changePassword.bind(this),
+<<<<<<< HEAD
           className: 'entryInput', ref: 'password', type: 'password', placeholder: '密码' })), (0, _jsx3.default)('div', {
+=======
+          className: 'entryInput', ref: 'password', type: 'password', placeholder: '\u5BC6\u7801' })), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'entryTip'
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'passwordTip' },
+<<<<<<< HEAD
           '密码错误'
+=======
+          '\u5BC6\u7801\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryItem entryItemCode ' + (this.state.uCode ? "entryItemError" : "")
         }, void 0, (0, _jsx3.default)('div', {
           className: 'entryInputBox  icon-mima'
         }, void 0, _react2.default.createElement('input', { onInput: this.changeCode.bind(this),
+<<<<<<< HEAD
           className: 'entryInput', ref: 'code', type: 'text', placeholder: '验证码' }), _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' }), (0, _jsx3.default)('span', {
+=======
+          className: 'entryInput', ref: 'code', type: 'text', placeholder: '\u9A8C\u8BC1\u7801' }), _react2.default.createElement('img', { ref: 'codeImg', onClick: this.changeImageSrc.bind(this), src: '' }), (0, _jsx3.default)('span', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: 'icon-refresh',
           onClick: this.changeImageSrc.bind(this)
         }, void 0, ' ')), (0, _jsx3.default)('div', {
@@ -18572,7 +21647,11 @@ module.exports =
         }, void 0, _react2.default.createElement(
           'p',
           { ref: 'codeTip' },
+<<<<<<< HEAD
           '验证码错误'
+=======
+          '\u9A8C\u8BC1\u7801\u9519\u8BEF'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         ))), (0, _jsx3.default)('div', {
           className: 'entryBtnBox'
         }, void 0, (0, _jsx3.default)('button', {
@@ -18591,13 +21670,21 @@ module.exports =
   exports.default = SignUp;
 
 /***/ },
+<<<<<<< HEAD
 /* 204 */
+=======
+/* 202 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("uuid");
 
 /***/ },
+<<<<<<< HEAD
 /* 205 */
+=======
+/* 203 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18622,7 +21709,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _UserCenterContainer = __webpack_require__(206);
+=======
+  var _UserCenterContainer = __webpack_require__(204);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _UserCenterContainer2 = _interopRequireDefault(_UserCenterContainer);
   
@@ -18654,7 +21745,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 206 */
+=======
+/* 204 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18663,12 +21758,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _UserCenter = __webpack_require__(207);
+=======
+  var _UserCenter = __webpack_require__(205);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _UserCenter2 = _interopRequireDefault(_UserCenter);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _breadcumb = __webpack_require__(94);
   
   var _building = __webpack_require__(115);
@@ -18676,6 +21776,15 @@ module.exports =
   var _BuildingCreateSelector = __webpack_require__(148);
   
   var _users = __webpack_require__(213);
+=======
+  var _breadcumb = __webpack_require__(93);
+  
+  var _building = __webpack_require__(113);
+  
+  var _BuildingCreateSelector = __webpack_require__(146);
+  
+  var _users = __webpack_require__(212);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var funUser = _interopRequireWildcard(_users);
   
@@ -18740,7 +21849,11 @@ module.exports =
   exports.default = UserCenterContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 207 */
+=======
+/* 205 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18779,6 +21892,7 @@ module.exports =
   
   var _reactBootstrap = __webpack_require__(70);
   
+<<<<<<< HEAD
   var _GetPersonalInfo = __webpack_require__(208);
   
   var _GetPersonalInfo2 = _interopRequireDefault(_GetPersonalInfo);
@@ -18796,6 +21910,25 @@ module.exports =
   var _GetCertificateMange2 = _interopRequireDefault(_GetCertificateMange);
   
   var _GetOrganize = __webpack_require__(212);
+=======
+  var _GetPersonalInfo = __webpack_require__(206);
+  
+  var _GetPersonalInfo2 = _interopRequireDefault(_GetPersonalInfo);
+  
+  var _GetMyAccount = __webpack_require__(207);
+  
+  var _GetMyAccount2 = _interopRequireDefault(_GetMyAccount);
+  
+  var _GetAccountManage = __webpack_require__(208);
+  
+  var _GetAccountManage2 = _interopRequireDefault(_GetAccountManage);
+  
+  var _GetCertificateMange = __webpack_require__(210);
+  
+  var _GetCertificateMange2 = _interopRequireDefault(_GetCertificateMange);
+  
+  var _GetOrganize = __webpack_require__(211);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _GetOrganize2 = _interopRequireDefault(_GetOrganize);
   
@@ -18806,8 +21939,18 @@ module.exports =
   var title = '个人中心';
   
   var _ref = (0, _jsx3.default)(_reactBootstrap.Tab, {
+<<<<<<< HEAD
     eventKey: 4,
     title: '礼券管理'
+=======
+    eventKey: 2,
+    title: '\u6211\u7684\u8D26\u6237'
+  }, void 0, (0, _jsx3.default)(_GetMyAccount2.default, {}));
+  
+  var _ref2 = (0, _jsx3.default)(_reactBootstrap.Tab, {
+    eventKey: 4,
+    title: '\u793C\u5238\u7BA1\u7406'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   }, void 0, (0, _jsx3.default)(_GetCertificateMange2.default, {}));
   
   var UserCenter = function (_Component) {
@@ -18815,7 +21958,7 @@ module.exports =
   
     function UserCenter() {
       (0, _classCallCheck3.default)(this, UserCenter);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(UserCenter).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (UserCenter.__proto__ || (0, _getPrototypeOf2.default)(UserCenter)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(UserCenter, [{
@@ -18834,15 +21977,24 @@ module.exports =
         }, void 0, (0, _jsx3.default)('div', {
           className: 'userTab'
         }, void 0, (0, _jsx3.default)(_reactBootstrap.Tabs, {
+<<<<<<< HEAD
           defaultActiveKey: 3,
           id: 'userTabs'
         }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 1,
           title: '个人信息'
+=======
+          defaultActiveKey: 5,
+          id: 'userTabs'
+        }, void 0, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 1,
+          title: '\u4E2A\u4EBA\u4FE1\u606F'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)(_GetPersonalInfo2.default, {
           onRevisePassword: function onRevisePassword(passwordObj) {
             return _this2.props.onRevisePassword(passwordObj);
           }
+<<<<<<< HEAD
         })), (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 2,
           title: '我的账户'
@@ -18862,6 +22014,16 @@ module.exports =
         })), _ref, (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 5,
           title: '组管理'
+=======
+        })), _ref, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 3,
+          title: '\u8D26\u6237\u7BA1\u7406'
+        }, void 0, (0, _jsx3.default)(_GetAccountManage2.default, {
+          githubAuthURL: this.props.githubAuthURL
+        })), _ref2, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 5,
+          title: '\u7EC4\u7BA1\u7406'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)(_GetOrganize2.default, {
           createOrganize: function createOrganize(org_name) {
             _this2.props.createOrganize(org_name);
@@ -18886,7 +22048,11 @@ module.exports =
   exports.default = UserCenter;
 
 /***/ },
+<<<<<<< HEAD
 /* 208 */
+=======
+/* 206 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -18923,11 +22089,19 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -18936,7 +22110,11 @@ module.exports =
   var _ref = (0, _jsx3.default)('div', {
     className: 'userItem'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '个人头像',
+=======
+    title: '\u4E2A\u4EBA\u5934\u50CF',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'PERSONAL HEAD'
   }), (0, _jsx3.default)('div', {
@@ -18945,12 +22123,20 @@ module.exports =
     className: 'userHeadBox'
   }, void 0, (0, _jsx3.default)('img', {})), (0, _jsx3.default)('div', {
     className: 'choose icon-operation'
+<<<<<<< HEAD
   }, void 0, (0, _jsx3.default)('span', {}, void 0, '更改头像'))));
+=======
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u66F4\u6539\u5934\u50CF'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref2 = (0, _jsx3.default)('div', {
     className: 'userItem'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '绑定手机',
+=======
+    title: '\u7ED1\u5B9A\u624B\u673A',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'BINDING CELLPHONE'
   }), (0, _jsx3.default)('div', {
@@ -18962,13 +22148,18 @@ module.exports =
     className: 'form-control'
   }), (0, _jsx3.default)('i', {
     className: 'userTip'
+<<<<<<< HEAD
   }, void 0, '绑定手机号可接受系统重要通知')), (0, _jsx3.default)('div', {
+=======
+  }, void 0, '\u7ED1\u5B9A\u624B\u673A\u53F7\u53EF\u63A5\u53D7\u7CFB\u7EDF\u91CD\u8981\u901A\u77E5')), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'userInputItem'
   }, void 0, (0, _jsx3.default)('input', {
     type: 'text',
     className: 'form-control userInputLittle'
   }), (0, _jsx3.default)('button', {
     className: 'userButtonLittle'
+<<<<<<< HEAD
   }, void 0, '短信验证码')), (0, _jsx3.default)('div', {
     className: 'userInputItem'
   }, void 0, (0, _jsx3.default)('button', {
@@ -18977,6 +22168,16 @@ module.exports =
   
   var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
     title: '修改密码',
+=======
+  }, void 0, '\u77ED\u4FE1\u9A8C\u8BC1\u7801')), (0, _jsx3.default)('div', {
+    className: 'userInputItem'
+  }, void 0, (0, _jsx3.default)('button', {
+    className: 'btn btn-warning'
+  }, void 0, '\u7ED1\u5B9A'))));
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u4FEE\u6539\u5BC6\u7801',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'MODIFY PASSWORD'
   });
@@ -18987,7 +22188,7 @@ module.exports =
     function GetPersonalInfo(props) {
       (0, _classCallCheck3.default)(this, GetPersonalInfo);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetPersonalInfo).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetPersonalInfo.__proto__ || (0, _getPrototypeOf2.default)(GetPersonalInfo)).call(this, props));
   
       _this.state = {
         oldP: false,
@@ -19095,19 +22296,31 @@ module.exports =
           className: 'userPhone'
         }, void 0, (0, _jsx3.default)('div', {
           className: 'userInputItem ' + (this.state.oldP ? "userInputItemError" : "")
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { onChange: this.changeOldPassword.bind(this), type: 'password', className: 'form-control', ref: 'old_p', placeholder: '原始密码' }), _react2.default.createElement(
+=======
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeOldPassword.bind(this), type: 'password', className: 'form-control', ref: 'old_p', placeholder: '\u539F\u59CB\u5BC6\u7801' }), _react2.default.createElement(
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           'i',
           { className: 'userTip', ref: 'oldTip' },
           ' '
         )), (0, _jsx3.default)('div', {
           className: 'userInputItem ' + (this.state.newP ? "userInputItemError" : "")
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { onChange: this.changeNewPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p', placeholder: '新密码' }), _react2.default.createElement(
+=======
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeNewPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p', placeholder: '\u65B0\u5BC6\u7801' }), _react2.default.createElement(
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           'i',
           { className: 'userTip', ref: 'newTip' },
           ' '
         )), (0, _jsx3.default)('div', {
           className: 'userInputItem ' + (this.state.newAgain ? "userInputItemError" : "")
+<<<<<<< HEAD
         }, void 0, _react2.default.createElement('input', { onChange: this.changeNewAgainPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p_again', placeholder: '确认新密码' }), _react2.default.createElement(
+=======
+        }, void 0, _react2.default.createElement('input', { onChange: this.changeNewAgainPassword.bind(this), type: 'password', className: 'form-control', ref: 'new_p_again', placeholder: '\u786E\u8BA4\u65B0\u5BC6\u7801' }), _react2.default.createElement(
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           'i',
           { className: 'userTip', ref: 'newTipAgain' },
           ' '
@@ -19116,7 +22329,11 @@ module.exports =
         }, void 0, (0, _jsx3.default)('button', {
           className: 'btn btn-warning',
           onClick: this.revisePassword.bind(this)
+<<<<<<< HEAD
         }, void 0, '确定')))));
+=======
+        }, void 0, '\u786E\u5B9A')))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return GetPersonalInfo;
@@ -19125,7 +22342,11 @@ module.exports =
   exports.default = GetPersonalInfo;
 
 /***/ },
+<<<<<<< HEAD
 /* 209 */
+=======
+/* 207 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19162,7 +22383,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
+=======
+  var _HeadLine = __webpack_require__(129);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -19181,6 +22406,7 @@ module.exports =
   
   var _ref3 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
     width: '15%'
+<<<<<<< HEAD
   }, void 0, '服务名称'), (0, _jsx3.default)('th', {
     width: '15%'
   }, void 0, '类型'), (0, _jsx3.default)('th', {
@@ -19194,6 +22420,21 @@ module.exports =
   }, void 0, '是否完成'), (0, _jsx3.default)('th', {
     width: '15%'
   }, void 0, '单号')));
+=======
+  }, void 0, '\u670D\u52A1\u540D\u79F0'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u7C7B\u578B'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u65F6\u95F4'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u91D1\u989D'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u6263\u6B3E\u65B9\u5F0F'), (0, _jsx3.default)('th', {
+    width: '10%'
+  }, void 0, '\u662F\u5426\u5B8C\u6210'), (0, _jsx3.default)('th', {
+    width: '15%'
+  }, void 0, '\u5355\u53F7')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref4 = (0, _jsx3.default)('div', {
     className: 'userItem accountBg'
@@ -19202,17 +22443,26 @@ module.exports =
   }, void 0, (0, _jsx3.default)('div', {
     className: 'left'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '账户余额',
+=======
+    title: '\u8D26\u6237\u4F59\u989D',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'ACCOUNT BALANCE'
   })), (0, _jsx3.default)('div', {
     className: 'right userHeadTip'
+<<<<<<< HEAD
   }, void 0, '  关注微信公众号，平台免费为您提供3个月的账户试用奖励。 ')), (0, _jsx3.default)('div', {
+=======
+  }, void 0, '  \u5173\u6CE8\u5FAE\u4FE1\u516C\u4F17\u53F7\uFF0C\u5E73\u53F0\u514D\u8D39\u4E3A\u60A8\u63D0\u4F9B3\u4E2A\u6708\u7684\u8D26\u6237\u8BD5\u7528\u5956\u52B1\u3002 ')), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'accountBd'
   }, void 0, (0, _jsx3.default)('div', {
     className: 'accountItem'
   }, void 0, (0, _jsx3.default)('span', {
     className: 'aiName'
+<<<<<<< HEAD
   }, void 0, '账户余额 :'), (0, _jsx3.default)('span', {
     className: 'aiInfo'
   }, void 0, (0, _jsx3.default)('i', {}, void 0, '-1550'), ' 元')), (0, _jsx3.default)('div', {
@@ -19220,15 +22470,32 @@ module.exports =
   }, void 0, (0, _jsx3.default)('span', {
     className: 'aiName'
   }, void 0, '支付金额 :'), (0, _jsx3.default)('span', {
+=======
+  }, void 0, '\u8D26\u6237\u4F59\u989D :'), (0, _jsx3.default)('span', {
+    className: 'aiInfo'
+  }, void 0, (0, _jsx3.default)('i', {}, void 0, '-1550'), ' \u5143')), (0, _jsx3.default)('div', {
+    className: 'accountItem'
+  }, void 0, (0, _jsx3.default)('span', {
+    className: 'aiName'
+  }, void 0, '\u652F\u4ED8\u91D1\u989D :'), (0, _jsx3.default)('span', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'aiInfo'
   }, void 0, (0, _jsx3.default)('input', {
     type: 'number',
     className: 'form-control'
+<<<<<<< HEAD
   }), ' 元')), (0, _jsx3.default)('div', {
     className: 'accountItem'
   }, void 0, (0, _jsx3.default)('span', {
     className: 'aiName'
   }, void 0, '支付方式 :'), (0, _jsx3.default)('span', {
+=======
+  }), ' \u5143')), (0, _jsx3.default)('div', {
+    className: 'accountItem'
+  }, void 0, (0, _jsx3.default)('span', {
+    className: 'aiName'
+  }, void 0, '\u652F\u4ED8\u65B9\u5F0F :'), (0, _jsx3.default)('span', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'aiInfo'
   }, void 0, (0, _jsx3.default)('a', {
     href: 'javascript:;',
@@ -19240,9 +22507,15 @@ module.exports =
     className: 'accountFt clearfix'
   }, void 0, (0, _jsx3.default)('button', {
     className: 'btn btn-danger'
+<<<<<<< HEAD
   }, void 0, '充值'), (0, _jsx3.default)('div', {
     className: 'accountFtTip right'
   }, void 0, (0, _jsx3.default)('p', {}, void 0, ' 提示：累计充值金额满', (0, _jsx3.default)('span', {}, void 0, '￥200'), '后可提交工单申请发票。'), (0, _jsx3.default)('a', {
+=======
+  }, void 0, '\u5145\u503C'), (0, _jsx3.default)('div', {
+    className: 'accountFtTip right'
+  }, void 0, (0, _jsx3.default)('p', {}, void 0, ' \u63D0\u793A\uFF1A\u7D2F\u8BA1\u5145\u503C\u91D1\u989D\u6EE1', (0, _jsx3.default)('span', {}, void 0, '\uFFE5200'), '\u540E\u53EF\u63D0\u4EA4\u5DE5\u5355\u7533\u8BF7\u53D1\u7968\u3002'), (0, _jsx3.default)('a', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     href: 'javascript:;'
   }, void 0, ' '))));
   
@@ -19251,19 +22524,27 @@ module.exports =
   }, void 0, (0, _jsx3.default)('div', {
     className: 'left'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '充值记录',
+=======
+    title: '\u5145\u503C\u8BB0\u5F55',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'RECHARGE RECORD'
   })), (0, _jsx3.default)('div', {
     className: 'right userHeadTip'
+<<<<<<< HEAD
   }, void 0, '提示：仅显示最近5笔交易，如需了解全部记录请提交 工单，我们会在24小时内发送您邮箱'));
+=======
+  }, void 0, '\u63D0\u793A\uFF1A\u4EC5\u663E\u793A\u6700\u8FD15\u7B14\u4EA4\u6613\uFF0C\u5982\u9700\u4E86\u89E3\u5168\u90E8\u8BB0\u5F55\u8BF7\u63D0\u4EA4 \u5DE5\u5355\uFF0C\u6211\u4EEC\u4F1A\u572824\u5C0F\u65F6\u5185\u53D1\u9001\u60A8\u90AE\u7BB1'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var GetMyAccount = function (_Component) {
     (0, _inherits3.default)(GetMyAccount, _Component);
   
     function GetMyAccount() {
       (0, _classCallCheck3.default)(this, GetMyAccount);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetMyAccount).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetMyAccount.__proto__ || (0, _getPrototypeOf2.default)(GetMyAccount)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetMyAccount, [{
@@ -19328,7 +22609,11 @@ module.exports =
   exports.default = GetMyAccount;
 
 /***/ },
+<<<<<<< HEAD
 /* 210 */
+=======
+/* 208 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19365,7 +22650,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
+=======
+  var _HeadLine = __webpack_require__(129);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -19374,12 +22663,17 @@ module.exports =
   var _ref = (0, _jsx3.default)('div', {
     className: 'accountManageHd'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '账号管理',
+=======
+    title: '\u8D26\u53F7\u7BA1\u7406',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'ACCOUNT MANAGEMENT'
   }));
   
   var _ref2 = (0, _jsx3.default)('div', {
+<<<<<<< HEAD
     className: 'accountManageBox icon-github'
   }, void 0, (0, _jsx3.default)('div', {
     className: 'ambInfo'
@@ -19390,13 +22684,17 @@ module.exports =
   }, void 0, (0, _jsx3.default)('div', {
     className: 'ambInfo'
   }, void 0, (0, _jsx3.default)('h1', {}, void 0, 'Coding'), (0, _jsx3.default)('p', {}, void 0, 'Coding.net 为软件开发者提供基于云计算技术的软件开发平台，包括项目管理，代码托管，运行空间和质量控制等等。')));
+=======
+    className: 'ambInfo'
+  }, void 0, (0, _jsx3.default)('h1', {}, void 0, 'Github'), (0, _jsx3.default)('p', {}, void 0, 'Github\u4E8E2008\u5E74\u4E0A\u7EBF\uFF0C\u7528\u4E8EGit\u4EE3\u7801\u4ED3\u5E93\u6258\u7BA1\u53CA\u57FA\u672C\u7684Web\u7BA1\u7406\u754C\u9762'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var GetAccountManage = function (_Component) {
     (0, _inherits3.default)(GetAccountManage, _Component);
   
     function GetAccountManage() {
       (0, _classCallCheck3.default)(this, GetAccountManage);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetAccountManage).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetAccountManage.__proto__ || (0, _getPrototypeOf2.default)(GetAccountManage)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetAccountManage, [{
@@ -19415,6 +22713,7 @@ module.exports =
           className: 'userTabBox'
         }, void 0, _ref, (0, _jsx3.default)('div', {
           className: 'accountManageItem'
+<<<<<<< HEAD
         }, void 0, _ref2, (0, _jsx3.default)('a', {
           href: user.oauth.github ? "javascript:;" : this.props.authUrl.github,
           target: '_blank',
@@ -19426,6 +22725,21 @@ module.exports =
           target: '_blank',
           className: 'btn ' + (user.oauth.coding ? "btn-default" : "btn-warning")
         }, void 0, user.oauth.coding ? "解除绑定" : "绑定")));
+=======
+        }, void 0, (0, _jsx3.default)('div', {
+          className: 'accountManageBox icon-github'
+        }, void 0, (0, _jsx3.default)('img', {
+          width: 60,
+          height: 60,
+          src: __webpack_require__(209),
+          alt: 'img'
+        }), _ref2), (0, _jsx3.default)('a', {
+          href: user.github ? "javascript:;" : this.props.githubAuthURL,
+          target: '_blank',
+          className: 'btn btn-warning',
+          disabled: user.github
+        }, void 0, user.github ? "已绑定" : "绑定")));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return GetAccountManage;
@@ -19437,7 +22751,17 @@ module.exports =
   exports.default = GetAccountManage;
 
 /***/ },
+<<<<<<< HEAD
 /* 211 */
+=======
+/* 209 */
+/***/ function(module, exports) {
+
+  module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphNmIzYTA5MS1mZTUwLTRkOGMtOGQ1NS1kYTcxMDUyYjdkMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0Q0OTkxN0E2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0Q0OTkxNzk2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphOThjNzgzOS1kYWE3LTQ3ZjgtODAzOS1jMzc0ZmIzYmI1ODUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTZiM2EwOTEtZmU1MC00ZDhjLThkNTUtZGE3MTA1MmI3ZDI2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"
+
+/***/ },
+/* 210 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19474,7 +22798,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
+=======
+  var _HeadLine = __webpack_require__(129);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
@@ -19489,27 +22817,42 @@ module.exports =
   }, void 0, (0, _jsx3.default)('div', {
     className: 'left'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '我的礼券',
+=======
+    title: '\u6211\u7684\u793C\u5238',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'MY CERTIFICATE'
   })), (0, _jsx3.default)('div', {
     className: 'right userHeadTip redTip'
+<<<<<<< HEAD
   }, void 0, '提示：礼券在激活后才可使用。')), (0, _jsx3.default)('div', {
+=======
+  }, void 0, '\u63D0\u793A\uFF1A\u793C\u5238\u5728\u6FC0\u6D3B\u540E\u624D\u53EF\u4F7F\u7528\u3002')), (0, _jsx3.default)('div', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     className: 'userInputItem'
   }, void 0, (0, _jsx3.default)('input', {
     type: 'text',
     className: 'form-control',
+<<<<<<< HEAD
     placeholder: '请输入礼券八位码'
   }), (0, _jsx3.default)('br', {}), (0, _jsx3.default)('button', {
     className: 'btn btn-danger'
   }, void 0, '激活'))));
+=======
+    placeholder: '\u8BF7\u8F93\u5165\u793C\u5238\u516B\u4F4D\u7801'
+  }), (0, _jsx3.default)('br', {}), (0, _jsx3.default)('button', {
+    className: 'btn btn-danger'
+  }, void 0, '\u6FC0\u6D3B'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var GetCertificateMange = function (_Component) {
     (0, _inherits3.default)(GetCertificateMange, _Component);
   
     function GetCertificateMange() {
       (0, _classCallCheck3.default)(this, GetCertificateMange);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetCertificateMange).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (GetCertificateMange.__proto__ || (0, _getPrototypeOf2.default)(GetCertificateMange)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(GetCertificateMange, [{
@@ -19524,7 +22867,11 @@ module.exports =
   exports.default = GetCertificateMange;
 
 /***/ },
+<<<<<<< HEAD
 /* 212 */
+=======
+/* 211 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19565,17 +22912,29 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
+=======
+  var _HeadLine = __webpack_require__(129);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _reactBootstrap = __webpack_require__(70);
   
+<<<<<<< HEAD
   var _Loading = __webpack_require__(92);
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _Confirm = __webpack_require__(114);
+=======
+  var _Loading = __webpack_require__(107);
+  
+  var _Loading2 = _interopRequireDefault(_Loading);
+  
+  var _Confirm = __webpack_require__(112);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
@@ -19592,6 +22951,7 @@ module.exports =
   
   var _ref3 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
       width: '25%'
+<<<<<<< HEAD
   }, void 0, '组织名称'), (0, _jsx3.default)('th', {
       width: '25%'
   }, void 0, '组织简介'), (0, _jsx3.default)('th', {
@@ -19599,13 +22959,28 @@ module.exports =
   }, void 0, '组织权限'), (0, _jsx3.default)('th', {
       width: '25%'
   }, void 0, '操作')));
+=======
+  }, void 0, '\u7EC4\u7EC7\u540D\u79F0'), (0, _jsx3.default)('th', {
+      width: '25%'
+  }, void 0, '\u7EC4\u7EC7\u7B80\u4ECB'), (0, _jsx3.default)('th', {
+      width: '25%'
+  }, void 0, '\u7EC4\u7EC7\u6743\u9650'), (0, _jsx3.default)('th', {
+      width: '25%'
+  }, void 0, '\u64CD\u4F5C')));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref4 = (0, _jsx3.default)('div', {
       className: 'left'
   }, void 0, (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
       title: '我的组织',
       titleEnglish: 'MY ORGANIZE',
       titleInfo: '所有我加入的组织的列表'
+=======
+      title: '\u6211\u7684\u7EC4\u7EC7',
+      titleEnglish: 'MY ORGANIZE',
+      titleInfo: '\u6240\u6709\u6211\u52A0\u5165\u7684\u7EC4\u7EC7\u7684\u5217\u8868'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   }));
   
   var _ref5 = (0, _jsx3.default)('div', {
@@ -19616,7 +22991,11 @@ module.exports =
       className: 'hbPlusInfo left'
   }, void 0, (0, _jsx3.default)('p', {
       className: 'hbPName'
+<<<<<<< HEAD
   }, void 0, '新建组织'), (0, _jsx3.default)('p', {
+=======
+  }, void 0, '\u65B0\u5EFA\u7EC4\u7EC7'), (0, _jsx3.default)('p', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       className: 'hbPInfo'
   }, void 0, 'Create Organize'));
   
@@ -19626,7 +23005,7 @@ module.exports =
       function GetOrganize() {
           (0, _classCallCheck3.default)(this, GetOrganize);
   
-          var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrganize).call(this));
+          var _this = (0, _possibleConstructorReturn3.default)(this, (GetOrganize.__proto__ || (0, _getPrototypeOf2.default)(GetOrganize)).call(this));
   
           _this.state = {
               orgData: {
@@ -19679,25 +23058,37 @@ module.exports =
               if (data.length == 1 && data[0].orga_name == user_name) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
                   colSpan: '5',
                   style: { textAlign: "center" }
+<<<<<<< HEAD
               }, void 0, '暂无数据~'));
               if (data.length == 0) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
                   colSpan: '5',
                   style: { textAlign: "center" }
               }, void 0, '暂无数据~'));
+=======
+              }, void 0, '\u6682\u65E0\u6570\u636E~'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
               var role = "";
               return data.map(function (item, i) {
                   if (item.orga_name == user_name) return false;
                   var opt = (0, _jsx3.default)('button', {
                       className: 'btn btn-danger',
                       onClick: _this2.leaveOrganize.bind(_this2, item.org_id)
+<<<<<<< HEAD
                   }, void 0, '退出组织');
+=======
+                  }, void 0, '\u9000\u51FA\u7EC4\u7EC7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
                   switch (Number(item.role)) {
                       case 200:
                           role = "组织拥有者";
                           opt = (0, _jsx3.default)('button', {
                               className: 'btn btn-danger',
                               onClick: _this2.deleteOrganize.bind(_this2, item.org_id)
+<<<<<<< HEAD
                           }, void 0, '解散组织');
+=======
+                          }, void 0, '\u89E3\u6563\u7EC4\u7EC7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
                           break;
                       case 210:
                           role = "管理员";
@@ -19754,15 +23145,25 @@ module.exports =
               }, void 0, _ref5, _ref6))), (0, _jsx3.default)('div', {
                   className: 'organizeBd sl-bd TableTextLeft'
               }, void 0, this.getTableDemo()), _react2.default.createElement(CreateOrganize, { onCreateOrganize: this.createOrganize.bind(this), ref: 'createOrgModel' }), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
                   title: '警告',
                   text: '您确定要离开此组织吗?',
+=======
+                  title: '\u8B66\u544A',
+                  text: '\u60A8\u786E\u5B9A\u8981\u79BB\u5F00\u6B64\u7EC4\u7EC7\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
                   ref: 'confirmModalLeave',
                   func: function func() {
                       _this3.props.leaveOrganize(_this3.state.orgData);
                   }
               }), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
                   title: '警告',
                   text: '您确定要解散此组织吗?',
+=======
+                  title: '\u8B66\u544A',
+                  text: '\u60A8\u786E\u5B9A\u8981\u89E3\u6563\u6B64\u7EC4\u7EC7\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
                   ref: 'confirmModalDelete',
                   func: function func() {
                       _this3.props.deleteOrganize(_this3.state.orgData);
@@ -19779,14 +23180,26 @@ module.exports =
   
   var _ref7 = (0, _jsx3.default)('span', {
       'aria-hidden': 'true'
+<<<<<<< HEAD
   }, void 0, '×');
+=======
+  }, void 0, '\xD7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref8 = (0, _jsx3.default)('h4', {
       className: 'modal-title',
       id: 'contained-modal-title-sm'
+<<<<<<< HEAD
   }, void 0, '新建组织');
   
   var _ref9 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '组织名称'));
+=======
+  }, void 0, '\u65B0\u5EFA\u7EC4\u7EC7');
+  
+  var _ref9 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, '\u7EC4\u7EC7\u540D\u79F0'));
+  
+  var _ref10 = (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('span', {}, void 0, ' '));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var CreateOrganize = function (_Component2) {
       (0, _inherits3.default)(CreateOrganize, _Component2);
@@ -19794,7 +23207,7 @@ module.exports =
       function CreateOrganize(props) {
           (0, _classCallCheck3.default)(this, CreateOrganize);
   
-          var _this4 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CreateOrganize).call(this, props));
+          var _this4 = (0, _possibleConstructorReturn3.default)(this, (CreateOrganize.__proto__ || (0, _getPrototypeOf2.default)(CreateOrganize)).call(this, props));
   
           _this4.state = {
               show: false,
@@ -19883,6 +23296,7 @@ module.exports =
                       className: 'modalItem'
                   }, void 0, _ref9, (0, _jsx3.default)('label', {}, void 0, _react2.default.createElement('input', { onInput: this.organizeName.bind(this),
                       className: 'form-control form-control-sm',
+<<<<<<< HEAD
                       type: 'input', placeholder: '请输入名称',
                       ref: 'org_name' }))), _react2.default.createElement(
                       'div',
@@ -19894,6 +23308,19 @@ module.exports =
                       className: 'btn btn-primary',
                       onClick: this.createOrganize.bind(this)
                   }, void 0, '创建组织'))))
+=======
+                      type: 'input', placeholder: '\u8BF7\u8F93\u5165\u540D\u79F0',
+                      ref: 'org_name' }))), _react2.default.createElement(
+                      'div',
+                      { ref: 'org_tip', className: 'volumeTip' },
+                      '\u7EC4\u7EC7\u540D\u79F0\u4E0D\u6B63\u786E'
+                  ), (0, _jsx3.default)('div', {
+                      className: 'modalItem modelItemLast'
+                  }, void 0, _ref10, (0, _jsx3.default)('label', {}, void 0, (0, _jsx3.default)('button', {
+                      className: 'btn btn-primary',
+                      onClick: this.createOrganize.bind(this)
+                  }, void 0, '\u521B\u5EFA\u7EC4\u7EC7'))))
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
               );
           }
       }]);
@@ -19903,7 +23330,11 @@ module.exports =
   exports.default = GetOrganize;
 
 /***/ },
+<<<<<<< HEAD
 /* 213 */
+=======
+/* 212 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -19945,7 +23376,7 @@ module.exports =
   }
   
   function fetchUserInfo(token) {
-    var development = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+    var development = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   
     return function (dispatch) {
       var url = '' + (development ? _constants.FETCH_URL.USER_INFO : _constants.FETCH_URL.USER_INFO_INTERNAL);
@@ -20022,7 +23453,11 @@ module.exports =
   }
 
 /***/ },
+<<<<<<< HEAD
 /* 214 */
+=======
+/* 213 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20031,6 +23466,7 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _reselect = __webpack_require__(63);
   
   //getBalance
@@ -20056,6 +23492,8 @@ module.exports =
     value: true
   });
   
+=======
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   var _regenerator = __webpack_require__(3);
   
   var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -20072,7 +23510,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _ReviseImageContainer = __webpack_require__(216);
+=======
+  var _ReviseImageContainer = __webpack_require__(214);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ReviseImageContainer2 = _interopRequireDefault(_ReviseImageContainer);
   
@@ -20105,7 +23547,11 @@ module.exports =
   // import CodeBuildList from './CodeBuildList'
 
 /***/ },
+<<<<<<< HEAD
 /* 216 */
+=======
+/* 214 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20114,12 +23560,17 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _ReviseImage = __webpack_require__(217);
+=======
+  var _ReviseImage = __webpack_require__(215);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ReviseImage2 = _interopRequireDefault(_ReviseImage);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _isBtnStateSelector = __webpack_require__(127);
   
   var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
@@ -20133,6 +23584,21 @@ module.exports =
   var _imageDetail = __webpack_require__(124);
   
   var _reviseImage = __webpack_require__(126);
+=======
+  var _isBtnStateSelector = __webpack_require__(125);
+  
+  var _isBtnStateSelector2 = _interopRequireDefault(_isBtnStateSelector);
+  
+  var _imageDetailSelector = __webpack_require__(123);
+  
+  var _imageDetailSelector2 = _interopRequireDefault(_imageDetailSelector);
+  
+  var _breadcumb = __webpack_require__(93);
+  
+  var _imageDetail = __webpack_require__(122);
+  
+  var _reviseImage = __webpack_require__(124);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -20167,7 +23633,11 @@ module.exports =
   exports.default = ReviseImageContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 217 */
+=======
+/* 215 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20204,6 +23674,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
@@ -20213,6 +23684,17 @@ module.exports =
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
   var _Toggle = __webpack_require__(120);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactDom = __webpack_require__(132);
+  
+  var _reactDom2 = _interopRequireDefault(_reactDom);
+  
+  var _Toggle = __webpack_require__(118);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
@@ -20226,7 +23708,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         is_public: _this.props.state
@@ -20257,6 +23739,7 @@ module.exports =
     return IsPublicToggle;
   }(_react.Component);
   
+<<<<<<< HEAD
   var _ref = (0, _jsx3.default)('h1', {}, void 0, '修改镜像');
   
   var _ref2 = (0, _jsx3.default)('p', {}, void 0, '镜像是服务运行的模板, 来源于代码, 基于 Dockerfile 构建, 默认目录在根\'/\'下, 文件名 Dockerfile .');
@@ -20283,6 +23766,34 @@ module.exports =
     title: '是否公开',
     titleEnglish: 'IS PUBLIC',
     titleInfo: '公开后都可以访问'
+=======
+  var _ref = (0, _jsx3.default)('h1', {}, void 0, '\u4FEE\u6539\u955C\u50CF');
+  
+  var _ref2 = (0, _jsx3.default)('p', {}, void 0, '\u955C\u50CF\u662F\u670D\u52A1\u8FD0\u884C\u7684\u6A21\u677F, \u6765\u6E90\u4E8E\u4EE3\u7801, \u57FA\u4E8E Dockerfile \u6784\u5EFA, \u9ED8\u8BA4\u76EE\u5F55\u5728\u6839\'/\'\u4E0B, \u6587\u4EF6\u540D Dockerfile .');
+  
+  var _ref3 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u540D\u79F0',
+    titleEnglish: 'IMAGE NAME',
+    titleInfo: '\u9ED8\u8BA4\u4F1A\u4E0E\u60A8\u4E0B\u65B9\u4EE3\u7801\u6E90\u7684\u9879\u76EE\u540D\u79F0\u76F8\u540C'
+  });
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u955C\u50CF\u7B80\u4ECB',
+    titleEnglish: 'IMAGE SUMMARY',
+    titleInfo: '\u7B80\u5355\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u8BE6\u7EC6\u63CF\u8FF0',
+    titleEnglish: 'IMAGE DETAIL',
+    titleInfo: '\u8BE6\u7EC6\u4ECB\u7ECD\u955C\u50CF\u7684\u4FE1\u606F'
+  });
+  
+  var _ref6 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u662F\u5426\u516C\u5F00',
+    titleEnglish: 'IS PUBLIC',
+    titleInfo: '\u516C\u5F00\u540E\u90FD\u53EF\u4EE5\u8BBF\u95EE'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var ReviseImage = function (_React$Component) {
@@ -20291,7 +23802,7 @@ module.exports =
     function ReviseImage() {
       (0, _classCallCheck3.default)(this, ReviseImage);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ReviseImage).call(this));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (ReviseImage.__proto__ || (0, _getPrototypeOf2.default)(ReviseImage)).call(this));
   
       _this2.state = {
         isImageName: false,
@@ -20373,7 +23884,11 @@ module.exports =
           }, void 0, _ref4, (0, _jsx3.default)('div', {
             className: 'assBox'
           }, void 0, _react2.default.createElement('textarea', {
+<<<<<<< HEAD
             placeholder: '镜像简介',
+=======
+            placeholder: '\u955C\u50CF\u7B80\u4ECB',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             className: 'form-control',
             defaultValue: item.detail,
             ref: 'image_detail'
@@ -20382,7 +23897,11 @@ module.exports =
           }, void 0, _ref5, (0, _jsx3.default)('div', {
             className: 'assBox'
           }, void 0, _react2.default.createElement('textarea', {
+<<<<<<< HEAD
             placeholder: '详细描述',
+=======
+            placeholder: '\u8BE6\u7EC6\u63CF\u8FF0',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             className: 'form-control',
             defaultValue: item.short_description,
             ref: 'short_description'
@@ -20424,7 +23943,11 @@ module.exports =
   exports.default = ReviseImage;
 
 /***/ },
+<<<<<<< HEAD
 /* 218 */
+=======
+/* 216 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20449,7 +23972,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _OrganizeContainer = __webpack_require__(219);
+=======
+  var _OrganizeContainer = __webpack_require__(217);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _OrganizeContainer2 = _interopRequireDefault(_OrganizeContainer);
   
@@ -20481,7 +24008,11 @@ module.exports =
   };
 
 /***/ },
+<<<<<<< HEAD
 /* 219 */
+=======
+/* 217 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20490,18 +24021,27 @@ module.exports =
     value: true
   });
   
+<<<<<<< HEAD
   var _Organize = __webpack_require__(220);
+=======
+  var _Organize = __webpack_require__(218);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Organize2 = _interopRequireDefault(_Organize);
   
   var _reactRedux = __webpack_require__(51);
   
+<<<<<<< HEAD
   var _breadcumb = __webpack_require__(94);
+=======
+  var _breadcumb = __webpack_require__(93);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _organize = __webpack_require__(76);
   
   var fun = _interopRequireWildcard(_organize);
   
+<<<<<<< HEAD
   var _organizeDetailSelector = __webpack_require__(225);
   
   var _organizeDetailSelector2 = _interopRequireDefault(_organizeDetailSelector);
@@ -20511,6 +24051,17 @@ module.exports =
   var _organizeUserListSelector2 = _interopRequireDefault(_organizeUserListSelector);
   
   var _userListSelector = __webpack_require__(227);
+=======
+  var _organizeDetailSelector = __webpack_require__(223);
+  
+  var _organizeDetailSelector2 = _interopRequireDefault(_organizeDetailSelector);
+  
+  var _organizeUserListSelector = __webpack_require__(224);
+  
+  var _organizeUserListSelector2 = _interopRequireDefault(_organizeUserListSelector);
+  
+  var _userListSelector = __webpack_require__(225);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _userListSelector2 = _interopRequireDefault(_userListSelector);
   
@@ -20575,7 +24126,11 @@ module.exports =
   exports.default = OrganizeContainer;
 
 /***/ },
+<<<<<<< HEAD
 /* 220 */
+=======
+/* 218 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20616,6 +24171,7 @@ module.exports =
   
   var _constants = __webpack_require__(38);
   
+<<<<<<< HEAD
   var _GetOrgInfo = __webpack_require__(221);
   
   var _GetOrgInfo2 = _interopRequireDefault(_GetOrgInfo);
@@ -20625,6 +24181,17 @@ module.exports =
   var _GetOrgDeal2 = _interopRequireDefault(_GetOrgDeal);
   
   var _GetOrgAdmin = __webpack_require__(223);
+=======
+  var _GetOrgInfo = __webpack_require__(219);
+  
+  var _GetOrgInfo2 = _interopRequireDefault(_GetOrgInfo);
+  
+  var _GetOrgDeal = __webpack_require__(220);
+  
+  var _GetOrgDeal2 = _interopRequireDefault(_GetOrgDeal);
+  
+  var _GetOrgAdmin = __webpack_require__(221);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _GetOrgAdmin2 = _interopRequireDefault(_GetOrgAdmin);
   
@@ -20634,12 +24201,20 @@ module.exports =
   
   var _ref = (0, _jsx3.default)(_reactBootstrap.Tab, {
     eventKey: 1,
+<<<<<<< HEAD
     title: '账户信息'
+=======
+    title: '\u8D26\u6237\u4FE1\u606F'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   }, void 0);
   
   var _ref2 = (0, _jsx3.default)(_reactBootstrap.Tab, {
     eventKey: 3,
+<<<<<<< HEAD
     title: '交易记录'
+=======
+    title: '\u4EA4\u6613\u8BB0\u5F55'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   }, void 0, (0, _jsx3.default)(_GetOrgDeal2.default, {}));
   
   var Organize = function (_Component) {
@@ -20647,7 +24222,7 @@ module.exports =
   
     function Organize() {
       (0, _classCallCheck3.default)(this, Organize);
-      return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Organize).apply(this, arguments));
+      return (0, _possibleConstructorReturn3.default)(this, (Organize.__proto__ || (0, _getPrototypeOf2.default)(Organize)).apply(this, arguments));
     }
   
     (0, _createClass3.default)(Organize, [{
@@ -20666,11 +24241,19 @@ module.exports =
         }, void 0, (0, _jsx3.default)('div', {
           className: 'userTab'
         }, void 0, (0, _jsx3.default)(_reactBootstrap.Tabs, {
+<<<<<<< HEAD
           defaultActiveKey: 4,
           id: 'userTabs'
         }, void 0, _ref, (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 2,
           title: '组织信息'
+=======
+          defaultActiveKey: 2,
+          id: 'userTabs'
+        }, void 0, _ref, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 2,
+          title: '\u7EC4\u7EC7\u4FE1\u606F'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)(_GetOrgInfo2.default, {
           getOrganizeDetail: function getOrganizeDetail(id) {
             _this2.props.getOrganizeDetail(id);
@@ -20678,11 +24261,18 @@ module.exports =
           organizeDetail: this.props.organizeDetail,
           setOrganizeDetail: function setOrganizeDetail(data) {
             _this2.props.setOrganizeDetail(data);
+<<<<<<< HEAD
           },
           isBtnState: this.props.isBtnState
         })), _ref2, (0, _jsx3.default)(_reactBootstrap.Tab, {
           eventKey: 4,
           title: '组织管理'
+=======
+          }
+        })), _ref2, (0, _jsx3.default)(_reactBootstrap.Tab, {
+          eventKey: 4,
+          title: '\u7EC4\u7EC7\u7BA1\u7406'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         }, void 0, (0, _jsx3.default)(_GetOrgAdmin2.default, {
           organizeUserList: this.props.organizeUserList,
           getOrganizeUserList: function getOrganizeUserList(id) {
@@ -20720,7 +24310,11 @@ module.exports =
   exports.default = Organize;
 
 /***/ },
+<<<<<<< HEAD
 /* 221 */
+=======
+/* 219 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20757,6 +24351,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
@@ -20766,6 +24361,17 @@ module.exports =
   var _Toggle2 = _interopRequireDefault(_Toggle);
   
   var _Loading = __webpack_require__(92);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _Toggle = __webpack_require__(118);
+  
+  var _Toggle2 = _interopRequireDefault(_Toggle);
+  
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
@@ -20777,7 +24383,7 @@ module.exports =
     function IsPublicToggle(props) {
       (0, _classCallCheck3.default)(this, IsPublicToggle);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(IsPublicToggle).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (IsPublicToggle.__proto__ || (0, _getPrototypeOf2.default)(IsPublicToggle)).call(this, props));
   
       _this.state = {
         is_public: _this.props.state
@@ -20812,7 +24418,11 @@ module.exports =
   var _ref = (0, _jsx3.default)(_Loading2.default, {});
   
   var _ref2 = (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '组织头像',
+=======
+    title: '\u7EC4\u7EC7\u5934\u50CF',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'ORGANIZE HEAD'
   });
@@ -20823,16 +24433,27 @@ module.exports =
     className: 'userHeadBox'
   }, void 0, (0, _jsx3.default)('img', {})), (0, _jsx3.default)('div', {
     className: 'choose icon-operation'
+<<<<<<< HEAD
   }, void 0, (0, _jsx3.default)('span', {}, void 0, '更改头像')));
   
   var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
     title: '组织描述',
+=======
+  }, void 0, (0, _jsx3.default)('span', {}, void 0, '\u66F4\u6539\u5934\u50CF')));
+  
+  var _ref4 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7EC4\u7EC7\u63CF\u8FF0',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'ORGANIZE '
   });
   
   var _ref5 = (0, _jsx3.default)(_HeadLine2.default, {
+<<<<<<< HEAD
     title: '是否公开',
+=======
+    title: '\u662F\u5426\u516C\u5F00',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
     titleEnglish: '',
     titleInfo: 'IS PUBLIC'
   });
@@ -20843,7 +24464,7 @@ module.exports =
     function GetOrgInfo(props) {
       (0, _classCallCheck3.default)(this, GetOrgInfo);
   
-      var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgInfo).call(this, props));
+      var _this2 = (0, _possibleConstructorReturn3.default)(this, (GetOrgInfo.__proto__ || (0, _getPrototypeOf2.default)(GetOrgInfo)).call(this, props));
   
       _this2.state = {
         is_public: 0
@@ -20878,8 +24499,11 @@ module.exports =
       key: 'render',
       value: function render() {
         var data = this.props.organizeDetail;
+<<<<<<< HEAD
         var role_uuid = this.context.store.getState().user_info.role_uuid;
         var role = role_uuid == 200;
+=======
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         if (data.creation_time == "") return (0, _jsx3.default)('div', {
           style: { textAlign: "center" }
         }, void 0, _ref);
@@ -20889,6 +24513,7 @@ module.exports =
           className: 'userItem organizeBox'
         }, void 0, _ref2, _ref3, _ref4, (0, _jsx3.default)('div', {
           className: 'organizeItem'
+<<<<<<< HEAD
         }, void 0, role ? _react2.default.createElement('textarea', { type: 'text', className: 'form-control', ref: 'orga_detail', defaultValue: data.orga_detail }) : (0, _jsx3.default)('p', {}, void 0, data.orga_detail)), _ref5, (0, _jsx3.default)('div', {
           className: 'organizeItem'
         }, void 0, (0, _jsx3.default)(IsPublicToggle, {
@@ -20902,6 +24527,19 @@ module.exports =
           disabled: !this.props.isBtnState.setOrg,
           onClick: this.setOrganizeDetail.bind(this)
         }, void 0, this.props.isBtnState.setOrg ? "保存" : "保存中..."))));
+=======
+        }, void 0, _react2.default.createElement('textarea', { type: 'text', className: 'form-control', ref: 'orga_detail', defaultValue: data.orga_detail })), _ref5, (0, _jsx3.default)('div', {
+          className: 'organizeItem'
+        }, void 0, (0, _jsx3.default)(IsPublicToggle, {
+          state: data.is_public == 1,
+          getToggle: this.getToggleValue.bind(this)
+        })), (0, _jsx3.default)('div', {
+          className: 'organizeItem organizeItemBtn '
+        }, void 0, (0, _jsx3.default)('button', {
+          className: 'btn btn-primary',
+          onClick: this.setOrganizeDetail.bind(this)
+        }, void 0, '\u4FDD\u5B58'))));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
       }
     }]);
     return GetOrgInfo;
@@ -20913,7 +24551,11 @@ module.exports =
   exports.default = GetOrgInfo;
 
 /***/ },
+<<<<<<< HEAD
 /* 222 */
+=======
+/* 220 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -20950,11 +24592,19 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _reactDom = __webpack_require__(134);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _reactDom = __webpack_require__(132);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _reactDom2 = _interopRequireDefault(_reactDom);
   
@@ -20970,7 +24620,7 @@ module.exports =
     function GetOrgDeal(props) {
       (0, _classCallCheck3.default)(this, GetOrgDeal);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgDeal).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetOrgDeal.__proto__ || (0, _getPrototypeOf2.default)(GetOrgDeal)).call(this, props));
   
       _this.state = {};
       return _this;
@@ -20988,7 +24638,11 @@ module.exports =
   exports.default = GetOrgDeal;
 
 /***/ },
+<<<<<<< HEAD
 /* 223 */
+=======
+/* 221 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21025,17 +24679,29 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
+<<<<<<< HEAD
   var _HeadLine = __webpack_require__(131);
   
   var _HeadLine2 = _interopRequireDefault(_HeadLine);
   
   var _Loading = __webpack_require__(92);
+=======
+  var _HeadLine = __webpack_require__(129);
+  
+  var _HeadLine2 = _interopRequireDefault(_HeadLine);
+  
+  var _Loading = __webpack_require__(107);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Loading2 = _interopRequireDefault(_Loading);
   
   var _reactBootstrap = __webpack_require__(70);
   
+<<<<<<< HEAD
   var _Confirm = __webpack_require__(114);
+=======
+  var _Confirm = __webpack_require__(112);
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _Confirm2 = _interopRequireDefault(_Confirm);
   
@@ -21049,6 +24715,7 @@ module.exports =
   
   var _ref2 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
     eventKey: '400'
+<<<<<<< HEAD
   }, void 0, '用户');
   
   var _ref3 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
@@ -21078,6 +24745,37 @@ module.exports =
   var _ref9 = (0, _jsx3.default)('button', {
     className: 'btn btn-danger'
   }, void 0, '移除组织');
+=======
+  }, void 0, '\u7528\u6237');
+  
+  var _ref3 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '520'
+  }, void 0, '\u7EC4\u7EC7\u521B\u5EFA\u8005');
+  
+  var _ref4 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '210'
+  }, void 0, '\u7BA1\u7406\u5458');
+  
+  var _ref5 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '520'
+  }, void 0, '\u7EC4\u7EC7\u521B\u5EFA\u8005');
+  
+  var _ref6 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '210'
+  }, void 0, '\u7BA1\u7406\u5458');
+  
+  var _ref7 = (0, _jsx3.default)(_reactBootstrap.MenuItem, {
+    eventKey: '520'
+  }, void 0, '\u7EC4\u7EC7\u521B\u5EFA\u8005');
+  
+  var _ref8 = (0, _jsx3.default)('button', {
+    className: 'btn btn-danger'
+  }, void 0, '\u79BB\u5F00\u7EC4\u7EC7');
+  
+  var _ref9 = (0, _jsx3.default)('button', {
+    className: 'btn btn-danger'
+  }, void 0, '\u79FB\u9664\u7EC4\u7EC7');
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   
   var _ref10 = (0, _jsx3.default)('img', {
     className: 'mediaImg',
@@ -21086,6 +24784,7 @@ module.exports =
   
   var _ref11 = (0, _jsx3.default)('thead', {}, void 0, (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('th', {
     width: '33%'
+<<<<<<< HEAD
   }, void 0, '用户名'), (0, _jsx3.default)('th', {
     width: '33%'
   }, void 0, '权限信息'), (0, _jsx3.default)('th', {
@@ -21104,6 +24803,26 @@ module.exports =
     title: '组织成员',
     titleEnglish: 'ORGANIZE USER LIST',
     titleInfo: '组织成员列表'
+=======
+  }, void 0, '\u7528\u6237\u540D'), (0, _jsx3.default)('th', {
+    width: '33%'
+  }, void 0, '\u6743\u9650\u4FE1\u606F'), (0, _jsx3.default)('th', {
+    width: '34%'
+  }, void 0, '\u64CD\u4F5C')));
+  
+  var _ref12 = (0, _jsx3.default)('li', {}, void 0, '\u6682\u65E0\u6570\u636E');
+  
+  var _ref13 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u9080\u8BF7\u65B0\u6210\u5458',
+    titleEnglish: 'INVITE USER',
+    titleInfo: '\u9080\u8BF7\u65B0\u6210\u5458'
+  });
+  
+  var _ref14 = (0, _jsx3.default)(_HeadLine2.default, {
+    title: '\u7EC4\u7EC7\u6210\u5458',
+    titleEnglish: 'ORGANIZE USER LIST',
+    titleInfo: '\u7EC4\u7EC7\u6210\u5458\u5217\u8868'
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
   });
   
   var GetOrgAdmin = function (_Component) {
@@ -21112,7 +24831,7 @@ module.exports =
     function GetOrgAdmin(props) {
       (0, _classCallCheck3.default)(this, GetOrgAdmin);
   
-      var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GetOrgAdmin).call(this, props));
+      var _this = (0, _possibleConstructorReturn3.default)(this, (GetOrgAdmin.__proto__ || (0, _getPrototypeOf2.default)(GetOrgAdmin)).call(this, props));
   
       _this.state = {
         inviteBox: false,
@@ -21152,7 +24871,11 @@ module.exports =
         if (!data.length) return (0, _jsx3.default)('tr', {}, void 0, (0, _jsx3.default)('td', {
           colSpan: '3',
           style: { textAlign: "center" }
+<<<<<<< HEAD
         }, void 0, '暂无数据~'));
+=======
+        }, void 0, '\u6682\u65E0\u6570\u636E~'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
         return data.map(function (item, i) {
           var role = "";
           var buttonGroup = "";
@@ -21165,7 +24888,11 @@ module.exports =
                 disabled: orgRole != 200,
                 onClick: _this2.onDeleteOrganize.bind(_this2),
                 className: 'btn btn-danger'
+<<<<<<< HEAD
               }, void 0, '解散组织'));
+=======
+              }, void 0, '\u89E3\u6563\u7EC4\u7EC7'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
               break;
             case 210:
               role = "管理员";
@@ -21180,11 +24907,19 @@ module.exports =
               }, void 0, _ref2, orgRole == 200 ? _ref3 : ""), user_name == item.user_name ? (0, _jsx3.default)('button', {
                 className: 'btn btn-danger',
                 onClick: _this2.onLeaveOrganize.bind(_this2)
+<<<<<<< HEAD
               }, void 0, '离开组织') : (0, _jsx3.default)('button', {
                 className: 'btn btn-danger',
                 onClick: _this2.onDeleteUser.bind(_this2, item.uid),
                 disabled: orgRole != 200
               }, void 0, '移除组织'));
+=======
+              }, void 0, '\u79BB\u5F00\u7EC4\u7EC7') : (0, _jsx3.default)('button', {
+                className: 'btn btn-danger',
+                onClick: _this2.onDeleteUser.bind(_this2, item.uid),
+                disabled: orgRole != 200
+              }, void 0, '\u79FB\u9664\u7EC4\u7EC7'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
               break;
             case 400:
               role = "成员";
@@ -21199,11 +24934,19 @@ module.exports =
               }, void 0, orgRole == 200 ? _ref4 : "", orgRole == 200 ? _ref5 : ""), user_name == item.user_name ? (0, _jsx3.default)('button', {
                 className: 'btn btn-danger',
                 onClick: _this2.onLeaveOrganize.bind(_this2)
+<<<<<<< HEAD
               }, void 0, '离开组织') : (0, _jsx3.default)('button', {
                 className: 'btn btn-danger',
                 disabled: orgRole == 400,
                 onClick: _this2.onDeleteUser.bind(_this2, item.uid)
               }, void 0, '移除组织'));
+=======
+              }, void 0, '\u79BB\u5F00\u7EC4\u7EC7') : (0, _jsx3.default)('button', {
+                className: 'btn btn-danger',
+                disabled: orgRole == 400,
+                onClick: _this2.onDeleteUser.bind(_this2, item.uid)
+              }, void 0, '\u79FB\u9664\u7EC4\u7EC7'));
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
               break;
             default:
               role = "成员";
@@ -21255,7 +24998,11 @@ module.exports =
             }, i, (0, _jsx3.default)('img', {
               width: 40,
               height: 40,
+<<<<<<< HEAD
               src: item.logo || __webpack_require__(224)
+=======
+              src: item.logo || __webpack_require__(222)
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
             }), (0, _jsx3.default)('p', {}, void 0, item.username), (0, _jsx3.default)('p', {}, void 0, item.email));
           });
           return body;
@@ -21382,29 +25129,48 @@ module.exports =
         }), (0, _jsx3.default)('button', {
           className: 'btn btn-primary',
           onClick: this.onInviteUser.bind(this)
+<<<<<<< HEAD
         }, void 0, '邀请'), (0, _jsx3.default)('ul', {
+=======
+        }, void 0, '\u9080\u8BF7'), (0, _jsx3.default)('ul', {
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           className: this.state.inviteBox ? "inviteShow" : "inviteHide"
         }, void 0, this.getUserListBody()))), (0, _jsx3.default)('div', {
           className: 'organizeBd sl-bd TableTextLeft'
         }, void 0, _ref14, (0, _jsx3.default)('div', {
           className: 'organizeUserTab'
         }, void 0, this.getTableDemo())), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
           title: '警告',
           text: '您确定要移除此用户吗?',
+=======
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u79FB\u9664\u6B64\u7528\u6237\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           ref: 'confirmModal',
           func: function func() {
             _this4.props.changeUserRole(_this4.state.roleData);
           }
         }), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
           title: '警告',
           text: '您确定要离开此组织吗?',
+=======
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u79BB\u5F00\u6B64\u7EC4\u7EC7\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           ref: 'confirmModalLeave',
           func: function func() {
             _this4.props.leaveOrganize(_this4.state.leaveData);
           }
         }), _react2.default.createElement(_Confirm2.default, {
+<<<<<<< HEAD
           title: '警告',
           text: '您确定要解散此组织吗?',
+=======
+          title: '\u8B66\u544A',
+          text: '\u60A8\u786E\u5B9A\u8981\u89E3\u6563\u6B64\u7EC4\u7EC7\u5417?',
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
           ref: 'confirmModalDelete',
           func: function func() {
             _this4.props.deleteOrganize(_this4.state.orgData);
@@ -21421,13 +25187,21 @@ module.exports =
   exports.default = GetOrgAdmin;
 
 /***/ },
+<<<<<<< HEAD
 /* 224 */
+=======
+/* 222 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDphNmIzYTA5MS1mZTUwLTRkOGMtOGQ1NS1kYTcxMDUyYjdkMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0Q0OTkxN0E2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0Q0OTkxNzk2MUJGMTFFNjgzMDY5NTdCRUNBRDNEOTIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphOThjNzgzOS1kYWE3LTQ3ZjgtODAzOS1jMzc0ZmIzYmI1ODUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YTZiM2EwOTEtZmU1MC00ZDhjLThkNTUtZGE3MTA1MmI3ZDI2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"
 
 /***/ },
+<<<<<<< HEAD
 /* 225 */
+=======
+/* 223 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21452,7 +25226,11 @@ module.exports =
   exports.default = makeGetOrganizeDetail;
 
 /***/ },
+<<<<<<< HEAD
 /* 226 */
+=======
+/* 224 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21476,7 +25254,11 @@ module.exports =
   exports.default = makeGetOrganizeUserListSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 227 */
+=======
+/* 225 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21501,13 +25283,21 @@ module.exports =
   exports.default = makeGetUserListSelector;
 
 /***/ },
+<<<<<<< HEAD
 /* 228 */
+=======
+/* 226 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
+<<<<<<< HEAD
 /* 229 */
+=======
+/* 227 */
+>>>>>>> 005c59645fad15d82823587da594545eb10b3230
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -21520,8 +25310,8 @@ module.exports =
   var _constants = __webpack_require__(38);
   
   function setRuntimeVariable(_ref) {
-    var name = _ref.name;
-    var value = _ref.value;
+    var name = _ref.name,
+        value = _ref.value;
   
     return {
       type: _constants.SET_RUNTIME_VARIABLE,

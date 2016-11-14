@@ -248,7 +248,6 @@ def put_env(service_name):
 
         return json.dumps(response)
 
-
     except Exception, e:
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
