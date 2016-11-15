@@ -26,7 +26,7 @@ import (
 )
 
 // Scheme defines methods for serializing and deserializing API objects, a type
-// registry for converting group, version, and kind information to and from Go
+// RegistryWeb for converting group, version, and kind information to and from Go
 // schemas, and mappings between Go schemas of different versions. A scheme is the
 // foundation for a versioned API and versioned configuration over time.
 //

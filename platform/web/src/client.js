@@ -102,7 +102,6 @@ function run() {
 
   context.store = configureStore(initialState, { history });
   let userName = context.store.getState().user_info.user_orga;
-  console.log(userName,">>>>>>>>");
   let hx = document.getElementById("script");
   window.easemobim = {};
   window.easemobim.config = {
@@ -116,8 +115,8 @@ function run() {
       email: '123456@**.com'
     },
   };
-  hx.setAttribute("async","async");
-  hx.setAttribute("src","//kefu.easemob.com/webim/easemob.js?tenantId=30589&hide=false&sat=false");
+  // hx.setAttribute("async","async");
+  // hx.setAttribute("src","//kefu.easemob.com/webim/easemob.js?tenantId=30589&hide=false&sat=false");
   context.createHref = history.createHref;
 
   // Re-render the app when window.location changes

@@ -166,7 +166,7 @@ const (
 	JobV1GeneratorName                          = "job/v1"
 	NamespaceV1GeneratorName                    = "namespace/v1"
 	SecretV1GeneratorName                       = "secret/v1"
-	SecretForDockerRegistryV1GeneratorName      = "secret-for-docker-registry/v1"
+	SecretForDockerRegistryV1GeneratorName      = "secret-for-docker-RegistryWeb/v1"
 	SecretForTLSV1GeneratorName                 = "secret-for-tls/v1"
 	ConfigMapV1GeneratorName                    = "configmap/v1"
 )
@@ -195,7 +195,7 @@ func DefaultGenerators(cmdName string) map[string]kubectl.Generator {
 	generators["secret"] = map[string]kubectl.Generator{
 		SecretV1GeneratorName: kubectl.SecretGeneratorV1{},
 	}
-	generators["secret-for-docker-registry"] = map[string]kubectl.Generator{
+	generators["secret-for-docker-RegistryWeb"] = map[string]kubectl.Generator{
 		SecretForDockerRegistryV1GeneratorName: kubectl.SecretForDockerRegistryGeneratorV1{},
 	}
 	generators["secret-for-tls"] = map[string]kubectl.Generator{

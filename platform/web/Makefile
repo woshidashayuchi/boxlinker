@@ -5,7 +5,7 @@ TAG = latest
 PREFIX = index.boxlinker.com/boxlinker
 IMAGE_NAME = web
 
-container: build
+container:
 	npm run build -- --release
 	docker build -t ${PREFIX}/${IMAGE_NAME}:${TAG} .
 

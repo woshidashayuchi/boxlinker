@@ -82,7 +82,7 @@ const (
 	acceptHeader         = "Accept"
 )
 
-// Handler returns the HTTP handler for the global Prometheus registry. It is
+// Handler returns the HTTP handler for the global Prometheus RegistryWeb. It is
 // already instrumented with InstrumentHandler (using "prometheus" as handler
 // name). Usually the handler is used to handle the "/metrics" endpoint.
 func Handler() http.Handler {
@@ -168,7 +168,7 @@ func Unregister(c Collector) bool {
 // knowledge of a metric descriptor).
 //
 // Sorting concerns: The caller is responsible for sorting the label pairs in
-// each metric. However, the order of metrics will be sorted by the registry as
+// each metric. However, the order of metrics will be sorted by the RegistryWeb as
 // it is required anyway after merging with the metric families collected
 // conventionally.
 //

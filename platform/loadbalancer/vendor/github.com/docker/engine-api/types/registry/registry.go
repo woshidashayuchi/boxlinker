@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-// ServiceConfig stores daemon registry services configuration.
+// ServiceConfig stores daemon RegistryWeb services configuration.
 type ServiceConfig struct {
 	InsecureRegistryCIDRs []*NetIPNet           `json:"InsecureRegistryCIDRs"`
 	IndexConfigs          map[string]*IndexInfo `json:"IndexConfigs"`
@@ -33,7 +33,7 @@ func (ipnet *NetIPNet) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
-// IndexInfo contains information about a registry
+// IndexInfo contains information about a RegistryWeb
 //
 // RepositoryInfo Examples:
 // {
@@ -62,19 +62,19 @@ func (ipnet *NetIPNet) UnmarshalJSON(b []byte) (err error) {
 //   "Official" : false,
 // }
 type IndexInfo struct {
-	// Name is the name of the registry, such as "docker.io"
+	// Name is the name of the RegistryWeb, such as "docker.io"
 	Name string
 	// Mirrors is a list of mirrors, expressed as URIs
 	Mirrors []string
-	// Secure is set to false if the registry is part of the list of
+	// Secure is set to false if the RegistryWeb is part of the list of
 	// insecure registries. Insecure registries accept HTTP and/or accept
 	// HTTPS with certificates from unknown CAs.
 	Secure bool
-	// Official indicates whether this is an official registry
+	// Official indicates whether this is an official RegistryWeb
 	Official bool
 }
 
-// SearchResult describes a search result returned from a registry
+// SearchResult describes a search result returned from a RegistryWeb
 type SearchResult struct {
 	// StarCount indicates the number of stars this repository has
 	StarCount int `json:"star_count"`
@@ -90,7 +90,7 @@ type SearchResult struct {
 	Description string `json:"description"`
 }
 
-// SearchResults lists a collection search results returned from a registry
+// SearchResults lists a collection search results returned from a RegistryWeb
 type SearchResults struct {
 	// Query contains the query string that generated the search results
 	Query string `json:"query"`

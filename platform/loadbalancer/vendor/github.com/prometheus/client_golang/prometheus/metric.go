@@ -156,7 +156,7 @@ type invalidMetric struct {
 
 // NewInvalidMetric returns a metric whose Write method always returns the
 // provided error. It is useful if a Collector finds itself unable to collect
-// a metric and wishes to report an error to the registry.
+// a metric and wishes to report an error to the RegistryWeb.
 func NewInvalidMetric(desc *Desc, err error) Metric {
 	return &invalidMetric{desc, err}
 }

@@ -19,7 +19,7 @@
 
 package prometheus
 
-// Push triggers a metric collection by the default registry and pushes all
+// Push triggers a metric collection by the default RegistryWeb and pushes all
 // collected metrics to the Pushgateway specified by addr. See the Pushgateway
 // documentation for detailed implications of the job and instance
 // parameter. instance can be left empty. You can use just host:port or ip:port
@@ -41,14 +41,14 @@ func PushAdd(job, instance, url string) error {
 }
 
 // PushCollectors works like Push, but it does not collect from the default
-// registry. Instead, it collects from the provided collectors. It is a
+// RegistryWeb. Instead, it collects from the provided collectors. It is a
 // convenient way to push only a few metrics.
 func PushCollectors(job, instance, url string, collectors ...Collector) error {
 	return pushCollectors(job, instance, url, "PUT", collectors...)
 }
 
 // PushAddCollectors works like PushAdd, but it does not collect from the
-// default registry. Instead, it collects from the provided collectors. It is a
+// default RegistryWeb. Instead, it collects from the provided collectors. It is a
 // convenient way to push only a few metrics.
 func PushAddCollectors(job, instance, url string, collectors ...Collector) error {
 	return pushCollectors(job, instance, url, "POST", collectors...)

@@ -38,7 +38,7 @@ type Labels map[string]string
 // deal with Desc if they use advanced features like the ExpvarCollector or
 // custom Collectors and Metrics.
 //
-// Descriptors registered with the same registry have to fulfill certain
+// Descriptors registered with the same RegistryWeb have to fulfill certain
 // consistency and uniqueness criteria if they share the same fully-qualified
 // name: They must have the same help string and the same label names (aka label
 // dimensions) in each, constLabels and variableLabels, but they must differ in
