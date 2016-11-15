@@ -37,6 +37,7 @@ def token_auth(token):
         status = token_info['status']
 
     log.debug('status = %d' % (status))
+
     return status
 
 
@@ -54,7 +55,12 @@ def token_check(func):
 
             userinfo_auth = token_auth(token)
             if userinfo_auth == 0:
-                result = func(*args, **kwargs)
+                try:
+                    result = func(*args, **kwargs)
+                except Exception, e:
+                    log.error('function(%s) exec error, reason = %s'
+                              % (func.__name__, e))
+                    return request_result(601)
             else:
                 log.warning('User token auth denied: token = %s' % (token))
                 raise

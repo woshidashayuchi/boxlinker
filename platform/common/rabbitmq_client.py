@@ -93,7 +93,6 @@ class RabbitmqClient(object):
 
     def rpc_call_client(self, queue_name, timeout, json_data):
         try:
-            # log.info("queue_name====" % queue_name)
             self.mq_connect()
             self.callback_queue()
             self.rpc_call(queue_name, json_data)
