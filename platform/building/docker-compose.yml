@@ -1,8 +1,5 @@
-# go build && ./cmd -D --rabbitmq-host=boxlinker.com --rabbitmq-port=30001 --rabbitmq-exchange-name=build_code_exchang_debug --db=postgres://postgres:postgres@127.0.0.1/postgres?sslmode=disable
-# cd src/github.com/cabernety/boxlinker/platform/building/cmd
-
 postgres:
-  image: postgres
+  image: index.boxlinker.com/boxlinker/postgres
   ports:
   - 5432:5432
 auto-build:
@@ -11,12 +8,12 @@ auto-build:
   - 8080:8080
   links:
   - postgres:postgres
-  args:
-  - db=postgres://postgres:postgres@postgres/postgres?sslmode=disable
-  - logger=oss://oss-cn-beijing.aliyuncs.com
-  - D
-  - oss-access-key-id=LTAIRgaFkdGaZlVM
-  - oss-access-key-secret=EGv0wHzPE5cv97INkIQ4vYdqyYzxnH
-  - oss-bucket-name=boxlinker-logs
-  - registry-host=index.boxlinker.com
-  - url=http://boxlinker.com
+  command: -D
+  environment:
+  - DATABASE_URL=postgres://postgres:postgres@postgres/postgres?sslmode=disable
+  - LOGGER=oss://oss-cn-beijing.aliyuncs.com
+  - OSS_ACCESS_KEY_ID=LTAIRgaFkdGaZlVM
+  - OSS_ACCESS_KEY_SECRET=EGv0wHzPE5cv97INkIQ4vYdqyYzxnH
+  - OSS_BUCKET_NAME=boxlinker-logs
+  - REGISTRY_HOST=index.boxlinker.com
+  - BASE_URL=http://boxlinker.com
