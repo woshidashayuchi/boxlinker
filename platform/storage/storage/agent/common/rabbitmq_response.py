@@ -5,7 +5,7 @@ from common.logs import logging as log
 from common.code import request_result
 from common.single import Singleton
 
-from billing.manage import billing_manager
+from api import storage_manager
 
 
 class RabbitmqResponse(object):
@@ -14,11 +14,11 @@ class RabbitmqResponse(object):
 
     def __init__(self, queue_name):
 
-        self.billing_manager = billing_manager.BillingManagerAPI()
+        self.storage_manager = storage_manager.StorageManagerAPI()
 
     def rpc_exec(self, json_data):
         try:
-            response = self.billing_manager.billing_manager(json_data)
+            response = self.storage_manager.storage_manager(json_data)
 
             return response
 
