@@ -13,6 +13,7 @@ import HeadLine from '../../components/HeadLine';
 import ContainerBox from '../../components/ContainerBox';
 import InputRange from 'react-input-range';
 import Toggle from '../../components/Toggle';
+import {DropdownButton,MenuItem} from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import {INPUT_TIP} from '../../constants/index';
 import Link from '../Link';
@@ -109,16 +110,16 @@ class ConfigContainer extends Component{
 
   componentDidMount(){
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.ADD_SERVICE,BREADCRUMB.CONFIG_CONTAINER);
-    let my = this;
-    if(!my.props.deployData.image_id){
-      my.context.store.dispatch(receiveNotification({message:"请先选择要部署的镜像",level:"danger"}));
-      my.context.store.dispatch(navigate("/choseImage"));
-      setTimeout(function(){
-        my.context.store.dispatch(clearNotification())
-      },3000);
-    }else{
-      this.props.getBuildingDetail(this.props.deployData.image_id);
-    }
+    // let my = this;
+    // if(!my.props.deployData.image_id){
+    //   my.context.store.dispatch(receiveNotification({message:"请先选择要部署的镜像",level:"danger"}));
+    //   my.context.store.dispatch(navigate("/choseImage"));
+    //   setTimeout(function(){
+    //     my.context.store.dispatch(clearNotification())
+    //   },3000);
+    // }else{
+    //   this.props.getBuildingDetail(this.props.deployData.image_id);
+    // }
   }
 
   onServiceNameChange(){
@@ -179,8 +180,14 @@ class ConfigContainer extends Component{
       isUpdate:flag
     })
   }
-
+  aaa(key,e){
+    this.refs.aaa.title = key;
+    console.log(this.refs.aaa.props);
+    this.refs.aaa.props.title = "qqqqqq";
+    console.log(e.target.innerHTML);
+  }
   render(){
+    let ttt =  "wwwww";
     this.context.setTitle(title);
     let data = this.props.deployData;
     let tags = this.props.buildingDetail.tags;
@@ -233,8 +240,14 @@ class ConfigContainer extends Component{
               />
               <div className="assBox">
                 <select className="form-control" ref="imageVersion" defaultValue={data.image_version}>
-                  {option}
-                </select>
+                {option}
+              </select>
+                <DropdownButton title = {ttt} id = "1" ref = "aaa"
+                                onSelect = {this.aaa.bind(this)}
+                >
+                  <MenuItem eventKey="1">Dropdown link1</MenuItem>
+                  <MenuItem eventKey="2">Dropdown link2</MenuItem>
+                </DropdownButton>
               </div>
             </div>
             <div className="assItem">
