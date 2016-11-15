@@ -42,6 +42,25 @@ func newServer(c client, auth func(http.Handler) http.Handler) *Server {
 
 	r := mux.NewRouter()
 
+
+	/**
+	* @api {post} /builds 开始一项构建流程
+	* @apiName BuildCreate
+	* @apiGroup Auto-Build
+	*
+	* @apiParam {String} branch git项目分支
+	* @apiParam {String} repository git项目名称, p.s. user/repo
+	* @apiParam {String} sha git commit sha, optional
+	*
+	* @apiSuccess {String} id build id
+	* @apiSuccess {String} repository git repo name, "user/repo"
+	* @apiSuccess {String} branch git branch
+	* @apiSuccess {String} sha git commit sha
+	* @apiSuccess {String} state 构建状态, 可能的值 pending|building|failed|succeeded
+	* @apiSuccess {String} createdAt 创建时间
+	* @apiSuccess {String} startedAt 开始时间
+	* @apiSuccess {String} completedAt 完成时间
+	*/
 	r.Handle("/builds", authFunc(s.BuildCreate)).Methods("POST")
 	r.Handle("/builds/{owner}/{repo}@{sha}", authFunc(s.BuildInfo)).Methods("GET")
 	r.Handle("/builds/{id}", authFunc(s.BuildInfo)).Methods("GET")

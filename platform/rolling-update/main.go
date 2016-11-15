@@ -24,11 +24,12 @@ import (
 )
 
 const (
-	APP_NAME = "krud"
+	APP_NAME = "rolling-update"
 )
 
 func main() {
 	fs := flag.NewFlagSet(APP_NAME,flag.ExitOnError)
+
 	debug := fs.Bool("debug",false,"debug")
 	listen := fs.String("listen",":8080",`default service port`)
 	deploymentKey := fs.String("deployment-key","deployment","Key to use to differentiate between two different controllers.")
