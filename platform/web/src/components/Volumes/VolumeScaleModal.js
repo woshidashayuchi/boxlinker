@@ -10,7 +10,7 @@ class InputRangesBox extends Component {//input滑块
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value
+      value: 2
     };
   }
   getValue(){
@@ -26,9 +26,9 @@ class InputRangesBox extends Component {//input滑块
       <div className="formField">
         <InputRange
           className="formField"
-          maxValue={100}
-          minValue={this.props.value||10}
-          step={10}
+          maxValue={2}
+          minValue={1}
+          step={1}
           labelPrefix=""
           labelSuffix="G"
           value={this.state.value}

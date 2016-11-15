@@ -15,6 +15,7 @@ class Organize extends  Component{
     store:React.PropTypes.object
   };
   static propTypes = {
+    isBtnState:React.PropTypes.object,
     setBreadcrumb:React.PropTypes.func,
     getOrganizeDetail:React.PropTypes.func,
     organizeDetail:React.PropTypes.object,
@@ -36,7 +37,7 @@ class Organize extends  Component{
     return (
       <div className = "containerBgF">
         <div className = "userTab">
-          <Tabs defaultActiveKey={2} id="userTabs">
+          <Tabs defaultActiveKey={4} id="userTabs">
             <Tab eventKey={1} title="账户信息">
             </Tab>
             <Tab eventKey={2} title="组织信息">
@@ -44,6 +45,7 @@ class Organize extends  Component{
                 getOrganizeDetail = {(id) => {this.props.getOrganizeDetail(id)}}
                 organizeDetail = {this.props.organizeDetail}
                 setOrganizeDetail = {(data) => {this.props.setOrganizeDetail(data)}}
+                isBtnState = {this.props.isBtnState}
               />
             </Tab>
             <Tab eventKey={3} title="交易记录">

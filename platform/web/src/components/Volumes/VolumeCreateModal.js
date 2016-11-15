@@ -7,7 +7,7 @@ class InputRangesBox extends Component {//input滑块
   constructor(props) {
     super(props);
     this.state = {
-      value: 10
+      value: 2
     };
   }
   handleValueChange(component, value) {
@@ -23,9 +23,9 @@ class InputRangesBox extends Component {//input滑块
       <div className="formField">
         <InputRange
           className="formField"
-          maxValue={100}
-          minValue={10}
-          step={10}
+          maxValue={2}
+          minValue={1}
+          step={1}
           labelPrefix=""
           labelSuffix="G"
           value={this.state.value}
@@ -37,16 +37,16 @@ class InputRangesBox extends Component {//input滑块
 }
 
 export default class extends Component {
+  static propTypes = {
+    onVolumeCreate: React.PropTypes.func,
+    isBtnState:React.PropTypes.object
+  };
   constructor(){
     super();
     this.state = {
       show: false
     }
   }
-  static propTypes = {
-    onVolumeCreate: React.PropTypes.func,
-    isBtnState:React.PropTypes.object
-  };
   open(){
     this.setState({
       show:true,

@@ -3,7 +3,7 @@ import {createSelector} from 'reselect'
 
 const getRepos = (state) => state.repos
 
-const getGithubAuthURL = (state) => state.githubAuthURL;
+const authUrl = (state) => state.authUrl;
 
 const makeGetReposSelector = () => {
   return createSelector(
@@ -14,9 +14,9 @@ const makeGetReposSelector = () => {
   )
 }
 
-export const makeGetGithubAuthURLSelector = () => {
+export const makeGetAuthURLSelector = () => {
   return createSelector(
-    [getGithubAuthURL],
+    [authUrl],
     (url) => {
       return url;
     }

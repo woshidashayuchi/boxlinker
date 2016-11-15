@@ -86,10 +86,14 @@ export function fetchLeaveOrganize(data){
               },3000);
               break;
             case "userList":
-              dispatch(receiveNotification({message:"退出成功,请重新登录",level:"success"}));
+              dispatch(receiveNotification({message:"退出成功",level:"success"}));
+              var exp = new Date();
+              exp.setTime(exp.getTime()+1000*60*60*24*7);
+              cookie.save('_at',json.result.token,{path:'/',expires: exp});
+              localStorage.setItem("_at",json.result.token);
+              location.href = '/';
               setTimeout(function(){
                 dispatch(clearNotification());
-                window.location.href = "/login";
               },3000);
               break;
 
@@ -122,13 +126,16 @@ export function fetchDeleteOrganize(data){
               dispatch(fetchGetOrganizeListAction());
               break;
             case "userList":
-              dispatch(receiveNotification({message:"解散成功,请重新登录",level:"success"}));
+              dispatch(receiveNotification({message:"解散成功",level:"success"}));
+              var exp = new Date();
+              exp.setTime(exp.getTime()+1000*60*60*24*7);
+              cookie.save('_at',json.result.token,{path:'/',expires: exp});
+              localStorage.setItem("_at",json.result.token);
+              location.href = '/';
               setTimeout(function(){
                 dispatch(clearNotification());
-                window.location.href = "/login";
               },3000);
               break;
-
           }
           setTimeout(function(){
             dispatch(clearNotification());
@@ -173,11 +180,17 @@ export function fetchGetOrganizeDetailAction(id){
   })
 }
 
+function isLoading(state){
+  return {
+    type:Const.IS_BTN_STATE.setOrg,
+    payload:state
+  }
+}
+
 export function fetchSetOrganizeDetailAction(data){
   let body = JSON.stringify({
-    org_name: data.org_name,
     orga_detail:data.orga_detail,
-    is_public:data.is_public
+    is_public:String(data.is_public)
   });
   console.log(body,"修改组织参数");
   let myInit = {
@@ -185,12 +198,14 @@ export function fetchSetOrganizeDetailAction(data){
     headers:{token:localStorage.getItem("_at")},
     body:body
   };
-  let url = Const.FETCH_URL.ORGANIZE+"/"+data.orga_id;
+  let url = Const.FETCH_URL.ORGANIZE;
   return (dispatch =>{
+    dispatch(isLoading(false));
     return fetch(url,myInit)
       .then(response => response.json())
       .then(json =>{
         console.log(json,"修改组织返回值");
+        dispatch(isLoading(true));
         if(json.status == 0){
           dispatch(receiveNotification({message:"修改成功",level:"success"}));
           setTimeout(function(){
@@ -373,11 +388,15 @@ export function fetchChangeOrganizeOwnerAction(data){
       .then(json =>{
         console.log(json,"委托组织创建者");
         if(json.status == 0){
-          dispatch(receiveNotification({message:"设置成功请重新登录",level:"success"}));
+          dispatch(receiveNotification({message:"设置成功",level:"success"}));
           dispatch(fetchGetOrganizeUserListAction(data.orga_uuid));
+          var exp = new Date();
+          exp.setTime(exp.getTime()+1000*60*60*24*7);
+          cookie.save('_at',json.result.token,{path:'/',expires: exp});
+          localStorage.setItem("_at",json.result.token);
+          location.href = '/';
           setTimeout(function(){
             dispatch(clearNotification());
-            window.location.href = "/login";
           },3000);
         }else{
           dispatch(receiveNotification({message:"操作失败:"+json.msg,level:"danger"}));

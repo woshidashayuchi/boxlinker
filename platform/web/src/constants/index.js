@@ -32,6 +32,7 @@ export const SERVICE_STATE = {
   Stopping:'stopping'
 };
 export const GET_MONITOR_DATA = 'GET_MONITOR_DATA';
+export const GET_DASHBOARD = 'GET_DASHBOARD';
 //image
 export const GET_IMAGE_LIST = 'GET_IMAGE_LIST';
 export const CLEAR_IMAGE_LIST = 'CLEAR_IMAGE_LIST';
@@ -44,11 +45,14 @@ export const API_IMAGE_URL = "http://auth.boxlinker.com/registry/v2";
 export const GET_REPO_LIST = "GET_REPO_LIST";
 export const IS_LOADING = "IS_LOADING";
 export const GET_GITHUB_AUTH_URL = "GET_GITHUB_AUTH_URL";
+export const GET_CODING_AUTH_URL = 'GET_CODING_AUTH_URL';
 export const GET_BUILDING_IMAGE_LIST = "GET_BUILDING_IMAGE_LIST";
 export const GET_BUILDING_DETAIL = 'GET_BUILDING_DETAIL';
 // userinfo
 export const RECEIVE_USER_INFO = "RECEIVE_USER_INFO";
 export const GET_USER_LIST = 'GET_USER_LIST';
+//user
+export const GET_BALANCE = 'GET_BALANCE';
 // organize
 export const GET_ORGANIZE_LIST = 'GET_ORGANIZE_LIST';
 export const GET_ORGANIZE_DETAIL = 'GET_ORGANIZE_DETAIL';
@@ -140,10 +144,10 @@ export const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION";
 export const RECEIVE_SERVICE_STATE = "RECEIVE_SERVICE_STATE";
 
 
-let URL = false;
+let URL = true;
 
 if (URL){
-  URL = 'http://www.livenowhy.com'
+  URL = 'http://192.168.1.6:8080'
 }else {
   URL = 'http://auth.boxlinker.com'
 }
@@ -164,14 +168,16 @@ export const FETCH_URL = {
   IMAGE:URL + '/registry/image_repository',
   BUILDING_REVISE:URL+'/api/v1.0/repository/repositorybuilds',
   GET_SERVICE_MONITOR: 'http://monitor.boxlinker.com/api/v1/model/namespaces',
+  DASHBOARD:'http://controller.boxlinker.com/api/v1/broad',
 
   //new
   ORGANIZE:URL + '/api/v1.0/usercenter/orgs',
   TOKEN:URL + '/api/v1.0/usercenter/tokens',
+  AUTH_URL:URL + '/api/v2.0/oauths/oauthurl'
 
 };
 // endpoints
-export const RECEIVE_ENDPOINTS = 'RECEIVE_ENDPOINTS'
+export const RECEIVE_ENDPOINTS = 'RECEIVE_ENDPOINTS';
 
 export const INPUT_TIP = {
   service :{
@@ -201,11 +207,12 @@ export const INPUT_TIP = {
 };
 
 export const CPU = [
-    {x:1,m:"128M"},
-    {x:2,m:"256M"},
-    {x:4,m:"512M"},
-    {x:8,m:"1024M"},
-    {x:16,m:"2048M"}
+    {x:1,m:"50M"},
+    // {x:2,m:"256M"},
+    // {x:4,m:"512M"},
+    // {x:8,m:"1024M"},
+    // {x:16,m:"2048M"}
+
 ];
 
 export const IS_BTN_STATE = {
@@ -218,7 +225,8 @@ export const IS_BTN_STATE = {
   storage:'STORAGE',
   env:'ENV',
   command:'COMMAND',
-  pods:'PODS'
+  pods:'PODS',
+  setOrg:'SET_ORG'
 };
 
 

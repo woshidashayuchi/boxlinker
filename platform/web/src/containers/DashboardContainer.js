@@ -12,18 +12,22 @@ import makeGetImageListSelector from '../selectors/imageListSelector';
 import {
   fetchVolumesListAction,
 } from '../actions/volumes'
-import makeGetVolumesListSelector from '../selectors/volumesListSelector'
+import makeGetVolumesListSelector from '../selectors/volumesListSelector';
+import makeGetDashboardData from '../selectors/dashboardSelector';
+import {fetchGetDashboardAction} from "../actions/dashboard";
 
 const mapStateToProps = (state) => {
   const selectorServiceList = makeGetServiceListSelector();
   const selectorImage = makeGetImageListSelector();
   const selectorVolumesList = makeGetVolumesListSelector();
+  const selectorDashboard = makeGetDashboardData()
   return {
     serviceList: selectorServiceList(state),
     imageList :selectorImage(state),
-    volumesList: selectorVolumesList(state)
+    volumesList: selectorVolumesList(state),
+    dashboard:selectorDashboard(state)
   }
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -38,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setBreadcrumb:(...arr) => {
       dispatch(setBreadcrumbAction(...arr))
+    },
+    onDashboardLoad:() =>{
+      dispatch(fetchGetDashboardAction())
     }
   }
 }

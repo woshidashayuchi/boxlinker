@@ -14,7 +14,7 @@ const DropdownToggle = Dropdown.Toggle,
 const CodeStore = {
   "Default":(<span>选择代码仓库</span>),
   "Github":(<span><i className="icon-github"> </i><i>Github</i></span>),
-  // "Coding":(<span><i className="icon-refresh"> </i><i>Coding</i></span>)
+  "Coding":(<span><i className="icon-refresh"> </i><i>Coding</i></span>)
 };
 
 class BuildingCreate extends React.Component{

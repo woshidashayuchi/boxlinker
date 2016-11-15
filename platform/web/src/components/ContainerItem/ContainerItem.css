@@ -64,6 +64,9 @@
 .csActive .csSize{
   border-color:#fff;
 }
+.csUnit span{
+  font-size:12px;
+}
 .csItem:nth-child(2).csActive{
   border-color:#439ec1;
   background:#5eafce;

@@ -13,7 +13,8 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
         return parameter
 
     para_format = {
-        "pstr": "[A-Za-z]{1,30}[A-Za-z0-9-_]{0,10}$",
+        "pstr": "[A-Za-z0-9-_]{1,60}$",
+        "pnam": "[A-Za-z]{1,30}[A-Za-z0-9-_]{0,10}$",
         "pint": "[0-9]{1,16}$",
         "pflt": "[0-9]{1,15}[.]{0,1}[0-9]{1,6}$",
         "ppwd": ".{5,60}"

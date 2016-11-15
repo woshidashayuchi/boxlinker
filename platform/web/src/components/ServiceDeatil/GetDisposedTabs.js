@@ -79,9 +79,11 @@ class ChooseContainerBtn extends Component{//选择容器 按钮
   render(){
     return(<div className="chooseContainer icon-operation" onClick={this.showModal.bind(this)}>
         <span>更改</span>
-        <Modal {...this.props} show={this.state.show} onHide={this.hideModal.bind(this)} bsSize="sm" aria-labelledby="contained-modal-title-sm">
+        <Modal {...this.props} show={this.state.show} onHide={this.hideModal.bind(this)} bsSize="sm"
+               aria-labelledby="contained-modal-title-sm">
           <div className="modal-header">
-            <button type="button" onClick={this.hideModal.bind(this)} className="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <button type="button" onClick={this.hideModal.bind(this)} className="close" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
             <h4 className="modal-title" id="contained-modal-title-sm">容器配置</h4>
           </div>
           <div className="modal-body">
@@ -466,13 +468,14 @@ class GetDisposedTabs extends Component{
         save.push(saveObj);
       }
     }
-    console.log(save);
     let data = {
       serviceName:this.props.serviceDetail.fservice_name,
       volume :save,
     };
-    this.props.onSaveVolume(data);
-
+    console.log(data);
+    if(!this.state.volume) {
+      this.props.onSaveVolume(data);
+    }
   }
   getEnvironment(){
     let data = [],sd = this.props.serviceDetail;
@@ -547,10 +550,10 @@ class GetDisposedTabs extends Component{
     let children = newData.map(function(item,i){
       return (
         <div className = {style} key = {i} >
-          <ContainerItem key={i} classNumber = {i}>
+          <ContainerItem key={i} classNumber = {i} active = {true}>
             <span>{item.x}</span>
             <span>x</span>
-            <span>{item.m}</span>
+            <span>{item.m}<span>(公测)</span></span>
           </ContainerItem>
         </div>
       );
@@ -665,10 +668,10 @@ class GetDisposedTabs extends Component{
           />
           <div className="assBox">
             {this.getContainerBox(data.containerDeploy)}
-            <ChooseContainerBtn
-              serviceName = {this.props.serviceDetail.fservice_name}
-              onSaveContainerDeploy={(data) => {this.props.onSaveContainerDeploy(data)}}
-            />
+            {/*<ChooseContainerBtn*/}
+              {/*serviceName = {this.props.serviceDetail.fservice_name}*/}
+              {/*onSaveContainerDeploy={(data) => {this.props.onSaveContainerDeploy(data)}}*/}
+            {/*/>*/}
           </div>
         </div>
         <div className="assItem">
@@ -699,7 +702,9 @@ class GetDisposedTabs extends Component{
             titleInfo="自动启动设置"
           />
           <div className="assBox">
-            <AutoStartUpToggle disabled ={!this.props.isBtnState.autoStateUp} isState = {data.auto_startup==1} getToggle = {this.getIsStartUp.bind(this)}  />
+            <AutoStartUpToggle disabled ={!this.props.isBtnState.autoStateUp}
+                               isState = {data.auto_startup==1}
+                               getToggle = {this.getIsStartUp.bind(this)}  />
           </div>
         </div>
       </div>

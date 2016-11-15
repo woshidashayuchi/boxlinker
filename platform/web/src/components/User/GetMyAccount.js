@@ -3,6 +3,13 @@ import React ,{PropTypes,Component}  from 'react';
 import HeadLine from '../../components/HeadLine';
 
 class GetMyAccount extends Component{
+  static propTypes = {
+    balance:React.PropTypes.number,
+    getBalance:React.PropTypes.func,
+  };
+  componentDidMount(){
+
+  }
   getTableBody(){
     let data = [
       {name:"服务名称",type:"数据卷扩容",time:"20160223",money:"200.00",way:"支付宝",pay:"已完成",odd:"123543"},

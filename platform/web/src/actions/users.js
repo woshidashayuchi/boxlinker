@@ -27,7 +27,7 @@ export function fetchUserInfo(token,development = false){
     }).then(response => response.json())
       .then(json => {
         if (json.status == 0){
-          dispatch(receiveUserInfo(json.result))
+          dispatch(receiveUserInfo(json.result));
         }else {
           console.error('fetch user info error',json)
         }
@@ -66,5 +66,30 @@ export function fetchRevisePasswordAction(passwordObj) {
         console.error('fetch user info failed ',e)
       })
   }
+}
 
+function receiveBalance(data){
+  return{
+    type:Const.GET_BALANCE,
+    payload:data
+  }
+}
+export function fetchGetBalanceAction(){
+  let myInit = {
+    method:"GET",
+    headers:{token:localStorage.getItem("_at")}
+  };
+  let url = Const.FETCH_URL;
+  return (dispatch =>{
+    return fetch(url,myInit)
+      .then(response =>response.json())
+      .then(json =>{
+        console.log(json);
+        if(json.status == 0) {
+          dispatch(receiveBalance(json.result))
+        }else{
+
+        }
+      })
+  })
 }

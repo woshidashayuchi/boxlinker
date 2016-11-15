@@ -33,25 +33,46 @@ function receiveBuildingImageListAction (data){
   }
 }
 
-function receiveGithubAuthURLAction(url){
+function receiveAuthURLAction(type,url){
+  let action_type ;
+  switch (type){
+    case "github":
+      action_type = Const.GET_GITHUB_AUTH_URL;
+      break;
+    case "coding":
+      action_type = Const.GET_CODING_AUTH_URL;
+      break;
+    default:
+      action_type = Const.GET_GITHUB_AUTH_URL;
+  }
   return {
-    type: GET_GITHUB_AUTH_URL,
+    type: action_type,
     payload: url
   }
 }
 
-export function fetchGithubAuthURLAction(){
+export function fetchGetAuthURLLAction(data){
+  let body = JSON.stringify(data);
+  console.log(body,"授权链接参数");
   return (dispatch) => {
     dispatch(isLoadingAction(true));
-    return fetch(FETCH_URL.GITHUB_AUTH,{
-      method:'GET',
+    return fetch(FETCH_URL.AUTH_URL,{
+      method:'POST',
       headers:{
         token: localStorage.getItem('_at')
-      }
+      },
+      body:body
     }).then(response => response.json())
       .then(json => {
+        console.log(json,"获取授权链接");
         if (json.status == 0){
-          dispatch(receiveGithubAuthURLAction(json.result.msg))
+          switch (data.src_type){
+            case "github":
+              dispatch(receiveAuthURLAction("github",json.result.msg));
+              break;
+            case "coding":
+              dispatch(receiveAuthURLAction("coding",json.result.msg));
+          }
         }else {
           console.error('fetchGithubAuthURLAction error: ',json)
         }

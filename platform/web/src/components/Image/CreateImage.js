@@ -167,11 +167,11 @@ class CreateImage extends React.Component{
           </div>
           <div className="assItem">
             <div className="acBtn">
-              <button className="btn btn-primary"
+              <button className={`btn btn-primary ${!this.props.isBtnState?"btn-loading":""}`}
                       onClick = {this.building.bind(this)}
                       disabled={!this.props.isBtnState.building}>
                       {this.props.isBtnState.building?"新建":"新建中..."}
-                </button>
+              </button>
             </div>
           </div>
         </div>

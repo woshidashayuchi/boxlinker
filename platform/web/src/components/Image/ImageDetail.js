@@ -164,6 +164,8 @@ class ImageDetail extends Component{
     let data = this.props.imageDetail;
     if(!data.repository) return <div className="text-center"><Loading /></div>;
     let tag = data.image_tag?`:${data.image_tag}`:":latest";
+    let userName = this.context.store.getState().user_info.user_name;
+    let isMy = userName == data.user_name;
     return (
       <div className="containerBgF containerPadding" key = {data.is_public}>
         <div className="sdHd">

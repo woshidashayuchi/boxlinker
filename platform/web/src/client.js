@@ -32,7 +32,10 @@ const context = {
       removeCss.forEach(f => f());
     };
   },
-  setTitle: value => (document.title = value),
+  setTitle: value => {
+    document.title = value;
+    const script = document.createElement("script");
+  },
   setMeta: (name, content) => {
     // Remove and create a new <meta /> tag in order to make it work
     // with bookmarks in Safari
@@ -98,6 +101,22 @@ function run() {
   FastClick.attach(document.body);
 
   context.store = configureStore(initialState, { history });
+  let userName = context.store.getState().user_info.user_orga;
+  let hx = document.getElementById("script");
+  window.easemobim = {};
+  window.easemobim.config = {
+    visitor: {         //访客信息，以下参数支持变量
+      trueName: userName,
+      qq: '567**34',
+      phone: '188****8888',
+      companyName: '环信',
+      userNickname: userName,
+      description: '描述信息',
+      email: '123456@**.com'
+    },
+  };
+  // hx.setAttribute("async","async");
+  // hx.setAttribute("src","//kefu.easemob.com/webim/easemob.js?tenantId=30589&hide=false&sat=false");
   context.createHref = history.createHref;
 
   // Re-render the app when window.location changes
