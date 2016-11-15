@@ -1,6 +1,6 @@
 .idea
 node_modules
 .DS_Store
-docs
+docs/docs
 vendor
 npm-debug.log

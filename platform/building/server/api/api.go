@@ -44,9 +44,10 @@ func newServer(c client, auth func(http.Handler) http.Handler) *Server {
 
 
 	/**
-	* @api {post} /builds 开始一项构建流程
+	* @api {post} /builds 生成自动构建
 	* @apiName BuildCreate
-	* @apiGroup Auto-Build
+	* @apiGroup AutoBuild
+	* @apiVersion 1.0.0
 	*
 	* @apiParam {String} branch git项目分支
 	* @apiParam {String} repository git项目名称, p.s. user/repo
@@ -63,13 +64,39 @@ func newServer(c client, auth func(http.Handler) http.Handler) *Server {
 	*/
 	r.Handle("/builds", authFunc(s.BuildCreate)).Methods("POST")
 	r.Handle("/builds/{owner}/{repo}@{sha}", authFunc(s.BuildInfo)).Methods("GET")
+
+	/**
+	* @api {post} /builds/:id 获取 build 流程详细信息
+	* @apiName BuildInfo
+	* @apiGroup AutoBuild
+	* @apiVersion 1.0.0
+	*
+	* @apiParam {String} id build id
+	*
+	* @apiSuccess {String} id build id
+	* @apiSuccess {String} repository git repo name, "user/repo"
+	* @apiSuccess {String} branch git branch
+	* @apiSuccess {String} sha git commit sha
+	* @apiSuccess {String} state 构建状态, 可能的值 pending | building | failed | succeeded
+	* @apiSuccess {String} createdAt 创建时间
+	* @apiSuccess {String} startedAt 开始时间
+	* @apiSuccess {String} completedAt 完成时间
+	*/
 	r.Handle("/builds/{id}", authFunc(s.BuildInfo)).Methods("GET")
 
-	// Artifacts
 	r.Handle("/artifacts/{owner}/{repo}@{sha}", authFunc(s.ArtifactInfo)).Methods("GET")
 	r.Handle("/artifacts/{id}", authFunc(s.ArtifactInfo)).Methods("GET")
 
-	// Logs
+	/**
+	* @api {post} /logs/:id 获取 build 流程日志
+	* @apiName BuildInfo
+	* @apiGroup AutoBuild
+	* @apiDescription 这是一个 long polling 接口
+	* @apiVersion 1.0.0
+	*
+	* @apiParam {String} id build id
+	*
+	*/
 	r.HandleFunc("/logs/{id}", s.LogsStream).Methods("GET")
 
 	s.mux = r
