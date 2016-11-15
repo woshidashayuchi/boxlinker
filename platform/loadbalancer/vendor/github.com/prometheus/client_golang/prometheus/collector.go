@@ -35,7 +35,7 @@ type Collector interface {
 	// method idempotently sends the same descriptors throughout the
 	// lifetime of the Collector. If a Collector encounters an error while
 	// executing this method, it must send an invalid descriptor (created
-	// with NewInvalidDesc) to signal the error to the registry.
+	// with NewInvalidDesc) to signal the error to the RegistryWeb.
 	Describe(chan<- *Desc)
 	// Collect is called by Prometheus when collecting metrics. The
 	// implementation sends each collected metric via the provided channel

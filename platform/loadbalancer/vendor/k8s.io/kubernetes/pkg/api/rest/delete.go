@@ -32,7 +32,7 @@ type RESTDeleteStrategy interface {
 	runtime.ObjectTyper
 }
 
-// RESTGracefulDeleteStrategy must be implemented by the registry that supports
+// RESTGracefulDeleteStrategy must be implemented by the RegistryWeb that supports
 // graceful deletion.
 type RESTGracefulDeleteStrategy interface {
 	// CheckGracefulDelete should return true if the object can be gracefully deleted and set
@@ -44,7 +44,7 @@ type RESTGracefulDeleteStrategy interface {
 // should be gracefully deleted, if gracefulPending is set the object has already been gracefully deleted
 // (and the provided grace period is longer than the time to deletion), and an error is returned if the
 // condition cannot be checked or the gracePeriodSeconds is invalid. The options argument may be updated with
-// default values if graceful is true. Second place where we set deletionTimestamp is pkg/registry/generic/registry/store.go
+// default values if graceful is true. Second place where we set deletionTimestamp is pkg/RegistryWeb/generic/RegistryWeb/store.go
 // this function is responsible for setting deletionTimestamp during gracefulDeletion, other one for cascading deletions.
 func BeforeDelete(strategy RESTDeleteStrategy, ctx api.Context, obj runtime.Object, options *api.DeleteOptions) (graceful, gracefulPending bool, err error) {
 	objectMeta, gvk, kerr := objectMetaAndKind(strategy, obj)
@@ -96,7 +96,7 @@ func BeforeDelete(strategy RESTDeleteStrategy, ctx api.Context, obj runtime.Obje
 	// If it's the first graceful deletion we are going to set the DeletionTimestamp to non-nil.
 	// Controllers of the object that's being deleted shouldn't take any nontrivial actions, hence its behavior changes.
 	// Thus we need to bump object's Generation (if set). This handles generation bump during graceful deletion.
-	// The bump for objects that don't support graceful deletion is handled in pkg/registry/generic/registry/store.go.
+	// The bump for objects that don't support graceful deletion is handled in pkg/RegistryWeb/generic/RegistryWeb/store.go.
 	if objectMeta.Generation > 0 {
 		objectMeta.Generation++
 	}

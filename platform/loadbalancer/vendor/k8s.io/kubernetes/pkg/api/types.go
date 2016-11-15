@@ -145,7 +145,7 @@ type ObjectMeta struct {
 	// There cannot be more than one managing controller.
 	OwnerReferences []OwnerReference `json:"ownerReferences,omitempty"`
 
-	// Must be empty before the object is deleted from the registry. Each entry
+	// Must be empty before the object is deleted from the RegistryWeb. Each entry
 	// is an identifier for the responsible component that will remove the entry
 	// from the list. If the deletionTimestamp of the object is non-nil, entries
 	// in this list can only be removed.

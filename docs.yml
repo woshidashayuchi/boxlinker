@@ -37,7 +37,7 @@ items:
         nodeSelector:
           role: node
         imagePullSecrets:
-        - name: registry-key
+        - name: RegistryWeb-key
         containers:
         - name: fe
           image: index.boxlinker.com/boxlinker/docs:1.0

@@ -14,9 +14,9 @@ type AuthConfig struct {
 	ServerAddress string `json:"serveraddress,omitempty"`
 
 	// IdentityToken is used to authenticate the user and get
-	// an access token for the registry.
+	// an access token for the RegistryWeb.
 	IdentityToken string `json:"identitytoken,omitempty"`
 
-	// RegistryToken is a bearer token to be sent to a registry
+	// RegistryToken is a bearer token to be sent to a RegistryWeb
 	RegistryToken string `json:"registrytoken,omitempty"`
 }

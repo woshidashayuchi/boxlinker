@@ -262,7 +262,7 @@ func UnmarshalMessageSetJSON(buf []byte, m map[int32]Extension) error {
 	return errors.New("TODO: UnmarshalMessageSetJSON not yet implemented")
 }
 
-// A global registry of types that can be used in a MessageSet.
+// A global RegistryWeb of types that can be used in a MessageSet.
 
 var messageSetMap = make(map[int32]messageSetDesc)
 

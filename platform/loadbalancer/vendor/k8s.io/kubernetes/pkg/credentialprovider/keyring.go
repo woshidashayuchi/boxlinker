@@ -31,11 +31,11 @@ import (
 	"k8s.io/kubernetes/pkg/util/sets"
 )
 
-// DockerKeyring tracks a set of docker registry credentials, maintaining a
-// reverse index across the registry endpoints. A registry endpoint is made
-// up of a host (e.g. registry.example.com), but it may also contain a path
-// (e.g. registry.example.com/foo) This index is important for two reasons:
-// - registry endpoints may overlap, and when this happens we must find the
+// DockerKeyring tracks a set of docker RegistryWeb credentials, maintaining a
+// reverse index across the RegistryWeb endpoints. A RegistryWeb endpoint is made
+// up of a host (e.g. RegistryWeb.example.com), but it may also contain a path
+// (e.g. RegistryWeb.example.com/foo) This index is important for two reasons:
+// - RegistryWeb endpoints may overlap, and when this happens we must find the
 //   most specific match for a given image
 // - iterating a map does not yield predictable results
 type DockerKeyring interface {
@@ -103,7 +103,7 @@ func (dk *BasicDockerKeyring) Add(cfg DockerConfig) {
 		// Or hostname matches:
 		//    foo.bar.com
 		// It also considers /v2/  and /v1/ equivalent to the hostname
-		// See ResolveAuthConfig in docker/registry/auth.go.
+		// See ResolveAuthConfig in docker/RegistryWeb/auth.go.
 		effectivePath := parsed.Path
 		if strings.HasPrefix(effectivePath, "/v2/") || strings.HasPrefix(effectivePath, "/v1/") {
 			effectivePath = effectivePath[3:]
@@ -134,7 +134,7 @@ const (
 )
 
 // isDefaultRegistryMatch determines whether the given image will
-// pull from the default registry (DockerHub) based on the
+// pull from the default RegistryWeb (DockerHub) based on the
 // characteristics of its name.
 func isDefaultRegistryMatch(image string) bool {
 	parts := strings.SplitN(image, "/", 2)
@@ -149,7 +149,7 @@ func isDefaultRegistryMatch(image string) bool {
 	}
 
 	if parts[0] == "docker.io" || parts[0] == "index.docker.io" {
-		// resolve docker.io/image and index.docker.io/image as default registry
+		// resolve docker.io/image and index.docker.io/image as default RegistryWeb
 		return true
 	}
 
@@ -253,7 +253,7 @@ func (dk *BasicDockerKeyring) Lookup(image string) ([]LazyAuthConfiguration, boo
 		return ret, true
 	}
 
-	// Use credentials for the default registry if provided, and appropriate
+	// Use credentials for the default RegistryWeb if provided, and appropriate
 	if isDefaultRegistryMatch(image) {
 		if auth, ok := dk.creds[defaultRegistryHost]; ok {
 			return auth, true

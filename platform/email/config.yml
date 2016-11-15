@@ -37,7 +37,7 @@ items:
         nodeSelector:
           role: loadbalancer
         imagePullSecrets:
-        - name: registry-key
+        - name: RegistryWeb-key
         containers:
         - name: send-email
           image: index.boxlinker.com/boxlinker/send-email:1.0.3

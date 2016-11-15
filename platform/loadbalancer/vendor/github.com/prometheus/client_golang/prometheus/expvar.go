@@ -32,7 +32,7 @@ type ExpvarCollector struct {
 }
 
 // NewExpvarCollector returns a newly allocated ExpvarCollector that still has
-// to be registered with the Prometheus registry.
+// to be registered with the Prometheus RegistryWeb.
 //
 // The exports map has the following meaning:
 //

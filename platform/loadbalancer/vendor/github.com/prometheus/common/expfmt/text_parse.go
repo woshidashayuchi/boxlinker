@@ -88,7 +88,7 @@ type TextParser struct {
 // frequent use of this method, which is sample ingestion in the Prometheus
 // server. However, for presentation purposes, you might want to sort the
 // metrics, and in some cases, you must sort the labels, e.g. for consumption by
-// the metric family injection hook of the Prometheus registry.
+// the metric family injection hook of the Prometheus RegistryWeb.
 //
 // Summaries and histograms are rather special beasts. You would probably not
 // use them in the simple text format anyway. This method can deal with

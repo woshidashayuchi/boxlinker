@@ -492,7 +492,7 @@ func setExtension(pb extendableProto, extension *ExtensionDesc, value interface{
 	return nil
 }
 
-// A global registry of extensions.
+// A global RegistryWeb of extensions.
 // The generated code will register the generated descriptors by calling RegisterExtension.
 
 var extensionMaps = make(map[reflect.Type]map[int32]*ExtensionDesc)

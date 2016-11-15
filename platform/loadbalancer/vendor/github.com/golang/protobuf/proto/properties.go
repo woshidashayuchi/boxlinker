@@ -795,7 +795,7 @@ func getbase(pb Message) (t reflect.Type, b structPointer, err error) {
 	return
 }
 
-// A global registry of enum types.
+// A global RegistryWeb of enum types.
 // The generated code will register the generated maps by calling RegisterEnum.
 
 var enumValueMaps = make(map[string]map[string]int32)
@@ -815,7 +815,7 @@ func EnumValueMap(enumType string) map[string]int32 {
 	return enumValueMaps[enumType]
 }
 
-// A registry of all linked message types.
+// A RegistryWeb of all linked message types.
 // The string is a fully-qualified proto name ("pkg.Message").
 var (
 	protoTypes    = make(map[string]reflect.Type)

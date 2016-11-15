@@ -12,14 +12,14 @@ var (
 	// dashes.
 	separatorRegexp = match(`(?:[._]|__|[-]*)`)
 
-	// nameComponentRegexp restricts registry path component names to start
+	// nameComponentRegexp restricts RegistryWeb path component names to start
 	// with at least one letter or number, with following parts able to be
 	// separated by one period, one or two underscore and multiple dashes.
 	nameComponentRegexp = expression(
 		alphaNumericRegexp,
 		optional(repeated(separatorRegexp, alphaNumericRegexp)))
 
-	// hostnameComponentRegexp restricts the registry hostname component of a
+	// hostnameComponentRegexp restricts the RegistryWeb hostname component of a
 	// repository name to start with a component as defined by hostnameRegexp
 	// and followed by an optional port.
 	hostnameComponentRegexp = match(`(?:[a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])`)

@@ -25,17 +25,17 @@ import (
 	"k8s.io/kubernetes/pkg/runtime"
 )
 
-// SecretForDockerRegistryGeneratorV1 supports stable generation of a docker registry secret
+// SecretForDockerRegistryGeneratorV1 supports stable generation of a docker RegistryWeb secret
 type SecretForDockerRegistryGeneratorV1 struct {
 	// Name of secret (required)
 	Name string
-	// Username for registry (required)
+	// Username for RegistryWeb (required)
 	Username string
-	// Email for registry (required)
+	// Email for RegistryWeb (required)
 	Email string
-	// Password for registry (required)
+	// Password for RegistryWeb (required)
 	Password string
-	// Server for registry (required)
+	// Server for RegistryWeb (required)
 	Server string
 }
 

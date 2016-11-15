@@ -165,7 +165,7 @@ type KubeletConfiguration struct {
 	// hostIPCSources is a comma-separated list of sources from which the
 	// Kubelet allows pods to use the host ipc namespace. Defaults to "*".
 	HostIPCSources string `json:"hostIPCSources"`
-	// registryPullQPS is the limit of registry pulls per second. If 0,
+	// registryPullQPS is the limit of RegistryWeb pulls per second. If 0,
 	// unlimited. Set to 0 for no limit. Defaults to 5.0.
 	RegistryPullQPS float64 `json:"registryPullQPS"`
 	// registryBurst is the maximum size of a bursty pulls, temporarily allows

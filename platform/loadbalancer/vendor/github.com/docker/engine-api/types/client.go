@@ -147,7 +147,7 @@ type ImageBuildResponse struct {
 
 // ImageCreateOptions holds information to create images.
 type ImageCreateOptions struct {
-	RegistryAuth string // RegistryAuth is the base64 encoded credentials for the registry
+	RegistryAuth string // RegistryAuth is the base64 encoded credentials for the RegistryWeb
 }
 
 // ImageImportSource holds source information for ImageImport
@@ -178,14 +178,14 @@ type ImageLoadResponse struct {
 
 // ImagePullOptions holds information to pull images.
 type ImagePullOptions struct {
-	RegistryAuth  string // RegistryAuth is the base64 encoded credentials for the registry
+	RegistryAuth  string // RegistryAuth is the base64 encoded credentials for the RegistryWeb
 	PrivilegeFunc RequestPrivilegeFunc
 }
 
 // RequestPrivilegeFunc is a function interface that
 // clients can supply to retry operations after
 // getting an authorization error.
-// This function returns the registry authentication
+// This function returns the RegistryWeb authentication
 // header value in base 64 format, or an error
 // if the privilege request fails.
 type RequestPrivilegeFunc func() (string, error)
