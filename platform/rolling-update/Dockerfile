@@ -1,7 +1,7 @@
 FROM alpine:latest
 
-COPY ./krud /krud
+COPY ./rolling-update /rolling-update
 
 EXPOSE 8080
 
-ENTRYPOINT /krud
+ENTRYPOINT /rolling-update

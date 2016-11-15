@@ -1,11 +1,11 @@
 all: push
 
 # 0.0 shouldn't clobber any released builds
-TAG = 1.0.1
-PREFIX = index.boxlinker.com/boxlinker/krud
+TAG = latest
+PREFIX = index.boxlinker.com/boxlinker/rolling-update
 
 server: main.go
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o krud ./main.go
+	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o rolling-update ./main.go
 
 container: server
 	docker build -t $(PREFIX):$(TAG) .
