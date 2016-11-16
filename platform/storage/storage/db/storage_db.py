@@ -9,76 +9,78 @@ from common.logs import logging as log
 class StorageDB(MysqlInit):
 
     def __init__(self):
+
         super(StorageDB, self).__init__()
 
-    def get_uuid(self, resource_name, resource_type, organization):
-        sql = "select uuid from resources_acl where resource_name='%s' and resource_type='%s' and organization='%s'" \
-               % (resource_name, resource_type, organization)
+    def name_duplicate_check(self, volume_name, orga_uuid):
+
+        sql = "select count(*) from volumes a join resources_acl b \
+               where a.volume_name='%s' and b.orga_uuid='%s' \
+               and a.volume_uuid=b.resource_uuid" \
+               % (volume_name, orga_uuid)
 
         return super(StorageDB, self).exec_select_sql(sql)[0][0]
 
-    def disk_name_check(self, disk_name, organization):
-        sql = "select count(*) from resources_acl where resource_name='%s' and organization='%s'" \
-               % (disk_name, organization)
+    def volume_create(self, volume_uuid, volume_name,
+                      disk_name, volume_size, fs_type,
+                      pool_name, user_uuid, orga_uuid):
 
-        return super(StorageDB, self).exec_select_sql(sql)[0][0]
-
-    def disk_create(self, uuid, disk_name, disk_ins_name, resource_type, disk_size, fs_type, pool_name, user_orag, user_name):
-        sql_01 = "insert into resources_acl(uuid, resource_name, resource_type, admin, organization, user, create_time, update_time) \
-                  values('%s', '%s', '%s', '0', '%s', '%s', now(), now())" \
-                  % (uuid, disk_name, resource_type, user_orag, user_name)
-        sql_02 = "insert into storage_disk(uuid, disk_name, disk_size, disk_status, fs_type, pool_name, create_time, update_time) \
-                  values('%s', '%s', '%d', 'unused', '%s', '%s', now(), now())" \
-                  % (uuid, disk_ins_name, int(disk_size), fs_type, pool_name)
-
-        return super(StorageDB, self).exec_update_sql(sql_01, sql_02)
-
-    def disk_delete(self, uuid):
-        sql_01 = "delete from resources_acl where uuid='%s'" \
-                 % (uuid)
-        sql_02 = "delete from storage_disk where uuid='%s'" \
-                 % (uuid)
+        sql_01 = "insert into resources_acl(resource_uuid, resource_type, \
+                  admin_uuid, orga_uuid, user_uuid, create_time, update_time) \
+                  values('%s', 'volume', 'global', '%s', '%s', now(), now())" \
+                  % (volume_uuid, orga_uuid, user_uuid)
+        sql_02 = "insert into volumes(volume_uuid, volume_name, volume_size, \
+                  volume_status, disk_name, fs_type, mount_point, pool_name, \
+                  create_time, update_time) \
+                  values('%s', '%s', '%d', 'unused', '%s', '%s', 'None', \
+                  '%s', now(), now())" \
+                  % (volume_uuid, volume_name, int(volume_size),
+                     disk_name, fs_type, pool_name)
 
         return super(StorageDB, self).exec_update_sql(sql_01, sql_02)
 
-    def disk_resize(self, uuid, disk_size):
-        sql = "update storage_disk set disk_size='%d',update_time=now() where uuid='%s'" \
-              % (int(disk_size), uuid)
+    def volume_delete(self, volume_uuid):
+
+        sql_01 = "delete from resources_acl where resource_uuid='%s'" \
+                 % (volume_uuid)
+        sql_02 = "delete from volumes where volume_uuid='%s'" \
+                 % (volume_uuid)
+
+        return super(StorageDB, self).exec_update_sql(sql_01, sql_02)
+
+    def volume_resize(self, volume_uuid, volume_size):
+
+        sql = "update volumes set volume_size='%d', update_time=now() \
+               where volume_uuid='%s'" \
+              % (int(volume_size), volume_uuid)
 
         return super(StorageDB, self).exec_update_sql(sql)
 
-    def disk_status(self, uuid, disk_status):
-        sql = "update storage_disk set disk_status='%s',update_time=now() where uuid='%s'" \
-              % (disk_status, uuid)
+    def volume_status(self, volume_uuid, volume_status):
+
+        sql = "update volumes set volume_status='%s', update_time=now() \
+               where volume_uuid='%s'" \
+              % (volume_status, volume_uuid)
 
         return super(StorageDB, self).exec_update_sql(sql)
 
-    def disk_info(self, resource_name, resource_type, organization):
-        sql = "select a.disk_name, a.disk_size, a.disk_status, a.fs_type, a.pool_name, a.create_time, a.update_time \
-               from storage_disk a join resources_acl b \
-               where a.uuid=b.uuid and b.resource_name='%s' and b.resource_type='%s' and b.organization='%s'" \
-              % (resource_name, resource_type, organization)
+    def volume_info(self, volume_uuid):
+
+        sql = "select volume_name, volume_size, volume_status, disk_name, \
+               fs_type, mount_point, pool_name, create_time, update_time \
+               from volumes where volume_uuid='%s'" \
+              % (volume_uuid)
 
         return super(StorageDB, self).exec_select_sql(sql)
 
-    def disk_list_info(self, resource_type, user_name, user_role, user_orag):
-        if user_role == 0:
-            sql = "select b.resource_name, a.disk_name, a.disk_size, a.disk_status, a.fs_type, a.pool_name, a.create_time, a.update_time \
-                   from storage_disk a join resources_acl b \
-                   where a.uuid=b.uuid and b.resource_type='%s'" \
-                   % (resource_type)
-        elif user_role == 1:
-            sql = "select b.resource_name, a.disk_name, a.disk_size, a.disk_status, a.fs_type, a.pool_name, a.create_time, a.update_time \
-                   from storage_disk a join resources_acl b \
-                   where a.uuid=b.uuid and b.resource_type='%s' and b.organization='%s'" \
-                   % (resource_type, user_orag)
-        else:
-            sql = "select b.resource_name, a.disk_name, a.disk_size, a.disk_status, a.fs_type, a.pool_name, a.create_time, a.update_time \
-                   from storage_disk a join resources_acl b \
-                   where a.uuid=b.uuid and b.resource_type='%s' and b.organization='%s' and b.user='%s'" \
-                   % (resource_type, user_orag, user_name)
+    def volume_list_info(self, user_uuid, orga_uuid):
+
+        sql = "select a.volume_name, a.volume_size, a.volume_status, \
+               a.disk_name, a.fs_type, a.mount_point, a.pool_name, \
+               a.create_time, a.update_time \
+               from volumes a join resources_acl b \
+               where b.user_uuid='%s' and b.orga_uuid='%s' \
+               and a.volume_uuid=b.resource_uuid" \
+              % (user_uuid, orga_uuid)
 
         return super(StorageDB, self).exec_select_sql(sql)
-
-
-

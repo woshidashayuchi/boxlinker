@@ -76,7 +76,7 @@ class StorageVolumeApi(Resource):
 
         self.storage_api = rpc_api.StorageRpcApi()
 
-    def get(self, resource_uuid):
+    def get(self, volume_uuid):
 
         try:
             token = request.headers.get('token')
@@ -90,12 +90,12 @@ class StorageVolumeApi(Resource):
         context = {
                       "token": token,
                       "user_info": user_info,
-                      "resource_uuid": resource_uuid
+                      "resource_uuid": volume_uuid
                   }
 
         return self.storage_api.disk_info(context)
 
-    def put(self, resource_uuid):
+    def put(self, volume_uuid):
 
         try:
             token = request.headers.get('token')
@@ -117,12 +117,12 @@ class StorageVolumeApi(Resource):
         context = {
                       "token": token,
                       "user_info": user_info,
-                      "resource_uuid": resource_uuid
+                      "resource_uuid": volume_uuid
                   }
 
         return self.storage_api.disk_resize(context, parameters)
 
-    def delete(self, resource_uuid):
+    def delete(self, volume_uuid):
 
         try:
             token = request.headers.get('token')
@@ -136,7 +136,7 @@ class StorageVolumeApi(Resource):
         context = {
                       "token": token,
                       "user_info": user_info,
-                      "resource_uuid": resource_uuid
+                      "resource_uuid": volume_uuid
                   }
 
         return self.storage_api.disk_delete(context)
@@ -148,7 +148,7 @@ class StorageVolumeStatusApi(Resource):
 
         self.storage_api = rpc_api.StorageRpcApi()
 
-    def put(self, volume_name):
+    def put(self, volume_uuid):
 
         try:
             token = request.headers.get('token')
@@ -170,7 +170,7 @@ class StorageVolumeStatusApi(Resource):
         context = {
                       "token": token,
                       "user_info": user_info,
-                      "resource_uuid": resource_uuid
+                      "resource_uuid": volume_uuid
                   }
 
         return self.storage_api.disk_status(context, parameters)

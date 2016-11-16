@@ -13,6 +13,7 @@ from billing.db.billing_db import BillingDB
 class ResourcesManager(object):
 
     def __init__(self):
+
         self.billing_db = BillingDB()
 
     def resource_create(self, resource_uuid, resource_name,
@@ -92,7 +93,8 @@ class ResourcesManager(object):
     def resource_get(self, user_uuid, orga_uuid, role_uuid):
 
         try:
-            resources_list_info = self.billing_db.resource_get(user_uuid, orga_uuid, role_uuid)
+            resources_list_info = self.billing_db.resource_get(
+                                       user_uuid, orga_uuid, role_uuid)
         except Exception, e:
             log.error('Database select error')
             return request_result(404)

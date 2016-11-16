@@ -4,229 +4,222 @@
 import uuid
 import json
 
-from time import sleep
-
 from common.logs import logging as log
 from common.code import request_result
-from common.acl_auth import acl_check
 from common.json_encode import CJsonEncoder
+
 from storage.db import storage_db
-from storage.drive.ceph import ceph_driver
+from storage.drive import ceph_driver
 
 
 class DiskManager(object):
 
     def __init__(self):
+
         self.ceph_db = storage_db.StorageDB()
         self.ceph_driver = ceph_driver.CephDriver()
         self.pool_name = 'pool_hdd'
 
-    @acl_check
-    def disk_create(self, token, user_name, user_role, user_orag, user_ip, resource_name, resource_type, disk_name, disk_size, fs_type):
-
-        pool_name = self.pool_name
-        resource_type = 'volume'
+    def volume_create(self, token, user_uuid, orga_uuid,
+                      volume_name, volume_size, fs_type):
 
         try:
-            disk_name_ch = self.ceph_db.disk_name_check(disk_name, user_orag)
+            disk_name_ch = self.ceph_db.name_duplicate_check(
+                                        volume_name, orga_uuid)
         except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
         if disk_name_ch != 0:
-            log.warning('Ceph disk(%s) already exists' % (disk_name))
+            log.warning('Volume name(%s) already exists' % (volume_name))
             return request_result(301)
 
-        disk_id = str(uuid.uuid4())
-        disk_ins_name = disk_name + '-' + disk_id
+        volume_uuid = str(uuid.uuid4())
+        disk_name = volume_name + '-' + volume_uuid
 
         ret = self.ceph_driver.disk_create(
-            token, pool_name, disk_ins_name, disk_size)
+                   token, self.pool_name, disk_name, volume_size)
         ret = eval(ret)
         status_code = int(ret['status'])
         if status_code != 0:
-            log.error('Ceph disk(%s) create failure' % (disk_name))
-            self.ceph_driver.notification(202, user_name)
+            log.error('Create ceph disk(%s) failure' % (volume_name))
+            # self.ceph_driver.notification(202, user_name)
             return request_result(status_code)
 
         try:
-            self.ceph_db.disk_create(disk_id, disk_name, disk_ins_name, resource_type, disk_size, fs_type, pool_name, user_orag, user_name)
+            self.ceph_db.volume_create(
+                         volume_uuid, volume_name,
+                         disk_name, volume_size, fs_type,
+                         pool_name, user_uuid, orga_uuid)
         except Exception, e:
-            log.error('Database insert error')
+            log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
-        disk_status = 'unused'
-
         result = {
-                     "resource_type": resource_type,
-                     "disk_name": disk_name,
-                     "pool_name": pool_name,
-                     "image_name": disk_ins_name,
-                     "disk_size": disk_size,
-                     "disk_status": disk_status,
+                     "volume_uuid": volume_uuid,
+                     "volume_name": volume_name,
+                     "pool_name": self.pool_name,
+                     "image_name": disk_name,
+                     "volume_size": volume_size,
                      "fs_type": fs_type
                  }
 
-        self.ceph_driver.notification(201, user_name)
+        # self.ceph_driver.notification(201, user_name)
 
         return request_result(0, result)
 
-    @acl_check
-    def disk_delete(self, token, user_name, user_role, user_orag, user_ip, resource_name, resource_type):
-        pool_name = self.pool_name
-        disk_name = resource_name
+    def volume_delete(self, token, volume_uuid):
 
         try:
-            disk_id = self.ceph_db.get_uuid(disk_name, resource_type, user_orag)
+            volume_info = self.ceph_db.volume_info(volume_uuid)
         except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        disk_ins_name = disk_name + '-' + disk_id
+        disk_name = volume_info[0][3]
 
-        ret = self.ceph_driver.disk_delete(token, pool_name, disk_ins_name)
+        ret = self.ceph_driver.disk_delete(token, self.pool_name, disk_name)
         ret = eval(ret)
         status_code = int(ret['status'])
         if status_code != 0:
-            log.error('Ceph disk(%s) delete failure' % (disk_name))
-            self.ceph_driver.notification(206, user_name)
+            log.error('Delete ceph disk(%s) failure' % (disk_name))
+            # self.ceph_driver.notification(206, user_name)
             return request_result(status_code)
 
         try:
-            self.ceph_db.disk_delete(disk_id)
+            self.ceph_db.volume_delete(volume_uuid)
         except Exception, e:
             log.error('Database delete error')
             return request_result(402)
 
-        self.ceph_driver.notification(205, user_name)
+        # self.ceph_driver.notification(205, user_name)
 
         return request_result(0)
 
-    @acl_check
-    def disk_resize(self, token, user_name, user_role, user_orag, user_ip, resource_name, resource_type, disk_size):
-        pool_name = self.pool_name
-        disk_name = resource_name
+    def volume_resize(self, token, volume_uuid, volume_size):
 
         try:
-            disk_id = self.ceph_db.get_uuid(disk_name, resource_type, user_orag)
+            volume_info = self.ceph_db.volume_info(volume_uuid)
         except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        disk_ins_name = disk_name + '-' + disk_id
+        volume_name = volume_info[0][0]
+        disk_name = volume_info[0][3]
 
-        ret = self.ceph_driver.disk_resize(token, pool_name, disk_ins_name, disk_size)
+        ret = self.ceph_driver.disk_resize(token, self.pool_name,
+                                           disk_name, volume_size)
         ret = eval(ret)
         status_code = int(ret['status'])
         if status_code != 0:
             log.error('ceph disk(%s) resize failure' % (disk_name))
-            self.ceph_driver.notification(204, user_name)
+            # self.ceph_driver.notification(204, user_name)
 
             return request_result(status_code)
 
-        self.ceph_driver.disk_growfs(token, disk_ins_name)
+        self.ceph_driver.disk_growfs(token, disk_name)
 
         try:
-            self.ceph_db.disk_resize(disk_id, disk_size)
+            self.ceph_db.volume_resize(volume_uuid, volume_size)
         except Exception, e:
             log.error('Database update error')
             return request_result(403)
 
         result = {
-                     "resource_type": resource_type,
-                     "disk_name": disk_name,
-                     "pool_name": pool_name,
-                     "image_name": disk_ins_name,
-                     "disk_size": disk_size
+                     "volume_uuid": volume_uuid,
+                     "volume_name": volume_name,
+                     "pool_name": self.pool_name,
+                     "image_name": disk_name,
+                     "volume_size": volume_size
                  }
 
-        self.ceph_driver.notification(203, user_name)
+        # self.ceph_driver.notification(203, user_name)
 
         return request_result(0, result)
 
-    @acl_check
-    def disk_status(self, token, user_name, user_role, user_orag, user_ip, resource_name, resource_type, disk_status):
-        pool_name = self.pool_name
-        disk_name = resource_name
+    def volume_status(self, volume_uuid, volume_status):
 
         try:
-            disk_id = self.ceph_db.get_uuid(disk_name, resource_type, user_orag)
-        except Exception, e:
-            return request_result(404)
-
-        try:
-            self.ceph_db.disk_status(disk_id, disk_status)
+            self.ceph_db.volume_status(volume_uuid, volume_status)
         except Exception, e:
             log.error('Database update error')
             return request_result(403)
 
-        disk_ins_name = disk_name + '-' + disk_id
-
         result = {
-                     "resource_type": resource_type,
-                     "disk_name": disk_name,
-                     "pool_name": pool_name,
-                     "image_name": disk_ins_name,
-                     "disk_status": disk_status
+                     "volume_uuid": volume_uuid,
+                     "volume_status": volume_status
                  }
 
         return request_result(0, result)
 
-    @acl_check
-    def disk_info(self, token, user_name, user_role, user_orag, user_ip, resource_name, resource_type):
+    def volume_info(self, volume_uuid):
+
         try:
-            disk_info = self.ceph_db.disk_info(resource_name, resource_type, user_orag)
+            volume_info = self.ceph_db.volume_info(volume_uuid)
         except Exception, e:
             return request_result(404)
 
-        for disk in disk_info:
-            image_name = disk[0]
-            disk_size = disk[1]
-            disk_status = disk[2]
-            fs_type = disk[3]
-            pool_name = disk[4]
-            create_time = disk[5]
-            update_time = disk[6]
+        volume_name = volume_info[0][0]
+        volume_size = volume_info[0][1]
+        volume_status = volume_info[0][2]
+        image_name = volume_info[0][3]
+        fs_type = volume_info[0][4]
+        mount_point = volume_info[0][5]
+        pool_name = volume_info[0][6]
+        create_time = volume_info[0][7]
+        update_time = volume_info[0][8]
 
-            v_disk_info = {"disk_name": resource_name, 
-                           "image_name": image_name, 
-                           "disk_size": disk_size, 
-                           "disk_status": disk_status, 
-                           "fs_type": fs_type,
-                           "pool_name": pool_name, 
-                           "create_time": create_time,
-                           "update_time": update_time}
+        v_disk_info = {
+                          "volume_uuid": volume_uuid,
+                          "volume_name": volume_name,
+                          "volume_size": volume_size,
+                          "volume_status": volume_status,
+                          "image_name": image_name,
+                          "fs_type": fs_type,
+                          "mount_point": mount_point,
+                          "pool_name": pool_name,
+                          "create_time": create_time,
+                          "update_time": update_time
+                      }
 
-            volume_info = json.dumps(v_disk_info, cls=CJsonEncoder)
+        volume_info = json.dumps(v_disk_info, cls=CJsonEncoder)
 
         result = json.loads(volume_info)
 
         return request_result(0, result)
 
-    @acl_check
-    def disk_list(self, token, user_name, user_role, user_orag, user_ip, resource_name, resource_type, get_resource_type):
+    def volume_list(self, user_uuid, orga_uuid):
+
         try:
-            disk_list_info = self.ceph_db.disk_list_info(get_resource_type, user_name, user_role, user_orag)
+            volume_list_info = self.ceph_db.volume_list_info(
+                                            user_uuid, orga_uuid)
         except Exception, e:
             return request_result(404)
 
         disk_list = []
-        for disk_info in disk_list_info:
-            log.debug('disk_info=%s' % (str(disk_info)))
-            disk_name = disk_info[0]
-            image_name = disk_info[1]
-            disk_size = disk_info[2]
-            disk_status = disk_info[3]
-            fs_type = disk_info[4]
-            pool_name = disk_info[5]
-            create_time = disk_info[6]
-            update_time = disk_info[7]
+        for volume_info in volume_list_info:
+            volume_name = volume_info[0]
+            volume_size = volume_info[1]
+            volume_status = volume_info[2]
+            image_name = volume_info[3]
+            fs_type = volume_info[4]
+            mount_point = volume_info[5]
+            pool_name = volume_info[6]
+            create_time = volume_info[7]
+            update_time = volume_info[8]
 
-            v_disk_info = {"disk_name": disk_name,
-                           "image_name": image_name,
-                           "disk_size": disk_size,
-                           "disk_status": disk_status,
-                           "fs_type": fs_type,
-                           "pool_name": pool_name,
-                           "create_time": create_time,
-                           "update_time": update_time}
+            v_disk_info = {
+                              "volume_uuid": volume_uuid,
+                              "volume_name": volume_name,
+                              "volume_size": volume_size,
+                              "volume_status": volume_status,
+                              "image_name": image_name,
+                              "fs_type": fs_type,
+                              "mount_point": mount_point,
+                              "pool_name": pool_name,
+                              "create_time": create_time,
+                              "update_time": update_time
+                          }
 
             v_disk_info = json.dumps(v_disk_info, cls=CJsonEncoder)
             v_disk_info = json.loads(v_disk_info)

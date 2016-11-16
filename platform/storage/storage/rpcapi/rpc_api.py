@@ -21,7 +21,7 @@ class StorageRpcApi(object):
     def disk_create(self, context, parameters=None):
         try:
             dict_data = {
-                            "api": "bil_rss_rss_crt",
+                            "api": "stg_ceh_dsk_crt",
                             "context": context,
                             "parameters": parameters
                         }
@@ -35,7 +35,7 @@ class StorageRpcApi(object):
     def disk_list(self, context, parameters=None):
         try:
             dict_data = {
-                            "api": "bil_rss_rss_del",
+                            "api": "stg_ceh_dsk_lst",
                             "context": context,
                             "parameters": parameters
                         }
@@ -49,7 +49,7 @@ class StorageRpcApi(object):
     def disk_info(self, context, parameters=None):
         try:
             dict_data = {
-                            "api": "bil_rss_rss_put",
+                            "api": "stg_ceh_dsk_get",
                             "context": context,
                             "parameters": parameters
                         }
@@ -63,7 +63,7 @@ class StorageRpcApi(object):
     def disk_resize(self, context, parameters=None):
         try:
             dict_data = {
-                            "api": "bil_rss_rss_get",
+                            "api": "stg_ceh_dsk_rsz",
                             "context": context,
                             "parameters": parameters
                         }
@@ -77,7 +77,7 @@ class StorageRpcApi(object):
     def disk_delete(self, context, parameters=None):
         try:
             dict_data = {
-                            "api": "bil_voc_voc_crt",
+                            "api": "stg_ceh_dsk_del",
                             "context": context,
                             "parameters": parameters
                         }
@@ -91,7 +91,7 @@ class StorageRpcApi(object):
     def disk_status(self, context, parameters=None):
         try:
             dict_data = {
-                            "api": "bil_voc_voc_act",
+                            "api": "stg_ceh_dsk_sts",
                             "context": context,
                             "parameters": parameters
                         }
