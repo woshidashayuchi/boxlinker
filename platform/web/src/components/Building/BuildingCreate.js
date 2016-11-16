@@ -18,6 +18,19 @@ const CodeStore = {
 };
 
 class BuildingCreate extends React.Component{
+  static contextTypes = {
+    setTitle: React.PropTypes.func,
+    store: React.PropTypes.object,
+    setBreadcrumb:React.PropTypes.func
+  };
+  static propTypes = {
+    repos: React.PropTypes.array,
+    authUrl: React.PropTypes.object,
+    onReposLoad: React.PropTypes.func,
+    getAuthUrl: React.PropTypes.func,
+    onBuilding:React.PropTypes.func,
+    isBtnState:React.PropTypes.object
+  };
   constructor(){
     super();
     this.state = {
@@ -29,19 +42,6 @@ class BuildingCreate extends React.Component{
       isPublic:1
     }
   }
-  static contextTypes = {
-    setTitle: React.PropTypes.func,
-    store: React.PropTypes.object,
-    setBreadcrumb:React.PropTypes.func
-  };
-  static propTypes = {
-    repos: React.PropTypes.array,
-    githubAuthURL: React.PropTypes.string,
-    onReposLoad: React.PropTypes.func,
-    getGithubAuthURL: React.PropTypes.func,
-    onBuilding:React.PropTypes.func,
-    isBtnState:React.PropTypes.object
-  };
   selectCodeStore(key,refresh){
     console.log(key,refresh);
     let tip = ReactDOM.findDOMNode(this.refs.btn_group_tip);
@@ -59,7 +59,10 @@ class BuildingCreate extends React.Component{
     this.props.setBreadcrumb(BREADCRUMB.CONSOLE,BREADCRUMB.BUILD_CREATE);
     if(this.state.codeStoreKey!='Default')
       this.props.onReposLoad(this.state.codeStoreKey);
-    this.props.getGithubAuthURL();
+    let git = this.context.store.getState().user_info.oauth.github;
+    let cod = this.context.store.getState().user_info.oauth.coding;
+    !git?this.props.getAuthURL({src_type:"github",redirect_url:window.location.href}):null;
+    !cod?this.props.getAuthURL({src_type:"coding",redirect_url:window.location.href}):null;
   }
   onImageNameChange(){
     let imageName = ReactDOM.findDOMNode(this.refs.image_name),
@@ -141,7 +144,10 @@ class BuildingCreate extends React.Component{
       isPublic:this.state.isPublic?0:1
     })
   }
-
+  render1(){
+    return(<h1>1111</h1>
+    )
+  }
   render(){
     this.context.setTitle('代码构建');
     let user = this.context.store.getState().user_info;
@@ -190,7 +196,7 @@ class BuildingCreate extends React.Component{
               titleInfo="代码源的描述等"
             />
             <div className="assBox">
-              {!user.github?<a className="btn btn-primary" href={this.props.githubAuthURL}>Github 授权</a>:
+              {!user.oauth.github?<a className="btn btn-primary" href={this.props.authUrl.github}>Github 授权</a>:
                 <ButtonGroup>
                   <Dropdown bsStyle="default" ref = "repo_name"
                             onSelect={this.selectCodeStore.bind(this)}

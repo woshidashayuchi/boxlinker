@@ -2,10 +2,10 @@ import {connect} from 'react-redux'
 import BuildingCreate from '../../components/Building/BuildingCreate'
 import {
   fetchRepoListAction,
-  fetchGithubAuthURLAction,
+  fetchGetAuthURLLAction,
   fetchBuildingAction
 } from '../../actions/building'
-import makeGetReposSelector,{makeGetGithubAuthURLSelector} from '../../selectors/BuildingCreateSelector'
+import makeGetReposSelector,{makeGetAuthURLSelector} from '../../selectors/BuildingCreateSelector'
 import {
   setBreadcrumbAction,
 } from '../../actions/breadcumb'
@@ -13,11 +13,11 @@ import makeIsBtnStateSelector from '../../selectors/isBtnStateSelector';
 
 const mapStateToProps = (state) => {
   const selector = makeGetReposSelector();
-  const s1 = makeGetGithubAuthURLSelector();
+  const getAuthURL = makeGetAuthURLSelector();
   const isBtnStateSelector = makeIsBtnStateSelector();
   return {
     repos: selector(state),
-    githubAuthURL: s1(state),
+    authUrl: getAuthURL(state),
     isBtnState:isBtnStateSelector(state),
   }
 }
@@ -27,8 +27,8 @@ const mapDispatchToProps = (dispatch) => {
     onReposLoad: (key,refresh) => {
       dispatch(fetchRepoListAction(key,refresh))
     },
-    getGithubAuthURL: () => {
-      dispatch(fetchGithubAuthURLAction())
+    getAuthURL: (data) => {
+      dispatch(fetchGetAuthURLLAction(data))
     },
     onBuilding:(data) =>{
       dispatch(fetchBuildingAction(data))

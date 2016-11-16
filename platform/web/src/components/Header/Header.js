@@ -42,6 +42,12 @@ class Header extends Component {
         this.props.changeAccount(org_id);
     }
   }
+  onChangeSidebar(){
+    this.props.onSidebarToggleClick(!this.props.isSidebarOpen);
+    var exp = new Date();
+    exp.setTime(exp.getTime()+1000*60*60*24*7);
+    cookie.save('isSidebarOpen',!this.props.isSidebarOpen,{path:'/',expires: exp});
+  }
   handleClick(e){
     if(e.target.innerText.trim() =="退出"){
       cookie.remove('_at');
@@ -53,6 +59,13 @@ class Header extends Component {
   }
   componentDidMount(){
     this.props.getOrganizeList();
+  }
+  getLogo(){
+    let open = this.props.isSidebarOpen;
+    return (
+      open?<img src="/logo.png" alt="boxLinker" className="brand-icon" />:
+        <img src="/logo-small.png" alt="boxLinker" style = {{width:"28px",height:"24px"}} className="brand-icon" />
+    )
   }
   render(){
     const username = this.context.store.getState().user_info.user_name;
@@ -81,7 +94,7 @@ class Header extends Component {
           <MenuItem eventKey={4.1}>退出</MenuItem>
         </NavDropdown>
         :
-        <NavDropdown eventKey={4.1} title="退出" id="header-nav-item-userinfo"> </NavDropdown>;
+        <button eventKey={4.1} title="退出" id="header-nav-item-que"> </button>;
     }else{
       dropdown = username?
         <NavDropdown eventKey={4} title={username} id="header-nav-item-userinfo">
@@ -89,10 +102,46 @@ class Header extends Component {
           <MenuItem eventKey={4.1}>退出</MenuItem>
         </NavDropdown>
         :
-        <NavDropdown eventKey={4.1} title="退出" id="header-nav-item-userinfo"> </NavDropdown>;
+        <button eventKey={4.1} title="退出" id="header-nav-item-que"> </button>;
     }
     return (
-      <Navbar fixedTop={true} className="app-navbar" style={{left:"180px"}} onClick = {this.handleClick.bind(this)}>
+      <header id="navbar">
+        <div className="navbar-header logo">
+          <a href="index.html" className="navbar-brand">
+            {this.getLogo()}
+          </a>
+        </div>
+        <div id="navbar-container" className="boxed">
+          <div className="navbar-content clearfix">
+            <ul className="nav navbar-top-links pull-left">
+              <li className="tgl-menu-btn">
+                <a className="mainnav-toggle" href="javascript:;"
+                  onClick = {this.onChangeSidebar.bind(this)}
+                >
+                  <i className={this.props.isSidebarOpen?"icon-withdraw":"icon-back"} aria-hidden="true"> </i>
+                </a>
+              </li>
+            </ul>
+            <ul className="nav navbar-top-links pull-right">
+              <li>
+                <Nav onSelect={this.handleSelect.bind(this)}>
+                  {dropdown}
+                </Nav>
+              </li>
+              <li>
+                <a href="javascript:;" className="aside-toggle navbar-aside-icon">
+                  <i className="pci-ver-dots"> </i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+    )
+  }
+  render1(){
+    return(
+      <Navbar fixedTop={true} className="app-navbar" onClick = {this.handleClick.bind(this)}>
         <Nav onSelect={this.handleSelect.bind(this)}>
           <NavItem eventKey={1.1} href="javascript:void(0)"><i className={this.props.isSidebarOpen?"icon-withdraw":"icon-back"} aria-hidden="true"></i></NavItem>
         </Nav>
@@ -100,7 +149,6 @@ class Header extends Component {
           <NavItem className="loading-animation">{this.props.isLoading?<Loading type="bubbles" color="#fff" height="50px" width="50px"/>:null}</NavItem>
           {dropdown}
         </Nav>
-
       </Navbar>
     )
   }

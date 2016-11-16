@@ -1829,7 +1829,7 @@ module.exports =
     BUILDING: URL + '/oauth/githubbuild',
     USER: URL + '/api/v1.0/usercenter',
     IMAGE_LIST: URL + '/registry/image_repository',
-    USER_INFO_INTERNAL: 'http://registry-api:8080/user/userinfo',
+    USER_INFO_INTERNAL: 'http://auth:8080/user/userinfo',
     LOGS: 'http://logs.boxlinker.com/api/v1.0/logs/polling/labels',
     SVC_ENDPOINTS: function SVC_ENDPOINTS(name) {
       return 'http://ci-api.boxlinker.com/api/v1/endpoints/' + name;
@@ -2600,7 +2600,7 @@ module.exports =
         var notification = this.props.notifications.message ? _react2.default.createElement(_Notification2.default, { show: true, obj: this.props.notifications }) : _react2.default.createElement(_Notification2.default, { show: false, obj: this.props.notifications });
         return _react2.default.createElement(
           'div',
-          { className: 'app ' + (this.props.isSidebarOpen ? "" : "sidebar-close") },
+          { className: 'app effect aside-float aside-bright navbar-fixed mainnav-lg ' + (this.props.isSidebarOpen ? "" : "sidebar-close mainnav-sm"), id: 'container' },
           _react2.default.createElement(_HeaderContainer2.default, null),
           _react2.default.createElement(_SidebarContainer2.default, null),
           _react2.default.createElement(
@@ -3248,34 +3248,26 @@ module.exports =
       key: 'render',
       value: function render() {
         return _react2.default.createElement(
-          'ul',
-          { className: _Sidebar2.default.list },
+          'li',
+          null,
           _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              MenuListItem,
-              {
-                href: 'javascript:void(0)',
-                icon: this.props.icon,
-                rightIcon: _react2.default.createElement(
-                  'i',
-                  { className: (0, _classnames2.default)(_Sidebar2.default.toggler, this.state.open ? _Sidebar2.default.togglerOpen : '') },
-                  ' '
-                ),
-                onClick: this.handleClick.bind(this)
-              },
-              this.props.title
-            )
+            MenuListItem,
+            {
+              href: 'javascript:void(0)',
+              icon: this.props.icon,
+              rightIcon: _react2.default.createElement(
+                'i',
+                { className: 'arrow ' + (this.state.open ? "arrowOpen" : '') },
+                ' '
+              ),
+              onClick: this.handleClick.bind(this)
+            },
+            this.props.title
           ),
           _react2.default.createElement(
-            'li',
-            null,
-            _react2.default.createElement(
-              _reactBootstrap.Collapse,
-              { 'in': this.state.open },
-              this.props.children
-            )
+            'div',
+            { className: 'collapseItem ' + (this.state.open ? "" : "collapseItemHide") },
+            this.props.children
           )
         );
       }
@@ -3415,87 +3407,57 @@ module.exports =
         this.props.onChangeSidebarActive(url);
       }
     }, {
-      key: 'getLogo',
-      value: function getLogo() {
-        var open = this.props.isSidebarOpen;
-        return open ? _react2.default.createElement(
-          'div',
-          { className: _Sidebar2.default.logo },
-          _react2.default.createElement(
-            'a',
-            { href: '/' },
-            _react2.default.createElement('img', { src: '/logo.png' })
-          )
-        ) : _react2.default.createElement(
-          'div',
-          { className: (0, _classnames2.default)(_Sidebar2.default.logo, _Sidebar2.default.logoSmall) },
-          _react2.default.createElement(
-            'a',
-            { href: '/' },
-            _react2.default.createElement('img', { src: '/logo-small.png' })
-          )
-        );
-      }
-    }, {
       key: 'getList',
       value: function getList() {
         var open = this.props.isSidebarOpen;
         var is_user = this.context.store.getState().user_info.is_user;
         return open ? _react2.default.createElement(
           'div',
-          { className: _Sidebar2.default.listPack },
+          { className: 'listPack' },
           _react2.default.createElement(
-            'div',
-            { className: _Sidebar2.default.menuList },
+            'ul',
+            { className: 'menuList list-group', id: 'mainnav-menu' },
             _react2.default.createElement(
-              'ul',
-              { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
+              'li',
+              { onClick: this.onChangeAction.bind(this, "/"),
+                className: this.props.sidebarActive == "/" ? "subListAction" : "" },
               _react2.default.createElement(
-                'li',
-                { onClick: this.onChangeAction.bind(this, "/"),
-                  className: this.props.sidebarActive == "/" ? "subListAction" : "" },
-                _react2.default.createElement(
-                  MenuListItem,
-                  { href: '/', icon: showIcon("icon-console") },
-                  '控制台'
-                )
+                MenuListItem,
+                { href: '/', icon: showIcon("icon-console") },
+                '控制台'
               )
             ),
             _react2.default.createElement(
               MenuList,
               { title: '服务中心', icon: showIcon("icon-servicecenter") },
               _react2.default.createElement(
-                'ul',
-                { className: _Sidebar2.default.subList },
+                'p',
+                { onClick: this.onChangeAction.bind(this, "/choseImage"),
+                  className: this.props.sidebarActive == "/choseImage" ? "subListAction" : "" },
                 _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/choseImage"),
-                    className: this.props.sidebarActive == "/choseImage" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/choseImage', icon: showIcon("icon-New-service") },
-                    '新建服务'
-                  )
-                ),
+                  MenuListItem,
+                  { href: '/choseImage', icon: showIcon("icon-New-service") },
+                  '新建服务'
+                )
+              ),
+              _react2.default.createElement(
+                'p',
+                { onClick: this.onChangeAction.bind(this, "/serviceList"),
+                  className: this.props.sidebarActive == "/serviceList" ? "subListAction" : "" },
                 _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/serviceList"),
-                    className: this.props.sidebarActive == "/serviceList" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/serviceList', icon: showIcon("icon-servicelist") },
-                    '服务列表'
-                  )
-                ),
+                  MenuListItem,
+                  { href: '/serviceList', icon: showIcon("icon-servicelist") },
+                  '服务列表'
+                )
+              ),
+              _react2.default.createElement(
+                'p',
+                { onClick: this.onChangeAction.bind(this, "/volumes"),
+                  className: this.props.sidebarActive == "/volumes" ? "subListAction" : "" },
                 _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/volumes"),
-                    className: this.props.sidebarActive == "/volumes" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/volumes', icon: showIcon("icon-storagemanag") },
-                    '存储卷管理'
-                  )
+                  MenuListItem,
+                  { href: '/volumes', icon: showIcon("icon-storagemanag") },
+                  '存储卷管理'
                 )
               )
             ),
@@ -3503,55 +3465,51 @@ module.exports =
               MenuList,
               { title: '镜像中心', icon: showIcon("icon-mirrorceer") },
               _react2.default.createElement(
-                'ul',
-                { className: _Sidebar2.default.subList },
+                'p',
+                { onClick: this.onChangeAction.bind(this, "/createImage"),
+                  className: this.props.sidebarActive == "/createImage" ? "subListAction" : "" },
                 _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/createImage"),
-                    className: this.props.sidebarActive == "/createImage" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/createImage', icon: showIcon("icon-mirrorhouse") },
-                    '新建镜像'
-                  )
-                ),
+                  MenuListItem,
+                  { href: '/createImage', icon: showIcon("icon-mirrorhouse") },
+                  '新建镜像'
+                )
+              ),
+              _react2.default.createElement(
+                'p',
+                { onClick: this.onChangeAction.bind(this, "/imageForMy"),
+                  className: this.props.sidebarActive == "/imageForMy" ? "subListAction" : "" },
                 _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/imageForMy"),
-                    className: this.props.sidebarActive == "/imageForMy" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/imageForMy', icon: showIcon("icon-mymirror") },
-                    '我的镜像'
-                  )
-                ),
+                  MenuListItem,
+                  { href: '/imageForMy', icon: showIcon("icon-mymirror") },
+                  '我的镜像'
+                )
+              ),
+              _react2.default.createElement(
+                'p',
+                { onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
+                  className: this.props.sidebarActive == "/imageForPlatform" ? "subListAction" : "" },
                 _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/imageForPlatform"),
-                    className: this.props.sidebarActive == "/imageForPlatform" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/imageForPlatform', icon: showIcon("icon-formmirror") },
-                    '平台镜像'
-                  )
-                ),
+                  MenuListItem,
+                  { href: '/imageForPlatform', icon: showIcon("icon-formmirror") },
+                  '平台镜像'
+                )
+              ),
+              _react2.default.createElement(
+                'p',
+                { onClick: this.onChangeAction.bind(this, "/building"),
+                  className: this.props.sidebarActive == "/building" ? "subListAction" : "" },
                 _react2.default.createElement(
-                  'li',
-                  { onClick: this.onChangeAction.bind(this, "/building"),
-                    className: this.props.sidebarActive == "/building" ? "subListAction" : "" },
-                  _react2.default.createElement(
-                    MenuListItem,
-                    { href: '/building', icon: showIcon("icon-codeconstruct") },
-                    '代码构建'
-                  )
+                  MenuListItem,
+                  { href: '/building', icon: showIcon("icon-codeconstruct") },
+                  '代码构建'
                 )
               )
             ),
             is_user == 1 ? _react2.default.createElement(
-              'ul',
-              { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
+              'li',
+              null,
               _react2.default.createElement(
-                'li',
+                'p',
                 { onClick: this.onChangeAction.bind(this, "/user"),
                   className: this.props.sidebarActive == "/user" ? "subListAction" : "" },
                 _react2.default.createElement(
@@ -3561,10 +3519,10 @@ module.exports =
                 )
               )
             ) : _react2.default.createElement(
-              'ul',
-              { className: (0, _classnames2.default)(_Sidebar2.default.list, "sidebar-menu-list") },
+              'li',
+              null,
               _react2.default.createElement(
-                'li',
+                'p',
                 { onClick: this.onChangeAction.bind(this, "/organize"),
                   className: this.props.sidebarActive == "/organize" ? "subListAction" : "" },
                 _react2.default.createElement(
@@ -3698,8 +3656,7 @@ module.exports =
       value: function render() {
         return _react2.default.createElement(
           'div',
-          { className: (0, _classnames2.default)(_Sidebar2.default.root, "app-sidebar") },
-          this.getLogo(),
+          { className: 'sidebar app-sidebar', id: 'mainnav' },
           this.getList()
         );
       }
@@ -3770,7 +3727,7 @@ module.exports =
   
   
   // module
-  exports.push([module.id, "\n.Sidebar_root_2SE {\n  position: fixed;\n  z-index:1;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 180px;\n  background-color: #21314b;\n}\n.Sidebar_listPack_3C3{\n  position: absolute;\n  top: 60px;\n  left: 0;\n  bottom:0;\n  right:0;\n  overflow: auto;\n}\n.Sidebar_menuList_Aik{\n  margin-top: 50px;\n  margin-left: 15px;\n}\n.Sidebar_toggler_3IY{\n  float: right;\n  padding: 2px;\n  -webkit-transition: all .3s ease;\n  -o-transition: all .3s ease;\n  transition: all .3s ease;\n  -webkit-transform: rotate(0deg);\n      -ms-transform: rotate(0deg);\n       -o-transform: rotate(0deg);\n          transform: rotate(0deg);\n  display: block;\n  width: 14px;\n  height: 14px;\n  background-color: #444e5b;\n  margin-top: 2px;\n}\n.Sidebar_toggler_3IY:before{\n  content:\" \";\n  width: 2px;\n  height: 10px;\n  background-color: #fff;\n  left: 6px;\n  position: absolute;\n}\n.Sidebar_toggler_3IY:after{\n  content:\" \";\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n  top: 6px;\n  position: absolute;\n}\n.Sidebar_togglerOpen_203:before{\n  display: none;\n}\n.Sidebar_list_3AA li a:hover .Sidebar_toggler_3IY:after,.Sidebar_list_3AA li a:hover .Sidebar_toggler_3IY:before{\n  background-color: #1ba4c6;\n}\n.Sidebar_list_3AA{\n  margin-bottom: 15px;\n  border-top-left-radius: .4em;\n  border-bottom-left-radius: .4em;\n  background-color: #363f4e;\n}\n.Sidebar_list_3AA li a {\n  display: block;\n  padding: 15px 15px 15px 50px;\n  -webkit-transition: color ease .2s;\n  -o-transition: color ease .2s;\n  transition:color ease .2s;\n}\n.Sidebar_list_3AA li a,.Sidebar_list_3AA li a:active,.Sidebar_list_3AA li a:visited{\n  color: #fff;\n  font-size:16px;\n}\n.Sidebar_list_3AA li a:hover{\n   color: #09c8f4;\n }\n.Sidebar_list_3AA li:nth-child(2){\n  font-size:0;\n}\n.Sidebar_listFA_eCy{\n  float: left;\n  width: 20px;\n  height: 20px;\n  font-size: 1.4em;\n  margin-left: -30px;\n  color:#999;\n  -webkit-transition: color ease .2s;\n  -o-transition: color ease .2s;\n  transition:color ease .2s;\n}\n.Sidebar_list_3AA li a:hover .Sidebar_listFA_eCy{\n  color:#1ba4c6;\n}\n.Sidebar_subList_3sh>li>a{\n   padding-top: 8px;\n   padding-bottom: 8px;\n\n}\n.Sidebar_subList_3sh>li>a,.Sidebar_subList_3sh>li>a:active,.Sidebar_subList_3sh>li>a:visited{\n  color: #afafaf;\n  font-size:14px;\n}\n.Sidebar_subList_3sh>li>a:hover{\n  color: #09c8f4;\n}\n.Sidebar_logo_2cK{\n  max-height: 60px;\n  min-height: 60px;\n  background-color: #fff;\n  padding: 16px 30px;\n}\n.Sidebar_logo_2cK > a {\n  display: block;\n}\n.Sidebar_logo_2cK > a > img{\n  width: 100%;\n}\n.Sidebar_logoSmall_1za{\n  padding:17px 13px;\n}\n\n", "", {"version":3,"sources":["/./components/Sidebar/Sidebar.css"],"names":[],"mappings":";AACA;EACE,gBAAgB;EAChB,UAAU;EACV,QAAQ;EACR,OAAO;EACP,UAAU;EACV,aAAa;EACb,0BAA0B;CAC3B;AACD;EACE,mBAAmB;EACnB,UAAU;EACV,QAAQ;EACR,SAAS;EACT,QAAQ;EACR,eAAe;CAChB;AACD;EACE,iBAAiB;EACjB,kBAAkB;CACnB;AACD;EACE,aAAa;EACb,aAAa;EACb,iCAAyB;EAAzB,4BAAyB;EAAzB,yBAAyB;EACzB,gCAAwB;MAAxB,4BAAwB;OAAxB,2BAAwB;UAAxB,wBAAwB;EACxB,eAAe;EACf,YAAY;EACZ,aAAa;EACb,0BAA0B;EAC1B,gBAAgB;CACjB;AACD;EACE,YAAY;EACZ,WAAW;EACX,aAAa;EACb,uBAAuB;EACvB,UAAU;EACV,mBAAmB;CACpB;AACD;EACE,YAAY;EACZ,YAAY;EACZ,YAAY;EACZ,uBAAuB;EACvB,SAAS;EACT,mBAAmB;CACpB;AACD;EACE,cAAc;CACf;AACD;EACE,0BAA0B;CAC3B;AACD;EACE,oBAAoB;EACpB,6BAA6B;EAC7B,gCAAgC;EAChC,0BAA0B;CAC3B;AACD;EACE,eAAe;EACf,6BAA6B;EAC7B,mCAA0B;EAA1B,8BAA0B;EAA1B,0BAA0B;CAC3B;AAED;EACE,YAAY;EACZ,eAAe;CAChB;AACD;GACG,eAAe;EAChB;AACF;EACE,YAAY;CACb;AAED;EACE,YAAY;EACZ,YAAY;EACZ,aAAa;EACb,iBAAiB;EACjB,mBAAmB;EACnB,WAAW;EACX,mCAA0B;EAA1B,8BAA0B;EAA1B,0BAA0B;CAC3B;AACD;EACE,cAAc;CACf;AACD;GACG,iBAAiB;GACjB,oBAAoB;;CAEtB;AAED;EACE,eAAe;EACf,eAAe;CAChB;AACD;EACE,eAAe;CAChB;AAED;EACE,iBAAiB;EACjB,iBAAiB;EACjB,uBAAuB;EACvB,mBAAmB;CACpB;AACD;EACE,eAAe;CAChB;AACD;EACE,YAAY;CACb;AACD;EACE,kBAAkB;CACnB","file":"Sidebar.css","sourcesContent":["\n.root {\n  position: fixed;\n  z-index:1;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 180px;\n  background-color: #21314b;\n}\n.listPack{\n  position: absolute;\n  top: 60px;\n  left: 0;\n  bottom:0;\n  right:0;\n  overflow: auto;\n}\n.menuList{\n  margin-top: 50px;\n  margin-left: 15px;\n}\n.toggler{\n  float: right;\n  padding: 2px;\n  transition: all .3s ease;\n  transform: rotate(0deg);\n  display: block;\n  width: 14px;\n  height: 14px;\n  background-color: #444e5b;\n  margin-top: 2px;\n}\n.toggler:before{\n  content:\" \";\n  width: 2px;\n  height: 10px;\n  background-color: #fff;\n  left: 6px;\n  position: absolute;\n}\n.toggler:after{\n  content:\" \";\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n  top: 6px;\n  position: absolute;\n}\n.togglerOpen:before{\n  display: none;\n}\n.list li a:hover .toggler:after,.list li a:hover .toggler:before{\n  background-color: #1ba4c6;\n}\n.list{\n  margin-bottom: 15px;\n  border-top-left-radius: .4em;\n  border-bottom-left-radius: .4em;\n  background-color: #363f4e;\n}\n.list li a {\n  display: block;\n  padding: 15px 15px 15px 50px;\n  transition:color ease .2s;\n}\n\n.list li a,.list li a:active,.list li a:visited{\n  color: #fff;\n  font-size:16px;\n}\n.list li a:hover{\n   color: #09c8f4;\n }\n.list li:nth-child(2){\n  font-size:0;\n}\n\n.listFA{\n  float: left;\n  width: 20px;\n  height: 20px;\n  font-size: 1.4em;\n  margin-left: -30px;\n  color:#999;\n  transition:color ease .2s;\n}\n.list li a:hover .listFA{\n  color:#1ba4c6;\n}\n.subList>li>a{\n   padding-top: 8px;\n   padding-bottom: 8px;\n\n}\n\n.subList>li>a,.subList>li>a:active,.subList>li>a:visited{\n  color: #afafaf;\n  font-size:14px;\n}\n.subList>li>a:hover{\n  color: #09c8f4;\n}\n\n.logo{\n  max-height: 60px;\n  min-height: 60px;\n  background-color: #fff;\n  padding: 16px 30px;\n}\n.logo > a {\n  display: block;\n}\n.logo > a > img{\n  width: 100%;\n}\n.logoSmall{\n  padding:17px 13px;\n}\n\n"],"sourceRoot":"webpack://"}]);
+  exports.push([module.id, "\n.Sidebar_root_2SE {\n  position: fixed;\n  z-index:1;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 180px;\n  background-color: #21314b;\n}\n.Sidebar_listPack_3C3{\n  position: absolute;\n  top: 60px;\n  left: 0;\n  bottom:0;\n  right:0;\n  overflow: auto;\n}\n.Sidebar_menuList_Aik{\n  margin-top: 50px;\n  margin-left: 15px;\n}\n.Sidebar_toggler_3IY{\n  float: right;\n  padding: 2px;\n  -webkit-transition: all .3s ease;\n  -o-transition: all .3s ease;\n  transition: all .3s ease;\n  -webkit-transform: rotate(0deg);\n      -ms-transform: rotate(0deg);\n       -o-transform: rotate(0deg);\n          transform: rotate(0deg);\n  display: block;\n  width: 14px;\n  height: 14px;\n  background-color: #444e5b;\n  margin-top: 2px;\n}\n.Sidebar_toggler_3IY:before{\n  content:\" \";\n  width: 2px;\n  height: 10px;\n  background-color: #fff;\n  left: 6px;\n  position: absolute;\n}\n.Sidebar_toggler_3IY:after{\n  content:\" \";\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n  top: 6px;\n  position: absolute;\n}\n.Sidebar_togglerOpen_203:before{\n  display: none;\n}\n/*.list li a:hover .toggler:after,.list li a:hover .toggler:before{*/\n/*background-color: #1ba4c6;*/\n/*}*/\n/*.list li a {*/\n/*display: block;*/\n/*padding: 15px 15px 15px 50px;*/\n/*transition:color ease .2s;*/\n/*}*/\n/*.list li a,.list li a:active,.list li a:visited{*/\n/*color: #fff;*/\n/*font-size:16px;*/\n/*}*/\n/*.list li a:hover{*/\n/*color: #09c8f4;*/\n/*}*/\n/*.list li:nth-child(2){*/\n/*font-size:0;*/\n/*}*/\n/*.listFA{*/\n/*float: left;*/\n/*width: 20px;*/\n/*height: 20px;*/\n/*font-size: 1.4em;*/\n/*margin-left: -30px;*/\n/*color:#999;*/\n/*transition:color ease .2s;*/\n/*}*/\n/*.list li a:hover .listFA{*/\n/*color:#1ba4c6;*/\n/*}*/\n/*.subList>li>a{*/\n/*padding-top: 8px;*/\n/*padding-bottom: 8px;*/\n/*}*/\n/*.subList>li>a,.subList>li>a:active,.subList>li>a:visited{*/\n/*color: #afafaf;*/\n/*font-size:14px;*/\n/*}*/\n/*.subList>li>a:hover{*/\n/*color: #09c8f4;*/\n/*}*/", "", {"version":3,"sources":["/./components/Sidebar/Sidebar.css"],"names":[],"mappings":";AACA;EACE,gBAAgB;EAChB,UAAU;EACV,QAAQ;EACR,OAAO;EACP,UAAU;EACV,aAAa;EACb,0BAA0B;CAC3B;AACD;EACE,mBAAmB;EACnB,UAAU;EACV,QAAQ;EACR,SAAS;EACT,QAAQ;EACR,eAAe;CAChB;AACD;EACE,iBAAiB;EACjB,kBAAkB;CACnB;AACD;EACE,aAAa;EACb,aAAa;EACb,iCAAyB;EAAzB,4BAAyB;EAAzB,yBAAyB;EACzB,gCAAwB;MAAxB,4BAAwB;OAAxB,2BAAwB;UAAxB,wBAAwB;EACxB,eAAe;EACf,YAAY;EACZ,aAAa;EACb,0BAA0B;EAC1B,gBAAgB;CACjB;AACD;EACE,YAAY;EACZ,WAAW;EACX,aAAa;EACb,uBAAuB;EACvB,UAAU;EACV,mBAAmB;CACpB;AACD;EACE,YAAY;EACZ,YAAY;EACZ,YAAY;EACZ,uBAAuB;EACvB,SAAS;EACT,mBAAmB;CACpB;AACD;EACE,cAAc;CACf;AACD,qEAAqE;AACnE,8BAA8B;AAChC,KAAK;AACL,gBAAgB;AACd,mBAAmB;AACnB,iCAAiC;AACjC,8BAA8B;AAChC,KAAK;AAEL,oDAAoD;AAClD,gBAAgB;AAChB,mBAAmB;AACrB,KAAK;AACL,qBAAqB;AAClB,mBAAmB;AACrB,KAAK;AACN,0BAA0B;AACxB,gBAAgB;AAClB,KAAK;AAEL,YAAY;AACV,gBAAgB;AAChB,gBAAgB;AAChB,iBAAiB;AACjB,qBAAqB;AACrB,uBAAuB;AACvB,eAAe;AACf,8BAA8B;AAChC,KAAK;AACL,6BAA6B;AAC3B,kBAAkB;AACpB,KAAK;AACL,kBAAkB;AACf,qBAAqB;AACrB,wBAAwB;AAE3B,KAAK;AAEL,6DAA6D;AAC3D,mBAAmB;AACnB,mBAAmB;AACrB,KAAK;AACL,wBAAwB;AACtB,mBAAmB;AACrB,KAAK","file":"Sidebar.css","sourcesContent":["\n.root {\n  position: fixed;\n  z-index:1;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 180px;\n  background-color: #21314b;\n}\n.listPack{\n  position: absolute;\n  top: 60px;\n  left: 0;\n  bottom:0;\n  right:0;\n  overflow: auto;\n}\n.menuList{\n  margin-top: 50px;\n  margin-left: 15px;\n}\n.toggler{\n  float: right;\n  padding: 2px;\n  transition: all .3s ease;\n  transform: rotate(0deg);\n  display: block;\n  width: 14px;\n  height: 14px;\n  background-color: #444e5b;\n  margin-top: 2px;\n}\n.toggler:before{\n  content:\" \";\n  width: 2px;\n  height: 10px;\n  background-color: #fff;\n  left: 6px;\n  position: absolute;\n}\n.toggler:after{\n  content:\" \";\n  width: 10px;\n  height: 2px;\n  background-color: #fff;\n  top: 6px;\n  position: absolute;\n}\n.togglerOpen:before{\n  display: none;\n}\n/*.list li a:hover .toggler:after,.list li a:hover .toggler:before{*/\n  /*background-color: #1ba4c6;*/\n/*}*/\n/*.list li a {*/\n  /*display: block;*/\n  /*padding: 15px 15px 15px 50px;*/\n  /*transition:color ease .2s;*/\n/*}*/\n\n/*.list li a,.list li a:active,.list li a:visited{*/\n  /*color: #fff;*/\n  /*font-size:16px;*/\n/*}*/\n/*.list li a:hover{*/\n   /*color: #09c8f4;*/\n /*}*/\n/*.list li:nth-child(2){*/\n  /*font-size:0;*/\n/*}*/\n\n/*.listFA{*/\n  /*float: left;*/\n  /*width: 20px;*/\n  /*height: 20px;*/\n  /*font-size: 1.4em;*/\n  /*margin-left: -30px;*/\n  /*color:#999;*/\n  /*transition:color ease .2s;*/\n/*}*/\n/*.list li a:hover .listFA{*/\n  /*color:#1ba4c6;*/\n/*}*/\n/*.subList>li>a{*/\n   /*padding-top: 8px;*/\n   /*padding-bottom: 8px;*/\n\n/*}*/\n\n/*.subList>li>a,.subList>li>a:active,.subList>li>a:visited{*/\n  /*color: #afafaf;*/\n  /*font-size:14px;*/\n/*}*/\n/*.subList>li>a:hover{*/\n  /*color: #09c8f4;*/\n/*}*/"],"sourceRoot":"webpack://"}]);
   
   // exports
   exports.locals = {
@@ -3778,12 +3735,7 @@ module.exports =
   	"listPack": "Sidebar_listPack_3C3",
   	"menuList": "Sidebar_menuList_Aik",
   	"toggler": "Sidebar_toggler_3IY",
-  	"togglerOpen": "Sidebar_togglerOpen_203",
-  	"list": "Sidebar_list_3AA",
-  	"listFA": "Sidebar_listFA_eCy",
-  	"subList": "Sidebar_subList_3sh",
-  	"logo": "Sidebar_logo_2cK",
-  	"logoSmall": "Sidebar_logoSmall_1za"
+  	"togglerOpen": "Sidebar_togglerOpen_203"
   };
 
 /***/ },
@@ -3996,6 +3948,14 @@ module.exports =
         }
       }
     }, {
+      key: 'onChangeSidebar',
+      value: function onChangeSidebar() {
+        this.props.onSidebarToggleClick(!this.props.isSidebarOpen);
+        var exp = new Date();
+        exp.setTime(exp.getTime() + 1000 * 60 * 60 * 24 * 7);
+        _reactCookie2.default.save('isSidebarOpen', !this.props.isSidebarOpen, { path: '/', expires: exp });
+      }
+    }, {
       key: 'handleClick',
       value: function handleClick(e) {
         if (e.target.innerText.trim() == "退出") {
@@ -4010,6 +3970,12 @@ module.exports =
       key: 'componentDidMount',
       value: function componentDidMount() {
         this.props.getOrganizeList();
+      }
+    }, {
+      key: 'getLogo',
+      value: function getLogo() {
+        var open = this.props.isSidebarOpen;
+        return open ? _react2.default.createElement('img', { src: '/logo.png', alt: 'boxLinker', className: 'brand-icon' }) : _react2.default.createElement('img', { src: '/logo-small.png', alt: 'boxLinker', style: { width: "28px", height: "24px" }, className: 'brand-icon' });
       }
     }, {
       key: 'render',
@@ -4070,8 +4036,8 @@ module.exports =
               '退出'
             )
           ) : _react2.default.createElement(
-            _reactBootstrap.NavDropdown,
-            { eventKey: 4.1, title: '退出', id: 'header-nav-item-userinfo' },
+            'button',
+            { eventKey: 4.1, title: '退出', id: 'header-nav-item-que' },
             ' '
           );
         } else {
@@ -4085,14 +4051,84 @@ module.exports =
               '退出'
             )
           ) : _react2.default.createElement(
-            _reactBootstrap.NavDropdown,
-            { eventKey: 4.1, title: '退出', id: 'header-nav-item-userinfo' },
+            'button',
+            { eventKey: 4.1, title: '退出', id: 'header-nav-item-que' },
             ' '
           );
         }
         return _react2.default.createElement(
+          'header',
+          { id: 'navbar' },
+          _react2.default.createElement(
+            'div',
+            { className: 'navbar-header logo' },
+            _react2.default.createElement(
+              'a',
+              { href: 'index.html', className: 'navbar-brand' },
+              this.getLogo()
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { id: 'navbar-container', className: 'boxed' },
+            _react2.default.createElement(
+              'div',
+              { className: 'navbar-content clearfix' },
+              _react2.default.createElement(
+                'ul',
+                { className: 'nav navbar-top-links pull-left' },
+                _react2.default.createElement(
+                  'li',
+                  { className: 'tgl-menu-btn' },
+                  _react2.default.createElement(
+                    'a',
+                    { className: 'mainnav-toggle', href: 'javascript:;',
+                      onClick: this.onChangeSidebar.bind(this)
+                    },
+                    _react2.default.createElement(
+                      'i',
+                      { className: this.props.isSidebarOpen ? "icon-withdraw" : "icon-back", 'aria-hidden': 'true' },
+                      ' '
+                    )
+                  )
+                )
+              ),
+              _react2.default.createElement(
+                'ul',
+                { className: 'nav navbar-top-links pull-right' },
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement(
+                    _reactBootstrap.Nav,
+                    { onSelect: this.handleSelect.bind(this) },
+                    dropdown
+                  )
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement(
+                    'a',
+                    { href: 'javascript:;', className: 'aside-toggle navbar-aside-icon' },
+                    _react2.default.createElement(
+                      'i',
+                      { className: 'pci-ver-dots' },
+                      ' '
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+    }, {
+      key: 'render1',
+      value: function render1() {
+        return _react2.default.createElement(
           _reactBootstrap.Navbar,
-          { fixedTop: true, className: 'app-navbar', style: { left: "180px" }, onClick: this.handleClick.bind(this) },
+          { fixedTop: true, className: 'app-navbar', onClick: this.handleClick.bind(this) },
           _react2.default.createElement(
             _reactBootstrap.Nav,
             { onSelect: this.handleSelect.bind(this) },
@@ -5850,11 +5886,7 @@ module.exports =
       key: 'render',
       value: function render() {
         var dashboard = this.props.dashboard;
-        if (dashboard.flag) return _react2.default.createElement(
-          'div',
-          { style: { textAlign: "center" } },
-          _react2.default.createElement(_Loading2.default, null)
-        );
+        // if(dashboard.flag) return <div style = {{textAlign:"center"}}><Loading /></div>
         var cpu_b = Number(parseFloat(dashboard.cpu_b).toFixed(2));
         var userCpu_b = 100 - cpu_b;
         var memory_b = Number(parseFloat(dashboard.memory_b).toFixed(2));
@@ -11959,11 +11991,11 @@ module.exports =
   
   var mapStateToProps = function mapStateToProps(state) {
     var selector = (0, _BuildingCreateSelector2.default)();
-    var s1 = (0, _BuildingCreateSelector.makeGetGithubAuthURLSelector)();
+    var getAuthURL = (0, _BuildingCreateSelector.makeGetAuthURLSelector)();
     var isBtnStateSelector = (0, _isBtnStateSelector2.default)();
     return {
       repos: selector(state),
-      githubAuthURL: s1(state),
+      authUrl: getAuthURL(state),
       isBtnState: isBtnStateSelector(state)
     };
   };
@@ -11973,8 +12005,8 @@ module.exports =
       onReposLoad: function onReposLoad(key, refresh) {
         dispatch((0, _building.fetchRepoListAction)(key, refresh));
       },
-      getGithubAuthURL: function getGithubAuthURL() {
-        dispatch((0, _building.fetchGithubAuthURLAction)());
+      getAuthURL: function getAuthURL(data) {
+        dispatch((0, _building.fetchGetAuthURLLAction)(data));
       },
       onBuilding: function onBuilding(data) {
         dispatch((0, _building.fetchBuildingAction)(data));
@@ -12121,7 +12153,10 @@ module.exports =
       value: function componentDidMount() {
         this.props.setBreadcrumb(_constants.BREADCRUMB.CONSOLE, _constants.BREADCRUMB.BUILD_CREATE);
         if (this.state.codeStoreKey != 'Default') this.props.onReposLoad(this.state.codeStoreKey);
-        this.props.getGithubAuthURL();
+        var git = this.context.store.getState().user_info.oauth.github;
+        var cod = this.context.store.getState().user_info.oauth.coding;
+        !git ? this.props.getAuthURL({ src_type: "github", redirect_url: window.location.href }) : null;
+        !cod ? this.props.getAuthURL({ src_type: "coding", redirect_url: window.location.href }) : null;
       }
     }, {
       key: 'onImageNameChange',
@@ -12210,6 +12245,15 @@ module.exports =
         });
       }
     }, {
+      key: 'render1',
+      value: function render1() {
+        return _react2.default.createElement(
+          'h1',
+          null,
+          '1111'
+        );
+      }
+    }, {
       key: 'render',
       value: function render() {
         this.context.setTitle('代码构建');
@@ -12286,9 +12330,9 @@ module.exports =
               _react2.default.createElement(
                 'div',
                 { className: 'assBox' },
-                !user.github ? _react2.default.createElement(
+                !user.oauth.github ? _react2.default.createElement(
                   'a',
-                  { className: 'btn btn-primary', href: this.props.githubAuthURL },
+                  { className: 'btn btn-primary', href: this.props.authUrl.github },
                   'Github 授权'
                 ) : _react2.default.createElement(
                   _reactBootstrap.ButtonGroup,
@@ -12496,9 +12540,9 @@ module.exports =
   };
   BuildingCreate.propTypes = {
     repos: _react2.default.PropTypes.array,
-    githubAuthURL: _react2.default.PropTypes.string,
+    authUrl: _react2.default.PropTypes.object,
     onReposLoad: _react2.default.PropTypes.func,
-    getGithubAuthURL: _react2.default.PropTypes.func,
+    getAuthUrl: _react2.default.PropTypes.func,
     onBuilding: _react2.default.PropTypes.func,
     isBtnState: _react2.default.PropTypes.object
   };

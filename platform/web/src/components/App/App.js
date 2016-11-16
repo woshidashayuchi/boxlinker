@@ -32,7 +32,7 @@ class App extends Component {
     let notification = this.props.notifications.message?
       <Notification show = {true} obj={this.props.notifications}/>:<Notification show = {false} obj={this.props.notifications}/>;
     return (
-      <div className={`app ${this.props.isSidebarOpen?"":"sidebar-close"}`}>
+      <div className={`app effect aside-float aside-bright navbar-fixed mainnav-lg ${this.props.isSidebarOpen?"":"sidebar-close mainnav-sm"}`} id = "container" >
         <HeaderContainer/>
         <SidebarContainer/>
         <div className="containerPack">

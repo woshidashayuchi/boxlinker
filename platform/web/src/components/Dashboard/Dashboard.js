@@ -84,7 +84,7 @@ class Monitor extends Component {
   };
   render(){
     let dashboard = this.props.dashboard;
-    if(dashboard.flag) return <div style = {{textAlign:"center"}}><Loading /></div>
+    // if(dashboard.flag) return <div style = {{textAlign:"center"}}><Loading /></div>
     let cpu_b = Number(parseFloat(dashboard.cpu_b).toFixed(2));
     let userCpu_b = 100-cpu_b;
     let memory_b = Number(parseFloat(dashboard.memory_b).toFixed(2));

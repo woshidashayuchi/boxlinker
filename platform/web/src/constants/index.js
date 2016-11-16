@@ -160,7 +160,7 @@ export const FETCH_URL = {
   BUILDING:URL+'/oauth/githubbuild',
   USER:URL+'/api/v1.0/usercenter',
   IMAGE_LIST:URL+'/registry/image_repository',
-  USER_INFO_INTERNAL: 'http://registry-api:8080/user/userinfo',
+  USER_INFO_INTERNAL: 'http://auth:8080/user/userinfo',
   LOGS: 'http://logs.boxlinker.com/api/v1.0/logs/polling/labels',
   SVC_ENDPOINTS: function(name) {
     return `http://ci-api.boxlinker.com/api/v1/endpoints/${name}`;

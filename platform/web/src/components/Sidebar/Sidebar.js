@@ -38,21 +38,21 @@ class MenuList extends Component{
     });
   }
   render(){
-    return <ul className={s.list}>
+    return (
       <li><MenuListItem
         href="javascript:void(0)"
         icon={this.props.icon}
-        rightIcon={<i className={cx(s.toggler,this.state.open?s.togglerOpen:'')}> </i>}
+        rightIcon={<i className={`arrow ${this.state.open?"arrowOpen":''}`}> </i>}
         onClick={this.handleClick.bind(this)}
       >
         {this.props.title}
-      </MenuListItem></li>
-      <li>
-        <Collapse in={this.state.open}>
-          {this.props.children}
-        </Collapse>
+      </MenuListItem>
+        <div className={`collapseItem ${this.state.open?"":"collapseItemHide"}` }>
+        {this.props.children}
+        </div>
       </li>
-    </ul>
+    )
+
   }
 }
 
@@ -144,72 +144,57 @@ class Sidebar extends Component {
     cookie.save('sidebarActive',url,{path:'/',expires: exp});
     this.props.onChangeSidebarActive(url);
   }
-  getLogo(){
-    let open = this.props.isSidebarOpen;
-    return (
-      open?
-        <div className={s.logo}>
-          <a href="/"><img src="/logo.png"/></a>
-        </div>:
-        <div className={cx(s.logo,s.logoSmall)}>
-          <a href="/"><img src="/logo-small.png"/></a>
-        </div>
-    )
-  }
   getList(){
     let open = this.props.isSidebarOpen;
     let is_user = this.context.store.getState().user_info.is_user;
     return (
       open?
-        <div className={s.listPack}>
-          <div className={s.menuList}>
-            <ul className={cx(s.list,"sidebar-menu-list")}>
-              <li onClick = {this.onChangeAction.bind(this,"/")}
-                  className={this.props.sidebarActive =="/"?"subListAction":""}><MenuListItem href="/" icon={showIcon("icon-console")}>控制台</MenuListItem></li>
-            </ul>
+        <div className="listPack">
+          <ul className="menuList list-group" id = "mainnav-menu">
+            <li onClick = {this.onChangeAction.bind(this,"/")}
+                className={this.props.sidebarActive =="/"?"subListAction":""}>
+              <MenuListItem href="/" icon={showIcon("icon-console")}>控制台</MenuListItem>
+            </li>
             <MenuList title="服务中心" icon={showIcon("icon-servicecenter")}>
-              <ul className={s.subList}>
-                <li onClick = {this.onChangeAction.bind(this,"/choseImage")}
+                <p onClick = {this.onChangeAction.bind(this,"/choseImage")}
                     className={this.props.sidebarActive =="/choseImage"?"subListAction":""}>
                   <MenuListItem href="/choseImage" icon={showIcon("icon-New-service")}>新建服务</MenuListItem>
-                </li>
-                <li onClick = {this.onChangeAction.bind(this,"/serviceList")}
+                </p>
+                <p onClick = {this.onChangeAction.bind(this,"/serviceList")}
                     className={this.props.sidebarActive =="/serviceList"?"subListAction":""}>
                   <MenuListItem href="/serviceList" icon={showIcon("icon-servicelist")}>服务列表</MenuListItem>
-                </li>
-                <li onClick = {this.onChangeAction.bind(this,"/volumes")}
+                </p>
+                <p onClick = {this.onChangeAction.bind(this,"/volumes")}
                     className={this.props.sidebarActive =="/volumes"?"subListAction":""}>
-                  <MenuListItem href="/volumes" icon={showIcon("icon-storagemanag")}>存储卷管理</MenuListItem></li>
-              </ul>
+                  <MenuListItem href="/volumes" icon={showIcon("icon-storagemanag")}>存储卷管理</MenuListItem></p>
             </MenuList>
             <MenuList title="镜像中心" icon={showIcon("icon-mirrorceer")}>
-              <ul className={s.subList}>
-                <li onClick = {this.onChangeAction.bind(this,"/createImage")}
+                <p onClick = {this.onChangeAction.bind(this,"/createImage")}
                     className={this.props.sidebarActive =="/createImage"?"subListAction":""}>
-                  <MenuListItem href="/createImage" icon={showIcon("icon-mirrorhouse")}>新建镜像</MenuListItem></li>
-                <li onClick = {this.onChangeAction.bind(this,"/imageForMy")}
+                  <MenuListItem href="/createImage" icon={showIcon("icon-mirrorhouse")}>新建镜像</MenuListItem></p>
+                <p onClick = {this.onChangeAction.bind(this,"/imageForMy")}
                     className={this.props.sidebarActive =="/imageForMy"?"subListAction":""}>
-                  <MenuListItem href="/imageForMy" icon={showIcon("icon-mymirror")}>我的镜像</MenuListItem></li>
-                <li onClick = {this.onChangeAction.bind(this,"/imageForPlatform")}
+                  <MenuListItem href="/imageForMy" icon={showIcon("icon-mymirror")}>我的镜像</MenuListItem></p>
+                <p onClick = {this.onChangeAction.bind(this,"/imageForPlatform")}
                     className={this.props.sidebarActive =="/imageForPlatform"?"subListAction":""}>
-                  <MenuListItem href="/imageForPlatform" icon={showIcon("icon-formmirror")}>平台镜像</MenuListItem></li>
-                <li onClick = {this.onChangeAction.bind(this,"/building")}
+                  <MenuListItem href="/imageForPlatform" icon={showIcon("icon-formmirror")}>平台镜像</MenuListItem></p>
+                <p onClick = {this.onChangeAction.bind(this,"/building")}
                     className={this.props.sidebarActive =="/building"?"subListAction":""}>
-                  <MenuListItem href="/building" icon={showIcon("icon-codeconstruct")}>代码构建</MenuListItem></li>
-              </ul>
+                  <MenuListItem href="/building" icon={showIcon("icon-codeconstruct")}>代码构建</MenuListItem></p>
             </MenuList>
-            {is_user == 1?<ul className={cx(s.list,"sidebar-menu-list")}>
-              <li onClick = {this.onChangeAction.bind(this,"/user")}
-                  className={this.props.sidebarActive =="/user"?"subListAction":""}>
-                <MenuListItem href="/user" icon={showIcon("icon-login")}>用户中心</MenuListItem></li>
-            </ul>:
-              <ul className={cx(s.list,"sidebar-menu-list")}>
-                <li onClick = {this.onChangeAction.bind(this,"/organize")}
-                    className={this.props.sidebarActive =="/organize"?"subListAction":""}>
-                  <MenuListItem href="/organize" icon={showIcon("icon-login")}>组织中心</MenuListItem></li>
-              </ul>
+            {is_user == 1?
+              <li>
+                  <p onClick = {this.onChangeAction.bind(this,"/user")}
+                      className={this.props.sidebarActive =="/user"?"subListAction":""}>
+                    <MenuListItem href="/user" icon={showIcon("icon-login")}>用户中心</MenuListItem></p>
+              </li>:
+              <li>
+                  <p onClick = {this.onChangeAction.bind(this,"/organize")}
+                      className={this.props.sidebarActive =="/organize"?"subListAction":""}>
+                    <MenuListItem href="/organize" icon={showIcon("icon-login")}>组织中心</MenuListItem></p>
+              </li>
             }
-          </div>
+          </ul>
         </div>
         :
         <div className="sidebar-menu-thin">
@@ -289,8 +274,7 @@ class Sidebar extends Component {
   }
   render(){
     return (
-      <div className={cx(s.root,"app-sidebar")}>
-        {this.getLogo()}
+      <div className="sidebar app-sidebar" id="mainnav">
         {this.getList()}
       </div>
     )
