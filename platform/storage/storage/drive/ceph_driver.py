@@ -12,6 +12,7 @@ from common.code import request_result
 class CephDriver(object):
 
     def __init__(self):
+
         self.rmq_client = RabbitmqClient()
         self.queue_name = 'storage_drive'
         self.exchange_name = 'storage_node'
@@ -19,6 +20,7 @@ class CephDriver(object):
         self.timeout = 60
 
     def disk_create(self, token, pool_name, disk_name, disk_size):
+
         try:
             dict_data = {"api":"drv_ceh_dsk_crt", "token":token, "parameters":{"pool_name":pool_name, "disk_name":disk_name, "disk_size":disk_size}}
             json_data = json.dumps(dict_data)
@@ -28,6 +30,7 @@ class CephDriver(object):
             return request_result(598)
 
     def disk_delete(self, token, pool_name, disk_name):
+
         try:
             dict_data = {"api":"drv_ceh_dsk_del", "token":token, "parameters":{"pool_name":pool_name, "disk_name":disk_name}}
             json_data = json.dumps(dict_data)
@@ -37,6 +40,7 @@ class CephDriver(object):
             return request_result(598)
 
     def disk_resize(self, token, pool_name, disk_name, disk_size):
+
         try:
             dict_data = {"api":"drv_ceh_dsk_rsz", "token":token, "parameters":{"pool_name":pool_name, "disk_name":disk_name, "disk_size":disk_size}}
             json_data = json.dumps(dict_data)
@@ -46,6 +50,7 @@ class CephDriver(object):
             return request_result(598)
 
     def disk_growfs(self, token, image_name):
+
         try:
             dict_data = {"api":"drv_ceh_dsk_gow", "token":token, "parameters":{"image_name":image_name}}
             json_data = json.dumps(dict_data)
@@ -55,6 +60,7 @@ class CephDriver(object):
             return request_result(598)
 
     def notification(self, status, namespace, data=None):
+
         try:
             dict_data = {"status": status, "namespace": namespace, "data": data}
             json_data = json.dumps(dict_data)

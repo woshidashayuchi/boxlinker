@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-
-import sys
+import json
 import pika
 
 from time import sleep
 from common.logs import logging as log
 from common.single import Singleton
-
 from storage.manage import rabbitmq_response
 
 
@@ -52,20 +50,20 @@ class RabbitmqServer(object):
         return queue_name
 
     def call_request(self, channel, method, props, body):
-        response = self.rbtmq_response.rpc_exec(body)
+        response = self.rbtmq_response.rpc_exec(json.loads(body))
         channel.basic_publish(exchange='',
                               routing_key=props.reply_to,
                               properties=pika.BasicProperties(
-                                    correlation_id=props.correlation_id),
-                              body=str(response))
+                                         correlation_id=props.correlation_id),
+                              body=str(json.dumps(response)))
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
     def cast_request(self, channel, method, props, body):
-        self.rbtmq_response.rpc_exec(body)
+        self.rbtmq_response.rpc_exec(json.loads(body))
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
     def broadcast_request(self, channel, method, props, body):
-        self.rbtmq_response.rpc_exec(body)
+        self.rbtmq_response.rpc_exec(json.loads(body))
 
     def msg_call_request(self, queue_name):
         self.channel.basic_qos(prefetch_count=1)

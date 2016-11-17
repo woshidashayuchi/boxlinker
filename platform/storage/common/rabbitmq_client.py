@@ -2,7 +2,7 @@
 # Author: YanHua <it-yanh@all-reach.com>
 
 import os
-import sys
+import json
 import pika
 import uuid
 
@@ -91,22 +91,24 @@ class RabbitmqClient(object):
             self.connection.sleep(0.1)
             self.connection.process_data_events()
 
-    def rpc_call_client(self, queue_name, timeout, json_data):
+    def rpc_call_client(self, queue_name, timeout, dict_data):
         try:
+            json_data = json.dumps(dict_data)
             self.mq_connect()
             self.callback_queue()
             self.rpc_call(queue_name, json_data)
             self.get_response(timeout, queue_name)
             self.mq_disconnect()
 
-            return self.response
+            return json.loads(self.response)
         except Exception, e:
             log.error('RabbitMQ call client exec error: queue=%s, reason=%s'
                       % (queue_name, e))
             raise
 
-    def rpc_cast_client(self, queue_name, json_data):
+    def rpc_cast_client(self, queue_name, dict_data):
         try:
+            json_data = json.dumps(dict_data)
             self.mq_connect()
             self.rpc_cast(queue_name, json_data)
             self.mq_disconnect()
@@ -115,8 +117,9 @@ class RabbitmqClient(object):
                       % (queue_name, e))
             raise
 
-    def broadcast_client(self, exchange_name, json_data):
+    def broadcast_client(self, exchange_name, dict_data):
         try:
+            json_data = json.dumps(dict_data)
             self.mq_connect()
             self.broad_exchange(exchange_name)
             self.broad_cast(exchange_name, json_data)
