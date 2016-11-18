@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-import json
 
 from common.logs import logging as log
 from common.code import request_result
@@ -69,10 +68,9 @@ class CephManagerAPI(object):
 
         return self.ceph_driver.disk_growfs(image_name)
 
-    def ceph_manager(self, json_data):
+    def ceph_manager(self, dict_data):
 
         try:
-            dict_data = json.loads(json_data)
             api = dict_data['api']
             token = dict_data['token']
             parameters = dict_data['parameters']

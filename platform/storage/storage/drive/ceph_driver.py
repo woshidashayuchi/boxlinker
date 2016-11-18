@@ -22,49 +22,113 @@ class CephDriver(object):
     def disk_create(self, token, pool_name, disk_name, disk_size):
 
         try:
-            dict_data = {"api":"drv_ceh_dsk_crt", "token":token, "parameters":{"pool_name":pool_name, "disk_name":disk_name, "disk_size":disk_size}}
-            json_data = json.dumps(dict_data)
-            ret = self.rmq_client.rpc_call_client(self.queue_name, self.timeout, json_data)
-            return ret
+
+            api = 'drv_ceh_dsk_crt'
+
+            parameters = {
+                             "pool_name": pool_name,
+                             "disk_name": disk_name,
+                             "disk_size": disk_size
+                         }
+
+            dict_data = {
+                            "api": api,
+                            "token": token,
+                            "parameters": parameters
+                        }
+
+            return self.rmq_client.rpc_call_client(
+                        self.queue_name, self.timeout, dict_data)
+
         except Exception, e:
+
             return request_result(598)
 
     def disk_delete(self, token, pool_name, disk_name):
 
         try:
-            dict_data = {"api":"drv_ceh_dsk_del", "token":token, "parameters":{"pool_name":pool_name, "disk_name":disk_name}}
-            json_data = json.dumps(dict_data)
-            ret = self.rmq_client.rpc_call_client(self.queue_name, self.timeout, json_data)
-            return ret
+
+            api = 'drv_ceh_dsk_del'
+
+            parameters = {
+                             "pool_name": pool_name,
+                             "disk_name": disk_name
+                         }
+
+            dict_data = {
+                            "api": api,
+                            "token": token,
+                            "parameters": parameters
+                        }
+
+            return self.rmq_client.rpc_call_client(
+                        self.queue_name, self.timeout, dict_data)
+
         except Exception, e:
+
             return request_result(598)
 
     def disk_resize(self, token, pool_name, disk_name, disk_size):
 
         try:
-            dict_data = {"api":"drv_ceh_dsk_rsz", "token":token, "parameters":{"pool_name":pool_name, "disk_name":disk_name, "disk_size":disk_size}}
-            json_data = json.dumps(dict_data)
-            ret = self.rmq_client.rpc_call_client(self.queue_name, self.timeout, json_data)
-            return ret
+
+            api = 'drv_ceh_dsk_rsz'
+
+            parameters = {
+                             "pool_name": pool_name,
+                             "disk_name": disk_name,
+                             "disk_size": disk_size
+                         }
+
+            dict_data = {
+                            "api": api,
+                            "token": token,
+                            "parameters": parameters
+                        }
+
+            return self.rmq_client.rpc_call_client(
+                        self.queue_name, self.timeout, dict_data)
+
         except Exception, e:
+
             return request_result(598)
 
     def disk_growfs(self, token, image_name):
 
         try:
-            dict_data = {"api":"drv_ceh_dsk_gow", "token":token, "parameters":{"image_name":image_name}}
-            json_data = json.dumps(dict_data)
-            self.rmq_client.broadcast_client(self.exchange_name, json_data)
+
+            api = 'drv_ceh_dsk_gow'
+
+            parameters = {"image_name": image_name}
+
+            dict_data = {
+                            "api": api,
+                            "token": token,
+                            "parameters": parameters
+                        }
+
+            self.rmq_client.broadcast_client(
+                 self.exchange_name, dict_data)
             return request_result(0)
+
         except Exception, e:
+
             return request_result(598)
 
     def notification(self, status, namespace, data=None):
 
         try:
-            dict_data = {"status": status, "namespace": namespace, "data": data}
-            json_data = json.dumps(dict_data)
-            self.rmq_client.rpc_cast_client(self.notification_queue, json_data)
+
+            dict_data = {
+                            "status": status,
+                            "namespace": namespace,
+                            "data": data
+                        }
+
+            self.rmq_client.rpc_cast_client(
+                 self.notification_queue, dict_data)
             return request_result(0)
+
         except Exception, e:
+
             return request_result(598)

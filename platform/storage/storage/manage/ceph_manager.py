@@ -37,11 +37,10 @@ class DiskManager(object):
         volume_uuid = str(uuid.uuid4())
         disk_name = volume_name + '-' + volume_uuid
 
-        ret = self.ceph_driver.disk_create(
-                   token, self.pool_name, disk_name, volume_size)
-        ret = eval(ret)
-        status_code = int(ret['status'])
-        if status_code != 0:
+        status_code = self.ceph_driver.disk_create(
+                           token, self.pool_name,
+                           disk_name, volume_size)['status']
+        if int(status_code) != 0:
             log.error('Create ceph disk(%s) failure' % (volume_name))
             # self.ceph_driver.notification(202, user_name)
             return request_result(status_code)
@@ -78,10 +77,10 @@ class DiskManager(object):
 
         disk_name = volume_info[0][3]
 
-        ret = self.ceph_driver.disk_delete(token, self.pool_name, disk_name)
-        ret = eval(ret)
-        status_code = int(ret['status'])
-        if status_code != 0:
+        status_code = self.ceph_driver.disk_delete(
+                           token, self.pool_name,
+                           disk_name)['status']
+        if int(status_code) != 0:
             log.error('Delete ceph disk(%s) failure' % (disk_name))
             # self.ceph_driver.notification(206, user_name)
             return request_result(status_code)
@@ -107,11 +106,10 @@ class DiskManager(object):
         volume_name = volume_info[0][0]
         disk_name = volume_info[0][3]
 
-        ret = self.ceph_driver.disk_resize(token, self.pool_name,
-                                           disk_name, volume_size)
-        ret = eval(ret)
-        status_code = int(ret['status'])
-        if status_code != 0:
+        status_code = self.ceph_driver.disk_resize(
+                           token, self.pool_name,
+                           disk_name, volume_size)['status']
+        if int(status_code) != 0:
             log.error('ceph disk(%s) resize failure' % (disk_name))
             # self.ceph_driver.notification(204, user_name)
 

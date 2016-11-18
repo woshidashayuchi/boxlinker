@@ -22,8 +22,8 @@ class RabbitmqResponse(object):
         try:
             response = self.ceph_manager.ceph_manager(json_data)
 
-            return json.dumps(response)
+            return response
 
         except Exception, e:
             log.error('RPC Server exec error: %s' % (e))
-            return json.dumps(request_result(599))
+            return request_result(599)
