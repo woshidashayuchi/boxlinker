@@ -18,12 +18,9 @@ def rest_app_run():
                      '/api/v1.0/storage/volumes')
 
     api.add_resource(storage_api.StorageVolumeApi,
-                     '/api/v1.0/storage/volumes/<volume_name>')
-
-    api.add_resource(storage_api.StorageVolumeApi,
-                     '/api/v1.0/storage/volumes/<volume_name>/size')
+                     '/api/v1.0/storage/volumes/<volume_uuid>')
 
     api.add_resource(storage_api.StorageVolumeStatusApi,
-                     '/api/v1.0/storage/volumes/<volume_name>/status')
+                     '/api/v1.0/storage/volumes/<volume_uuid>/status')
 
     app.run(host='0.0.0.0', port=8001, threaded=True, debug=False)

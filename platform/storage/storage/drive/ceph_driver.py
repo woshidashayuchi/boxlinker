@@ -23,6 +23,7 @@ class CephDriver(object):
 
         try:
 
+            disk_size = int(disk_size) * 1024
             api = 'drv_ceh_dsk_crt'
 
             parameters = {
@@ -72,6 +73,7 @@ class CephDriver(object):
 
         try:
 
+            disk_size = int(disk_size) * 1024
             api = 'drv_ceh_dsk_rsz'
 
             parameters = {

@@ -49,7 +49,7 @@ class DiskManager(object):
             self.ceph_db.volume_create(
                          volume_uuid, volume_name,
                          disk_name, volume_size, fs_type,
-                         pool_name, user_uuid, orga_uuid)
+                         self.pool_name, user_uuid, orga_uuid)
         except Exception, e:
             log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
@@ -196,15 +196,16 @@ class DiskManager(object):
 
         disk_list = []
         for volume_info in volume_list_info:
-            volume_name = volume_info[0]
-            volume_size = volume_info[1]
-            volume_status = volume_info[2]
-            image_name = volume_info[3]
-            fs_type = volume_info[4]
-            mount_point = volume_info[5]
-            pool_name = volume_info[6]
-            create_time = volume_info[7]
-            update_time = volume_info[8]
+            volume_uuid = volume_info[0]
+            volume_name = volume_info[1]
+            volume_size = volume_info[2]
+            volume_status = volume_info[3]
+            image_name = volume_info[4]
+            fs_type = volume_info[5]
+            mount_point = volume_info[6]
+            pool_name = volume_info[7]
+            create_time = volume_info[8]
+            update_time = volume_info[9]
 
             v_disk_info = {
                               "volume_uuid": volume_uuid,

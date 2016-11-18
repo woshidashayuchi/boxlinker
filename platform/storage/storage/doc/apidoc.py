@@ -6,17 +6,16 @@
 
 """
 @apiDefine CODE_POST_0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "resource_type": "string",
-        "disk_name": "string",
+        "volume_uuid": "string",
+        "volume_name": "string",
         "pool_name": "string",
         "image_name": "string",
-        "disk_size": "string",
-        "disk_status": "string",
+        "volume_size": int,
         "fs_type": "string"
     }
 }
@@ -25,7 +24,7 @@
 
 """
 @apiDefine CODE_DELETE_0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
@@ -36,16 +35,16 @@
 
 """
 @apiDefine CODE_PUT_0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "resource_type": "string",
-        "disk_name": "string",
+        "volume_uuid": "string",
+        "volume_name": "string",
         "pool_name": "string",
         "image_name": "string",
-        "disk_size": "string"
+        "volume_size": int
     }
 }
 """
@@ -53,16 +52,13 @@
 
 """
 @apiDefine CODE_PUT_STATUS0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "resource_type": "string",
-        "disk_name": "string",
-        "pool_name": "string",
-        "image_name": "string",
-        "disk_status": "string"
+        "volume_uuid": "string",
+        "volume_status": "string"
     }
 }
 """
@@ -70,20 +66,21 @@
 
 """
 @apiDefine CODE_GET_0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "resource_type": "string",
-        "disk_name": "string",
-        "pool_name": "string",
+        "volume_uuid": "string",
+        "volume_name": "string",
+        "volume_size": int,
+        "volume_status": "string",
         "image_name": "string",
-        "disk_size": "string",
-        "disk_status": "string",
         "fs_type": "string",
-        "create_time": datetime,
-        "update_time": datetime
+        "mount_point": "string",
+        "pool_name": "string",
+        "create_time": "YYYY-MM-DD HH:MM:SS",
+        "update_time": "YYYY-MM-DD HH:MM:SS"
     }
 }
 """
@@ -91,44 +88,47 @@
 
 """
 @apiDefine CODE_GET_LIST_0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
         "volume_list": [
             {
-                "resource_type": "string",
-                "disk_name": "string",
-                "pool_name": "string",
+                "volume_uuid": "string",
+                "volume_name": "string",
+                "volume_size": int,
+                "volume_status": "string",
                 "image_name": "string",
-                "disk_size": "string",
-                "disk_status": "string",
                 "fs_type": "string",
-                "create_time": datetime,
-                "update_time": datetime
+                "mount_point": "string",
+                "pool_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
-                "resource_type": "string",
-                "disk_name": "string",
-                "pool_name": "string",
+                "volume_uuid": "string",
+                "volume_name": "string",
+                "volume_size": int,
+                "volume_status": "string",
                 "image_name": "string",
-                "disk_size": "string",
-                "disk_status": "string",
                 "fs_type": "string",
-                "create_time": datetime,
-                "update_time": datetime
+                "mount_point": "string",
+                "pool_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
-                "resource_type": "string",
-                "disk_name": "string",
-                "pool_name": "string",
+                "volume_uuid": "string",
+                "volume_name": "string",
+                "volume_size": int,
+                "volume_status": "string",
                 "image_name": "string",
-                "disk_size": "string",
-                "disk_status": "string",
                 "fs_type": "string",
-                "create_time": datetime,
-                "update_time": datetime
+                "mount_point": "string",
+                "pool_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
             }
         ]
     }
@@ -137,17 +137,18 @@
 
 
 """
-@api {post} /api/v1.0/storage/volumes
+@api {post} /api/v1.0/storage/volumes 存储卷创建
 @apiName create volume
 @apiGroup storage
 @apiVersion 1.0.0
 @apiDescription create storage volume
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiParam {json} body 
+@apiParam {json} body
+@apiParamExample body
 {
-    "disk_name": "string",
-    "disk_size": "string",
+    "volume_name": "string",
+    "volume_size": int,
     "fs_type": "xfs/ext4"
 }
 @apiUse CODE_POST_0
@@ -155,7 +156,7 @@
 
 
 """
-@api {delete} /api/v1.0/storage/volumes/<disk_name>
+@api {delete} /api/v1.0/storage/volumes/<volume_uuid> 存储卷删除
 @apiName delete volume
 @apiGroup storage
 @apiVersion 1.0.0
@@ -167,55 +168,41 @@
 
 
 """
-@api {put} /api/v1.0/storage/volumes/<disk_name>
-@apiName update volume
+@api {put} /api/v1.0/storage/volumes/<volume_uuid> 存储卷容量调整
+@apiName update volume size
 @apiGroup storage
 @apiVersion 1.0.0
 @apiDescription resize storage volume size
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiParam {json} body 
+@apiParam {json} body
+@apiParamExample body
 {
-    "disk_size": "string"
+    "volume_size": int
 }
 @apiUse CODE_PUT_0
 """
 
 
 """
-@api {put} /api/v1.0/storage/volumes/<disk_name>/size
-@apiName update volume
-@apiGroup storage
-@apiVersion 1.0.1
-@apiDescription resize storage volume size
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body 
-{
-    "disk_size": "string"
-}
-@apiUse CODE_PUT_0
-"""
-
-
-"""
-@api {put} /api/v1.0/storage/volumes/<disk_name>/status
-@apiName update volume
+@api {put} /api/v1.0/storage/volumes/<volume_uuid>/status 存储卷状态更新
+@apiName update volume status
 @apiGroup storage
 @apiVersion 1.0.0
 @apiDescription update storage volume status
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiParam {json} body 
+@apiParam {json} body
+@apiParamExample body
 {
-    "disk_status": "using/unused"
+    "volume_status": "using/unused"
 }
 @apiUse CODE_PUT_STATUS0
 """
 
 
 """
-@api {get} /api/v1.0/storage/volumes/<disk_name>
+@api {get} /api/v1.0/storage/volumes/<volume_uuid> 存储卷信息
 @apiName list single volume
 @apiGroup storage
 @apiVersion 1.0.0
@@ -227,7 +214,7 @@
 
 
 """
-@api {get} /api/v1.0/storage/volumes
+@api {get} /api/v1.0/storage/volumes 存储卷列表
 @apiName list volumes
 @apiGroup storage
 @apiVersion 1.0.0

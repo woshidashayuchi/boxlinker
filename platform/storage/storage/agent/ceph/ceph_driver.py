@@ -11,6 +11,7 @@ class CephDriver(object):
 
     def disk_create(self, pool_name, disk_name, disk_size):
 
+        disk_size = str(disk_size)
         result = execute(
                  "rbd create "+pool_name+"/"+disk_name+" --image-format 2 --size "+disk_size+"",
                  shell=True, run_as_root=True)[1]
@@ -33,6 +34,7 @@ class CephDriver(object):
 
     def disk_resize(self, pool_name, disk_name, disk_size):
 
+        disk_size = str(disk_size)
         result = execute(
                  "rbd resize --size "+disk_size+" "+pool_name+"/"+disk_name+"",
                  shell=True, run_as_root=True)[1]

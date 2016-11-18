@@ -23,14 +23,14 @@ class MysqlInit(object):
             self.pool = PooledDB(MySQLdb, 2,
                                  host=os.environ.get('DB_SERVER01'),
                                  port=3306, user='cloud', passwd='cloud',
-                                 db='clouddata', charset='utf8')
+                                 db='storage', charset='utf8')
         except Exception, e:
             log.error('db_server01 connection error: reason= %s' % (e))
             try:
                 self.pool = PooledDB(MySQLdb, 2,
                                      host=os.environ.get('DB_SERVER02'),
                                      port=3306, user='cloud', passwd='cloud',
-                                     db='clouddata', charset='utf8')
+                                     db='storage', charset='utf8')
             except Exception, e:
                 log.error('db_server02 connection error: reason=%s' % (e))
                 raise
