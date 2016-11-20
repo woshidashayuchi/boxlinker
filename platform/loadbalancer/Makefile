@@ -1,7 +1,7 @@
 all: push
 
 # 0.0 shouldn't clobber any released builds
-TAG = 0.45
+TAG = latest
 PREFIX = index.boxlinker.com/boxlinker/servicelb
 
 server: lb.go
