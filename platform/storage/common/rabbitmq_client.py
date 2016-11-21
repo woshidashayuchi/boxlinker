@@ -46,7 +46,7 @@ class RabbitmqClient(object):
         if self.corr_id == props.correlation_id:
             self.response = body
 
-    def callback_queue(self):
+    def callback_create(self):
         log.debug('Create callback queue')
         self.callback_queue = self.channel.queue_declare(
                               exclusive=True).method.queue
@@ -95,7 +95,7 @@ class RabbitmqClient(object):
         try:
             json_data = json.dumps(dict_data)
             self.mq_connect()
-            self.callback_queue()
+            self.callback_create()
             self.rpc_call(queue_name, json_data)
             self.get_response(timeout, queue_name)
             self.mq_disconnect()

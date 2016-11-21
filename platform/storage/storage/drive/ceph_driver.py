@@ -33,7 +33,7 @@ class CephDriver(object):
                          }
 
             dict_data = {
-                            "api": api,
+                            "api": "drv_ceh_dsk_crt",
                             "token": token,
                             "parameters": parameters
                         }
