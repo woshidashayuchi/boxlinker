@@ -496,14 +496,15 @@ s *api.Service, servicePort *api.ServicePort) (endpoints []string) {
 	for _, ss := range ep.Subsets {
 		for _, epPort := range ss.Ports {
 			var targetPort int
+			var ep = int(epPort.Port)
 			switch servicePort.TargetPort.Type {
 			case intstr.Int:
-				if epPort.Port == getTargetPort(servicePort) {
-					targetPort = epPort.Port
+				if ep == getTargetPort(servicePort) {
+					targetPort = ep
 				}
 			case intstr.String:
 				if epPort.Name == servicePort.TargetPort.StrVal {
-					targetPort = epPort.Port
+					targetPort = ep
 				}
 			}
 			if targetPort == 0 {
@@ -567,10 +568,11 @@ func (lbc *loadBalancerController) getServices() (httpSvc []service, httpsTermSv
 
 			if ok && lbc.canHttpRole() {
 				for _, item := range httpArr {
-					if item.port == servicePort.Port {
+					var sport = int(servicePort.Port)
+					if item.port == sport {
 						// http service
 						newSvc := service{
-							Name:        getServiceNameForLBRule(&s, servicePort.Port),
+							Name:        getServiceNameForLBRule(&s, sport),
 							Ep:          ep,
 							BackendPort: getTargetPort(&servicePort),
 						}
@@ -593,10 +595,11 @@ func (lbc *loadBalancerController) getServices() (httpSvc []service, httpsTermSv
 			portsMap,ok := annotations.getTcp()
 			if ok && lbc.canTcpRole() {
 				for _, portMap := range portsMap {
-					if portMap.containerPort == servicePort.Port {
+					var sport = int(servicePort.Port)
+					if portMap.containerPort == sport {
 
 						newSvc := service{
-							Name:        getServiceNameForLBRule(&s, servicePort.Port),
+							Name:        getServiceNameForLBRule(&s, sport),
 							Ep:          ep,
 							BackendPort: getTargetPort(&servicePort),
 						}
