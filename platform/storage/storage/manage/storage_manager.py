@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-import json
-
 import ceph_manager
 
 from common.logs import logging as log
@@ -120,16 +118,15 @@ class StorageManagerAPI(object):
 
         return self.ceph_manager.volume_status(volume_uuid, volume_status)
 
-    def storage_manager(self, json_data):
+    def storage_manager(self, dict_data):
 
         try:
-            dict_data = json.loads(json_data)
             api = dict_data['api']
             context = dict_data['context']
             parameters = dict_data['parameters']
         except Exception, e:
             log.error('parameters error: %s' % (e))
-            return json.dumps(request_result(101))
+            return request_result(101)
 
         try:
             func = {
@@ -141,7 +138,7 @@ class StorageManagerAPI(object):
                 "stg_ceh_dsk_sts": self.volume_update
             }
 
-            return json.dumps(func[api](context, parameters))
+            return func[api](context, parameters)
         except Exception, e:
             log.error('RPC API routing error: %s' % (e))
-            return json.dumps(request_result(102))
+            return request_result(102)

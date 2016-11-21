@@ -20,7 +20,7 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
         "ppwd": ".{5,60}"
     }
 
-    m = re.match(para_format[ptype], parameter)
+    m = re.match(para_format[ptype], str(parameter))
     if m is None:
         log.warning('parameter format error, parameter=%s, ptype=%s, exist=%s'
                     % (str(parameter), ptype, exist))
