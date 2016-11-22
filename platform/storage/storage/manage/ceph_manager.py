@@ -137,7 +137,7 @@ class DiskManager(object):
         volume_conf = str(volume_size) + 'G'
         request_code = self.billing_create(
                             token, volume_uuid, volume_name,
-                            volume_conf, orga_uuid, user_uuid)
+                            volume_conf, orga_uuid, user_uuid)['status']
         if int(request_code) != 0:
             return request_result(request_code)
 
