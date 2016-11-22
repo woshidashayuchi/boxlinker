@@ -61,6 +61,10 @@ class StorageManagerAPI(object):
 
         try:
             token = context['token']
+            user_info = context['user_info']
+            user_uuid = user_info['user_uuid']
+            orga_uuid = user_info['orga_uuid']
+
             volume_uuid = context['resource_uuid']
             volume_size = parameters['volume_size']
 
@@ -71,7 +75,8 @@ class StorageManagerAPI(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.ceph_manager.volume_resize(token, volume_uuid, volume_size)
+        return self.ceph_manager.volume_resize(
+                    token, volume_uuid, volume_size, user_uuid, orga_uuid)
 
     @token_check
     def volume_info(self, context, parameters):

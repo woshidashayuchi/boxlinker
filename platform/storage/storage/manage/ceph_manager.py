@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
+import os
 import uuid
 import json
+import requests
 
 from common.logs import logging as log
 from common.code import request_result
@@ -10,6 +12,8 @@ from common.json_encode import CJsonEncoder
 
 from storage.db import storage_db
 from storage.drive import ceph_driver
+
+requests.adapters.DEFAULT_RETRIES = 5
 
 
 class DiskManager(object):
@@ -19,6 +23,82 @@ class DiskManager(object):
         self.ceph_db = storage_db.StorageDB()
         self.ceph_driver = ceph_driver.CephDriver()
         self.pool_name = 'pool_hdd'
+        self.billing_api = os.environ.get('BILLING_API')
+
+    def billing_create(self, token, volume_uuid, volume_name,
+                       volume_conf, orga_uuid, user_uuid):
+
+        headers = {'token': token}
+        body = {
+                   "resource_uuid": volume_uuid,
+                   "resource_name": volume_name,
+                   "resource_type": "volume",
+                   "resource_conf": volume_conf,
+                   "resource_status": "using",
+                   "resource_orga": orga_uuid,
+                   "resource_user": user_uuid
+               }
+
+        try:
+            url = '%s/api/v1.0/billing/resources' % (self.billing_api)
+            r = requests.post(url, headers=headers,
+                              data=json.dumps(body), timeout=5)
+            status = r.json()['status']
+        except Exception, e:
+            log.error('Billing resource create error: reason=%s' % (e))
+            self.volume_delete(token, volume_uuid)
+            return request_result(601)
+
+        if int(status) != 0:
+            log.error('Billing info create error, request_code not equal 0')
+            self.volume_delete(token, volume_uuid)
+            return request_result(601)
+
+        return request_result(0)
+
+    def billing_delete(self, token, volume_uuid):
+
+        headers = {'token': token}
+        try:
+            url = '%s/api/v1.0/billing/resources/%s' \
+                  % (self.billing_api, volume_uuid)
+            r = requests.delete(url, headers=headers, timeout=5)
+            status = r.json()['status']
+        except Exception, e:
+            log.error('Billing info delete error: reason=%s' % (e))
+
+        if int(status) != 0:
+            log.error('Billing info delete error, request_code not equal 0')
+            return request_result(601)
+
+        return request_result(0)
+
+    def billing_update(self, token, volume_uuid,
+                       volume_conf, user_uuid, orga_uuid):
+
+        headers = {'token': token}
+        body = {
+                   "resource_conf": volume_conf,
+                   "resource_status": "using",
+                   "resource_orga": orga_uuid,
+                   "resource_user": user_uuid
+               }
+
+        try:
+            url = '%s/api/v1.0/billing/resources/%s' \
+                  % (self.billing_api, volume_uuid)
+            r = requests.put(url, headers=headers,
+                             data=json.dumps(body), timeout=5)
+            status = r.json()['status']
+        except Exception, e:
+            log.error('Billing info update error: reason=%s' % (e))
+            return request_result(601)
+
+        if int(status) != 0:
+            log.error('Billing info update error, request_code not equal 0')
+            return request_result(601)
+
+        return request_result(0)
 
     def volume_create(self, token, user_uuid, orga_uuid,
                       volume_name, volume_size, fs_type):
@@ -53,6 +133,13 @@ class DiskManager(object):
         except Exception, e:
             log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
+
+        volume_conf = str(volume_size) + 'G'
+        request_code = self.billing_create(
+                            token, volume_uuid, volume_name,
+                            volume_conf, orga_uuid, user_uuid)
+        if int(request_code) != 0:
+            return request_result(request_code)
 
         result = {
                      "volume_uuid": volume_uuid,
@@ -93,9 +180,12 @@ class DiskManager(object):
 
         # self.ceph_driver.notification(205, user_name)
 
+        self.billing_delete(token, volume_uuid)
+
         return request_result(0)
 
-    def volume_resize(self, token, volume_uuid, volume_size):
+    def volume_resize(self, token, volume_uuid,
+                      volume_size, user_uuid, orga_uuid):
 
         try:
             volume_info = self.ceph_db.volume_info(volume_uuid)
@@ -122,6 +212,10 @@ class DiskManager(object):
         except Exception, e:
             log.error('Database update error')
             return request_result(403)
+
+        volume_conf = str(volume_size) + 'G'
+        self.billing_update(token, volume_uuid,
+                            volume_conf, user_uuid, orga_uuid)
 
         result = {
                      "volume_uuid": volume_uuid,
