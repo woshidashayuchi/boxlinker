@@ -17,10 +17,10 @@ class RabbitmqResponse(object):
 
         self.storage_manager = storage_manager.StorageManagerAPI()
 
-    def rpc_exec(self, json_data):
+    def rpc_exec(self, dict_data):
 
         try:
-            response = self.storage_manager.storage_manager(json_data)
+            response = self.storage_manager.storage_manager(dict_data)
 
             return response
 

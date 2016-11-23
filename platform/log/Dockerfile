@@ -1,0 +1,13 @@
+# Author: YanHua <it-yanh@all-reach.com>
+
+FROM index.boxlinker.com/boxlinker/centos7-base:latest
+
+RUN pip install flask-restful
+RUN pip install requests
+RUN pip install flask-cors
+RUN pip install pika
+
+COPY ./common /log/common/
+COPY ./log /log/log/
+
+CMD python /log/log/restapi/restapi_service.py & python /log/log/manage/log_service.py

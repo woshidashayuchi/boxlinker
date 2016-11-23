@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
+import log_manager
+
 from common.logs import logging as log
 from common.code import request_result
 from common.single import Singleton
-
-from billing.manage import billing_manager
 
 
 class RabbitmqResponse(object):
@@ -14,14 +14,13 @@ class RabbitmqResponse(object):
 
     def __init__(self, queue_name):
 
-        self.billing_manager = billing_manager.BillingManagerAPI()
+        self.log_manager = log_manager.LogManagerAPI()
 
-    def rpc_exec(self, json_data):
+    def rpc_exec(self, dict_data):
+
         try:
-            response = self.billing_manager.billing_manager(json_data)
-
+            response = self.log_manager.log_manager(dict_data)
             return response
-
         except Exception, e:
             log.error('RPC Server exec error: %s' % (e))
             return request_result(599)

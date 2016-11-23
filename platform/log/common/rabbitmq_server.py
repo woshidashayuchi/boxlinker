@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
+import os
 import json
 import pika
 
 from time import sleep
 from common.logs import logging as log
 from common.single import Singleton
-# from storage.manage import rabbitmq_response
+from log.manage import rabbitmq_response
 
 
 class RabbitmqServer(object):
 
-    def mq_connect(self, mq_server01='mq_server01',
-                   mq_server02='mq_server02',
+    def mq_connect(self, mq_server01=os.environ.get('MQ_SERVER01'),
+                   mq_server02=os.environ.get('MQ_SERVER02'),
                    heartbeat_time=30):
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))

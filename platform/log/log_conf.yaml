@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: List
+items:
+# log config
+
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: log-api
+    namespace: boxlinker
+    labels:
+      name: log-api
+      rc-krud: "boxlinker_centos-log"
+  spec:
+    replicas: 1
+    selector:
+      name: log-api
+    template:
+      metadata:
+        labels:
+          name: log-api
+      spec:
+        nodeSelector:
+          role: system
+        imagePullSecrets:
+        - name: registry-key
+        containers:
+        - name: log-api
+          imagePullPolicy: Always
+          image: index.boxlinker.com/boxlinker/centos-log:1.0.1
+          ports:
+          - containerPort: 8001
+          env:
+          - name: MQ_SERVER01
+            value: rabbitmq
+          - name: MQ_SERVER02
+            value: rabbitmq
+          - name: TOKEN_AUTH_API
+            value: http://auth:8080/api/v1.0/usercenter/tokens
+          - name: KIBANA_LOG_API
+            value: http://kibana:5601/elasticsearch/_msearch?timeout=0&ignore_unavailable=true&preference=1473650101921
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: log-api
+    namespace: boxlinker
+    labels:
+      name: log-api
+    annotations:
+      serviceloadbalancer/lb.http: log.boxlinker.com:8001
+      serviceloadbalancer/lb.node: main
+  spec:
+    selector:
+      name: log-api
+    ports:
+    - name: rest-api
+      port: 8001
+      targetPort: 8001
