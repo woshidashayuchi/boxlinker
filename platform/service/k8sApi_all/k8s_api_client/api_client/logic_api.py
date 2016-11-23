@@ -452,7 +452,7 @@ if __name__ == '__main__':
     while True:
         try:
             app.run(debug=True, host="0.0.0.0", port=9000, threaded=True)
-            log.info("restart----------------------------------")
+
         except Exception, e:
             log.warning('k8s RESTful API Server running error, reason=%s' % e)
         sleep(8)

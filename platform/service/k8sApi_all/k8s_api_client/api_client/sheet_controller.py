@@ -33,7 +33,7 @@ class SheetController(object):
         pass
 
     def sheet_controller(self, json_list):
-        log.info("hello one body one system ==%s"%json_list)
+
         if json_list.get("volume") is None:
             json_list.pop("token")
         else:
@@ -105,8 +105,6 @@ class SheetController(object):
 
             kubernete_sclient.rpc_exec(json_list2)
 
-            log.info("end------------")
-
         except Exception, e:
             # log.info("{'userid': '%s', 'log_info': 'oh,no,create faild...'}"
             #            % (json_list.get("user_name")))
@@ -154,7 +152,7 @@ class SheetController(object):
             #         % (json_list.get("user_name")))
             log.info("ending-----rc---")
         except Exception, e:
-            log.error("uuuuuuuuuuuuu==%s" % e)
+            log.error("add rc error, reason=%s" % e)
             # log.info("{'userid': '%s', 'log_info': 'creating the replicationcontroller and pod faild...'}"
             #         % (json_list.get("user_name")))
             # log.warning('creating the rc running error, reason=%s'
@@ -260,12 +258,10 @@ class SheetController(object):
         except Exception, e:
             log.error("es error, reason=%s" % e)
 
-        try:
-            notification.notify_result(json_list.get("user_name"), json_list.get("service_name"), 402, 107, 300)
-        except Exception, e:
-            log.error("notification error,reason=%s" % e)
-
-
+        # try:
+        #    notification.notify_result(json_list.get("user_name"), json_list.get("service_name"), 402, 107, 300)
+        # except Exception, e:
+        #    log.error("notification error,reason=%s" % e)
 
         result = "service is creating..."
 
@@ -355,7 +351,7 @@ class SheetController(object):
                         result_env.append(env)
                 for g in resu_volume:
                     if g.get("rc_id") == i.get("uuid"):
-                        volume = {"disk_name": g.get("volume_name"),
+                        volume = {"volume_id": g.get("volume_id"),
                                   "disk_path": g.get("volume_path"),
                                   "readonly": g.get("read_only")}
                         result_volume.append(volume)
@@ -406,7 +402,7 @@ class SheetController(object):
 
         try:
             delresult = kubernete_sclient.rpc_name(json_list_pod)
-            if delresult != "<Response [200]>":
+            if delresult != "<Response [200]>" and delresult != "<Response [404]>":
                 return code.request_result(503)
             log.info("{'userid': '%s', 'log_info': 'pod has be deleted!'}"
                      % (json_list.get("user_name")))
@@ -431,7 +427,8 @@ class SheetController(object):
         kubernete_sclient = KubernetesClient()
         try:
             rc_response = kubernete_sclient.rpc_name(json_list_rc)
-            if rc_response != "<Response [200]>":
+
+            if rc_response != "<Response [200]>" and rc_response != "<Response [404]>":
                 log.info("rc delete error reason=%s" % rc_response)
                 return code.request_result(503)
 
@@ -456,7 +453,7 @@ class SheetController(object):
         try:
             service_response = kubernete_sclient.rpc_name(json_list_service)
 
-            if service_response != "<Response [200]>":
+            if service_response != "<Response [200]>" and service_response != "<Response [404]>":
                 log.info("service delete error reason=%s" % service_response)
                 return code.request_result(503)
 
@@ -481,8 +478,8 @@ class SheetController(object):
         resu = logic.exeQuery(cur, sel_sql)
         xxx = []
         for i in resu:
-            disk_name = i.get("volume_name")
-            xxx.append({"disk_name":disk_name})
+            volume_id = i.get("volume_id")
+            xxx.append({"volume_id": volume_id})
         if len(xxx) != 0:
 
             json_up = {"volume": xxx,"token": json_list.get("token")}
