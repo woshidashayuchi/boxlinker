@@ -8,6 +8,7 @@ from kubernetes_client import KubernetesClient
 from data import DataOrm
 from resource_model.create_json import SourceModel
 from response_code import code
+from billing.call_billing import CallBilling
 from podstatus_monitor.podlist_status import list_status
 import re
 from es.to_es import post_es
@@ -23,6 +24,7 @@ from time import sleep
 from service_acl.acl_code.acl_model.controller import Controller
 from token_about.token_for_out import p_out
 from flask import request
+import time
 
 
 class SheetController(object):
@@ -60,6 +62,17 @@ class SheetController(object):
         uid_service = str(uuid.uuid4())
         uid_font = str(uuid.uuid4())
 
+        # try:
+        #    jj = json_list
+        #    jj["uid_font"] = uid_font
+        #    r = CallBilling.base_con(jj)
+        #    if r is False:
+        #        log.error("can't intering the billings")
+        #        return code.request_result(501)
+        #    log.info("oooooooooooooollllllllllllll")
+        # except Exception, e:
+        #    log.error("intering the billing error, reason=%s" % e)
+
         try:
 
             log.info("{'userid': '%s', 'log_info': 'readying...'}"
@@ -89,9 +102,7 @@ class SheetController(object):
                         % (json_list.get("user_name")))
 
             kubernete_sclient = KubernetesClient()
-            log.info("AAAAAAAAAAAAAAA---BBBBBBBBBBBBBB")
-            log.info("go-------")
-            log.info("CCCCCCCCCCCCCCC---DDDDDDDDDDDDDD")
+
             kubernete_sclient.rpc_exec(json_list2)
 
             log.info("end------------")
@@ -137,9 +148,7 @@ class SheetController(object):
             # log.info("{'userid': '%s', 'log_info': 'creating the replicationcontroller and pod...'}"
             #         % (json_list.get("user_name")))
             kubernete_client = KubernetesClient()
-            log.info("EEEEEEEEEEEEEEE---BBBBBBBBBBBBBB")
-            log.info("go-------")
-            log.info("FFFFFFFFFFFFFFF---DDDDDDDDDDDDDD")
+
             kubernete_client.rpc_exec(json_list2)
             # log.info("{'userid': '%s', 'log_info': 'create the replicationcontroller and pod sucessful...'}"
             #         % (json_list.get("user_name")))
@@ -164,8 +173,8 @@ class SheetController(object):
             log.info("volume++++++++++++++++++!!!!!")
         except Exception, e:
             log.error("storage status update error,reason=%s" % e)
-
-        typee = {"rtype": "rc", "uid_rc": uid_rc}
+        create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        typee = {"rtype": "rc", "uid_rc": uid_rc, "create_time": create_time, "update_time": create_time}
         json_list.update(typee)
         try:
             # log.info("{'userid': '%s', 'log_info': 'entering the replicationcontroller and pod...'}"
@@ -222,9 +231,11 @@ class SheetController(object):
         except Exception, e:
             log.error('k8sapi entering the resource(volume) runing error,reason=%s'
                       % e)
+
         typee = {"rtype": "fservice", "uid_font": uid_font, "status": "Pending",
                  "all_name": json_list.get("user_name")+json_list.get("service_name"),
-                 "orga_orga": json_list.get("user_orga")}
+                 "orga_orga": json_list.get("user_orga"), "create_time":create_time,
+                 "update_time": create_time}
         json_list.update(typee)
 
         try:

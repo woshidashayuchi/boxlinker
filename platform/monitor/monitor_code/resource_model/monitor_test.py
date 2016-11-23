@@ -20,6 +20,7 @@ class Show(object):
     @classmethod
     def get_msg(cls, json_data):
         BASEURL = "http://%s/api/datasources/proxy/1/query?db=k8s&q=" % os.environ.get("GRAFANA")
+
         get_sql = ""
         result = []
         try:

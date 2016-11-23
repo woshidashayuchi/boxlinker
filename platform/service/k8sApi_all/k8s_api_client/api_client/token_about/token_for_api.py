@@ -17,8 +17,9 @@ class TokenForApi(object):
 
     @classmethod
     def get_msg(cls, token):
+        log.info("test1--...................")
         user_info = get_userinfo(token)['user_info']
-        log.info("tokennnnn==%s" % user_info)
+        log.info(user_info)
 
         user_info = json.loads(user_info)
         user_name = user_info['user_orga']

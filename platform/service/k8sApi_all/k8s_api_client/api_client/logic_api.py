@@ -14,6 +14,7 @@ from time import sleep
 from podstatus_monitor.anytime_update_status import Up
 from resource_model.sheet_model import SheetModel
 from podstatus_monitor.pod_message import pod_messages
+from podstatus_monitor.get_svcid import get_id
 
 app = Flask(__name__)
 CORS(app=app)
@@ -436,8 +437,18 @@ def put_command(service_name):
         log.error("update error, reason = %s" % e)
         return json.dumps(code.request_result(502))
 
+
+@app.route('/api/v1/application/service/<service_name>/uuid', methods=['GET'])
+def get_uuid(service_name):
+    try:
+        return json.dumps(get_id(service_name))
+    except Exception, e:
+        log.error("get the uuid error, reason=%s" % e)
+        return json.dumps(code.request_result(404))
+
+
 if __name__ == '__main__':
-    # app.run(debug=True, host="0.0.0.0", port=9000)
+
     while True:
         try:
             app.run(debug=True, host="0.0.0.0", port=9000, threaded=True)

@@ -34,9 +34,9 @@ class DataOrm(object):
 
     db_config = {
         'host': os.environ.get('MYSQL_HOST'),
-        'user': 'cloud',
-        'passwd': 'cloud',
-        'db': 'clouddata',
+        'user': 'kuber',
+        'passwd': 'kuber',
+        'db': 'kuberdata',
         'charset': 'UTF8',
         'port': os.environ.get('MYSQL_PORT')
     }
@@ -55,10 +55,12 @@ class DataOrm(object):
         font_service = Table('font_service', metadata,
             Column('uuid', String(64), primary_key=True),
             Column('user_id', String(64)),
+            Column('orga_id', String(64)),
             Column('service_id', String(64)),
             Column('rc_id', String(64)),
             Column('fservice_name', String(64)),
             Column('fservice_status', String(20)),
+            Column('all_name', String(64)),
             Column('fservice_create_time', DateTime, server_default=func.now()),
             Column('fservice_update_time', DateTime, server_default=func.now())
         )
@@ -72,13 +74,18 @@ class DataOrm(object):
             Column('spec_selector_name', String(64)),
             Column('template_name', String(64)),
             Column('template_container_name', String(64)),
+            Column('image_id', String(64)),
             Column('image_name', String(64)),
             Column('image_version', String(64)),
             Column('limits_cpu', String(64)),
+            Column('limits_memory', String(64)),
+            Column('policy', String(32)),
+            Column('auto_startup', String(32)),
             Column('containerPort', String(64)),
             Column('protocol', String(32)),
             Column('env_name', String(32)),
             Column('env_value', String(32)),
+            Column('command', String(64)),
             Column('rc_create_time', DateTime, server_default=func.now()),
             Column('rc_update_time', DateTime, server_default=func.now())
         )
@@ -106,7 +113,10 @@ class DataOrm(object):
             Column('containerPort',String(64)),
             Column('protocol',String(32)),
             Column('access_mode',String(32)),
-            Column('access_scope',String(32))
+            Column('access_scope',String(32)),
+            Column('tcp_port',String(32)),
+            Column('http_domain',String(64)),
+            Column('tcp_domain',String(64))
         )
         container.create()
 
@@ -134,6 +144,17 @@ class DataOrm(object):
 
             )
         acl.create()
+
+        volume = Table('volume',metadata,
+                Column('uuid',String(64),primary_key=True),
+                Column('rc_id',String(64)),
+                Column('user_id',String(64)),
+                Column('service_name',String(64)),
+                Column('volume_name',String(32)),
+                Column('volume_path',String(64)),
+                Column('read_only',String(32), server_default='True')
+            )
+        volume.create()
     '''
 
     rc_table = Table('replicationcontrollers', metadata, autoload=True)
@@ -192,6 +213,8 @@ class DataOrm(object):
             # u.protocol = json_list.get("container1")
             # u.env_name = json_list.get("env1")
             # u.env_value = json_list.get("env2")
+            u.rc_create_time = json_list.get("create_time")
+            u.rc_update_time = json_list.get("update_time")
             try:
                 session.add(u)
             except Exception, e:
@@ -225,6 +248,8 @@ class DataOrm(object):
             u.all_name = json_list.get("all_name")
             u.fservice_name = json_list.get("service_name")
             u.fservice_status = json_list.get("status")
+            u.fservice_create_time = json_list.get("create_time")
+            u.fservice_update_time = json_list.get("update_time")
 
             session.add(u)
             session.flush()
@@ -330,7 +355,7 @@ class DataOrm(object):
                      "b.spec_selector_name, b.template_name, b.template_container_name, " \
                      "b.image_name, b.image_version, b.limits_cpu,b.limits_memory," \
                      "b.policy, b.auto_startup, b.containerPort, b.image_id, b.command," \
-                     "b.protocol, b.env_name, b.env_value, b.rc_update_time ltime," \
+                     "b.protocol, b.env_name, b.env_value, a.fservice_create_time ltime," \
                      "c.uuid, c.service_name, c.labels, c.selector_name, " \
                      "c.ports_name, c.ports_port, c.ports_targetport, c.service_domain_name  " \
                      "from " \
@@ -547,6 +572,10 @@ class DataOrm(object):
         up_sql = "update replicationcontrollers set spec_replicas = \'%s\' where uuid = (select rc_id from font_service where orga_id = \'%s\' and fservice_name=\'%s\')" %(pods_num, user_id, service_name)
         return up_sql
 
+    @classmethod
+    def get_svcid(cls, all_name):
+        svc_sql = "select uuid from font_service where all_name=\'%s\'" % all_name
+        return svc_sql
 
     @classmethod
     def time_diff(cls, update_date):
