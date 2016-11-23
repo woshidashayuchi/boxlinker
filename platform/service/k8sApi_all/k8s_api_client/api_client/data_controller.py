@@ -14,9 +14,9 @@ class LogicModel(object):
 
     def connection(self):
         conn = pymysql.connect(host=os.environ.get('MYSQL_HOST'),
-                               db='clouddata',
+                               db='kuberdata',
                                port=int(os.environ.get('MYSQL_PORT')),
-                               user='cloud', passwd='cloud',
+                               user='kuber', passwd='kuber',
                                charset='UTF8',
                                cursorclass=pymysql.cursors.DictCursor)
         cur = conn.cursor()

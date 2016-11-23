@@ -7,11 +7,11 @@ import sys
 p_path = sys.path[0] + '/..'
 sys.path.append(p_path)
 from flask import Flask
-from flask import request,Response
+from flask import request
 from flask_cors import CORS
 from time import sleep
 import json
-from common.logs import logging as log
+from common1.logs import logging as log
 from monitor_api import MonitorApi
 from response_code import code
 
@@ -38,7 +38,7 @@ def monitor_resource(namespace, pod_name, rtype):
         if response == "error":
             return json.dumps(code.request_result(601))
         else:
-            return json.dumps(code.request_result(0,response))
+            return json.dumps(code.request_result(0, response))
     except Exception, e:
         log.error("error, reason=%s" % e)
         return json.dumps(code.request_result(601))

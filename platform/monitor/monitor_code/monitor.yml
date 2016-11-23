@@ -21,7 +21,7 @@ items:
     namespace: boxlinker
     labels:
       component: monitor-api
-      rc-krud: boxlinker_centos-monitor
+      rc-krud: boxlinker_cmn-monitor
   spec:
     replicas: 1
     template:
@@ -39,7 +39,7 @@ items:
         - name: registry-key
         containers:
         - name: monitor-api
-          image: index.boxlinker.com/boxlinker/centos-monitor:1.0.0
+          image: index.boxlinker.com/boxlinker/cmn-monitor:1.0.0
           imagePullPolicy: Always
           ports:
           - containerPort: 9008

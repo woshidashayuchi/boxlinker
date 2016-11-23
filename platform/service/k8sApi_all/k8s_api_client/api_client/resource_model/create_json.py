@@ -142,7 +142,7 @@ class SourceModel(object):
                                 }
                              },
                              "spec": {
-                                "nodeSelector": {"role": "node"},
+                                "nodeSelector": {"role": "user"},
                                 "imagePullSecrets": [{"name": "registry-key"}],
                                 "containers": [
                                    {
@@ -267,7 +267,7 @@ class SourceModel(object):
                                 }
                              },
                              "spec": {
-                                "nodeSelector": {"role": "node"},
+                                "nodeSelector": {"role": "user"},
                                 "imagePullSecrets": [{"name": "registry-key"}],
                                 "containers": [
                                    {
@@ -511,7 +511,7 @@ class SourceModel(object):
                                 }
                              },
                              "spec": {
-                                "nodeSelector": {"role": "node"},
+                                "nodeSelector": {"role": "user"},
                                 "imagePullSecrets": [{"name": "registry-key"}],
                                 "containers": [
                                    {

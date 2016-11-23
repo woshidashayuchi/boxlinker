@@ -15,7 +15,7 @@ class Structure(object):
 
     @classmethod
     def struct_sql(cls, json_data):
-
+        # client = InfluxDBClient(host='influxdb', port=8086, username='root', password='root', database='dashboard')
         time_long = json_data.get("time_long")
         time_span = json_data.get("time_span")
         user_name = json_data.get("user_name")
