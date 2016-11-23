@@ -6,12 +6,12 @@
 
 """
 @apiDefine CODE_GET_USER0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "end_time": int,
+        "end_time": float,
         "logs_list": [
             {
                 "log_info": "string",
@@ -32,12 +32,12 @@
 
 """
 @apiDefine CODE_GET_SYS0
-@apiSuccess (Response) {json} Response
+@apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "end_time": int,
+        "end_time": float,
         "logs_list": [
             {
                 "file": "string",
@@ -70,52 +70,36 @@
 
 
 """
-@api {post} /api/v1.0/logs/labels/<label_value>
+@api {get} /api/v1.0/logs/labels/<label_value>?date_time=<epoch_milliseconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 根据label查日志
 @apiName Get log from label_value
 @apiGroup log
 @apiVersion 1.0.0
 @apiDescription Get log from label_value
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiParam {json} body 
-{
-    "date_time": "datetime",
-    "start_time": "epoch_milliseconds",
-    "end_time": "epoch_milliseconds"
-}
 @apiUse CODE_GET_SYS0
 """
 
 
 """
-@api {post} /api/v1.0/logs/pods/<pod_name>
+@api {get} /api/v1.0/logs/pods/<pod_name>?date_time=<epoch_milliseconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 根据pod名查日志
 @apiName Get log from pod_name
 @apiGroup log
 @apiVersion 1.0.0
 @apiDescription Get log from pod_name
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiParam {json} body 
-{
-    "date_time": "datetime",
-    "start_time": "epoch_milliseconds",
-    "end_time": "epoch_milliseconds"
-}
 @apiUse CODE_GET_SYS0
 """
 
 
 """
-@api {post} /api/v1.0/logs/polling/labels/<label_value>
+@api {get} /api/v1.0/logs/polling/labels/<label_value>?start_time=<epoch_milliseconds> 根据label轮询日志
 @apiName Get log polling from label_value
 @apiGroup log
 @apiVersion 1.0.0
 @apiDescription Get log polling from label_value
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiParam {json} body
-{
-    "start_time": "epoch_milliseconds"
-}
 @apiUse CODE_GET_SYS0
 """

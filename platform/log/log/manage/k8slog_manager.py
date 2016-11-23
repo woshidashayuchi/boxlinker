@@ -9,7 +9,7 @@ from time import sleep
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
-from logs.drive import log_driver
+from log.drive import log_driver
 
 
 class K8sLogManager(object):
