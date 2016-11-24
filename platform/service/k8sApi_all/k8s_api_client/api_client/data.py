@@ -150,7 +150,7 @@ class DataOrm(object):
                 Column('rc_id',String(64)),
                 Column('user_id',String(64)),
                 Column('service_name',String(64)),
-                Column('volume_name',String(32)),
+                Column('volume_id',String(64)),
                 Column('volume_path',String(64)),
                 Column('read_only',String(32), server_default='True')
             )
@@ -307,7 +307,7 @@ class DataOrm(object):
                     u.user_id = json_list.get("user_orga")
                     u.service_name = json_list.get("service_name")
 
-                    u.volume_name = i.get("disk_name")
+                    u.volume_id = i.get("volume_id")
                     u.volume_path = i.get("disk_path")
                     u.read_only = i.get("readonly")
 
@@ -487,7 +487,7 @@ class DataOrm(object):
     def get_using_volume(cls,json_list):
         user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        get_sql = "select volume_name from volume where rc_id=(select rc_id from font_service where orga_id=\'%s\' and  fservice_name=\'%s\')" % (user_id, service_name)
+        get_sql = "select volume_id from volume where rc_id=(select rc_id from font_service where orga_id=\'%s\' and  fservice_name=\'%s\')" % (user_id, service_name)
         return get_sql
 
     @classmethod

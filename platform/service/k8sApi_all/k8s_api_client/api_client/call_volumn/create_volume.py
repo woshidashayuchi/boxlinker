@@ -25,7 +25,7 @@ class CreateVolume(object):
         if request_para is not None:
             for i in request_para:
 
-                get_url = "http://%s/api/v1.0/storage/volumes/%s" % (os.environ.get("STORAGE_HOST"), i.get("disk_name"))
+                get_url = "http://%s/api/v1.0/storage/volumes/%s" % (os.environ.get("STORAGE_HOST"), i.get("volume_id"))
                 try:
                     log.info(headers)
                     resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get("result")
@@ -37,9 +37,9 @@ class CreateVolume(object):
                 except Exception, e:
                     log.error("select volumes error,reason=%s"% (e))
                     return "timeout"
-                log.info("hahahahahahahahahahahahahaha")
+
                 log.info(resu)
-                vname = resu.get("disk_name")
+                vname = resu.get("volume_name")
                 pool_name = resu.get("pool_name")
                 image = resu.get("image_name")
                 readonly1 = i.get("readonly")
@@ -53,9 +53,12 @@ class CreateVolume(object):
                             "name": vname,
                             "rbd": {
                                 "monitors": [
-                                    "192.168.1.5:5000",
-                                    "192.168.1.8:5000",
-                                    "192.168.1.9:5000"
+                                    # "192.168.1.5:5000",
+                                    # "192.168.1.8:5000",
+                                    # "192.168.1.9:5000"
+                                    "172.20.1.11:5000",
+                                    "172.20.1.12:5000",
+                                    "172.20.1.21:5000"
                                 ],
                                 "pool": pool_name,
                                 "image": image,
@@ -77,12 +80,34 @@ class CreateVolume(object):
         result = []
         request_para = json_list.get("volume")
         readonly = True
+
+
+        headers = {"token": json_list.get("token")}
+
         for i in request_para:
             if i.get("readonly") == "True":
                 readonly = True
             else:
                 readonly = False
-            disk_msg = {"name": i.get("disk_name"), "readOnly": readonly, "mountPath": i.get("disk_path")}
+
+
+            get_url = "http://%s/api/v1.0/storage/volumes/%s" % (os.environ.get("STORAGE_HOST"), i.get("volume_id"))
+            try:
+                    log.info(headers)
+                    resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get("result")
+                    if resu == {}:
+                        return "error"
+                    else:
+                        pass
+                    log.info(resu)
+            except Exception, e:
+                log.error("select volumes error,reason=%s"% (e))
+                return "timeout"
+            vname = resu.get("volume_name")
+
+
+
+            disk_msg = {"name": vname, "readOnly": readonly, "mountPath": i.get("disk_path")}
             result.append(disk_msg)
 
         return result
@@ -91,13 +116,14 @@ class CreateVolume(object):
     def put_using(cls, json_list):
 
         headers = {"token": json_list.get("token")}
-        put_url = "http://%s/api/v1.0/storage/volumes/%s/status" % (os.environ.get("STORAGE_HOST"), json_list.get("disk_name"))
+        put_url = "http://%s/api/v1.0/storage/volumes/%s/status" % (os.environ.get("STORAGE_HOST"), json_list.get("volume_id"))
         log.info("inner parameters========================%s" % headers)
         log.info(json_list)
-        using = {"disk_status": json_list.get("disk_status")}
+        using = {"volume_status": json_list.get("volume_status")}
         resu = ""
         try:
             resu = requests.put(put_url, headers=headers, data=json.dumps(using))
+            log.info("######################################")
             log.info(resu.text)
         except Exception, e:
             log.error("update storage error, reason=%s" % e)

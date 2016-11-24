@@ -34,15 +34,15 @@ class StorageStatus(object):
 
         if json_list.get("action").upper() == "POST":
             for i in volume:
-                disk_name = i.get("disk_name")
-                json_status = {"disk_name": disk_name, "disk_status": "using"}
+                volume_id = i.get("volume_id")
+                json_status = {"volume_id": volume_id, "volume_status": "using"}
                 json_list.update(json_status)
                 response = CreateVolume.put_using(json_list)
 
         elif json_list.get("action").upper() == "PUT":
             for i in volume:
-                disk_name = i.get("disk_name")
-                json_status = {"disk_name": disk_name, "disk_status": "unused"}
+                disk_name = i.get("volume_id")
+                json_status = {"volume_id": disk_name, "volume_status": "unused"}
                 json_list.update(json_status)
                 response = CreateVolume.put_using(json_list)
 

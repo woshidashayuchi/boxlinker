@@ -6,5 +6,5 @@ COPY ./storage /usr/share/nginx/html/
 COPY ./monitor /usr/share/nginx/html/
 COPY ./billing /usr/share/nginx/html/
 COPY ./index.html /usr/share/nginx/html/
-
+COPY ./log /usr/share/nginx/html/
 
