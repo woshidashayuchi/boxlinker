@@ -36,3 +36,5 @@ items:
             value: http://k8s-api:9000/api/v1/application/service/status
           - name: TOKEN_PATH
             value: /run/secrets/kubernetes.io/serviceaccount/token
+          - name: BILLING_API
+            value: http://billing:8001

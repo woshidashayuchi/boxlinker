@@ -63,6 +63,7 @@ class AppStatusManager(object):
         for rc_off_name in rc_off_list:
             self.k8s_driver.rc_status_update(rc_off_name, 'Stopping')
             del rc_status_cache[rc_off_name]
+            log.info('Update rc(%s) status off' % (rc_off_name))
 
         for rc_name, rc_info in rc_status_new.items():
             pods_info = rc_info['pods_info']
@@ -79,7 +80,7 @@ class AppStatusManager(object):
                 continue
             else:
                 rc_status_cache[rc_name] = pod_status
-                log.debug('Update rc(%s) status(%s)' % (rc_name, pod_status))
+                log.info('Update rc(%s) status(%s)' % (rc_name, pod_status))
                 self.k8s_driver.rc_status_update(rc_name, pod_status)
 
         return rc_status_cache
