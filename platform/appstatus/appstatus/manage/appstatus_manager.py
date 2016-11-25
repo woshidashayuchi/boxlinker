@@ -41,7 +41,13 @@ class AppStatusManager(object):
             rc_name_info = rc_info['metadata']['annotations']['kubernetes.io/created-by']
             rc_name = json.loads(rc_name_info)['reference']['name']
             pod_name = rc_info['metadata']['name']
-            pod_status = rc_info['status']['phase']
+            # pod_status = rc_info['status']['phase']
+            pod_status_info = rc_info['status']['containerStatuses'][0]['state']
+            for k, v in pod_status_info.items():
+                if k == 'waiting':
+                    pod_status = v['reason']
+                else:
+                    pod_status = k
 
             # log.debug('rc_name=%s, pod_name=%s, status_result=%s'
             #           % (rc_name, pod_name, pod_status))
@@ -71,7 +77,7 @@ class AppStatusManager(object):
                 # log.debug('pod_info=%s, type=%s'
                 #           % (pod_info, type(pod_info)))
                 pod_status = pod_info.values()[0]
-                if pod_status == 'Running':
+                if pod_status == 'running':
                     break
                 else:
                     continue
