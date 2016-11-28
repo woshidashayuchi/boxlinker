@@ -1,21 +1,9 @@
 {
     "apiVersion": "v1",
-    "kind": "ReplicationController",
-    "metadata": {
-        "name": "rabbitmq01",
-        "namespace": "boxlinker",
-        "labels": 
-         {
-          "name": "rabbitmq01"
-         }
-    },
-    "spec": {
-        "replicas": 1,
-        "selector": {
-            "name": "rabbitmq01"
-        },
-        "template": {
+    "kind": "Pod",
             "metadata": {
+                "name": "rabbitmq01",
+                "namespace": "boxlinker",
                 "labels": {
                     "name": "rabbitmq01",
                     "logs": "boxlinker-rabbitmq01"
@@ -59,6 +47,3 @@
                     }
                 ]
             }
-        }
-    }
-}
