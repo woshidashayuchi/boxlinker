@@ -9,6 +9,8 @@ metadata:
         serviceloadbalancer/lb.tcp: "30001:5672"
         serviceloadbalancer/lb.node: "main"
 spec:
+    selector:
+      db: rabbitmq-cluster
     sessionAffinity: ClientIP
     ports:
     - name: rabbitmq
