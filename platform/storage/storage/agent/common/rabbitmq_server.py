@@ -12,8 +12,8 @@ from manage import rabbitmq_response
 
 class RabbitmqServer(object):
 
-    def mq_connect(self, mq_server01='mq_server01',
-                   mq_server02='mq_server02',
+    def mq_connect(self, mq_server01='rabbitmq',
+                   mq_server02='rabbitmq',
                    heartbeat_time=30):
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))

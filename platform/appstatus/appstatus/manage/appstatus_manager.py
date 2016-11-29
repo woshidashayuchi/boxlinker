@@ -38,11 +38,19 @@ class AppStatusManager(object):
         rc_status_new = {}
 
         for rc_info in rc_status_list:
-            rc_name_info = rc_info['metadata']['annotations']['kubernetes.io/created-by']
-            rc_name = json.loads(rc_name_info)['reference']['name']
-            pod_name = rc_info['metadata']['name']
-            # pod_status = rc_info['status']['phase']
-            pod_status_info = rc_info['status']['containerStatuses'][0]['state']
+            try:
+                rc_name_info = rc_info['metadata']['annotations'][
+                                      'kubernetes.io/created-by'
+                                      ]
+                rc_name = json.loads(rc_name_info)['reference']['name']
+                pod_name = rc_info['metadata']['name']
+                pod_status_info = rc_info['status'][
+                                  'containerStatuses'][0]['state']
+            except Exception, e:
+                log.warning('Get rc info error, rc_info=%s, reason=%s'
+                            % (rc_info, e))
+                continue
+
             for k, v in pod_status_info.items():
                 if k == 'waiting':
                     pod_status = v['reason']
@@ -65,7 +73,9 @@ class AppStatusManager(object):
                 rc_status_new[rc_name]['pods_info'].append(
                     {pod_name: pod_status})
 
-        rc_off_list = dict.fromkeys([x for x in rc_status_cache if x not in rc_status_new]).keys()
+        rc_off_list = dict.fromkeys(
+                      [x for x in rc_status_cache if x not in rc_status_new]
+                      ).keys()
         for rc_off_name in rc_off_list:
             self.k8s_driver.rc_status_update(rc_off_name, 'Stopping')
             del rc_status_cache[rc_off_name]
@@ -82,7 +92,8 @@ class AppStatusManager(object):
                 else:
                     continue
 
-            if (rc_name in rc_status_cache.keys()) and (pod_status == rc_status_cache[rc_name]):
+            if (rc_name in rc_status_cache.keys()) \
+                    and (pod_status == rc_status_cache[rc_name]):
                 continue
             else:
                 rc_status_cache[rc_name] = pod_status
