@@ -40,7 +40,7 @@ items:
     labels:
       name: rabbitmq-server
     annotations:
-      serviceloadbalancer/lb.tcp: "30002:5672"
+      serviceloadbalancer/lb.tcp: "30001:5672"
       serviceloadbalancer/lb.node: "main"
   spec:
     selector:
