@@ -574,7 +574,7 @@ class DataOrm(object):
 
     @classmethod
     def get_svcid(cls, all_name):
-        svc_sql = "select uuid from font_service where all_name=\'%s\'" % all_name
+        svc_sql = "select a.uuid, a.user_id, a.orga_id, a.fservice_status, b.spec_replicas, b.limits_cpu from font_service a, replicationcontrollers b where a.all_name=\'%s\' and b.uuid=a.rc_id" % all_name
         return svc_sql
 
     @classmethod

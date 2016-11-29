@@ -14,9 +14,7 @@ def post_es(json_list, log_info):
     headers = {"token": json_list.get("token")}
     msg_json, es_url = create_esjson(json_list, log_info)
     try:
-        log.info("~~~~~~~~~~~~~~~~ZZZZZZZZZ")
-        log.info(es_url)
-        log.info(json.dumps(msg_json))
+
         result = requests.post(url=es_url, headers=headers, data=json.dumps(msg_json)+"\n")
 
     except Exception, e:

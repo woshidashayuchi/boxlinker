@@ -12,7 +12,7 @@ from common.rabbitmq_server import RabbitmqServer
 
 def server_start():
 
-    queue = 'kuber_control'
+    queue = 'podstatus_control'
 
     while True:
         try:
@@ -27,3 +27,4 @@ def server_start():
 if __name__ == "__main__":
 
     server_start()
+

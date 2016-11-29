@@ -14,13 +14,13 @@ from common.single import Singleton
 
 class RabbitmqClient(object):
 
-    def mq_connect(self, mq_server01='rabbitmq01', mq_server02='rabbitmq01'):
+    def mq_connect(self, mq_server01='192.168.1.10', mq_server02='192.168.1.10'):
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))
 
         try:
             self.connection = pika.BlockingConnection(
-                              pika.ConnectionParameters(host=mq_server01))
+                              pika.ConnectionParameters(host=mq_server01,port=30001))
             self.channel = self.connection.channel()
         except Exception, e:
             log.error('rabbitmq server %s connection error: reason=%s'
@@ -28,7 +28,7 @@ class RabbitmqClient(object):
             try:
                 self.connection = pika.BlockingConnection(
                                   pika.ConnectionParameters(
-                                       host=mq_server02))
+                                       host=mq_server02,port=30001))
                 self.channel = self.connection.channel()
             except Exception, e:
                 log.error('rabbitmq server %s connection error: reason=%s'
@@ -76,7 +76,7 @@ class RabbitmqClient(object):
                                    routing_key='',
                                    body=str(json_data))
 
-    def get_response(self, timeout,queue_name):
+    def get_response(self, timeout):
         cnt = 0
         while self.response is None:
             cnt += 1

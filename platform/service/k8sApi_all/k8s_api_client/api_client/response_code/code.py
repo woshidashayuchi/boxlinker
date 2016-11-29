@@ -20,6 +20,7 @@ status_code = {
         402: "Database delete error",
         403: "Database update error",
         404: "Database select error",
+        405: "did not have this resource",
         501: "kubernetes resource create failure",
         502: "kubernetes resource update failure",
         503: "kubernetes resource delete failure",

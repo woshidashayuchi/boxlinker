@@ -6,26 +6,50 @@ import urllib
 import requests
 import json
 import urllib2
+import os
 
-class AllApiMethods:
 
-        host_address = 'http://127.0.0.1:8080/api/v1'
+class AllApiMethods(object):
+
+        # host_address = 'http://127.0.0.1:8080/api/v1'
+        host_address = "https://kubernetes.default.svc:443/api"
         # 以下所有方法:json_list需要增加资源类型(rtype)说明:eg:pods?services?rcs?...要记得末尾的复数s
+
+        with open(os.environ.get('TOKEN_PATH'), 'r') as f:
+            token = f.read()
+
+        auth_info = "Bearer %s" % (token)
+        HEADERS = {"Authorization": auth_info}
+
+        def __init__(self):
+                pass
+
+        @classmethod
+        def get_account(cls, json_list):
+                account_name = json_list.get("name")
+                namespace = json_list.get("namespace1")
+                url = '%s/namespaces/%s/serviceaccounts/%s' % (cls.host_address, namespace, account_name)
+                msg = urllib2.Request(url, headers=cls.HEADERS)
+                res = urllib2.urlopen(msg)
+                return res.read()
 
         @classmethod
         def get_noup_resource(cls, json_list):
                 rtype = json_list.pop("rtype")
                 params = urllib.urlencode(json_list)
                 url = '%s/%s?%s' % (cls.host_address, rtype, params)
-                msg = urllib.urlopen(url)
-                response = msg.read()
+                msg = urllib2.Request(url, headers=cls.HEADERS)
+                res = urllib2.urlopen(msg)
+
+                response = res.read()
 
                 return response
+
         @classmethod
         def show_namespace(cls,json_list):
                 url = '%s/namespaces/%s' % (cls.host_address,json_list.get('name'))
                 response = requests.get(url)
-                return response
+                return response.text
 
         @classmethod
         def post_namespace(cls,json_list):
@@ -137,10 +161,8 @@ class AllApiMethods:
 
         @classmethod
         def put_name_resource(cls, json_list):
-                # print(json_list)
-		rtype = json_list.pop('rtype')
+                rtype = json_list.pop('rtype')
                 if json_list.get('namespace'):
-
                         namespace = json_list.pop('namespace')
                 else:
                         namespace = 'default'

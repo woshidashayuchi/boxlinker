@@ -42,17 +42,13 @@ items:
           image: index.boxlinker.com/boxlinker/centos-controller:1.0.0
           imagePullPolicy: Always
           env:
+          - name: GRAFANA
+            value: grafana-api:3000
+          - name: HEAPSTER
+            value: heapster:8082
           - name: RABBITMQ_HOST
             value: rabbitmq
           - name: RABBITMQ_PORT
             value: "5672"
-          - name: STORAGE_HOST
-            value: storage-api:9999
-          - name: AUTHOR_HOST
-            value: registry-api:8080
-          - name: GRAFANA
-            value: grafana-api:9998
-          - name: HEAPSTER
-            value: heapster:8082
           ports:
           - containerPort: 9999

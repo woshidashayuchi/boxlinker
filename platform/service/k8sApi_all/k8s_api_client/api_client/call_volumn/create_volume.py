@@ -22,7 +22,7 @@ class CreateVolume(object):
         request_para = json_list.get("volume")
         headers = {"token": json_list.get("token")}
 
-        if request_para is not None:
+        if request_para is not None and request_para != "":
             for i in request_para:
 
                 get_url = "http://%s/api/v1.0/storage/volumes/%s" % (os.environ.get("STORAGE_HOST"), i.get("volume_id"))
@@ -33,6 +33,8 @@ class CreateVolume(object):
                         return "error"
                     else:
                         pass
+                    log.info("hhhhhhuuuuuuhhhhhhuuuuuuuuuuuuuuuuuuuuu-----------")
+                    log.info(get_url)
                     log.info(resu)
                 except Exception, e:
                     log.error("select volumes error,reason=%s"% (e))
@@ -56,9 +58,9 @@ class CreateVolume(object):
                                     # "192.168.1.5:5000",
                                     # "192.168.1.8:5000",
                                     # "192.168.1.9:5000"
-                                    "172.20.1.11:5000",
-                                    "172.20.1.12:5000",
-                                    "172.20.1.21:5000"
+                                    "10.10.10.11:5000",
+                                    "10.10.10.12:5000",
+                                    "10.10.10.21:5000"
                                 ],
                                 "pool": pool_name,
                                 "image": image,
@@ -73,6 +75,7 @@ class CreateVolume(object):
             log.info(result)
             return result
         else:
+
             pass
 
     @classmethod
@@ -123,7 +126,7 @@ class CreateVolume(object):
         resu = ""
         try:
             resu = requests.put(put_url, headers=headers, data=json.dumps(using))
-            log.info("######################################")
+
             log.info(resu.text)
         except Exception, e:
             log.error("update storage error, reason=%s" % e)

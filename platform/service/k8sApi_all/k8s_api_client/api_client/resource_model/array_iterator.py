@@ -73,7 +73,7 @@ class ArrayIterator(object):
         http_lb = ""
         m = 1
         for i in ser:
-            domain_http = "%s-%s%s.lb1.boxlinker.com:" % (user_name, service_name, i.get("container_port"))
+            domain_http = "%s-%s%s.boxlinker.com:" % (user_name, service_name, i.get("container_port"))
             log.info("-------------------%s" % i)
             if i.get("access_mode").upper() == "HTTP":
                 http_lbadd = domain_http + i.get("container_port")

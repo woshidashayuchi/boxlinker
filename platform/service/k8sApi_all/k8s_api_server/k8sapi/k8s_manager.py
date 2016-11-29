@@ -12,8 +12,6 @@ import json
 from time import sleep
 import notification
 from kubernetes_client import KubernetesClient 
-from operate_result import SuccessOrFailed
-
 
 class KubernetesManagerAPI(object):
 
@@ -24,20 +22,20 @@ class KubernetesManagerAPI(object):
             pass
 
     def kubernetes_manager(self, json_lst):
-        json_list = eval(json_lst)
-        json_update1 = json_list.get('parameters')
-        json_update2 = str(json_update1)
-        json_update = eval(json_update2)
+	json_list = eval(json_lst)
+	json_update1 = json_list.get('parameters')
+	json_update2 = str(json_update1)
+	json_update = eval(json_update2)
         action = json_list.pop('action').upper()
-        resource = json_list.get('resources_type')
-        parameters1 = json_list.get('parameters')
-        parameterst = str(parameters1)
-        parameters = eval(parameterst)
+	resource = json_list.get('resources_type')
+	parameters1 = json_list.get('parameters')
+	parameterst = str(parameters1)
+	parameters = eval(parameterst)
         # 解析json_list,调用方法
         # 获取namespace与name
-        parameters2 = str(parameters)
-        parameters = eval(parameters2)
-        if 'namespace' in parameters.keys():
+       	parameters2 = str(parameters)
+	parameters = eval(parameters2)
+	if 'namespace' in parameters.keys():
             if parameters.get('namespace') == '' or parameters.get('namespace') == 'default':
                 namespace = 'default'
             else:
@@ -54,6 +52,13 @@ class KubernetesManagerAPI(object):
             other = None
 
         # 绝大部分api访问路径一致的资源可以按照路径共同实现方法
+        if resource == 'serviceAccount':
+            if action.upper() == 'GET':
+                response = AllApiMethods.get_account(parameters)
+                return response
+            if action.upper() == 'PUT':
+                response = AllApiMethods.put_name_resource(parameters)
+                return response
         if resource == 'secret':
             json_secret = parameters
             if action.upper() == 'POST':
@@ -99,13 +104,12 @@ class KubernetesManagerAPI(object):
                     return response
                 if action.upper() == 'DELETE':
                     response = AllApiMethods.delete_name_resource(json_to)
-
                     return response
                 if action.upper() == 'PATCH':
                     json_to.pop("namespace")
-                    json_to.pop("name")
-                    json_to.update(parameters)
-                    response = AllApiMethods.patch_name_resource(json_to)
+		    json_to.pop("name")
+		    json_to.update(parameters)
+		    response = AllApiMethods.patch_name_resource(json_to)
                     return response
                 if action.upper() == 'PUT':
                     log.debug(parameters)
@@ -115,17 +119,17 @@ class KubernetesManagerAPI(object):
             if namespace is not None and name is None:
                 json_to = {'rtype': resource, 'namespace': namespace}
                 try:
-                    if action.upper() == 'GET':
-                        response = AllApiMethods.get_namespace_resource(json_to)
-                        return response
-                except Exception,e:
-                    log.warning('Error')
+			if action.upper() == 'GET':
+                    		response = AllApiMethods.get_namespace_resource(json_to)
+                    		return response
+		except Exception,e:
+			log.warning('Error')
                 if action.upper() == 'POST':
                     json_to.pop('namespace')
-                    json_to.update(parameters)
                     log.info("user_id:%s" % parameters.get("user_id"))
                     user_id = parameters.pop("user_id")
                     kclient = KubernetesClient()
+                    json_to.update(parameters)
                     response = AllApiMethods.post_namespace_resource(json_to)
                     log.info(json.loads(response))
                     rc_name = ""
@@ -133,6 +137,7 @@ class KubernetesManagerAPI(object):
                     svc_name = ""
                     if json.loads(response).get("code") is None and json.loads(response).get("kind") == "ReplicationController":
                         r_name = parameters.get("metadata").get("name")
+                        pp_name = r_name.replace(parameters.get("namespace"),"")
                         json_get_pod = {"rtype":"pods","namespace":parameters.get("namespace")}
                         res = AllApiMethods.get_namespace_resource(json_get_pod)
                         # log.error(resu.text)
@@ -144,7 +149,11 @@ class KubernetesManagerAPI(object):
                                 status = i.get("status").get("phase")
                                 svc_name = r_name.replace(parameters.get("namespace"),"")
                                 break
-                        json_insert_pod = {"user_id": user_id, "user_name": parameters.get("namespace"), "service_name": r_name, "status": status}
+
+                        log.info("++++++++++++++++!!!!!!!!!")
+                        json_insert_pod = {"user_id": user_id, "user_name": parameters.get("namespace"), "service_name": pp_name, "status": status,"token":parameters.pop("token")}
+                        log.info(json_insert_pod)
+                        log.info("---------------!!!!!!!!!")
                         try:
                             result = kclient.rpc_exec(json_insert_pod)
                             log.info(result)
@@ -161,6 +170,12 @@ class KubernetesManagerAPI(object):
                         except Exception, e:
                             log.error('notify error, reason=%s' % e)
                     elif json.loads(response).get("code") is not None:
+                        pp_name = r_name.replace(parameters.get("namespace"),"")
+                        json_insert_pod = {"user_id": user_id, "user_name": parameters.get("namespace"), "service_name": pp_name,"token":parameters.get("token"),"status":"fail"}
+                        try:
+                            kclient.rpc_exec(json_insert_pod)
+                        except Exception, e:
+                            log.error('to es error, reason=%s' % e)
                         try:
                             notification.notify_result(parameters.get("namespace"), svc_name, 402, 300, 301)
                         except Exception, e:

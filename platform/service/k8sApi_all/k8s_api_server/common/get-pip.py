@@ -24,7 +24,7 @@ import os.path
 import pkgutil
 import shutil
 import sys
-import struct_g
+import struct
 import tempfile
 
 # Useful for very coarse version differentiation.
@@ -51,7 +51,7 @@ except ImportError:
         padding = (-len(b)) % 5
         b = b + b'~' * padding
         out = []
-        packI = struct_g.Struct('!I').pack
+        packI = struct.Struct('!I').pack
         for i in range(0, len(b), 5):
             chunk = b[i:i + 5]
             acc = 0
@@ -67,7 +67,7 @@ except ImportError:
                 raise
             try:
                 out.append(packI(acc))
-            except struct_g.error:
+            except struct.error:
                 raise ValueError('base85 overflow in hunk starting at byte %d'
                                  % i)
 

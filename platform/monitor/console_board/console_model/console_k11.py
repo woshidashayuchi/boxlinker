@@ -19,13 +19,14 @@ class ConsoleAct(object):
     def pos(self, pods):
 
         changes = ["cpu/usage_rate", "cpu/limit", "memory/usage", "memory/limit"]
+
+        cpu_usage = 0
         cpu_limit = 0
-        cnt_c = 0
-        cnt_m = 0
+        memory_usage = 0
         memory_limit = 0
-        cpu_result = []
-        memory_result = []
-        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+
+        cpu_usage_result = []
+        memory_usage_result = []
         namespace = pods.get("user_name")
         pods = pods.get("pods")
         STATICHTTP = "http://%s/api/datasources/proxy/1/query?db=k8s&q=" % os.environ.get("GRAFANA")
@@ -36,7 +37,7 @@ class ConsoleAct(object):
                 sql_s = "SELECT sum(\"value\") FROM \"change\" WHERE \"type\" = \'pod_container\' " \
                         "AND \"namespace_name\" =~ /%s$/ " \
                         "AND \"pod_name\" =~ /%s$/ " \
-                        "AND time > now() - 15m GROUP BY time(1m), \"container_name\" fill(null)&epoch=ms" % (namespace,
+                        "AND time > now() - 1m GROUP BY time(1m), \"container_name\" fill(null)&epoch=ms" % (namespace,
                                                                                                     i)
 
                 url1 = STATICHTTP + sql_s
@@ -52,30 +53,18 @@ class ConsoleAct(object):
                         log.info("hhh===%s" % xx)
 
                         if xx == "cpu/usage_rate":
-                            xxx = x[0].get("series")[0].get("values")
+                            c = int(x[0].get("series")[0].get("values")[1][1])
+                            # if c >= 200:
+                            #     cpu_usage = 200
+                            # else:
 
-                            for g in a:
-                                if cnt_c == 0:
-                                    cpu_result = xxx
-                                    cnt_c += 1
-                                else:
-                                    cpu_result[g][1] = float(cpu_result[g][1]) + float(xxx[g][1])
-                                    cnt_c += 1
+                            cpu_usage = int(cpu_usage) + abs(c)
 
                         if xx == "cpu/limit":
                             cpu_limit = int(cpu_limit) + abs(x[0].get("series")[0].get("values")[1][1])
 
                         if xx == "memory/usage":
-                            # memory_usage = int(memory_usage) + abs(int(x[0].get("series")[0].get("values")[1][1]))
-                            xxx = x[0].get("series")[0].get("values")
-
-                            for g in a:
-                                if cnt_m == 0:
-                                    memory_result = xxx
-                                    cnt_m += 1
-                                else:
-                                    memory_result[g][1] = float(memory_result[g][1]) + float(xxx[g][1])
-                                    cnt_m += 1
+                            memory_usage = int(memory_usage) + abs(int(x[0].get("series")[0].get("values")[1][1]))
 
                         if xx == "memory/limit":
                             memory_limit = int(memory_limit) + abs(int(x[0].get("series")[0].get("values")[1][1]))
@@ -83,5 +72,5 @@ class ConsoleAct(object):
                     except Exception, e:
                         log.error("error, reason=%s" % e)
 
-        resu = {"cpu_usage": cpu_result, "cpu_limit":cpu_limit, "memory_usage": memory_result, "memory_limit": memory_limit}
+        resu = {"cpu_usage":cpu_usage, "cpu_limit":cpu_limit, "memory_usage": memory_usage, "memory_limit": memory_limit}
         return resu

@@ -30,11 +30,12 @@ def con_access(json_list):
         log.info(i)
         for j in json_list.get("ports"):
             log.info(j)
-            if j.get("containerPort") == i.get("containerPort"):
-                access = {"container_port": j.get("containerPort"), "protocol": i.get("protocol"), "access_mode": i.get("access_mode")}
-                con.append(access)
-                log.info(con)
+            if j.get("containerPort") is not None and i.get("containerPort") is not None:
+                if int(j.get("containerPort")) == int(i.get("containerPort")):
+                    access = {"container_port": j.get("containerPort"), "protocol": i.get("protocol"), "access_mode": i.get("access_mode")}
+                    con.append(access)
+                    log.info(con)
 
-            else:
-                log.error("can't get the port")
+                else:
+                    log.error("can't get the port")
     return con

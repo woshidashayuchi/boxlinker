@@ -16,15 +16,28 @@ def get_id(all_name):
     svc_sql = DataOrm.get_svcid(all_name)
     logic = LogicModel()
     conn, cur = logic.connection()
-    uid = ''
+    result = {}
     try:
         resu = logic.exeQuery(cur, svc_sql)
         for i in resu:
-            uid = i.get("uuid")
+            resource_uuid = i.get("uuid")
+            resource_user = i.get("user_id")
+            resource_orga = i.get("orga_id")
+            resource_status = i.get("fservice_status")
+            a = i.get("spec_replicas")
+            b = i.get("limits_cpu")
+            if a is not None and b is not None and resource_uuid is not None:
+                resource_conf = int(a)*int(b)
+                result = {"resource_uuid": resource_uuid, "resource_user": resource_user,
+                          "resource_orga": resource_orga, "resource_status": resource_status,
+                          "resource_conf": resource_conf}
+
+            else:
+                result = "did not have this resource"
 
     except Exception, e:
 
         log.error("query the service_id error, reason=%s" % e)
         return code.request_result(404)
     logic.connClose(conn, cur)
-    return code.request_result(0, uid)
+    return code.request_result(0, result)

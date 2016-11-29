@@ -14,26 +14,18 @@ class RabbitmqResponse(object):
     __metaclass__ = Singleton
 
     def __init__(self, queue_name):
-
-        if queue_name == 'center_control':
-
-            self.center_manager = center_manager.CenterManagerAPI()
-
-        elif queue_name == 'kubernetes_control':
-
-            self.k8s_manager = k8s_manager.KubernetesManagerAPI()
-
-        else:
-            log.warning('There is no queue_name %s.' % (queue_name))
-
+        log.info('gonginginginginging*********')
+        self.k8s_manager = k8s_manager.KubernetesManagerAPI()
+       
     def rpc_exec(self, json_data):
         try:
+            log.info("***********111111***********")
+            log.info(json_data)
             response = self.k8s_manager.kubernetes_manager(json_data)
-
+            log.info("*************2222222222**********")
+            log.info(response)
             return response
 
         except Exception, e:
             log.error('RPC Server exec error: %s' % (e))
             return '系统维护中，请稍后再试。'
-
-

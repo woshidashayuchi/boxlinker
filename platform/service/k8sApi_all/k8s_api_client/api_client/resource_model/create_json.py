@@ -143,7 +143,7 @@ class SourceModel(object):
                              },
                              "spec": {
                                 "nodeSelector": {"role": "user"},
-                                "imagePullSecrets": [{"name": "registry-key"}],
+                                # "imagePullSecrets": [{"name": "registry-key"}],
                                 "containers": [
                                    {
                                       "name": service_name1,
@@ -268,7 +268,7 @@ class SourceModel(object):
                              },
                              "spec": {
                                 "nodeSelector": {"role": "user"},
-                                "imagePullSecrets": [{"name": "registry-key"}],
+                                # "imagePullSecrets": [{"name": "registry-key"}],
                                 "containers": [
                                    {
                                       "name": service_name1,
@@ -289,12 +289,13 @@ class SourceModel(object):
                        "namespace": namespace,
                        "user_id": json_list.get("user_id")
                     }
+
             if json_list.get("env") == [{"env_key": "", "env_value": ""}] or json_list.get("env") == "":
                 j = 0
                 for i in add_rc["spec"]["template"]["spec"]["containers"]:
                     del add_rc["spec"]["template"]["spec"]["containers"][j]["env"]
                     j += 1
-            if json_list.get("volume") == "":
+            if json_list.get("volume") == "" or json_list.get("volume") is None:
                 j = 0
                 del add_rc["spec"]["template"]["spec"]["volumes"]
                 for i in add_rc["spec"]["template"]["spec"]["containers"]:
@@ -338,7 +339,7 @@ class SourceModel(object):
                                "metadata": {
                                   "annotations": {"serviceloadbalancer/lb.http": http_lb,
                                                   "serviceloadbalancer/lb.tcp": tcp_lb,
-                                                  "serviceloadbalancer/lb.node": "lb1"
+                                                  "serviceloadbalancer/lb.node": "main"
 
                                                   },
                                   "name": service_name1,
@@ -397,7 +398,7 @@ class SourceModel(object):
                                "metadata": {
                                   "annotations": {"serviceloadbalancer/lb.http": http_lb,
                                                   "serviceloadbalancer/lb.tcp": tcp_lb,
-                                                  "serviceloadbalancer/lb.node": "lb1"
+                                                  "serviceloadbalancer/lb.node": "main"
 
                                                   },
                                   "name": service_name1,

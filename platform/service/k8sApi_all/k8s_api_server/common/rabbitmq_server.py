@@ -5,7 +5,6 @@
 
 import sys
 import pika
-import os
 
 import rabbitmq_response
 
@@ -16,8 +15,8 @@ from common.single import Singleton
 
 class RabbitmqServer(object):
 
-    def mq_connect(self, mq_server01=os.environ.get('RABBITMQ_HOST'),
-                   mq_server02=os.environ.get('RABBITMQ_HOST'),
+    def mq_connect(self, mq_server01='192.168.1.10',
+                   mq_server02='192.168.1.10',
                    heartbeat_time=30):
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))
@@ -26,7 +25,7 @@ class RabbitmqServer(object):
                               pika.ConnectionParameters(
                                    host=mq_server01,
                                    heartbeat_interval=heartbeat_time,
-                                   port=int(os.environ.get('RABBITMQ_PORT'))))
+                                   port=30001))
             self.channel = self.connection.channel()
         except Exception, e:
             log.error('RabbitMQ server %s connection error: reason=%s'
@@ -36,7 +35,7 @@ class RabbitmqServer(object):
                                   pika.ConnectionParameters(
                                        host=mq_server02,
                                        heartbeat_interval=heartbeat_time,
-                                       port=int(os.environ.get('RABBITMQ_PORT'))))
+                                       port=30001))
                 self.channel = self.connection.channel()
             except Exception, e:
                 log.error('RabbitMQ server %s connection error: reason=%s'
@@ -52,6 +51,8 @@ class RabbitmqServer(object):
         result = self.channel.queue_declare(exclusive=True)
         queue_name = result.method.queue
         self.channel.queue_bind(exchange=exchange_name, queue=queue_name)
+
+        return queue_name
 
     def call_request(self, channel, method, props, body):
         response = self.rbtmq_response.rpc_exec(body)
@@ -71,14 +72,17 @@ class RabbitmqServer(object):
 
     def msg_call_request(self, queue_name):
         self.channel.basic_qos(prefetch_count=1)
-        self.channel.basic_consume(self.call_request, queue=queue_name, no_ack=False)
+        self.channel.basic_consume(self.call_request,
+                                   queue=queue_name, no_ack=False)
 
     def msg_cast_request(self, queue_name):
         self.channel.basic_qos(prefetch_count=1)
-        self.channel.basic_consume(self.cast_request, queue=queue_name, no_ack=False)
+        self.channel.basic_consume(self.cast_request,
+                                   queue=queue_name, no_ack=False)
 
-    def msg_broadcast_request(self, exchange_name):
-        self.channel.basic_consume(self.broadcast_request, queue=queue_name, no_ack=True)
+    def msg_broadcast_request(self, exchange_name, queue_name):
+        self.channel.basic_consume(self.broadcast_request,
+                                   queue=queue_name, no_ack=True)
 
     def server_run(self, qu_ex_name):
         try:
@@ -96,8 +100,10 @@ class RabbitmqServer(object):
     def rpc_call_server(self, queue_name):
         try:
             self.queue_declare(queue_name)
+	    log.info("***********-----------%s"%'call')
             self.rbtmq_response = rabbitmq_response.RabbitmqResponse(
                                   queue_name)
+            log.info("***********-----------%s"%'call')
             self.msg_call_request(queue_name)
             self.server_run(queue_name)
         except Exception, e:
@@ -107,9 +113,12 @@ class RabbitmqServer(object):
 
     def rpc_cast_server(self, queue_name):
         try:
+            log.info("**********----------%s"%queue_name)
             self.queue_declare(queue_name)
+            log.info("**********----------%s"%queue_name)
             self.rbtmq_response = rabbitmq_response.RabbitmqResponse(
                                   queue_name)
+            log.info("**********----------%s"%queue_name)
             self.msg_cast_request(queue_name)
             self.server_run(queue_name)
         except Exception, e:
@@ -119,10 +128,10 @@ class RabbitmqServer(object):
 
     def broadcast_server(self, exchange_name):
         try:
-            self.broadcast_queue_declare(exchange_name)
+            queue_name = self.broadcast_queue_declare(exchange_name)
             self.rbtmq_response = rabbitmq_response.RabbitmqResponse(
                                   exchange_name)
-            self.msg_broadcast_request(exchange_name)
+            self.msg_broadcast_request(exchange_name, queue_name)
             self.server_run(exchange_name)
         except Exception, e:
             log.error(
@@ -150,3 +159,4 @@ if __name__ == "__main__":
 
     else:
         print '参数错误'
+

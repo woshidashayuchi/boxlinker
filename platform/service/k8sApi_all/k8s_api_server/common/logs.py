@@ -5,7 +5,7 @@
 import logging
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     filename='/var/log/cloud.log',
     format='%(asctime)s [%(levelname)s] %(filename)s[line:%(lineno)d] %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S',

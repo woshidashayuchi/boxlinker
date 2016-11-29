@@ -32,7 +32,7 @@ class InnerApi(object):
         try:
             resu = logical.exeQuery(cur, get_sql)
             for i in resu:
-                i["disk_name"] = i.get("volume_name")
+                i["volume_id"] = i.get("volume_id")
                 volume.append(i)
         except Exception, e:
             log.error("query the volume error,reason=%s" % e)

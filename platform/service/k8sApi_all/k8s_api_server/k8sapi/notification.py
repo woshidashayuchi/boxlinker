@@ -24,33 +24,29 @@ level_resource = {
 }
 
 msg_resource = {
-
-    101: "create success",
-    102: "create failed",
-    103: "update success",
-    104: "update failed",
-    105: "delete success",
-    106: "delete failed",
-    107: "going..."
+    200: "create success",
+    201: "select success",
+    202: "update success",
+    203: "delete success",
+    301: "create failed",
+    302: "select failed",
+    303: "update failed",
+    304: "delete failed",
+    204: "creating..."
 }
 
 
-def notify_result(user_name, service_name, type, code, level):
+def notify_result(user_name,service_name, type, level, msg):
     notify = KubernetesClient()
-    resu = {
+    result = {
+                 "user_name": user_name,
                  "service_name": service_name,
                  "type": type_resource[type],
                  "level": level_resource[level],
-                 "message": msg_resource[code]
+                 "message": msg
 
              }
-    result = {
-        "status":    code,
-        "namespace": user_name,
-        "data": resu
-    }
     json_notify = json.dumps(result)
-    log.info("result=%s" % json_notify)
     try:
         notify.notification(json_notify)
     except Exception, e:
