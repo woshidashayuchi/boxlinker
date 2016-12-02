@@ -6,7 +6,7 @@ import sys
 p_path = sys.path[0] + '/../..'
 sys.path.insert(1, p_path)
 
-import storage_response
+import cephbcast_response
 
 from time import sleep
 
@@ -16,19 +16,19 @@ from common.rabbitmq_server import RabbitmqServer
 
 def server_start():
 
-    queue = 'storage_api_call'
+    exchange_name = 'ceph_bcast'
 
     while True:
 
         try:
-            log.info('Starting Storage RPC Call API Server, topic=%s'
-                     % (queue))
+            log.info('Starting Ceph RPC Bcast API Server, exchange=%s'
+                     % (exchange_name))
             rbtmq = RabbitmqServer(60)
-            rbtmq.rpc_call_server(queue, storage_response)
+            rbtmq.broadcast_server(exchange_name, cephbcast_response)
         except Exception, e:
             log.warning(
-                'RPC Call API Server running error, queue=%s, reason=%s'
-                % (queue, e))
+                'RPC Bcast API Server running error, exchange=%s, reason=%s'
+                % (exchange_name, e))
         sleep(10)
 
 

@@ -6,17 +6,17 @@ from common.logs import logging as log
 from common.code import request_result
 from common.token_auth import token_check
 
-from ceph.ceph_driver import CephDriver
+from ceph.manage.ceph_manager import CephManager
 
 
-class CephManagerAPI(object):
+class CephRpcAPI(object):
 
     def __init__(self):
 
-        self.ceph_driver = CephDriver()
+        self.ceph_manager = CephManager()
 
     @token_check
-    def disk_create(self, token, parameters):
+    def disk_create(self, context, parameters):
 
         try:
             pool_name = parameters['pool_name']
@@ -27,10 +27,10 @@ class CephManagerAPI(object):
                       % (parameters, e))
             return request_result(101)
 
-        return self.ceph_driver.disk_create(pool_name, disk_name, disk_size)
+        return self.ceph_manager.disk_create(pool_name, disk_name, disk_size)
 
     @token_check
-    def disk_delete(self, token, parameters):
+    def disk_delete(self, context, parameters):
 
         try:
             pool_name = parameters['pool_name']
@@ -40,10 +40,10 @@ class CephManagerAPI(object):
                       % (parameters, e))
             return request_result(101)
 
-        return self.ceph_driver.disk_delete(pool_name, disk_name)
+        return self.ceph_manager.disk_delete(pool_name, disk_name)
 
     @token_check
-    def disk_resize(self, token, parameters):
+    def disk_resize(self, context, parameters):
 
         try:
             pool_name = parameters['pool_name']
@@ -54,10 +54,10 @@ class CephManagerAPI(object):
                       % (parameters, e))
             return request_result(101)
 
-        return self.ceph_driver.disk_resize(pool_name, disk_name, disk_size)
+        return self.ceph_manager.disk_resize(pool_name, disk_name, disk_size)
 
     @token_check
-    def rbd_growfs(self, token, parameters):
+    def rbd_growfs(self, context, parameters):
 
         try:
             image_name = parameters['image_name']
@@ -66,27 +66,4 @@ class CephManagerAPI(object):
                       % (parameters, e))
             return request_result(101)
 
-        return self.ceph_driver.disk_growfs(image_name)
-
-    def ceph_manager(self, dict_data):
-
-        try:
-            api = dict_data['api']
-            token = dict_data['token']
-            parameters = dict_data['parameters']
-        except Exception, e:
-            log.error('parameters error: %s' % (e))
-            return request_result(101)
-
-        try:
-            fun = {
-                "drv_ceh_dsk_crt": self.disk_create,
-                "drv_ceh_dsk_del": self.disk_delete,
-                "drv_ceh_dsk_rsz": self.disk_resize,
-                "drv_ceh_dsk_gow": self.rbd_growfs
-            }
-
-            return fun[api](token, parameters)
-        except Exception, e:
-            log.error('RPC API routing error: %s' % (e))
-            return request_result(102)
+        return self.ceph_manager.disk_growfs(image_name)

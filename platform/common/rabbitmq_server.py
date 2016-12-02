@@ -6,7 +6,6 @@ import pika
 
 from time import sleep
 from common.logs import logging as log
-from common.single import Singleton
 
 
 class RabbitmqServer(object):
