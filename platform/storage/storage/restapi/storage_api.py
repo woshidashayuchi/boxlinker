@@ -12,14 +12,14 @@ from common.logs import logging as log
 from common.code import request_result
 from common.token_decode import get_userinfo
 from common.time_log import time_log
-from storage.rpcapi import rpc_api
+from storage.client import rpc_client
 
 
 class StorageVolumesApi(Resource):
 
     def __init__(self):
 
-        self.storage_api = rpc_api.StorageRpcApi()
+        self.storage_api = rpc_client.RpcClient()
 
     @time_log
     def post(self):
@@ -74,7 +74,7 @@ class StorageVolumeApi(Resource):
 
     def __init__(self):
 
-        self.storage_api = rpc_api.StorageRpcApi()
+        self.storage_api = rpc_client.RpcClient()
 
     def get(self, volume_uuid):
 
@@ -146,7 +146,7 @@ class StorageVolumeStatusApi(Resource):
 
     def __init__(self):
 
-        self.storage_api = rpc_api.StorageRpcApi()
+        self.storage_api = rpc_client.RpcClient()
 
     def put(self, volume_uuid):
 

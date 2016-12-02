@@ -9,7 +9,7 @@ from common.rabbitmq_client import RabbitmqClient
 from common.code import request_result
 
 
-class CephDriver(object):
+class StorageDriver(object):
 
     def __init__(self):
 

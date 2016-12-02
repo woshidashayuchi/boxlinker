@@ -12,7 +12,7 @@ from common.logs import logging as log
 from storage.restapi.restful_api import rest_app_run
 
 
-def storage_server():
+def server_start():
 
     while True:
         try:
@@ -26,4 +26,4 @@ def storage_server():
 
 if __name__ == "__main__":
 
-    storage_server()
+    server_start()

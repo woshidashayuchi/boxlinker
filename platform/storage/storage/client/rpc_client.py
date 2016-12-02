@@ -7,7 +7,7 @@ from common.code import request_result
 from common.rabbitmq_client import RabbitmqClient
 
 
-class StorageRpcApi(object):
+class RpcClient(object):
 
     def __init__(self):
 
@@ -27,6 +27,7 @@ class StorageRpcApi(object):
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, dict_data)
         except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
     @acl_check
@@ -41,6 +42,7 @@ class StorageRpcApi(object):
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, dict_data)
         except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
     @acl_check
@@ -55,6 +57,7 @@ class StorageRpcApi(object):
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, dict_data)
         except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
     @acl_check
@@ -69,6 +72,7 @@ class StorageRpcApi(object):
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, dict_data)
         except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
     @acl_check
@@ -83,6 +87,7 @@ class StorageRpcApi(object):
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, dict_data)
         except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
     @acl_check
@@ -97,4 +102,5 @@ class StorageRpcApi(object):
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, dict_data)
         except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)

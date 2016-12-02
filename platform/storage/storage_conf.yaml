@@ -58,6 +58,7 @@ items:
   spec:
     selector:
       name: storage-api
+    sessionAffinity: ClientIP
     ports:
     - name: rest-api
       port: 8001

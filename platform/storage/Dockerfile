@@ -11,4 +11,4 @@ RUN yum install -y MySQL-python
 COPY ./common /storage/common/
 COPY ./storage /storage/storage/
 
-CMD python /storage/storage/restapi/restapi_service.py & python /storage/storage/manage/storage_service.py
+CMD python /storage/storage/restapi/restapi_service.py & python /storage/storage/rpcapi/rpcapi_service.py
