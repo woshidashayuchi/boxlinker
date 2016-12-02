@@ -20,7 +20,7 @@ class RabbitmqResponse(object):
         self.ceph_rpcapi = ceph_rpcapi.CephRpcAPI()
 
         self.rpc_api.add_resource(
-             'drv_ceh_dsk_gow', self.rpc_api.rbd_growfs)
+             'drv_ceh_dsk_gow', self.ceph_rpcapi.rbd_growfs)
 
     def rpc_exec(self, dict_data):
 

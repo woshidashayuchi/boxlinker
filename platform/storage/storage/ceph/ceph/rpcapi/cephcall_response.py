@@ -20,13 +20,13 @@ class RabbitmqResponse(object):
         self.ceph_rpcapi = ceph_rpcapi.CephRpcAPI()
 
         self.rpc_api.add_resource(
-             'drv_ceh_dsk_crt', self.rpc_api.disk_create)
+             'drv_ceh_dsk_crt', self.ceph_rpcapi.disk_create)
 
         self.rpc_api.add_resource(
-             'drv_ceh_dsk_del', self.rpc_api.disk_delete)
+             'drv_ceh_dsk_del', self.ceph_rpcapi.disk_delete)
 
         self.rpc_api.add_resource(
-             'drv_ceh_dsk_rsz', self.rpc_api.disk_resize)
+             'drv_ceh_dsk_rsz', self.ceph_rpcapi.disk_resize)
 
     def rpc_exec(self, dict_data):
 
