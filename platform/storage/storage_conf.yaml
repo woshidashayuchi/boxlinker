@@ -28,7 +28,7 @@ items:
         containers:
         - name: storage-api
           imagePullPolicy: Always
-          image: index.boxlinker.com/boxlinker/centos-storage:1.0.1
+          image: index.boxlinker.com/boxlinker/centos-storage:1.0.3
           ports:
           - containerPort: 8001
           env:
