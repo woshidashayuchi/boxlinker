@@ -26,8 +26,11 @@ class Containers(object):
     tcp_port = Column(String(32))
     http_domain = Column(String(64))
     tcp_domain = Column(String(64))
+    private_domain = Column(String(64))
+    identify = Column(String(32))
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %d, %r, %r, %r, %r, %r, %r,%r, %d, %r, %r, %r, %r, %r)' % \
+        return '%s(%r, %r, %r, %d, %r, %r, %r, %r, %r, %r,%r, %d, %r, %r, %r, %r, %r, %r, %r)' % \
                 (self.__class__.__name__, self.uuid, self.rc_id, self.user_id, self.service_name, self.containerPort,
-                 self.protocol, self.access_mode, self.access_scope, self.tcp_port, self.http_domain, self.tcp_domain)
+                 self.protocol, self.access_mode, self.access_scope, self.tcp_port, self.http_domain, self.tcp_domain,
+                 self.private_domain, self.identify)

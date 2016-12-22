@@ -1,0 +1,33 @@
+#! /usr/bin python
+# -*- coding:utf8 -*-
+# Date:2016/10/8
+# Author:王晓峰
+
+import sys
+p_path = sys.path[0] + '/..'
+sys.path.append(p_path)
+import json
+from kubernetes_client import KubernetesClient
+from common.logs import logging as log
+from response_code import code
+
+
+
+def pod_messages(json_list):
+    pod = []
+
+    to_server = {"action": "get", "resources_type": "pods", "parameters": {"namespace": json_list.get("user_name")}}
+    kuberclient = KubernetesClient()
+    try:
+        pods_msg = kuberclient.rpc_pod(to_server)
+        resu = json.loads(pods_msg).get("items")
+
+        for i in resu:
+            if json_list.get("user_name")+json_list.get("service_name") == i.get("metadata").get("labels").get("component"):
+                for j in i.get("spec").get("containers"):
+
+                    pod_ms = {"pod_name": i.get("metadata").get("name")}
+                    pod.append(pod_ms)
+        return code.request_result(0, pod)
+    except Exception, e:
+        log.error("query the pods error,reason=%s" % e)

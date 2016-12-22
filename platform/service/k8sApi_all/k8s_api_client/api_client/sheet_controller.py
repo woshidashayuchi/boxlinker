@@ -8,25 +8,17 @@ from kubernetes_client import KubernetesClient
 from data import DataOrm
 from resource_model.create_json import SourceModel
 from response_code import code
-from billing.call_billing import CallBilling
-from podstatus_monitor.podlist_status import list_status
-import re
 from es.to_es import post_es
-import json
 from resource_check.check_name import CheckName
 from service_list.service_list import ServiceList
-from resource_model.array_iterator import ArrayIterator
 from common.logs import logging as log
-from notification import notification
 from resource_model.container_domain import ContainerDomain
 from call_volumn.inner_api import InnerApi
-from time import sleep
 from service_acl.acl_code.acl_model.controller import Controller
-from token_about.token_for_out import p_out
-from flask import request
 import time
 from resource_model.serviceaccount import ServiceAccount
 from resource_model.add_second import add_second
+from domain_identify.domain_identify import DomainIdentify
 
 
 class SheetController(object):
@@ -39,32 +31,25 @@ class SheetController(object):
             json_list.pop("token")
         else:
             pass
-
         try:
             post_es(json_list, 'check the name...')
         except Exception, e:
             log.error("es error, reason=%s" % e)
 
-        log.info("{'userid': '%s', 'log_info': 'check the name which you use ok or not'}"
-                 % (json_list.get("user_name")))
-
         try:
             res = CheckName.check_name(json_list)
-            if res == False:
-
+            if res is False:
                 return code.request_result(301)
             else:
-
                 log.info("{'userid': '%s', 'log_info': 'the name is ok'}"
                          % (json_list.get("user_name")))
         except Exception, e:
-            log.error("check the name happend exception, reason=%s" % (e))
+            log.error("check the name error, reason=%s" % (e))
             return code.request_result(404)
         source_model = SourceModel()
         uid_rc = str(uuid.uuid4())
         uid_service = str(uuid.uuid4())
         uid_font = str(uuid.uuid4())
-
         # try:
         #    jj = json_list
         #    jj["uid_font"] = uid_font
@@ -88,7 +73,7 @@ class SheetController(object):
         except Exception, e:
 
             log.error('creating the resource_bunch running error, reason=%s'
-                      % (e))
+                      % e)
 
             result = code.request_result(101)
             return result
@@ -97,21 +82,13 @@ class SheetController(object):
         json_list2 = str(json_list1)
 
         try:
-            log.info("{'userid': '%s', 'log_info': 'creating the service,this maybe need a while...'}"
-                        % (json_list.get("user_name")))
-
             kubernete_sclient = KubernetesClient()
-
             kubernete_sclient.rpc_exec(json_list2)
-
         except Exception, e:
-
-            log.error('k8sapi creating the service running error, reason=%s'
-                        % (e))
-
+            log.error('creating the service running error, reason=%s'
+                      % e)
             result = code.request_result(501)
             return result
-
         typee = {"rtype": "service", "uid_service": uid_service}
         json_list.update(typee)
         try:
@@ -122,13 +99,10 @@ class SheetController(object):
         except Exception, e:
             resu = add_second(json_list)
             if resu is False:
-
                 log.error('k8sapi entering the resource(service) running error, reason=%s'
-                            % (e))
+                          % e)
                 result = code.request_result(401)
                 return result
-            else:
-                pass
 
         add_rc["token"] = json_list.get("token")
         json_list1 = {"action": "post", "resources_type": "replicationcontrollers", "parameters": add_rc}
@@ -137,19 +111,14 @@ class SheetController(object):
         try:
             kubernete_client = KubernetesClient()
             kubernete_client.rpc_exec(json_list2)
-
-            log.info("ending-----rc---")
         except Exception, e:
             log.error("add rc error, reason=%s" % e)
             result = code.request_result(501)
-
             return result
 
         # 更新volume状态
         try:
-
             resul = InnerApi.change_status(json_list)
-
             log.info(resul)
         except Exception, e:
             log.error("storage status update error,reason=%s" % e)
@@ -157,12 +126,10 @@ class SheetController(object):
         typee = {"rtype": "rc", "uid_rc": uid_rc, "create_time": create_time, "update_time": create_time}
         json_list.update(typee)
         try:
-
             DataOrm.add_method(json_list)
-
         except Exception, e:
             log.warning('rc entering the database running error, reason=%s'
-                        % (e))
+                        % e)
             return code.request_result(401)
 
         type_con = {"rtype": "containers"}
@@ -178,35 +145,29 @@ class SheetController(object):
             return code.request_result(401)
 
         try:
-            log.info("{'userid': '%s', 'log_info': 'creating other message to database...'}"
-                     % (json_list.get("user_name")))
             DataOrm.add_method(json_list)
-
         except Exception, e:
             resu = add_second(json_list)
             if resu is False:
                 log.warning('container entering the database running error, reason=%s'
-                            % (e))
+                            % e)
                 return code.request_result(401)
-            else:
-                pass
-
         type_env = {"rtype": "env"}
-
         json_list.update(type_env)
         try:
             DataOrm.add_method(json_list)
         except Exception, e:
             resu = add_second(json_list)
             if resu is False:
-                log.warning('k8sapi entering the resource(rc) running error, reason=%s'
-                            % (e))
+                log.warning('k8sapi entering the resource(env) running error, reason=%s'
+                            % e)
                 result = code.request_result(401)
                 return result
 
         type_volume = {"rtype": "volume"}
         json_list.update(type_volume)
         try:
+            log.info("===========volume")
             DataOrm.add_method(json_list)
         except Exception, e:
             resu = add_second(json_list)
@@ -216,22 +177,22 @@ class SheetController(object):
 
         typee = {"rtype": "fservice", "uid_font": uid_font, "status": "Pending",
                  "all_name": json_list.get("user_name")+json_list.get("service_name"),
-                 "orga_orga": json_list.get("user_orga"), "create_time":create_time,
+                 "orga_orga": json_list.get("user_orga"), "create_time": create_time,
                  "update_time": create_time}
         json_list.update(typee)
 
         try:
+            log.info("===========font")
             DataOrm.add_method(json_list)
-            # log.info("{'userid': '%s', 'log_info': 'created success!!!'}"
-            #         % (json_list.get("user_name")))
         except Exception, e:
             resu = add_second(json_list)
             if resu is False:
                 log.warning('k8sapi entering the resource(fservice) running error, reason=%s'
-                            % (e))
+                            % e)
                 result = code.request_result(401)
                 return result
         try:
+            log.info("===========acl")
             controller = Controller()
             rest = controller.add_acl(json_list)
             log.info(rest)
@@ -247,14 +208,7 @@ class SheetController(object):
         except Exception, e:
             log.error("es error, reason=%s" % e)
 
-        # try:
-        #    notification.notify_result(json_list.get("user_name"), json_list.get("service_name"), 402, 107, 300)
-        # except Exception, e:
-        #    log.error("notification error,reason=%s" % e)
-
-        result = "service is creating..."
-
-        return code.request_result(0, result)
+        return code.request_result(0, "service is creating...")
 
     def service_list(self, json_list):
 
@@ -273,32 +227,30 @@ class SheetController(object):
 
     def detail_service(self, json_list):
         logicmodel = LogicModel()
-
         try:
             select_all = DataOrm.detail_list(json_list)
         except Exception, e:
-            log.warning('k8sapi get the detail resource(sql) running error, reason=%s'
-                        % (e))
+            log.warning('get the detail resource(sql) running error, reason=%s'
+                        % e)
             result = code.request_result(101)
             return result
         try:
             select_con = DataOrm.detail_container(json_list)
         except Exception, e:
-            log.warning('k8sapi get the detail resource(sql) running error, reason=%s'
-                        % (e))
+            log.warning('get the container detail resource(sql) running error, reason=%s'
+                        % e)
             result = code.request_result(101)
             return result
         try:
             select_env = DataOrm.detail_env(json_list)
         except Exception, e:
-            log.warning('k8sapi get the detail resource(sql) running error, reason=%s'
-                        % (e))
+            log.warning('get the env detail resource(sql) running error, reason=%s'
+                        % e)
         try:
             select_volume = DataOrm.detail_volume(json_list)
         except Exception, e:
-            log.warning('k8sapi get the detail resource(volume) running error, reason=%s'
-                        % (e))
-
+            log.warning('get the volume detail resource(volume) running error, reason=%s'
+                        % e)
             result = code.request_result(101)
             return result
         try:
@@ -323,16 +275,18 @@ class SheetController(object):
                     try:
                         if j.get("rc_id") == i.get("uuid"):
                             container = {"container_port": j.get("containerPort"),
-                                        "protocol": j.get("protocol"),
-                                        "access_mode": j.get("access_mode"),
-                                        "access_scope": j.get("access_scope"),
-                                        "http_domain": j.get("http_domain"),
-                                        "tcp_domain": j.get("tcp_domain")}
+                                         "protocol": j.get("protocol"),
+                                         "access_mode": j.get("access_mode"),
+                                         "access_scope": j.get("access_scope"),
+                                         "http_domain": j.get("http_domain"),
+                                         "tcp_domain": j.get("tcp_domain"),
+                                         "domain": j.get("private_domain"),
+                                         "identify": j.get("identify")}
 
                             result_con.append(container)
                     except Exception, e:
                         log.warning('select container running error, reason=%s'
-                        % (e))
+                                    % e)
                 for x in resu_env:
                     if x.get("rc_id") == i.get("uuid"):
                         env = {"env_key": x.get("env_name"),
@@ -360,7 +314,7 @@ class SheetController(object):
             result = code.request_result(0, result_one)
         except Exception, e:
             log.warning('k8sapi get the detail resource(out) running error, reason=%s'
-                        % (e))
+                        % e)
             result = code.request_result(404)
             return result
         return result
@@ -377,7 +331,7 @@ class SheetController(object):
         json_list.update(del_type)
 
         log.info("{'userid': '%s', 'log_info': 'deleting pod and replicationcontroller...'}"
-                     % (json_list.get("user_name")))
+                 % (json_list.get("user_name")))
 
         try:
             post_es(json_list, 'deleting the service...')
@@ -398,16 +352,14 @@ class SheetController(object):
 
         except Exception, e:
             log.error('k8sapi delete the pod from k8s running error, reason=%s'
-                        % (e))
-            log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
-                     % (json_list.get("user_name")))
+                      % e)
             post_es(json_list, 'deleting the service failed')
 
             result = code.request_result(503)
             return result
 
         rc_name1 = json_list.get("user_name")+json_list.get("service_name")
-        del_service1 = json_list.get("user_name")+json_list.get("service_name")
+        del_service1 = json_list.get("service_name")
         rc_name = rc_name1.replace("_", "-")
         serv_service_name = del_service1.replace("_", "-")
         del_rc = {"namespace": json_list.get("namespace"), "name": rc_name}
@@ -426,10 +378,10 @@ class SheetController(object):
 
         except Exception, e:
             log.warning('k8sapi delete the rc running error, reason=%s'
-                        % (e))
+                        % e)
 
             log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
-                     % (json_list.get("user_name")))
+                      % (json_list.get("user_name")))
             post_es(json_list, 'deleting the service failed')
 
             result = code.request_result(503)
@@ -451,10 +403,10 @@ class SheetController(object):
 
         except Exception, e:
             log.error('k8sapi delete the service running error, reason=%s'
-                        % (e))
+                      % e)
 
             log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
-                     % (json_list.get("user_name")))
+                      % (json_list.get("user_name")))
 
             post_es(json_list, 'deleting the service failed')
 
@@ -470,31 +422,26 @@ class SheetController(object):
             volume_id = i.get("volume_id")
             xxx.append({"volume_id": volume_id})
         if len(xxx) != 0:
-
             json_up = {"volume": xxx,"token": json_list.get("token")}
             try:
-                log.info("------------------------------")
-                log.info(json_up)
                 resul = InnerApi.change_status1(json_up)
-                log.info(resul)
-                log.info("------------------------!!!!!!")
+                if resul == "<Response [200]>":
+                    pass
+                else:
+                    log.error("storage to unused faild, reason=%s" % resul)
             except Exception, e:
                 log.error("storage to unused faild, reason=%s" % e)
+
             logic.connClose(conn, cur)
         else:
             pass
-
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
-
         try:
             del_rc, del_service, del_fservice, del_container, del_env, del_volume, del_acl = DataOrm.delete_sql(json_list)
         except Exception, e:
-            log.warning('k8sapi struct the sql running error, reason=%s'
-                        % (e))
-
-            log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
-                     % (json_list.get("user_name")))
+            log.error('k8sapi struct the sql running error, reason=%s'
+                      % e)
             post_es(json_list, 'deleting the service failed')
             result = code.request_result(101)
             return result
@@ -507,14 +454,9 @@ class SheetController(object):
             logicmodel.exeDelete(cur, del_volume)
             logicmodel.exeDelete(cur, del_fservice)
             logicmodel.exeDelete(cur, del_acl)
-
-            log.info("{'userid': '%s', 'log_info': 'service delete success!'}"
-                     % (json_list.get("user_name")))
         except Exception, e:
-            log.error('k8sapi exec the sql running error, reason=%s' % e)
+            log.error('k8sapi delete resource running error, reason=%s' % e)
 
-            log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
-                     % (json_list.get("user_name")))
             post_es(json_list, 'deleting the service failed')
             result = code.request_result(402)
             return result
@@ -531,10 +473,9 @@ class SheetController(object):
     def update_service(self, json_list):
             contoller = Controller()
             rest = contoller.up_judge(json_list)
-            if rest != 0:
+            if rest != 0 and json_list.get("domain_identify") != 1:
                 log.error(rest)
                 return code.request_result(202)
-
             update_svc = dict()
             create_json = SourceModel()
             kubernete_sclient = KubernetesClient()
@@ -544,198 +485,197 @@ class SheetController(object):
                 post_es(json_list, 'updating the service...')
             except Exception, e:
                 log.error("es error, reason=%s" % e)
-            try:
-                log.info("{'userid': '%s', 'log_info': 'begin to update the service...'}"
-                     % (json_list.get("user_name")))
-
-                update_json = create_json.create_json(json_list)
-                log.info(update_json)
-                if update_json == "timeout":
-                    return code.request_result(502)
+            if json_list.get("rtype") == "domain_change":
+                logic = LogicModel()
+                conn, cur = logic.connection()
+                detail_sql = DataOrm.detail_containers(json_list)
+                log.info("detail sql===%s" % detail_sql)
+                containers = logic.exeQuery(cur, detail_sql)
+                a = []
+                for i in containers:
+                    i["container_port"] = i.get("containerPort")
+                    a.append(i)
+                b = {"container": a}
+                json_list.update(b)
                 update_svc = create_json.update_service(json_list)
-
-            except Exception, e:
-                log.warning('k8sapi struct the update_sql running error, reason=%s'
-                        % (e))
-
-                log.error("{'userid': '%s', 'log_info': 'update the service failed!'}"
-                     % (json_list.get("user_name")))
-                post_es(json_list, 'update the service failed!')
-                result = code.request_result(101)
-                return result
-            json_list1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": update_json}
-            json_list2 = str(json_list1)
-
-            try:
-
-                log.info("{'userid': '%s', 'log_info': 'updating the replication and pod...'}"
-                     % (json_list.get("user_name")))
-
-                rest = kubernete_sclient.rpc_name(json_list2)
-
-                if rest != "<Response [200]>":
-                    log.info("update error, reason=%s" % rest)
-                    return code.request_result(502)
-            except Exception, e:
-                log.warning('k8sapi update the rc running error, reason=%s'
-                        % (e))
-                post_es(json_list, 'update the service failed!')
-                result = code.request_result(502)
-                return result
-
-            log.info("delete pod****************************************")
-            del_pod = SourceModel()
-            del_type = {"del_type": "pod"}
-            json_list.update(del_type)
-            delete_pod = del_pod.delete_pod(json_list)
-            log.info(delete_pod)
-            delete_pod1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": delete_pod}
-            json_list_pod = str(delete_pod1)
-            try:
-                kubernete_sclient = KubernetesClient()
-                rest = kubernete_sclient.rpc_name(json_list_pod)
-                log.info(json_list_pod)
-                if rest != "<Response [200]>":
-                    log.info("update error, reason=%s" % rest)
-                    return code.request_result(502)
-
-            except Exception, e:
-                log.warning('k8sapi delete the pod from k8s running error, reason=%s'
-                            % (e))
-                post_es(json_list, 'update the service failed!')
-                result = code.request_result(503)
-                return result
-
-            json_list1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": update_json}
-            log.info("****************************************")
-            log.info(update_json)
-            json_list2 = str(json_list1)
-            try:
-                kubernete_sclient = KubernetesClient()
-                rest = kubernete_sclient.rpc_name(json_list2)
-
-                if rest != "<Response [200]>":
-                    log.info("update error, reason=%s" % rest)
-                    return code.request_result(502)
-
-                log.info("{'userid': '%s', 'log_info': 'update the replicationcontroller and pod success!'}"
-                     % (json_list.get("user_name")))
-
-            except Exception, e:
-                log.error('k8sapi update the rc running error, reason=%s'
-                        % (e))
-
-                log.error("{'userid': '%s', 'log_info': 'update the replicationcontroller and pod failed!'}"
-                     % (json_list.get("user_name")))
-                post_es(json_list, 'update the service failed!')
-
-                result = code.request_result(502)
-                return result
-
-            logic = LogicModel()
-            conn, cur = logic.connection()
-            sel_sql = DataOrm.get_using_volume(json_list)
-            resu = logic.exeQuery(cur, sel_sql)
-            xxx = []
-            for i in resu:
-                volume_id = i.get("volume_id")
-                xxx.append({"volume_id": volume_id})
-            if len(xxx) != 0:
-
-                json_up = {"volume": xxx, "token": json_list.get("token")}
-                try:
-                    log.info("------------------------------")
-                    log.info(json_up)
-                    resul = InnerApi.change_status1(json_up)
-                    log.info(resul)
-                    log.info("------------------------!!!!!!")
-                except Exception, e:
-                    log.error("storage to unused faild, reason=%s" % e)
-                    post_es(json_list, 'update the service failed!')
-                logic.connClose(conn, cur)
+                log.info(update_svc)
             else:
-                pass
+                try:
+                    log.info("{'userid': '%s', 'log_info': 'begin to update the service...'}"
+                             % (json_list.get("user_name")))
 
-            # 更新volume
-            try:
-                log.info("volume+++++++++++++++++++++++")
+                    update_json = create_json.create_json(json_list)
+                    log.info(update_json)
+                    if update_json == "timeout":
+                        return code.request_result(502)
+                    update_svc = create_json.update_service(json_list)
 
-                resul = InnerApi.change_status(json_list)
-                if resul != "ok" and str(resul) != "<Response [200]>":
-                    log.info("resul type====%s" % type(resul))
-                    # return code.request_result(502)
+                except Exception, e:
+                    log.warning('k8sapi struct the update_sql running error, reason=%s'
+                                % e)
 
-                log.info("volume++++++++++++++++++!!!!!")
-            except Exception, e:
-                log.error("storage status update error,reason=%s" % e)
-                post_es(json_list, 'update the service failed!')
+                    log.error("{'userid': '%s', 'log_info': 'update the service failed!'}"
+                              % (json_list.get("user_name")))
+                    post_es(json_list, 'update the service failed!')
+                    result = code.request_result(101)
+                    return result
+                json_list1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": update_json}
+                json_list2 = str(json_list1)
 
-            service_name = json_list.get("service_name")
-            user_name = json_list.get("user_name")
-            service_name2 = user_name+service_name
-            service_name1 = service_name2.replace("_", "-")
-            get_service = {"rtype": "services", "namespace": user_name, "name": service_name1}
-            json_get = {"action": "get", "resources_type": "services", "parameters": get_service}
-            json_get1 = str(json_get)
-            kubernete_get = KubernetesClient()
-            try:
+                try:
 
-                log.info("{'userid': '%s', 'log_info': 'get the using service message...'}"
-                     % (json_list.get("user_name")))
+                    log.info("{'userid': '%s', 'log_info': 'updating the replication and pod...'}"
+                             % (json_list.get("user_name")))
 
-                res = eval(kubernete_get.rpc_name(json_get1))
-                log.info(res)
-            except Exception, e:
-                log.error("get clusterIP error, reason=%s" % (e))
+                    rest = kubernete_sclient.rpc_name(json_list2)
 
-                log.error("{'userid': '%s', 'log_info': 'get the message of using service failed!'}"
-                     % (json_list.get("user_name")))
-                post_es(json_list, 'update the service failed!')
+                    if rest != "<Response [200]>":
+                        log.info("update error, reason=%s" % rest)
+                        return code.request_result(502)
+                except Exception, e:
+                    log.warning('k8sapi update the rc running error, reason=%s'
+                                % e)
+                    post_es(json_list, 'update the service failed!')
+                    result = code.request_result(502)
+                    return result
 
-                result = code.request_result(502)
-                return result
-            # up_json = {"spec": {"clusterIP": res["spec"]["clusterIP"]}}
-            # log.info(up_json)
-            log.info("''''''''''''''''''''''''''''x")
-            log.info(update_svc)
-            update_svc["spec"]["clusterIP"] = res["spec"]["clusterIP"]
-            log.info("''''''''''''''''''''''''''''y")
-            update_svc["metadata"]["resourceVersion"] = res["metadata"]["resourceVersion"]
-            log.info("''''''''''''''''''''''''''''z")
-            log.info(update_svc)
+                del_pod = SourceModel()
+                del_type = {"del_type": "pod"}
+                json_list.update(del_type)
+                delete_pod = del_pod.delete_pod(json_list)
+                log.info(delete_pod)
+                delete_pod1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": delete_pod}
+                json_list_pod = str(delete_pod1)
+                try:
+                    kubernete_sclient = KubernetesClient()
+                    rest = kubernete_sclient.rpc_name(json_list_pod)
+                    log.info(json_list_pod)
+                    if rest != "<Response [200]>":
+                        log.info("update error, reason=%s" % rest)
+                        return code.request_result(502)
 
-            json_list3 = {"action": "put", "resources_type": "services", "parameters": update_svc}
-            json_list4 = str(json_list3)
-            kubernete_svc = KubernetesClient()
-            try:
+                except Exception, e:
+                    log.warning('k8sapi delete the pod from k8s running error, reason=%s'
+                                % e)
+                    post_es(json_list, 'update the service failed!')
+                    result = code.request_result(503)
+                    return result
 
-                log.info("{'userid': '%s', 'log_info': 'updating the using service...'}"
-                     % (json_list.get("user_name")))
+                json_list1 = {"action": "put", "resources_type": "replicationcontrollers", "parameters": update_json}
+                json_list2 = str(json_list1)
+                try:
+                    kubernete_sclient = KubernetesClient()
+                    rest = kubernete_sclient.rpc_name(json_list2)
 
-                rest = kubernete_svc.rpc_name(json_list4)
+                    if rest != "<Response [200]>":
+                        log.info("update error, reason=%s" % rest)
+                        return code.request_result(502)
+                except Exception, e:
+                    log.error('k8sapi update the rc running error, reason=%s'
+                              % e)
+                    post_es(json_list, 'update the service failed!')
 
-                if rest != "<Response [200]>":
-                    log.error("update service error, reason=%s" % rest)
-                    return code.request_result(502)
+                    result = code.request_result(502)
+                    return result
 
-                log.info("{'userid': '%s', 'log_info': 'update the using service success!'}"
-                     % (json_list.get("user_name")))
+                logic = LogicModel()
+                conn, cur = logic.connection()
+                sel_sql = DataOrm.get_using_volume(json_list)
+                resu = logic.exeQuery(cur, sel_sql)
+                xxx = []
+                for i in resu:
+                    volume_id = i.get("volume_id")
+                    xxx.append({"volume_id": volume_id})
+                if len(xxx) != 0:
 
-            except Exception, e:
-                log.error("k8sapi update the service running error, reason=%s"
-                          % (e))
+                    json_up = {"volume": xxx, "token": json_list.get("token")}
+                    try:
+                        resul = InnerApi.change_status1(json_up)
+                        log.info(resul)
+                    except Exception, e:
+                        log.error("storage to unused faild, reason=%s" % e)
+                        post_es(json_list, 'update the service failed!')
+                    logic.connClose(conn, cur)
+                else:
+                    pass
 
-                log.error("{'userid': '%s', 'log_info': 'update the using service failed!'}"
-                     % (json_list.get("user_name")))
-                post_es(json_list, 'update the service failed!')
+                # 更新volume
+                try:
+                    resul = InnerApi.change_status(json_list)
+                    if resul != "ok" and str(resul) != "<Response [200]>":
+                        log.info("resul type====%s" % type(resul))
+                        # return code.request_result(502)
+                except Exception, e:
+                    log.error("storage status update error,reason=%s" % e)
+                    post_es(json_list, 'update the service failed!')
 
-                result = code.request_result(502)
-                return result
+            if DomainIdentify.get_identify(json_list) == 1:
+
+                service_name = json_list.get("service_name")
+                user_name = json_list.get("user_name")
+                # service_name2 = user_name+service_name
+                service_name1 = service_name.replace("_", "-")
+                get_service = {"rtype": "services", "namespace": user_name, "name": service_name1}
+                json_get = {"action": "get", "resources_type": "services", "parameters": get_service}
+                json_get1 = str(json_get)
+                kubernete_get = KubernetesClient()
+                try:
+
+                    log.info("{'userid': '%s', 'log_info': 'get the using service message...'}"
+                             % (json_list.get("user_name")))
+
+                    res = eval(kubernete_get.rpc_name(json_get1))
+                    log.info(res)
+                except Exception, e:
+                    log.error("get clusterIP error, reason=%s" % e)
+
+                    log.error("{'userid': '%s', 'log_info': 'get the message of using service failed!'}"
+                              % (json_list.get("user_name")))
+                    post_es(json_list, 'update the service failed!')
+
+                    result = code.request_result(502)
+                    return result
+                log.info(update_svc)
+                update_svc["spec"]["clusterIP"] = res["spec"]["clusterIP"]
+                update_svc["metadata"]["resourceVersion"] = res["metadata"]["resourceVersion"]
+                log.info(update_svc)
+                json_list3 = {"action": "put", "resources_type": "services", "parameters": update_svc}
+                json_list4 = str(json_list3)
+                kubernete_svc = KubernetesClient()
+                try:
+
+                    log.info("{'userid': '%s', 'log_info': 'updating the using service...'}"
+                             % (json_list.get("user_name")))
+
+                    rest = kubernete_svc.rpc_name(json_list4)
+
+                    if rest != "<Response [200]>":
+                        log.error("update service error, reason=%s" % rest)
+                        return code.request_result(502)
+
+                    log.info("{'userid': '%s', 'log_info': 'update the using service success!'}"
+                             % (json_list.get("user_name")))
+
+                except Exception, e:
+                    log.error("update the service running error, reason=%s"
+                              % e)
+
+                    log.error("{'userid': '%s', 'log_info': 'update the using service failed!'}"
+                              % (json_list.get("user_name")))
+                    post_es(json_list, 'update the service failed!')
+
+                    result = code.request_result(502)
+                    return result
 
             try:
                 logicmodel = LogicModel()
                 conn, cur = logicmodel.connection()
-                update_sql = DataOrm.update_sql(json_list)
+                update_sql = ""
+                if json_list.get("rtype") == "domain_change":
+                    update_sql = DataOrm.update_domain(json_list)
+                else:
+                    update_sql = DataOrm.update_sql(json_list)
+                log.info(update_sql)
                 rest = logicmodel.exeUpdate(cur, update_sql)
                 logicmodel.connClose(conn, cur)
                 log.info(rest)
@@ -763,19 +703,16 @@ class SheetController(object):
         conn, cur = logicmodel.connection()
         try:
             delete_container_sql = DataOrm.delete_container_sql(json_list)
-            print delete_container_sql
             logicmodel.exeDelete(cur, delete_container_sql)
-        except:
+        except Exception, e:
+            log.error("delete container error, reason=%s" % e)
             result = code.request_result(403)
             return result
-
         rc_id_sql = DataOrm.get_rc_id(json_list)
-
         try:
             resu = logicmodel.exeQuery(cur, rc_id_sql)
             logicmodel.connClose(conn, cur)
             for i in resu:
-                print i.get("rc_id")
                 rc = {"uid_rc": i.get("rc_id"), "rtype": "containers"}
                 json_list.update(rc)
 
@@ -792,7 +729,7 @@ class SheetController(object):
             DataOrm.add_method(json_list)
         except Exception, e:
             log.warning('update container running error, reason=%s'
-                        % (e) )
+                        % e)
             return code.request_result(401)
         result = code.request_result(0, "success")
 
@@ -800,7 +737,6 @@ class SheetController(object):
 
     def update_volume(self, json_list):
         log.info("begin.........~~~~~~~~~~~~~~~")
-
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         try:
@@ -865,7 +801,8 @@ class SheetController(object):
             delete_env_sql = DataOrm.delete_env_sql(json_list)
             logicmodel.exeDelete(cur, delete_env_sql)
 
-        except:
+        except Exception, e:
+            log.error("env delete error, reason=%s" % e)
             result = code.request_result(403)
             return result
 
@@ -879,12 +816,12 @@ class SheetController(object):
 
         except Exception, e:
             log.warning('query rc_id running error, reason=%s'
-                        % (e))
+                        % e)
         try:
             DataOrm.add_method(json_list)
         except Exception, e:
             log.warning('update envs running error, reason=%s'
-                        % (e) )
+                        % e)
             return code.request_result(403)
         result = code.request_result(0, "success")
 
@@ -902,7 +839,7 @@ class SheetController(object):
                 json_list.update(rc)
         except Exception, e:
             log.warning('query rc_id running error, reason=%s'
-                        % (e))
+                        % e)
         try:
             x = 99
             if json_list.get("auto") is None and json_list.get("command") is None:
@@ -916,7 +853,6 @@ class SheetController(object):
                 logicmodel.connClose(conn, cur)
             if json_list.get("command") is not None:
                 log.info(22222222)
-
                 update_command_sql = DataOrm.put_command(json_list)
                 x = logicmodel.exeUpdate(cur, update_command_sql)
                 logicmodel.connClose(conn, cur)
@@ -937,15 +873,12 @@ class SheetController(object):
         secret_json = namespace_c.create_secret(json_list)
         json_list1 = {"action": "post", "resources_type": "namespace", "parameters": namespace_json}
         json_list2 = str(json_list1)
-
-
         try:
-            log.info("AAAAAAAAAAAAAAAAA")
             resul = kubernete_sclient.rpc_name(json_list2)
             log.info(resul.text)
-            log.info("BBBBBBBBBBBBBBBBBBBB")
             result = code.request_result(0, namespace_json)
-        except:
+        except Exception, e:
+            log.error("get the namespace error, reason=%s" % e)
             result = code.request_result(501)
             return result
         return result
@@ -978,20 +911,15 @@ class SheetController(object):
 
     def show_namespace(self, json_list):
         kubernete_sclient = KubernetesClient()
-        # json_list:{"name":"xxx"}
         json_list1 = {"action": "get", "resources_type": "namespace", "parameters": json_list}
         json_list2 = str(json_list1)
         try:
             res = kubernete_sclient.rpc_name(json_list2)
-            log.info("(((((((((((((((((())))))))))))))))()()()()()")
-            # log.info(type(res))
-            # log.info(res)
             if eval(str(res)).get("kind") != 'Status' and eval(str(res)).get("kind") is not None:
                 return "ok"
             else:
                 return "no"
         except Exception, e:
-            log.error("errorerror-------------------, reason=%s" % e)
+            log.error("get the namespace error, reason=%s" % e)
             result = code.request_result(504)
             return result
-

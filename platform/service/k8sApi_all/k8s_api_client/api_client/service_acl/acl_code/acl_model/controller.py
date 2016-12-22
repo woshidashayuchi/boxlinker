@@ -59,14 +59,8 @@ class Controller(object):
             log.info(i.get("organization"))
             log.info(role_uuid)
             log.info(user_orga)
-            if i.get("organization") == user_orga: # and user_orga == user_id:
+            if i.get("organization") == user_orga:
                 svc_name.append(i.get("service_name"))
-            #if i.get("organization") == user_orga and int(role_uuid) == 200 and user_orga != user_id:
-            #    svc_name.append(i.get("service_name"))
-            #if i.get("organization") == user_orga and int(role_uuid) == 210 and user_orga != user_id:
-            #    svc_name.append(i.get("service_name"))
-            #if i.get("organization") == user_orga and int(role_uuid) == 400 and user_orga != user_id:
-            #    svc_name.append(i.get("service_name"))
 
         return svc_name
 
@@ -84,20 +78,16 @@ class Controller(object):
         else:
             pass
         for i in query:
-            log.info("organization===%s,orga====%s" % (i.get("organization"), user_orga))
-            log.info("user_id=====%s,user====%s" % (user_id, i.get("user")))
-            log.info("service_name====%s,jjservice_name====%s" % (i.get("service_name"), json_data.get("service_name")))
             if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and \
                                                                                  int(role_uuid) < i.get("role"):
                 return 0
             if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and \
                                                                                  user_id == i.get("user"):
-                log.info("iiiiiiiiiiiiiiiiiiiiii")
+
                 return 0
         return 1
 
     def add_acl(self, json_data):
-
         json_data["rtype"] = "acl"
         json_data["resource_type"] = "service"
 
@@ -118,17 +108,18 @@ class Controller(object):
         if len(authority_judge) == 0:
             return "error"
 
-        user_id, user_name, user_orga, role_uuid = json_data.get("user_id"), json_data.get("user_name"), json_data.get("user_orga"), json_data.get("role_uuid")
+        user_id, user_name, user_orga, role_uuid = json_data.get("user_id"), json_data.get("user_name"), \
+                                                   json_data.get("user_orga"), json_data.get("role_uuid")
         query = self.list_acl(json_data)
 
         a = ""
         if query != "error":
             for i in query:
                 log.info("orga=%s, user=%s" % (i.get("organization"), i.get("user")))
-                if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and i.get("user") == user_id:
-                    a = i.get("uuid")
                 if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and \
-                                                                                 int(role_uuid) < i.get("role"):
+                   i.get("user") == user_id: a = i.get("uuid")
+                if i.get("organization") == user_orga and i.get("service_name") == json_data.get("service_name") and \
+                   int(role_uuid) < i.get("role"):
                     a = i.get("uuid")
         else:
 
@@ -153,23 +144,23 @@ class Controller(object):
             return "error"
 
     def up_acl(self, json_data):
-
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
-
         up_sql = ""
         try:
             up_sql = AclSql.up_sql(json_data)
         except Exception, e:
             log.error("sql create error, reason=%s" % e)
-
         try:
             res = logicmodel.exeUpdate(cur, up_sql)
             logicmodel.connClose(conn, cur)
             return res
         except Exception, e:
             log.error("update acl error, reason=%s" % e)
-            return "%s" % e
+            return e
 
-    def svc_list_acl(self, json_data):
-        pass
+    def domain_identify_acl(self, json_data):
+        if int(json_data.get("role_uuid")) <= 401:
+            return 1
+        else:
+            return 0

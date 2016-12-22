@@ -41,6 +41,7 @@ class Structure(object):
                 limit_sql = STATICSQL.replace("change", "cpu/limit")
                 request_sql = STATICSQL.replace("change", "cpu/request")
                 result = {"usage_sql": usage_sql, "limit_sql": limit_sql, "request_sql": request_sql}
+                log.info("-----+++++cpusql=%s" % usage_sql)
                 return result
             if json_data.get("type") == "memory":
                 usage_sql = STATICSQL.replace("change", "memory/usage")

@@ -72,30 +72,32 @@ class ArrayIterator(object):
         tcp_lb = ""
         http_lb = ""
         m = 1
+
         for i in ser:
-            domain_http = "%s-%s%s.boxlinker.com:" % (user_name, service_name, i.get("container_port"))
+            # if i.get("access_scope") == "outsisde":
+            domain_http = "%s-%s%s.lb1.boxlinker.com:" % (user_name, service_name, i.get("container_port"))
             log.info("-------------------%s" % i)
-            if i.get("access_mode").upper() == "HTTP":
+            if i.get("access_scope") == "inside":
+                pass
+            if i.get("access_mode").upper() == "HTTP" and i.get("access_scope") == "outsisde":
                 http_lbadd = domain_http + i.get("container_port")
                 if http_lb == "":
                     http_lb = http_lb + http_lbadd
                 else:
                     http_lb = http_lb + "," + http_lbadd
-            elif i.get("access_mode").upper() == "TCP":
+            if i.get("access_mode").upper() == "TCP" and i.get("access_scope") == "outsisde":
 
                 logical = LogicModel()
                 conn, cur = logical.connection()
                 select_max_port = DataOrm.max_tcp_port()
                 resu1 = logical.exeQuery(cur, select_max_port)
                 for n in resu1:
-                    log.info("&&&&&&&,n=%s,&&&&&,x=%s" % (n, n.get("tcp_port")))
                     using_port = n.get("tcp_port")
                 if using_port is None:
                     ran_port = "30000"
                     tcp_lb = "%s:%s" % (ran_port, i.get("container_port"))
                     pass
                 else:
-
                     ran_port = int(n.get("tcp_port"))+m
                     m += 1
                     if tcp_lb == "":
@@ -107,13 +109,13 @@ class ArrayIterator(object):
 
                 logical.connClose(conn, cur)
 
-        tcp_port = {"container": ser}
+        container = {"container": ser}
 
-        return http_lb, tcp_lb, tcp_port
+        return http_lb, tcp_lb, container
 
     @classmethod
     def command_query(cls, json_list):
-        log.info("command=%s,%s"%(type(json_list.get("command")),json_list.get("command")))
+        log.info("command=%s,%s" % (type(json_list.get("command")), json_list.get("command")))
         if json_list.get("command") != "" and json_list.get("command") is not None:
             com = json_list.get("command")
             command = com.split(",")

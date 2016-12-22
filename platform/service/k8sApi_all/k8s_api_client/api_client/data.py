@@ -51,111 +51,113 @@ class DataOrm(object):
 
     metadata = MetaData(engine)
     # Base = declarative_base()
-    '''
-        font_service = Table('font_service', metadata,
-            Column('uuid', String(64), primary_key=True),
-            Column('user_id', String(64)),
-            Column('orga_id', String(64)),
-            Column('service_id', String(64)),
-            Column('rc_id', String(64)),
-            Column('fservice_name', String(64)),
-            Column('fservice_status', String(20)),
-            Column('all_name', String(64)),
-            Column('fservice_create_time', DateTime, server_default=func.now()),
-            Column('fservice_update_time', DateTime, server_default=func.now())
-        )
-        font_service.create()
+    font_service = Table('font_service', metadata,
+        Column('uuid', String(64), primary_key=True),
+        Column('user_id', String(64)),
+        Column('orga_id', String(64)),
+        Column('service_id', String(64)),
+        Column('rc_id', String(64)),
+        Column('fservice_name', String(64)),
+        Column('fservice_status', String(20)),
+        Column('all_name', String(64)),
+        Column('fservice_create_time', DateTime, server_default=func.now()),
+        Column('fservice_update_time', DateTime, server_default=func.now())
+    )
+    # font_service.create()
 
-        rc_table = Table('replicationcontrollers', metadata,
-            Column('uuid', String(64), primary_key=True),
-            Column('rc_name', String(64)),
-            Column('labels_name', String(64)),
-            Column('spec_replicas', Integer),
-            Column('spec_selector_name', String(64)),
-            Column('template_name', String(64)),
-            Column('template_container_name', String(64)),
-            Column('image_id', String(64)),
-            Column('image_name', String(64)),
-            Column('image_version', String(64)),
-            Column('limits_cpu', String(64)),
-            Column('limits_memory', String(64)),
-            Column('policy', String(32)),
-            Column('auto_startup', String(32)),
-            Column('containerPort', String(64)),
-            Column('protocol', String(32)),
-            Column('env_name', String(32)),
-            Column('env_value', String(32)),
-            Column('command', String(64)),
-            Column('rc_create_time', DateTime, server_default=func.now()),
-            Column('rc_update_time', DateTime, server_default=func.now())
-        )
-        rc_table.create()
+    rc_table = Table('replicationcontrollers', metadata,
+        Column('uuid', String(64), primary_key=True),
+        Column('rc_name', String(64)),
+        Column('labels_name', String(64)),
+        Column('spec_replicas', Integer),
+        Column('spec_selector_name', String(64)),
+        Column('template_name', String(64)),
+        Column('template_container_name', String(64)),
+        Column('image_id', String(64)),
+        Column('image_name', String(64)),
+        Column('image_version', String(64)),
+        Column('limits_cpu', String(64)),
+        Column('limits_memory', String(64)),
+        Column('policy', String(32)),
+        Column('auto_startup', String(32)),
+        Column('containerPort', String(64)),
+        Column('protocol', String(32)),
+        Column('env_name', String(32)),
+        Column('env_value', String(32)),
+        Column('command', String(64)),
+        Column('rc_create_time', DateTime, server_default=func.now()),
+        Column('rc_update_time', DateTime, server_default=func.now())
+    )
+    # rc_table.create()
 
-        service_table = Table('service', metadata,
+    service_table = Table('service', metadata,
+        Column('uuid', String(64), primary_key=True),
+        Column('service_name', String(64)),
+        Column('labels', String(64)),
+        Column('selector_name', String(64)),
+        Column('ports_name', String(64)),
+        Column('ports_port', Integer),
+        Column('ports_targetport', Integer),
+        Column('service_domain_name', String(64)),
+        Column('service_create_time', DateTime, server_default=func.now()),
+        Column('service_update_time', DateTime, server_default=func.now())
+    )
+    # service_table.create()
+
+    container = Table('containers', metadata,
+        Column('uuid', String(64), primary_key=True),
+        Column('rc_id', String(64)),
+        Column('user_id', String(64)),
+        Column('service_name', String(64)),
+        Column('containerPort', String(64)),
+        Column('protocol', String(32)),
+        Column('access_mode', String(32)),
+        Column('access_scope', String(32)),
+        Column('tcp_port', String(32)),
+        Column('http_domain', String(64)),
+        Column('tcp_domain', String(64)),
+        Column('private_domain', String(64)),
+        Column('identify', String(32))
+
+    )
+    # container.create()
+
+    env = Table('env', metadata,
+        Column('uuid', String(64),primary_key=True),
+        Column('rc_id', String(64)),
+        Column('user_id', String(64)),
+        Column('service_name', String(64)),
+        Column('env_name', String(32)),
+        Column('env_value', String(32))
+    )
+    # env.create()
+
+    acl = Table('service_acl', metadata,
             Column('uuid', String(64), primary_key=True),
             Column('service_name', String(64)),
-            Column('labels', String(64)),
-            Column('selector_name', String(64)),
-            Column('ports_name', String(64)),
-            Column('ports_port', Integer),
-            Column('ports_targetport', Integer),
-            Column('service_domain_name', String(64)),
-            Column('service_create_time', DateTime, server_default=func.now()),
-            Column('service_update_time', DateTime, server_default=func.now())
+            Column('resource_type', String(64)),
+            Column('admin', String(64)),
+            Column('organization', String(64)),
+            Column('user', String(64)),
+            Column('role', Integer),
+            Column('create_time', DateTime, server_default=func.now()),
+            Column('update_time', DateTime, server_default=func.now())
+
         )
-        service_table.create()
+    # acl.create()
 
-        container = Table('containers',metadata,
-            Column('uuid',String(64),primary_key=True),
-            Column('rc_id',String(64)),
-            Column('user_id',String(64)),
-            Column('service_name',String(64)),
-            Column('containerPort',String(64)),
-            Column('protocol',String(32)),
-            Column('access_mode',String(32)),
-            Column('access_scope',String(32)),
-            Column('tcp_port',String(32)),
-            Column('http_domain',String(64)),
-            Column('tcp_domain',String(64))
+    volume = Table('volume', metadata,
+            Column('uuid', String(64), primary_key=True),
+            Column('rc_id', String(64)),
+            Column('user_id', String(64)),
+            Column('service_name', String(64)),
+            Column('volume_id', String(64)),
+            Column('volume_path', String(64)),
+            Column('read_only', String(32), server_default='True')
         )
-        container.create()
+    # volume.create()
 
-        env = Table('env',metadata,
-            Column('uuid',String(64),primary_key=True),
-            Column('rc_id',String(64)),
-            Column('user_id',String(64)),
-            Column('service_name',String(64)),
-            Column('env_name',String(32)),
-            Column('env_value',String(32))
-        )
-        env.create()
-
-
-        acl = Table('service_acl',metadata,
-                Column('uuid',String(64),primary_key=True),
-                Column('service_name',String(64)),
-                Column('resource_type',String(64)),
-                Column('admin',String(64)),
-                Column('organization',String(64)),
-                Column('user',String(64)),
-                Column('role',Integer),
-                Column('create_time', DateTime, server_default=func.now()),
-                Column('update_time', DateTime, server_default=func.now())
-
-            )
-        acl.create()
-
-        volume = Table('volume',metadata,
-                Column('uuid',String(64),primary_key=True),
-                Column('rc_id',String(64)),
-                Column('user_id',String(64)),
-                Column('service_name',String(64)),
-                Column('volume_id',String(64)),
-                Column('volume_path',String(64)),
-                Column('read_only',String(32), server_default='True')
-            )
-        volume.create()
-    '''
+    metadata.create_all(engine)
 
     rc_table = Table('replicationcontrollers', metadata, autoload=True)
     service_table = Table('service', metadata, autoload=True)
@@ -287,7 +289,6 @@ class DataOrm(object):
                     u.rc_id = json_list.get("uid_rc")
                     u.user_id = json_list.get("user_orga")
                     u.service_name = json_list.get("service_name")
-
                     u.env_name = i.get("env_key")
                     u.env_value = i.get("env_value")
 
@@ -381,7 +382,8 @@ class DataOrm(object):
     def con_one(cls,json_list):
         user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        select_one = "select * from containers a where a.user_id=\'%s\' and a.service_name=\'%s\'" % (user_id,service_name)
+        select_one = "select * from containers a where a.user_id=\'%s\' and a.service_name=\'%s\'" % (user_id,
+                                                                                                      service_name)
         return select_one
 
     @classmethod
@@ -558,11 +560,11 @@ class DataOrm(object):
         else:
             command = "update replicationcontrollers a set a.command = NULL where a.uuid=\'%s\'" % (json_list.get("rc_id"))
             return command
+
     @classmethod
     def check_name(cls, json_list):
         select_name = "select fservice_name from font_service where orga_id=\'%s\'" % (json_list.get("user_orga"))
         return select_name
-
 
     @classmethod
     def update_pnum(cls, json_list):
@@ -576,6 +578,54 @@ class DataOrm(object):
     def get_svcid(cls, all_name):
         svc_sql = "select a.uuid, a.user_id, a.orga_id, a.fservice_status, b.spec_replicas, b.limits_cpu from font_service a, replicationcontrollers b where a.all_name=\'%s\' and b.uuid=a.rc_id" % all_name
         return svc_sql
+
+    @classmethod
+    def change_domain(cls):
+        domain_used = "select * from containers"
+        return domain_used
+
+    @classmethod
+    def update_domain(cls, json_data):
+        orga_id = json_data.get("user_orga")
+        service_name = json_data.get("service_name")
+        private_domain = json_data.get("domain")
+        up_sql = "update containers set private_domain = \'%s\' where rc_id=(select rc_id from font_service where " \
+                 "orga_id=\'%s\' and fservice_name=\'%s\')" % (private_domain, orga_id, service_name)
+        return up_sql
+
+    @classmethod
+    def detail_containers(cls, json_data):
+        orga_id = json_data.get("user_orga")
+        service_name = json_data.get("service_name")
+        sql = "select * from containers where rc_id=(select rc_id from font_service where " \
+              "orga_id=\'%s\' and fservice_name=\'%s\')" % (orga_id, service_name)
+        return sql
+
+    @classmethod
+    def change_identify(cls, json_data):
+        orga_id = json_data.get("user_orga")
+        service_name = json_data.get("service_name")
+        identify = json_data.get("identify")
+        sql = "update containers set identify=\'%d\' where rc_id=(select rc_id from font_service where " \
+              "orga_id=\'%s\' and fservice_name=\'%s\')" % (identify, orga_id, service_name)
+        return sql
+
+    @classmethod
+    def change_domain_identify(cls, json_data):
+        private_domain = json_data.get("domain")
+        identify = json_data.get("identify")
+        sql = "update containers set identify=\'%d\' where private_domain=\'%s\'" % (identify, private_domain)
+        return sql
+
+    @classmethod
+    def get_service_name(cls, private_domain):
+        sql = "select service_name from containers where private_domain=\'%s\'" % private_domain
+        return sql
+
+    @classmethod
+    def get_orga_id(cls, json_data):
+        sql = "select orga_id from font_service where rc_id=(select rc_id from containers where private_domain=\'%s\')" % (json_data.get("domain"))
+        return sql
 
     @classmethod
     def time_diff(cls, update_date):

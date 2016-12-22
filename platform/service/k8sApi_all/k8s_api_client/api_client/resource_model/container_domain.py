@@ -12,11 +12,8 @@ class ContainerDomain(object):
     def __init__(self):
         pass
 
-    def container_domain(self,json_list):
+    def container_domain(self, json_list):
         http_lb, tcp_lb, tcp_port = ArrayIterator.service_domain(json_list)
-        log.info("^^^^^^^^^^^^^^^^^^^^^^^^^")
-        log.info(tcp_port)
-        log.info("^^^^^^^^^^^^^^^^^^^^^^^^^")
         container = tcp_port.get("container")
         newcon = []
         if http_lb == "":
@@ -28,6 +25,8 @@ class ContainerDomain(object):
                 http_domain = i[:num]
                 log.info("http_domain=============%s" % http_domain)
                 for j in container:
+                    if j.get("access_scope") == "inside" and j.get("access_mode").upper() == "HTTP":
+                        j["http_domain"] = None
                     if j.get("container_port") == c_port and j.get("access_mode").upper() == "HTTP":
                         j["http_domain"] = http_domain
                         newcon.append(j)
@@ -39,12 +38,20 @@ class ContainerDomain(object):
                 c_port = x[num+1:]
                 log.info("c_port===============%s" % c_port)
                 tcp_domain = "lb1.boxlinker.com" + ":" + x[:num]
+                # tcp_domain = "boxlinker.com" + ":" + x[:num]
                 log.info("tcp_domain=============%s" % tcp_domain)
                 for y in container:
+                    if y.get("access_mode").upper() == "TCP" and y.get("access_scope") == "inside":
+                        y["tcp_domain"] = None
                     if y.get("container_port") == c_port and y.get("access_mode").upper() == "TCP":
                         log.info("container_port===========%s" % y.get("container_port"))
                         log.info("access_mode===========%s" % y.get("access_mode"))
                         y["tcp_domain"] = tcp_domain
                         newcon.append(y)
 
+        for i in container:
+            if i.get("access_scope") == "inside":
+                i["http_domain"] = ""
+                i["tcp_domain"] = ""
+                newcon.append(i)
         return newcon

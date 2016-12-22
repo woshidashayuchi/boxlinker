@@ -25,7 +25,7 @@ def get_msg():
     try:
         token_get1 = request.headers.get("token")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get1)
-        log.info("useruseruser==%s"%user_name)
+        log.info("useruseruser==%s" % user_name)
     except Exception, e:
         return code.request_result(202)
     json_data = {"user_name": user_name, "token": token_get1}

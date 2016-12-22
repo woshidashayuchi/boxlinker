@@ -8,8 +8,6 @@ sys.path.append(p_path)
 from api_client import podstatus
 from common.logs import logging as log
 from common.single import Singleton
-#from api import center_manager
-#from k8sapi import k8s_manager
 
 
 class RabbitmqResponse(object):

@@ -82,8 +82,6 @@ class ShowMessage(object):
                                 log.info(i.get("value")[1][0])
                                 j.get("value").append(i.get("value")[1])
                 yield json.dumps(response).decode('utf-8')
-                    # result.append(json.loads(requests.get(BASEURL+res_sql).text))
-                    # result["aaa"] = json.loads(requests.get(BASEURL+res_sql).text)
 
             except Exception, e:
                 log.error("get the result error, reason=%s" % e)

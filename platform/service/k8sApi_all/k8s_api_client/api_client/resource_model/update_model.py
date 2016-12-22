@@ -60,7 +60,7 @@ class GetAll(object):
                 x = {"env_key":j.get("env_name"), "env_value":j.get("env_value")}
                 env.append(x)
             for m in volume_resu:
-                x = {"disk_name":m.get("volume_name"),"disk_path":m.get("volume_path"),"readonly":m.get("read_only")}
+                x = {"volume_id":m.get("volume_id"),"disk_path":m.get("volume_path"),"readonly":m.get("read_only")}
                 volume.append(x)
             for n in rc_resu:
                 auto_startup = n.get("auto_startup")

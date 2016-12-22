@@ -21,21 +21,19 @@ class CreateVolume(object):
         readonly = True
         request_para = json_list.get("volume")
         headers = {"token": json_list.get("token")}
-
+        monitors = [x for x in os.environ.get("VOLUMEIP").split(',')]
         if request_para is not None and request_para != "":
             for i in request_para:
 
                 get_url = "http://%s/api/v1.0/storage/volumes/%s" % (os.environ.get("STORAGE_HOST"), i.get("volume_id"))
                 try:
                     log.info(headers)
+                    log.info("get_url===%s" % get_url)
                     resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get("result")
                     if resu == {}:
                         return "error"
                     else:
                         pass
-                    log.info("hhhhhhuuuuuuhhhhhhuuuuuuuuuuuuuuuuuuuuu-----------")
-                    log.info(get_url)
-                    log.info(resu)
                 except Exception, e:
                     log.error("select volumes error,reason=%s"% (e))
                     return "timeout"
@@ -54,14 +52,7 @@ class CreateVolume(object):
                 volumes = {
                             "name": vname,
                             "rbd": {
-                                "monitors": [
-                                    # "192.168.1.5:5000",
-                                    # "192.168.1.8:5000",
-                                    # "192.168.1.9:5000"
-                                    "10.10.10.11:5000",
-                                    "10.10.10.12:5000",
-                                    "10.10.10.21:5000"
-                                ],
+                                "monitors": monitors,
                                 "pool": pool_name,
                                 "image": image,
                                 "user": "admin",
@@ -84,7 +75,6 @@ class CreateVolume(object):
         request_para = json_list.get("volume")
         readonly = True
 
-
         headers = {"token": json_list.get("token")}
 
         for i in request_para:
@@ -92,7 +82,6 @@ class CreateVolume(object):
                 readonly = True
             else:
                 readonly = False
-
 
             get_url = "http://%s/api/v1.0/storage/volumes/%s" % (os.environ.get("STORAGE_HOST"), i.get("volume_id"))
             try:
@@ -107,8 +96,6 @@ class CreateVolume(object):
                 log.error("select volumes error,reason=%s"% (e))
                 return "timeout"
             vname = resu.get("volume_name")
-
-
 
             disk_msg = {"name": vname, "readOnly": readonly, "mountPath": i.get("disk_path")}
             result.append(disk_msg)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Author: Wangxiaof
+# Author: Wang-xf
 
 import sys
 p_path = sys.path[0] + '/..'
@@ -39,15 +39,3 @@ class KubernetesClient(object):
         queue = 'podstatus_control'
 
         return self.rbtmq.rpc_call_client(queue, timeout, json_data)
-
-
-
-if __name__ == "__main__":
-
-    if (len(sys.argv) == 2):
-        center_client = KubernetesClient()
-        json_data = sys.argv[1]
-        result = center_client.rpc_exec(json_data)
-        print result,
-    else:
-        print '参数错误'

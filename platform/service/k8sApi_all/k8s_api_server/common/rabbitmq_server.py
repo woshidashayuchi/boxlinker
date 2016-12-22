@@ -5,7 +5,7 @@
 
 import sys
 import pika
-
+import os
 import rabbitmq_response
 
 from time import sleep
@@ -15,8 +15,8 @@ from common.single import Singleton
 
 class RabbitmqServer(object):
 
-    def mq_connect(self, mq_server01='192.168.1.10',
-                   mq_server02='192.168.1.10',
+    def mq_connect(self, mq_server01=os.environ.get("RABBITMQ_HOST"),
+                   mq_server02=os.environ.get("RABBITMQ_HOST"),
                    heartbeat_time=30):
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))
@@ -25,7 +25,7 @@ class RabbitmqServer(object):
                               pika.ConnectionParameters(
                                    host=mq_server01,
                                    heartbeat_interval=heartbeat_time,
-                                   port=30001))
+                                   port=int(os.environ.get("RABBITMQ_PORT"))))
             self.channel = self.connection.channel()
         except Exception, e:
             log.error('RabbitMQ server %s connection error: reason=%s'
@@ -35,7 +35,7 @@ class RabbitmqServer(object):
                                   pika.ConnectionParameters(
                                        host=mq_server02,
                                        heartbeat_interval=heartbeat_time,
-                                       port=30001))
+                                       port=int(os.environ.get("RABBITMQ_PORT"))))
                 self.channel = self.connection.channel()
             except Exception, e:
                 log.error('RabbitMQ server %s connection error: reason=%s'

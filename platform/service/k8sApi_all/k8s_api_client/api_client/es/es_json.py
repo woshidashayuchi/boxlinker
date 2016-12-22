@@ -17,6 +17,7 @@ def create_esjson(json_list, log_info):
 
     msg_json = {
         "log": json.dumps(log_dict),
+
         "kubernetes":
             {
                 "namespace_name": "%s" % json_list.get("user_name"),
@@ -29,5 +30,7 @@ def create_esjson(json_list, log_info):
                     },
             },
         "@timestamp": str(get_now_time_ss_z())
+
     }
+
     return msg_json, es_url

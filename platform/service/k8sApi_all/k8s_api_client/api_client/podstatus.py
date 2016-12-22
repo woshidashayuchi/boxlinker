@@ -5,9 +5,9 @@
 from data_controller import LogicModel
 from data import DataOrm
 from common.logs import logging as log
-import json
 from es.to_es import post_es
-# from detail_podstatus import update_s
+from resource_model.event_monitor import EventMonitor
+import json
 
 
 class PodStatus(object):
@@ -16,11 +16,8 @@ class PodStatus(object):
         pass
 
     def update_podstatus(self, json_list):
-        # user_id, user_name, service_name, status
-        update_status_sql = ""
         try:
             log.info("json_list=%s, type=%s" % (json_list, type(json_list)))
-            log.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             json1 = eval(json_list)
             update_status_sql = DataOrm.update_pods(json1)
         except Exception, e:
@@ -34,21 +31,25 @@ class PodStatus(object):
             try:
                 logical.exeUpdate(cur, update_status_sql)
                 log.info("service create success!!!!!!!!!!")
-                log.info(eval(json_list).get("token"))
-                post_es(eval(json_list), "service has be created successfully!")
+                logical.connClose(conn, cur)
+
+                # post_es(eval(json_list), "service has be created successfully!")
             except Exception, e:
                 log.error("status update error,reason=%s" % e)
                 return "failed"
-
-            logical.connClose(conn, cur)
+            try:
+                event = EventMonitor()
+                log.info("gogogogogogogogogogogogogogogogo")
+                event.mail_es(eval(str(json_list)))
+            except Exception, e:
+                log.error("event error, reason=%s" % e)
 
         else:
             try:
                 logical.exeUpdate(cur, update_status_sql)
                 log.info("service create failed")
                 post_es(eval(json_list), "service create failed!")
+                logical.connClose(conn, cur)
             except Exception, e:
                 log.error("status update error,reason=%s" % e)
                 return "failed"
-
-        # update_s(json_list)

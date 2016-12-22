@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: k8s-server
+  namespace: boxlinker
+  labels:
+    component: k8s-server
+    rc-krud: boxlinker_centos-k8sserver
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: k8s-server
+      namespace: boxlinker
+      labels:
+        logs: boxlinker-k8s-server
+        name: k8s-server
+        component: k8s-server
+    spec:
+      nodeSelector:
+        role: system
+      imagePullSecrets:
+      - name: registry-key
+      containers:
+      - name: k8s-server
+        image: index.boxlinker.com/boxlinker/centos-k8sserver:latest
+        imagePullPolicy: Always
+        env:
+        - name: RABBITMQ_HOST
+          value: rabbitmq
+        - name: RABBITMQ_PORT
+          value: "5672"

@@ -33,6 +33,7 @@ def pod_messages(json_list):
                     log.info(con_ret)
 
                 log.info(con_ret)
+
                 pod_ms = {"pod_phase": i.get("status").get("phase"), "pod_name": i.get("metadata").get("name"),
                           "pod_ip": i.get("status").get("podIP"), "containers": con_ret}
                 pod.append(pod_ms)

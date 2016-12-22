@@ -15,6 +15,7 @@ from podstatus_monitor.anytime_update_status import Up
 from resource_model.sheet_model import SheetModel
 from podstatus_monitor.pod_message import pod_messages
 from podstatus_monitor.get_svcid import get_id
+from resource_model.change_domain import ChangeDomain
 
 app = Flask(__name__)
 CORS(app=app)
@@ -30,24 +31,20 @@ def create_service(service_name):
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
-        log.info("**************")
     except Exception, e:
         log.error("author registry error, reason=%s" % e)
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     try:
         json_list = json.loads(request.get_data())
-    except:
+    except Exception, e:
+        log.error("parameters error, reason=%s" % e)
         return json.dumps(code.request_result(101))
 
     show_resource = {"name": user_name}
-    # log.info(controller.show_namespace(show_resource))
     if controller.show_namespace(show_resource) != "ok":
-        log.info("begin@@@@@@@@@@@@@@@@@@@@----")
         try:
             controller.create_namespace(user_msg)
-
             controller.create_secret(user_msg)
-
         except Exception, e:
             log.error("resource create error ,reason =%s" % e)
             return json.dumps(code.request_result(501))
@@ -80,15 +77,16 @@ def get_all_service():
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
 
     except Exception, e:
-
-        return json.dumps(code.request_result(202))
-    # user_id = json_list1.encode("utf-8")
+        log.error("authentication error, reason=%s" % e)
+        return json.dumps(code.request_result(201))
     try:
         service_name = request.args.get("service_name",)
-        # service_name = json_list2.encode("utf-8")
-        json_list = {"user_id": user_id,"user_name":user_name,"user_orga":user_orga,"role_uuid":role_uuid}
+        json_list = {"user_id": user_id, "user_name": user_name,
+                     "user_orga": user_orga, "role_uuid": role_uuid}
         if service_name is not None:
-            json_list = {"user_id": user_id, "user_name":user_name, "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
+            json_list = {"user_id": user_id, "user_name": user_name,
+                         "service_name": service_name,  "user_orga": user_orga,
+                         "role_uuid": role_uuid}
         controller = SheetController()
         response = controller.service_list(json_list)
         return json.dumps(response)
@@ -105,9 +103,10 @@ def detail_service(service_name):
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
     except:
-        return json.dumps(code.request_result(202))
-    # json_list1 = request.args.get('user_id',)
-    json_list = {"user_id": user_id, "user_name": user_name, "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
+        log.error("authentication error, reason=%s" % e)
+        return json.dumps(code.request_result(201))
+    json_list = {"user_id": user_id, "user_name": user_name,
+                 "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
     controller = SheetController()
     response = controller.detail_service(json_list)
     print(response)
@@ -122,9 +121,10 @@ def del_service(service_name):
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
     except:
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     # json_list = json.loads(request.get_data())
-    json_list = {"token": token_get1, "service_name": service_name, "user_name": user_name, "namespace": user_name, "user_id": user_id,
+    json_list = {"token": token_get1, "service_name": service_name,
+                 "user_name": user_name, "namespace": user_name, "user_id": user_id,
                   "user_orga": user_orga, "role_uuid": role_uuid}
     controller = SheetController()
     response = controller.del_service(json_list)
@@ -139,7 +139,7 @@ def put_service(service_name):
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
     except:
-       return json.dumps(code.request_result(202))
+       return json.dumps(code.request_result(201))
 
     json_list1 = json.loads(request.get_data())
     log.debug("json_list1=%s" % (json_list1))
@@ -164,9 +164,9 @@ def put_container(service_name):
         token_get2 = token_get1.decode("utf-8")
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        # user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
-    except:
-        return json.dumps(code.request_result(202))
+    except Exception, e:
+        log.error("authentication error, reason=%s" % e)
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_id,
                  "user_name": user_name, "type": "container",
@@ -198,9 +198,10 @@ def put_volume(service_name):
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name,  "user_orga": user_orga, "role_uuid": role_uuid}
     except:
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
-    json_name = {"token": token_get1, "service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid, "type":"volume"}
+    json_name = {"token": token_get1, "service_name": service_name, "user_id": user_msg.get("user_id"),
+                 "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid, "type": "volume"}
     json_list.update(json_name)
     controller = SheetController()
     try:
@@ -228,10 +229,10 @@ def put_env(service_name):
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "type":"env",  "user_orga": user_orga, "role_uuid": role_uuid}
+                 "type": "env",  "user_orga": user_orga, "role_uuid": role_uuid}
 
     json_list.update(json_name)
     json_list["token"] = token_get1
@@ -263,7 +264,7 @@ def put_cm(service_name):
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
                  "type": "limits",  "user_orga": user_orga, "role_uuid": role_uuid}
@@ -292,7 +293,7 @@ def start_service(service_name):
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     json_list = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
                  "user_orga": user_orga, "role_uuid": role_uuid}
     json_get = json.loads(request.get_data())
@@ -319,7 +320,7 @@ def telescopic(service_name):
                     "tel": "tel", "user_orga": user_orga, "role_uuid": role_uuid,"token": token_get1}
     except Exception, e:
         log.error("telescopic error, reason=%s" % e)
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
     json_list.update(user_msg)
     try:
@@ -340,7 +341,7 @@ def pod_message(service_name):
                     "user_orga": user_orga, "role_uuid": role_uuid}
     except Exception, e:
         log.error("telescopic error, reason=%s" % e)
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     try:
         response = pod_messages(user_msg)
         return json.dumps(response)
@@ -364,7 +365,7 @@ def put_auto_startup(service_name):
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
                  "type": "auto_startup",  "user_orga": user_orga, "role_uuid": role_uuid}
@@ -396,13 +397,12 @@ def put_policy(service_name):
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
     except:
-        return json.dumps(code.request_result(202))
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
                  "user_orga": user_orga, "role_uuid": role_uuid}
     json_list["token"] = token_get1
     json_list.update(json_name)
-    log.info("awsdesacdsc=====%s" % json.dumps(json_list))
     try:
         controller = SheetController()
         response = controller.update_service(json_list)
@@ -420,8 +420,9 @@ def put_command(service_name):
         token_get = token_get2.encode("utf-8")
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
         user_msg = {"user_id": user_id, "user_name": user_name}
-    except:
-        return json.dumps(code.request_result(202))
+    except Exception, e:
+        log.error("author error, reason=%s" % e)
+        return json.dumps(code.request_result(201))
     json_list = json.loads(request.get_data())
     json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
                  "user_orga": user_orga, "role_uuid": role_uuid}
@@ -445,6 +446,28 @@ def get_uuid(service_name):
     except Exception, e:
         log.error("get the uuid error, reason=%s" % e)
         return json.dumps(code.request_result(404))
+
+
+@app.route('/api/v1/application/service/<service_name>/domain', methods=['PUT'])
+def change_domain(service_name):
+    try:
+        token_get1 = request.headers.get("token")
+        token_get2 = token_get1.decode("utf-8")
+        token_get = token_get2.encode("utf-8")
+        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+    except Exception, e:
+        return json.dumps(code.request_result(201))
+    json_list = json.loads(request.get_data())
+    change_info = {"service_name": service_name, "cname": json_list.get("cname"),
+                   "domain": json_list.get("domain"), "rtype": "domain_change", "token": token_get1,
+                   "user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
+
+    change = ChangeDomain()
+    try:
+        return json.dumps(change.domain(change_info))
+    except Exception, e:
+        log.error("change the domain error, reason=%s" % e)
+        return code.request_result(502)
 
 
 if __name__ == '__main__':

@@ -25,7 +25,7 @@ class ConsoleAct(object):
         memory_limit = 0
         cpu_result = []
         memory_result = []
-        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         namespace = pods.get("user_name")
         pods = pods.get("pods")
         STATICHTTP = "http://%s/api/datasources/proxy/1/query?db=k8s&q=" % os.environ.get("GRAFANA")
@@ -37,7 +37,7 @@ class ConsoleAct(object):
                         "AND \"namespace_name\" =~ /%s$/ " \
                         "AND \"pod_name\" =~ /%s$/ " \
                         "AND time > now() - 15m GROUP BY time(1m), \"container_name\" fill(null)&epoch=ms" % (namespace,
-                                                                                                    i)
+                                                                                                              i)
 
                 url1 = STATICHTTP + sql_s
                 url = url1.replace("change", j)
@@ -54,12 +54,17 @@ class ConsoleAct(object):
                         if xx == "cpu/usage_rate":
                             xxx = x[0].get("series")[0].get("values")
 
-                            for g in a:
-                                if cnt_c == 0:
-                                    cpu_result = xxx
-                                    cnt_c += 1
-                                else:
-                                    cpu_result[g][1] = float(cpu_result[g][1]) + float(xxx[g][1])
+                            if cnt_c == 0:
+                                cpu_result = xxx
+                                cnt_c += 1
+                            else:
+                                for g in a:
+                                    if cpu_result[g][1] is None or cpu_result[g][1] == "":
+                                        cpu_result[g][1] = float(xxx[g][1])
+                                    if xxx[g][1] is None or xxx[g][1] == "":
+                                        pass
+                                    else:
+                                        cpu_result[g][1] = float(cpu_result[g][1]) + float(xxx[g][1])
                                     cnt_c += 1
 
                         if xx == "cpu/limit":
@@ -69,12 +74,17 @@ class ConsoleAct(object):
                             # memory_usage = int(memory_usage) + abs(int(x[0].get("series")[0].get("values")[1][1]))
                             xxx = x[0].get("series")[0].get("values")
 
-                            for g in a:
-                                if cnt_m == 0:
-                                    memory_result = xxx
-                                    cnt_m += 1
-                                else:
-                                    memory_result[g][1] = float(memory_result[g][1]) + float(xxx[g][1])
+                            if cnt_m == 0:
+                                memory_result = xxx
+                                cnt_m += 1
+                            else:
+                                for g in a:
+                                    if memory_result[g][1] is None or memory_result[g][1] == "":
+                                        memory_result[g][1] = float(xxx[g][1])
+                                    if xxx[g][1] is None or xxx[g][1] == "":
+                                        pass
+                                    else:
+                                        memory_result[g][1] = float(memory_result[g][1]) + float(xxx[g][1])
                                     cnt_m += 1
 
                         if xx == "memory/limit":
@@ -83,5 +93,6 @@ class ConsoleAct(object):
                     except Exception, e:
                         log.error("error, reason=%s" % e)
 
-        resu = {"cpu_usage": cpu_result, "cpu_limit":cpu_limit, "memory_usage": memory_result, "memory_limit": memory_limit}
+        resu = {"cpu_usage": cpu_result, "cpu_limit": cpu_limit, "memory_usage": memory_result,
+                "memory_limit": memory_limit}
         return resu

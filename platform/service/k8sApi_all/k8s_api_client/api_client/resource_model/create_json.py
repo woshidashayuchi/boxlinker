@@ -23,25 +23,25 @@ class SourceModel(object):
 
     def create_json(self, json_list):
 
-        if json_list.get("tel") == None and json_list.get("operate") == None:
-           json_list = choice_up(json_list)
-        elif json_list.get("tel") == None and json_list.get("operate") == "start":
+        if json_list.get("tel") is None and json_list.get("operate") is None:
+            json_list = choice_up(json_list)
+        elif json_list.get("tel") is None and json_list.get("operate") == "start":
             json_list = choice_up(json_list)
         else:
             json_list.pop("tel")
 
         command = None
-        com = ""
+        # com = ""
         log.info(json_list)
         volumes = []
         image_name = ""
         image_version = ""
-        container_cpu = ""
+        # container_cpu = ""
         policy1 = 0
         pods_num = 1
         container = json_list.get("container")
         env = json_list.get("env")
-        container_memory = ""
+        # container_memory = ""
         auto_startup = json_list.get("auto_startup")
         select_rc = DataOrm.get_update_rc(json_list)
 
@@ -53,13 +53,12 @@ class SourceModel(object):
             for i in resu:
                 image_name = i.get("image_name")
                 image_version = i.get("image_version")
-                container_cpu = i.get("limits_cpu")
-                container_memory = i.get("limits_memory")
+                # container_cpu = i.get("limits_cpu")
+                # container_memory = i.get("limits_memory")
                 pods_num = int(i.get("spec_replicas"))
                 policy1 = int(i.get("policy"))
                 command = i.get("command")
             logicmodel.connClose(conn, cur)
-            log.info("command=====%s" % command)
 
             if json_list.get("command") == "" or json_list.get("command") is None:
                 pass
@@ -70,25 +69,19 @@ class SourceModel(object):
                 com = command.split(",")
             else:
                 com = ""
-            log.info("ssssssssssssssss")
-            log.info(com)
         except Exception as msg:
             result = code.request_result(403, ret={"msg": msg.message, "msg1": msg.args})
             return result
-        # images = image_name+":"+image_version
 
         if json_list.get("image_name") is not None and json_list.get("policy") is not None:
-            log.info("jsondata=====================%s" % json_list)
             image_name = json_list.get("image_name")
             image_version = json_list.get("image_version")
             policy1 = int(json_list.get("policy"))
 
         images = image_name
         if int(auto_startup) == 1:
-            # rc_krub = images[20:].replace("/", "_").replace(":", "_")
             pass
         else:
-            # rc_krub = "null"
             pods_num = 0
         if policy1 == 1:
             rc_krub = images[20:].replace("/", "_").replace(":", "_")
@@ -111,10 +104,11 @@ class SourceModel(object):
         volume = CreateVolume()
         user_name = json_list.get("user_name")
         service_name = json_list.get("service_name")
-        service_name = user_name+service_name
-        service_name1 = service_name.replace("_", "-")
-        if json_list.get("container_cpu") is not None:
-            container_cpu, container_memory = limits_cm(json_list)
+        service_name2 = user_name+service_name
+
+        service_name1 = service_name2.replace("_", "-")
+        # if json_list.get("container_cpu") is not None:
+        #    container_cpu, container_memory = limits_cm(json_list)
 
         update_rc = {
                        "kind": "ReplicationController",
@@ -143,7 +137,6 @@ class SourceModel(object):
                              },
                              "spec": {
                                 "nodeSelector": {"role": "user"},
-                                # "imagePullSecrets": [{"name": "registry-key"}],
                                 "containers": [
                                    {
                                       "name": service_name1,
@@ -188,7 +181,7 @@ class SourceModel(object):
         return update_rc
 
     def add_rc(self, json_list):
-        add_rc=dict()
+        add_rc = dict()
         namespace = json_list.get("user_name")
         image_name = json_list.get("image_name")
         image_version = json_list.get("image_version")
@@ -212,10 +205,8 @@ class SourceModel(object):
         auto_startup = json_list.get("auto_startup")
         log.info("8888888888888888888888+++%s" % command)
         if int(auto_startup) == 1:
-            # rc_krub = images[20:].replace("/", "_").replace(":", "_")
             pass
         else:
-            # rc_krub = "null"
             pods_num = 0
         if int(policy1) == 1:
             rc_krub = images[20:].replace("/", "_").replace(":", "_")
@@ -313,11 +304,8 @@ class SourceModel(object):
         return add_rc
 
     def add_service(self, json_list):
-        # namespace = json_list.get("user_name")
         service_name = json_list.get("service_name")
         user_name = json_list.get("user_name")
-        # domain_name = user_name+"-"+service_name+".boxlinker.com"
-        # status = "running"
         try:
             http_lb, tcp_lb, tcp_port = ArrayIterator.service_domain(json_list)
         except Exception, e:
@@ -330,42 +318,42 @@ class SourceModel(object):
             log.error('service json create error data=%s, reason=%s' % (container, e))
             return
         try:
-                service_name2 = user_name+service_name
-                service_name1 = service_name2.replace("_", "-")
+            service_name1 = service_name.replace("_", "-")
+            service_name2 = user_name+service_name
+            service_name2 = service_name2.replace("_", "-")
+            add_service = {
+                           "kind": "Service",
+                           "apiVersion": "v1",
+                           "metadata": {
+                              "annotations": {"serviceloadbalancer/lb.http": http_lb,
+                                              "serviceloadbalancer/lb.tcp": tcp_lb,
+                                              "serviceloadbalancer/lb.node": "lb1"
 
-                add_service = {
-                               "kind": "Service",
-                               "apiVersion": "v1",
-                               "metadata": {
-                                  "annotations": {"serviceloadbalancer/lb.http": http_lb,
-                                                  "serviceloadbalancer/lb.tcp": tcp_lb,
-                                                  "serviceloadbalancer/lb.node": "main"
+                                              },
+                              "name": service_name1,
+                              "labels": {
+                                 "name": service_name1
+                              }
+                           },
+                           "spec": {
+                              "ports": ArrayIterator.service_port(container),
+                              "selector": {
+                                 "component": service_name2,
+                                 "name": service_name2
+                              }
+                           },
+                           "namespace": user_name,
+                           "user_id": json_list.get("user_id")
+                        }
 
-                                                  },
-                                  "name": service_name1,
-                                  "labels": {
-                                     "name": service_name1
-                                  }
-                               },
-                               "spec": {
-                                  "ports": ArrayIterator.service_port(container),
-                                  "selector": {
-                                     "component": service_name1,
-                                     "name": service_name1
-                                  }
-                               },
-                               "namespace": user_name,
-                               "user_id": json_list.get("user_id")
-                            }
-
-                if http_lb == "":
-                    add_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.http")
-                elif tcp_lb == "":
-                    add_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.tcp")
-                else:
-                    pass
+            if http_lb == "" or http_lb is None:
+                add_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.http")
+            if tcp_lb == "" or tcp_lb is None:
+                add_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.tcp")
+            if (http_lb == "" and tcp_lb == "") or (http_lb is None and tcp_lb is None):
+                add_service["metadata"].pop("annotations")
         except Exception, e:
-            log.error("service create json error reason=%s" % (e))
+            log.error("service create json error reason=%s" % e)
             return
         return add_service
 
@@ -381,52 +369,61 @@ class SourceModel(object):
             http_lb, tcp_lb, tcp_port = ArrayIterator.service_domain(json_list)
         except Exception, e:
             log.error("the domain create error, reason=%s"
-                      % (e))
+                      % e)
         try:
-            log.info("the container data=%s,type=%s" % (json_list.get("container"), type(json_list.get("container"))))
+            # service_name2 = user_name+service_name
+            service_name1 = service_name.replace("_", "-")
+            service_name2 = user_name+service_name
+            service_name2 = service_name2.replace("_", "-")
+            update_service = {
+                           "kind": "Service",
+                           "apiVersion": "v1",
+                           "metadata": {
+                              "annotations": {"serviceloadbalancer/lb.http": http_lb,
+                                              "serviceloadbalancer/lb.tcp": tcp_lb,
+                                              "serviceloadbalancer/lb.node": "lb1"
 
+                                              },
+                              "name": service_name1,
+                              "namespace": user_name,
+                              "labels": {
+                                 "name": service_name1
+                              }
+                           },
+                           "spec": {
+                              "ports": ArrayIterator.service_port(container),
+                              "selector": {
+                                 "component": service_name2,
+                                 "name": service_name2
+                              }
+                           },
+                           "namespace": user_name,
+                           "name": service_name1,
+                           "rtype": "services"
+                        }
+            lb = update_service["metadata"]["annotations"]["serviceloadbalancer/lb.http"]
+            if http_lb == "" or http_lb is None:
+                update_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.http")
+            if tcp_lb == "" or tcp_lb is None:
+                update_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.tcp")
+            if (http_lb == "" and tcp_lb == "") or (http_lb is None and tcp_lb is None):
+                update_service["metadata"].pop("annotations")
+            if json_list.get("rtype") == "domain_change":
+                domain = json_list.get("domain")
+                cname = json_list.get("cname")
+                change_str = lb.replace(cname, domain)
+                update_service["metadata"]["annotations"]["serviceloadbalancer/lb.http"] = change_str
+            if json_list.get("identify_info") == "identify":
+                domain = json_list.get("domain")
+                cname = json_list.get("cname")
+                result_str = ""
+                for i in domain.split(","):
+                    result_str = result_str+' '+i
+                result_str = result_str.strip()
+                change_str = lb.replace(cname, result_str)
+                update_service["metadata"]["annotations"]["serviceloadbalancer/lb.http"] = change_str
         except Exception, e:
-            log.error('service json create error data=%s, reason=%s' % (container, e))
-            return
-        try:
-                service_name2 = user_name+service_name
-                service_name1 = service_name2.replace("_", "-")
-
-                update_service = {
-                               "kind": "Service",
-                               "apiVersion": "v1",
-                               "metadata": {
-                                  "annotations": {"serviceloadbalancer/lb.http": http_lb,
-                                                  "serviceloadbalancer/lb.tcp": tcp_lb,
-                                                  "serviceloadbalancer/lb.node": "main"
-
-                                                  },
-                                  "name": service_name1,
-                                  "namespace": user_name,
-                                  "labels": {
-                                     "name": service_name1
-                                  }
-                               },
-                               "spec": {
-                                  "ports": ArrayIterator.service_port(container),
-                                  "selector": {
-                                     "component": service_name1,
-                                     "name": service_name1
-                                  }
-                               },
-                               "namespace": user_name,
-                               "name": service_name1,
-                               "rtype": "services"
-                            }
-
-                if http_lb == "":
-                    update_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.http")
-                elif tcp_lb == "":
-                    update_service["metadata"]["annotations"].pop("serviceloadbalancer/lb.tcp")
-                else:
-                    pass
-        except Exception, e:
-            log.error("service create json error reason=%s" % (e))
+            log.error("service create json error reason=%s" % e)
             return
         return update_service
 
@@ -435,10 +432,10 @@ class SourceModel(object):
         command = ""
         image_name = ""
         image_version = ""
-        container_cpu = ""
+        # container_cpu = ""
         policy1 = 0
         pods_num = 0
-        container_memory = ""
+        # container_memory = ""
         auto_startup = 0
         select_rc = DataOrm.get_update_rc(json_list)
         containers_pod = DataOrm.detail_container(json_list)
@@ -451,15 +448,15 @@ class SourceModel(object):
             res = []
             for j in xxx:
                 containers = {"container_port": j.get("containerPort"),
-                       "protocol": j.get("protocol"),
-                       "access_mode": j.get("access_mode"),
-                       "access_scope": j.get("access_scope")}
+                              "protocol": j.get("protocol"),
+                              "access_mode": j.get("access_mode"),
+                              "access_scope": j.get("access_scope")}
                 res.append(containers)
             for i in resu:
                 image_name = i.get("image_name")
                 image_version = i.get("image_version")
-                container_cpu = i.get("limits_cpu")
-                container_memory = i.get("limits_memory")
+                # container_cpu = i.get("limits_cpu")
+                # container_memory = i.get("limits_memory")
                 policy1 = int(i.get("policy"))
                 com = i.get("command")
             logicmodel.connClose(conn, cur)
@@ -473,10 +470,6 @@ class SourceModel(object):
             result = code.request_result(403, ret={"msg": msg.message, "msg1": msg.args})
             return result
         images = image_name
-        if int(auto_startup) == 1:
-           pass
-        else:
-           pass
         if policy1 == 1:
             rc_krub = images[20:].replace("/", "_").replace(":", "_")
             pullpolicy = "Always"
@@ -485,8 +478,9 @@ class SourceModel(object):
             rc_krub = "null"
         user_name = json_list.get("user_name")
         service_name = json_list.get("service_name")
-        service_name = user_name+service_name
-        service_name1 = service_name.replace("_", "-")
+        service_name2 = user_name+service_name
+        service_name1 = service_name2.replace("_", "-")
+
         del_pod = {
                        "kind": "ReplicationController",
                        "apiVersion": "v1",
@@ -534,10 +528,7 @@ class SourceModel(object):
                        "name": service_name1,
                        "rtype": "replicationcontrollers"
                     }
-        # if json_list.get("env") == [{"env_key": "", "env_value": ""}] or json_list.get("env") is None :
-        #    update_rc["spec"]["template"]["spec"]["containers"].pop("env")
-        # else:
-        #    pass
+
         if command == "" or command is None:
             j = 0
             for i in del_pod["spec"]["template"]["spec"]["containers"]:
@@ -553,8 +544,8 @@ class SourceModel(object):
         image_version = json_list.get("image_version")
         service_name = json_list.get("service_name")
 
-        container_memory = json_list.get("container_memory")
-        container_cpu = json_list.get("container_cpu")
+        # container_memory = json_list.get("container_memory")
+        # container_cpu = json_list.get("container_cpu")
         pods_num = int(json_list.get("pods_num"))
 
         user_name = json_list.get("user_name")

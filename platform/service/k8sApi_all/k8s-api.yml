@@ -39,7 +39,7 @@ items:
         - name: registry-key
         containers:
         - name: k8s-api
-          image: index.boxlinker.com/boxlinker/centos-k8sapi:1.0.0
+          image: index.boxlinker.com/boxlinker/centos-k8sapi:latest
           imagePullPolicy: Always
           env:
           - name: MYSQL_HOST
@@ -51,10 +51,12 @@ items:
           - name: RABBITMQ_PORT
             value: "5672"
           - name: STORAGE_HOST
-            value: storage-api:9999
+            value: storage-api:8001
           - name: AUTHOR_HOST
             value: registry-api:8080
           - name: ELASTIC_SEARCH
             value: elasticsearch:9200
+          - name: VOLUMEIP
+            value: 10.10.10.11:5000,10.10.10.12:5000,10.10.10.21:5000
           ports:
           - containerPort: 9000

@@ -12,7 +12,7 @@ import os
 class AllApiMethods(object):
 
         # host_address = 'http://127.0.0.1:8080/api/v1'
-        host_address = "https://kubernetes.default.svc:443/api"
+        host_address = "https://kubernetes.default.svc:443/api/v1"
         # 以下所有方法:json_list需要增加资源类型(rtype)说明:eg:pods?services?rcs?...要记得末尾的复数s
 
         with open(os.environ.get('TOKEN_PATH'), 'r') as f:
@@ -48,21 +48,21 @@ class AllApiMethods(object):
         @classmethod
         def show_namespace(cls,json_list):
                 url = '%s/namespaces/%s' % (cls.host_address,json_list.get('name'))
-                response = requests.get(url)
+                response = requests.get(url, headers=cls.HEADERS, verify=False)
                 return response.text
 
         @classmethod
         def post_namespace(cls,json_list):
                 url = '%s/namespaces' % (cls.host_address)
                 print url
-                response = requests.post(url,json.dumps(json_list))
+                response = requests.post(url, data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 return response
 
         @classmethod
         def post_secret(cls,json_list):
                 names = json_list.pop('namespace')
                 url = '%s/namespaces/%s/secrets' % (cls.host_address,names)
-                response = requests.post(url,json.dumps(json_list))
+                response = requests.post(url, data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 return response
 
         @classmethod
@@ -77,8 +77,10 @@ class AllApiMethods(object):
                         namespace = "default"
                 params = urllib.urlencode(json_list)
                 url = '%s/namespaces/%s/%s?%s' % (cls.host_address, namespace, rtype, params)
-                msg = urllib.urlopen(url)
-                response = msg.read()
+
+                msg = urllib2.Request(url, headers=cls.HEADERS)
+                res = urllib2.urlopen(msg)
+                response = res.read()
 
                 return response
 
@@ -101,8 +103,9 @@ class AllApiMethods(object):
 
                 params = urllib.urlencode(json_list)
                 url = '%s/namespaces/%s/%s/%s?%s' % (cls.host_address, namespace, rtype, name, params)
-                msg = urllib.urlopen(url)
-                response = msg.read()
+                msg = urllib2.Request(url, headers=cls.HEADERS)
+                res = urllib2.urlopen(msg)
+                response = res.read()
 
                 return response
 
@@ -117,7 +120,7 @@ class AllApiMethods(object):
 
                 url = '%s/namespaces/%s/%s' % (cls.host_address, namespace, rtype)
 
-                the_page = requests.post(url, json.dumps(json_list))
+                the_page = requests.post(url, data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 response = the_page.text
 
                 return response
@@ -133,7 +136,7 @@ class AllApiMethods(object):
                 else:
                         namespace = 'default'
                 url = '%s/namespaces/%s/%s/%s' % (cls.host_address, namespace, rtype, json_list.get('name'))
-                response = requests.delete(url)
+                response = requests.delete(url, headers=cls.HEADERS, verify=False)
 
                 return response
 
@@ -154,7 +157,7 @@ class AllApiMethods(object):
                         return m_name
 
                 url = '%s/namespaces/%s/%s/%s' % (cls.host_address, namespace, rtype, name)
-                the_page = requests.patch(url,data=json.dumps(json_list))
+                the_page = requests.patch(url,data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 response = the_page.text
 
                 return response
@@ -173,7 +176,7 @@ class AllApiMethods(object):
                         return m_name
 
                 url = '%s/namespaces/%s/%s/%s' % (cls.host_address, namespace, rtype, name)
-                the_page = requests.put(url,data=json.dumps(json_list))
+                the_page = requests.put(url,data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 return the_page		
 
         @classmethod
@@ -181,7 +184,7 @@ class AllApiMethods(object):
                 global host_address
                 rtype = json_list.pop('rtype')
                 url = '%s/%s' % (host_address,rtype)
-                the_page = requests.post(url, json_list)
+                the_page = requests.post(url, data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 response = the_page.text
                 return response
 
@@ -191,7 +194,7 @@ class AllApiMethods(object):
                 namespace = json_list.pop('namespace')
                 name = json_list.pop('name')
                 url = '%s/namespaces/%s/pods/%s/status' % (host_address, namespace, name)
-                response = requests.put(url, json_list)
+                response = requests.put(url, data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 return response
 
         @classmethod
@@ -200,7 +203,7 @@ class AllApiMethods(object):
                 namespace = json_list.pop('namespace')
                 name = json_list.pop('name')
                 url = '%s/namespaces/%s/pods/%s/binding' % (host_address, namespace, name)
-                response = requests.post(url, json_list)
+                response = requests.post(url, data=json.dumps(json_list), headers=cls.HEADERS, verify=False)
                 return response
 
         @classmethod

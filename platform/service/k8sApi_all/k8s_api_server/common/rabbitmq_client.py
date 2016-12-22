@@ -6,6 +6,7 @@
 import sys
 import pika
 import uuid
+import os
 
 from time import sleep
 from common.logs import logging as log
@@ -14,13 +15,13 @@ from common.single import Singleton
 
 class RabbitmqClient(object):
 
-    def mq_connect(self, mq_server01='192.168.1.10', mq_server02='192.168.1.10'):
+    def mq_connect(self, mq_server01=os.environ.get("RABBITMQ_HOST"), mq_server02=os.environ.get("RABBITMQ_HOST")):
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))
 
         try:
             self.connection = pika.BlockingConnection(
-                              pika.ConnectionParameters(host=mq_server01,port=30001))
+                              pika.ConnectionParameters(host=mq_server01,port=int(os.environ.get("RABBITMQ_PORT"))))
             self.channel = self.connection.channel()
         except Exception, e:
             log.error('rabbitmq server %s connection error: reason=%s'
@@ -28,7 +29,7 @@ class RabbitmqClient(object):
             try:
                 self.connection = pika.BlockingConnection(
                                   pika.ConnectionParameters(
-                                       host=mq_server02,port=30001))
+                                       host=mq_server02,port=int(os.environ.get("RABBITMQ_PORT"))))
                 self.channel = self.connection.channel()
             except Exception, e:
                 log.error('rabbitmq server %s connection error: reason=%s'
