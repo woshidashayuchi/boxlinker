@@ -55,6 +55,7 @@ items:
     annotations:
       serviceloadbalancer/lb.http: storage.boxlinker.com:8001
       serviceloadbalancer/lb.node: main
+      serviceloadbalancer/lb.sslTerm: "true"
   spec:
     selector:
       name: storage-api

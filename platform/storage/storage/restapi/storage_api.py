@@ -76,6 +76,7 @@ class StorageVolumeApi(Resource):
 
         self.storage_api = rpc_client.RpcClient()
 
+    @time_log
     def get(self, volume_uuid):
 
         try:
@@ -95,6 +96,7 @@ class StorageVolumeApi(Resource):
 
         return self.storage_api.disk_info(context)
 
+    @time_log
     def put(self, volume_uuid):
 
         try:
@@ -122,6 +124,7 @@ class StorageVolumeApi(Resource):
 
         return self.storage_api.disk_resize(context, parameters)
 
+    @time_log
     def delete(self, volume_uuid):
 
         try:
@@ -148,6 +151,7 @@ class StorageVolumeStatusApi(Resource):
 
         self.storage_api = rpc_client.RpcClient()
 
+    @time_log
     def put(self, volume_uuid):
 
         try:

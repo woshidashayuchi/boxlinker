@@ -33,3 +33,4 @@ def time_log(func):
         return result
 
     return __wrapper
+

@@ -13,7 +13,7 @@ from common.code import request_result
 
 requests.adapters.DEFAULT_RETRIES = 5
 caches = LocalCache(100)
-url = 'http://192.168.1.6:8080/api/v1.0/usercenter/tokens'
+url = 'http://auth.boxlinker.com/api/v1.0/usercenter/tokens'
 
 
 def token_auth(token):
