@@ -36,6 +36,8 @@ class K8sLogManager(object):
         if start_time is None:
             start_time = end_time - 300000
 
+        start_time = int(start_time)
+        end_time = int(end_time)
         ret = self.log_driver.pod_log_info(label_value, pod_name,
                                            date_time, start_time, end_time)
         status_code = int(ret['status'])
@@ -64,7 +66,7 @@ class K8sLogManager(object):
 
             pod_log = pod_log['_source']
             log.debug('pod_log=%s, type=%s' % (pod_log, type(pod_log)))
-            log.debug('user_uuid=%s, role_uuid=%d' % (user_uuid, role_uuid))
+            log.debug('user_uuid=%s, role_uuid=%s' % (user_uuid, role_uuid))
 
             try:
                 mlogs = json.loads(pod_log['log'])
