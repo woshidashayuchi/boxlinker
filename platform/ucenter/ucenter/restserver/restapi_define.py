@@ -11,6 +11,7 @@ from common.logs import logging as log
 from common.code import request_result
 from common.time_log import time_log
 from common.token_localauth import token_auth
+from common.parameters import context_data
 
 from ucenter.rpcapi import rpc_client as ucenter_rpcapi
 
@@ -32,10 +33,7 @@ class UcenterUsersApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "resource_uuid": "uct_usr_usr_crt",
-                      "action": "create"
-                  }
+        context = context_data(None, "uct_usr_usr_crt", "create")
 
         return self.ucenter_api.user_create(context, parameters)
 
@@ -60,11 +58,7 @@ class UcenterUsersApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_usr_usr_lst",
-                      "action": "read"
-                  }
+        context = context_data(token, "uct_usr_usr_lst", "read")
 
         return self.ucenter_api.user_list(context, parameters)
 
@@ -86,11 +80,7 @@ class UcenterUserApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_uuid,
-                      "action": "read"
-                  }
+        context = context_data(token, user_uuid, "read")
 
         return self.ucenter_api.user_info(context)
 
@@ -113,11 +103,7 @@ class UcenterUserApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_uuid,
-                      "action": "update"
-                  }
+        context = context_data(token, user_uuid, "update")
 
         return self.ucenter_api.user_update(context, parameters)
 
@@ -131,10 +117,7 @@ class UcenterUserStatusApi(Resource):
     @time_log
     def post(self, user_uuid):
 
-        context = {
-                      "resource_uuid": user_uuid,
-                      "action": "create"
-                  }
+        context = context_data(None, user_uuid, "create")
 
         return self.ucenter_api.user_activate(context)
 
@@ -157,11 +140,7 @@ class UcenterUserStatusApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_usr_usr_stu",
-                      "action": "update"
-                  }
+        context = context_data(token, "uct_usr_usr_stu", "update")
 
         parameters['user_uuid'] = user_uuid
 
@@ -193,11 +172,7 @@ class UcenterRolesApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_rol_rol_crt",
-                      "action": "create"
-                  }
+        context = context_data(token, "uct_rol_rol_crt", "create")
 
         return self.ucenter_api.role_create(context, parameters)
 
@@ -212,11 +187,7 @@ class UcenterRolesApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_rol_rol_lst",
-                      "action": "read"
-                  }
+        context = context_data(token, "uct_rol_rol_lst", "read")
 
         return self.ucenter_api.role_list(context)
 
@@ -238,11 +209,7 @@ class UcenterRoleApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": role_uuid,
-                      "action": "read"
-                  }
+        context = context_data(token, role_uuid, "read")
 
         return self.ucenter_api.role_info(context)
 
@@ -265,11 +232,7 @@ class UcenterRoleApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": role_uuid,
-                      "action": "update"
-                  }
+        context = context_data(token, role_uuid, "update")
 
         return self.ucenter_api.role_update(context, parameters)
 
@@ -284,11 +247,7 @@ class UcenterRoleApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": role_uuid,
-                      "action": "delete"
-                  }
+        context = context_data(token, role_uuid, "delete")
 
         return self.ucenter_api.role_delete(context)
 
@@ -318,21 +277,14 @@ class UcenterPasswordApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_uuid,
-                      "action": "update"
-                  }
+        context = context_data(token, user_uuid, "update")
 
         return self.ucenter_api.password_change(context, parameters)
 
     @time_log
     def get(self, user_uuid):
 
-        context = {
-                      "resource_uuid": user_uuid,
-                      "action": "read"
-                  }
+        context = context_data(None, user_uuid, "read")
 
         return self.ucenter_api.password_find(context)
 
@@ -355,11 +307,7 @@ class UcenterPasswordApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_uuid,
-                      "action": "update"
-                  }
+        context = context_data(token, user_uuid, "update")
 
         return self.ucenter_api.password_reset(context, parameters)
 
@@ -381,9 +329,7 @@ class UcenterTokensApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "resource_uuid": "uct_tkn_tkn_lgi"
-                  }
+        context = context_data(None, "uct_tkn_tkn_lgi", None)
 
         return self.ucenter_api.token_login(context, parameters)
 
@@ -397,9 +343,7 @@ class UcenterTokensApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token
-                  }
+        context = context_data(token, None, None)
 
         return self.ucenter_api.token_check(context)
 
@@ -421,9 +365,7 @@ class UcenterTokensApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token
-                  }
+        context = context_data(token, None, None)
 
         return self.ucenter_api.token_switch(context, parameters)
 
@@ -437,9 +379,7 @@ class UcenterTokensApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token
-                  }
+        context = context_data(token, None, None)
 
         return self.ucenter_api.token_delete(context)
 
@@ -469,11 +409,7 @@ class UcenterTeamsApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_tem_tem_crt",
-                      "action": "create"
-                  }
+        context = context_data(token, "uct_tem_tem_crt", "create")
 
         return self.ucenter_api.team_create(context, parameters)
 
@@ -488,11 +424,7 @@ class UcenterTeamsApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_tem_tem_lst",
-                      "action": "read"
-                  }
+        context = context_data(token, "uct_tem_tem_lst", "read")
 
         return self.ucenter_api.team_list(context)
 
@@ -514,11 +446,7 @@ class UcenterTeamApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": team_uuid,
-                      "action": "read"
-                  }
+        context = context_data(token, team_uuid, "read")
 
         return self.ucenter_api.team_info(context)
 
@@ -541,11 +469,7 @@ class UcenterTeamApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": team_uuid,
-                      "action": "update"
-                  }
+        context = context_data(token, team_uuid, "update")
 
         return self.ucenter_api.team_update(context, parameters)
 
@@ -560,11 +484,7 @@ class UcenterTeamApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": team_uuid,
-                      "action": "delete"
-                  }
+        context = context_data(token, team_uuid, "delete")
 
         return self.ucenter_api.team_delete(context)
 
@@ -594,11 +514,7 @@ class UcenterProjectsApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_pro_pro_crt",
-                      "action": "create"
-                  }
+        context = context_data(token, "uct_pro_pro_crt", "create")
 
         return self.ucenter_api.project_create(context, parameters)
 
@@ -613,11 +529,7 @@ class UcenterProjectsApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": "uct_pro_pro_lst",
-                      "action": "read"
-                  }
+        context = context_data(token, "uct_pro_pro_lst", "read")
 
         return self.ucenter_api.project_list(context)
 
@@ -639,11 +551,7 @@ class UcenterProjectApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": project_uuid,
-                      "action": "read"
-                  }
+        context = context_data(token, project_uuid, "read")
 
         return self.ucenter_api.project_info(context)
 
@@ -666,11 +574,7 @@ class UcenterProjectApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": project_uuid,
-                      "action": "update"
-                  }
+        context = context_data(token, project_uuid, "update")
 
         return self.ucenter_api.project_update(context, parameters)
 
@@ -685,11 +589,7 @@ class UcenterProjectApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": project_uuid,
-                      "action": "delete"
-                  }
+        context = context_data(token, project_uuid, "delete")
 
         return self.ucenter_api.project_delete(context)
 
@@ -719,11 +619,7 @@ class UcenterUsersTeamsApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_info['team_uuid'],
-                      "action": "create"
-                  }
+        context = context_data(token, user_info['team_uuid'], "create")
 
         return self.ucenter_api.user_team_add(context, parameters)
 
@@ -738,11 +634,7 @@ class UcenterUsersTeamsApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_info['team_uuid'],
-                      "action": "read"
-                  }
+        context = context_data(token, user_info['team_uuid'], "read")
 
         return self.ucenter_api.user_team_list(context)
 
@@ -772,11 +664,7 @@ class UcenterUserTeamApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_uuid,
-                      "action": "update"
-                  }
+        context = context_data(token, user_uuid, "update")
 
         return self.ucenter_api.user_team_activate(context, parameters)
 
@@ -799,11 +687,7 @@ class UcenterUserTeamApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_info['team_uuid'],
-                      "action": "update"
-                  }
+        context = context_data(token, user_info['team_uuid'], "update")
 
         parameters['user_uuid'] = user_uuid
 
@@ -825,11 +709,7 @@ class UcenterUserTeamApi(Resource):
         else:
             resource_uuid = user_info['team_uuid']
 
-        context = {
-                      "token": token,
-                      "resource_uuid": resource_uuid,
-                      "action": "delete"
-                  }
+        context = context_data(token, resource_uuid, "delete")
 
         parameters = {"user_uuid": user_uuid}
 
@@ -861,11 +741,7 @@ class UcenterUsersProjectsApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_info['project_uuid'],
-                      "action": "create"
-                  }
+        context = context_data(token, user_info['project_uuid'], "create")
 
         return self.ucenter_api.user_project_add(context, parameters)
 
@@ -880,11 +756,7 @@ class UcenterUsersProjectsApi(Resource):
 
             return request_result(201)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_info['project_uuid'],
-                      "action": "read"
-                  }
+        context = context_data(token, user_info['project_uuid'], "read")
 
         return self.ucenter_api.user_project_list(context)
 
@@ -914,11 +786,7 @@ class UcenterUserProjectApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "resource_uuid": user_info['project_uuid'],
-                      "action": "update"
-                  }
+        context = context_data(token, user_info['project_uuid'], "update")
 
         parameters['user_uuid'] = user_uuid
 
@@ -940,11 +808,7 @@ class UcenterUserProjectApi(Resource):
         else:
             resource_uuid = user_info['project_uuid']
 
-        context = {
-                      "token": token,
-                      "resource_uuid": resource_uuid,
-                      "action": "delete"
-                  }
+        context = context_data(token, resource_uuid, "delete")
 
         parameters = {"user_uuid": user_uuid}
 

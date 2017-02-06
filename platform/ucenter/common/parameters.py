@@ -1,10 +1,27 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-
 import sys
 import re
 from common.logs import logging as log
+
+
+def context_data(token=None, resource_uuid=None, action=None):
+
+    return {
+               "token": token,
+               "resource_uuid": resource_uuid,
+               "action": action
+           }
+
+
+def rpc_data(api, context, parameters):
+
+    return {
+               "api": api,
+               "context": context,
+               "parameters": parameters
+           }
 
 
 def parameter_check(parameter, ptype='pstr', exist='yes'):
