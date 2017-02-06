@@ -7,14 +7,16 @@ import pika_pool
 import uuid
 
 from time import sleep
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 
 
 class RabbitmqClient(object):
 
-    def __init__(self, mq_server01='127.0.0.1',
-                 mq_server02='127.0.0.1'):
+    def __init__(self, mq_server01=conf.mq_server01,
+                 mq_server02=conf.mq_server02,
+                 mq_port=conf.mq_port):
 
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))
@@ -24,8 +26,10 @@ class RabbitmqClient(object):
         #    'socket_timeout=10&'
         #    'connection_attempts=2')
 
-        self.params01 = pika.ConnectionParameters(host=mq_server01, port=5672)
-        self.params02 = pika.ConnectionParameters(host=mq_server02, port=5672)
+        self.params01 = pika.ConnectionParameters(
+                             host=mq_server01, port=mq_port)
+        self.params02 = pika.ConnectionParameters(
+                             host=mq_server02, port=mq_port)
 
         try:
             self.pool = pika_pool.QueuedPool(
@@ -53,15 +57,17 @@ class RabbitmqClient(object):
                           % (mq_server02, e))
                 raise
 
-    def mq_connect(self, mq_server01='127.0.0.1',
-                   mq_server02='127.0.0.1'):
+    def mq_connect(self, mq_server01=conf.mq_server01,
+                   mq_server02=conf.mq_server02,
+                   mq_port=conf.mq_port):
 
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))
 
         try:
             self.connection = pika.BlockingConnection(
-                              pika.ConnectionParameters(host=mq_server01))
+                              pika.ConnectionParameters(
+                                   host=mq_server01, port=mq_port))
             self.channel = self.connection.channel()
         except Exception, e:
             log.error('rabbitmq server %s connection error: reason=%s'
@@ -69,7 +75,7 @@ class RabbitmqClient(object):
             try:
                 self.connection = pika.BlockingConnection(
                                   pika.ConnectionParameters(
-                                       host=mq_server02))
+                                       host=mq_server02, port=mq_port))
                 self.channel = self.connection.channel()
             except Exception, e:
                 log.error('rabbitmq server %s connection error: reason=%s'

@@ -8,6 +8,7 @@ sys.path.insert(1, p_path)
 
 from time import sleep
 
+from conf import conf
 from common.logs import logging as log
 from ucenter.restserver.restapi_register import rest_app_run
 
@@ -16,11 +17,11 @@ def server_start():
 
     while True:
         try:
-            log.info('Starting Ucenter Restful API Server')
+            log.info('Starting %s Restful API Server' % (conf.service_name))
             rest_app_run()
         except Exception, e:
-            log.warning('Ucenter RESTful API Server running error, reason=%s'
-                        % (e))
+            log.warning('%s RESTful API Server running error, reason=%s'
+                        % (conf.service_name, e))
         sleep(10)
 
 

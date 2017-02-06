@@ -11,13 +11,14 @@ sys.path.insert(1, p_path)
 
 import rpcapi_register
 
+from conf import conf
 from common.logs import logging as log
 from common.rabbitmq_server import RabbitmqServer
 
 
 def server_start(n):
 
-    queue = 'ucentercall_api'
+    queue = conf.call_queue
 
     while True:
 

@@ -130,10 +130,10 @@ class RabbitmqResponse(object):
         self.rpc_api.add_resource(
              'uct_usr_pro_del', self.rpcapi_define.user_project_delete)
 
-    def rpc_exec(self, dict_data):
+    def rpc_exec(self, rpc_body):
 
         try:
-            return self.rpc_api.rpcapp_run(dict_data)
+            return self.rpc_api.rpcapp_run(rpc_body)
         except Exception, e:
             log.error('RPC Server exec error: %s' % (e))
             return request_result(599)

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
+from conf import conf
+
 from common.logs import logging as log
 from common.single import Singleton
 from common.DBUtils.PooledDB import PooledDB
@@ -20,18 +22,20 @@ class MysqlInit(object):
 
         try:
             self.pool = PooledDB(MySQLdb, 4,
-                                 host='127.0.0.1',
-                                 port=3306, user='cloud', passwd='cloud',
-                                 db='ucenter', charset='utf8')
+                                 host=conf.db_server01, port=conf.db_port,
+                                 user=conf.db_user, passwd=conf.db_passwd,
+                                 db=conf.database, charset='utf8')
         except Exception, e:
-            log.error('db_server01 connection error: reason= %s' % (e))
+            log.error('db_server01(%s) connection error: reason= %s'
+                      % (conf.db_server01, e))
             try:
-                self.pool = PooledDB(MySQLdb, 2,
-                                     host='127.0.0.1',
-                                     port=3306, user='cloud', passwd='cloud',
-                                     db='ucenter', charset='utf8')
+                self.pool = PooledDB(MySQLdb, 4,
+                                     host=conf.db_server02, port=conf.db_port,
+                                     user=conf.db_user, passwd=conf.db_passwd,
+                                     db=conf.database, charset='utf8')
             except Exception, e:
-                log.error('db_server02 connection error: reason=%s' % (e))
+                log.error('db_server02(%s) connection error: reason=%s'
+                          % (conf.db_server02, e))
                 raise
 
     def get_cursor(self):

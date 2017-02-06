@@ -6,6 +6,7 @@ import time
 import inspect
 import requests
 
+from conf import conf
 from common.logs import logging as log
 from common.local_cache import LocalCache
 from common.code import request_result
@@ -13,7 +14,7 @@ from common.code import request_result
 
 requests.adapters.DEFAULT_RETRIES = 5
 caches = LocalCache(100)
-url = os.environ.get('TOKEN_AUTH_API')
+url = conf.ucenter_api
 
 
 def token_auth(token):

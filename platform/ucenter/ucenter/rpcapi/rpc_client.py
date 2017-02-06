@@ -3,6 +3,7 @@
 
 import time
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.local_cache import LocalCache
@@ -17,8 +18,8 @@ class UcenterRpcClient(object):
     def __init__(self):
 
         self.rbtmq = RabbitmqClient()
-        self.queue = 'ucentercall_api'
-        self.timeout = 60
+        self.queue = conf.call_queue
+        self.timeout = conf.rpc_timeout
 
     def user_create(self, context, parameters=None):
 

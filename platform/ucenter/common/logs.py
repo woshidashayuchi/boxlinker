@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-
 import logging
+
+from conf import conf
+
 
 logging.basicConfig(
     level=logging.INFO,
-    filename='/var/log/cloud.log',
+    filename=conf.log_file,
     format=('%(asctime)s '
             '[%(levelname)s] '
             '[%(filename)s line:%(lineno)d] '

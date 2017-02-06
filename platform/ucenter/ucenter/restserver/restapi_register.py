@@ -7,6 +7,8 @@ from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
 
+from conf import conf
+
 
 def rest_app_run():
 
@@ -59,4 +61,5 @@ def rest_app_run():
     api.add_resource(restapi_define.UcenterUserProjectApi,
                      '/api/v1.0/ucenter/usersprojects/<user_uuid>')
 
-    app.run(host='0.0.0.0', port=8001, threaded=True, debug=True)
+    app.run(host=conf.rest_host, port=conf.rest_port,
+            threaded=True, debug=conf.rest_debug)
