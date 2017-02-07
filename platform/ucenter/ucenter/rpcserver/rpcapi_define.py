@@ -33,13 +33,13 @@ class UcenterRpcAPI(object):
     def user_create(self, context, parameters):
 
         try:
-            user_name = parameters['user_name']
-            password = parameters['password']
-            email = parameters['email']
-            real_name = parameters['real_name']
-            mobile = parameters['mobile']
-            sex = parameters['sex']
-            birth_date = parameters['birth_date']
+            user_name = parameters.get('user_name')
+            password = parameters.get('password')
+            email = parameters.get('email')
+            real_name = parameters.get('real_name')
+            mobile = parameters.get('mobile')
+            sex = parameters.get('sex')
+            birth_date = parameters.get('birth_date')
 
             user_name = parameter_check(user_name, ptype='pnam')
             password = parameter_check(password, ptype='ppwd')
@@ -62,7 +62,7 @@ class UcenterRpcAPI(object):
     def user_activate(self, context, parameters):
 
         try:
-            user_uuid = context['resource_uuid']
+            user_uuid = context.get('resource_uuid')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
         except Exception, e:
@@ -76,8 +76,8 @@ class UcenterRpcAPI(object):
     def user_status(self, context, parameters):
 
         try:
-            user_uuid = parameters['user_uuid']
-            status = parameters['user_status']
+            user_uuid = parameters.get('user_uuid')
+            status = parameters.get('user_status')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             status = parameter_check(status, ptype='pstr')
@@ -94,7 +94,7 @@ class UcenterRpcAPI(object):
     def user_list(self, context, parameters):
 
         try:
-            user_name = parameters['user_name']
+            user_name = parameters.get('user_name')
 
             user_name = parameter_check(user_name, ptype='pnam')
         except Exception, e:
@@ -108,7 +108,7 @@ class UcenterRpcAPI(object):
     def user_info(self, context, parameters):
 
         try:
-            user_uuid = context['resource_uuid']
+            user_uuid = context.get('resource_uuid')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
         except Exception, e:
@@ -122,12 +122,12 @@ class UcenterRpcAPI(object):
     def user_update(self, context, parameters):
 
         try:
-            user_uuid = context['resource_uuid']
+            user_uuid = context.get('resource_uuid')
 
-            real_name = parameters['real_name']
-            mobile = parameters['mobile']
-            sex = parameters['sex']
-            birth_date = parameters['birth_date']
+            real_name = parameters.get('real_name')
+            mobile = parameters.get('mobile')
+            sex = parameters.get('sex')
+            birth_date = parameters.get('birth_date')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             real_name = parameter_check(real_name, ptype='pnam', exist='no')
@@ -149,11 +149,11 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info['user_uuid']
-            team_uuid = user_info['team_uuid']
+            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
 
-            role_name = parameters['role_name']
-            role_priv = parameters['role_priv']
+            role_name = parameters.get('role_name')
+            role_priv = parameters.get('role_priv')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             team_uuid = parameter_check(team_uuid, ptype='pstr')
@@ -175,7 +175,7 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info['team_uuid']
+            team_uuid = user_info.get('team_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
@@ -189,7 +189,7 @@ class UcenterRpcAPI(object):
     def role_info(self, context, parameters):
 
         try:
-            role_uuid = context['resource_uuid']
+            role_uuid = context.get('resource_uuid')
 
             role_uuid = parameter_check(role_uuid, ptype='pstr')
         except Exception, e:
@@ -203,8 +203,8 @@ class UcenterRpcAPI(object):
     def role_update(self, context, parameters):
 
         try:
-            role_uuid = context['resource_uuid']
-            role_priv = parameters['role_priv']
+            role_uuid = context.get('resource_uuid')
+            role_priv = parameters.get('role_priv')
 
             role_uuid = parameter_check(role_uuid, ptype='pstr')
             role_priv = parameter_check(role_priv, ptype='pstr')
@@ -222,7 +222,7 @@ class UcenterRpcAPI(object):
     def role_delete(self, context, parameters):
 
         try:
-            role_uuid = context['resource_uuid']
+            role_uuid = context.get('resource_uuid')
 
             role_uuid = parameter_check(role_uuid, ptype='pstr')
         except Exception, e:
@@ -236,9 +236,9 @@ class UcenterRpcAPI(object):
     def password_change(self, context, parameters):
 
         try:
-            user_uuid = context['resource_uuid']
-            old_password = parameters['old_password']
-            new_password = parameters['new_password']
+            user_uuid = context.get('resource_uuid')
+            old_password = parameters.get('old_password')
+            new_password = parameters.get('new_password')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             old_password = parameter_check(old_password, ptype='ppwd')
@@ -254,7 +254,7 @@ class UcenterRpcAPI(object):
     def password_find(self, context, parameters):
 
         try:
-            user_name = context['resource_uuid']
+            user_name = context.get('resource_uuid')
 
             user_name = parameter_check(user_name, ptype='pnam')
         except Exception, e:
@@ -268,8 +268,8 @@ class UcenterRpcAPI(object):
     def password_reset(self, context, parameters):
 
         try:
-            user_uuid = context['resource_uuid']
-            password = parameters['password']
+            user_uuid = context.get('resource_uuid')
+            password = parameters.get('password')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             password = parameter_check(password, ptype='ppwd')
@@ -284,8 +284,8 @@ class UcenterRpcAPI(object):
     def token_login(self, context, parameters):
 
         try:
-            user_name = parameters['user_name']
-            password = parameters['password']
+            user_name = parameters.get('user_name')
+            password = parameters.get('password')
 
             try:
                 user_name = parameter_check(user_name, ptype='pnam')
@@ -302,9 +302,9 @@ class UcenterRpcAPI(object):
     def token_switch(self, context, parameters):
 
         try:
-            user_token = context['token']
-            team_uuid = parameters['team_uuid']
-            project_uuid = parameters['project_uuid']
+            user_token = context.get('token')
+            team_uuid = parameters.get('team_uuid')
+            project_uuid = parameters.get('project_uuid')
 
             user_token = parameter_check(user_token, ptype='pstr')
             team_uuid = parameter_check(team_uuid, ptype='pstr')
@@ -321,7 +321,7 @@ class UcenterRpcAPI(object):
     def token_auth(self, context, parameters):
 
         try:
-            user_token = context['token']
+            user_token = context.get('token')
 
             user_token = parameter_check(user_token, ptype='pstr')
         except Exception, e:
@@ -334,7 +334,7 @@ class UcenterRpcAPI(object):
     def token_delete(self, context, parameters):
 
         try:
-            user_token = context['token']
+            user_token = context.get('token')
 
             user_token = parameter_check(user_token, ptype='pstr')
         except Exception, e:
@@ -349,10 +349,10 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_owner = user_info['user_uuid']
+            team_owner = user_info.get('user_uuid')
 
-            team_name = parameters['team_name']
-            team_desc = parameters['team_desc']
+            team_name = parameters.get('team_name')
+            team_desc = parameters.get('team_desc')
 
             team_name = parameter_check(team_name, ptype='pnam')
             team_owner = parameter_check(team_owner, ptype='pstr')
@@ -369,7 +369,7 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info['user_uuid']
+            user_uuid = user_info.get('user_uuid')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -381,7 +381,7 @@ class UcenterRpcAPI(object):
     def team_info(self, context, parameters):
 
         try:
-            team_uuid = context['resource_uuid']
+            team_uuid = context.get('resource_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
@@ -395,9 +395,9 @@ class UcenterRpcAPI(object):
     def team_update(self, context, parameters):
 
         try:
-            team_uuid = context['resource_uuid']
-            team_owner = parameters['team_owner']
-            team_desc = parameters['team_desc']
+            team_uuid = context.get('resource_uuid')
+            team_owner = parameters.get('team_owner')
+            team_desc = parameters.get('team_desc')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             team_owner = parameter_check(team_owner, ptype='pstr', exist='no')
@@ -414,7 +414,7 @@ class UcenterRpcAPI(object):
     def team_delete(self, context, parameters):
 
         try:
-            team_uuid = context['resource_uuid']
+            team_uuid = context.get('resource_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
@@ -429,11 +429,11 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            project_owner = user_info['user_uuid']
-            project_team = user_info['team_uuid']
+            project_owner = user_info.get('user_uuid')
+            project_team = user_info.get('team_uuid')
 
-            project_name = parameters['project_name']
-            project_desc = parameters['project_desc']
+            project_name = parameters.get('project_name')
+            project_desc = parameters.get('project_desc')
 
             project_name = parameter_check(project_name, ptype='pnam')
             project_owner = parameter_check(project_owner, ptype='pstr')
@@ -454,8 +454,8 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info['user_uuid']
-            team_uuid = user_info['team_uuid']
+            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             team_uuid = parameter_check(team_uuid, ptype='pstr')
@@ -470,7 +470,7 @@ class UcenterRpcAPI(object):
     def project_info(self, context, parameters):
 
         try:
-            project_uuid = context['resource_uuid']
+            project_uuid = context.get('resource_uuid')
 
             project_uuid = parameter_check(project_uuid, ptype='pstr')
         except Exception, e:
@@ -485,11 +485,11 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info['team_uuid']
+            team_uuid = user_info.get('team_uuid')
 
-            project_uuid = context['resource_uuid']
-            project_owner = parameters['project_owner']
-            project_desc = parameters['project_desc']
+            project_uuid = context.get('resource_uuid')
+            project_owner = parameters.get('project_owner')
+            project_desc = parameters.get('project_desc')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             project_uuid = parameter_check(project_uuid, ptype='pstr')
@@ -509,7 +509,7 @@ class UcenterRpcAPI(object):
     def project_delete(self, context, parameters):
 
         try:
-            project_uuid = context['resource_uuid']
+            project_uuid = context.get('resource_uuid')
 
             project_uuid = parameter_check(project_uuid, ptype='pstr')
         except Exception, e:
@@ -524,10 +524,10 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info['team_uuid']
+            team_uuid = user_info.get('team_uuid')
 
-            user_uuid = parameters['user_uuid']
-            role_uuid = parameters['role_uuid']
+            user_uuid = parameters.get('user_uuid')
+            role_uuid = parameters.get('role_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             user_uuid = parameter_check(user_uuid, ptype='pstr')
@@ -545,7 +545,7 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info['team_uuid']
+            team_uuid = user_info.get('team_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
@@ -559,8 +559,8 @@ class UcenterRpcAPI(object):
     def user_team_activate(self, context, parameters):
 
         try:
-            user_uuid = context['resource_uuid']
-            team_uuid = parameters['team_uuid']
+            user_uuid = context.get('resource_uuid')
+            team_uuid = parameters.get('team_uuid')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             team_uuid = parameter_check(team_uuid, ptype='pstr')
@@ -577,11 +577,11 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info['team_uuid']
-            team_priv = user_info['team_priv']
+            team_uuid = user_info.get('team_uuid')
+            team_priv = user_info.get('team_priv')
 
-            n_user_uuid = parameters['user_uuid']
-            n_role_uuid = parameters['role_uuid']
+            n_user_uuid = parameters.get('user_uuid')
+            n_role_uuid = parameters.get('role_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             team_priv = parameter_check(team_priv, ptype='pstr')
@@ -600,10 +600,10 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info['team_uuid']
-            team_priv = user_info['team_priv']
+            team_uuid = user_info.get('team_uuid')
+            team_priv = user_info.get('team_priv')
 
-            n_user_uuid = parameters['user_uuid']
+            n_user_uuid = parameters.get('user_uuid')
 
             n_user_uuid = parameter_check(n_user_uuid, ptype='pstr')
             team_uuid = parameter_check(team_uuid, ptype='pstr')
@@ -621,11 +621,11 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info['team_uuid']
-            project_uuid = user_info['project_uuid']
+            team_uuid = user_info.get('team_uuid')
+            project_uuid = user_info.get('project_uuid')
 
-            user_uuid = parameters['user_uuid']
-            role_uuid = parameters['role_uuid']
+            user_uuid = parameters.get('user_uuid')
+            role_uuid = parameters.get('role_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             project_uuid = parameter_check(project_uuid, ptype='pstr')
@@ -644,7 +644,7 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            project_uuid = user_info['project_uuid']
+            project_uuid = user_info.get('project_uuid')
 
             project_uuid = parameter_check(project_uuid, ptype='pstr')
         except Exception, e:
@@ -659,11 +659,11 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            project_uuid = user_info['project_uuid']
-            project_priv = user_info['project_priv']
+            project_uuid = user_info.get('project_uuid')
+            project_priv = user_info.get('project_priv')
 
-            n_user_uuid = parameters['user_uuid']
-            n_role_uuid = parameters['role_uuid']
+            n_user_uuid = parameters.get('user_uuid')
+            n_role_uuid = parameters.get('role_uuid')
 
             project_uuid = parameter_check(project_uuid, ptype='pstr')
             project_priv = parameter_check(project_priv, ptype='pstr')
@@ -682,10 +682,10 @@ class UcenterRpcAPI(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            project_uuid = user_info['project_uuid']
-            project_priv = user_info['project_priv']
+            project_uuid = user_info.get('project_uuid')
+            project_priv = user_info.get('project_priv')
 
-            n_user_uuid = parameters['user_uuid']
+            n_user_uuid = parameters.get('user_uuid')
 
             n_user_uuid = parameter_check(n_user_uuid, ptype='pstr')
             project_uuid = parameter_check(project_uuid, ptype='pstr')

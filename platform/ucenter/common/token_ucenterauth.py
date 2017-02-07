@@ -26,7 +26,7 @@ def token_auth(token):
         try:
             headers = {'token': token}
             ret = requests.get(url, headers=headers, timeout=5)
-            status = ret['status']
+            status = ret.json()['status']
             if status != 0:
                 raise
         except Exception, e:
