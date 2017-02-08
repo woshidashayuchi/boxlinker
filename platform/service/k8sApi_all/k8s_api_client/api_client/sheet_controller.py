@@ -19,6 +19,11 @@ import time
 from resource_model.serviceaccount import ServiceAccount
 from resource_model.add_second import add_second
 from domain_identify.domain_identify import DomainIdentify
+from resource_model.base_call import BaseCallForOthers
+from billing.call_billing import CallBilling
+from image.image_about import ImageAbout
+from es.uid_font import get_uuid
+from resource_model.sheet_model import SheetModel
 
 
 class SheetController(object):
@@ -26,43 +31,36 @@ class SheetController(object):
     def __init__(self):
         pass
 
-    def sheet_controller(self, json_list):
+    @staticmethod
+    def sheet_controller(json_list):
+        uid_font = str(uuid.uuid4())
+        uid_rc = str(uuid.uuid4())
+        uid_service = str(uuid.uuid4())
+        json_list["rc_id"] = uid_rc
         if json_list.get("volume") is None:
             json_list.pop("token")
-        else:
-            pass
-        try:
-            post_es(json_list, 'check the name...')
-        except Exception, e:
-            log.error("es error, reason=%s" % e)
+
+        post_es(json_list, 'check the name...')
 
         try:
             res = CheckName.check_name(json_list)
             if res is False:
                 return code.request_result(301)
-            else:
-                log.info("{'userid': '%s', 'log_info': 'the name is ok'}"
-                         % (json_list.get("user_name")))
         except Exception, e:
-            log.error("check the name error, reason=%s" % (e))
+            log.error("check the name error, reason=%s" % e)
             return code.request_result(404)
         source_model = SourceModel()
-        uid_rc = str(uuid.uuid4())
-        uid_service = str(uuid.uuid4())
-        uid_font = str(uuid.uuid4())
         # try:
-        #    jj = json_list
-        #    jj["uid_font"] = uid_font
-        #    r = CallBilling.base_con(jj)
-        #    if r is False:
-        #        log.error("can't intering the billings")
-        #        return code.request_result(501)
-        #    log.info("oooooooooooooollllllllllllll")
+        #     jj = json_list
+        #     jj["uid_font"] = uid_font
+        #     r = CallBilling.base_con(jj)
+        #     if r is False:
+        #         log.error("can't intering the billings")
+        #         return code.request_result(501)
         # except Exception, e:
-        #    log.error("intering the billing error, reason=%s" % e)
+        #     log.error("intering the billing error, reason=%s" % e)
 
         try:
-
             add_rc = source_model.add_rc(json_list)
             add_service = source_model.add_service(json_list)
 
@@ -133,7 +131,6 @@ class SheetController(object):
             return code.request_result(401)
 
         type_con = {"rtype": "containers"}
-        # http_lb, tcp_lb, tcp_port = ArrayIterator.service_domain(json_list)
         try:
             domain_con = ContainerDomain()
             domain = domain_con.container_domain(json_list)
@@ -180,7 +177,7 @@ class SheetController(object):
                  "orga_orga": json_list.get("user_orga"), "create_time": create_time,
                  "update_time": create_time}
         json_list.update(typee)
-
+        json_list = ImageAbout.image_add(json_list)
         try:
             log.info("===========font")
             DataOrm.add_method(json_list)
@@ -210,13 +207,13 @@ class SheetController(object):
 
         return code.request_result(0, "service is creating...")
 
-    def service_list(self, json_list):
+    @staticmethod
+    def service_list(json_list):
 
         control = Controller()
         service_l = ServiceList()
         json_list["list_acl"] = "list"
         x = control.authority_judge(json_list)
-        log.info(x)
         if x is None:
             return code.request_result(0, [])
         elif len(x) != 0:
@@ -225,32 +222,29 @@ class SheetController(object):
             log.info(rest)
             return rest
 
-    def detail_service(self, json_list):
+    @staticmethod
+    def detail_service(json_list):
         logicmodel = LogicModel()
         try:
             select_all = DataOrm.detail_list(json_list)
         except Exception, e:
-            log.warning('get the detail resource(sql) running error, reason=%s'
-                        % e)
+            log.warning('get the detail resource(sql) running error, reason=%s' % e)
             result = code.request_result(101)
             return result
         try:
             select_con = DataOrm.detail_container(json_list)
         except Exception, e:
-            log.warning('get the container detail resource(sql) running error, reason=%s'
-                        % e)
+            log.warning('get the container detail resource(sql) running error, reason=%s' % e)
             result = code.request_result(101)
             return result
         try:
             select_env = DataOrm.detail_env(json_list)
         except Exception, e:
-            log.warning('get the env detail resource(sql) running error, reason=%s'
-                        % e)
+            log.warning('get the env detail resource(sql) running error, reason=%s' % e)
         try:
             select_volume = DataOrm.detail_volume(json_list)
         except Exception, e:
-            log.warning('get the volume detail resource(volume) running error, reason=%s'
-                        % e)
+            log.warning('get the volume detail resource(volume) running error, reason=%s' % e)
             result = code.request_result(101)
             return result
         try:
@@ -319,7 +313,9 @@ class SheetController(object):
             return result
         return result
 
-    def del_service(self, json_list):
+    @staticmethod
+    def del_service(json_list):
+        # json_list['uid_font'] = get_uuid(json_list)
         controller = Controller()
         del_acl = controller.up_judge(json_list)
         if del_acl != 0:
@@ -332,11 +328,6 @@ class SheetController(object):
 
         log.info("{'userid': '%s', 'log_info': 'deleting pod and replicationcontroller...'}"
                  % (json_list.get("user_name")))
-
-        try:
-            post_es(json_list, 'deleting the service...')
-        except Exception, e:
-            log.error("es error, reason=%s" % e)
 
         delete_pod = del_pod.delete_pod(json_list)
 
@@ -382,7 +373,6 @@ class SheetController(object):
 
             log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
                       % (json_list.get("user_name")))
-            post_es(json_list, 'deleting the service failed')
 
             result = code.request_result(503)
             return result
@@ -404,11 +394,8 @@ class SheetController(object):
         except Exception, e:
             log.error('k8sapi delete the service running error, reason=%s'
                       % e)
-
             log.error("{'userid': '%s', 'log_info': 'service delete failed'}"
                       % (json_list.get("user_name")))
-
-            post_es(json_list, 'deleting the service failed')
 
             result = code.request_result(503)
             return result
@@ -422,7 +409,7 @@ class SheetController(object):
             volume_id = i.get("volume_id")
             xxx.append({"volume_id": volume_id})
         if len(xxx) != 0:
-            json_up = {"volume": xxx,"token": json_list.get("token")}
+            json_up = {"volume": xxx, "token": json_list.get("token")}
             try:
                 resul = InnerApi.change_status1(json_up)
                 if resul == "<Response [200]>":
@@ -433,16 +420,19 @@ class SheetController(object):
                 log.error("storage to unused faild, reason=%s" % e)
 
             logic.connClose(conn, cur)
-        else:
-            pass
+
+        # uid_font = BaseCallForOthers.get_billing_resource_uuid(json_list)
+        # json_list["uid_font"] = uid_font
+        # CallBilling.billing_delete(json_list)
+
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         try:
-            del_rc, del_service, del_fservice, del_container, del_env, del_volume, del_acl = DataOrm.delete_sql(json_list)
+            del_rc, del_service, del_fservice, del_container, del_env, del_volume, del_acl = \
+                DataOrm.delete_sql(json_list)
         except Exception, e:
             log.error('k8sapi struct the sql running error, reason=%s'
                       % e)
-            post_es(json_list, 'deleting the service failed')
             result = code.request_result(101)
             return result
 
@@ -456,27 +446,21 @@ class SheetController(object):
             logicmodel.exeDelete(cur, del_acl)
         except Exception, e:
             log.error('k8sapi delete resource running error, reason=%s' % e)
-
-            post_es(json_list, 'deleting the service failed')
             result = code.request_result(402)
             return result
-
         logicmodel.connClose(conn, cur)
-
-        try:
-            post_es(json_list, 'delete the service successfully!')
-        except Exception, e:
-            log.error("es error, reason=%s" % e)
 
         return code.request_result(0, "delete success")
 
-    def update_service(self, json_list):
+    @staticmethod
+    def update_service(json_list):
+            json_list['rc_id'] = SheetModel.get_rc_id(json_list)
             contoller = Controller()
             rest = contoller.up_judge(json_list)
             if rest != 0 and json_list.get("domain_identify") != 1:
                 log.error(rest)
                 return code.request_result(202)
-            update_svc = dict()
+            # update_svc = dict()
             create_json = SourceModel()
             kubernete_sclient = KubernetesClient()
             del_type = {"del_type": "rc"}
@@ -609,7 +593,8 @@ class SheetController(object):
                     log.error("storage status update error,reason=%s" % e)
                     post_es(json_list, 'update the service failed!')
 
-            if DomainIdentify.get_identify(json_list) == 1:
+            if json_list.get("domain") is None or \
+                    (json_list.get("domain") is not None and DomainIdentify.get_identify(json_list) == 1):
 
                 service_name = json_list.get("service_name")
                 user_name = json_list.get("user_name")
@@ -643,23 +628,17 @@ class SheetController(object):
                 json_list4 = str(json_list3)
                 kubernete_svc = KubernetesClient()
                 try:
-
                     log.info("{'userid': '%s', 'log_info': 'updating the using service...'}"
                              % (json_list.get("user_name")))
-
                     rest = kubernete_svc.rpc_name(json_list4)
-
                     if rest != "<Response [200]>":
                         log.error("update service error, reason=%s" % rest)
                         return code.request_result(502)
-
                     log.info("{'userid': '%s', 'log_info': 'update the using service success!'}"
                              % (json_list.get("user_name")))
-
                 except Exception, e:
                     log.error("update the service running error, reason=%s"
                               % e)
-
                     log.error("{'userid': '%s', 'log_info': 'update the using service failed!'}"
                               % (json_list.get("user_name")))
                     post_es(json_list, 'update the service failed!')
@@ -670,7 +649,7 @@ class SheetController(object):
             try:
                 logicmodel = LogicModel()
                 conn, cur = logicmodel.connection()
-                update_sql = ""
+
                 if json_list.get("rtype") == "domain_change":
                     update_sql = DataOrm.update_domain(json_list)
                 else:
@@ -679,7 +658,7 @@ class SheetController(object):
                 rest = logicmodel.exeUpdate(cur, update_sql)
                 logicmodel.connClose(conn, cur)
                 log.info(rest)
-                if rest == 1 or rest == 0:
+                if rest >= 0:
                     pass
                 else:
                     log.error("update database error, reason=%s" % rest)
@@ -698,7 +677,8 @@ class SheetController(object):
                 log.error("es error, reason=%s" % e)
             return result
 
-    def update_container(self, json_list):
+    @staticmethod
+    def update_container(json_list):
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         try:
@@ -735,23 +715,19 @@ class SheetController(object):
 
         return result
 
-    def update_volume(self, json_list):
+    @staticmethod
+    def update_volume(json_list):
         log.info("begin.........~~~~~~~~~~~~~~~")
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         try:
-
             delete_container_sql = DataOrm.delete_volume_sql(json_list)
             using_volume = InnerApi.using_volume(json_list)
-            log.info("delete_sql====%s" % delete_container_sql)
-            log.info("using_volume===%s" % using_volume)
             # 更新storage状态
             xx = "ok"
             try:
                 if len(using_volume) != 0:
-
                     xx = InnerApi.change_status1(using_volume)
-                    log.info("xx=========%s" % xx)
             except Exception, e:
                 log.error("storage status update error,reason=%s" % e)
             if xx != "ok":
@@ -771,7 +747,6 @@ class SheetController(object):
                 rc = {"uid_rc": i.get("rc_id"), "rtype": "volume"}
                 json_list.update(rc)
             # return code.request_result(0, "success")
-
         except Exception, e:
             log.warning('query rc_id running error, json=%s, reason=%s'
                         % (json_list, e))
@@ -788,13 +763,14 @@ class SheetController(object):
             DataOrm.add_method(json_list)
         except Exception, e:
             log.warning('update container running error, reason=%s'
-                        % (e) )
+                        % e)
             return code.request_result(401)
         result = code.request_result(0, "success")
 
         return result
 
-    def update_env(self, json_list):
+    @staticmethod
+    def update_env(json_list):
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         try:
@@ -815,8 +791,7 @@ class SheetController(object):
                 json_list.update(rc)
 
         except Exception, e:
-            log.warning('query rc_id running error, reason=%s'
-                        % e)
+            log.warning('query rc_id running error, reason=%s' % e)
         try:
             DataOrm.add_method(json_list)
         except Exception, e:
@@ -827,7 +802,8 @@ class SheetController(object):
 
         return result
 
-    def update_cm(self, json_list):
+    @staticmethod
+    def update_cm(json_list):
         logicmodel = LogicModel()
         conn, cur = logicmodel.connection()
         rc_id_sql = DataOrm.get_rc_id(json_list)
@@ -843,7 +819,6 @@ class SheetController(object):
         try:
             x = 99
             if json_list.get("auto") is None and json_list.get("command") is None:
-                log.info(3333333)
                 update_cm_sql = DataOrm.put_cpu_memory(json_list)
                 x = logicmodel.exeUpdate(cur, update_cm_sql)
                 logicmodel.connClose(conn, cur)
@@ -852,7 +827,6 @@ class SheetController(object):
                 x = logicmodel.exeUpdate(cur, update_auto_sql)
                 logicmodel.connClose(conn, cur)
             if json_list.get("command") is not None:
-                log.info(22222222)
                 update_command_sql = DataOrm.put_command(json_list)
                 x = logicmodel.exeUpdate(cur, update_command_sql)
                 logicmodel.connClose(conn, cur)
@@ -861,16 +835,16 @@ class SheetController(object):
             else:
                 return "error"
         except Exception, e:
-            log.error("cm entering the database error data=%s,reason=%s" % (update_cm_sql, e))
+            log.error("cm entering the database error, reason=%s" % e)
             result = code.request_result(403)
             return result
         return code.request_result(0, "success")
 
-    def create_namespace(self, json_list):
+    @staticmethod
+    def create_namespace(json_list):
         namespace_c = SourceModel()
         kubernete_sclient = KubernetesClient()
         namespace_json = namespace_c.create_namespace(json_list)
-        secret_json = namespace_c.create_secret(json_list)
         json_list1 = {"action": "post", "resources_type": "namespace", "parameters": namespace_json}
         json_list2 = str(json_list1)
         try:
@@ -883,7 +857,8 @@ class SheetController(object):
             return result
         return result
 
-    def create_secret(self, json_list):
+    @staticmethod
+    def create_secret(json_list):
         secret_c = SourceModel()
         kubernete_sclient = KubernetesClient()
         secret_json = secret_c.create_secret(json_list)
@@ -909,7 +884,8 @@ class SheetController(object):
             log.error("serviceaccount create error, reason=%s" % e)
         return result
 
-    def show_namespace(self, json_list):
+    @staticmethod
+    def show_namespace(json_list):
         kubernete_sclient = KubernetesClient()
         json_list1 = {"action": "get", "resources_type": "namespace", "parameters": json_list}
         json_list2 = str(json_list1)

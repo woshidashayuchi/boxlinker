@@ -57,11 +57,8 @@ class Show(object):
                 # log.info(json.loads(requests.get(BASEURL+res_sql).text))
                 result.append(respon)
             # result["aaa"] = json.loads(requests.get(BASEURL+res_sql).text)
-            log.info("go----====++++++!!!!!")
-            log.info(result)
             if result[0].get("value") is not None:
                 for i in result:
-                    log.info("########")
                     for j in i.get("value"):
                         if j[1] == 0 and i.get("value").index(j) > 0 and i.get("value")[i.get("value").index(j)-1][1] is not None:
                             j[1] = i.get("value")[i.get("value").index(j)-1][1]
@@ -80,3 +77,15 @@ class Show(object):
             log.error("get the result error, reason=%s" % e)
             return "error"
 
+    @classmethod
+    def get_rc_msg(cls, json_data):
+        resu = []
+        for i in json_data.get("pods"):
+            json_data["pod_name"] = i
+            result = cls.get_msg(json_data)
+            log.info("result")
+            resu.append(result)
+
+        for i in resu:
+            pass
+        return resu

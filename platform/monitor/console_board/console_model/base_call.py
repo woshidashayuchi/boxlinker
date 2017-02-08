@@ -13,7 +13,6 @@ from console_k import ConsoleAct
 import code
 
 
-
 def pod_messages(json_list):
     pods = []
     to_server = {"action": "get", "resources_type": "pods", "parameters": {"namespace": json_list.get("user_name")}}

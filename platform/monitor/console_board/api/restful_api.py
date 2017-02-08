@@ -27,9 +27,9 @@ def get_msg():
         user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get1)
         log.info("useruseruser==%s" % user_name)
     except Exception, e:
+        log.error("auth identify error, reason=%s" % e)
         return code.request_result(202)
     json_data = {"user_name": user_name, "token": token_get1}
-    # json_data = {"user_name": aaa}
     log.info("json_data===%s" % json_data)
     response = for_rest(json_data)
 
@@ -40,7 +40,6 @@ if __name__ == "__main__":
     while True:
         try:
             app.run(debug=True, host="0.0.0.0", port=9999, threaded=True)
-            log.info("restart----------------------------------")
         except Exception, e:
             log.warning('Monitor Server running error, reason=%s' % e)
         sleep(8)

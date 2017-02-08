@@ -38,7 +38,6 @@ class ConsoleAct(object):
                         "AND \"pod_name\" =~ /%s$/ " \
                         "AND time > now() - 15m GROUP BY time(1m), \"container_name\" fill(null)&epoch=ms" % (namespace,
                                                                                                               i)
-
                 url1 = STATICHTTP + sql_s
                 url = url1.replace("change", j)
                 res = json.loads(urllib.urlopen(url).read())

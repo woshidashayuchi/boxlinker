@@ -10,14 +10,12 @@ import os
 
 
 def create_esjson(json_list, log_info):
-    HOST = 'http://%s' % os.environ.get("ELASTIC_SEARCH")
-    TYPE = 'fluentd'
+    host = "http://%s" % os.environ.get("ELASTIC_SEARCH")
+    rtype = 'fluentd'
     log_dict = get_index(json_list, log_info)
-    es_url = HOST + '/' + 'logstash-' + get_now_time_ymd(part='.') + '/' + TYPE
-
+    es_url = host + '/' + 'logstash-' + get_now_time_ymd(part='.') + '/' + rtype
     msg_json = {
         "log": json.dumps(log_dict),
-
         "kubernetes":
             {
                 "namespace_name": "%s" % json_list.get("user_name"),
@@ -26,11 +24,10 @@ def create_esjson(json_list, log_info):
                 "container_name": "%s" % json_list.get("user_name")+json_list.get("service_name"),
                 "labels":
                     {
-                        "logs": "%s" % json_list.get("user_name")+json_list.get("service_name")
+                        "logs": "%s" % json_list.get("rc_id")
                     },
             },
         "@timestamp": str(get_now_time_ss_z())
-
     }
 
     return msg_json, es_url

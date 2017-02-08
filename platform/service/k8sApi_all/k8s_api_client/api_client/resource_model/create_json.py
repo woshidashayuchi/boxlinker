@@ -203,7 +203,6 @@ class SourceModel(object):
         container = json_list.get("container")
         env = json_list.get("env")
         auto_startup = json_list.get("auto_startup")
-        log.info("8888888888888888888888+++%s" % command)
         if int(auto_startup) == 1:
             pass
         else:
@@ -278,7 +277,8 @@ class SourceModel(object):
                           }
                        },
                        "namespace": namespace,
-                       "user_id": json_list.get("user_id")
+                       "user_id": json_list.get("user_id"),
+                       # "uid_font": json_list.get("uid_font")
                     }
 
             if json_list.get("env") == [{"env_key": "", "env_value": ""}] or json_list.get("env") == "":
@@ -310,7 +310,7 @@ class SourceModel(object):
             http_lb, tcp_lb, tcp_port = ArrayIterator.service_domain(json_list)
         except Exception, e:
             log.error("the domain create error, reason=%s"
-                      % (e))
+                      % e)
         try:
             log.info("the container data=%s,type=%s" % (json_list.get("container"), type(json_list.get("container"))))
             container = json_list.get("container")
@@ -360,8 +360,6 @@ class SourceModel(object):
     def update_service(self, json_list):
         http_lb = ""
         tcp_lb = ""
-        log.info("::::::::::::::::::::::::::::")
-        log.info(json_list)
         service_name = json_list.get("service_name")
         user_name = json_list.get("user_name")
         container = json_list.get("container")

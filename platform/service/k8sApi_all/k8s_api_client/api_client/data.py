@@ -60,6 +60,7 @@ class DataOrm(object):
         Column('fservice_name', String(64)),
         Column('fservice_status', String(20)),
         Column('all_name', String(64)),
+        Column('image_dir', String(200)),
         Column('fservice_create_time', DateTime, server_default=func.now()),
         Column('fservice_update_time', DateTime, server_default=func.now())
     )
@@ -248,6 +249,7 @@ class DataOrm(object):
             u.service_id = json_list.get("uid_service")
             u.rc_id = json_list.get("uid_rc")
             u.all_name = json_list.get("all_name")
+            u.image_dir = json_list.get("image_dir")
             u.fservice_name = json_list.get("service_name")
             u.fservice_status = json_list.get("status")
             u.fservice_create_time = json_list.get("create_time")
@@ -336,12 +338,12 @@ class DataOrm(object):
         user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
         select_rc = "select distinct(b.rc_name), c.service_domain_name, a.fservice_name, a.fservice_status," \
-                    "a.fservice_update_time ltime from font_service a," \
+                    "a.image_dir, a.fservice_update_time ltime from font_service a," \
                     "replicationcontrollers b,service c,containers d where (a.rc_id = b.uuid and " \
                     "a.service_id = c.uuid and a.orga_id=\'%s\')" % user_id
         if service_name is not None:
            select_one = "select b.rc_name, c.service_domain_name, a.fservice_name, a.fservice_status," \
-                        "a.fservice_update_time ltime from font_service a," \
+                        "a.image_dir, a.fservice_update_time ltime from font_service a," \
                         "replicationcontrollers b, service c,containers d where (a.rc_id = b.uuid and " \
                         "a.service_id = c.uuid and a.orga_id= \'%s\' and a.fservice_name = \'%s\')" % (user_id, service_name)
            return select_one
@@ -351,7 +353,7 @@ class DataOrm(object):
     def detail_list(cls, json_list):
         user_id = json_list.get("user_orga")
         service_name = json_list.get("service_name")
-        select_all = "select a.service_id, a.rc_id, a.fservice_name, a.fservice_status, " \
+        select_all = "select a.uuid uid_font, a.service_id, a.rc_id, a.fservice_name,a.image_dir,a.fservice_status, " \
                      "b.uuid, b.rc_name, b.labels_name, b.spec_replicas, " \
                      "b.spec_selector_name, b.template_name, b.template_container_name, " \
                      "b.image_name, b.image_version, b.limits_cpu,b.limits_memory," \
@@ -375,7 +377,7 @@ class DataOrm(object):
     @classmethod
     def list_container(cls, json_list):
         user_id = json_list.get("user_orga")
-        select_containers = "select a.user_id,a.service_name,a.http_domain,a.tcp_domain from containers a where a.user_id=\'%s\'" % user_id
+        select_containers = "select a.user_id,a.service_name, a.containerPort container_port, a.http_domain,a.tcp_domain from containers a where a.user_id=\'%s\'" % user_id
         return select_containers
 
     @classmethod
@@ -446,15 +448,18 @@ class DataOrm(object):
         update_time = time.strftime(ISOTIMEFORMAT, time.localtime())
         if image_name is None:
             update_sql = "update replicationcontrollers set auto_startup=\'%s\', rc_update_time=\'%s\'" \
-            "where uuid=(select rc_id from font_service where orga_id = \'%s\' and fservice_name = \'%s\')" % (auto_startup, update_time, user_id, service_name)
+                         "where uuid=(select rc_id from font_service where orga_id = \'%s\' " \
+                         "and fservice_name = \'%s\')" % (auto_startup, update_time, user_id, service_name)
             return update_sql
         else:
             policy = json_list.get("policy")
             image_name = json_list.get("image_name")
             image_version = json_list.get("image_version")
             update_sql = "update replicationcontrollers set policy=\'%s\', image_name=\'%s\'," \
-            "image_version=\'%s\', rc_update_time=\'%s\'" \
-            "where uuid=(select rc_id from font_service where orga_id = \'%s\' and fservice_name = \'%s\')" % (policy, image_name, image_version, update_time, user_id, service_name)
+                         "image_version=\'%s\', rc_update_time=\'%s\'" \
+                         "where uuid=(select rc_id from font_service where orga_id = \'%s\' " \
+                         "and fservice_name = \'%s\')" % (policy, image_name, image_version, update_time, user_id,
+                                                          service_name)
             return update_sql
 
     @classmethod
@@ -628,10 +633,24 @@ class DataOrm(object):
         return sql
 
     @classmethod
+    def get_billing_resource_id(cls, json_data):
+        orga_id = json_data.get("user_orga")
+        service_name = json_data.get("service_name")
+        sql = "select uuid uid_font from font_service where orga_id=\'%s\' and fservice_name=\'%s\'" % (orga_id,
+                                                                                                        service_name)
+        return sql
+
+    @classmethod
+    def get_uid_font(cls, json_list):
+        service_name = json_list.get("service_name")
+        orga_id = json_list.get("user_orga")
+        sql = "select uuid uid_font from font_service where orga_id=\'%s\' and fservice_name=\'%s\'" % (orga_id, service_name)
+        return sql
+
+    @classmethod
     def time_diff(cls, update_date):
         dates = time.strptime(str(update_date), "%Y-%m-%d %H:%M:%S")
         date1 = datetime.datetime(dates[0], dates[1], dates[2], dates[3], dates[4], dates[5])
-
         # 实现年\月\日\时\分\秒差值计算
         time_differ = datetime.datetime.now() - date1
         # datetime.datetime() - datetime.dateytime() 是timedelta的,timedelta可以.days,.seconds

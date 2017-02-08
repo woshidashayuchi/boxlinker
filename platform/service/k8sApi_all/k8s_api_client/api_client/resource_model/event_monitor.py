@@ -39,23 +39,20 @@ class EventMonitor(object):
         except Exception, e:
             log.error("get namespace events error, reason=%s" % e)
             return False
-        log.info("1111111")
-        log.info(json_data)
-        log.info(svc_name)
         items = result.get("items")
         for i in items:
             if svc_name in i.get("involvedObject").get("name"):
-                log.info("**********************%s" % i.get("involvedObject").get("name"))
+                # log.info("**********************%s" % i.get("involvedObject").get("name"))
                 response.append(i.get("message"))
 
         return response
 
-    def replace_str(self, data_list):
+    @staticmethod
+    def replace_str(data_list):
         font = data_list.replace("to 192.168.1.13", "").replace("to 192.168.1.14", "").replace("to 192.168.1.18", "")
         result = font.replace("to node \"192.168.1.13\"", "").replace("to node \"192.168.1.14\"",
                                                                       "").replace("to node \"192.168.1.18\"",
                                                                                   "")
-
         return result
 
     def mail_es(self, json_data):
@@ -75,11 +72,13 @@ class EventMonitor(object):
                 a = sorted(set(a), key=a.index)
                 for i in a:
                     i = self.replace_str(i)
-                    if "failed to fit in any node" in i or "Created pod" in i or "Deleted pod" in i:
-                        pass
-                    else:
+                    if "image" in i:
                         result = post_es(json_data, i)
                         log.info("es result == %s" % result)
+                    if "error" in i:
+                        post_es(json_data, i)
+                    if "Started container with docker id" in i and a.index(i) == len(a)-1:
+                        post_es(json_data, i)
             else:
                 for i in font:
                     if i in a:
@@ -91,11 +90,13 @@ class EventMonitor(object):
                 b = sorted(set(b), key=b.index)
                 for i in b:
                     i = self.replace_str(i)
-                    if "failed to fit in any node" in i or "Created pod" in i or "Deleted pod" in i:
-                        pass
-                    else:
+                    if "image" in i:
                         result = post_es(json_data, i)
                         log.info("es result == %s" % result)
+                    if "error" in i:
+                        post_es(json_data, i)
+                    if "Started container with docker id" in i and a.index(i) == len(a)-1:
+                        post_es(json_data, i)
 
             for i in a:
                 if a.index(i)+1 < len(a):

@@ -23,9 +23,6 @@ CORS(app=app)
 def monitor_resource(namespace, pod_name, rtype):
     r = {}
     try:
-        log.info(request.values)
-        log.info(request.values.get('time_long'))
-        log.info(request.values.get('time_span'))
         r = {"time_long": request.values.get('time_long','15m'), "time_span": request.values.get('time_span', '1m'),
              "user_name": namespace, "pod_name": pod_name, "type": rtype}
         log.info(r)
@@ -44,44 +41,21 @@ def monitor_resource(namespace, pod_name, rtype):
         return json.dumps(code.request_result(601))
 
 
-@app.route('/api/v1/model/namespaces/<namespace>/service/<service_name>/metrics/<rtype>', methods=['GET'])
-def monitor_service(namespace, service_name, rtype):
+@app.route('/api/v1/model/namespaces/<namespace>/pods/metrics/<rtype>', methods=['GET'])
+def monitor_service(namespace, rtype):
     r = {}
+    log.info("loads data==%s" % request.get_data())
     try:
-        log.info(request.values)
-        log.info(request.values.get('time_long'))
-        log.info(request.values.get('time_span'))
-        r = {"time_long": request.values.get('time_long','15m'), "time_span": request.values.get('time_span', '1m'),
-             "user_name": namespace, "service_name": service_name, "type": rtype}
-        log.info(r)
+        r = {"time_long": request.values.get('time_long', '15m'), "time_span": request.values.get('time_span', '1m'),
+             "user_name": namespace, "type": rtype, "pod_name": json.loads(request.get_data()).get("pod_name")}
     except Exception, e:
         log.error("get parameters error, reason=%s" % e)
-
-    try:
-        response = MonitorApi.get_rc_message(r)
-        if response is False:
-            return json.dumps(code.request_result(601))
-        else:
-            return json.dumps(code.request_result(0, response))
-    except Exception, e:
-        log.error("error, reason=%s" % e)
+        return code.request_result(101)
+    response = MonitorApi.get_rc_message(r)
+    if response is False:
         return json.dumps(code.request_result(601))
-
-
-@app.route('/api/v1/model/namespaces/<namespace>/metrics/<rtype>', methods=['GET'])
-def monitor_namespace(namespace, rtype):
-
-    try:
-        r = {"namespace": namespace, "rtype": rtype, "time_long": request.values.get('time_long', '30m')}
-    except Exception, e:
-        log.error("get parameters error, reason=%s")
-        return json.dumps(code.request_result(101))
-    try:
-        result = MonitorApi.get_namespace_msg(r)
-        return json.dumps(result)
-    except Exception, e:
-        log.error("get the message error , reason=%s" % e)
-        return json.dumps(code.request_result(601))
+    else:
+        return json.dumps(code.request_result(0, response))
 
 
 if __name__ == '__main__':

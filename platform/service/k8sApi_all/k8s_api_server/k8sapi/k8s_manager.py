@@ -120,6 +120,7 @@ class KubernetesManagerAPI(object):
                 except Exception, e:
                         log.error('get namespace error, reason=%s' % e)
                 if action.upper() == 'POST':
+                    # uid_font = parameters.pop("uid_font")
                     json_to.pop('namespace')
                     log.info("user_id:%s" % parameters.get("user_id"))
                     user_id = parameters.pop("user_id")
@@ -169,6 +170,7 @@ class KubernetesManagerAPI(object):
                         pp_name = r_name.replace(parameters.get("namespace"), "")
                         json_insert_pod = {"user_id": user_id, "user_name": parameters.get("namespace"), "service_name":
                                            pp_name, "token": parameters.get("token"), "status": "fail"}
+                        log.info("ooooooooooooo==%s" % json_insert_pod)
                         try:
                             kclient.rpc_exec(json_insert_pod)
                         except Exception, e:

@@ -20,9 +20,7 @@ class Up(object):
     def update_status(cls, json_list):
         update_sql = ""
         try:
-            log.info(json_list)
             update_sql = DataOrm.anytime_update_pod1(json_list)
-            log.info(update_sql)
         except Exception, e:
             log.error("create sql error, reason=%s" % e)
 

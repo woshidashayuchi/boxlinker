@@ -2,20 +2,14 @@
 # -*- coding:utf8 -*-
 # Date:2016/8/9
 # Author:wang-xf
+import sys
+p_path = sys.path[0] + '/..'
+sys.path.append(p_path)
 from flask import Flask
-from flask import request
-from sheet_controller import SheetController
-import json
-from response_code import code
-from token_about.token_for_api import TokenForApi
 from flask_cors import CORS
-from common.logs import logging as log
 from time import sleep
-from podstatus_monitor.anytime_update_status import Up
-from resource_model.sheet_model import SheetModel
-from podstatus_monitor.pod_message import pod_messages
-from podstatus_monitor.get_svcid import get_id
-from resource_model.change_domain import ChangeDomain
+from common.logs import logging as log
+from api_source import ApiSource
 
 app = Flask(__name__)
 CORS(app=app)
@@ -23,459 +17,102 @@ CORS(app=app)
 
 @app.route('/api/v1/application/service/<service_name>', methods=['POST'])
 def create_service(service_name):
-    controller = SheetController()
-
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
-    except Exception, e:
-        log.error("author registry error, reason=%s" % e)
-        return json.dumps(code.request_result(201))
-    try:
-        json_list = json.loads(request.get_data())
-    except Exception, e:
-        log.error("parameters error, reason=%s" % e)
-        return json.dumps(code.request_result(101))
-
-    show_resource = {"name": user_name}
-    if controller.show_namespace(show_resource) != "ok":
-        try:
-            controller.create_namespace(user_msg)
-            controller.create_secret(user_msg)
-        except Exception, e:
-            log.error("resource create error ,reason =%s" % e)
-            return json.dumps(code.request_result(501))
-    else:
-        log.info("should not create namespace,going...")
-
-    json_name = {"service_name": service_name, "namespace": user_name}
-    json_list.update(json_name)
-    json_list.update(user_msg)
-    json_list["token"] = token_get1
-
-    controller = SheetController()
-    response = controller.sheet_controller(json_list)
-    return json.dumps(response)
-
-
-@app.route('/create/service', methods=['GET'])
-def test():
-
-    return "some"
+    return ApiSource.create_service(service_name)
 
 
 @app.route('/api/v1/application/service', methods=['GET'])
 def get_all_service():
-
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-
-    except Exception, e:
-        log.error("authentication error, reason=%s" % e)
-        return json.dumps(code.request_result(201))
-    try:
-        service_name = request.args.get("service_name",)
-        json_list = {"user_id": user_id, "user_name": user_name,
-                     "user_orga": user_orga, "role_uuid": role_uuid}
-        if service_name is not None:
-            json_list = {"user_id": user_id, "user_name": user_name,
-                         "service_name": service_name,  "user_orga": user_orga,
-                         "role_uuid": role_uuid}
-        controller = SheetController()
-        response = controller.service_list(json_list)
-        return json.dumps(response)
-    except Exception, e:
-        log.error("start error, reason=%s" % e)
-        return json.dumps(code.request_result(404))
+    return ApiSource.get_all_service()
 
 
 @app.route('/api/v1/application/service/<service_name>/details', methods=['GET'])
 def detail_service(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-    except:
-        log.error("authentication error, reason=%s" % e)
-        return json.dumps(code.request_result(201))
-    json_list = {"user_id": user_id, "user_name": user_name,
-                 "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
-    controller = SheetController()
-    response = controller.detail_service(json_list)
-    print(response)
-    return json.dumps(response)
+    return ApiSource.detail_service(service_name)
 
 
 @app.route('/api/v1/application/remove/service/<service_name>', methods=['DELETE'])
 def del_service(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-    except:
-        return json.dumps(code.request_result(201))
-    # json_list = json.loads(request.get_data())
-    json_list = {"token": token_get1, "service_name": service_name,
-                 "user_name": user_name, "namespace": user_name, "user_id": user_id,
-                  "user_orga": user_orga, "role_uuid": role_uuid}
-    controller = SheetController()
-    response = controller.del_service(json_list)
-    return json.dumps(response)
+    return ApiSource.del_service(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>', methods=['PUT'])
 def put_service(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-    except:
-       return json.dumps(code.request_result(201))
-
-    json_list1 = json.loads(request.get_data())
-    log.debug("json_list1=%s" % (json_list1))
-    try:
-        json_list = {"service_name": service_name, "user_id": user_id, "user_name": user_name,
-                     "user_orga": user_orga, "role_uuid": role_uuid}
-        json_list = json.loads(json.dumps(json_list))
-        json_list.update(json_list1)
-        json_list["token"] = token_get1
-    except Exception, e:
-        log.error("error=%s" % (e))
-
-    controller = SheetController()
-    response = controller.update_service(json_list)
-    return json.dumps(response)
+    return ApiSource.put_service(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/container', methods=['PUT'])
 def put_container(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-    except Exception, e:
-        log.error("authentication error, reason=%s" % e)
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_id,
-                 "user_name": user_name, "type": "container",
-                 "user_orga": user_orga, "role_uuid": role_uuid}
-    json_list.update(json_name)
-    json_list["token"] = token_get1
-    controller = SheetController()
-    try:
-        rest = controller.update_service(json_list)
-        if int(rest.get("status")) != 0:
-            log.error(rest)
-            return json.dumps(code.request_result(502))
-        response = controller.update_container(json_list)
-        if int(response.get("status")) != 0:
-            log.error(response)
-            return json.dumps(code.request_result(502))
-        return json.dumps(response)
-    except Exception, e:
-        log.error("update error, reason = %s" % e)
-        return json.dumps(code.request_result(502))
+    return ApiSource.put_container(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/volume', methods=['PUT'])
 def put_volume(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name,  "user_orga": user_orga, "role_uuid": role_uuid}
-    except:
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_name = {"token": token_get1, "service_name": service_name, "user_id": user_msg.get("user_id"),
-                 "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid, "type": "volume"}
-    json_list.update(json_name)
-    controller = SheetController()
-    try:
-        rest = controller.update_service(json_list)
-        if int(rest.get("status")) != 0:
-            return json.dumps(code.request_result(502))
-        log.info(json_list)
-        response = controller.update_volume(json_list)
-        if int(response.get("status")) != 0:
-            return json.dumps(code.request_result(502))
-
-        return json.dumps(response)
-
-    except Exception, e:
-        log.error("update error, reason = %s" % e)
-        return json.dumps(code.request_result(502))
+    return ApiSource.put_volume(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/env', methods=['PUT'])
 def put_env(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name}
-    except:
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "type": "env",  "user_orga": user_orga, "role_uuid": role_uuid}
-
-    json_list.update(json_name)
-    json_list["token"] = token_get1
-    controller = SheetController()
-    try:
-        rest = controller.update_service(json_list)
-
-        if int(rest.get("status")) != 0:
-            log.error(rest)
-            return json.dumps(code.request_result(502))
-        response = controller.update_env(json_list)
-        if int(response.get("status")) != 0:
-            log.error(response)
-            return json.dumps(code.request_result(502))
-
-        return json.dumps(response)
-
-    except Exception, e:
-        log.error("update error, reason = %s" % e)
-        return json.dumps(code.request_result(502))
+    return ApiSource.put_env(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/cm', methods=['PUT'])
 def put_cm(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name}
-    except:
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "type": "limits",  "user_orga": user_orga, "role_uuid": role_uuid}
-    json_list["token"] = token_get1
-    json_list.update(json_name)
-    try:
-        controller = SheetController()
-        rest = controller.update_service(json_list)
-        response = controller.update_cm(json_list)
-        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
-            return json.dumps(response)
-        else:
-            return json.dumps(code.request_result(502))
-
-    except Exception, e:
-        log.error("update error, reason = %s" % e)
-        return json.dumps(code.request_result(502))
+    return ApiSource.put_cm(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/status', methods=['PUT'])
 def start_service(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name}
-    except:
-        return json.dumps(code.request_result(201))
-    json_list = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "user_orga": user_orga, "role_uuid": role_uuid}
-    json_get = json.loads(request.get_data())
-
-    if json_get.get("operate") == "start":
-        json_list["token"] = token_get1
-        log.info(json_list)
-        response = SheetModel.start_svc(json_list)
-        return json.dumps(response)
-    if json_get.get("operate") == "stop":
-        response = SheetModel.stop_svc(json_list)
-        return json.dumps(response)
+    return ApiSource.start_service(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/telescopic', methods=['PUT'])
 def telescopic(service_name):
-    response = {}
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name,
-                    "tel": "tel", "user_orga": user_orga, "role_uuid": role_uuid,"token": token_get1}
-    except Exception, e:
-        log.error("telescopic error, reason=%s" % e)
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_list.update(user_msg)
-    try:
-        response = SheetModel.elastic_telescopic(json_list)
-    except Exception, e:
-        log.error("elastic telescopic error, reason = %s" % e)
-    return json.dumps(response)
+    return ApiSource.telescopic(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/pod/message', methods=['GET'])
 def pod_message(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name, "service_name": service_name,
-                    "user_orga": user_orga, "role_uuid": role_uuid}
-    except Exception, e:
-        log.error("telescopic error, reason=%s" % e)
-        return json.dumps(code.request_result(201))
-    try:
-        response = pod_messages(user_msg)
-        return json.dumps(response)
-    except Exception, e:
-        log.error("get the message of pod error,reason=%s" % e)
+    return ApiSource.pod_message(service_name)
 
 
 @app.route('/api/v1/application/service/status', methods=['POST'])
 def update_status():
-    json_list = json.loads(request.get_data())
-    response = Up.update_status(json_list)
-    return json.dumps(response)
+    return ApiSource.update_status()
 
 
 @app.route('/api/v1/application/service/<service_name>/autostartup', methods=['PUT'])
 def put_auto_startup(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name}
-    except:
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "type": "auto_startup",  "user_orga": user_orga, "role_uuid": role_uuid}
-
-    json_list["token"] = token_get1
-    json_list["auto"] = "auto"
-    json_list.update(json_name)
-    try:
-        controller = SheetController()
-        rest = controller.update_service(json_list)
-        response = controller.update_cm(json_list)
-
-        if int(rest.get("status")) == 0 and int(response.get("status")) == 0:
-            return json.dumps(response)
-        else:
-            return json.dumps(code.request_result(502))
-
-    except Exception, e:
-        log.error("update error, reason = %s" % e)
-        return json.dumps(code.request_result(502))
+    return ApiSource.put_auto_startup(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/publish', methods=['PUT'])
 def put_policy(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name}
-    except:
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "user_orga": user_orga, "role_uuid": role_uuid}
-    json_list["token"] = token_get1
-    json_list.update(json_name)
-    try:
-        controller = SheetController()
-        response = controller.update_service(json_list)
-        return json.dumps(response)
-    except Exception, e:
-        log.error("update error, reason = %s" % e)
-        return json.dumps(code.request_result(502))
+    return ApiSource.put_policy(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/command', methods=['PUT'])
 def put_command(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        user_msg = {"user_id": user_id, "user_name": user_name}
-    except Exception, e:
-        log.error("author error, reason=%s" % e)
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                 "user_orga": user_orga, "role_uuid": role_uuid}
-    json_list["token"] = token_get1
-    json_list.update(json_name)
-    try:
-        controller = SheetController()
-        controller.update_service(json_list)
-        response = controller.update_cm(json_list)
-
-        return json.dumps(response)
-    except Exception, e:
-        log.error("update error, reason = %s" % e)
-        return json.dumps(code.request_result(502))
+    return ApiSource.put_command(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/uuid', methods=['GET'])
 def get_uuid(service_name):
-    try:
-        return json.dumps(get_id(service_name))
-    except Exception, e:
-        log.error("get the uuid error, reason=%s" % e)
-        return json.dumps(code.request_result(404))
+    return ApiSource.get_uuid(service_name)
 
 
 @app.route('/api/v1/application/service/<service_name>/domain', methods=['PUT'])
 def change_domain(service_name):
-    try:
-        token_get1 = request.headers.get("token")
-        token_get2 = token_get1.decode("utf-8")
-        token_get = token_get2.encode("utf-8")
-        user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-    except Exception, e:
-        return json.dumps(code.request_result(201))
-    json_list = json.loads(request.get_data())
-    change_info = {"service_name": service_name, "cname": json_list.get("cname"),
-                   "domain": json_list.get("domain"), "rtype": "domain_change", "token": token_get1,
-                   "user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
+    return ApiSource.change_domain(service_name)
 
-    change = ChangeDomain()
-    try:
-        return json.dumps(change.domain(change_info))
-    except Exception, e:
-        log.error("change the domain error, reason=%s" % e)
-        return code.request_result(502)
 
+@app.route('/api/v1/application/service/domain/identify', methods=['PUT'])
+def change_domain_identify():
+    return ApiSource.domain_identify()
 
 if __name__ == '__main__':
-
     while True:
         try:
             app.run(debug=True, host="0.0.0.0", port=9000, threaded=True)
-
         except Exception, e:
-            log.warning('k8s RESTful API Server running error, reason=%s' % e)
+            log.warning('k8s API Server running error, reason=%s' % e)
         sleep(8)

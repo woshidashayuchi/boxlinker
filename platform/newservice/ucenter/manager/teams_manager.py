@@ -1,0 +1,169 @@
+# -*- coding: utf-8 -*-
+# Author: YanHua <it-yanh@all-reach.com>
+
+import uuid
+import json
+import time
+
+from common.logs import logging as log
+from common.code import request_result
+from common.json_encode import CJsonEncoder
+
+from ucenter.db import ucenter_db
+from ucenter.driver import ucenter_driver
+
+
+class TeamsManager(object):
+
+    def __init__(self):
+
+        self.ucenter_db = ucenter_db.UcenterDB()
+        self.ucenter_driver = ucenter_driver.UcenterDriver()
+
+    def team_create(self, team_name, team_owner, team_desc=None):
+
+        team_uuid = str(uuid.uuid4())
+        project_uuid = str(uuid.uuid4())
+        try:
+            self.ucenter_db.team_create(
+                 team_uuid, team_name, team_owner,
+                 team_desc, project_uuid)
+        except Exception, e:
+            log.error('Database insert error, reason=%s' % (e))
+            return request_result(401)
+
+        result = {
+                     "team_uuid": team_uuid,
+                     "team_name": team_name,
+                     "team_owner": team_owner,
+                     "team_desc": team_desc,
+                     "project_uuid": project_uuid
+                 }
+
+        return request_result(0, result)
+
+    def team_list(self, user_uuid):
+
+        try:
+            team_list_info = self.ucenter_db.team_list(user_uuid)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        t_team_list = []
+        for team_info in team_list_info:
+            team_uuid = team_info[0]
+            team_name = team_info[1]
+            team_owner = team_info[2]
+            team_desc = team_info[3]
+            status = team_info[4]
+            create_time = team_info[5]
+            update_time = team_info[6]
+
+            v_team_info = {
+                              "team_uuid": team_uuid,
+                              "team_name": team_name,
+                              "team_owner": team_owner,
+                              "team_desc": team_desc,
+                              "status": status,
+                              "create_time": create_time,
+                              "update_time": update_time
+                          }
+
+            v_team_info = json.dumps(v_team_info, cls=CJsonEncoder)
+            v_team_info = json.loads(v_team_info)
+            t_team_list.append(v_team_info)
+
+        result = {"team_list": t_team_list}
+
+        return request_result(0, result)
+
+    def team_info(self, team_uuid):
+
+        try:
+            team_single_info = self.ucenter_db.team_info(team_uuid)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        team_name = team_single_info[0][0]
+        team_owner = team_single_info[0][1]
+        team_desc = team_single_info[0][2]
+        status = team_single_info[0][3]
+        create_time = team_single_info[0][4]
+        update_time = team_single_info[0][5]
+
+        v_team_info = {
+                          "team_uuid": team_uuid,
+                          "team_name": team_name,
+                          "team_owner": team_owner,
+                          "team_desc": team_desc,
+                          "status": status,
+                          "create_time": create_time,
+                          "update_time": update_time
+                      }
+
+        v_team_info = json.dumps(v_team_info, cls=CJsonEncoder)
+        result = json.loads(v_team_info)
+
+        return request_result(0, result)
+
+    def team_update(self, team_uuid, team_owner=None, team_desc=None):
+
+        result = {"team_uuid": team_uuid}
+
+        if team_owner:
+            try:
+                user_team_check = self.ucenter_db.user_team_check(
+                                       team_owner, team_uuid)
+            except Exception, e:
+                log.error('Database select error, reason=%s' % (e))
+                return request_result(404)
+
+            if user_team_check == 0:
+                log.warning('Team update owner denied, \
+                            team_owner=%s, team_uuid=%s'
+                            % (team_owner, team_uuid))
+                return request_result(202)
+
+            try:
+                project_uuid = self.ucenter_db.project_uuid_team(
+                                    team_uuid)[0][0]
+                self.ucenter_db.project_update_owner(
+                                project_uuid, team_owner)
+                self.ucenter_db.team_update_owner(
+                                team_uuid, team_owner)
+            except Exception, e:
+                log.error('Database update error, reason=%s' % (e))
+                return request_result(403)
+            result['team_owner'] = team_owner
+        elif team_desc:
+            try:
+                self.ucenter_db.team_update_desc(team_uuid, team_desc)
+            except Exception, e:
+                log.error('Database update error, reason=%s' % (e))
+                return request_result(403)
+            result['team_desc'] = team_desc
+
+        return request_result(0, result)
+
+    def team_delete(self, team_uuid):
+
+        try:
+            team_check = self.ucenter_db.team_check(team_uuid)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if team_check <= 1:
+            try:
+                self.ucenter_db.team_delete(team_uuid)
+            except Exception, e:
+                log.error('Database delete error, reason=%s' % (e))
+                return request_result(402)
+        else:
+            error_reason = "Team delete denied, there are users in the team"
+            log.warning('%s' % (error_reason))
+            result = {"reason": error_reason}
+            return request_result(202, result)
+        return request_result(0)

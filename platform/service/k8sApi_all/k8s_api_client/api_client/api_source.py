@@ -468,7 +468,6 @@ class ApiSource(object):
         json_data = json.loads(request.get_data())
         change_info = {"domain": json_data.get("domain"), "identify": json_data.get("identify"), "user_name": user_name,
                        "user_orga": user_orga, "role_uuid": role_uuid, "user_id": user_id, "token": token_get1}
-        log.info("token================%s" % change_info)
         change = ChangeDomain()
         try:
             return json.dumps(change.change_identify(change_info))

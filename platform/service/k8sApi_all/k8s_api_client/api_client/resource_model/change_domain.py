@@ -39,10 +39,11 @@ class ChangeDomain(object):
         except Exception, e:
             log.error("get the used domain error, reason=%s" % e)
             return "error"
-
+        logicmodel.connClose(conn, cur)
         for i in resu:
-            if i.get("private_domain") != "" and i.get("private_domain") is not None:
-
+            if i.get("private_domain") == "" or i.get("private_domain") is None:
+                pass
+            else:
                 for j in re.split(",", i.get("private_domain")):
                     if j == domain:
                         response = 0
@@ -66,7 +67,9 @@ class ChangeDomain(object):
             result = logical.exeQuery(cur, get_sql)
             for i in result:
                 orga_id = i.get("orga_id")
+            logical.connClose(conn, cur)
             return orga_id
+
         except Exception, e:
             log.error("get the orga_id error, reason=%s" % e)
 
@@ -75,7 +78,7 @@ class ChangeDomain(object):
         orga_id = self.get_orga_id(json_list)
         # 得到组织名
         try:
-            url = "http://auth.boxlinker.com/api/v1.0/usercenter/orgs/%s" % orga_id
+            url = "http://auth:80/api/v1.0/usercenter/orgs/%s" % orga_id
             header = {"token": json_list.get("token")}
             response = json.loads(requests.get(url, headers=header).text)
             if response.get("status") == 0:
@@ -96,6 +99,7 @@ class ChangeDomain(object):
         cname = ""
         for i in result:
             cname = i.get("http_domain")
+        logical.connClose(conn, cur)
         return cname
 
     def change_svc(self, json_data):
@@ -178,3 +182,4 @@ class ChangeDomain(object):
                 return request_result(502)
         except Exception, e:
             log.error("update error, reason=%s" % e)
+            return request_result(502)

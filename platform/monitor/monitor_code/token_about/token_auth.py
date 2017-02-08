@@ -9,7 +9,7 @@ import os
 
 
 def u_token_auth(token):
-    url = "http://%s" % os.environ.get('AUTHOR_HOST')
+    url = "https://%s" % os.environ.get('AUTHOR_HOST')
     headers = {'token': token}
 
     try:
