@@ -596,13 +596,15 @@
     "mobile": "string",
     "sex": "man/woman",
     "birth_date": epoch_milliseconds
+    "code_id": "string",
+    "code_str": "string"
 }
 @apiUse CODE_USER_REGISTER_0
 """
 
 
 """
-@api {post} /api/v1.0/ucenter/users/status/<user_uuid> 1.2 用户激活
+@api {get} /api/v1.0/ucenter/users/status/<user_uuid> 1.2 用户激活
 @apiName user activate
 @apiGroup 1 users
 @apiVersion 1.0.0

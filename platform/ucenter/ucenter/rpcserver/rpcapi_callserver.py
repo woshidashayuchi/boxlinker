@@ -15,6 +15,9 @@ from conf import conf
 from common.logs import logging as log
 from common.rabbitmq_server import RabbitmqServer
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 def server_start(n):
 

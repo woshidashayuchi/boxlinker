@@ -61,5 +61,10 @@ def rest_app_run():
     api.add_resource(restapi_define.UcenterUserProjectApi,
                      '/api/v1.0/ucenter/usersprojects/<user_uuid>')
 
+    @app.route('/api/v1.0/ucenter/users/activate/<status>',
+               methods=['GET'])
+    def activate(status):
+        return restapi_define.user_activate(status)
+
     app.run(host=conf.rest_host, port=conf.rest_port,
             threaded=True, debug=conf.rest_debug)

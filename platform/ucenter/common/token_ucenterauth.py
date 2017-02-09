@@ -25,8 +25,8 @@ def token_auth(token):
         log.debug('Cache token auth not hit, token=%s' % (token))
         try:
             headers = {'token': token}
-            ret = requests.get(url, headers=headers, timeout=5)
-            status = ret.json()['status']
+            ret = requests.get(url, headers=headers, timeout=5).json()
+            status = ret['status']
             if status != 0:
                 raise
         except Exception, e:

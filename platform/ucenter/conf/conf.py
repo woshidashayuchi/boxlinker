@@ -3,6 +3,10 @@
 
 import os
 
+boxlinker_index = 'https://boxlinker.com'
+# boxlinker_index = os.environ.get('BOXLINKER_INDEX')
+
+
 service_name = 'Ucenter'
 # service_name = os.environ.get('SERVICE_NAME')
 
@@ -11,6 +15,11 @@ log_file = '/var/log/cloud.log'
 
 # log_level = os.environ.get('LOG_LEVEL')
 # log_file = os.environ.get('LOG_FILE')
+
+
+verify_code = False
+verify_code_api = 'https://verify-code.boxlinker.com/check_code'
+# verify_code = os.environ.get('VERIFY_CODE')
 
 
 mq_server01 = '127.0.0.1'
@@ -37,7 +46,7 @@ database = 'ucenter'
 # database = os.environ.get('DATABASE')
 
 
-ucenter_api = 'ucenter.boxlinker.com'
+ucenter_api = 'https://ucenter.boxlinker.com'
 # ucenter_api = os.environ.get('UCENTER_API')
 
 
@@ -55,3 +64,7 @@ rpc_timeout = 60
 
 # call_queue = os.environ.get('CALL_QUEUE')
 # rpc_timeout = os.environ.get('RPC_TIMEOUT')
+
+
+email_api = 'https://email.boxlinker.com/send'
+# email_api = os.environ.get('EMAIL_API')

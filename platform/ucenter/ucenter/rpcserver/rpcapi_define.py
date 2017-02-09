@@ -40,6 +40,8 @@ class UcenterRpcAPI(object):
             mobile = parameters.get('mobile')
             sex = parameters.get('sex')
             birth_date = parameters.get('birth_date')
+            code_id = parameters.get('code_id')
+            code_str = parameters.get('code_str')
 
             user_name = parameter_check(user_name, ptype='pnam')
             password = parameter_check(password, ptype='ppwd')
@@ -50,6 +52,8 @@ class UcenterRpcAPI(object):
             birth_date = parameter_check(birth_date, ptype='pflt', exist='no')
             if sex and (sex != 'man') and (sex != 'woman'):
                 raise(Exception('parameter error'))
+            code_id = parameter_check(code_id, ptype='pstr', exist='no')
+            code_str = parameter_check(code_str, ptype='pstr', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -57,7 +61,8 @@ class UcenterRpcAPI(object):
 
         return self.users_manager.user_create(
                     user_name, password, email,
-                    real_name, mobile, sex, birth_date)
+                    real_name, mobile, sex,
+                    birth_date, code_id, code_str)
 
     def user_activate(self, context, parameters):
 
@@ -256,7 +261,10 @@ class UcenterRpcAPI(object):
         try:
             user_name = context.get('resource_uuid')
 
-            user_name = parameter_check(user_name, ptype='pnam')
+            try:
+                user_name = parameter_check(user_name, ptype='pnam')
+            except Exception:
+                user_name = parameter_check(user_name, ptype='peml')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))

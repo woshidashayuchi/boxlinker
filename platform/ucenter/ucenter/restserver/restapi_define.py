@@ -5,8 +5,11 @@
 import json
 
 from flask import request
+from flask import redirect
+from flask import render_template
 from flask_restful import Resource
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.time_log import time_log
@@ -14,6 +17,16 @@ from common.token_localauth import token_auth
 from common.parameters import context_data
 
 from ucenter.rpcapi import rpc_client as ucenter_rpcapi
+
+
+def user_activate(status):
+
+    user_activate_ret = '%s%s%s' % (conf.boxlinker_index,
+                                    ('/user_activate/status'
+                                     '?ret_status='), status)
+
+    return render_template("user_activate.html",
+                           item=user_activate_ret)
 
 
 class UcenterUsersApi(Resource):
@@ -115,11 +128,16 @@ class UcenterUserStatusApi(Resource):
         self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
 
     @time_log
-    def post(self, user_uuid):
+    def get(self, user_uuid):
 
         context = context_data(None, user_uuid, "create")
 
-        return self.ucenter_api.user_activate(context)
+        ret_status = self.ucenter_api.user_activate(context).get('status')
+        if int(ret_status) != 0:
+            log.warning('User_id(%s) activate error' % (user_uuid))
+
+        return redirect('/api/v1.0/ucenter/users/activate/%s'
+                        % (ret_status))
 
     @time_log
     def put(self, user_uuid):
