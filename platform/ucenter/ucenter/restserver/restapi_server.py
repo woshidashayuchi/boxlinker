@@ -12,6 +12,9 @@ from conf import conf
 from common.logs import logging as log
 from ucenter.restserver.restapi_register import rest_app_run
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 def server_start():
 

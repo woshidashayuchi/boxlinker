@@ -6,6 +6,7 @@ import os
 import json
 import requests
 
+from conf import conf
 from common.logs import logging as log
 from common.rabbitmq_client import RabbitmqClient
 from common.code import request_result
@@ -20,129 +21,45 @@ class UcenterDriver(object):
         self.rmq_client = RabbitmqClient()
         self.queue_name = 'ceph_call'
         self.exchange_name = 'ceph_bcast'
-        self.notification_queue = 'boxlinker-notification'
         self.timeout = 60
-        self.billing_api = os.environ.get('BILLING_API')
+        self.email_api = conf.email_api
+        self.verify_code_api = conf.verify_code_api
 
-    def disk_create(self, token, pool_name, disk_name, disk_size):
+    def email_send(self, data):
 
-        try:
-
-            disk_size = int(disk_size) * 1024
-            api = 'drv_ceh_dsk_crt'
-            context = {"token": token}
-
-            parameters = {
-                             "pool_name": pool_name,
-                             "disk_name": disk_name,
-                             "disk_size": disk_size
-                         }
-
-            dict_data = {
-                            "api": api,
-                            "context": context,
-                            "parameters": parameters
-                        }
-
-            return self.rmq_client.rpc_call_client(
-                        self.queue_name, self.timeout, dict_data)
-
-        except Exception, e:
-
-            return request_result(598)
-
-    def disk_delete(self, token, pool_name, disk_name):
+        headers = {'content-type': "application/json"}
+        body = json.JSONEncoder().encode(data)
 
         try:
-
-            api = 'drv_ceh_dsk_del'
-            context = {"token": token}
-
-            parameters = {
-                             "pool_name": pool_name,
-                             "disk_name": disk_name
-                         }
-
-            dict_data = {
-                            "api": api,
-                            "context": context,
-                            "parameters": parameters
-                        }
-
-            return self.rmq_client.rpc_call_client(
-                        self.queue_name, self.timeout, dict_data)
-
+            r = requests.post(self.email_api, headers=headers,
+                              data=body, timeout=5)
+            status = r.json()['status']
+            log.debug('Email send request=%s, request_status=%s'
+                      % (r, status))
+            if int(status) != 0:
+                raise(Exception('request_code not equal 0'))
         except Exception, e:
+            log.error('Email send error: reason=%s' % (e))
+            return request_result(601)
 
-            return request_result(598)
+        return request_result(0)
 
-    def disk_resize(self, token, pool_name, disk_name, disk_size):
+    def verify_code_check(self, code_id, code_str):
 
+        verify_code_url = '%s/%s?code=%s' % (self.verify_code_api,
+                                             code_id, code_str)
         try:
-
-            disk_size = int(disk_size) * 1024
-            api = 'drv_ceh_dsk_rsz'
-            context = {"token": token}
-
-            parameters = {
-                             "pool_name": pool_name,
-                             "disk_name": disk_name,
-                             "disk_size": disk_size
-                         }
-
-            dict_data = {
-                            "api": api,
-                            "context": context,
-                            "parameters": parameters
-                        }
-
-            return self.rmq_client.rpc_call_client(
-                        self.queue_name, self.timeout, dict_data)
-
+            r = requests.get(url=verify_code_url, timeout=5)
+            status = r.json()['status']
+            log.debug('Verify code check url=%s, request_status=%s'
+                      % (verify_code_url, status))
+            if int(status) != 0:
+                raise(Exception('request_code not equal 0'))
         except Exception, e:
+            log.error('Verify code check error: reason=%s' % (e))
+            return request_result(601)
 
-            return request_result(598)
-
-    def disk_growfs(self, token, image_name):
-
-        try:
-
-            api = 'drv_ceh_dsk_gow'
-            context = {"token": token}
-
-            parameters = {"image_name": image_name}
-
-            dict_data = {
-                            "api": api,
-                            "context": context,
-                            "parameters": parameters
-                        }
-
-            self.rmq_client.broadcast_client(
-                 self.exchange_name, dict_data)
-            return request_result(0)
-
-        except Exception, e:
-
-            return request_result(598)
-
-    def notification(self, status, namespace, data=None):
-
-        try:
-
-            dict_data = {
-                            "status": status,
-                            "namespace": namespace,
-                            "data": data
-                        }
-
-            self.rmq_client.rpc_cast_client(
-                 self.notification_queue, dict_data)
-            return request_result(0)
-
-        except Exception, e:
-
-            return request_result(598)
+        return request_result(0)
 
     def billing_create(self, token, volume_uuid, volume_name,
                        volume_conf, orga_uuid, user_uuid):

@@ -15,7 +15,7 @@ class RpcClient(object):
         self.queue = 'storage_api_call'
         self.timeout = 60
 
-    @acl_check
+    # @acl_check
     def disk_create(self, context, parameters=None):
 
         try:
@@ -30,7 +30,7 @@ class RpcClient(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
-    @acl_check
+    # @acl_check
     def disk_list(self, context, parameters=None):
 
         try:
@@ -45,7 +45,7 @@ class RpcClient(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
-    @acl_check
+    # @acl_check
     def disk_info(self, context, parameters=None):
 
         try:
@@ -60,7 +60,7 @@ class RpcClient(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
-    @acl_check
+    # @acl_check
     def disk_resize(self, context, parameters=None):
 
         try:
@@ -75,7 +75,7 @@ class RpcClient(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
-    @acl_check
+    # @acl_check
     def disk_delete(self, context, parameters=None):
 
         try:
@@ -90,7 +90,7 @@ class RpcClient(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
-    @acl_check
+    # @acl_check
     def disk_status(self, context, parameters=None):
 
         try:

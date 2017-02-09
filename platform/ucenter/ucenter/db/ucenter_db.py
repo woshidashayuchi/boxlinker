@@ -47,6 +47,16 @@ class UcenterDB(MysqlInit):
 
         return super(UcenterDB, self).exec_update_sql(sql_01, sql_02)
 
+    def user_delete(self, user_uuid):
+
+        sql_01 = "delete from users where user_uuid='%s'" \
+                 % (user_uuid)
+
+        sql_02 = "delete from resources_acl where resource_uuid='%s'" \
+                 % (user_uuid)
+
+        return super(UcenterDB, self).exec_update_sql(sql_01, sql_02)
+
     def user_info(self, user_uuid):
 
         sql = "select user_name, real_name, email, mobile, \

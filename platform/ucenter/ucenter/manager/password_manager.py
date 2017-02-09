@@ -5,11 +5,13 @@ import uuid
 import json
 import time
 
+from conf import conf
 from ucenter_common import passwd_encrypt
 from tokens_manager import TokensManager
 
 from common.logs import logging as log
 from common.code import request_result
+from common.parameters import parameter_check
 from common.json_encode import CJsonEncoder
 
 from ucenter.db import ucenter_db
@@ -84,6 +86,12 @@ class PasswordsManager(object):
     def password_find(self, user_name):
 
         try:
+            email = parameter_check(user_name, ptype='peml')
+            user_name = self.ucenter_db.email_user_name(email)[0][0]
+        except Exception, e:
+            log.debug('Use email find password error, reason=%s' % (e))
+
+        try:
             user_info = self.ucenter_db.user_name_info(user_name)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
@@ -117,8 +125,27 @@ class PasswordsManager(object):
         # 发重置密码的链接到注册邮箱
         # 链接里带一个临时user_token和user_uuid
 
-        url = "http://xxx.com/changepwd?id=%s&token=%s" \
-              % (user_uuid, user_token)
+        passwd_ret_url = "%s/changepwd?id=%s&token=%s" \
+                         % (conf.boxlinker_index, user_uuid, user_token)
+        html_body = ("<p>"
+                     "感谢您使用邮箱找回密码，"
+                     "请在30分钟内点击以下链接重置您的密码：<br>"
+                     "<a href = %s>%s</a> </p>"
+                     % (passwd_ret_url, passwd_ret_url))
+
+        data = {
+                   "to": email,
+                   "title": "密码重置",
+                   "text": None,
+                   "html": html_body
+               }
+
+        log.debug('email=%s, html_body=%s, type=%s'
+                  % (email, html_body, type(html_body)))
+
+        email_send = self.ucenter_driver.email_send(data).get('status')
+        if int(email_send) != 0:
+            return request_result(601)
 
         result = {
                      "user_name": user_name,

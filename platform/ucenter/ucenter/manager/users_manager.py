@@ -5,6 +5,7 @@ import uuid
 import json
 import time
 
+from conf import conf
 from ucenter_common import passwd_encrypt
 
 from common.logs import logging as log
@@ -24,7 +25,14 @@ class UsersManager(object):
 
     def user_create(self, user_name, password,
                     email, real_name=None, mobile=None,
-                    sex=None, birth_date=None):
+                    sex=None, birth_date=None,
+                    code_id=None, code_str=None):
+
+        if conf.verify_code is True:
+            verify_code_check = self.ucenter_driver.verify_code_check(
+                                     code_id, code_str).get('status')
+            if int(verify_code_check) != 0:
+                return request_result(104)
 
         try:
             user_name_check = self.ucenter_db.name_duplicate_check(
@@ -64,6 +72,25 @@ class UsersManager(object):
             return request_result(401)
 
         # 发送激活邮件给用户
+        user_activate_url = '%s%s%s' % (conf.ucenter_api,
+                                        '/api/v1.0/ucenter/users/status/',
+                                        user_uuid)
+
+        data = {
+                   "to": email,
+                   "title": "用户激活",
+                   "text": None,
+                   "html": ("<p>"
+                            "感谢您注册boxlinker账号，"
+                            "请点击以下链接激活您的账号：<br>"
+                            "<a href = %s>%s</a> </p>"
+                            % (user_activate_url, user_activate_url))
+               }
+
+        email_send = self.ucenter_driver.email_send(data).get('status')
+        if int(email_send) != 0:
+            self.ucenter_db.user_delete(user_uuid)
+            return request_result(601)
 
         result = {
                      "user_name": user_name,

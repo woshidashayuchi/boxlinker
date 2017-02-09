@@ -79,8 +79,8 @@ class StorageDB(MysqlInit):
                a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
                a.pool_name, a.create_time, a.update_time \
                from volumes a join resources_acl b \
-               where b.user_uuid='%s' and b.orga_uuid='%s' \
+               where b.orga_uuid='%s' \
                and a.volume_uuid=b.resource_uuid" \
-              % (user_uuid, orga_uuid)
+              % (orga_uuid)
 
         return super(StorageDB, self).exec_select_sql(sql)
