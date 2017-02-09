@@ -20,9 +20,10 @@ class KubernetesClientApi(object):
     @classmethod
     @time_log
     def create_service(cls, service_name):
+
         try:
             token = request.headers.get('token')
-            token_auth(token)
+            token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error, token=%s, reason=%s' % (token, e))
 
@@ -31,14 +32,15 @@ class KubernetesClientApi(object):
         try:
             context = json.loads(request.get_data())
             context['token'] = token
+            context.update(token_ret.get('result'))
         except Exception, e:
-            log.error("parameters error, body data=%s,reason=%s" % e)
+            log.error("parameters error, body data=%s,reason=%s" % (context, e))
 
             return json.dumps(request_result(101))
 
-        log.info(cls.kuber.create_services(context))
+        ret = cls.kuber.create_services(context)
 
-        return json.dumps(cls.kuber.create_services(context))
+        return json.dumps(ret)
 
 
     '''

@@ -16,10 +16,10 @@ class Containers(object):
     __tablename__ = 'replicationcontrollers'
 
     uuid = Column(String(64), primary_key=True)
-    rc_id = Column(String(64))
-    user_id = Column(String(64))
-    service_name = Column(String(64))
-    containerPort = Column(String(64))
+    rc_uuid = Column(String(64))
+    # user_id = Column(String(64))
+    # service_name = Column(String(64))
+    container_port = Column(Integer)
     protocol = Column(String(32))
     access_mode = Column(String(32))
     access_scope = Column(String(32))
@@ -27,10 +27,10 @@ class Containers(object):
     http_domain = Column(String(64))
     tcp_domain = Column(String(64))
     private_domain = Column(String(64))
-    identify = Column(String(32))
+    identify = Column(Integer, default=0)
 
     def __repr__(self):
-        return '%s(%r, %r, %r, %d, %r, %r, %r, %r, %r, %r,%r, %d, %r, %r, %r, %r, %r, %r, %r)' % \
-                (self.__class__.__name__, self.uuid, self.rc_id, self.user_id, self.service_name, self.containerPort,
+        return '%s(%r, %r, %d, %r, %r, %r, %r, %r, %r,%r, %d)' % \
+                (self.__class__.__name__, self.uuid, self.rc_id, self.container_port,
                  self.protocol, self.access_mode, self.access_scope, self.tcp_port, self.http_domain, self.tcp_domain,
                  self.private_domain, self.identify)

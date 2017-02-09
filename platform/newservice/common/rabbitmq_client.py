@@ -86,8 +86,7 @@ class RabbitmqClient(object):
         while self.response is None:
             cnt += 1
             if cnt >= timeout:
-                log.warning('RPC client exec time out, queue = %s'
-                            % (queue_name))
+                log.warning('RPC client exec time out, queue = %s' % queue_name)
                 self.response = request_result(597)
                 return
             self.connection.sleep(0.1)

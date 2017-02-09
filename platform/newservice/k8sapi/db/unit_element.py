@@ -3,6 +3,7 @@
 # Date: 2017/02/08
 
 import uuid
+from common.logs import logging as log
 
 
 def font_infix_element(dict_data):
@@ -19,12 +20,40 @@ def font_infix_element(dict_data):
 
 
 def rc_infix_element(dict_data):
-    spec_replicas = dict_data.get('spec_replicas')
+
+    pods_num = dict_data.get('pods_num')
     image_id = dict_data.get('image_id')
-    limits_cpu = dict_data.get('limits_cpu')
-    limits_memory = dict_data.get('limits_memory')
+    container_cpu = dict_data.get('container_cpu')
+    container_memory = dict_data.get('container_memory')
     policy = dict_data.get('policy')
     auto_startup = dict_data.get('auto_startup')
+    command = dict_data.get('command')
+    isUpdate = dict_data.get('isUpdate')
+
+    return pods_num, image_id, container_cpu, container_memory, policy, auto_startup, command, isUpdate
+
+
+def container_element(dict_data):
+
+    rc_uuid = dict_data.get('rc_uuid')
+    container_uuid = str(uuid.uuid4())
     container_port = dict_data.get('container_port')
     protocol = dict_data.get('protocol')
+    access_mode = dict_data.get('access_mode')
+    access_scope = dict_data.get('access_scope')
+    tcp_port = dict_data.get('tcp_port')
+    http_domain = dict_data.get('http_domain')
+    tcp_domain = dict_data.get('tcp_domain')
+
+    return container_uuid, rc_uuid, container_port, protocol, access_mode, access_scope, tcp_port, http_domain, \
+        tcp_domain
+
+
+def env_element(dict_data):
+
+    env_uuid = str(uuid.uuid4())
+    rc_uuid = dict_data.get('rc_uuid')
     env_key = dict_data.get('env_key')
+    env_value = dict_data.get('env_value')
+
+    return env_uuid, rc_uuid, env_key, env_value
