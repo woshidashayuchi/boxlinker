@@ -35,6 +35,7 @@ class DBInit(object):
                                                                   ), echo=True)
 
     metadata = MetaData(engine)
+
     font_service = Table('font_service', metadata,
         Column('uuid', String(64), primary_key=True),
         Column('user_uuid', String(64)),
@@ -101,7 +102,7 @@ class DBInit(object):
         Column('http_domain', String(64)),
         Column('tcp_domain', String(64)),
         Column('private_domain', String(64)),
-        Column('identify', Integer, default=0)
+        Column('identify', String(32), default='0')
 
     )
 
@@ -130,11 +131,11 @@ class DBInit(object):
     volume = Table('volume', metadata,
         Column('uuid', String(64), primary_key=True),
         Column('rc_uuid', String(64)),
-        Column('user_uuid', String(64)),
+        # Column('user_uuid', String(64)),
         # Column('service_name', String(64)),
         Column('volume_uuid', String(64)),
-        Column('volume_path', String(64)),
-        Column('read_only', String(32), server_default='True')
+        Column('disk_path', String(64)),
+        Column('readonly', String(32), server_default='True')
         )
 
     metadata.create_all(engine)

@@ -105,9 +105,9 @@ class KApiMethods(object):
         rtype = json_list.pop('rtype')
         if json_list.get('namespace'):
 
-                namespace = json_list.pop('namespace')
+            namespace = json_list.pop('namespace')
         else:
-                namespace = 'default'
+            namespace = 'default'
 
         url = '%s/namespaces/%s/%s' % (self.host_address, namespace, rtype)
 
@@ -122,9 +122,9 @@ class KApiMethods(object):
 
         if json_list.get('namespace'):
 
-                namespace = json_list.pop('namespace')
+            namespace = json_list.pop('namespace')
         else:
-                namespace = 'default'
+            namespace = 'default'
         url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, json_list.get('name'))
         response = requests.delete(url, headers=self.HEADERS, verify=False)
 
@@ -135,15 +135,15 @@ class KApiMethods(object):
         rtype = json_list.pop('rtype')
 
         if json_list.get('namespace'):
-                namespace = json_list.pop('namespace')
+            namespace = json_list.pop('namespace')
         else:
-                namespace = 'default'
+            namespace = 'default'
         if json_list.get('name'):
-                name = json_list.pop('name')
+            name = json_list.pop('name')
 
         else:
-                m_name = '输入资源名,才可以进行修改'
-                return m_name
+            m_name = '输入资源名,才可以进行修改'
+            return m_name
 
         url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, name)
         the_page = requests.patch(url, data=json.dumps(json_list), headers=self.HEADERS, verify=False)
@@ -154,14 +154,14 @@ class KApiMethods(object):
     def put_name_resource(self, json_list):
         rtype = json_list.pop('rtype')
         if json_list.get('namespace'):
-                namespace = json_list.pop('namespace')
+            namespace = json_list.pop('namespace')
         else:
-                namespace = 'default'
+            namespace = 'default'
         if json_list.get('name'):
-                name = json_list.pop('name')
+            name = json_list.pop('name')
         else:
-                m_name = '输入资源名,才可以进行修改'
-                return m_name
+            m_name = '输入资源名,才可以进行修改'
+            return m_name
 
         url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, name)
         the_page = requests.put(url, data=json.dumps(json_list), headers=self.HEADERS, verify=False)

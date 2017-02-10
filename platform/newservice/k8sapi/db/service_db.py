@@ -4,7 +4,7 @@
 
 from common.mysql_base import MysqlInit
 from common.logs import logging as log
-from unit_element import font_infix_element, rc_infix_element, container_element, env_element
+from unit_element import font_infix_element, rc_infix_element, container_element, env_element, volume_element
 
 
 class ServiceDB(MysqlInit):
@@ -69,6 +69,13 @@ class ServiceDB(MysqlInit):
         env_uuid, rc_uuid, env_key, env_value = env_element(dict_data)
         sql = "insert into env(uuid,rc_uuid,env_key,env_value) VALUES ('%s','%s','%s','%s')" % (env_uuid, rc_uuid,
                                                                                                 env_key, env_value)
+        return super(ServiceDB, self).exec_update_sql(sql)
+
+    def volume_infix_db(self, dict_data):
+        v_uuid, rc_uuid, volume_uuid, disk_path, readonly = volume_element(dict_data)
+        sql = "insert into volume(uuid, rc_uuid, volume_uuid, disk_path, readonly) VALUES ('%s','%s','%s','%s'," \
+              "'%s')" % (v_uuid, rc_uuid, volume_uuid, disk_path, readonly)
+
         return super(ServiceDB, self).exec_update_sql(sql)
 
     def max_used_port(self):

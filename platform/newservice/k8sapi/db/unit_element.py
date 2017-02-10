@@ -57,3 +57,14 @@ def env_element(dict_data):
     env_value = dict_data.get('env_value')
 
     return env_uuid, rc_uuid, env_key, env_value
+
+
+def volume_element(dict_data):
+
+    v_uuid = str(uuid.uuid4())
+    rc_uuid = dict_data.get('rc_uuid')
+    volume_uuid = dict_data.get('volume_uuid')
+    disk_path = dict_data.get('disk_path')
+    readonly = dict_data.get('readonly')
+
+    return v_uuid, rc_uuid, volume_uuid, disk_path, readonly

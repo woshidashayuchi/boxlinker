@@ -26,3 +26,7 @@ rest_debug = True
 call_queue = 'kubernetescall_api'
 rpc_timeout = 60
 
+STORAGE_HOST = 'https://storage.boxlinker.com/api/v1.0/storage/volumes'
+PROJECT_MSG = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/projects'
+VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
+

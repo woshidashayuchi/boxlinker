@@ -34,7 +34,7 @@ class KubernetesClientApi(object):
             context['token'] = token
             context.update(token_ret.get('result'))
         except Exception, e:
-            log.error("parameters error, body data=%s,reason=%s" % (context, e))
+            log.error("parameters error,reason=%s" % e)
 
             return json.dumps(request_result(101))
 
