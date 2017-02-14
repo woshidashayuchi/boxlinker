@@ -99,8 +99,15 @@ class CreateManager(object):
         if check_name == 'error':
             return request_result(404)
 
+        log.info('22222222222222')
+        ret = self.kuber_driver.create_service(context)
+        if ret is not True:
+            return request_result(501)
+        log.info('========>>>>>>>>>>%s' % ret)
+
         project_name = self.token_driver.gain_project_name(context)
         if project_name is False:
+            log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
             return request_result(501)
 
         context.update({'project_name': project_name})
@@ -114,11 +121,4 @@ class CreateManager(object):
         if infix is False or diff is False:
             return request_result(401)
 
-        add_rc = self.kuber_driver.add_rc(context)
-        add_service = self.kuber_driver.add_service(context)
-        if add_rc is False or add_service is False:
-            return request_result(501)
-
-        log.info('add_rc====%s,\\n,add_service=%s' % (add_rc, add_service))
-
-        return self.krpc_client.create_services(context)
+        return request_result(0, 'service is creating')

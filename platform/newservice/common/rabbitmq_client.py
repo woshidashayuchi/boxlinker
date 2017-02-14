@@ -96,12 +96,11 @@ class RabbitmqClient(object):
         try:
             json_data = json.dumps(dict_data)
             self.mq_connect()
-
             self.callback_create()
             self.rpc_call(queue_name, json_data)
             self.get_response(timeout, queue_name)
             self.mq_disconnect()
-
+            log.info('response......=%s,type = %s' % (self.response, type(self.response)))
             return json.loads(self.response)
         except Exception, e:
             log.error('RabbitMQ call client exec error: queue=%s, reason=%s'

@@ -83,3 +83,9 @@ class ServiceDB(MysqlInit):
         sql = 'select max(CAST(tcp_port AS SIGNED)) tcp_port from containers'
 
         return super(ServiceDB, self).exec_select_sql(sql)
+
+    def create_svcaccount_or_not(self, dict_data):
+
+        sql = "select uuid from font_service where project_uuid='%s'" % dict_data.get('project_uuid')
+
+        return super(ServiceDB, self).exec_select_sql(sql)

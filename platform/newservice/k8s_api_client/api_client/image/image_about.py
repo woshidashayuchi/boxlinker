@@ -19,7 +19,10 @@ class ImageAbout(object):
         headers = {"token": json_data.get("token")}
         json_image = {"name": json_data.get("service_name")}
         try:
-            result = json.loads(requests.post(url, headers=headers, timeout=5, json=json_image).text)
+            ret = requests.post(url, headers=headers, timeout=5, json=json_image)
+            log.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>========%s,type:%s' % (ret, type(ret)))
+            result = json.loads(ret.text)
+            log.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>========%s,type:%s' % (result, type(result)))
             json_data["image_dir"] = result.get("result").get("image_url")
             return json_data
         except Exception, e:

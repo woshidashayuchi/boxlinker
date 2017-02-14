@@ -32,6 +32,7 @@ class KubernetesClientApi(object):
         try:
             context = json.loads(request.get_data())
             context['token'] = token
+            context['service_name'] = service_name
             context.update(token_ret.get('result'))
         except Exception, e:
             log.error("parameters error,reason=%s" % e)

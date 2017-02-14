@@ -15,5 +15,6 @@ class KubernetesRpcAPI(object):
         self.create_manager = CreateManager()
 
     def service_create(self, context, parameters=None):
-        log.info("create context data is: %s(%s)" % (context, type(context)))
+        # log.info("create context data is: %s(%s)" % (context, type(context)))
+        log.info('1111111111111111111111')
         return self.create_manager.service_create(context)

@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
 # Author: wang-xf <it-wangxf@all-reach.com>
 # Date: 2017/02/10
-
-from common.logs import logging as log
-from conf import conf
+import re
 import json
 import requests
+from conf import conf
 from common.time_log import time_log
-import re
+from common.code import request_result
+from common.logs import logging as log
 from db.service_db import ServiceDB
+from rpcapi_client import KubernetesRpcClient
 
 
 class KubernetesDriver(object):
 
     def __init__(self):
         self.service_db = ServiceDB()
+        self.krpc_client = KubernetesRpcClient()
+
 
     @staticmethod
-    @time_log
     def command_query(dict_data):
         in_command = dict_data.get('command')
 
@@ -27,7 +29,6 @@ class KubernetesDriver(object):
             return command
 
     @staticmethod
-    @time_log
     def define_volumes(dict_data):
         result = []
         request_para = dict_data.get('volume')
@@ -69,31 +70,31 @@ class KubernetesDriver(object):
             return result
 
     @staticmethod
-    @time_log
     def fill_containerfor_volume(dict_data):
         result = []
-        request_para = dict_data.get('volume')
+        if dict_data.get('volume') is not None and dict_data.get('volume') != '':
+            request_para = dict_data.get('volume')
 
-        headers = {'token': dict_data.get('token')}
+            headers = {'token': dict_data.get('token')}
 
-        for i in request_para:
-            if i.get('readonly') == 'True':
-                readonly = True
-            else:
-                readonly = False
+            for i in request_para:
+                if i.get('readonly') == 'True':
+                    readonly = True
+                else:
+                    readonly = False
 
-            get_url = '%s/%s' % (conf.STORAGE_HOST, i.get('volume_id'))
-            try:
-                resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get('result')
-                if resu == {}:
-                    return 'error'
-            except Exception, e:
-                log.error('select volumes error,reason=%s' % e)
-                return 'timeout'
-            vname = resu.get('volume_name')
+                get_url = '%s/%s' % (conf.STORAGE_HOST, i.get('volume_id'))
+                try:
+                    resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get('result')
+                    if resu == {}:
+                        return 'error'
+                except Exception, e:
+                    log.error('select volumes error,reason=%s' % e)
+                    return 'timeout'
+                vname = resu.get('volume_name')
 
-            disk_msg = {'name': vname, 'readOnly': readonly, 'mountPath': i.get('disk_path')}
-            result.append(disk_msg)
+                disk_msg = {'name': vname, 'readOnly': readonly, 'mountPath': i.get('disk_path')}
+                result.append(disk_msg)
 
         return result
 
@@ -223,7 +224,6 @@ class KubernetesDriver(object):
 
         return result
 
-    @time_log
     def unit_element(self, dict_data):
         namespace = dict_data.get('project_uuid')
         image_name = dict_data.get('image_name')
@@ -263,13 +263,13 @@ class KubernetesDriver(object):
         return namespace, image_name, image_version, service_name, pods_num, project_name, command, container, \
             env, user_uuid, rc_krud, pullpolicy, volumes
 
-    @time_log
     def add_rc(self, dict_data):
         namespace, image_name, image_version, service_name, pods_num, project_name, command, container, \
             env, user_uuid, rc_krud, pullpolicy, volumes = self.unit_element(dict_data)
 
         try:
             add_rc = {
+               "c_type": "replicationcontrollers",
                "kind": "ReplicationController", "apiVersion": "v1",
                "metadata": {
                   "namespace": namespace, "name": service_name,
@@ -299,7 +299,7 @@ class KubernetesDriver(object):
                 for i in add_rc['spec']['template']['spec']['containers']:
                     del add_rc['spec']['template']['spec']['containers'][j]['env']
                     j += 1
-            if dict_data.get('volume') == '' or dict_data.get('volume') is None:
+            if dict_data.get('volume') == '' or dict_data.get('volume') is None or len(dict_data.get('volume')) == 0:
                 j = 0
                 del add_rc['spec']['template']['spec']['volumes']
                 for i in add_rc['spec']['template']['spec']['containers']:
@@ -316,7 +316,6 @@ class KubernetesDriver(object):
 
         return add_rc
 
-    @time_log
     def add_service(self, dict_data):
         namespace = dict_data.get('project_uuid')
         service_name = dict_data.get('service_name')
@@ -337,7 +336,7 @@ class KubernetesDriver(object):
         try:
             service_name1 = service_name.replace('_', '-')
             add_service = {
-                           "kind": "Service", "apiVersion": "v1",
+                           "c_type": "services", "kind": "Service", "apiVersion": "v1",
                            "metadata": {
                               "annotations": {"serviceloadbalancer/lb.http": http_lb,
                                               "serviceloadbalancer/lb.tcp": tcp_lb,
@@ -364,3 +363,94 @@ class KubernetesDriver(object):
             return False
 
         return add_service
+
+    def show_namespace(self, dict_data):
+        namespace = dict_data.get('project_uuid')
+        ns_ret = self.krpc_client.show_ns({'namespace': namespace})
+        return ns_ret
+
+    def create_namespace(self, dict_data):
+        namespace = dict_data.get('project_uuid')
+        ns_dict = {"apiVersion": "v1", "kind": "Namespace", "metadata": {"name": namespace}}
+        ns_cre_ret = self.krpc_client.create_ns(ns_dict)
+
+        if ns_cre_ret.get('kind') != 'Namespace':
+            log.error('ns create error, create result is : %s' % ns_cre_ret)
+            return False
+        return True
+
+    def get_secret(self, dict_data):
+        get_secret_dict = {"namespace": dict_data.get('project_uuid'), "name": "default"}
+        ret = self.krpc_client.get_secret(get_secret_dict)
+
+        return ret
+
+    def create_secret(self, dict_data):
+        namespace = dict_data.get('project_uuid')
+        secret_dict = {"apiVersion": "v1", "kind": "Secret",
+                       "metadata": {"name": "registry-key", "namespace": namespace},
+                       "data":
+                           {".dockerconfigjson":
+                                "ewoJImF1dGhzIjogewoJCSJpbmRleC5ib3hsaW5rZXIuY29tIjogewoJCQkiYXV0aCI6ICJZbTk0YkdsdWEyVnlPbEZCV25kemVERXlNdz09IgoJCX0KCX0KfQ=="},
+                       "type": "kubernetes.io/dockerconfigjson"
+                       }
+        secret_cre_ret = self.krpc_client.create_secret(secret_dict)
+        if secret_cre_ret.get('kind') != 'Secret':
+            return False
+        return True
+
+    def create_svc_account(self, dict_data):
+        namespace = dict_data.get('project_uuid')
+        service_account = self.krpc_client.get_account({'namespace': namespace, 'name': 'default'})
+        log.info('get service account...the result is: %s, type is:%s' % (service_account, type(service_account)))
+
+        account_json = {
+                "kind": "ServiceAccount", "apiVersion": "v1",
+                "metadata": {"name": "default", "namespace": namespace},
+                "secrets": service_account.get("secrets"),
+                "imagePullSecrets": [{"name": "registry-key"}]
+            }
+
+        cre_account = self.krpc_client.create_account(account_json)
+        if not cre_account:
+            log.error('service account create error, the create result is : %s' % cre_account)
+            return False
+
+        return True
+
+    def create_service(self, context):
+
+        try:
+            check = self.service_db.create_svcaccount_or_not(context)
+
+        except Exception, e:
+            log.error('check the namespace if is exist(database select)...,reason=%s' % e)
+            return request_result(501)
+        ns_if_exist = self.show_namespace(context)
+        log.info('4444444444++=%s' % ns_if_exist)
+        if len(check) == 0:
+            if ns_if_exist.get('kind') != 'Namespace':
+                ret_ns = self.create_namespace(context)
+                ret_secret = self.create_secret(context)
+                ret_account = self.create_svc_account(context)
+                if not ret_ns or not ret_secret or not ret_account:
+                    log.info('the namespace create result is : %s' % ret_ns)
+                    log.info('the secret create result is : %s' % ret_secret)
+                    log.info('the account create result is : %s' % ret_account)
+                    return request_result(501)
+
+        add_rc = self.add_rc(context)
+        add_service = self.add_service(context)
+        if add_rc is False or add_service is False:
+            log.info('CREATE SERVICE ERROR WHEN CREATE JSON DATA...')
+            return request_result(501)
+
+        rc_ret = json.loads(self.krpc_client.create_services(add_rc))
+        svc_ret = json.loads(self.krpc_client.create_services(add_service))
+
+        if rc_ret.get('kind') != 'ReplicationController' or svc_ret.get('kind') != 'Service':
+            log.info('CREATE SERVICE ERROR WHEN USE KUBERNETES API TO CREATE... rc_ret=%s,svc_ret=%s' % (rc_ret,
+                                                                                                         svc_ret))
+            return request_result(501)
+
+        return True

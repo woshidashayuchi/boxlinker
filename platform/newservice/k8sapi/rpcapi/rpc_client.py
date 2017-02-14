@@ -23,7 +23,7 @@ class KubernetesRpcClient(object):
     def create_services(self, context, parameters=None):
         try:
             rpc_body = rpc_data("svc_cre", context, parameters)
-            log.info("Rpc_body is : %s" % rpc_body)
+
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, rpc_body)
         except Exception, e:

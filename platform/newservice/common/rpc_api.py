@@ -26,9 +26,6 @@ class RpcAPI(object):
             return request_result(101)
 
         try:
-            log.info('执行结果:%s'% self.app_resources[api])
-            log.info('context:%s' % context)
-            log.info('parameters:%s' % parameters)
             return self.app_resources[api](context, parameters)
         except Exception, e:
             log.error('RPC API routing error: %s' % e)

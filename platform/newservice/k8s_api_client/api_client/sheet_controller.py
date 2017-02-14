@@ -179,7 +179,7 @@ class SheetController(object):
                  "orga_orga": json_list.get("user_orga"), "create_time": create_time,
                  "update_time": create_time}
         json_list.update(typee)
-        json_list = ImageAbout.image_add(json_list)
+        # json_list = ImageAbout.image_add(json_list)
         try:
             log.info("===========font")
             DataOrm.add_method(json_list)
@@ -623,7 +623,7 @@ class SheetController(object):
                 try:
                     log.info("{'userid': '%s', 'log_info': 'updating the using service...'}"
                              % (json_list.get("user_name")))
-                    if json_list.get('type') == 'container':
+                    if json_list.get('type') == 'container' or str(json_list.get('identify') == '1'):
                         rest = kubernete_svc.rpc_name(json_list4)
                         if rest != "<Response [200]>":
                             log.error("update service error, reason=%s" % rest)
