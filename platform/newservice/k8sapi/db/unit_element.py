@@ -6,6 +6,12 @@ import uuid
 from common.logs import logging as log
 
 
+def normal_call(dict_data):
+    project_uuid = dict_data.get('project_uuid')
+    service_name = dict_data.get("service_name")
+    return project_uuid, service_name
+
+
 def font_infix_element(dict_data):
 
     font_uuid = str(uuid.uuid4())
@@ -68,3 +74,4 @@ def volume_element(dict_data):
     readonly = dict_data.get('readonly')
 
     return v_uuid, rc_uuid, volume_uuid, disk_path, readonly
+

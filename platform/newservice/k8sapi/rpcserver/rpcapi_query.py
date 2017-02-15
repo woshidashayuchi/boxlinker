@@ -18,7 +18,7 @@ from common.rabbitmq_server import RabbitmqServer
 
 def server_start(n):
 
-    queue = conf.call_queue
+    queue = 'query_resource'
 
     while True:
 

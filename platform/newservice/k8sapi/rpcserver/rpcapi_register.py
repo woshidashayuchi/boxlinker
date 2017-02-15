@@ -19,8 +19,13 @@ class RabbitmqResponse(object):
 
         self.rpcapi_define = rpcapi_define.KubernetesRpcAPI()
 
-        self.rpc_api.add_resource(
-             'svc_cre', self.rpcapi_define.service_create)
+        self.rpc_api.add_resource('svc_cre', self.rpcapi_define.service_create)
+
+        self.rpc_api.add_resource('svc_query', self.rpcapi_define.service_query)
+
+        self.rpc_api.add_resource('svc_detail', self.rpcapi_define.service_detail)
+
+        self.rpc_api.add_resource('svc_delete', self.rpcapi_define.service_delete)
 
     def rpc_exec(self, rpc_body):
 

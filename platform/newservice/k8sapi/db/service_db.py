@@ -4,13 +4,16 @@
 
 from common.mysql_base import MysqlInit
 from common.logs import logging as log
-from unit_element import font_infix_element, rc_infix_element, container_element, env_element, volume_element
+from unit_element import font_infix_element, rc_infix_element, container_element, env_element, volume_element,\
+    normal_call
+from common.db_operate import DbOperate
 
 
 class ServiceDB(MysqlInit):
 
     def __init__(self):
         super(ServiceDB, self).__init__()
+        self.operate = DbOperate()
 
     def name_if_used_check(self, dict_data):
 
@@ -89,3 +92,51 @@ class ServiceDB(MysqlInit):
         sql = "select uuid from font_service where project_uuid='%s'" % dict_data.get('project_uuid')
 
         return super(ServiceDB, self).exec_select_sql(sql)
+
+    def service_list(self, dict_data):
+
+        project_uuid, service_name = normal_call(dict_data)
+
+        sql = "SELECT a.service_name, b.http_domain, b.tcp_domain, b.container_port, a.service_status," \
+              "a.image_dir, a.service_update_time ltime FROM font_service a RIGHT JOIN " \
+              "containers b ON (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s')" % project_uuid
+
+        conn, cur = self.operate.connection()
+        ret = self.operate.exeQuery(cur, sql)
+        self.operate.connClose(conn, cur)
+
+        return ret
+
+    def service_detail(self, dict_data):
+        service_name = dict_data.get('service_name')
+        project_uuid = dict_data.get('project_uuid')
+
+        sql_rc = "select * from replicationcontrollers where uuid = (select rc_uuid from font_service where " \
+                 "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+
+        sql_container = "select * from containers where rc_uuid = (select rc_uuid from font_service where " \
+                        "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+
+        sql_env = "select * from env where rc_uuid = (select rc_uuid from font_service where " \
+                  "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+
+        sql_volume = "select * from volume where rc_uuid = (select rc_uuid from font_service where " \
+                     "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+
+        conn, cur = self.operate.connection()
+        rc_ret = self.operate.exeQuery(cur, sql_rc)
+        self.operate.connClose(conn, cur)
+
+        conn, cur = self.operate.connection()
+        env_ret = self.operate.exeQuery(cur, sql_env)
+        self.operate.connClose(conn, cur)
+
+        conn, cur = self.operate.connection()
+        volume_ret = self.operate.exeQuery(cur, sql_volume)
+        self.operate.connClose(conn, cur)
+
+        conn, cur = self.operate.connection()
+        containers_ret = self.operate.exeQuery(cur, sql_container)
+        self.operate.connClose(conn, cur)
+
+        return rc_ret, containers_ret, env_ret, volume_ret

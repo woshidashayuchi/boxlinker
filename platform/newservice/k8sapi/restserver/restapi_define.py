@@ -25,8 +25,7 @@ class KubernetesClientApi(object):
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
-
+            log.error('Token check error, reason=%s' % e)
             return json.dumps(request_result(201))
 
         try:
@@ -36,118 +35,60 @@ class KubernetesClientApi(object):
             context.update(token_ret.get('result'))
         except Exception, e:
             log.error("parameters error,reason=%s" % e)
-
             return json.dumps(request_result(101))
 
         ret = cls.kuber.create_services(context)
 
         return json.dumps(ret)
 
-
-    '''
-        controller = SheetController()
-
-        try:
-            token_get1 = request.headers.get("token")
-            token_get2 = token_get1.decode("utf-8")
-            token_get = token_get2.encode("utf-8")
-            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-            user_msg = {"user_id": user_id, "user_name": user_name, "user_orga": user_orga, "role_uuid": role_uuid}
-        except Exception, e:
-            log.error("author registry error, reason=%s" % e)
-            return json.dumps(code.request_result(201))
-        try:
-            json_list = json.loads(request.get_data())
-        except Exception, e:
-            log.error("parameters error, reason=%s" % e)
-            return json.dumps(code.request_result(101))
-
-        show_resource = {"name": user_name}
-        if controller.show_namespace(show_resource) != "ok":
-            try:
-                controller.create_namespace(user_msg)
-                controller.create_secret(user_msg)
-            except Exception, e:
-                log.error("resource create error ,reason =%s" % e)
-                return json.dumps(code.request_result(501))
-        else:
-            log.info("should not create namespace,going...")
-
-        json_name = {"service_name": service_name, "namespace": user_name}
-        json_list.update(json_name)
-        json_list.update(user_msg)
-        json_list["token"] = token_get1
-
-        controller = SheetController()
-        response = controller.sheet_controller(json_list)
-        return json.dumps(response)
-    '''
-
     @classmethod
     def get_all_service(cls):
-        pass
-        '''
-        try:
-            token_get1 = request.headers.get("token")
-            token_get2 = token_get1.decode("utf-8")
-            token_get = token_get2.encode("utf-8")
-            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
 
-        except Exception, e:
-            log.error("authentication error, reason=%s" % e)
-            return json.dumps(code.request_result(201))
         try:
-            service_name = request.args.get("service_name",)
-            json_list = {"user_id": user_id, "user_name": user_name,
-                         "user_orga": user_orga, "role_uuid": role_uuid}
-            if service_name is not None:
-                json_list = {"user_id": user_id, "user_name": user_name,
-                             "service_name": service_name,  "user_orga": user_orga,
-                             "role_uuid": role_uuid}
-            controller = SheetController()
-            response = controller.service_list(json_list)
-            return json.dumps(response)
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
         except Exception, e:
-            log.error("start error, reason=%s" % e)
-            return json.dumps(code.request_result(404))
-    '''
+            log.error('Token check error, reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        context = token_ret.get('result')
+        context['service_name'] = request.args.get('service_name',)
+        ret = cls.kuber.query_service(context)
+
+        return json.dumps(ret)
+
     @classmethod
     def detail_service(cls, service_name):
-        pass
-    '''
         try:
-            token_get1 = request.headers.get("token")
-            token_get2 = token_get1.decode("utf-8")
-            token_get = token_get2.encode("utf-8")
-            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
         except Exception, e:
-            log.error("authentication error, reason=%s" % e)
-            return json.dumps(code.request_result(201))
-        json_list = {"user_id": user_id, "user_name": user_name,
-                     "service_name": service_name,  "user_orga": user_orga, "role_uuid": role_uuid}
-        controller = SheetController()
-        response = controller.detail_service(json_list)
-        return json.dumps(response)
-    '''
+            log.error('Token check error, reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        context = token_ret.get('result')
+        context['service_name'] = service_name
+
+        ret = cls.kuber.detail_service(context)
+
+        return json.dumps(ret)
+
     @classmethod
     def del_service(cls, service_name):
-        pass
-    '''
         try:
-            token_get1 = request.headers.get("token")
-            token_get2 = token_get1.decode("utf-8")
-            token_get = token_get2.encode("utf-8")
-            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
         except Exception, e:
-            log.error("authentication error, reason=%s" % e)
-            return json.dumps(code.request_result(201))
-        json_list = {"token": token_get1, "service_name": service_name,
-                     "user_name": user_name, "namespace": user_name, "user_id": user_id,
-                     "user_orga": user_orga, "role_uuid": role_uuid}
-        controller = SheetController()
-        response = controller.del_service(json_list)
-        return json.dumps(response)
-    '''
+            log.error('Token check error,reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        context = token_ret.get('result')
+        context['service_name'] = service_name
+
+        ret = cls.kuber.delete_service(context)
+
+        return json.dumps(ret)
+
     @classmethod
     def put_service(cls, service_name):
         pass

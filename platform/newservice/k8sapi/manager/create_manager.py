@@ -102,8 +102,8 @@ class CreateManager(object):
         log.info('22222222222222')
         ret = self.kuber_driver.create_service(context)
         if ret is not True:
+            log.info('========>>>>>>>>>>%s' % ret)
             return request_result(501)
-        log.info('========>>>>>>>>>>%s' % ret)
 
         project_name = self.token_driver.gain_project_name(context)
         if project_name is False:
