@@ -157,6 +157,7 @@
                 "role_uuid": "string",
                 "role_name": "string",
                 "role_priv": "string",
+                "role_type": "string",
                 "status": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
@@ -165,6 +166,7 @@
                 "role_uuid": "string",
                 "role_name": "string",
                 "role_priv": "string",
+                "role_type": "string",
                 "status": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
@@ -173,6 +175,7 @@
                 "role_uuid": "string",
                 "role_name": "string",
                 "role_priv": "string",
+                "role_type": "string",
                 "status": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
@@ -193,6 +196,7 @@
         "role_uuid": "string",
         "role_name": "string",
         "role_priv": "string",
+        "role_type": "string",
         "status": "string",
         "create_time": "YYYY-MM-DD HH:MM:SS",
         "update_time": "YYYY-MM-DD HH:MM:SS"
@@ -300,8 +304,10 @@
                 "team_uuid": "string",
                 "team_name": "string",
                 "team_owner": "string",
+                "team_type": "string",
                 "team_desc": "string",
                 "status": "string",
+                "role_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
@@ -309,8 +315,10 @@
                 "team_uuid": "string",
                 "team_name": "string",
                 "team_owner": "string",
+                "team_type": "string",
                 "team_desc": "string",
                 "status": "string",
+                "role_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
@@ -318,8 +326,10 @@
                 "team_uuid": "string",
                 "team_name": "string",
                 "team_owner": "string",
+                "team_type": "string",
                 "team_desc": "string",
                 "status": "string",
+                "role_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             }
@@ -339,6 +349,7 @@
         "team_uuid": "string",
         "team_name": "string",
         "team_owner": "string",
+        "team_type": "string",
         "team_desc": "string",
         "status": "string",
         "create_time": "YYYY-MM-DD HH:MM:SS",
@@ -393,8 +404,10 @@
                 "project_name": "string",
                 "project_owner": "string",
                 "project_team": "string",
+                "project_type": "string",
                 "project_desc": "string",
                 "status": "string",
+                "role_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
@@ -403,8 +416,10 @@
                 "project_name": "string",
                 "project_owner": "string",
                 "project_team": "string",
+                "project_type": "string",
                 "project_desc": "string",
                 "status": "string",
+                "role_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
@@ -413,8 +428,10 @@
                 "project_name": "string",
                 "project_owner": "string",
                 "project_team": "string",
+                "project_type": "string",
                 "project_desc": "string",
                 "status": "string",
+                "role_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             }
@@ -435,6 +452,7 @@
         "project_name": "string",
         "project_owner": "string",
         "project_team": "string",
+        "project_type": "string",
         "project_desc": "string",
         "status": "string",
         "create_time": "YYYY-MM-DD HH:MM:SS",

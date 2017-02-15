@@ -10,7 +10,6 @@ from common.code import request_result
 from common.json_encode import CJsonEncoder
 
 from ucenter.db import ucenter_db
-from ucenter.driver import ucenter_driver
 
 
 class UserProjectManager(object):
@@ -18,10 +17,12 @@ class UserProjectManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
-        self.ucenter_driver = ucenter_driver.UcenterDriver()
 
     def user_project_add(self, user_uuid, role_uuid,
                          project_uuid, project_team):
+
+        if role_uuid is None:
+            role_uuid = 'user'
 
         try:
             user_team_check = self.ucenter_db.user_team_check(
@@ -50,13 +51,6 @@ class UserProjectManager(object):
             except Exception, e:
                 log.error('Database insert error, reason=%s' % (e))
                 return request_result(401)
-        else:
-            try:
-                self.ucenter_db.user_project_update(
-                     user_uuid, project_uuid, role_uuid)
-            except Exception, e:
-                log.error('Database update error, reason=%s' % (e))
-                return request_result(403)
 
         result = {
                      "user_uuid": user_uuid,

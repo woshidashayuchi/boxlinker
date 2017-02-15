@@ -117,7 +117,12 @@ def acl_check(func):
         log.debug('ack check result=%s' % (ret))
 
         if ret == 0:
-            return func(*args, **kwargs)
+            try:
+                return func(*args, **kwargs)
+            except Exception, e:
+                log.error('function(%s) exec error, reason = %s'
+                          % (func.__name__, e))
+                return request_result(601)
         else:
             log.warning('Resource acl auth denied: user_uuid = %s, \
                          team_uuid=%s, team_priv=%s, project_uuid=%s, \
@@ -128,4 +133,8 @@ def acl_check(func):
 
             return request_result(202)
 
-    return _aclauth
+    try:
+        return _aclauth
+    except Exception, e:
+        log.error('Acl check error, reason=%s' % (e))
+        return request_result(202)

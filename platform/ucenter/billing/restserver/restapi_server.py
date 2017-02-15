@@ -9,7 +9,7 @@ sys.path.insert(1, p_path)
 from time import sleep
 
 from common.logs import logging as log
-from ucenter.restserver.restapi_register import rest_app_run
+from billing.restserver.restapi_register import rest_app_run
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -29,4 +29,4 @@ def server_start(service_name):
 
 if __name__ == "__main__":
 
-    server_start('Ucenter')
+    server_start('Billing')

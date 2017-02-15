@@ -10,7 +10,6 @@ from common.code import request_result
 from common.json_encode import CJsonEncoder
 
 from ucenter.db import ucenter_db
-from ucenter.driver import ucenter_driver
 
 
 class UserTeamManager(object):
@@ -18,9 +17,11 @@ class UserTeamManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
-        self.ucenter_driver = ucenter_driver.UcenterDriver()
 
     def user_team_add(self, user_uuid, team_uuid, team_role):
+
+        if team_role is None:
+            team_role = 'user'
 
         try:
             user_team_check = self.ucenter_db.user_team_check(
@@ -36,13 +37,6 @@ class UserTeamManager(object):
             except Exception, e:
                 log.error('Database insert error, reason=%s' % (e))
                 return request_result(401)
-        else:
-            try:
-                self.ucenter_db.user_team_update(
-                     user_uuid, team_uuid, team_role)
-            except Exception, e:
-                log.error('Database update error, reason=%s' % (e))
-                return request_result(403)
 
         result = {
                      "user_uuid": user_uuid,

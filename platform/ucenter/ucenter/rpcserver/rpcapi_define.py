@@ -4,12 +4,12 @@
 from common.logs import logging as log
 from common.code import request_result
 from common.acl import acl_check
-from common.token_localauth import token_auth
 from common.parameters import parameter_check
+from common.token_localauth import token_auth
 
 from ucenter.manager import users_manager
 from ucenter.manager import roles_manager
-from ucenter.manager import password_manager
+from ucenter.manager import passwords_manager
 from ucenter.manager import tokens_manager
 from ucenter.manager import teams_manager
 from ucenter.manager import projects_manager
@@ -17,13 +17,13 @@ from ucenter.manager import userteam_manager
 from ucenter.manager import userproject_manager
 
 
-class UcenterRpcAPI(object):
+class UcenterRpcManager(object):
 
     def __init__(self):
 
         self.users_manager = users_manager.UsersManager()
         self.roles_manager = roles_manager.RolesManager()
-        self.password_manager = password_manager.PasswordsManager()
+        self.passwords_manager = passwords_manager.PasswordsManager()
         self.tokens_manager = tokens_manager.TokensManager()
         self.teams_manager = teams_manager.TeamsManager()
         self.projects_manager = projects_manager.ProjectsManager()
@@ -101,7 +101,10 @@ class UcenterRpcAPI(object):
         try:
             user_name = parameters.get('user_name')
 
-            user_name = parameter_check(user_name, ptype='pnam')
+            try:
+                user_name = parameter_check(user_name, ptype='pnam')
+            except Exception:
+                user_name = parameter_check(user_name, ptype='peml')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -253,7 +256,7 @@ class UcenterRpcAPI(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.password_manager.password_change(
+        return self.passwords_manager.password_change(
                     user_uuid, old_password, new_password)
 
     def password_find(self, context, parameters):
@@ -270,7 +273,7 @@ class UcenterRpcAPI(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.password_manager.password_find(user_name)
+        return self.passwords_manager.password_find(user_name)
 
     @acl_check
     def password_reset(self, context, parameters):
@@ -286,7 +289,7 @@ class UcenterRpcAPI(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.password_manager.password_reset(
+        return self.passwords_manager.password_reset(
                     user_uuid, password)
 
     def token_login(self, context, parameters):
@@ -539,7 +542,7 @@ class UcenterRpcAPI(object):
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             user_uuid = parameter_check(user_uuid, ptype='pstr')
-            role_uuid = parameter_check(role_uuid, ptype='pstr')
+            role_uuid = parameter_check(role_uuid, ptype='pstr', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -638,7 +641,7 @@ class UcenterRpcAPI(object):
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             project_uuid = parameter_check(project_uuid, ptype='pstr')
             user_uuid = parameter_check(user_uuid, ptype='pstr')
-            role_uuid = parameter_check(role_uuid, ptype='pstr')
+            role_uuid = parameter_check(role_uuid, ptype='pstr', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))

@@ -79,6 +79,7 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS roles (
         role_uuid           VARCHAR(64) NULL DEFAULT NULL,
         role_name           VARCHAR(64) NULL DEFAULT NULL,
         role_priv           VARCHAR(64) NULL DEFAULT NULL,
+        role_type           VARCHAR(64) NULL DEFAULT NULL,
         status              VARCHAR(32) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
@@ -106,11 +107,12 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS teams (
         team_uuid           VARCHAR(64) NULL DEFAULT NULL,
         team_name           VARCHAR(64) NULL DEFAULT NULL,
         team_owner          VARCHAR(64) NULL DEFAULT NULL,
+        team_type           VARCHAR(64) NULL DEFAULT NULL,
         team_desc           VARCHAR(64) NULL DEFAULT NULL,
         status              VARCHAR(32) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
-        UNIQUE(team_name, team_owner),
+        UNIQUE(team_name),
         PRIMARY KEY (team_uuid)
 )
 COLLATE='utf8_general_ci'
@@ -122,11 +124,12 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS projects (
         project_name        VARCHAR(64) NULL DEFAULT NULL,
         project_owner       VARCHAR(64) NULL DEFAULT NULL,
         project_team        VARCHAR(64) NULL DEFAULT NULL,
+        project_type        VARCHAR(64) NULL DEFAULT NULL,
         project_desc        VARCHAR(64) NULL DEFAULT NULL,
         status              VARCHAR(32) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
-        UNIQUE(project_name, project_owner),
+        UNIQUE(project_name, project_team),
         PRIMARY KEY (project_uuid)
 )
 COLLATE='utf8_general_ci'
@@ -211,14 +214,14 @@ fi
 role_check=$($v_connect_mysql "select count(*) from roles" | tail -n+2)
 if [ $role_check -eq 0 ]; then
 
-    $v_connect_mysql "insert into roles(role_uuid, role_name, role_priv, status, create_time, update_time)
-                      values('owner', 'owner', 'CRUD', 'enable', now(), now())"
+    $v_connect_mysql "insert into roles(role_uuid, role_name, role_priv, role_type, status, create_time, update_time)
+                      values('owner', 'owner', 'CRUD', 'system', 'enable', now(), now())"
 
-    $v_connect_mysql "insert into roles(role_uuid, role_name, role_priv, status, create_time, update_time)
-                      values('admin', 'admin', 'CRU', 'enable', now(), now())"
+    $v_connect_mysql "insert into roles(role_uuid, role_name, role_priv, role_type, status, create_time, update_time)
+                      values('admin', 'admin', 'CRU', 'system', 'enable', now(), now())"
 
-    $v_connect_mysql "insert into roles(role_uuid, role_name, role_priv, status, create_time, update_time)
-                      values('user', 'user', 'R', 'enable', now(), now())"
+    $v_connect_mysql "insert into roles(role_uuid, role_name, role_priv, role_type, status, create_time, update_time)
+                      values('user', 'user', 'R', 'system', 'enable', now(), now())"
 
 fi
 
@@ -240,18 +243,20 @@ if [ $user_check -eq 0 ]; then
                       '7110be8012', 'admin@boxlinker.com', 'None', \
                       'enable', 'man', now(), now(), now())"
 
-    $v_connect_mysql "insert into teams(team_uuid, team_name, team_owner, \
+    $v_connect_mysql "insert into teams(team_uuid, team_name, team_owner, team_type, \
                       team_desc, status, create_time, update_time) \
-                      values('"$team_uuid"', 'admin', 'sysadmin', 'private', 'enable', now(), now())"
+                      values('"$team_uuid"', 'admin', 'sysadmin', 'system', \
+                      'user default team', 'enable', now(), now())"
 
     $v_connect_mysql "insert into users_teams(user_uuid, team_uuid, \
                       team_role, status, create_time, update_time) \
                       values('sysadmin', '"$team_uuid"', 'owner', 'enable', now(), now())"
 
     $v_connect_mysql "insert into projects(project_uuid, project_name, \
-                      project_owner, project_team, project_desc, status, \
+                      project_owner, project_team, project_type, project_desc, status, \
                       create_time, update_time) \
-                      values('"$project_uuid"', 'admin', 'sysadmin', '"$team_uuid"', 'private', 'enable', now(), now())"
+                      values('"$project_uuid"', 'admin', 'sysadmin', '"$team_uuid"', \
+                      'system', 'team default project', 'enable', now(), now())"
 
     $v_connect_mysql "insert into users_projects(user_uuid, project_uuid, \
                       project_role, status, create_time, update_time) \

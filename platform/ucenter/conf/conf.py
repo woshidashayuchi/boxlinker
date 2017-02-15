@@ -6,13 +6,8 @@ import os
 boxlinker_index = 'https://boxlinker.com'
 # boxlinker_index = os.environ.get('BOXLINKER_INDEX')
 
-
-service_name = 'Ucenter'
-# service_name = os.environ.get('SERVICE_NAME')
-
 log_level = 'INFO'
 log_file = '/var/log/cloud.log'
-
 # log_level = os.environ.get('LOG_LEVEL')
 # log_file = os.environ.get('LOG_FILE')
 
@@ -59,11 +54,9 @@ rest_debug = True
 # rest_debug = os.environ.get('REST_DEBUG')
 
 
-call_queue = 'ucentercall_api'
-rpc_timeout = 60
-
-# call_queue = os.environ.get('CALL_QUEUE')
-# rpc_timeout = os.environ.get('RPC_TIMEOUT')
+ucenter_call_queue = 'ucenter_call_api'
+billing_call_queue = 'billing_call_api'
+# ucenter_call_queue = os.environ.get('UCENTER_CALL_QUEUE')
 
 
 email_api = 'https://email.boxlinker.com/send'

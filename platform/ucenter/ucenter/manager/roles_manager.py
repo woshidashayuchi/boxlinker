@@ -10,7 +10,6 @@ from common.code import request_result
 from common.json_encode import CJsonEncoder
 
 from ucenter.db import ucenter_db
-from ucenter.driver import ucenter_driver
 
 
 class RolesManager(object):
@@ -18,7 +17,6 @@ class RolesManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
-        self.ucenter_driver = ucenter_driver.UcenterDriver()
 
     def role_create(self, role_name, role_priv,
                     user_uuid, team_uuid):
@@ -55,14 +53,16 @@ class RolesManager(object):
             role_uuid = role_info[0]
             role_name = role_info[1]
             role_priv = role_info[2]
-            status = role_info[3]
-            create_time = role_info[4]
-            update_time = role_info[5]
+            role_type = role_info[3]
+            status = role_info[4]
+            create_time = role_info[5]
+            update_time = role_info[6]
 
             v_role_info = {
                               "role_uuid": role_uuid,
                               "role_name": role_name,
                               "role_priv": role_priv,
+                              "role_type": role_type,
                               "status": status,
                               "create_time": create_time,
                               "update_time": update_time
@@ -86,14 +86,16 @@ class RolesManager(object):
 
         role_name = role_single_info[0][0]
         role_priv = role_single_info[0][1]
-        status = role_single_info[0][2]
-        create_time = role_single_info[0][3]
-        update_time = role_single_info[0][4]
+        role_type = role_single_info[0][2]
+        status = role_single_info[0][3]
+        create_time = role_single_info[0][4]
+        update_time = role_single_info[0][5]
 
         v_role_info = {
                           "role_uuid": role_uuid,
                           "role_name": role_name,
                           "role_priv": role_priv,
+                          "role_type": role_type,
                           "status": status,
                           "create_time": create_time,
                           "update_time": update_time
@@ -105,6 +107,16 @@ class RolesManager(object):
         return request_result(0, result)
 
     def role_update(self, role_uuid, role_priv):
+
+        try:
+            role_type = self.ucenter_db.role_type(role_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if role_type == 'system':
+            log.warning('System role not allow update')
+            return request_result(202)
 
         result = {"role_uuid": role_uuid}
 
@@ -122,6 +134,16 @@ class RolesManager(object):
         return request_result(0, result)
 
     def role_delete(self, role_uuid):
+
+        try:
+            role_type = self.ucenter_db.role_type(role_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if role_type == 'system':
+            log.warning('System role not allow delete')
+            return request_result(202)
 
         try:
             self.ucenter_db.role_delete(role_uuid)

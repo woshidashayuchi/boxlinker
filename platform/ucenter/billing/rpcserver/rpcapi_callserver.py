@@ -21,7 +21,7 @@ sys.setdefaultencoding('utf8')
 
 def server_start(n):
 
-    queue = conf.ucenter_call_queue
+    queue = conf.billing_call_queue
 
     while True:
 

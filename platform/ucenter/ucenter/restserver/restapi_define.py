@@ -13,10 +13,10 @@ from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.time_log import time_log
-from common.token_localauth import token_auth
 from common.parameters import context_data
+from common.token_localauth import token_auth
 
-from ucenter.rpcapi import rpc_client as ucenter_rpcapi
+from ucenter.rpcapi import rpc_api as ucenter_rpcapi
 
 
 def user_activate(status):
@@ -33,7 +33,7 @@ class UcenterUsersApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self):
@@ -80,7 +80,7 @@ class UcenterUserApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def get(self, user_uuid):
@@ -125,7 +125,7 @@ class UcenterUserStatusApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def get(self, user_uuid):
@@ -169,7 +169,7 @@ class UcenterRolesApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self):
@@ -214,7 +214,7 @@ class UcenterRoleApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def get(self, role_uuid):
@@ -274,7 +274,7 @@ class UcenterPasswordApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self, user_uuid):
@@ -334,7 +334,7 @@ class UcenterTokensApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self):
@@ -406,7 +406,7 @@ class UcenterTeamsApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self):
@@ -451,7 +451,7 @@ class UcenterTeamApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def get(self, team_uuid):
@@ -511,7 +511,7 @@ class UcenterProjectsApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self):
@@ -556,7 +556,7 @@ class UcenterProjectApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def get(self, project_uuid):
@@ -616,7 +616,7 @@ class UcenterUsersTeamsApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self):
@@ -661,7 +661,7 @@ class UcenterUserTeamApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self, user_uuid):
@@ -738,7 +738,7 @@ class UcenterUsersProjectsApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def post(self):
@@ -783,7 +783,7 @@ class UcenterUserProjectApi(Resource):
 
     def __init__(self):
 
-        self.ucenter_api = ucenter_rpcapi.UcenterRpcClient()
+        self.ucenter_api = ucenter_rpcapi.UcenterRpcApi()
 
     @time_log
     def put(self, user_uuid):

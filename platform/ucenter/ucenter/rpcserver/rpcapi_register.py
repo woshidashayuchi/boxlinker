@@ -17,7 +17,7 @@ class RabbitmqResponse(object):
 
     def rpc_add_resource(self):
 
-        self.rpcapi_define = rpcapi_define.UcenterRpcAPI()
+        self.rpcapi_define = rpcapi_define.UcenterRpcManager()
 
         self.rpc_api.add_resource(
              'uct_usr_usr_crt', self.rpcapi_define.user_create)

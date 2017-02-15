@@ -10,7 +10,6 @@ from common.code import request_result
 from common.json_encode import CJsonEncoder
 
 from ucenter.db import ucenter_db
-from ucenter.driver import ucenter_driver
 
 
 class ProjectsManager(object):
@@ -18,10 +17,22 @@ class ProjectsManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
-        self.ucenter_driver = ucenter_driver.UcenterDriver()
 
     def project_create(self, project_name, project_owner,
                        project_team, project_desc=None):
+
+        try:
+            project_check = self.ucenter_db.project_duplicate_check(
+                                 project_name, project_team)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if project_check != 0:
+            log.warning('Project(%s) already exists in Team(%s)'
+                        % (project_name, project_team))
+            return request_result(301, 'Project(%s) already exists in Team'
+                                  % (project_name))
 
         project_uuid = str(uuid.uuid4())
         try:
@@ -57,18 +68,22 @@ class ProjectsManager(object):
             project_name = project_info[1]
             project_owner = project_info[2]
             project_team = project_info[3]
-            project_desc = project_info[4]
-            status = project_info[5]
-            create_time = project_info[6]
-            update_time = project_info[7]
+            project_type = project_info[4]
+            project_desc = project_info[5]
+            status = project_info[6]
+            create_time = project_info[7]
+            update_time = project_info[8]
+            role_name = project_info[9]
 
             v_project_info = {
                                  "project_uuid": project_uuid,
                                  "project_name": project_name,
                                  "project_owner": project_owner,
                                  "project_team": project_team,
+                                 "project_type": project_type,
                                  "project_desc": project_desc,
                                  "status": status,
+                                 "role_name": role_name,
                                  "create_time": create_time,
                                  "update_time": update_time
                              }
@@ -92,16 +107,18 @@ class ProjectsManager(object):
         project_name = project_single_info[0][0]
         project_owner = project_single_info[0][1]
         project_team = project_single_info[0][2]
-        project_desc = project_single_info[0][3]
-        status = project_single_info[0][4]
-        create_time = project_single_info[0][5]
-        update_time = project_single_info[0][6]
+        project_type = project_single_info[0][3]
+        project_desc = project_single_info[0][4]
+        status = project_single_info[0][5]
+        create_time = project_single_info[0][6]
+        update_time = project_single_info[0][7]
 
         v_project_info = {
                              "project_uuid": project_uuid,
                              "project_name": project_name,
                              "project_owner": project_owner,
                              "project_team": project_team,
+                             "project_type": project_type,
                              "project_desc": project_desc,
                              "status": status,
                              "create_time": create_time,
@@ -115,6 +132,16 @@ class ProjectsManager(object):
 
     def project_update(self, project_uuid, team_uuid,
                        project_owner=None, project_desc=None):
+
+        try:
+            project_type = self.ucenter_db.project_type(project_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if project_type == 'system':
+            log.warning('System project not allow update')
+            return request_result(202)
 
         result = {"project_uuid": project_uuid}
 
@@ -151,6 +178,16 @@ class ProjectsManager(object):
         return request_result(0, result)
 
     def project_delete(self, project_uuid):
+
+        try:
+            project_type = self.ucenter_db.project_type(project_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if project_type == 'system':
+            log.warning('System project not allow delete')
+            return request_result(202)
 
         try:
             project_check = self.ucenter_db.project_check(project_uuid)

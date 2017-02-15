@@ -88,7 +88,7 @@ class RabbitmqClient(object):
             if cnt >= timeout:
                 log.warning('RPC client exec time out, queue = %s'
                             % (queue_name))
-                self.response = request_result(597)
+                self.response = json.dumps(request_result(597))
                 return
             self.connection.sleep(0.1)
             self.connection.process_data_events()

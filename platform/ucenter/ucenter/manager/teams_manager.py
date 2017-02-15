@@ -10,7 +10,6 @@ from common.code import request_result
 from common.json_encode import CJsonEncoder
 
 from ucenter.db import ucenter_db
-from ucenter.driver import ucenter_driver
 
 
 class TeamsManager(object):
@@ -18,9 +17,20 @@ class TeamsManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
-        self.ucenter_driver = ucenter_driver.UcenterDriver()
 
     def team_create(self, team_name, team_owner, team_desc=None):
+
+        try:
+            team_check = self.ucenter_db.team_duplicate_check(
+                              team_name)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if team_check != 0:
+            log.warning('Team(%s) already exists' % (team_name))
+            return request_result(301, 'Team(%s) already exists'
+                                  % (team_name))
 
         team_uuid = str(uuid.uuid4())
         project_uuid = str(uuid.uuid4())
@@ -55,17 +65,21 @@ class TeamsManager(object):
             team_uuid = team_info[0]
             team_name = team_info[1]
             team_owner = team_info[2]
-            team_desc = team_info[3]
-            status = team_info[4]
-            create_time = team_info[5]
-            update_time = team_info[6]
+            team_type = team_info[3]
+            team_desc = team_info[4]
+            status = team_info[5]
+            create_time = team_info[6]
+            update_time = team_info[7]
+            role_name = team_info[8]
 
             v_team_info = {
                               "team_uuid": team_uuid,
                               "team_name": team_name,
                               "team_owner": team_owner,
+                              "team_type": team_type,
                               "team_desc": team_desc,
                               "status": status,
+                              "role_name": role_name,
                               "create_time": create_time,
                               "update_time": update_time
                           }
@@ -88,15 +102,17 @@ class TeamsManager(object):
 
         team_name = team_single_info[0][0]
         team_owner = team_single_info[0][1]
-        team_desc = team_single_info[0][2]
-        status = team_single_info[0][3]
-        create_time = team_single_info[0][4]
-        update_time = team_single_info[0][5]
+        team_type = team_single_info[0][2]
+        team_desc = team_single_info[0][3]
+        status = team_single_info[0][4]
+        create_time = team_single_info[0][5]
+        update_time = team_single_info[0][6]
 
         v_team_info = {
                           "team_uuid": team_uuid,
                           "team_name": team_name,
                           "team_owner": team_owner,
+                          "team_type": team_type,
                           "team_desc": team_desc,
                           "status": status,
                           "create_time": create_time,
@@ -109,6 +125,16 @@ class TeamsManager(object):
         return request_result(0, result)
 
     def team_update(self, team_uuid, team_owner=None, team_desc=None):
+
+        try:
+            team_type = self.ucenter_db.team_type(team_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if team_type == 'system':
+            log.warning('System team not allow update')
+            return request_result(202)
 
         result = {"team_uuid": team_uuid}
 
@@ -127,7 +153,7 @@ class TeamsManager(object):
                 return request_result(202)
 
             try:
-                project_uuid = self.ucenter_db.project_uuid_team(
+                project_uuid = self.ucenter_db.project_default(
                                     team_uuid)[0][0]
                 self.ucenter_db.project_update_owner(
                                 project_uuid, team_owner)
@@ -148,6 +174,16 @@ class TeamsManager(object):
         return request_result(0, result)
 
     def team_delete(self, team_uuid):
+
+        try:
+            team_type = self.ucenter_db.team_type(team_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if team_type == 'system':
+            log.warning('System team not allow delete')
+            return request_result(202)
 
         try:
             team_check = self.ucenter_db.team_check(team_uuid)

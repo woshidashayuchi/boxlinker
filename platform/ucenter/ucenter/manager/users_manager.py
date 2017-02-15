@@ -10,6 +10,7 @@ from ucenter_common import passwd_encrypt
 
 from common.logs import logging as log
 from common.code import request_result
+from common.parameters import parameter_check
 from common.json_encode import CJsonEncoder
 
 from ucenter.db import ucenter_db
@@ -106,7 +107,15 @@ class UsersManager(object):
     def user_list(self, user_name):
 
         try:
-            user_list_info = self.ucenter_db.user_list(user_name)
+            email = parameter_check(user_name, ptype='peml')
+        except Exception, e:
+            email = None
+
+        try:
+            if email is None:
+                user_list_info = self.ucenter_db.user_list(user_name)
+            else:
+                user_list_info = self.ucenter_db.user_list_email(email)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)

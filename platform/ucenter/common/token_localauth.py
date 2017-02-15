@@ -7,7 +7,7 @@ import inspect
 from common.logs import logging as log
 from common.local_cache import LocalCache
 from common.code import request_result
-from ucenter.rpcapi import rpc_client
+from ucenter.rpcapi import rpc_api as ucenter_rpcapi
 
 caches = LocalCache(100)
 
@@ -20,7 +20,7 @@ def token_auth(token):
         log.debug('Cache token auth not hit, token=%s' % (token))
         try:
             context = {"token": token}
-            ret = rpc_client.UcenterRpcClient().token_check(context)
+            ret = ucenter_rpcapi.UcenterRpcApi().token_check(context)
             status = ret['status']
             if status != 0:
                 raise(Exception('Token auth denied'))

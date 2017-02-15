@@ -14,7 +14,6 @@ from common.json_encode import CJsonEncoder
 from common.md5_encrypt import md5_encrypt
 
 from ucenter.db import ucenter_db
-from ucenter.driver import ucenter_driver
 
 
 class TokensManager(object):
@@ -22,7 +21,6 @@ class TokensManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
-        self.ucenter_driver = ucenter_driver.UcenterDriver()
 
     def token_login(self, user_name, password):
 
@@ -83,7 +81,7 @@ class TokensManager(object):
         if project_uuid is None:
             try:
                 project_uuid = self.ucenter_db.project_default(
-                                    team_uuid)
+                                    team_uuid)[0][0]
             except Exception, e:
                 log.error('Database select error, reason=%s' % (e))
                 return request_result(404)

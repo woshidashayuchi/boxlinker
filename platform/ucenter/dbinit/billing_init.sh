@@ -1,6 +1,6 @@
 #!/bin/bash
 
-db_server='database'
+db_server='127.0.0.1'
 db_port=3306
 database='billing'
 
@@ -52,8 +52,7 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS resources_acl (
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB"
-$v_connect_mysql "create index admin_uuid_idx on resources_acl(admin_uuid)"
-$v_connect_mysql "create index type_owner_project_idx on resources_acl(resource_type, owner_uuid, project_uuid)"
+$v_connect_mysql "create index type_project_user_idx on resources_acl(resource_type, project_uuid, user_uuid)"
 
 
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS resources (
@@ -126,7 +125,8 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS bills (
         resource_uuid       VARCHAR(64) NULL DEFAULT NULL,
         resource_cost       DOUBLE(10,6) NULL DEFAULT NULL,
         voucher_cost        DOUBLE(10,6) NULL DEFAULT NULL,
-        user_uuid           VARCHAR(64) NULL DEFAULT NULL,
+        owner_uuid          VARCHAR(64) NULL DEFAULT NULL,
+        team_uuid           VARCHAR(64) NULL DEFAULT NULL,
         project_uuid        VARCHAR(64) NULL DEFAULT NULL,
         insert_time         DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (id)
@@ -134,7 +134,7 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS bills (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB"
 $v_connect_mysql "create index resource_uuid_idx on bills(resource_uuid)"
-$v_connect_mysql "create index user_orga_idx on bills(user_uuid, orga_uuid)"
+$v_connect_mysql "create index owner_idx on bills(owner_uuid)"
 $v_connect_mysql "create index insert_time_idx on bills(insert_time)"
 
 
@@ -144,29 +144,31 @@ if [ $acl_check -eq 0 ]; then
     admin_api_list="bil_voc_voc_crt"
     for admin_api in $admin_api_list
     do
-        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, orga_uuid, user_uuid, create_time, update_time)
-                          values('"$admin_api"', 'api', 'global', '0', '0', now(), now())"
+        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)
+                          values('"$admin_api"', 'api', 'global', '0', '0', '0', now(), now())"
     done
 
-    organ_api_list=""
-    for organ_api in $organ_api_list
+    team_api_list=""
+    for team_api in $team_api_list
     do
-        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, orga_uuid, user_uuid, create_time, update_time)
-                          values('"$organ_api"', 'api', '0', 'global', '0', now(), now())"
+        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)
+                          values('"$team_api"', 'api', 'global', 'global', '0', '0', now(), now())"
     done
 
-    user_api_list="bil_rss_rss_crt bil_blc_blc_add bil_odr_odr_crt bil_voc_voc_act"
+    project_api_list=""
+    for project_api in $project_api_list
+    do
+        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)
+                          values('"$project_api"', 'api', 'global', 'global', 'global', '0', now(), now())"
+    done
+
+    user_api_list="bil_rss_rss_crt bil_blc_blc_add bil_blc_blc_inf bil_blc_blc_put
+                   bil_odr_odr_crt bil_voc_voc_act bil_rss_rss_lst bil_voc_voc_lst
+                   bil_bls_bls_lst bil_odr_odr_lst"
     for user_api in $user_api_list
     do
-        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, orga_uuid, user_uuid, create_time, update_time)
-                          values('"$user_api"', 'api', '0', 'global', 'global', now(), now())"
-    done
-
-    global_api_list="bil_rss_rss_get bil_voc_voc_get bil_bls_bls_get bil_blc_blc_get bil_blc_blc_put bil_odr_odr_get"
-    for global_api in $global_api_list
-    do
-        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, orga_uuid, user_uuid, create_time, update_time)
-                          values('"$global_api"', 'api', 'global', 'global', 'global', now(), now())"
+        $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)
+                          values('"$user_api"', 'api', 'global', 'global', 'global', 'global', now(), now())"
     done
 
 fi
