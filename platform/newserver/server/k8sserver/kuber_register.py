@@ -31,6 +31,10 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('account_cre', self.rpcapi_define.svc_account_create)
 
+        self.rpc_api.add_resource('svc_delete', self.rpcapi_define.svc_delete)
+
+        self.rpc_api.add_resource('pods_get', self.rpcapi_define.pods_messages)
+
     def rpc_exec(self, rpc_body):
 
         try:

@@ -18,7 +18,6 @@ class KubernetesRpcClient(object):
     def __init__(self):
         self.rbtmq = RabbitmqClient()
         self.queue = 'kubernetescall_api'
-        self.queue_query = 'query_resource'
         self.timeout = 5
 
     def create_services(self, context, parameters=None):
@@ -37,7 +36,7 @@ class KubernetesRpcClient(object):
             rpc_body = rpc_data("svc_query", context, parameters)
 
             return self.rbtmq.rpc_call_client(
-                        self.queue_query, self.timeout, rpc_body)
+                        self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(404)
@@ -48,7 +47,7 @@ class KubernetesRpcClient(object):
             rpc_body = rpc_data("svc_detail", context, parameters)
 
             return self.rbtmq.rpc_call_client(
-                        self.queue_query, self.timeout, rpc_body)
+                        self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(404)
@@ -59,7 +58,7 @@ class KubernetesRpcClient(object):
             rpc_body = rpc_data("svc_delete", context, parameters)
 
             return self.rbtmq.rpc_call_client(
-                        self.queue_query, self.timeout, rpc_body)
+                        self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(503)

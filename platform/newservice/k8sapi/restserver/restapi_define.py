@@ -4,7 +4,7 @@
 
 import json
 from flask import request
-from common.time_log import time_log
+# from common.time_log import time_log
 from common.logs import logging as log
 from common.code import request_result
 from common.token_ucenterauth import token_auth
@@ -18,7 +18,6 @@ class KubernetesClientApi(object):
     kuber = KubernetesRpcClient()
 
     @classmethod
-    @time_log
     def create_service(cls, service_name):
 
         try:

@@ -5,5 +5,8 @@
 
 
 4 接口修改:
-  1) 张培:镜像
+  1) 张培:镜像(kubernetes_driver:delete_pod,add_rc)
   2) 华哥:存储
+
+
+

@@ -99,7 +99,6 @@ class KubernetesDriver(object):
         return result
 
     @staticmethod
-    @time_log
     def container(con):
         ret = []
         for i in con:
@@ -122,16 +121,17 @@ class KubernetesDriver(object):
         return result
 
     def service_domain(self, context):
+
         ser = context.get('container')
         service_name = context.get('service_name')
-        user_name = context.get('project_name')
+        project_name = context.get('project_name')
         using_port = None
         tcp_lb = ''
         http_lb = ''
         m = 1
 
         for i in ser:
-            domain_http = '%s-%s.lb1.boxlinker.com:' % (user_name, service_name)
+            domain_http = '%s-%s.lb1.boxlinker.com:' % (project_name, service_name)
             if i.get('access_mode').upper() == 'HTTP' and i.get('access_scope') == 'outsisde':
                 http_lbadd = domain_http + str(i.get('container_port'))
                 if http_lb == '':
@@ -201,7 +201,6 @@ class KubernetesDriver(object):
                 i['http_domain'] = ''
                 i['tcp_domain'] = ''
                 newcon.append(i)
-
         return newcon
 
     def service_port(self, ser):
@@ -316,6 +315,89 @@ class KubernetesDriver(object):
 
         return add_rc
 
+    def del_pod_element(self, dict_data):
+
+        command = ''
+        pullpolicy = ''
+        rc_krud = ''
+        image_name = "index.boxlinker.com/boxlinker/web-index"
+        image_version = "latest"
+        service_name = dict_data.get('service_name').replace('_', '-')
+        namespace = dict_data.get('project_uuid')
+        pods_num = 0
+        container = []
+        images = image_name + image_version
+
+        try:
+            rc_ret, containers_ret, env_ret, volume_ret = self.service_db.service_detail
+        except Exception, e:
+            log.error('get the all detail messages error, reason=%s' % e)
+            raise
+
+        for j in containers_ret:
+            containers = {"container_port": j.get("container_port"),
+                          "protocol": j.get("protocol"),
+                          "access_mode": j.get("access_mode"),
+                          "access_scope": j.get("access_scope")}
+            container.append(containers)
+
+        for i in rc_ret:
+            if i.get('policy') == 1:
+                rc_krud = images[20:].replace("/", "_").replace(":", "_")
+                pullpolicy = "Always"
+            else:
+                pullpolicy = "IfNotPresent"
+                rc_krud = "null"
+
+            command = self.command_query({'command': rc_ret.get('command')})
+
+        return command, pullpolicy, rc_krud, images, service_name, namespace, pods_num, container, images
+
+    def delete_pod(self, dict_data):
+
+        try:
+            command, pullpolicy, rc_krud, images, service_name, namespace, pods_num, \
+                container, images = self.del_pod_element(dict_data)
+        except Exception, e:
+            log.error('parameters explain error when delete pod...reason=%s' % e)
+            return False
+
+        del_pod = {
+                   "kind": "ReplicationController", "apiVersion": "v1",
+                   "metadata": {
+                       "namespace": namespace, "name": service_name,
+                       "labels": {"component": service_name, "rc-krud": rc_krud, "name": service_name}
+                   },
+                   "spec": {
+                      "replicas": pods_num,
+                      "selector": {"name": service_name},
+                      "template": {
+                         "metadata": {
+                            "labels": {"name": service_name, "logs": service_name}
+                         },
+                         "spec": {
+                            "nodeSelector": {"role": "user"},
+                            "imagePullSecrets": [{"name": "registry-key"}],
+                            "containers": [
+                               {
+                                  "name": service_name, "image": images,
+                                  "imagePullPolicy": pullpolicy,
+                                  "command": command, "ports": self.container(container)
+                               }
+                            ]
+                         }
+                      }
+                   }
+                }
+
+        if command == "" or command is None:
+            j = 0
+            for i in del_pod["spec"]["template"]["spec"]["containers"]:
+                del del_pod["spec"]["template"]["spec"]["containers"][j]["command"]
+                j += 1
+
+        return del_pod
+
     def add_service(self, dict_data):
         namespace = dict_data.get('project_uuid')
         service_name = dict_data.get('service_name')
@@ -379,12 +461,6 @@ class KubernetesDriver(object):
             return False
         return True
 
-    def get_secret(self, dict_data):
-        get_secret_dict = {"namespace": dict_data.get('project_uuid'), "name": "default"}
-        ret = self.krpc_client.get_secret(get_secret_dict)
-
-        return ret
-
     def create_secret(self, dict_data):
         namespace = dict_data.get('project_uuid')
         secret_dict = {"apiVersion": "v1", "kind": "Secret",
@@ -418,6 +494,32 @@ class KubernetesDriver(object):
 
         return True
 
+    def get_pod_name(self, context):
+        pod = []
+        pod_message = {"namespace": context.get("project_uuid"), 'rtype': 'pods'}
+
+        try:
+            response = self.krpc_client.get_pod_messages(pod_message).get('items')
+        except Exception, e:
+            log.error("explain the kubernetes response error,reason=%s" % e)
+            return False
+
+        try:
+            for i in response:
+                if context.get("service_name") == i.get("metadata").get("labels").get("component"):
+                    for j in i.get("spec").get("containers"):
+                        p = {"ports": j.get("ports")}
+                        p.update(context)
+
+                    pod_ms = {"pod_phase": i.get("status").get("phase"), "pod_name": i.get("metadata").get("name"),
+                              "pod_ip": i.get("status").get("podIP")}
+                    pod.append(pod_ms)
+        except Exception, e:
+            log.error("explain the pods messages error,reason=%s" % e)
+            return False
+
+        return pod
+
     def create_service(self, context):
 
         try:
@@ -426,17 +528,18 @@ class KubernetesDriver(object):
         except Exception, e:
             log.error('check the namespace if is exist(database select)...,reason=%s' % e)
             return request_result(501)
+
         ns_if_exist = self.show_namespace(context)
-        log.info('4444444444++=%s' % ns_if_exist)
+
         if len(check) == 0:
             if ns_if_exist.get('kind') != 'Namespace':
                 ret_ns = self.create_namespace(context)
                 ret_secret = self.create_secret(context)
                 ret_account = self.create_svc_account(context)
+
                 if not ret_ns or not ret_secret or not ret_account:
-                    log.info('the namespace create result is : %s' % ret_ns)
-                    log.info('the secret create result is : %s' % ret_secret)
-                    log.info('the account create result is : %s' % ret_account)
+                    log.error('CREATE NS,SECRET,ACCOUNT ERROR, RESULT:NS: %s,SECRET: %s, ACCOUNT: %s' %
+                              (ret_ns, ret_secret, ret_account))
                     return request_result(501)
 
         add_rc = self.add_rc(context)
@@ -454,3 +557,39 @@ class KubernetesDriver(object):
             return request_result(501)
 
         return True
+
+    def delete_service(self, context):
+
+        pods = self.get_pod_name(context)
+        if pods is False:
+            log.error('PODS MESSAGES GET ERROR')
+            return request_result(503)
+
+        namespace = context.get('project_uuid')
+        name = context.get('service_name')
+
+        del_rc_json = {'namespace': namespace, 'name': name, 'rtype': 'replicationcontrollers'}
+        del_svc_json = {'namespace': namespace, 'name': name, 'rtype': 'services'}
+        rc_ret = self.krpc_client.delete_service_a_rc(del_rc_json)
+        svc_ret = self.krpc_client.delete_service_a_rc(del_svc_json)
+
+        for i in pods:
+            log.info('pod_name is: %s' % i.get('pod_name'))
+            del_pod_json = {'namespace': namespace, 'name': i.get('pod_name'), 'rtype': 'pods'}
+            pod_ret = self.krpc_client.delete_service_a_rc(del_pod_json)
+
+            log.info('boss delete result:rc--%s,pod--%s,service--%s' % (str(rc_ret.get('code')),
+                                                                        str(pod_ret),
+                                                                        str(svc_ret.get('code'))))
+
+            if pod_ret.get('code') != 200 and pod_ret.get('code') is not None:
+                return request_result(503)
+
+        if (rc_ret.get('code') != 200 and rc_ret.get('code') != 404) or \
+                (svc_ret.get('code') != 200 and svc_ret.get('code') != 404):
+            log.error('DELETE SERVICE RESULT IS--RC:%s;SERVICE:%s' % (rc_ret, svc_ret))
+
+            return request_result(503)
+
+        return True
+

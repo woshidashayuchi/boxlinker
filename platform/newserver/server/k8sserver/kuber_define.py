@@ -48,8 +48,19 @@ class KubernetesRpcAPIs(object):
             log.error('create the secret(kubernetes) error, reason=%s' % e)
 
     def svc_account_create(self, context, parameters=None):
-
         try:
             return self.kubernetes.post_account(context)
         except Exception, e:
             log.error('create the account(kubernetes) error, reason=%s' % e)
+
+    def svc_delete(self, context, parameters=None):
+        try:
+            return self.kubernetes.delete_name_resource(context)
+        except Exception, e:
+            log.error('delete the service(kubernetes) error, reason=%s' % e)
+
+    def pods_messages(self, context, parameters=None):
+        try:
+            return self.kubernetes.get_namespace_resource(context)
+        except Exception, e:
+            log.error('get pods messages(kubernetes) error, reason=%s' % e)

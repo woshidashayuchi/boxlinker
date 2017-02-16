@@ -81,3 +81,25 @@ class KubernetesRpcClient(object):
             return True
         except Exception, e:
             log.error('Rpc client exec error when create account...,reason=%s' % e)
+
+    def delete_service_a_rc(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data('svc_delete', context, parameters)
+
+            ret = self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+
+            return ret
+        except Exception, e:
+            log.error('Rpc client exec error when delete rc and service...,reason=%s' % e)
+
+    def get_pod_messages(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data('pods_get', context, parameters)
+
+            ret = self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+
+            return ret
+        except Exception, e:
+            log.error('Rpc client exec error when delete rc and service...,reason=%s' % e)

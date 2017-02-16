@@ -7,8 +7,9 @@ items:
     name: apidoc
     namespace: boxlinker
     annotations:
-      serviceloadbalancer/lb.http: docs.boxlinker.com:80
+      serviceloadbalancer/lb.http: apidoc.boxlinker.com:80
       serviceloadbalancer/lb.node: main
+      serviceloadbalancer/lb.sslTerm: "true"
   spec:
     selector:
       component: apidoc

@@ -20,8 +20,8 @@ class ServiceDB(MysqlInit):
         service_name = dict_data.get("service_name")
         project_uuid = dict_data.get("project_uuid")
 
-        sql = "select * from font_service where service_name =\'%s\' and " \
-              "project_uuid = \'%s\'" % (service_name, project_uuid)
+        sql = "select * from font_service where service_name ='%s' and " \
+              "project_uuid = '%s'" % (service_name, project_uuid)
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
@@ -98,8 +98,8 @@ class ServiceDB(MysqlInit):
         project_uuid, service_name = normal_call(dict_data)
 
         sql = "SELECT a.service_name, b.http_domain, b.tcp_domain, b.container_port, a.service_status," \
-              "a.image_dir, a.service_update_time ltime FROM font_service a RIGHT JOIN " \
-              "containers b ON (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s')" % project_uuid
+              "a.image_dir, a.service_update_time ltime FROM font_service a, " \
+              "containers b WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s')" % project_uuid
 
         conn, cur = self.operate.connection()
         ret = self.operate.exeQuery(cur, sql)
@@ -140,3 +140,25 @@ class ServiceDB(MysqlInit):
         self.operate.connClose(conn, cur)
 
         return rc_ret, containers_ret, env_ret, volume_ret
+
+    def delete_all(self, dict_data):
+
+        service_name = dict_data.get('service_name')
+        project_uuid = dict_data.get('project_uuid')
+
+        del_volume = "delete from volume where rc_uuid=(select rc_uuid from font_service " \
+                     "where service_name='%s' and project_uuid='%s')" % (service_name, project_uuid)
+
+        del_container = "delete from containers where rc_uuid=(select rc_uuid from font_service " \
+                        "where service_name='%s' and project_uuid='%s')" % (service_name, project_uuid)
+
+        del_env = "delete from env where rc_uuid=(select rc_uuid from font_service " \
+                  "where service_name='%s' and project_uuid='%s')" % (service_name, project_uuid)
+
+        del_rc = "delete from replicationcontrollers where uuid=(select rc_uuid from font_service " \
+                 "where service_name='%s' and project_uuid='%s')" % (service_name, project_uuid)
+
+        del_font = "delete from font_service where project_uuid='%s' and service_name='%s'" % (project_uuid,
+                                                                                               service_name)
+
+        return super(ServiceDB, self).exec_update_sql(del_volume, del_container, del_env, del_rc, del_font)

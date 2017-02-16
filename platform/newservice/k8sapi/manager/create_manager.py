@@ -99,10 +99,9 @@ class CreateManager(object):
         if check_name == 'error':
             return request_result(404)
 
-        log.info('22222222222222')
         ret = self.kuber_driver.create_service(context)
         if ret is not True:
-            log.info('========>>>>>>>>>>%s' % ret)
+            log.info('kubernetes resource create result is: %s' % ret)
             return request_result(501)
 
         project_name = self.token_driver.gain_project_name(context)
@@ -110,14 +109,18 @@ class CreateManager(object):
             log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
             return request_result(501)
 
-        context.update({'project_name': project_name})
-        infix = self.infix_db(context)
+        try:
+            context['project_name'] = project_name
+            infix = self.infix_db(context)
 
-        domain = self.kuber_driver.container_domain(context)
-        context.update({'container': domain})
+            domain = self.kuber_driver.container_domain(context)
+            context.update({'container': domain})
 
-        diff = self.diff_infix_db(context)
-
+            diff = self.diff_infix_db(context)
+        except Exception, e:
+            log.error('resource in database error, reason=%s' % e)
+            return request_result(401)
+        log.info('555*****************')
         if infix is False or diff is False:
             return request_result(401)
 

@@ -13,17 +13,12 @@ class TokenDriver(object):
         self.url = conf.PROJECT_MSG
 
     def gain_project_name(self, dict_data):
-        project_uuid = '/' + dict_data.get('project_uuid')
+        # project_uuid = '/' + dict_data.get('project_uuid')
         headers = {'token': dict_data.get('token')}
 
         try:
-            ret = requests.get(self.url+project_uuid, headers=headers, timeout=5)
-            log.info('gain the project message: %s, type: %s' % (ret, type(ret)))
+            ret = requests.get(self.url, headers=headers, timeout=5)
             ret = json.loads(ret.text)
-
-            if ret.get('status') == 202:
-                ret = requests.get(self.url, headers=headers, timeout=5)
-                ret = json.loads(ret.text)
 
         except Exception, e:
             log.error('gain the project message error, reason: %s' % e)

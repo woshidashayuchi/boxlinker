@@ -40,7 +40,11 @@ class MetalWork(object):
 
         for x in a:
 
-            x['ltime'] = self.operate.time_diff(x.get('ltime'))
+            try:
+                x['ltime'] = self.operate.time_diff(x.get('ltime'))
+            except Exception, e:
+                log.error('exchange the time to chinese error, reason=%s' % e)
+                raise
 
             for y in service:
                 if x.get('service_name') == y:

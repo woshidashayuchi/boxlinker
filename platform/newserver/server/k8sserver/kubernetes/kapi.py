@@ -76,17 +76,12 @@ class KApiMethods(object):
 
         rtype = json_list.pop('rtype')
 
-        if json_list.get('namespace'):
+        namespace = json_list.get('namespace')
+        url = '%s/namespaces/%s/%s' % (self.host_address, namespace, rtype)
 
-            namespace = json_list.pop('namespace')
-        else:
-            namespace = 'default'
-        params = urllib.urlencode(json_list)
-        url = '%s/namespaces/%s/%s?%s' % (self.host_address, namespace, rtype, params)
-
-        msg = urllib2.Request(url, headers=self.HEADERS)
-        res = urllib2.urlopen(msg)
-        response = res.read()
+        msg = requests.get(url, headers=self.HEADERS, verify=False).text
+        log.info('the resources messages is %s,type is %s' % (msg, type(msg)))
+        response = json.loads(str(msg))
 
         return response
 
@@ -129,15 +124,12 @@ class KApiMethods(object):
 
         rtype = json_list.pop('rtype')
 
-        if json_list.get('namespace'):
-
-            namespace = json_list.pop('namespace')
-        else:
-            namespace = 'default'
+        namespace = json_list.get('namespace')
         url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, json_list.get('name'))
         response = requests.delete(url, headers=self.HEADERS, verify=False)
 
-        return response
+        log.info('delete resource result is %s, type is: %s' % (response, type(response)))
+        return json.loads(str(response.text))
 
     def patch_name_resource(self, json_list):
 
