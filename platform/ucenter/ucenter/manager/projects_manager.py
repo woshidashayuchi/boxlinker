@@ -167,7 +167,8 @@ class ProjectsManager(object):
                 log.error('Database update error, reason=%s' % (e))
                 return request_result(403)
             result['project_owner'] = project_owner
-        elif project_desc:
+
+        if project_desc:
             try:
                 self.ucenter_db.project_update_desc(project_uuid, project_desc)
             except Exception, e:

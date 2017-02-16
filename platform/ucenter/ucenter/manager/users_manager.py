@@ -104,7 +104,7 @@ class UsersManager(object):
 
         return request_result(0, result)
 
-    def user_list(self, user_name):
+    def user_list(self, user_name, name_check):
 
         try:
             email = parameter_check(user_name, ptype='peml')
@@ -112,10 +112,15 @@ class UsersManager(object):
             email = None
 
         try:
-            if email is None:
-                user_list_info = self.ucenter_db.user_list(user_name)
+            if name_check == 'true':
+                result = self.ucenter_db.name_duplicate_check(
+                              user_name)[0][0]
+                return request_result(0, result)
             else:
-                user_list_info = self.ucenter_db.user_list_email(email)
+                if email is None:
+                    user_list_info = self.ucenter_db.user_list(user_name)
+                else:
+                    user_list_info = self.ucenter_db.user_list_email(email)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)

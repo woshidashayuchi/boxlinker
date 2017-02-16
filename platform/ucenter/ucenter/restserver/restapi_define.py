@@ -63,8 +63,10 @@ class UcenterUsersApi(Resource):
 
         try:
             user_name = request.args.get('user_name')
+            name_check = request.args.get('name_check')
             parameters = {
-                             "user_name": user_name
+                             "user_name": user_name,
+                             "name_check": name_check
                          }
         except Exception, e:
             log.error('Parameters error, reason=%s' % (e))
@@ -442,9 +444,25 @@ class UcenterTeamsApi(Resource):
 
             return request_result(201)
 
+        try:
+            team_name = request.args.get('team_name')
+            name_check = request.args.get('name_check')
+            uuid_info = request.args.get('uuid_info')
+            public_info = request.args.get('public_info')
+            parameters = {
+                             "team_name": team_name,
+                             "name_check": name_check,
+                             "uuid_info": uuid_info,
+                             "public_info": public_info
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
         context = context_data(token, "uct_tem_tem_lst", "read")
 
-        return self.ucenter_api.team_list(context)
+        return self.ucenter_api.team_list(context, parameters)
 
 
 class UcenterTeamApi(Resource):

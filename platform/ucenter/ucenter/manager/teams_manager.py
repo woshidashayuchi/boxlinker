@@ -52,7 +52,70 @@ class TeamsManager(object):
 
         return request_result(0, result)
 
-    def team_list(self, user_uuid):
+    def team_info_public(self, team_name):
+
+        try:
+            team_single_info = self.ucenter_db.team_info_public(team_name)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        team_uuid = team_single_info[0][0]
+        team_name = team_single_info[0][1]
+        team_owner = team_single_info[0][2]
+        team_type = team_single_info[0][3]
+        team_desc = team_single_info[0][4]
+        status = team_single_info[0][5]
+        create_time = team_single_info[0][6]
+        update_time = team_single_info[0][7]
+
+        v_team_info = {
+                          "team_uuid": team_uuid,
+                          "team_name": team_name,
+                          "team_owner": team_owner,
+                          "team_type": team_type,
+                          "team_desc": team_desc,
+                          "status": status,
+                          "create_time": create_time,
+                          "update_time": update_time
+                      }
+
+        v_team_info = json.dumps(v_team_info, cls=CJsonEncoder)
+        result = json.loads(v_team_info)
+
+        return request_result(0, result)
+
+    def team_list(self, user_uuid, team_name,
+                  name_check, uuid_info, public_info):
+
+        if team_name:
+            if name_check == 'true':
+                result = self.ucenter_db.team_duplicate_check(
+                              team_name)[0][0]
+
+                return request_result(0, result)
+
+            elif uuid_info == 'true':
+                try:
+                    team_info = self.ucenter_db.team_info_uuid(team_name)
+                except Exception, e:
+                    log.error('Database select error, reason=%s' % (e))
+                    return request_result(404)
+
+                team_uuid = team_info[0][0]
+                team_name = team_info[0][1]
+                team_owner = team_info[0][2]
+                result = {
+                             "team_uuid": team_uuid,
+                             "team_name": team_name,
+                             "team_owner": team_owner
+                 }
+
+                return request_result(0, result)
+
+            elif public_info == 'true':
+
+                return self.team_info_public(team_name)
 
         try:
             team_list_info = self.ucenter_db.team_list(user_uuid)
@@ -124,15 +187,16 @@ class TeamsManager(object):
 
         return request_result(0, result)
 
-    def team_update(self, team_uuid, team_owner=None, team_desc=None):
+    def team_update(self, team_uuid, team_owner=None,
+                    team_type=None, team_desc=None):
 
         try:
-            team_type = self.ucenter_db.team_type(team_uuid)[0][0]
+            team_type_check = self.ucenter_db.team_type(team_uuid)[0][0]
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        if team_type == 'system':
+        if team_type_check == 'system':
             log.warning('System team not allow update')
             return request_result(202)
 
@@ -163,7 +227,16 @@ class TeamsManager(object):
                 log.error('Database update error, reason=%s' % (e))
                 return request_result(403)
             result['team_owner'] = team_owner
-        elif team_desc:
+
+        if (team_type == 'private') or (team_type == 'public'):
+            try:
+                self.ucenter_db.team_update_type(team_uuid, team_type)
+            except Exception, e:
+                log.error('Database update error, reason=%s' % (e))
+                return request_result(403)
+            result['team_type'] = team_type
+
+        if team_desc:
             try:
                 self.ucenter_db.team_update_desc(team_uuid, team_desc)
             except Exception, e:

@@ -39,6 +39,8 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
         "peml": ("[A-Za-z1-9]{1,1}[A-Za-z0-9-_]{2,30}"
                  "@[A-Za-z0-9]{1,1}[A-Za-z0-9-_.]{1,20}"
                  "[.]{1,1}[A-Za-z]{1,5}$"),
+        "puid": ("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-"
+                 "[a-z0-9]{4}-[a-z0-9]{12}$"),
         "ppwd": ".{5,60}"
     }
 

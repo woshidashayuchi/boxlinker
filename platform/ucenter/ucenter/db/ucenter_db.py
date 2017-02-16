@@ -76,7 +76,7 @@ class UcenterDB(MysqlInit):
 
         sql = "select user_name, real_name, email, mobile, \
                status, sex, birth_date, create_time, update_time \
-               from users where user_uuid='%s' and status!='delete'" \
+               from users where user_uuid='%s' and status='enable'" \
                % (user_uuid)
 
         return super(UcenterDB, self).exec_select_sql(sql)
@@ -84,7 +84,7 @@ class UcenterDB(MysqlInit):
     def user_name_info(self, user_name):
 
         sql = "select user_uuid, password, salt, email \
-               from users where user_name='%s' and status!='delete'" \
+               from users where user_name='%s' and status='enable'" \
                % (user_name)
 
         return super(UcenterDB, self).exec_select_sql(sql)
@@ -353,7 +353,7 @@ class UcenterDB(MysqlInit):
                a.team_type, a.team_desc, a.status, a.create_time, \
                a.update_time, c.role_name \
                from teams a join users_teams b join roles c \
-               where a.team_uuid=b.team_uuid and a.status!='delete' \
+               where a.team_uuid=b.team_uuid and a.status='enable' \
                and b.user_uuid='%s' and b.team_role=c.role_uuid" \
                % (user_uuid)
 
@@ -370,8 +370,26 @@ class UcenterDB(MysqlInit):
 
         sql = "select team_name, team_owner, team_type, team_desc, status, \
                create_time, update_time \
-               from teams where team_uuid='%s' and status!='delete'" \
+               from teams where team_uuid='%s' and status='enable'" \
                % (team_uuid)
+
+        return super(UcenterDB, self).exec_select_sql(sql)
+
+    def team_info_uuid(self, team_name):
+
+        sql = "select team_uuid, team_name, team_owner \
+               from teams where team_name='%s' and status='enable'" \
+               % (team_name)
+
+        return super(UcenterDB, self).exec_select_sql(sql)
+
+    def team_info_public(self, team_name):
+
+        sql = "select team_uuid, team_name, team_owner, team_type, \
+               team_desc, status, create_time, update_time \
+               from teams where team_name='%s' and team_type='public' \
+               and status='enable'" \
+               % (team_name)
 
         return super(UcenterDB, self).exec_select_sql(sql)
 
@@ -395,6 +413,14 @@ class UcenterDB(MysqlInit):
 
         return super(UcenterDB, self).exec_update_sql(
                                       sql_01, sql_02, sql_03, sql_04)
+
+    def team_update_type(self, team_uuid, team_type):
+
+        sql = "update teams set team_type='%s', update_time=now() \
+               where team_uuid='%s'" \
+               % (team_type, team_uuid)
+
+        return super(UcenterDB, self).exec_update_sql(sql)
 
     def team_update_desc(self, team_uuid, team_desc):
 
@@ -463,7 +489,7 @@ class UcenterDB(MysqlInit):
                a.create_time, a.update_time, c.role_name \
                from projects a join users_projects b join roles c \
                where a.project_uuid=b.project_uuid and a.project_team='%s' \
-               and a.status!='delete' and b.user_uuid='%s' \
+               and a.status='enable' and b.user_uuid='%s' \
                and b.project_role=c.role_uuid" \
                % (team_uuid, user_uuid)
 
@@ -488,7 +514,7 @@ class UcenterDB(MysqlInit):
 
         sql = "select project_name, project_owner, project_team, \
                project_type, project_desc, status, create_time, update_time \
-               from projects where project_uuid='%s' and status!='delete'" \
+               from projects where project_uuid='%s' and status='enable'" \
                % (project_uuid)
 
         return super(UcenterDB, self).exec_select_sql(sql)

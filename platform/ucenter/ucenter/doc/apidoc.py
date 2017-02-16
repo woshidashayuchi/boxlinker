@@ -72,6 +72,17 @@
 
 
 """
+@apiDefine CODE_USER_CHECK_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": 0/1
+}
+"""
+
+
+"""
 @apiDefine CODE_USER_LIST_0
 @apiSuccessExample 返回
 {
@@ -340,6 +351,21 @@
 
 
 """
+@apiDefine CODE_TEAM_UUID_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "team_uuid": "string",
+        "team_name": "string",
+        "team_owner": "string"
+    }
+}
+"""
+
+
+"""
 @apiDefine CODE_TEAM_INFO_0
 @apiSuccessExample 返回
 {
@@ -368,6 +394,7 @@
     "result": {
         "team_uuid": "string",
         "team_owner": "string",
+        "team_type": "string",
         "team_desc": "string"
     }
 }
@@ -645,7 +672,19 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/users/<user_uuid> 1.4 用户信息
+@api {get} /api/v1.0/ucenter/users?user_name=<string>&name_check=<true> 1.4 用户检测
+@apiName user exist check
+@apiGroup 1 users
+@apiVersion 1.0.0
+@apiDescription 用户注册时检测用户名是否存在
+@apiPermission organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_USER_CHECK_0
+"""
+
+
+"""
+@api {get} /api/v1.0/ucenter/users/<user_uuid> 1.5 用户信息
 @apiName user info
 @apiGroup 1 users
 @apiVersion 1.0.0
@@ -657,7 +696,7 @@
 
 
 """
-@api {put} /api/v1.0/ucenter/users/<user_uuid> 1.5 用户更新
+@api {put} /api/v1.0/ucenter/users/<user_uuid> 1.6 用户更新
 @apiName user update
 @apiGroup 1 users
 @apiVersion 1.0.0
@@ -677,7 +716,7 @@
 
 
 """
-@api {put} /api/v1.0/ucenter/users/status/<user_uuid> 1.6 用户状态
+@api {put} /api/v1.0/ucenter/users/status/<user_uuid> 1.7 用户状态
 @apiName user status update
 @apiGroup 1 users
 @apiVersion 1.0.0
@@ -870,7 +909,7 @@
 
 
 """
-@api {post} /api/v1.0/ucenter/teams 5.1 组织创建
+@api {post} /api/v1.0/ucenter/teams 5.1.1 组织创建
 @apiName team create
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -888,7 +927,7 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/teams 5.2 组织列表
+@api {get} /api/v1.0/ucenter/teams 5.1.2 组织列表
 @apiName team list
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -900,7 +939,43 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/teams/<team_uuid> 5.3 组织信息
+@api {get} /api/v1.0/ucenter/teams?team_name=<team_name>&name_check=<true> 5.1.3 组织检测
+@apiName team exist check
+@apiGroup 5 teams
+@apiVersion 1.0.0
+@apiDescription 创建组织时检测组织名是否存在
+@apiPermission organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_USER_CHECK_0
+"""
+
+
+"""
+@api {get} /api/v1.0/ucenter/teams?team_name=<team_name>&uuid_info=<true> 5.1.4 组织UUID
+@apiName team uuid get
+@apiGroup 5 teams
+@apiVersion 1.0.0
+@apiDescription 根据组织名查询组织UUID
+@apiPermission organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_TEAM_UUID_0
+"""
+
+
+"""
+@api {get} /api/v1.0/ucenter/teams?team_name=<team_name>&public_info=<true> 5.1.5 组织列表(公开团队)
+@apiName public team uuid get
+@apiGroup 5 teams
+@apiVersion 1.0.0
+@apiDescription 根据组织名查询平台公开的组织信息
+@apiPermission organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_TEAM_INFO_0
+"""
+
+
+"""
+@api {get} /api/v1.0/ucenter/teams/<team_uuid> 5.1.6 组织信息
 @apiName team info
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -912,7 +987,7 @@
 
 
 """
-@api {put} /api/v1.0/ucenter/teams/<team_uuid> 5.4 组织更新
+@api {put} /api/v1.0/ucenter/teams/<team_uuid> 5.1.7 组织更新
 @apiName team update
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -923,6 +998,7 @@
 @apiParamExample body
 {
     "team_owner": "string",
+    "team_type": "private/public"
     "team_desc": "string"
 }
 @apiUse CODE_TEAM_UPDATE_0
@@ -930,7 +1006,7 @@
 
 
 """
-@api {delete} /api/v1.0/ucenter/teams/<team_uuid> 5.5 组织删除
+@api {delete} /api/v1.0/ucenter/teams/<team_uuid> 5.1.8 组织删除
 @apiName team delete
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -942,7 +1018,7 @@
 
 
 """
-@api {post} /api/v1.0/ucenter/projects 6.1 项目创建
+@api {post} /api/v1.0/ucenter/projects 6.1.1 项目创建
 @apiName projects create
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -960,7 +1036,7 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/projects 6.2 项目列表
+@api {get} /api/v1.0/ucenter/projects 6.1.2 项目列表
 @apiName project list
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -972,7 +1048,7 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/projects/<project_uuid> 6.3 项目信息
+@api {get} /api/v1.0/ucenter/projects/<project_uuid> 6.1.3 项目信息
 @apiName project info
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -984,7 +1060,7 @@
 
 
 """
-@api {put} /api/v1.0/ucenter/projects/<project_uuid> 6.4 项目更新
+@api {put} /api/v1.0/ucenter/projects/<project_uuid> 6.1.4 项目更新
 @apiName project update
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -1002,7 +1078,7 @@
 
 
 """
-@api {delete} /api/v1.0/ucenter/projects/<project_uuid> 6.5 项目删除
+@api {delete} /api/v1.0/ucenter/projects/<project_uuid> 6.1.5 项目删除
 @apiName project delete
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -1014,7 +1090,7 @@
 
 
 """
-@api {post} /api/v1.0/ucenter/usersteams 5.6 组织用户添加
+@api {post} /api/v1.0/ucenter/usersteams 5.2.1 组织用户添加
 @apiName team user add
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -1032,7 +1108,7 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/usersteams 5.7 组织用户列表
+@api {get} /api/v1.0/ucenter/usersteams 5.2.2 组织用户列表
 @apiName team user list
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -1044,7 +1120,7 @@
 
 
 """
-@api {post} /api/v1.0/ucenter/usersteams/<user_uuid> 5.8 组织用户激活
+@api {post} /api/v1.0/ucenter/usersteams/<user_uuid> 5.2.3 组织用户激活
 @apiName team user activate
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -1061,7 +1137,7 @@
 
 
 """
-@api {put} /api/v1.0/ucenter/usersteams/<user_uuid> 5.9 组织用户权限
+@api {put} /api/v1.0/ucenter/usersteams/<user_uuid> 5.2.4 组织用户权限
 @apiName team user update
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -1078,7 +1154,7 @@
 
 
 """
-@api {delete} /api/v1.0/ucenter/usersteams/<user_uuid> 5.9.1 组织用户删除
+@api {delete} /api/v1.0/ucenter/usersteams/<user_uuid> 5.2.5 组织用户删除
 @apiName team user delete
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -1090,7 +1166,7 @@
 
 
 """
-@api {post} /api/v1.0/ucenter/usersprojects 6.6 项目用户添加
+@api {post} /api/v1.0/ucenter/usersprojects 6.2.1 项目用户添加
 @apiName project user add
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -1108,7 +1184,7 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/usersprojects 6.7 项目用户列表
+@api {get} /api/v1.0/ucenter/usersprojects 6.2.2 项目用户列表
 @apiName project user list
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -1120,7 +1196,7 @@
 
 
 """
-@api {put} /api/v1.0/ucenter/usersprojects/<user_uuid> 6.8 项目用户权限
+@api {put} /api/v1.0/ucenter/usersprojects/<user_uuid> 6.2.3 项目用户权限
 @apiName project user update
 @apiGroup 6 projects
 @apiVersion 1.0.0
@@ -1137,7 +1213,7 @@
 
 
 """
-@api {delete} /api/v1.0/ucenter/usersprojects/<user_uuid> 6.9 项目用户删除
+@api {delete} /api/v1.0/ucenter/usersprojects/<user_uuid> 6.2.4 项目用户删除
 @apiName project user delete
 @apiGroup 6 projects
 @apiVersion 1.0.0
