@@ -5,7 +5,7 @@
 from common.mysql_base import MysqlInit
 from common.logs import logging as log
 from unit_element import font_infix_element, rc_infix_element, container_element, env_element, volume_element,\
-    normal_call
+    normal_call, uuid_ele
 from common.db_operate import DbOperate
 
 
@@ -162,3 +162,24 @@ class ServiceDB(MysqlInit):
                                                                                                service_name)
 
         return super(ServiceDB, self).exec_update_sql(del_volume, del_container, del_env, del_rc, del_font)
+
+    def update_env(self, dict_data):
+        uuid_e = uuid_ele()
+        env = dict_data.get('env')
+        project_uuid, service_name = normal_call(dict_data)
+        for i in env:
+            sql_delete = "delete from env where rc_uuid=(select rc_uuid from font_service where " \
+                         "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+
+            sql_insert = "insert INTO env(uuid,rc_uuid,env_key,env_value) VALUES ('%s'," \
+                         "((select rc_uuid from font_service where service_name='%s' " \
+                         "and project_uuid='%s')),'%s','%s')" % (uuid_e, service_name, project_uuid,
+                                                                 i.get('env_key'), i.get('env_value'))
+            try:
+                if super(ServiceDB, self).exec_update_sql(sql_delete, sql_insert) is not None:
+                    return False
+            except Exception, e:
+                log.error('database update(env) error, reason=%s' % e)
+                return False
+
+        return True

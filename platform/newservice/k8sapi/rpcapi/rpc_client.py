@@ -24,8 +24,7 @@ class KubernetesRpcClient(object):
         try:
             rpc_body = rpc_data("svc_cre", context, parameters)
 
-            return self.rbtmq.rpc_call_client(
-                        self.queue, self.timeout, rpc_body)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(501)
@@ -35,8 +34,7 @@ class KubernetesRpcClient(object):
         try:
             rpc_body = rpc_data("svc_query", context, parameters)
 
-            return self.rbtmq.rpc_call_client(
-                        self.queue, self.timeout, rpc_body)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(404)
@@ -46,8 +44,7 @@ class KubernetesRpcClient(object):
         try:
             rpc_body = rpc_data("svc_detail", context, parameters)
 
-            return self.rbtmq.rpc_call_client(
-                        self.queue, self.timeout, rpc_body)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(404)
@@ -57,8 +54,17 @@ class KubernetesRpcClient(object):
         try:
             rpc_body = rpc_data("svc_delete", context, parameters)
 
-            return self.rbtmq.rpc_call_client(
-                        self.queue, self.timeout, rpc_body)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(503)
+
+    def update_service(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data('svc_update', context, parameters)
+
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % e)
+            return request_result(502)

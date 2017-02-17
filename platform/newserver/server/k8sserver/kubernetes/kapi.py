@@ -8,6 +8,7 @@ import json
 import urllib2
 import os
 from common.logs import logging as log
+from common.code import request_result
 
 
 class KApiMethods(object):
@@ -154,19 +155,13 @@ class KApiMethods(object):
 
     def put_name_resource(self, json_list):
         rtype = json_list.pop('rtype')
-        if json_list.get('namespace'):
-            namespace = json_list.pop('namespace')
-        else:
-            namespace = 'default'
-        if json_list.get('name'):
-            name = json_list.pop('name')
-        else:
-            m_name = '输入资源名,才可以进行修改'
-            return m_name
+        namespace = json_list.get('metadata').get('namespace')
+        name = json_list.get('metadata').get('name')
 
         url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, name)
         the_page = requests.put(url, data=json.dumps(json_list), headers=self.HEADERS, verify=False)
-        return the_page
+        log.info('kubernetes update result is:%s, type is : %s' % (the_page, type(the_page)))
+        return request_result(0, str(the_page))
 
     def post_nohup_resource(self, json_list):
         global host_address

@@ -35,6 +35,8 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('pods_get', self.rpcapi_define.pods_messages)
 
+        self.rpc_api.add_resource('up_service', self.rpcapi_define.svc_update)
+
     def rpc_exec(self, rpc_body):
 
         try:

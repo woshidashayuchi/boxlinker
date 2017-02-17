@@ -103,3 +103,14 @@ class KubernetesRpcClient(object):
             return ret
         except Exception, e:
             log.error('Rpc client exec error when delete rc and service...,reason=%s' % e)
+
+    def update_service(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data('up_service', context, parameters)
+
+            ret = self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+
+            return ret
+        except Exception, e:
+            log.error('Rpc client exec error when update rc and service...reason=%s' % e)

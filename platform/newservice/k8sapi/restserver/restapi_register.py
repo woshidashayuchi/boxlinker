@@ -39,11 +39,12 @@ def del_service(service_name):
     return KubernetesClientApi.del_service(service_name)
 
 
-@app.route('/api/v1.0/application/service/<service_name>', methods=['PUT'])
-def put_service(service_name):
-    return KubernetesClientApi.put_service(service_name)
+@app.route('/api/v1.0/application/service/<service_name>/<rtype>', methods=['PUT'])
+def put_service(service_name, rtype):
+    return KubernetesClientApi.put_service(service_name, rtype)
 
 
+'''
 @app.route('/api/v1.0/application/service/<service_name>/container', methods=['PUT'])
 def put_container(service_name):
     return KubernetesClientApi.put_container(service_name)
@@ -112,6 +113,7 @@ def change_domain(service_name):
 @app.route('/api/v1.0/application/service/domain/identify', methods=['PUT'])
 def change_domain_identify():
     return KubernetesClientApi.domain_identify()
+'''
 
 
 def rest_app_run():

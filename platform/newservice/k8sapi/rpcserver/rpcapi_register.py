@@ -27,6 +27,8 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('svc_delete', self.rpcapi_define.service_delete)
 
+        self.rpc_api.add_resource('svc_update', self.rpcapi_define.service_update)
+
     def rpc_exec(self, rpc_body):
 
         try:

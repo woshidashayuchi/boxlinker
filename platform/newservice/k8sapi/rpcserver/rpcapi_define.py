@@ -10,6 +10,7 @@ from common.logs import logging as log
 from manager.create_manager import CreateManager
 from manager.query_manager import QueryManager
 from manager.delete_manager import DeleteManager
+from manager.update_manager import UpdateManager
 
 
 class KubernetesRpcAPI(object):
@@ -18,9 +19,9 @@ class KubernetesRpcAPI(object):
         self.create_manager = CreateManager()
         self.query_manager = QueryManager()
         self.delete_manager = DeleteManager()
+        self.update_manager = UpdateManager()
 
     def service_create(self, context, parameters=None):
-        # log.info("create context data is: %s(%s)" % (context, type(context)))
         return self.create_manager.service_create(context)
 
     def service_query(self, context, parameters=None):
@@ -31,3 +32,6 @@ class KubernetesRpcAPI(object):
 
     def service_delete(self, context, parameters=None):
         return self.delete_manager.service_delete(context)
+
+    def service_update(self, context, parameters=None):
+        return self.update_manager.service_update(context)

@@ -75,3 +75,6 @@ def volume_element(dict_data):
 
     return v_uuid, rc_uuid, volume_uuid, disk_path, readonly
 
+
+def uuid_ele():
+    return str(uuid.uuid4())

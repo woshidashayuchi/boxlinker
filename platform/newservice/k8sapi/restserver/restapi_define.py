@@ -89,31 +89,29 @@ class KubernetesClientApi(object):
         return json.dumps(ret)
 
     @classmethod
-    def put_service(cls, service_name):
-        pass
-    '''
-        json_list = dict()
+    def put_service(cls, service_name, rtype):
         try:
-            token_get1 = request.headers.get("token")
-            token_get2 = token_get1.decode("utf-8")
-            token_get = token_get2.encode("utf-8")
-            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
         except Exception, e:
-            log.error("authentication error, reason=%s" % e)
-            return json.dumps(code.request_result(201))
-        json_list1 = json.loads(request.get_data())
-        try:
-            json_list = {"service_name": service_name, "user_id": user_id, "user_name": user_name,
-                         "user_orga": user_orga, "role_uuid": role_uuid}
-            json_list = json.loads(json.dumps(json_list))
-            json_list.update(json_list1)
-            json_list["token"] = token_get1
-        except Exception, e:
-            log.error("error=%s" % e)
-        controller = SheetController()
-        response = controller.update_service(json_list)
-        return json.dumps(response)
-    '''
+            log.error('Token check error,reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        context = token_ret.get('result')
+        context['service_name'] = service_name
+        context['token'] = token
+        context['rtype'] = rtype
+
+        in_data = json.loads(request.get_data())
+
+        if in_data is None and rtype == 'container':
+            return json.dumps(request_result(101))
+        if in_data is not None:
+            context.update(in_data)
+
+        ret = cls.kuber.update_service(context)
+        return json.dumps(ret)
+
     @classmethod
     def put_container(cls, service_name):
         pass

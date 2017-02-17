@@ -179,7 +179,7 @@ class SheetController(object):
                  "orga_orga": json_list.get("user_orga"), "create_time": create_time,
                  "update_time": create_time}
         json_list.update(typee)
-        # json_list = ImageAbout.image_add(json_list)
+        json_list = ImageAbout.image_add(json_list)
         try:
             log.info("===========font")
             DataOrm.add_method(json_list)

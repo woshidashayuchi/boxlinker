@@ -9,6 +9,7 @@ from common.time_log import time_log
 from common.code import request_result
 from common.logs import logging as log
 from db.service_db import ServiceDB
+from db.metal_work import MetalWork
 from rpcapi_client import KubernetesRpcClient
 
 
@@ -17,7 +18,7 @@ class KubernetesDriver(object):
     def __init__(self):
         self.service_db = ServiceDB()
         self.krpc_client = KubernetesRpcClient()
-
+        self.metal = MetalWork()
 
     @staticmethod
     def command_query(dict_data):
@@ -27,6 +28,12 @@ class KubernetesDriver(object):
             command = in_command.split(',')
 
             return command
+
+    @staticmethod
+    def get_image_msg(dict_data):
+        image_id = dict_data.get('image_id')
+        url = conf.IMAGE_SERVER
+        headers = {"token": dict_data.get("token")}
 
     @staticmethod
     def define_volumes(dict_data):
@@ -124,14 +131,14 @@ class KubernetesDriver(object):
 
         ser = context.get('container')
         service_name = context.get('service_name')
-        project_name = context.get('project_name')
+        team_name = context.get('team_name')
         using_port = None
         tcp_lb = ''
         http_lb = ''
         m = 1
 
         for i in ser:
-            domain_http = '%s-%s.lb1.boxlinker.com:' % (project_name, service_name)
+            domain_http = '%s-%s.lb1.boxlinker.com:' % (team_name, service_name)
             if i.get('access_mode').upper() == 'HTTP' and i.get('access_scope') == 'outsisde':
                 http_lbadd = domain_http + str(i.get('container_port'))
                 if http_lb == '':
@@ -229,7 +236,7 @@ class KubernetesDriver(object):
         image_version = dict_data.get('image_version')
         service_name = dict_data.get('service_name').replace('_', '-')
         pods_num = int(dict_data.get('pods_num'))
-        project_name = dict_data.get('project_name')
+        team_name = dict_data.get('team_name')
         command = self.command_query(dict_data)
         policy1 = dict_data.get('policy')
         images = image_name
@@ -259,11 +266,11 @@ class KubernetesDriver(object):
             log.error('volume define error, reason=%s' % e)
             raise
 
-        return namespace, image_name, image_version, service_name, pods_num, project_name, command, container, \
+        return namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
             env, user_uuid, rc_krud, pullpolicy, volumes
 
     def add_rc(self, dict_data):
-        namespace, image_name, image_version, service_name, pods_num, project_name, command, container, \
+        namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
             env, user_uuid, rc_krud, pullpolicy, volumes = self.unit_element(dict_data)
 
         try:
@@ -578,11 +585,8 @@ class KubernetesDriver(object):
             del_pod_json = {'namespace': namespace, 'name': i.get('pod_name'), 'rtype': 'pods'}
             pod_ret = self.krpc_client.delete_service_a_rc(del_pod_json)
 
-            log.info('boss delete result:rc--%s,pod--%s,service--%s' % (str(rc_ret.get('code')),
-                                                                        str(pod_ret),
-                                                                        str(svc_ret.get('code'))))
-
             if pod_ret.get('code') != 200 and pod_ret.get('code') is not None:
+                log.error('DELETE POD RESULT IS--POD:%s' % pod_ret)
                 return request_result(503)
 
         if (rc_ret.get('code') != 200 and rc_ret.get('code') != 404) or \
@@ -593,3 +597,79 @@ class KubernetesDriver(object):
 
         return True
 
+    def update_service(self, context):
+        try:
+            svc_detail_original = self.metal.service_detail(context)
+        except Exception, e:
+            log.error('get the service original details(kubernetes_driver) message error, reason=%s' % e)
+            return request_result(404)
+
+        if svc_detail_original.get('status') != 0:
+            return request_result(404)
+
+        try:
+            log.info('context is %s, type is %s' % (context, type(context)))
+            svc_detail = svc_detail_original.get('result')
+            svc_detail['service_name'] = context.get('service_name')
+            svc_detail['project_uuid'] = context.get('project_uuid')
+
+            # 需要删除
+            svc_detail['image_name'] = 'index.boxlinker.com/boxlinker/web-index'
+            svc_detail['image_version'] = 'latest'
+        except Exception, e:
+            log.error('struct the params when update service error, reason=%s' % e)
+            return request_result(502)
+
+        try:
+            rc_up_json = self.add_rc(svc_detail)
+            # svc_up_json = self.add_service(svc_detail)
+        except Exception, e:
+            log.error('rc_json or svc json struct error, reason=%s' % e)
+            return request_result(502)
+
+        rc_up_json['rtype'] = 'replicationcontrollers'
+        # svc_up_json['rtype'] = 'services'
+
+        rc_up_ret = self.krpc_client.update_service(rc_up_json)
+        # svc_up_ret = self.krpc_client.update_service(svc_up_json)
+
+        if rc_up_ret.get('result') != '<Response [200]>':
+                # or (svc_up_ret.get('kind') != 'Service' or svc_up_ret.get('code') != 200):
+            log.info('SERVICE UPDATE ERROR,RC_RET---:%s' % rc_up_ret)
+            return request_result(502)
+
+        pods = self.get_pod_name(context)
+        if pods is False:
+            log.error('PODS MESSAGES GET ERROR')
+            return request_result(502)
+
+        for i in pods:
+            log.info('pod_name is: %s' % i.get('pod_name'))
+            del_pod_json = {'namespace': context.get('project_uuid'), 'name': i.get('pod_name'), 'rtype': 'pods'}
+            pod_ret = self.krpc_client.delete_service_a_rc(del_pod_json)
+
+            if pod_ret.get('code') != 200 and pod_ret.get('code') is not None:
+                log.error('DELETE POD RESULT IS--POD:%s' % pod_ret)
+                return request_result(502)
+
+        return True
+
+    def update_env(self, context):
+
+        database_ret = self.service_db.update_env(context)
+        if database_ret is False:
+            return request_result(403)
+
+        service_ret = self.update_service(context)
+        if service_ret is not True:
+            return service_ret
+
+        return True
+
+    def update_main(self, context):
+        rtype = context.get('rtype')
+
+        if rtype == 'env':
+            return self.update_env(context)
+
+        return True

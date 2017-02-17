@@ -10,9 +10,9 @@ import json
 class TokenDriver(object):
 
     def __init__(self):
-        self.url = conf.PROJECT_MSG
+        self.url = conf.TEAM_MSG
 
-    def gain_project_name(self, dict_data):
+    def gain_team_name(self, dict_data):
         # project_uuid = '/' + dict_data.get('project_uuid')
         headers = {'token': dict_data.get('token')}
 
@@ -25,9 +25,9 @@ class TokenDriver(object):
             return False
 
         if ret.get('status') == 0:
-            for i in ret.get('result').get('project_list'):
-                if i.get('project_uuid') == dict_data.get('project_uuid'):
-                    return i.get('project_name')
+            for i in ret.get('result').get('team_list'):
+                if i.get('team_uuid') == dict_data.get('team_uuid'):
+                    return i.get('team_name')
 
             return False
         else:

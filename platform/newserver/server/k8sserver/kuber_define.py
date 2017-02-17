@@ -64,3 +64,9 @@ class KubernetesRpcAPIs(object):
             return self.kubernetes.get_namespace_resource(context)
         except Exception, e:
             log.error('get pods messages(kubernetes) error, reason=%s' % e)
+
+    def svc_update(self, context, parameters=None):
+        try:
+            return self.kubernetes.put_name_resource(context)
+        except Exception, e:
+            log.error('update service(%s) error, reason=%s' % (context.get('rtype'), e))
