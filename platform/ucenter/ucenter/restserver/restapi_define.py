@@ -674,6 +674,40 @@ class UcenterUsersTeamsApi(Resource):
 
         return self.ucenter_api.user_team_list(context)
 
+    @time_log
+    def delete(self):
+
+        try:
+            token = request.headers.get('token')
+            user_info = token_auth(token)['result']
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            user_uuid = request.args.get('user_uuid')
+            team_uuid = request.args.get('team_uuid')
+            if team_uuid is None:
+                team_uuid = user_info['team_uuid']
+            parameters = {
+                             "user_uuid": user_uuid,
+                             "team_uuid": team_uuid
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        if user_uuid == user_info['user_uuid']:
+            resource_uuid = user_uuid
+        else:
+            resource_uuid = team_uuid
+
+        context = context_data(token, resource_uuid, "delete")
+
+        return self.ucenter_api.user_team_delete(context, parameters)
+
 
 class UcenterUserTeamApi(Resource):
 
@@ -728,28 +762,6 @@ class UcenterUserTeamApi(Resource):
         parameters['user_uuid'] = user_uuid
 
         return self.ucenter_api.user_team_update(context, parameters)
-
-    @time_log
-    def delete(self, user_uuid):
-
-        try:
-            token = request.headers.get('token')
-            user_info = token_auth(token)['result']
-        except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
-
-            return request_result(201)
-
-        if user_uuid == user_info['user_uuid']:
-            resource_uuid = user_uuid
-        else:
-            resource_uuid = user_info['team_uuid']
-
-        context = context_data(token, resource_uuid, "delete")
-
-        parameters = {"user_uuid": user_uuid}
-
-        return self.ucenter_api.user_team_delete(context, parameters)
 
 
 class UcenterUsersProjectsApi(Resource):

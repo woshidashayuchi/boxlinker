@@ -76,7 +76,7 @@ class UcenterDB(MysqlInit):
 
         sql = "select user_name, real_name, email, mobile, \
                status, sex, birth_date, create_time, update_time \
-               from users where user_uuid='%s' and status='enable'" \
+               from users where user_uuid='%s' and status!='delete'" \
                % (user_uuid)
 
         return super(UcenterDB, self).exec_select_sql(sql)

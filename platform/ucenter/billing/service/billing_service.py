@@ -9,19 +9,19 @@ sys.path.insert(1, p_path)
 from time import sleep
 
 from common.logs import logging as log
-from billing.manager.cost_manager import CostsManager
+from billing.manager.costs_manager import CostsManager
 
 
 def billing_service():
 
-    cost_manager = CostsManager()
+    costs_manager = CostsManager()
 
+    log.info('Starting Billing Service')
     while True:
-        log.info('Starting Billing Service')
         sleep(3600)
         try:
             log.info('Start billing')
-            cost_manager.billing_statistics()
+            costs_manager.billing_statistics()
             log.info('Finish billing')
         except Exception, e:
             log.warning('Billing Service running error, reason=%s'

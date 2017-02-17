@@ -392,7 +392,8 @@ class UcenterRpcManager(object):
             team_name = parameter_check(team_name, ptype='pstr', exist='no')
             name_check = parameter_check(name_check, ptype='pstr', exist='no')
             uuid_info = parameter_check(uuid_info, ptype='pstr', exist='no')
-            public_info = parameter_check(public_info, ptype='pstr', exist='no')
+            public_info = parameter_check(public_info, ptype='pstr',
+                                          exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -627,13 +628,14 @@ class UcenterRpcManager(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            team_uuid = user_info.get('team_uuid')
+            user_uuid = user_info.get('user_uuid')
             team_priv = user_info.get('team_priv')
 
             n_user_uuid = parameters.get('user_uuid')
+            n_team_uuid = parameters.get('team_uuid')
 
             n_user_uuid = parameter_check(n_user_uuid, ptype='pstr')
-            team_uuid = parameter_check(team_uuid, ptype='pstr')
+            n_team_uuid = parameter_check(n_team_uuid, ptype='pstr')
             team_priv = parameter_check(team_priv, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
@@ -641,7 +643,7 @@ class UcenterRpcManager(object):
             return request_result(101)
 
         return self.userteam_manager.user_team_delete(
-                    team_uuid, team_priv, n_user_uuid)
+                    n_user_uuid, n_team_uuid, user_uuid, team_priv)
 
     @acl_check
     def user_project_add(self, context, parameters):
@@ -709,6 +711,7 @@ class UcenterRpcManager(object):
 
         try:
             user_info = token_auth(context['token'])['result']
+            user_uuid = user_info.get('user_uuid')
             project_uuid = user_info.get('project_uuid')
             project_priv = user_info.get('project_priv')
 
@@ -723,4 +726,4 @@ class UcenterRpcManager(object):
             return request_result(101)
 
         return self.userproject_manager.user_project_delete(
-                    project_uuid, project_priv, n_user_uuid)
+                    user_uuid, project_uuid, project_priv, n_user_uuid)

@@ -52,7 +52,7 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS resources_acl (
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB"
-$v_connect_mysql "create index type_project_user_idx on resources_acl(resource_type, project_uuid, user_uuid)"
+$v_connect_mysql "create index type_team_idx on resources_acl(resource_type, team_uuid)"
 
 
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS resources (
@@ -95,11 +95,11 @@ ENGINE=InnoDB"
 
 
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS balances (
-        user_uuid           VARCHAR(64) NULL DEFAULT NULL,
+        team_uuid           VARCHAR(64) NULL DEFAULT NULL,
         balance             DOUBLE(10,2) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
-        PRIMARY KEY (user_uuid)
+        PRIMARY KEY (team_uuid)
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB"
@@ -125,16 +125,16 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS bills (
         resource_uuid       VARCHAR(64) NULL DEFAULT NULL,
         resource_cost       DOUBLE(10,6) NULL DEFAULT NULL,
         voucher_cost        DOUBLE(10,6) NULL DEFAULT NULL,
-        owner_uuid          VARCHAR(64) NULL DEFAULT NULL,
         team_uuid           VARCHAR(64) NULL DEFAULT NULL,
         project_uuid        VARCHAR(64) NULL DEFAULT NULL,
+        user_uuid           VARCHAR(64) NULL DEFAULT NULL,
         insert_time         DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (id)
 )
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB"
 $v_connect_mysql "create index resource_uuid_idx on bills(resource_uuid)"
-$v_connect_mysql "create index owner_idx on bills(owner_uuid)"
+$v_connect_mysql "create index team_idx on bills(team_uuid)"
 $v_connect_mysql "create index insert_time_idx on bills(insert_time)"
 
 

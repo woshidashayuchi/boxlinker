@@ -29,7 +29,7 @@ class BillsManager(object):
 
         return
 
-    def bill_list(self, user_uuid, start_time, end_time):
+    def bill_list(self, team_uuid, start_time, end_time):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
@@ -37,7 +37,7 @@ class BillsManager(object):
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(float(end_time)))
             bills_list_info = self.billing_db.bill_list(
-                                   user_uuid, start_time, end_time)
+                                   team_uuid, start_time, end_time)
         except Exception, e:
             log.error('Database select error')
             return request_result(404)

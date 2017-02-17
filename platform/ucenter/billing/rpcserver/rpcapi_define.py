@@ -134,8 +134,9 @@ class BillingRpcManager(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            orga_uuid = user_info.get('orga_uuid')
             user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
+            project_uuid = user_info.get('project_uuid')
 
             voucher_uuid = parameters.get('voucher_uuid')
 
@@ -146,16 +147,14 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.vouchers_manager.voucher_active(
-                    voucher_uuid, orga_uuid, user_uuid)
+                    voucher_uuid, user_uuid, team_uuid, project_uuid)
 
     @acl_check
     def voucher_list(self, context, parameters):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info.get('user_uuid')
-            orga_uuid = user_info.get('orga_uuid')
-            role_uuid = user_info.get('role_uuid')
+            team_uuid = user_info.get('team_uuid')
 
             start_time = parameters.get('start_time')
             end_time = parameters.get('end_time')
@@ -168,15 +167,14 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.vouchers_manager.voucher_list(
-                    user_uuid, orga_uuid, role_uuid,
-                    start_time, end_time)
+                    team_uuid, start_time, end_time)
 
     @acl_check
     def bill_list(self, context, parameters):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
 
             start_time = parameters.get('start_time')
             end_time = parameters.get('end_time')
@@ -189,27 +187,27 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.bills_manager.bill_list(
-                    user_uuid, start_time, end_time)
+                    team_uuid, start_time, end_time)
 
     @acl_check
     def balance_init(self, context, parameters):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.balances_manager.balance_init(user_uuid)
+        return self.balances_manager.balance_init(team_uuid)
 
     @acl_check
     def balance_update(self, context, parameters):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
 
             amount = parameters.get('amount')
 
@@ -220,20 +218,20 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.balances_manager.balance_update(
-                    user_uuid, amount)
+                    team_uuid, amount)
 
     @acl_check
     def balance_info(self, context, parameters):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.balances_manager.balance_info(user_uuid)
+        return self.balances_manager.balance_info(team_uuid)
 
     @acl_check
     def order_create(self, context, parameters):
@@ -284,7 +282,7 @@ class BillingRpcManager(object):
 
         try:
             user_info = token_auth(context['token'])['result']
-            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
 
             start_time = parameters.get('start_time')
             end_time = parameters.get('end_time')
@@ -297,4 +295,4 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.orders_manager.order_list(
-                    user_uuid, start_time, end_time)
+                    team_uuid, start_time, end_time)

@@ -123,19 +123,21 @@ class UserProjectManager(object):
 
         return request_result(0, result)
 
-    def user_project_delete(self, project_uuid,
+    def user_project_delete(self, user_uuid, project_uuid,
                             project_priv, n_user_uuid):
 
-        try:
-            now_project_priv = self.ucenter_db.project_priv(
-                                    n_user_uuid, project_uuid)[0][0]
-            if ('U' in now_project_priv) and (project_priv != 'CRUD'):
-                raise(Exception('Operation denied'))
-        except Exception, e:
-            log.warning('Operation denied, operator project_priv=%s, \
-                        user project_priv=%s, reason=%s'
-                        % (project_priv, now_project_priv, e))
-            return request_result(202)
+        if n_user_uuid != user_uuid:
+        # 执行管理员或群主踢人操作
+            try:
+                now_project_priv = self.ucenter_db.project_priv(
+                                        n_user_uuid, project_uuid)[0][0]
+                if ('U' in now_project_priv) and (project_priv != 'CRUD'):
+                    raise(Exception('Operation denied'))
+            except Exception, e:
+                log.warning('Operation denied, operator project_priv=%s, \
+                            user project_priv=%s, reason=%s'
+                            % (project_priv, now_project_priv, e))
+                return request_result(202)
 
         try:
             self.ucenter_db.user_project_del(n_user_uuid, project_uuid)

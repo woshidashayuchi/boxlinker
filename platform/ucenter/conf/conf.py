@@ -61,3 +61,9 @@ billing_call_queue = 'billing_call_api'
 
 email_api = 'https://email.boxlinker.com/send'
 # email_api = os.environ.get('EMAIL_API')
+
+app_datum_cost = 0.2
+hdd_datum_cost = 0.1
+ssd_datum_cost = 0.4
+bwh_datum_cost = 0.5
+fip_datum_cost = 0.1

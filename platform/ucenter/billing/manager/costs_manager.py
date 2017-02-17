@@ -5,6 +5,7 @@ import balances_manager
 import vouchers_manager
 import bills_manager
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.time_log import time_log
@@ -16,11 +17,11 @@ class CostsManager(object):
 
     def __init__(self):
 
-        self.app_datum_cost = 0.2
-        self.hdd_datum_cost = 0.1
-        self.ssd_datum_cost = 0.4
-        self.bwh_datum_cost = 0.5
-        self.fip_datum_cost = 0.1
+        self.app_datum_cost = conf.app_datum_cost
+        self.hdd_datum_cost = conf.hdd_datum_cost
+        self.ssd_datum_cost = conf.ssd_datum_cost
+        self.bwh_datum_cost = conf.bwh_datum_cost
+        self.fip_datum_cost = conf.fip_datum_cost
 
         self.balances_manager = balances_manager.BalancesManager()
         self.vouchers_manager = vouchers_manager.VouchersManager()
@@ -45,22 +46,27 @@ class CostsManager(object):
         return resource_cost
 
     def cost_statistics(self, resource_uuid, resource_type,
-                        user_uuid, orga_uuid, resource_conf,
-                        resource_status):
+                        team_uuid, project_uuid, user_uuid,
+                        resource_conf, resource_status):
 
         resource_cost = self.cost_accounting(
                              resource_type, resource_conf, resource_status)
 
-        voucher_uuid = self.vouchers_manager.voucher_check(
-                       user_uuid, orga_uuid, resource_cost)
+        try:
+            voucher_uuid = self.billing_db.voucher_check(
+                                team_uuid, resource_cost)[0][0]
+        except Exception, e:
+            voucher_uuid = None
+            log.debug('Get voucher_uuid error, reason=%s' % (e))
 
-        if voucher_uuid is not False:
+        if voucher_uuid:
             voucher_cost = resource_cost
-            self.vouchers_manager.voucher_update(voucher_uuid, voucher_cost)
+            self.vouchers_manager.voucher_update(
+                 voucher_uuid, voucher_cost)
         else:
             voucher_cost = 0
             self.balances_manager.balance_update(
-                 user_uuid, orga_uuid, -resource_cost)
+                 team_uuid, -resource_cost)
 
         self.bills_manager.bill_create(user_uuid, team_uuid,
                                        project_uuid, resource_uuid,
@@ -80,13 +86,14 @@ class CostsManager(object):
         for resource_info in resources_info_list:
             resource_uuid = resource_info[0]
             resource_type = resource_info[1]
-            orga_uuid = resource_info[2]
-            user_uuid = resource_info[3]
-            resource_conf = resource_info[4]
-            resource_status = resource_info[5]
+            team_uuid = resource_info[2]
+            project_uuid = resource_info[3]
+            user_uuid = resource_info[4]
+            resource_conf = resource_info[5]
+            resource_status = resource_info[6]
 
             self.cost_statistics(resource_uuid, resource_type,
-                                 user_uuid, orga_uuid, resource_conf,
-                                 resource_status)
+                                 team_uuid, project_uuid, user_uuid,
+                                 resource_conf, resource_status)
 
         return

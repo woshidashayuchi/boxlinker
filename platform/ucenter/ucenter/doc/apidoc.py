@@ -1154,7 +1154,7 @@
 
 
 """
-@api {delete} /api/v1.0/ucenter/usersteams/<user_uuid> 5.2.5 组织用户删除
+@api {delete} /api/v1.0/ucenter/usersteams?user_uuid=<string>&team_uuid=<string> 5.2.5 组织用户删除
 @apiName team user delete
 @apiGroup 5 teams
 @apiVersion 1.0.0
