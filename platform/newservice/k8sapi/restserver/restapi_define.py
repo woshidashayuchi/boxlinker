@@ -102,12 +102,14 @@ class KubernetesClientApi(object):
         context['token'] = token
         context['rtype'] = rtype
 
-        in_data = json.loads(request.get_data())
-
-        if in_data is None and rtype == 'container':
-            return json.dumps(request_result(101))
-        if in_data is not None:
+        try:
+            in_data = json.loads(request.get_data())
+            if not in_data and rtype == 'container':
+                return json.dumps(request_result(101))
             context.update(in_data)
+        except Exception, e:
+            log.error('parameters error, reason is: %s' % e)
+            return json.dumps(request_result(101))
 
         ret = cls.kuber.update_service(context)
         return json.dumps(ret)

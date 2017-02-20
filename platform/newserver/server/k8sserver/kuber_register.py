@@ -37,6 +37,8 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('up_service', self.rpcapi_define.svc_update)
 
+        self.rpc_api.add_resource('get_one', self.rpcapi_define.get_one_re)
+
     def rpc_exec(self, rpc_body):
 
         try:

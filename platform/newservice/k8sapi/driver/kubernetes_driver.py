@@ -275,7 +275,7 @@ class KubernetesDriver(object):
 
         try:
             add_rc = {
-               "c_type": "replicationcontrollers",
+               "rtype": "replicationcontrollers",
                "kind": "ReplicationController", "apiVersion": "v1",
                "metadata": {
                   "namespace": namespace, "name": service_name,
@@ -405,6 +405,28 @@ class KubernetesDriver(object):
 
         return del_pod
 
+    def check_domain_use(self, dict_data):
+        try:
+            db_ret = self.service_db.identify_check(dict_data)
+        except Exception, e:
+            log.error('check the identify error, reason is: %s' % e)
+            return 'error'
+
+        if len(db_ret[0]) == 0:
+            return False
+        if str(db_ret[0][1]) == '0':
+            return False
+        if str(db_ret[0][1]) == '1':
+            return db_ret[0]
+
+    def get_one_re(self, dict_data):
+        ret = self.krpc_client.get_one_re(dict_data)
+        log.info('get the service message is: %s, type is %s' % (ret, type(ret)))
+        if ret.get('kind') != 'Service':
+            return False
+        else:
+            return ret
+
     def add_service(self, dict_data):
         namespace = dict_data.get('project_uuid')
         service_name = dict_data.get('service_name')
@@ -425,7 +447,7 @@ class KubernetesDriver(object):
         try:
             service_name1 = service_name.replace('_', '-')
             add_service = {
-                           "c_type": "services", "kind": "Service", "apiVersion": "v1",
+                           "rtype": "services", "kind": "Service", "apiVersion": "v1",
                            "metadata": {
                               "annotations": {"serviceloadbalancer/lb.http": http_lb,
                                               "serviceloadbalancer/lb.tcp": tcp_lb,
@@ -433,7 +455,7 @@ class KubernetesDriver(object):
                                               },
                               "name": service_name1,
                               "namespace": namespace,
-                              "labels": {"name": service_name1}
+                              "labels": {"name": service_name1},
                            },
                            "spec": {
                               "ports": self.service_port(container),
@@ -441,12 +463,27 @@ class KubernetesDriver(object):
                            },
                         }
 
+            ret = self.get_one_re(add_service)
+            if ret is False:
+                return False
+            else:
+                add_service['metadata']['resourceVersion'] = ret['metadata']['resourceVersion']
+                add_service['spec']['clusterIP'] = ret['spec']['clusterIP']
+
+            if dict_data.get('rtype') == 'container':
+                identify_check = self.check_domain_use(dict_data)[0]
+                if identify_check == 'error':
+                    return False
+                if identify_check:
+                    add_service['metadata']['annotations']['serviceloadbalancer/lb.http'] = identify_check
+
             if http_lb == '' or http_lb is None:
                 add_service['metadata']['annotations'].pop('serviceloadbalancer/lb.http')
             if tcp_lb == '' or tcp_lb is None:
                 add_service['metadata']['annotations'].pop('serviceloadbalancer/lb.tcp')
             if (http_lb == '' and tcp_lb == '') or (http_lb is None and tcp_lb is None):
                 add_service['metadata'].pop('annotations')
+
         except Exception, e:
             log.error('service create json error reason=%s' % e)
             return False
@@ -527,6 +564,23 @@ class KubernetesDriver(object):
 
         return pod
 
+    def inner_delete_pod(self, context):
+        pods = self.get_pod_name(context)
+        if pods is False:
+            log.error('PODS MESSAGES GET ERROR')
+            return request_result(502)
+
+        for i in pods:
+            log.info('pod_name is: %s' % i.get('pod_name'))
+            del_pod_json = {'namespace': context.get('project_uuid'), 'name': i.get('pod_name'), 'rtype': 'pods'}
+            pod_ret = self.krpc_client.delete_service_a_rc(del_pod_json)
+
+            if pod_ret.get('code') not in [200, 404] and pod_ret.get('code') is not None:
+                log.error('DELETE POD RESULT IS--POD:%s' % pod_ret)
+                return request_result(502)
+
+        return True
+
     def create_service(self, context):
 
         try:
@@ -597,7 +651,7 @@ class KubernetesDriver(object):
 
         return True
 
-    def update_service(self, context):
+    def update_rc(self, context):
         try:
             svc_detail_original = self.metal.service_detail(context)
         except Exception, e:
@@ -612,6 +666,7 @@ class KubernetesDriver(object):
             svc_detail = svc_detail_original.get('result')
             svc_detail['service_name'] = context.get('service_name')
             svc_detail['project_uuid'] = context.get('project_uuid')
+            svc_detail['rtype'] = context.get('rtype')
 
             # 需要删除
             svc_detail['image_name'] = 'index.boxlinker.com/boxlinker/web-index'
@@ -622,35 +677,31 @@ class KubernetesDriver(object):
 
         try:
             rc_up_json = self.add_rc(svc_detail)
-            # svc_up_json = self.add_service(svc_detail)
+            if context.get('rtype') == 'container':
+                svc_up_json = self.add_service(svc_detail)
+                svc_up_json['rtype'] = 'services'
         except Exception, e:
             log.error('rc_json or svc json struct error, reason=%s' % e)
             return request_result(502)
 
         rc_up_json['rtype'] = 'replicationcontrollers'
-        # svc_up_json['rtype'] = 'services'
+        if context.get('operate') == 'stop':
+            rc_up_json['spec']['replicas'] = 0
 
         rc_up_ret = self.krpc_client.update_service(rc_up_json)
-        # svc_up_ret = self.krpc_client.update_service(svc_up_json)
+        if context.get('rtype') == 'container':
+            svc_up_ret = self.krpc_client.update_service(svc_up_json)
+            if svc_up_ret.get('result') != '<Response [200]>':
+                log.error('SERVICE UPDATE RESULT IS: %s' % svc_up_ret)
+                return request_result(502)
 
         if rc_up_ret.get('result') != '<Response [200]>':
-                # or (svc_up_ret.get('kind') != 'Service' or svc_up_ret.get('code') != 200):
             log.info('SERVICE UPDATE ERROR,RC_RET---:%s' % rc_up_ret)
             return request_result(502)
 
-        pods = self.get_pod_name(context)
-        if pods is False:
-            log.error('PODS MESSAGES GET ERROR')
-            return request_result(502)
-
-        for i in pods:
-            log.info('pod_name is: %s' % i.get('pod_name'))
-            del_pod_json = {'namespace': context.get('project_uuid'), 'name': i.get('pod_name'), 'rtype': 'pods'}
-            pod_ret = self.krpc_client.delete_service_a_rc(del_pod_json)
-
-            if pod_ret.get('code') != 200 and pod_ret.get('code') is not None:
-                log.error('DELETE POD RESULT IS--POD:%s' % pod_ret)
-                return request_result(502)
+        ret = self.inner_delete_pod(context)
+        if ret is not True:
+            return ret
 
         return True
 
@@ -660,9 +711,109 @@ class KubernetesDriver(object):
         if database_ret is False:
             return request_result(403)
 
-        service_ret = self.update_service(context)
+        service_ret = self.update_rc(context)
         if service_ret is not True:
             return service_ret
+
+        return True
+
+    def update_cm(self, context):
+        pass
+
+    def update_volume(self, context):
+        pass
+
+    def update_container(self, context):
+        domain = self.check_domain_use(context)[0]
+        identify = self.check_domain_use(context)[1]
+        log.info('---------------domain:%s,,,,identify:%s...' % (domain, identify))
+        container = self.container_domain(context)
+
+        if domain == 'error':
+            return request_result(404)
+        if domain:
+            for i in container:
+                if i.get('http_domain') is not None:
+                    i['domain'] = domain
+                    i['identify'] = identify
+
+        new_container = {'container': container}
+        context.update(new_container)
+
+        try:
+            self.service_db.update_container(context)
+        except Exception, e:
+            log.error('container inner database error, reason is: %s' % e)
+            return request_result(403)
+
+        rc_ret = self.update_rc(context)
+        if rc_ret is not True:
+            log.error('RC UPDATE RESULT IS:%s' % rc_ret)
+            return request_result(502)
+        return True
+
+    def update_status(self, context):
+        try:
+            db_result = self.service_db.update_status(context)
+        except Exception, e:
+            log.error('update status error, reason is:%s' % e)
+            return request_result(403)
+        if db_result is False:
+            return request_result(403)
+
+        rc_ret = self.update_rc(context)
+        if rc_ret is not True:
+            log.error('RC UPDATE RESULT IS:%s' % rc_ret)
+            return request_result(502)
+
+        return True
+
+    def update_telescopic(self, context):
+        try:
+            db_result = self.service_db.update_telescopic(context)
+        except Exception, e:
+            log.error('update status error, reason is:%s' % e)
+            return request_result(403)
+        if db_result is False:
+            return request_result(403)
+
+        rc_ret = self.update_rc(context)
+        if rc_ret is not True:
+            log.error('RC UPDATE RESULT IS:%s' % rc_ret)
+            return request_result(502)
+
+        return True
+
+    def update_autostartup(self, context):
+        pass
+
+    def update_publish(self, context):
+        pass
+
+    def update_command(self, context):
+        try:
+            db_result = self.service_db.update_command(context)
+        except Exception, e:
+            log.error('update status error, reason is:%s' % e)
+            return request_result(403)
+        if db_result is False:
+            return request_result(403)
+
+        rc_ret = self.update_rc(context)
+        if rc_ret is not True:
+            log.error('RC UPDATE RESULT IS:%s' % rc_ret)
+            return request_result(502)
+
+        return True
+
+    def update_domain(self, context):
+        try:
+            db_result = self.service_db.update_domain(context)
+        except Exception, e:
+            log.error('update status error, reason is:%s' % e)
+            return request_result(403)
+        if db_result is False:
+            return request_result(301)
 
         return True
 
@@ -671,5 +822,23 @@ class KubernetesDriver(object):
 
         if rtype == 'env':
             return self.update_env(context)
+        if rtype == 'cm':
+            return self.update_cm(context)
+        if rtype == 'volume':
+            return self.update_volume(context)
+        if rtype == 'container':
+            return self.update_container(context)
+        if rtype == 'status':
+            return self.update_status(context)
+        if rtype == 'telescopic':
+            return self.update_telescopic(context)
+        if rtype == 'autostartup':
+            return self.update_autostartup(context)
+        if rtype == 'publish':
+            return self.update_publish(context)
+        if rtype == 'command':
+            return self.update_command(context)
+        if rtype == 'domain':
+            return self.update_domain(context)
 
         return True

@@ -75,6 +75,9 @@ def telescopic(service_name):
     return KubernetesClientApi.telescopic(service_name)
 
 
+
+
+
 @app.route('/api/v1.0/application/service/<service_name>/pod/message', methods=['GET'])
 def pod_message(service_name):
     return KubernetesClientApi.pod_message(service_name)
@@ -83,6 +86,9 @@ def pod_message(service_name):
 @app.route('/api/v1.0/application/service/status', methods=['POST'])
 def update_status():
     return KubernetesClientApi.update_status()
+
+
+
 
 
 @app.route('/api/v1.0/application/service/<service_name>/autostartup', methods=['PUT'])
@@ -100,9 +106,16 @@ def put_command(service_name):
     return KubernetesClientApi.put_command(service_name)
 
 
+
+
+
 @app.route('/api/v1.0/application/service/<service_name>/uuid', methods=['GET'])
 def get_uuid(service_name):
     return KubernetesClientApi.get_uuid(service_name)
+
+
+
+
 
 
 @app.route('/api/v1.0/application/service/<service_name>/domain', methods=['PUT'])

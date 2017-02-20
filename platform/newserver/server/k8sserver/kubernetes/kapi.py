@@ -89,31 +89,17 @@ class KApiMethods(object):
     def get_name_resource(self, json_list):
 
         rtype = json_list.pop('rtype')
-
-        if json_list.get('namespace'):
-
-            namespace = json_list.pop('namespace')
-
-        else:
-            namespace = 'default'
-        if json_list.get('name'):
-            name = json_list.pop('name')
-        else:
-            sss = '输入资源名,才可以查询具体资源'
-            return sss
-
-        params = urllib.urlencode(json_list)
-        url = '%s/namespaces/%s/%s/%s?%s' % (self.host_address, namespace, rtype, name, params)
-        msg = urllib2.Request(url, headers=self.HEADERS)
-        res = urllib2.urlopen(msg)
-        response = res.read()
-
-        return response
+        namespace = json_list.get('metadata').get('namespace')
+        name = json_list.get('metadata').get('name')
+        url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, name)
+        ret = requests.get(url, headers=self.HEADERS, verify=False).text
+        log.info('the resources messages is %s,type is %s' % (ret, type(ret)))
+        return json.loads(str(ret))
 
     def post_namespace_resource(self, dict_data):
 
         namespace = dict_data.get('metadata').get('namespace')
-        c_type = dict_data.pop('c_type')
+        c_type = dict_data.pop('rtype')
         url = '%s/namespaces/%s/%s' % (self.host_address, namespace, c_type)
 
         the_page = requests.post(url, data=json.dumps(dict_data), headers=self.HEADERS, verify=False)
@@ -160,7 +146,7 @@ class KApiMethods(object):
 
         url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, name)
         the_page = requests.put(url, data=json.dumps(json_list), headers=self.HEADERS, verify=False)
-        log.info('kubernetes update result is:%s, type is : %s' % (the_page, type(the_page)))
+        log.info('kubernetes update result(to text) is:%s, type is : %s' % (the_page.text, type(the_page)))
         return request_result(0, str(the_page))
 
     def post_nohup_resource(self, json_list):

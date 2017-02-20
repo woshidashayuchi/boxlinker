@@ -70,3 +70,9 @@ class KubernetesRpcAPIs(object):
             return self.kubernetes.put_name_resource(context)
         except Exception, e:
             log.error('update service(%s) error, reason=%s' % (context.get('rtype'), e))
+
+    def get_one_re(self, context, parameters=None):
+        try:
+            return self.kubernetes.get_name_resource(context)
+        except Exception, e:
+            log.error('get resource(%s) error, reason=%s' % (context.get('rtype'), e))

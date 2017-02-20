@@ -21,8 +21,9 @@ def font_infix_element(dict_data):
     team_uuid = dict_data.get('team_uuid')
     project_uuid = dict_data.get('project_uuid')
     service_name = dict_data.get('service_name')
+    image_dir = dict_data.get('image_dir')
 
-    return font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name
+    return font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name, image_dir
 
 
 def rc_infix_element(dict_data):

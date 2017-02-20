@@ -102,7 +102,7 @@ class DBInit(object):
         Column('http_domain', String(64)),
         Column('tcp_domain', String(64)),
         Column('private_domain', String(64)),
-        Column('identify', String(32), default='0')
+        Column('identify', String(32))
 
     )
 
