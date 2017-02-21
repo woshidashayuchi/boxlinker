@@ -14,7 +14,7 @@
 
 1.构建用户服务镜像
 
-# docker build -t index.boxlinker.com/boxlinker/ucenter:1.0.1 -f ./dkfile_ucenter/Dockerfile ./
+# docker build -t index.boxlinker.com/boxlinker/ucenter:1.0.1 -f ./ucenter/Dockerfile ./ucenter
 
 2.启动用户服务
 
@@ -26,7 +26,7 @@
 
 1.创建计费服务镜像
 
-# docker build -t index.boxlinker.com/boxlinker/billing:1.0.1 -f ./dkfile_billing/Dockerfile ./
+# docker build -t index.boxlinker.com/boxlinker/billing:1.0.1 -f ./billing/Dockerfile ./billing
 
 2.启动计费服务
 
