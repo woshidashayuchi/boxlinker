@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-import os
 import json
 import pika
 import uuid
 
 from time import sleep
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.single import Singleton
@@ -14,15 +14,17 @@ from common.single import Singleton
 
 class RabbitmqClient(object):
 
-    def mq_connect(self, mq_server01=os.environ.get('MQ_SERVER01'),
-                   mq_server02=os.environ.get('MQ_SERVER02')):
+    def mq_connect(self, mq_server01=conf.mq_server01,
+                   mq_server02=conf.mq_server02,
+                   mq_port=conf.mq_port):
 
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
                   % (mq_server01, mq_server02))
 
         try:
             self.connection = pika.BlockingConnection(
-                              pika.ConnectionParameters(host=mq_server01))
+                              pika.ConnectionParameters(
+                                   host=mq_server01, port=mq_port))
             self.channel = self.connection.channel()
         except Exception, e:
             log.error('rabbitmq server %s connection error: reason=%s'
@@ -30,7 +32,7 @@ class RabbitmqClient(object):
             try:
                 self.connection = pika.BlockingConnection(
                                   pika.ConnectionParameters(
-                                       host=mq_server02))
+                                       host=mq_server02, port=mq_port))
                 self.channel = self.connection.channel()
             except Exception, e:
                 log.error('rabbitmq server %s connection error: reason=%s'
@@ -86,7 +88,7 @@ class RabbitmqClient(object):
             if cnt >= timeout:
                 log.warning('RPC client exec time out, queue = %s'
                             % (queue_name))
-                self.response = request_result(597)
+                self.response = json.dumps(request_result(597))
                 return
             self.connection.sleep(0.1)
             self.connection.process_data_events()

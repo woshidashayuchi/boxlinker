@@ -12,19 +12,30 @@ class AuthDB(MysqlInit):
 
         super(AuthDB, self).__init__()
 
-    def acl_check(self, resource_uuid, role_uuid):
+    def admin_acl_check(self, resource_uuid):
 
-        role_uuid = int(role_uuid)
-        if (role_uuid/100 == 1):
-            sql = "select admin_uuid from resources_acl where resource_uuid = '%s'" \
-                  % (resource_uuid)
-        elif (role_uuid/100 == 2):
-            sql = "select orga_uuid from resources_acl where resource_uuid = '%s'" \
-                  % (resource_uuid)
-        else:
-            sql = "select user_uuid from resources_acl where resource_uuid = '%s'" \
-                  % (resource_uuid)
+        sql = "select admin_uuid from resources_acl where resource_uuid = '%s'" \
+              % (resource_uuid)
 
-        result = super(AuthDB, self).exec_select_sql(sql)
+        return super(AuthDB, self).exec_select_sql(sql)[0][0]
 
-        return result[0][0]
+    def team_acl_check(self, resource_uuid):
+
+        sql = "select team_uuid from resources_acl where resource_uuid = '%s'" \
+              % (resource_uuid)
+
+        return super(AuthDB, self).exec_select_sql(sql)[0][0]
+
+    def project_acl_check(self, resource_uuid):
+
+        sql = "select project_uuid from resources_acl where resource_uuid = '%s'" \
+              % (resource_uuid)
+
+        return super(AuthDB, self).exec_select_sql(sql)[0][0]
+
+    def user_acl_check(self, resource_uuid):
+
+        sql = "select user_uuid from resources_acl where resource_uuid = '%s'" \
+              % (resource_uuid)
+
+        return super(AuthDB, self).exec_select_sql(sql)[0][0]

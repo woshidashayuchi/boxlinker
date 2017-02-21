@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-import os
+from conf import conf
 
 from common.logs import logging as log
 from common.single import Singleton
@@ -19,23 +19,27 @@ class MysqlInit(object):
     __metaclass__ = Singleton
 
     def __init__(self):
+
         try:
-            self.pool = PooledDB(MySQLdb, 2,
-                                 host=os.environ.get('DB_SERVER01'),
-                                 port=3306, user='cloud', passwd='cloud',
-                                 db='clouddata', charset='utf8')
+            self.pool = PooledDB(MySQLdb, 4,
+                                 host=conf.db_server01, port=conf.db_port,
+                                 user=conf.db_user, passwd=conf.db_passwd,
+                                 db=conf.database, charset='utf8')
         except Exception, e:
-            log.error('db_server01 connection error: reason= %s' % (e))
+            log.error('db_server01(%s) connection error: reason= %s'
+                      % (conf.db_server01, e))
             try:
-                self.pool = PooledDB(MySQLdb, 2,
-                                     host=os.environ.get('DB_SERVER02'),
-                                     port=3306, user='cloud', passwd='cloud',
-                                     db='clouddata', charset='utf8')
+                self.pool = PooledDB(MySQLdb, 4,
+                                     host=conf.db_server02, port=conf.db_port,
+                                     user=conf.db_user, passwd=conf.db_passwd,
+                                     db=conf.database, charset='utf8')
             except Exception, e:
-                log.error('db_server02 connection error: reason=%s' % (e))
+                log.error('db_server02(%s) connection error: reason=%s'
+                          % (conf.db_server02, e))
                 raise
 
     def get_cursor(self):
+
         try:
             self.conn = self.pool.connection()
             self.cursor = self.conn.cursor()
@@ -49,6 +53,7 @@ class MysqlInit(object):
             raise
 
     def exec_select_sql(self, sql):
+
         self.get_cursor()
         try:
             self.cursor.execute(sql)
@@ -62,6 +67,7 @@ class MysqlInit(object):
             raise
 
     def exec_update_sql(self, *sql):
+
         self.get_cursor()
         try:
             for v_sql in sql:

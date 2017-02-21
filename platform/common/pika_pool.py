@@ -67,7 +67,7 @@ import time
 import pika.exceptions
 
 
-__version__ = '0.1.3'
+__version__ = '0.1.2'
 
 __all__ = [
     'Error'
@@ -145,6 +145,16 @@ class Connection(object):
         if self.fairy.channel is None:
             self.fairy.channel = self.fairy.cxn.channel()
         return self.fairy.channel
+
+    @property
+    def sleep(self, wait_time):
+
+        return self.fairy.cxn.sleep(self, wait_time)
+
+    @property
+    def process_data_events(self):
+
+        return self.fairy.cxn.process_data_events()
 
     def close(self):
         self.pool.close(self.fairy)
@@ -231,9 +241,22 @@ class Pool(object):
                 if not Connection.is_connection_invalidated(ex):
                     raise
 
+        @property
+        def cxn_params(self):
+            if isinstance(self.cxn, pika.BaseConnection):
+                return self.cxn.params
+            if isinstance(self.cxn, pika.BlockingConnection):
+                return self.cxn._impl.params
+
+        @property
+        def cxn_str(self):
+            params = self.cxn_params
+            if params:
+                return '{0}:{1}/{2}'.format(params.host, params.port, params.virtual_host)
+
         def __str__(self):
             return ', '.join('{0}={1}'.format(k, v) for k, v in [
-                ('cxn', '{0}:{1}/{2}'.format(self.cxn.params.host, self.cxn.params.port, self.cxn.params.virtual_host)),
+                ('cxn', self.cxn_str),
                 ('channel', '{0}'.format(int(self.channel) if self.channel is not None else self.channel)),
             ])
 
@@ -358,7 +381,7 @@ class QueuedPool(Pool):
 
         def __str__(self):
             return ', '.join('{0}={1}'.format(k, v) for k, v in [
-                ('cxn', '{0}:{1}/{2}'.format(self.cxn.params.host, self.cxn.params.port, self.cxn.params.virtual_host)),
+                ('cxn', self.cxn_str),
                 ('channel', '{0}'.format(int(self.channel) if self.channel is not None else self.channel)),
                 ('created_at', '{0}'.format(datetime.fromtimestamp(self.created_at).isoformat())),
                 ('released_at', '{0}'.format(datetime.fromtimestamp(self.released_at).isoformat())),
