@@ -15,7 +15,9 @@ import json
 status_code = {
         0:   "OK",
         101: "Parameters error",
-        102: "API routing or authentication error",
+        102: "RPC API routing error",
+        103: "Http requests error",
+        104: "Verify code error",
         201: "Authentication failure",
         202: "Operation denied",
         301: "Resource name already exists",
@@ -34,6 +36,7 @@ status_code = {
         599: "RabbitMQ rpc server exec error",
         601: "System error"
 }
+
 
 def request_result(code, ret={}):
 

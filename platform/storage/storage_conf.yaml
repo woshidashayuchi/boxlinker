@@ -10,7 +10,7 @@ items:
     namespace: boxlinker
     labels:
       name: storage-api
-      rc-krud: "boxlinker_centos-storage"
+      rc-krud: "boxlinker_storage"
   spec:
     replicas: 1
     selector:
@@ -28,7 +28,7 @@ items:
         containers:
         - name: storage-api
           imagePullPolicy: Always
-          image: index.boxlinker.com/boxlinker/centos-storage:1.0.3
+          image: index.boxlinker.com/boxlinker/storage:1.0.1
           ports:
           - containerPort: 8001
           env:
@@ -40,10 +40,6 @@ items:
             value: rabbitmq
           - name: MQ_SERVER02
             value: rabbitmq
-          - name: TOKEN_AUTH_API
-            value: https://auth.boxlinker.com/api/v1.0/usercenter/tokens
-          - name: BILLING_API
-            value: http://billing:8001
 
 - apiVersion: v1
   kind: Service

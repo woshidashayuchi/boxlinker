@@ -5,13 +5,16 @@ import json
 import pika
 
 from time import sleep
+from conf import conf
 from common.logs import logging as log
+from common.single import Singleton
 
 
 class RabbitmqServer(object):
 
-    def mq_connect(self, mq_server01='rabbitmq',
-                   mq_server02='rabbitmq',
+    def mq_connect(self, mq_server01=conf.mq_server01,
+                   mq_server02=conf.mq_server02,
+                   mq_port=conf.mq_port,
                    heartbeat_time=30):
 
         log.debug('Connecting to rabbitmq server, server01=%s, server02=%s'
@@ -19,7 +22,7 @@ class RabbitmqServer(object):
         try:
             self.connection = pika.BlockingConnection(
                               pika.ConnectionParameters(
-                                   host=mq_server01, port=5672,
+                                   host=mq_server01, port=mq_port,
                                    heartbeat_interval=heartbeat_time))
             self.channel = self.connection.channel()
         except Exception, e:
@@ -28,7 +31,7 @@ class RabbitmqServer(object):
             try:
                 self.connection = pika.BlockingConnection(
                                   pika.ConnectionParameters(
-                                       host=mq_server02, port=5672,
+                                       host=mq_server02, port=mq_port,
                                        heartbeat_interval=heartbeat_time))
                 self.channel = self.connection.channel()
             except Exception, e:

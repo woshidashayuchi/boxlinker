@@ -5,7 +5,7 @@ import weakref
 import collections
 
 
-class LocalCache():
+class LocalCache(object):
 
     notFound = object()
 
@@ -23,11 +23,11 @@ class LocalCache():
 
         value = self.weak.get(key, self.notFound)
 
-        if(value is not self.notFound):
+        if (value is not self.notFound):
 
             expire = value['expire']
 
-            if(int(time.time()) >= expire):
+            if (int(time.time()) >= expire):
 
                 return self.notFound
 

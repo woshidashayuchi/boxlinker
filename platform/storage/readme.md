@@ -2,7 +2,7 @@
 
 1.创建存储服务镜像
 
-# docker build -t index.boxlinker.com/boxlinker/centos-storage:1.0.1 ./
+# docker build -t index.boxlinker.com/boxlinker/storage:1.0.1 ./
 
 2.启动存储服务
 
