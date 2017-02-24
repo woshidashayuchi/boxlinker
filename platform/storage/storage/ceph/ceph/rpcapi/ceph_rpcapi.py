@@ -52,7 +52,7 @@ class CephRpcApi(object):
         try:
             rpc_body = rpc_data("drv_ceh_dsk_gow", context, parameters)
             self.rbtmq.broadcast_client(
-                 self.exchange_name, rpc_body)
+                 self.exchange, rpc_body)
             return request_result(0)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % (e))
