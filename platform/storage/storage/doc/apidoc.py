@@ -136,12 +136,17 @@
 """
 
 
+###################################################################
+#                       存储服务接口定义                          #
+###################################################################
+
+
 """
-@api {post} /api/v1.0/storage/volumes 存储卷创建
+@api {post} /api/v1.0/storage/volumes 1.1 存储卷创建
 @apiName create volume
-@apiGroup storage
+@apiGroup 1 storage
 @apiVersion 1.0.0
-@apiDescription create storage volume
+@apiDescription 存储卷创建
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
@@ -156,23 +161,35 @@
 
 
 """
-@api {delete} /api/v1.0/storage/volumes/<volume_uuid> 存储卷删除
-@apiName delete volume
-@apiGroup storage
+@api {get} /api/v1.0/storage/volumes 1.2 存储卷列表
+@apiName list volumes
+@apiGroup 1 storage
 @apiVersion 1.0.0
-@apiDescription delete storage volume
+@apiDescription 存储卷列表查询
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
+@apiUse CODE_GET_LIST_0
 """
 
 
 """
-@api {put} /api/v1.0/storage/volumes/<volume_uuid> 存储卷容量调整
-@apiName update volume size
-@apiGroup storage
+@api {get} /api/v1.0/storage/volumes/<volume_uuid> 1.3 存储卷信息
+@apiName list single volume
+@apiGroup 1 storage
 @apiVersion 1.0.0
-@apiDescription resize storage volume size
+@apiDescription 存储卷详细信息查询
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_GET_0
+"""
+
+
+"""
+@api {put} /api/v1.0/storage/volumes/<volume_uuid>?update=<size> 1.4 存储卷更新（容量）
+@apiName update volume size
+@apiGroup 1 storage
+@apiVersion 1.0.0
+@apiDescription 存储卷容量更新
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
@@ -185,11 +202,11 @@
 
 
 """
-@api {put} /api/v1.0/storage/volumes/<volume_uuid>/status 存储卷状态更新
+@api {put} /api/v1.0/storage/volumes/<volume_uuid>?update=<status> 1.5 存储卷更新（状态）
 @apiName update volume status
-@apiGroup storage
+@apiGroup 1 storage
 @apiVersion 1.0.0
-@apiDescription update storage volume status
+@apiDescription 存储卷状态更新
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
@@ -202,24 +219,12 @@
 
 
 """
-@api {get} /api/v1.0/storage/volumes/<volume_uuid> 存储卷信息
-@apiName list single volume
-@apiGroup storage
+@api {delete} /api/v1.0/storage/volumes/<volume_uuid> 1.6 存储卷删除
+@apiName delete volume
+@apiGroup 1 storage
 @apiVersion 1.0.0
-@apiDescription list single volume
+@apiDescription 存储卷删除
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_GET_0
-"""
-
-
-"""
-@api {get} /api/v1.0/storage/volumes 存储卷列表
-@apiName list volumes
-@apiGroup storage
-@apiVersion 1.0.0
-@apiDescription list storage volumes
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_GET_LIST_0
+@apiUse CODE_DELETE_0
 """

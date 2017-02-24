@@ -46,10 +46,10 @@ class StorageRpcApi(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
-    def disk_resize(self, context, parameters=None):
+    def disk_update(self, context, parameters=None):
 
         try:
-            rpc_body = rpc_data("stg_ceh_dsk_rsz", context, parameters)
+            rpc_body = rpc_data("stg_ceh_dsk_udt", context, parameters)
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, rpc_body)
         except Exception, e:
@@ -60,16 +60,6 @@ class StorageRpcApi(object):
 
         try:
             rpc_body = rpc_data("stg_ceh_dsk_del", context, parameters)
-            return self.rbtmq.rpc_call_client(
-                        self.queue, self.timeout, rpc_body)
-        except Exception, e:
-            log.error('Rpc client exec error, reason=%s' % (e))
-            return request_result(598)
-
-    def disk_status(self, context, parameters=None):
-
-        try:
-            rpc_body = rpc_data("stg_ceh_dsk_sts", context, parameters)
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, rpc_body)
         except Exception, e:

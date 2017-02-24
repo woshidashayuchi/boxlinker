@@ -29,13 +29,10 @@ class RabbitmqResponse(object):
              'stg_ceh_dsk_inf', self.rpcapi_define.volume_info)
 
         self.rpc_api.add_resource(
-             'stg_ceh_dsk_rsz', self.rpcapi_define.volume_resize)
-
-        self.rpc_api.add_resource(
              'stg_ceh_dsk_del', self.rpcapi_define.volume_delete)
 
         self.rpc_api.add_resource(
-             'stg_ceh_dsk_sts', self.rpcapi_define.volume_update)
+             'stg_ceh_dsk_udt', self.rpcapi_define.volume_update)
 
     def rpc_exec(self, rpc_body):
 

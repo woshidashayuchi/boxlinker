@@ -22,8 +22,5 @@ def rest_app_run():
     api.add_resource(restapi_define.VolumeApi,
                      '/api/v1.0/storage/volumes/<volume_uuid>')
 
-    api.add_resource(restapi_define.VolumeStatusApi,
-                     '/api/v1.0/storage/volumes/<volume_uuid>/status')
-
     app.run(host=conf.api_host, port=conf.api_port,
             threaded=True, debug=conf.api_debug)

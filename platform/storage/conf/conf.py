@@ -40,5 +40,5 @@ storage_call_queue = 'storage_call_api'
 ceph_call_queue = 'ceph_call'
 ceph_exchange_name = 'ceph_bcast'
 
-ucenter_api = 'https://ucenter.boxlinker.com'
-billing_api = 'https://billing.boxlinker.com'
+ucenter_api = 'http://ucenter:8001'
+billing_api = 'http://billing:8002'

@@ -96,19 +96,16 @@ class VolumeApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
+            update = request.args.get('update')
+            parameters['update'] = update
         except Exception, e:
             log.error('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
         context = context_data(token, volume_uuid, "update")
-        context = {
-                      "token": token,
-                      "user_info": user_info,
-                      "resource_uuid": volume_uuid
-                  }
 
-        return self.storage_api.disk_resize(context, parameters)
+        return self.storage_api.disk_update(context, parameters)
 
     @time_log
     def delete(self, volume_uuid):
@@ -124,33 +121,3 @@ class VolumeApi(Resource):
         context = context_data(token, volume_uuid, "delete")
 
         return self.storage_api.disk_delete(context)
-
-
-class VolumeStatusApi(Resource):
-
-    def __init__(self):
-
-        self.storage_api = storage_rpcapi.StorageRpcApi()
-
-    @time_log
-    def put(self, volume_uuid):
-
-        try:
-            token = request.headers.get('token')
-            token_auth(token)
-        except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
-
-            return request_result(201)
-
-        try:
-            body = request.get_data()
-            parameters = json.loads(body)
-        except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
-
-            return request_result(101)
-
-        context = context_data(token, volume_uuid, "update")
-
-        return self.storage_api.disk_status(context, parameters)

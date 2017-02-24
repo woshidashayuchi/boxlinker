@@ -237,3 +237,13 @@ class StorageManager(object):
         result = {"volume_list": disk_list}
 
         return request_result(0, result)
+
+    def volume_update(self, token, volume_uuid, update,
+                      volume_size, volume_status):
+
+        if update == 'size':
+            return self.volume_resize(
+                        token, volume_uuid, volume_size)
+        elif update == 'status':
+            return self.volume_status(
+                        volume_uuid, volume_status)

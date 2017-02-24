@@ -61,26 +61,6 @@ class StorageRpcManager(object):
         return self.storage_manager.volume_delete(token, volume_uuid)
 
     @acl_check
-    def volume_resize(self, context, parameters):
-
-        try:
-            token = context['token']
-
-            volume_uuid = context['resource_uuid']
-            volume_size = parameters['volume_size']
-
-            token = parameter_check(token, ptype='pstr')
-            volume_uuid = parameter_check(volume_uuid, ptype='pstr')
-            volume_size = parameter_check(volume_size, ptype='pint')
-        except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
-            return request_result(101)
-
-        return self.storage_manager.volume_resize(
-                    token, volume_uuid, volume_size)
-
-    @acl_check
     def volume_info(self, context, parameters):
 
         try:
@@ -117,15 +97,27 @@ class StorageRpcManager(object):
     def volume_update(self, context, parameters):
 
         try:
+            token = context['token']
             volume_uuid = context['resource_uuid']
-            volume_status = parameters['volume_status']
 
+            update = parameters.get('update')
+            volume_size = parameters.get('volume_size')
+            volume_status = parameters.get('volume_status')
+
+            token = parameter_check(token, ptype='pstr')
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
-            if (volume_status != 'using') and (volume_status != 'unused'):
+            if update == 'size':
+                volume_size = parameter_check(volume_size, ptype='pint')
+            elif update == 'status':
+                if (volume_status != 'using') and (volume_status != 'unused'):
+                    raise
+            else:
                 raise
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.storage_manager.volume_status(volume_uuid, volume_status)
+        return self.storage_manager.volume_update(
+                    token, volume_uuid, update,
+                    volume_size, volume_status)
