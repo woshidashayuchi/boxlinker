@@ -51,6 +51,7 @@ class CephRpcApi(object):
 
         try:
             rpc_body = rpc_data("drv_ceh_dsk_gow", context, parameters)
+            log.info('send broadcast request')
             self.rbtmq.broadcast_client(
                  self.exchange, rpc_body)
             return request_result(0)
