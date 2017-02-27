@@ -7,6 +7,6 @@ RUN easy_install requests
 RUN easy_install pika
 RUN easy_install pymysql
 RUN yum install MySQL-python -y
-COPY ./k8s_api_client /data/
+COPY ./k8sapi /data/
 EXPOSE 9000
-CMD python /data/api_client/logic_api.py & python /data/api_client/podstatus_server.py
+CMD python /data/k8sapi/restserver/restapi_server.py & python /data/k8sapi/rpcserver/rpcapi_callserver.py
