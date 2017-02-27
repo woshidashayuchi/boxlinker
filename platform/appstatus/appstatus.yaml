@@ -10,7 +10,7 @@ items:
     namespace: boxlinker
     labels:
       name: appstatus-service
-      rc-krud: "boxlinker_centos-appstatus"
+      rc-krud: "boxlinker_appstatus"
   spec:
     replicas: 1
     selector:
@@ -28,7 +28,7 @@ items:
         containers:
         - name: appstatus-service
           imagePullPolicy: Always
-          image: index.boxlinker.com/boxlinker/centos-appstatus:1.0.1
+          image: index.boxlinker.com/boxlinker/appstatus:1.0.1
           env:
           - name: K8S_POD_API
             value: https://kubernetes.default.svc:443/api/v1/pods
@@ -36,5 +36,3 @@ items:
             value: http://k8s-api:9000/api/v1/application/service/status
           - name: TOKEN_PATH
             value: /run/secrets/kubernetes.io/serviceaccount/token
-          - name: BILLING_API
-            value: http://billing:8001

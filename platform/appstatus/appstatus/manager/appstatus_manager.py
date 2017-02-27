@@ -9,7 +9,7 @@ from time import sleep
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
-from appstatus.drive import k8s_driver
+from appstatus.driver import k8s_driver
 
 
 class AppStatusManager(object):

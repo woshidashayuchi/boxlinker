@@ -22,4 +22,4 @@ log_file = '/var/log/cloud.log'
 log_call_queue = 'log_call_api'
 
 ucenter_api = 'http://ucenter:8001'
-kibana_log_api = 'http://kibana:5601/elasticsearch/_msearch?timeout=5&ignore_unavailable=true&preference=1473650101921'
+kibana_log_api = 'http://kibana:5601/elasticsearch/_msearch?timeout=0&ignore_unavailable=true&preference=1473650101921'

@@ -3,7 +3,7 @@
 
 from common.logs import logging as log
 from common.code import request_result
-from common.acl import acl_check
+# from common.acl import acl_check
 from common.parameters import parameter_check
 from common.token_ucenterauth import token_auth
 
@@ -29,9 +29,9 @@ class LogRpcManager(object):
             end_time = parameters['end_time']
 
             label_value = parameter_check(label_value, ptype='pnam')
-            date_time = parameter_check(date_time, ptype='pflt', exist='no')
-            start_time = parameter_check(start_time, ptype='pflt', exist='no')
-            end_time = parameter_check(end_time, ptype='pflt', exist='no')
+            date_time = parameter_check(date_time, ptype='pint', exist='no')
+            start_time = parameter_check(start_time, ptype='pint', exist='no')
+            end_time = parameter_check(end_time, ptype='pint', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -55,9 +55,9 @@ class LogRpcManager(object):
             end_time = parameters['end_time']
 
             pod_name = parameter_check(pod_name, ptype='pnam')
-            date_time = parameter_check(date_time, ptype='pflt', exist='no')
-            start_time = parameter_check(start_time, ptype='pflt', exist='no')
-            end_time = parameter_check(end_time, ptype='pflt', exist='no')
+            date_time = parameter_check(date_time, ptype='pint', exist='no')
+            start_time = parameter_check(start_time, ptype='pint', exist='no')
+            end_time = parameter_check(end_time, ptype='pint', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -79,7 +79,7 @@ class LogRpcManager(object):
             start_time = parameters['start_time']
 
             label_value = parameter_check(label_value, ptype='pnam')
-            start_time = parameter_check(start_time, ptype='pflt', exist='no')
+            start_time = parameter_check(start_time, ptype='pint', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))

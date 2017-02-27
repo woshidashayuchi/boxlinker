@@ -11,6 +11,7 @@ def decode_token_bytes(data):
 
     return base64.urlsafe_b64decode(data)
 
+
 @token_check
 def get_userinfo(token):
     """
