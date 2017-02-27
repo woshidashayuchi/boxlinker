@@ -11,4 +11,4 @@ COPY ./conf /log/conf/
 COPY ./common /log/common/
 COPY ./log /log/log/
 
-CMD python /log/log/restapi/restapi_service.py & python /log/log/manage/log_service.py
+CMD python /log/log/restserver/restapi_server.py & python /log/log/rpcserver/rpcapi_callserver.py

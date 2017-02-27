@@ -70,11 +70,11 @@
 
 
 """
-@api {get} /api/v1.0/logs/labels/<label_value>?date_time=<epoch_milliseconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 根据label查日志
+@api {get} /api/v1.0/logs/labels/<label_value>?date_time=<epoch_milliseconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 1.1 根据label查日志
 @apiName Get log from label_value
-@apiGroup log
+@apiGroup 1 log
 @apiVersion 1.0.0
-@apiDescription Get log from label_value
+@apiDescription 通过容器label_value查询日志
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_GET_SYS0
@@ -82,23 +82,11 @@
 
 
 """
-@api {get} /api/v1.0/logs/pods/<pod_name>?date_time=<epoch_milliseconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 根据pod名查日志
-@apiName Get log from pod_name
-@apiGroup log
-@apiVersion 1.0.0
-@apiDescription Get log from pod_name
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_GET_SYS0
-"""
-
-
-"""
-@api {get} /api/v1.0/logs/polling/labels/<label_value>?start_time=<epoch_milliseconds> 根据label轮询日志
+@api {get} /api/v1.0/logs/polling/labels/<label_value>?start_time=<epoch_milliseconds> 1.2 根据label轮询日志
 @apiName Get log polling from label_value
-@apiGroup log
+@apiGroup 1 log
 @apiVersion 1.0.0
-@apiDescription Get log polling from label_value
+@apiDescription 通过容器label_value轮询日志
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_GET_SYS0

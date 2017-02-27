@@ -12,8 +12,9 @@ from flask_restful import Resource
 
 from common.logs import logging as log
 from common.code import request_result
-from common.token_decode import get_userinfo
 from common.time_log import time_log
+from common.parameters import context_data
+from common.token_ucenterauth import token_auth
 
 from log.rpcapi import rpc_api as log_rpcapi
 
@@ -29,8 +30,7 @@ class LabelLogApi(Resource):
 
         try:
             token = request.headers.get('token')
-            user_info = get_userinfo(token)['user_info']
-            user_info = json.loads(user_info)
+            token_auth(token)
         except Exception, e:
             log.error('Token check error, token=%s, reason=%s' % (token, e))
 
@@ -51,66 +51,20 @@ class LabelLogApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "user_info": user_info,
-                      "resource_uuid": "log_lab_log_get"
-                  }
+        context = context_data(token, "service_uuid", "read")
 
         return self.log_api.label_log(context, parameters)
-
-
-class PodLogApi(Resource):
-
-    def __init__(self):
-
-        self.log_api = rpc_api.LogRpcApi()
-
-    @time_log
-    def get(self, pod_name):
-
-        try:
-            token = request.headers.get('token')
-            user_info = get_userinfo(token)['user_info']
-            user_info = json.loads(user_info)
-        except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
-
-            return request_result(201)
-
-        try:
-            date_time = request.args.get('date_time')
-            start_time = request.args.get('start_time')
-            end_time = request.args.get('end_time')
-            parameters = {
-                             "pod_name": pod_name,
-                             "date_time": date_time,
-                             "start_time": start_time,
-                             "end_time": end_time
-                         }
-        except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
-
-            return request_result(101)
-
-        context = {
-                      "token": token,
-                      "user_info": user_info,
-                      "resource_uuid": "log_pod_log_get"
-                  }
-
-        return self.log_api.pod_log(context, parameters)
 
 
 class LogPollApi(Resource):
 
     def __init__(self):
 
-        self.log_api = rpc_api.LogRpcApi()
+        self.log_api = log_rpcapi.LogRpcApi()
 
     def log_producer(self, context, parameters):
 
-        start_time = parameters['start_time']
+        start_time = parameters.get('start_time')
         cnt = 0
         while True:
             cnt += 1
@@ -153,8 +107,7 @@ class LogPollApi(Resource):
 
         try:
             token = request.headers.get('token')
-            user_info = get_userinfo(token)['user_info']
-            user_info = json.loads(user_info)
+            token_auth(token)
         except Exception, e:
             log.error('Token check error, token=%s, reason=%s' % (token, e))
 
@@ -171,11 +124,7 @@ class LogPollApi(Resource):
 
             return request_result(101)
 
-        context = {
-                      "token": token,
-                      "user_info": user_info,
-                      "resource_uuid": "log_pol_log_lst"
-                  }
+        context = context_data(token, "service_uuid", "read")
 
         try:
             return Response(self.log_producer(context, parameters))

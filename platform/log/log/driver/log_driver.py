@@ -5,6 +5,7 @@
 import os
 import requests
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 
@@ -15,11 +16,11 @@ class LogDriver(object):
 
     def __init__(self):
 
-        # self.url = 'http://kibana.boxlinker.com/elasticsearch/_msearch?timeout=0&ignore_unavailable=true&preference=1473650101921'
-        self.url = os.environ.get('KIBANA_LOG_API')
+        self.url = conf.kibana_log_api
         self.headers = {'kbn-version': '4.5.4'}
 
-    def pod_log_info(self, label_value, pod_name, date_time, start_time, end_time):
+    def pod_log_info(self, label_value, pod_name,
+                     date_time, start_time, end_time):
 
         body_label = '{"index":["logstash-%s"],"ignore_unavailable":true} \n \
                 {"size":100,"sort":[{"@timestamp": \
@@ -48,7 +49,8 @@ class LogDriver(object):
                 "query":{"filtered":{"query":{"query_string": \
                 {"analyze_wildcard":false,"query":"*"}}, \
                 "filter":{"bool":{"must":[ \
-                {"query":{"match":{"kubernetes.pod_name":{"query":"%s","type":"phrase"}}}}, \
+                {"query":{"match":{"kubernetes.pod_name": \
+                {"query":"%s","type":"phrase"}}}}, \
                 {"range":{"@timestamp":{"gte":%d,"lte":%d, \
                 "format":"epoch_millis"}}}],"must_not":[]}}}}, \
                 "highlight":{"pre_tags":["@kibana-highlighted-field@"], \
@@ -71,7 +73,8 @@ class LogDriver(object):
         log.debug('body=%s, type=%s' % (body, type(body)))
 
         try:
-            r = requests.post(self.url, headers=self.headers, data=body, timeout=5)
+            r = requests.post(self.url, headers=self.headers,
+                              data=body, timeout=5)
             # log.debug('logs_info=%s' % (r.text))
             return request_result(0, r.text)
         except Exception, e:

@@ -10,7 +10,7 @@ items:
     namespace: boxlinker
     labels:
       name: log-api
-      rc-krud: "boxlinker_centos-log"
+      rc-krud: "boxlinker_log"
   spec:
     replicas: 1
     selector:
@@ -27,7 +27,7 @@ items:
         containers:
         - name: log-api
           imagePullPolicy: Always
-          image: index.boxlinker.com/boxlinker/centos-log:1.0.1
+          image: index.boxlinker.com/boxlinker/log:1.0.1
           ports:
           - containerPort: 8001
           env:

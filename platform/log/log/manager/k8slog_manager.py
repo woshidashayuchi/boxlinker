@@ -18,10 +18,9 @@ class K8sLogManager(object):
 
         self.log_driver = log_driver.LogDriver()
 
-    def pod_log_list(self, user_uuid, role_uuid,
-                     label_value=None, pod_name=None,
-                     date_time=None, start_time=None,
-                     end_time=None):
+    def pod_log_list(self, user_uuid, label_value=None,
+                     pod_name=None, date_time=None,
+                     start_time=None, end_time=None):
 
         if date_time is None:
             date_time = time.strftime("%Y.%m.%d", time.localtime())
@@ -50,7 +49,6 @@ class K8sLogManager(object):
         pod_logs_list = log_list_info['responses'][0]['hits']['hits']
         log.debug('pod_logs_list=%s' % (pod_logs_list))
 
-        role_uuid = int(role_uuid)/100
         result = {}
         end_epoch_time = 0
         log_list = []
@@ -66,13 +64,13 @@ class K8sLogManager(object):
 
             pod_log = pod_log['_source']
             log.debug('pod_log=%s, type=%s' % (pod_log, type(pod_log)))
-            log.debug('user_uuid=%s, role_uuid=%s' % (user_uuid, role_uuid))
+            log.debug('user_uuid=%s' % (user_uuid))
 
             try:
                 mlogs = json.loads(pod_log['log'])
                 user_id = mlogs['log']['userid']
                 log.debug('log_user_id=%s' % (user_id))
-                if (role_uuid == 1):
+                if (user_uuid == 'sysadmin'):
                     plogs = mlogs
                     plogs['log_info'] = mlogs['log']['log_info']
                     del plogs['log']
@@ -86,7 +84,7 @@ class K8sLogManager(object):
             except Exception, e:
                 try:
                     label_tag = label_value[0:9]
-                    if (label_tag == 'boxlinker') and (role_uuid != 1):
+                    if (label_tag == 'boxlinker') and (user_uuid != 'sysadmin'):
                         continue
                 except Exception, e:
                     pass

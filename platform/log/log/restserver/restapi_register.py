@@ -16,13 +16,10 @@ def rest_app_run():
     CORS(app=app)
     api = Api(app)
 
-    api.add_resource(log_api.LabelLogApi,
+    api.add_resource(restapi_define.LabelLogApi,
                      '/api/v1.0/logs/labels/<label_value>')
 
-    api.add_resource(log_api.PodLogApi,
-                     '/api/v1.0/logs/pods/<pod_name>')
-
-    api.add_resource(log_api.LogPollApi,
+    api.add_resource(restapi_define.LogPollApi,
                      '/api/v1.0/logs/polling/labels/<label_value>')
 
     app.run(host=conf.api_host, port=conf.api_port,

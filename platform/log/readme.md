@@ -2,7 +2,7 @@
 
 1.创建日志服务镜像
 
-# docker build -t index.boxlinker.com/boxlinker/centos-log:1.0.1 ./
+# docker build -t index.boxlinker.com/boxlinker/log:1.0.1 ./
 
 2.启动日志服务
 
