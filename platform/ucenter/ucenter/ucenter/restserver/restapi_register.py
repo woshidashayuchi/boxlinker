@@ -66,5 +66,5 @@ def rest_app_run():
     def activate(status):
         return restapi_define.user_activate(status)
 
-    app.run(host=conf.rest_host, port=conf.ucenter_port,
-            threaded=True, debug=conf.rest_debug)
+    app.run(host=conf.api_host, port=conf.api_port,
+            threaded=True, debug=conf.api_debug)

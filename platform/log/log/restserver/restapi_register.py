@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-import log_api
+import restapi_define
 
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
+
+from conf import conf
 
 
 def rest_app_run():
@@ -23,4 +25,5 @@ def rest_app_run():
     api.add_resource(log_api.LogPollApi,
                      '/api/v1.0/logs/polling/labels/<label_value>')
 
-    app.run(host='0.0.0.0', port=8001, threaded=True, debug=False)
+    app.run(host=conf.api_host, port=conf.api_port,
+            threaded=True, debug=conf.api_debug)

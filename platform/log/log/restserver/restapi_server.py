@@ -9,21 +9,24 @@ sys.path.insert(1, p_path)
 from time import sleep
 
 from common.logs import logging as log
-from restful_api import rest_app_run
+from restapi_register import rest_app_run
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
-def log_server():
+def server_start(service_name):
 
     while True:
         try:
-            log.info('Starting Log Restful API Server')
+            log.info('Starting %s Restful API Server' % (service_name))
             rest_app_run()
         except Exception, e:
-            log.warning('Log RESTful API Server running error, reason=%s'
-                        % (e))
+            log.warning('%s RESTful API Server running error, reason=%s'
+                        % (service_name, e))
         sleep(10)
 
 
 if __name__ == "__main__":
 
-    log_server()
+    server_start('Log')

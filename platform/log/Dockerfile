@@ -7,6 +7,7 @@ RUN pip install requests
 RUN pip install flask-cors
 RUN pip install pika
 
+COPY ./conf /log/conf/
 COPY ./common /log/common/
 COPY ./log /log/log/
 

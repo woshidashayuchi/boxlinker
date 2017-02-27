@@ -14,8 +14,10 @@ class UcenterDB(MysqlInit):
 
     def name_duplicate_check(self, user_name):
 
-        sql = "select count(*) from users where user_name='%s'" \
-               % (user_name)
+        sql = "select count(*) from \
+               (select user_name from users where user_name='%s' \
+               union all select team_name from teams where team_name='%s') t" \
+               % (user_name, user_name)
 
         return super(UcenterDB, self).exec_select_sql(sql)
 

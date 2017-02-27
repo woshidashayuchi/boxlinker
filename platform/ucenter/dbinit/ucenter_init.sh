@@ -221,7 +221,7 @@ if [ $role_check -eq 0 ]; then
                       values('admin', 'admin', 'CRU', 'system', 'enable', now(), now())"
 
     $v_connect_mysql "insert into roles(role_uuid, role_name, role_priv, role_type, status, create_time, update_time)
-                      values('user', 'user', 'R', 'system', 'enable', now(), now())"
+                      values('user', 'user', 'C', 'system', 'enable', now(), now())"
 
 fi
 

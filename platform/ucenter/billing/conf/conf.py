@@ -27,6 +27,10 @@ database = 'billing'
 # db_passwd = os.environ.get('DB_PASSWD')
 # database = os.environ.get('DATABASE')
 
+api_host = '0.0.0.0'
+api_port = 8002
+api_debug = True
+
 rest_host = '0.0.0.0'
 rest_debug = True
 billing_port = 8002

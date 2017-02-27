@@ -218,7 +218,7 @@ class BillingDB(MysqlInit):
                and b.resource_uuid = c.resource_uuid \
                and c.team_uuid='%s' \
                and c.insert_time between '%s' and '%s' \
-               group by a.resource_name" \
+               group by a.resource_uuid" \
                % (team_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)

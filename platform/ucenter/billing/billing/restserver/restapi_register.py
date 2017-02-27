@@ -40,5 +40,5 @@ def rest_app_run():
     api.add_resource(restapi_define.OrderApi,
                      '/api/v1.0/billing/orders/<order_uuid>')
 
-    app.run(host=conf.rest_host, port=conf.billing_port,
-            threaded=True, debug=conf.rest_debug)
+    app.run(host=conf.api_host, port=conf.api_port,
+            threaded=True, debug=conf.api_debug)

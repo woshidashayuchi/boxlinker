@@ -27,9 +27,9 @@ database = 'ucenter'
 # db_passwd = os.environ.get('DB_PASSWD')
 # database = os.environ.get('DATABASE')
 
-rest_host = '0.0.0.0'
-rest_debug = True
-ucenter_port = 8001
+api_host = '0.0.0.0'
+api_port = 8001
+api_debug = True
 
 verify_code = False
 

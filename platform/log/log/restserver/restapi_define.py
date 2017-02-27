@@ -14,14 +14,15 @@ from common.logs import logging as log
 from common.code import request_result
 from common.token_decode import get_userinfo
 from common.time_log import time_log
-from log.rpcapi import rpc_api
+
+from log.rpcapi import rpc_api as log_rpcapi
 
 
 class LabelLogApi(Resource):
 
     def __init__(self):
 
-        self.log_api = rpc_api.LogRpcApi()
+        self.log_api = log_rpcapi.LogRpcApi()
 
     @time_log
     def get(self, label_value):

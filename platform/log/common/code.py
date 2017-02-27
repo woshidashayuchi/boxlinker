@@ -17,6 +17,7 @@ status_code = {
         101: "Parameters error",
         102: "RPC API routing error",
         103: "Http requests error",
+        104: "Verify code error",
         201: "Authentication failure",
         202: "Operation denied",
         301: "Resource name already exists",
