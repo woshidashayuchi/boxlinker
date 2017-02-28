@@ -10,22 +10,21 @@ services:
 #    - 80:80
 #    - 443:443
 
-
-#docker run -itd -h rabbitmq -p 5672:5672 index.boxlinker.com/library/rabbitmq
-#  nginx:
-#    image: index.boxlinker.com/boxlinker/nginx-true:latest
-#    links:
-#    - imagerepo:imagerepo
-#    volumes:
-#    - ./registry/auth-nginx/nginx.conf:/etc/nginx/nginx.conf
-#    ports:
-#    - 80:80
-#    - 443:443
+  mysql:
+    image: index.boxlinker.com/boxlinker/user_mysql:latest
+    restart: always
+    volumes:
+    - /data/dbase/:/var/lib/mysql
+    ports:
+    - 3306:3306
+    environment:
+    - MYSQL_ROOT_PASSWORD=root123admin
   imagerepo-apiserver:
     image: index.boxlinker.com/boxlinker/imagerepo-base:latest
     restart: always
     links:
     - rabbitmq:rabbitmq
+    - mysql:mysql
     command: python /ImageRepo/imageAuth/restserver/restapi_server.py
     volumes:
     - "./common:/ImageRepo/common/"
@@ -36,12 +35,14 @@ services:
     - "/etc/hosts:/etc/hosts"
     ports:
     - 8843:8001
+
   imagerepo-callserver:
     image: index.boxlinker.com/boxlinker/imagerepo-base:latest
     restart: always
     command: python /ImageRepo/imageAuth/rpcserver/rpcapi_callserver.py
     links:
-    - rabbitmq:rabbitmq
+    - rabbitmq:rbbitmq
+    - mysql:mysql
     volumes:
     - "./common:/ImageRepo/common/"
     - "./imageAuth:/ImageRepo/imageAuth/"

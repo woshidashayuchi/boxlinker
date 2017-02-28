@@ -18,12 +18,12 @@ mq_port = 5672
 # mq_port = 30001
 
 
-db_server01 = '101.201.53.211'
-db_server02 = '101.201.53.211'
+db_server01 = 'mysql'
+db_server02 = 'mysql'
 db_port = 3306
 db_user = 'root'
 db_passwd = 'root123admin'
-database = 'imagesa'
+database = 'registry'
 
 issuer = "Auth Service"  # 和镜像库配置相同,用于register token生成
 # private_key = '/Users/lzp/Desktop/v1.0/boxlinker-auth-test/ssl/ca.key'  # 加密
@@ -66,14 +66,14 @@ class hub_db:
     if DEBUG:
         user = 'root'
         pawd = 'root123admin'
-        cydb = 'imagesa'
-        host = '101.201.53.211'
+        cydb = 'registry'
+        host = 'mysql'
         mysql_engine = 'mysql://' + user + ':' + pawd + '@' + host + ':' + str(port) + '/' + cydb + '?charset=utf8'
     else:
-        host = '101.201.53.211'  # 线上
+        host = 'mysql'  # 线上
         user = 'root'
         pawd = 'root123admin'
-        cydb = 'imagesa'
+        cydb = 'registry'
         mysql_engine = 'mysql://' + user + ':' + pawd + '@' + host + ':' + str(port) + '/' + cydb + '?charset=utf8'
 
 

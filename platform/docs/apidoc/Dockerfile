@@ -8,4 +8,4 @@ COPY ./billing /usr/share/nginx/html/
 COPY ./index.html /usr/share/nginx/html/
 COPY ./log /usr/share/nginx/html/
 COPY ./usercenter /usr/share/nginx/html/
-
+COPY ./imageAuth /usr/share/nginx/html/

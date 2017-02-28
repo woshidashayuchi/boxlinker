@@ -253,8 +253,11 @@ if __name__ == '__main__':
     # print type(ret)
     # print ret
 
-    # ret = IRDB.get_image_repo_uuid_by_name(imagename='sss')
-    # print ret
+    while True:
+        import time
+        time.sleep(1)
+        ret = IRDB.get_image_repo_uuid_by_name(imagename='zhangsan/paussdsd')
+        print ret
     #
     # ret = IRDB.get_repo_uuid_by_image_name(imagename='sssss')
     # print ret[0][0]
@@ -301,8 +304,8 @@ if __name__ == '__main__':
     # ret = IRDB.get_repo_detail_by_uuid('4bd1ca3f-1752-33e6-b8d0-b9348a58ced7')
     # print ret
 
-    ret = IRDB.get_repo_events_by_imagename('liuzhangpei/phpmyadmi')
-    print ret
+    # ret = IRDB.get_repo_events_by_imagename('liuzhangpei/phpmyadmi')
+    # print ret
 
 
 
