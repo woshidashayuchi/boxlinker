@@ -86,7 +86,7 @@ class ImageRepoManager(object):
             image_uuid = self.image_repo_db.get_image_repo_uuid_by_name(imagename=image)
             if len(image_uuid) > 0:
                 log.info('get_repo_uuid is True uuid: %s' % (image_uuid[0][0]))
-                return image_uuid[0][0]
+                return True, image_uuid[0][0]
 
             if 'push' in actionlist:
                 image_name = str(image)
@@ -94,11 +94,11 @@ class ImageRepoManager(object):
                 self.image_repo_db.init_image_repo(repo_uuid=repo_uuid, imagename=image_name, resource_type='image_repo',
                                                    user_uuid='0', admin_uuid='global', team_uuid=team_uuid,
                                                    project_uuid='0', is_public=is_public)
-                return repo_uuid
-            raise
+                return True, repo_uuid
+            return False, None
         except Exception, e:
             log.error('ImageRepoManager get_repo_uuid is error: %s' % (e))
-            raise
+            return False, None
 
     def image_rank(self):
         """ 获取镜像排名 """

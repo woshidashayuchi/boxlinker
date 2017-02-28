@@ -82,54 +82,72 @@ def acl_check(func):
 
     def _aclauth(*args, **kwargs):
 
-        func_args = inspect.getcallargs(func, *args, **kwargs)
-        context = func_args.get('context')
+        try:
+            func_args = inspect.getcallargs(func, *args, **kwargs)
+            context = func_args.get('context')
 
-        log.info("acl_check context :%s" % (context))
+            log.info("acl_check context :%s" % (context))
 
-        token = context['token']
-        resource_uuid = context['resource_uuid']
-        action = context['action']
+            token = context['token']
+            log.info('acl_check --> 01')
+            resource_uuid = context['resource_uuid']
+            log.info('acl_check --> 02')
+            action = context['action']
+            log.info('acl_check --> 03')
 
-        user_info = token_auth(token)['result']
-        user_uuid = user_info['user_uuid']
-        team_uuid = user_info['team_uuid']
-        team_priv = user_info['team_priv']
-        project_uuid = user_info['project_uuid']
-        project_priv = user_info['project_priv']
+            user_info = token_auth(token)['result']
+            log.info('acl_check --> 04')
+            user_uuid = user_info['user_uuid']
+            team_uuid = user_info['team_uuid']
+            team_priv = user_info['team_priv']
+            project_uuid = user_info['project_uuid']
+            project_priv = user_info['project_priv']
+            log.info('acl_check --> 05')
 
-        context = "%s%s%s%s%s%s%s" % (user_uuid, team_uuid, team_priv,
-                                      project_uuid, project_priv,
-                                      resource_uuid, action)
+            context = "%s%s%s%s%s%s%s" % (user_uuid, team_uuid, team_priv,
+                                          project_uuid, project_priv,
+                                          resource_uuid, action)
 
-        log.debug('start ack check, context=%s' % (context))
-        acl_info = caches.get(context)
-        if (acl_info is LocalCache.notFound):
-            log.debug('Cache acl not hit, context=%s' % (context))
-            auth_manager = AuthManager()
-            ret = auth_manager.resource_acl_check(
-                               user_uuid, team_uuid, team_priv,
+            log.info('acl_check --> 06')
+            log.debug('start ack check, context=%s' % (context))
+            acl_info = caches.get(context)
+            log.info('acl_check --> 07')
+            if (acl_info is LocalCache.notFound):
+                log.debug('Cache acl not hit, context=%s' % (context))
+                auth_manager = AuthManager()
+
+                log.info('acl_check --> 08')
+                ret = auth_manager.resource_acl_check(
+                                   user_uuid, team_uuid, team_priv,
+                                   project_uuid, project_priv,
+                                   resource_uuid, action)
+
+                log.info('acl_check --> 09')
+                expire = int(time.time()) + 300
+                log.info('acl_check --> 10')
+                caches.set(context, {"acl_check": ret, "expire": expire})
+                log.debug('Cached acl check, context=%s' % (context))
+            else:
+                log.info('acl_check --> 11')
+                log.debug('Cache acl hit, context=%s' % (context))
+                ret = acl_info['acl_check']
+
+            log.info('acl_check --> 12  ack check result=%s' % (ret))
+            log.debug('ack check result=%s' % (ret))
+
+            if ret == 0:
+                return func(*args, **kwargs)
+            else:
+                log.warning('Resource acl auth denied: user_uuid = %s, \
+                             team_uuid=%s, team_priv=%s, project_uuid=%s, \
+                             project_priv=%s, resource_uuid=%s, action=%s'
+                            % (user_uuid, team_uuid, team_priv,
                                project_uuid, project_priv,
-                               resource_uuid, action)
-            expire = int(time.time()) + 300
-            caches.set(context, {"acl_check": ret, "expire": expire})
-            log.debug('Cached acl check, context=%s' % (context))
-        else:
-            log.debug('Cache acl hit, context=%s' % (context))
-            ret = acl_info['acl_check']
+                               resource_uuid, action))
 
-        log.debug('ack check result=%s' % (ret))
+                return request_result(202)
+        except Exception, e:
+            log.error('acl is error: %s' % (e))
 
-        if ret == 0:
-            return func(*args, **kwargs)
-        else:
-            log.warning('Resource acl auth denied: user_uuid = %s, \
-                         team_uuid=%s, team_priv=%s, project_uuid=%s, \
-                         project_priv=%s, resource_uuid=%s, action=%s'
-                        % (user_uuid, team_uuid, team_priv,
-                           project_uuid, project_priv,
-                           resource_uuid, action))
-
-            return request_result(202)
 
     return _aclauth

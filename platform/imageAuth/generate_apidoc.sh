@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-apidoc -i imageAuth -o apidoc/user
+apidoc -i imageAuth -o /Users/lzp/Desktop/PythonTools/boxlinker/platform/docs/apidoc/imageAuth/imageAuthdoc

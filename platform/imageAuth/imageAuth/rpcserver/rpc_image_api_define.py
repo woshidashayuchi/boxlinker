@@ -243,7 +243,10 @@ class ImageRepoRpcAPI(object):
 
         type_, image, actions = scopes.split(':')
         actionlist = actions.split(',')
-        repo_uuid = self.images_manage.get_repo_uuid(scopes, team_uuid, is_public=0)
+        retbool, repo_uuid = self.images_manage.get_repo_uuid(scopes, team_uuid, is_public=0)
+        if retbool is False:
+            log.error('get_repo_uuid is error')
+            return request_result(601)
 
         # admin 账号  只要token正确  可以任意权限, 不能比 self.images_manage.get_repo_uuid 先执行,否则无法初始化数据
         if user_name in admin_user:

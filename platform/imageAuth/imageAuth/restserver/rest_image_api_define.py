@@ -321,7 +321,7 @@ class ImageRepoSystem(Resource):
 
     """
     @api {get} /api/v1.0/imagerepo/image/<string:repoid>/public_info  1.9 镜像详情(公开的镜像详情)
-    @apiName image info
+    @apiName image public info
     @apiGroup ImageRepo
     @apiVersion 1.0.0
     @apiDescription 当个镜像 操作 (系统注册用户都可以调用该接口)
@@ -353,7 +353,7 @@ class ImageRepo(Resource):
 
     """
     @api {get} /api/v1.0/imagerepo/image/<string:repoid>  1.6 镜像详情
-    @apiName image info
+    @apiName get image info
     @apiGroup ImageRepo
     @apiVersion 1.0.0
     @apiDescription 镜像详情
@@ -377,7 +377,7 @@ class ImageRepo(Resource):
 
     """
     @api {delete} /api/v1.0/imagerepo/image/<string:repoid>  1.7 删除镜像
-    @apiName image info
+    @apiName delete image
     @apiGroup ImageRepo
     @apiVersion 1.0.0
     @apiDescription 删除镜像
@@ -406,8 +406,6 @@ class ImageRepoDetail(Resource):
     def __init__(self):
         self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
 
-
-    """ 修改镜像,详情 """
     """
     @api {put} /api/v1.0/imagerepo/image/<string:repoid>/detail/<string:detail_type>  1.8 修改镜像详情
     @apiName modify image info
