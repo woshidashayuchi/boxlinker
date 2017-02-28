@@ -171,6 +171,16 @@ class ServiceDB(MysqlInit):
 
         return dict_data
 
+    def get_using_volume(self, dict_data):
+        sql = "select * from volume where rc_uuid=(SELECT rc_uuid from font_service where " \
+              "service_name='%s' and project_uuid='%s')" % (dict_data.get('service_name'),
+                                                            dict_data.get('project_uuid'))
+        conn, cur = self.operate.connection()
+        volume_ret = self.operate.exeQuery(cur, sql)
+        self.operate.connClose(conn, cur)
+
+        return volume_ret
+
     def delete_all(self, dict_data):
 
         service_name = dict_data.get('service_name')
@@ -230,6 +240,29 @@ class ServiceDB(MysqlInit):
                          "((select rc_uuid from font_service where service_name='%s' " \
                          "and project_uuid='%s')),'%s','%s')" % (uuid_e, service_name, project_uuid,
                                                                  i.get('env_key'), i.get('env_value'))
+            try:
+                if super(ServiceDB, self).exec_update_sql(sql_delete, sql_insert) is not None:
+                    return False
+            except Exception, e:
+                log.error('database update(env) error, reason=%s' % e)
+                return False
+
+        return True
+
+    def update_volume(self, dict_data):
+        uuid_v = uuid_ele()
+        volume = dict_data.get('volume')
+        project_uuid, service_name = normal_call(dict_data)
+        for i in volume:
+            sql_delete = "delete from volume where rc_uuid=(SELECT rc_uuid from font_service WHERE " \
+                         "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+
+            sql_insert = "insert into volume(uuid,rc_uuid,volume_uuid,disk_path,readonly) VALUES " \
+                         "('%s',(select rc_uuid from font_service where service_name='%s' and " \
+                         "project_uuid='%s'),'%s','%s','%s')" % (uuid_v, service_name, project_uuid,
+                                                                 i.get('volume_uuid'), i.get('disk_path'),
+                                                                 i.get('readonly'))
+
             try:
                 if super(ServiceDB, self).exec_update_sql(sql_delete, sql_insert) is not None:
                     return False
@@ -320,3 +353,30 @@ class ServiceDB(MysqlInit):
               "http_domain != 'None'" % (project_uuid, service_name)
 
         return super(ServiceDB, self).exec_select_sql(sql)
+
+    def check_uuid(self, font_uuid=None, rc_uuid=None, container_uuid=None, env_uuid=None, volume_uuid=None,
+                   acl_uuid=None):
+
+        sql_font = "select uuid from font_service where uuid='%s'" % font_uuid
+        sql_rc = "select uuid from replicationcontrollers where uuid='%s'" % rc_uuid
+        sql_container = "select uuid from containers where uuid='%s'" % container_uuid
+        sql_env = "select uuid from env where uuid='%s'" % env_uuid
+        sql_volume = "select uuid from volume where uuid='%s'" % volume_uuid
+        sql_acl = "select resource_uuid from resources_acl where resource_uuid='%s'" % acl_uuid
+
+        try:
+            if len(super(ServiceDB, self).exec_select_sql(sql_font)[0]) != 0:
+                return False
+            if len(super(ServiceDB, self).exec_select_sql(sql_rc)[0]) != 0:
+                return False
+            if len(super(ServiceDB, self).exec_select_sql(sql_container)[0]) != 0:
+                return False
+            if len(super(ServiceDB, self).exec_select_sql(sql_env)[0]) != 0:
+                return False
+            if len(super(ServiceDB, self).exec_select_sql(sql_volume)[0]) != 0:
+                return False
+            if len(super(ServiceDB, self).exec_select_sql(sql_acl)[0]) != 0:
+                return False
+        except Exception, e:
+            log.error('compare the uuid error, reason=%s' % e)
+            return 'error'

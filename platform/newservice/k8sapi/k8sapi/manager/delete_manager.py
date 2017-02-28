@@ -23,6 +23,15 @@ class DeleteManager(object):
             log.error('get the service name error, reason=%s' % e)
             return request_result(404)
 
+        try:
+            ret_volume = self.kuber.update_volume_status(context)
+            if ret_volume is False:
+                log.info('UPDATE THE VOLUME STATUS ERROR')
+                return request_result(503)
+        except Exception, e:
+            log.error('update volume status error, reason is: %s' % e)
+            return request_result(503)
+
         ret = self.kuber.delete_service(context)
         if ret is not True:
             return ret

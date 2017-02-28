@@ -90,6 +90,7 @@ class KubernetesClientApi(object):
             return json.dumps(request_result(201))
 
         parameters = token_ret.get('result')
+        parameters['token'] = token
         parameters['service_uuid'] = service_uuid
 
         context = context_data(token, service_uuid, 'delete')

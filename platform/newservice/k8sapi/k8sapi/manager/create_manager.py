@@ -18,6 +18,7 @@ class CreateManager(object):
         self.krpc_client = KubernetesRpcClient()
         self.token_driver = TokenDriver()
         self.kuber_driver = KubernetesDriver()
+        self.volume = VolumeDriver()
 
     def check_name(self, context):
         try:
@@ -94,9 +95,6 @@ class CreateManager(object):
     def service_create(self, context):
         log.info('the create service data is: %s' % context)
 
-        volume = VolumeDriver()
-        log.info('444444444444444%s' % volume.get_message(context))
-
         check_name = self.check_name(context)
         if check_name is False:
             return request_result(301)
@@ -108,6 +106,16 @@ class CreateManager(object):
             log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
             return request_result(501)
         context['team_name'] = team_name
+
+        try:
+            context['action'] = 'post'
+            change_volume = self.volume.storage_status(context)
+            if change_volume is False:
+                log.info('VOLUME STATUS UPDATE ERROR,CHANGE_VOLUME RESULT IS: %s' % change_volume)
+                return request_result(501)
+        except Exception, e:
+            log.error('change the volume status error, reason is:%s' % e)
+            return request_result(501)
 
         ret = self.kuber_driver.create_service(context)
         if ret is not True:

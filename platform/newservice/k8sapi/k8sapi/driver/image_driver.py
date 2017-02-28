@@ -8,8 +8,22 @@ from common.logs import logging as log
 
 
 def image_dir(dict_data):
-    url = conf.IMAGE_SERVER
+    image_server = conf.IMAGE_SERVER
+    url = image_server.replace('image_uuid', dict_data.get('image_id'))
     headers = {"token": dict_data.get("token")}
+
+    try:
+        result = requests.get(url, headers=headers, timeout=5)
+
+        log.info('the image message is:%s, type is: %s' % (result, type(result)))
+        if result.get('status') != 0:
+            return False
+    except Exception, e:
+        log.error('get the image name and version based on image id error, reason=%s' % e)
+        return False
+
+    # image_name = result.get('result').get
+
     json_image = {"name": dict_data.get("service_name")}
     try:
         ret = requests.post(url, headers=headers, timeout=5, json=json_image)

@@ -5,8 +5,6 @@ from common.logs import logging as log
 from storage_api import StorageRpcApi
 from common.parameters import context_data
 from conf import conf
-import requests
-import json
 
 
 class VolumeDriver(object):
@@ -14,86 +12,93 @@ class VolumeDriver(object):
     def __init__(self):
         self.storage_api = StorageRpcApi()
 
-    def storage_json(self, dict_data):
-
-        action = dict_data.get("action")
-        volume = dict_data.get("volume")
-        volume_array = []
-
-        for i in volume:
-            if action.upper() == "POST":
-                i["status"] = "using"
-            elif action.upper() == "PUT":
-                i["status"] = "unused"
-            volume_array.append(i)
-        json_volume = {"volume": volume_array}
-        log.info(json_volume)
-        return json_volume
-
     def put_using(self, dict_data):
+        token = dict_data.get('token')
+        volume_uuid = dict_data.get('volume_uuid')
+        context = context_data(token, volume_uuid, 'update')
+        parameters = {'volume_status': dict_data.get('volume_status'), 'update': 'status'}
 
-        headers = {"token": dict_data.get("token")}
-        put_url = "%s/%s/status" % (conf.STORAGE_HOST, dict_data.get("volume_uuid"))
-        log.info("inner parameters========================%s" % headers)
-        log.info(dict_data)
-        using = {"volume_status": dict_data.get("volume_status")}
-        resu = ""
         try:
-            resu = requests.put(put_url, headers=headers, data=json.dumps(using))
+            change_result = self.storage_api.disk_update(context, parameters)
 
-            log.info(resu.text)
+            log.info('change the volume status result is:%s, type is %s' % (change_result, type(change_result)))
+
+            if change_result.get('status') != 0:
+                return False
         except Exception, e:
-            log.error("update storage error, reason=%s" % e)
-        return resu
+            log.error('change the volume status error, reason is: %s' % e)
+            return False
 
-    def storage_status(self, json_list):
+        return change_result
+
+    def storage_status(self, dict_data):
         response = ""
-        volume = json_list.get("volume")
+        volume = dict_data.get("volume")
+        if volume is None or volume == '':
+            return True
 
-        if json_list.get("action").upper() == "POST":
+        if dict_data.get("action").upper() == "POST":
             for i in volume:
-                volume_id = i.get("volume_id")
-                json_status = {"volume_id": volume_id, "volume_status": "using"}
-                json_list.update(json_status)
-                response = self.put_using(json_list)
+                volume_uuid = i.get("volume_uuid")
+                json_status = {"volume_uuid": volume_uuid, "volume_status": "using"}
+                dict_data.update(json_status)
+                response = self.put_using(dict_data)
 
-        elif json_list.get("action").upper() == "PUT":
+        if dict_data.get("action").upper() == "PUT":
             for i in volume:
-                disk_name = i.get("volume_id")
-                json_status = {"volume_id": disk_name, "volume_status": "unused"}
-                json_list.update(json_status)
-                response = self.put_using(json_list)
+                volume_uuid = i.get("volume_uuid")
+                json_status = {"volume_uuid": volume_uuid, "volume_status": "unused"}
+                dict_data.update(json_status)
+                response = self.put_using(dict_data)
 
         return response
 
-    def change_status(self, dict_data):
-
-        volume = dict_data.get('volume')
-        if len(volume) != 0 and volume is not None:
-            dict_data.update({'action': 'post'})
-
-            try:
-                dict_volume = self.storage_json(dict_data)
-                dict_volume.update({'action': 'post'})
-                dict_data.update(dict_volume)
-                response = self.storage_status(dict_data)
-                return response
-            except Exception, e:
-                log.error("storage update error,reason=%s" % e)
-                return False
-
-        return True
-
-    def get_message(self, dict_data):
+    def volume_message(self, dict_data):
         token = dict_data.get('token')
-        volume_uuid = dict_data.get('volume_uuid')
-        context = context_data(token, 'e7fea3e6-bd88-4ed8-b0e6-4b65d418d4dd', "read")
+        monitors = [x for x in conf.VOLUMEIP.split(',')]
+        volume = dict_data.get('volume')
 
-        # parameters = {'volume_uuid': volume_uuid}
-        log.info('1111111111111')
-        log.info('context=%s' % context)
-        log.info('')
-        ret = self.storage_api.disk_info(context)
-        log.info('2222222222222')
-        log.info('aaaaaaaaaaaaaaa%s' % ret)
-        return ret
+        ret = []
+        ret_disk = []
+        for i in volume:
+            volume_uuid = i.get('volume_uuid')
+
+            context = context_data(token, volume_uuid, "read")
+            try:
+                volume_result = self.storage_api.disk_info(context)
+                log.info('get the volume message is:%s,type is %s' % (ret, type(ret)))
+
+                if volume_result.get('status') != 0:
+                    return False, False
+            except Exception, e:
+                log.error('get the volume message error, reason=%s' % e)
+                return False, False
+
+            volume_name = volume_result.get('result').get('volume_name')
+            pool_name = volume_result.get('result').get('pool_name')
+            image = volume_result.get('result').get('image_name')
+            fs_type = volume_result.get('result').get('fs_type')
+            readonly1 = i.get('readonly')
+            if readonly1 == 'True':
+                readonly = True
+            else:
+                readonly = False
+
+            volumes = {
+                        "name": volume_name,
+                        "rbd": {
+                            "monitors": monitors, "pool": pool_name, "image": image, "user": "admin",
+                            "keyring": "/etc/ceph/keyring", "fsType": fs_type, "readOnly": readonly
+                        }
+                    }
+            disk_msg = {'name': volume_name, 'readOnly': readonly, 'mountPath': i.get('disk_path')}
+
+            ret_disk.append(disk_msg)
+            ret.append(volumes)
+
+        return ret, ret_disk
+
+    def change_volume_status(self, dict_data):
+        # change the database volume's status to unused
+        # query the volume message first
+        pass

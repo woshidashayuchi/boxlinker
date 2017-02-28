@@ -5,11 +5,11 @@ import re
 import json
 import requests
 from conf import conf
-from common.time_log import time_log
 from common.code import request_result
 from common.logs import logging as log
 from db.service_db import ServiceDB
 from db.metal_work import MetalWork
+from volume_driver import VolumeDriver
 from rpcapi_client import KubernetesRpcClient
 
 
@@ -19,6 +19,7 @@ class KubernetesDriver(object):
         self.service_db = ServiceDB()
         self.krpc_client = KubernetesRpcClient()
         self.metal = MetalWork()
+        self.volume = VolumeDriver()
 
     @staticmethod
     def command_query(dict_data):
@@ -34,76 +35,6 @@ class KubernetesDriver(object):
         image_id = dict_data.get('image_id')
         url = conf.IMAGE_SERVER
         headers = {"token": dict_data.get("token")}
-
-    @staticmethod
-    def define_volumes(dict_data):
-        result = []
-        request_para = dict_data.get('volume')
-        headers = {'token': dict_data.get('token')}
-        monitors = [x for x in conf.VOLUMEIP.split(',')]
-        if request_para is not None and request_para != '':
-            for i in request_para:
-
-                get_url = '%s/%s' % (conf.STORAGE_HOST, i.get('volume_id'))
-                try:
-                    resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get('result')
-                    if resu == {}:
-                        return 'error'
-                except Exception, e:
-                    log.error('select volumes error,reason=%s' % e)
-                    return "timeout"
-
-                log.info(resu)
-                vname = resu.get('volume_name')
-                pool_name = resu.get('pool_name')
-                image = resu.get('image_name')
-                readonly1 = i.get('readonly')
-                if readonly1 == 'True':
-                    readonly = True
-                else:
-                    readonly = False
-                fs_type = resu.get('fs_type')
-                log.info(resu)
-                volumes = {
-                            "name": vname,
-                            "rbd": {
-                                "monitors": monitors, "pool": pool_name, "image": image, "user": "admin",
-                                "keyring": "/etc/ceph/keyring", "fsType": fs_type, "readOnly": readonly
-                            }
-                        }
-
-                result.append(volumes)
-            log.info(result)
-            return result
-
-    @staticmethod
-    def fill_containerfor_volume(dict_data):
-        result = []
-        if dict_data.get('volume') is not None and dict_data.get('volume') != '':
-            request_para = dict_data.get('volume')
-
-            headers = {'token': dict_data.get('token')}
-
-            for i in request_para:
-                if i.get('readonly') == 'True':
-                    readonly = True
-                else:
-                    readonly = False
-
-                get_url = '%s/%s' % (conf.STORAGE_HOST, i.get('volume_id'))
-                try:
-                    resu = json.loads(requests.get(get_url, headers=headers, timeout=5).text).get('result')
-                    if resu == {}:
-                        return 'error'
-                except Exception, e:
-                    log.error('select volumes error,reason=%s' % e)
-                    return 'timeout'
-                vname = resu.get('volume_name')
-
-                disk_msg = {'name': vname, 'readOnly': readonly, 'mountPath': i.get('disk_path')}
-                result.append(disk_msg)
-
-        return result
 
     @staticmethod
     def container(con):
@@ -257,21 +188,22 @@ class KubernetesDriver(object):
 
         try:
             if dict_data.get('volume') is not None and dict_data.get('volume') != '':
-                volumes = self.define_volumes(dict_data)
-                if volumes == 'timeout':
-                    return 'timeout'
+                volumes, volume_mounts = self.volume.volume_message(dict_data)
+                if volumes is False:
+                    return False
             else:
-                volumes = 'null'
+                volumes = None
+                volume_mounts = None
         except Exception, e:
             log.error('volume define error, reason=%s' % e)
-            raise
+            return False
 
         return namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
-            env, user_uuid, rc_krud, pullpolicy, volumes
+            env, user_uuid, rc_krud, pullpolicy, volumes, volume_mounts
 
     def add_rc(self, dict_data):
         namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
-            env, user_uuid, rc_krud, pullpolicy, volumes = self.unit_element(dict_data)
+            env, user_uuid, rc_krud, pullpolicy, volumes, volume_mounts = self.unit_element(dict_data)
 
         try:
             add_rc = {
@@ -293,7 +225,7 @@ class KubernetesDriver(object):
                         "containers": [
                            {"name": service_name, "image": image_name+":"+image_version, "imagePullPolicy": pullpolicy,
                             "command": command, "ports": self.container(container), "env": self.env(env),
-                            "volumeMounts": self.fill_containerfor_volume(dict_data)}
+                            "volumeMounts": volume_mounts}
                         ], "volumes": volumes,
                      }
                   }
@@ -305,17 +237,23 @@ class KubernetesDriver(object):
                 for i in add_rc['spec']['template']['spec']['containers']:
                     del add_rc['spec']['template']['spec']['containers'][j]['env']
                     j += 1
-            if dict_data.get('volume') == '' or dict_data.get('volume') is None or len(dict_data.get('volume')) == 0:
+
+            if volumes is None:
                 j = 0
                 del add_rc['spec']['template']['spec']['volumes']
                 for i in add_rc['spec']['template']['spec']['containers']:
                     del add_rc['spec']['template']['spec']['containers'][j]['volumeMounts']
                     j += 1
+
+            if volumes is False:
+                return False
+
             if command == '' or command is None or command == 'Null':
                 j = 0
                 for i in add_rc['spec']['template']['spec']['containers']:
                     del add_rc['spec']['template']['spec']['containers'][j]['command']
                     j += 1
+
         except Exception, e:
             log.error('rc json create error,reason=%s' % e)
             return False
@@ -709,6 +647,21 @@ class KubernetesDriver(object):
 
         return True
 
+    def update_volume_status(self, dict_data):
+        using_volume = self.service_db.get_using_volume(dict_data)
+        ch_volume = dict()
+        to_change_volume = []
+        for i in using_volume:
+            ch_volume['volume_uuid'] = i.get('volume_uuid')
+            to_change_volume.append(ch_volume)
+
+        result = self.volume.storage_status({'volume': to_change_volume, 'action': 'put',
+                                             'token': dict_data.get('token')})
+        if result is False:
+            return False
+
+        return True
+
     def update_env(self, context):
 
         database_ret = self.service_db.update_env(context)
@@ -725,7 +678,15 @@ class KubernetesDriver(object):
         pass
 
     def update_volume(self, context):
-        pass
+        database_ret = self.service_db.update_volume(context)
+        if database_ret is False:
+            return request_result(403)
+
+        service_ret = self.update_rc(context)
+        if service_ret is not True:
+            return service_ret
+
+        return True
 
     def update_container(self, context):
         try:
@@ -812,9 +773,6 @@ class KubernetesDriver(object):
 
         return True
 
-    def update_autostartup(self, context):
-        pass
-
     def update_publish(self, context):
         pass
 
@@ -860,8 +818,6 @@ class KubernetesDriver(object):
             return self.update_status(context)
         if rtype == 'telescopic':
             return self.update_telescopic(context)
-        if rtype == 'autostartup':
-            return self.update_autostartup(context)
         if rtype == 'publish':
             return self.update_publish(context)
         if rtype == 'command':
