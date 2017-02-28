@@ -13,6 +13,7 @@ items:
     annotations:
       serviceloadbalancer/lb.http: imageauth.boxlinker.com:8001
       serviceloadbalancer/lb.node: main
+      serviceloadbalancer/lb.sslTerm: "true"
   spec:
     ports:
     - port: 8001
@@ -25,7 +26,7 @@ items:
     namespace: boxlinker
   subsets:
     - addresses:
-      - ip: 192.168.1.6
+      - ip: "192.168.1.6"
       ports:
         - port: 8843
 
