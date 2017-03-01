@@ -28,7 +28,7 @@ items:
             capabilities:
               add:
                 - IPC_LOCK
-          image: index.boxlinker.com/boxlinker/docker-elasticsearch-kubernetes:2.3.4
+          image: index.boxlinker.com/boxlinker/elasticsearch:latest
           env:
           - name: KUBERNETES_CA_CERTIFICATE_FILE
             value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -58,9 +58,9 @@ items:
         - name: storage
           rbd:
             monitors:
-            - "10.10.10.11:5000"
-            - "10.10.10.12:5000"
-            - "10.10.10.21:5000"
+            - "192.168.1.5:5000"
+            - "192.168.1.8:5000"
+            - "192.168.1.9:5000"
             pool: pool_hdd
             image: boxlinker_elasticsearch
             user: admin
