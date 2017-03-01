@@ -81,11 +81,11 @@ items:
       serviceloadbalancer/lb.sslTerm: "true"
     labels:
       component: elasticsearch
-      role: client
+      role: elasticsearch
   spec:
     selector:
       component: elasticsearch
-      role: client
+      role: elasticsearch
     ports:
     - name: http
       port: 9200
