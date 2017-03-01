@@ -10,7 +10,7 @@ import os
 
 
 def create_esjson(json_list, log_info):
-    host = "http://%s" % os.environ.get("ELASTIC_SEARCH")
+    host = "http://es.boxlinker.com"
     rtype = 'fluentd'
     log_dict = get_index(json_list, log_info)
     es_url = host + '/' + 'logstash-' + get_now_time_ymd(part='.') + '/' + rtype

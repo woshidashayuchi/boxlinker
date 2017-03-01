@@ -7,8 +7,6 @@ p_path1 = sys.path[0] + '/..'
 sys.path.append(p_path)
 sys.path.append(p_path1)
 from restapi_register import rest_app_run
-from db.db_init import DBInit
-from db.data_init import DataInit
 
 
 if __name__ == "__main__":

@@ -35,7 +35,8 @@ status_code = {
         597: "RabbitMQ rpc client exec timeout",
         598: "RabbitMQ rpc client exec error",
         599: "RabbitMQ rpc server exec error",
-        601: "System error"
+        601: "System error",
+        701: "Monitor message select error"
 }
 
 

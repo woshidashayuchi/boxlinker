@@ -577,6 +577,9 @@ class KubernetesDriver(object):
             log.info('CREATE SERVICE ERROR WHEN CREATE JSON DATA...')
             return request_result(501)
 
+        add_rc['token'] = context.get('token')
+        add_service['token'] = context.get('token')
+
         self.krpc_client.create_services(add_rc)
         self.krpc_client.create_services(add_service)
 
