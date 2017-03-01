@@ -107,7 +107,7 @@ class LogPollApi(Resource):
 
         try:
             token = request.headers.get('token')
-            token_auth(token)
+            # token_auth(token)
         except Exception, e:
             log.error('Token check error, token=%s, reason=%s' % (token, e))
 

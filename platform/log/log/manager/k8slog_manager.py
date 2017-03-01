@@ -37,8 +37,9 @@ class K8sLogManager(object):
 
         start_time = int(start_time)
         end_time = int(end_time)
-        ret = self.log_driver.pod_log_info(label_value, pod_name,
-                                           date_time, start_time, end_time)
+        ret = self.log_driver.pod_log_info(
+                   label_value, date_time,
+                   start_time, end_time)
         status_code = int(ret['status'])
         if status_code != 0:
             return request_result(status_code)
@@ -84,7 +85,8 @@ class K8sLogManager(object):
             except Exception, e:
                 try:
                     label_tag = label_value[0:9]
-                    if (label_tag == 'boxlinker') and (user_uuid != 'sysadmin'):
+                    if (label_tag == 'boxlinker') \
+                       and (user_uuid != 'sysadmin'):
                         continue
                 except Exception, e:
                     pass
