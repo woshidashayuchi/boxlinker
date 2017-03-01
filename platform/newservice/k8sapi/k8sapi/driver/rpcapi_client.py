@@ -16,13 +16,14 @@ class KubernetesRpcClient(object):
     def __init__(self):
         self.rbtmq = RabbitmqClient()
         self.queue = 'kubernetes_api'
+        self.queue_c = 'kubernetes_create'
         self.timeout = 5
 
     def create_services(self, context, parameters=None):
         try:
             rpc_body = rpc_data('kuber_cre', context, parameters)
 
-            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+            return self.rbtmq.rpc_cast_client(self.queue_c, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(501)

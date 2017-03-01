@@ -68,3 +68,13 @@ class KubernetesRpcClient(object):
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(502)
+
+    def pod_msg(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data('pod_msg', context, parameters)
+
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % e)
+            return request_result(502)

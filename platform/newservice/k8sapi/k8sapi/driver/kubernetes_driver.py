@@ -479,8 +479,28 @@ class KubernetesDriver(object):
 
         return True
 
+    def access_container(self, context):
+        con = []
+
+        try:
+            containers = self.service_db.detail_container(context)
+        except Exception, e:
+            log.error('query the database of containers error, reason=%s' % e)
+            return False
+
+        for i in containers:
+            for j in context.get('ports'):
+                if j.get('containerPort') is not None and i.get('container_port') is not None:
+                    if int(j.get('containerPort')) == int(i.get('container_port')):
+                        access = {'container_port': j.get('containerPort'), 'protocol': i.get('protocol'),
+                                  'access_mode': i.get('access_mode')}
+                        con.append(access)
+
+        return con
+
     def get_pod_name(self, context):
         pod = []
+        con_ret = []
         pod_message = {"namespace": context.get("project_uuid"), 'rtype': 'pods'}
 
         try:
@@ -492,12 +512,19 @@ class KubernetesDriver(object):
         try:
             for i in response:
                 if context.get("service_name") == i.get("metadata").get("labels").get("component"):
-                    for j in i.get("spec").get("containers"):
-                        p = {"ports": j.get("ports")}
-                        p.update(context)
+
+                    if context.get('rtype') == 'pods_msg':
+                        for j in i.get("spec").get("containers"):
+                            p = {"ports": j.get("ports")}
+                            p.update(context)
+                            try:
+                                con_ret = self.access_container(p)
+                            except Exception, e:
+                                log.error('corresponding containers ports error, reason=%s' % e)
+                                return False
 
                     pod_ms = {"pod_phase": i.get("status").get("phase"), "pod_name": i.get("metadata").get("name"),
-                              "pod_ip": i.get("status").get("podIP")}
+                              "pod_ip": i.get("status").get("podIP"), 'containers': con_ret}
                     pod.append(pod_ms)
         except Exception, e:
             log.error("explain the pods messages error,reason=%s" % e)
@@ -550,13 +577,8 @@ class KubernetesDriver(object):
             log.info('CREATE SERVICE ERROR WHEN CREATE JSON DATA...')
             return request_result(501)
 
-        rc_ret = json.loads(self.krpc_client.create_services(add_rc))
-        svc_ret = json.loads(self.krpc_client.create_services(add_service))
-
-        if rc_ret.get('kind') != 'ReplicationController' or svc_ret.get('kind') != 'Service':
-            log.info('CREATE SERVICE ERROR WHEN USE KUBERNETES API TO CREATE... rc_ret=%s,svc_ret=%s' % (rc_ret,
-                                                                                                         svc_ret))
-            return request_result(501)
+        self.krpc_client.create_services(add_rc)
+        self.krpc_client.create_services(add_service)
 
         return True
 
@@ -631,7 +653,7 @@ class KubernetesDriver(object):
 
         rc_up_ret = self.krpc_client.update_service(rc_up_json)
         if context.get('rtype') == 'container':
-            log.info('#####update the service json data is: %s' % svc_up_json)
+            log.info('update the container json data is: %s' % svc_up_json)
             svc_up_ret = self.krpc_client.update_service(svc_up_json)
             if svc_up_ret.get('result') != '<Response [200]>':
                 log.error('SERVICE UPDATE RESULT IS: %s' % svc_up_ret)

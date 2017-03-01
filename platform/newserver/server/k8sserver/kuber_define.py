@@ -6,6 +6,7 @@ import sys
 p_path = sys.path[0] + '/..'
 sys.path.append(p_path)
 
+import json
 from common.logs import logging as log
 from kubernetes.kapi import KApiMethods
 
@@ -17,7 +18,15 @@ class KubernetesRpcAPIs(object):
 
     def service_crea(self, context, parameters=None):
         try:
-            return self.kubernetes.post_namespace_resource(context)
+            ret = self.kubernetes.post_namespace_resource(context)
+            ret = json.loads(ret)
+
+            if ret.get('kind') != 'ReplicationController' and ret.get('kind') != 'Service':
+                log.info('CREATE SERVICE ERROR WHEN USE KUBERNETES API TO CREATE... result is:%s,'
+                         'type is:%s' % (ret, type(ret)))
+
+            log.info('create service success, result is:%s, type is: %s' % (ret, type(ret)))
+
         except Exception, e:
             log.error('create the service(kubernetes) error, reason=%s' % e)
 
