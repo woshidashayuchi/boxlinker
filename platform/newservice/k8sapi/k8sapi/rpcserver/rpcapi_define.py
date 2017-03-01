@@ -41,3 +41,7 @@ class KubernetesRpcAPI(object):
     @acl_check
     def service_update(self, context, parameters):
         return self.update_manager.service_update(parameters)
+
+    @acl_check
+    def pods_message(self, context, parameters):
+        return self.query_manager.pod_message(parameters)

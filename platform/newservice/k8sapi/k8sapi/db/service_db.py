@@ -380,3 +380,13 @@ class ServiceDB(MysqlInit):
         except Exception, e:
             log.error('compare the uuid error, reason=%s' % e)
             return 'error'
+
+    def detail_container(self, context):
+        sql = "select * from containers WHERE rc_uuid=(SELECT rc_uuid from font_service where " \
+              "uuid='%s')" % (context.get('service_uuid'))
+
+        conn, cur = self.operate.connection()
+        container_ret = self.operate.exeQuery(cur, sql)
+        self.operate.connClose(conn, cur)
+
+        return container_ret

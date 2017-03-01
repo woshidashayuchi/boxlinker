@@ -32,6 +32,23 @@
 }
 """
 """
+@apiDefine CODE_GET_POD_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result":[{"pod_phase": "Pending",
+               "pod_ip": "172.16.77.12",
+               "pod_name": "newxxx-h0jn6",
+               "containers": [{"access_mode": "TCP",
+                               "protocol": "TCP",
+                               "container_port": 2000},
+                              {"access_mode": "HTTP",
+                               "protocol": "TCP",
+                               "container_port": 3000}]}]
+}
+"""
+"""
 @apiDefine CODE_LIST_0
 @apiSuccessExample 返回
 {
@@ -164,6 +181,7 @@
 }
 @apiUse CODE_POST_0
 """
+
 
 """
 @api {get} /api/v1.0/application/service 2.1 服务列表
@@ -326,4 +344,15 @@
     "domain":"string"
 }
 @apiUse CODE_UPDATE_0
+"""
+
+"""
+@api {get} api/v1.0/application/service/<service_uuid>/pod/message 5.1 查询服务的pod信息
+@apiName pods read
+@apiGroup 5 read_pods
+@apiVersion 1.0.0
+@apiDescription pods信息查询
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_GET_POD_0
 """

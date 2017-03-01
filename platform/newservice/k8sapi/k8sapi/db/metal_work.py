@@ -50,6 +50,7 @@ class MetalWork(object):
                 if x.get('service_name') == y:
                     if len(ret) == 0:
                         ret.append({'service_name': y, 'image_dir': x.get('image_dir'),
+                                    'service_uuid': x.get('service_uuid'),
                                     'ltime': x.get('ltime'), 'service_status': x.get('service_status'),
                                     'container': [{'container_port': x.get('container_port'),
                                                    'http_domain': x.get('http_domain'),
@@ -69,6 +70,7 @@ class MetalWork(object):
 
                         if y not in b:
                             ret.append({'service_name': y, 'image_dir': x.get('image_dir'),
+                                        'service_uuid': x.get('service_uuid'),
                                         'ltime': x.get('ltime'), 'service_status': x.get('service_status'),
                                         'container': [{'container_port': x.get('container_port'),
                                                        'http_domain': x.get('http_domain'),
