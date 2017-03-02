@@ -28,7 +28,7 @@ class LogRpcManager(object):
             start_time = parameters['start_time']
             end_time = parameters['end_time']
 
-            label_value = parameter_check(label_value, ptype='pnam')
+            label_value = parameter_check(label_value, ptype='pstr')
             date_time = parameter_check(date_time, ptype='pint', exist='no')
             start_time = parameter_check(start_time, ptype='pint', exist='no')
             end_time = parameter_check(end_time, ptype='pint', exist='no')
@@ -54,7 +54,7 @@ class LogRpcManager(object):
             start_time = parameters['start_time']
             end_time = parameters['end_time']
 
-            pod_name = parameter_check(pod_name, ptype='pnam')
+            pod_name = parameter_check(pod_name, ptype='pstr')
             date_time = parameter_check(date_time, ptype='pint', exist='no')
             start_time = parameter_check(start_time, ptype='pint', exist='no')
             end_time = parameter_check(end_time, ptype='pint', exist='no')
@@ -78,7 +78,7 @@ class LogRpcManager(object):
             label_value = parameters['label_value']
             start_time = parameters['start_time']
 
-            label_value = parameter_check(label_value, ptype='pnam')
+            label_value = parameter_check(label_value, ptype='pstr')
             start_time = parameter_check(start_time, ptype='pint', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'

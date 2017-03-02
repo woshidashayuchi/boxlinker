@@ -54,28 +54,29 @@ class UcenterUsersApi(Resource):
     def get(self):
 
         try:
-            token = request.headers.get('token')
-            token_auth(token)
-        except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
-
-            return request_result(201)
-
-        try:
             user_name = request.args.get('user_name')
             name_check = request.args.get('name_check')
             parameters = {
-                             "user_name": user_name,
-                             "name_check": name_check
+                             "user_name": user_name
                          }
         except Exception, e:
             log.error('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
-        context = context_data(token, "uct_usr_usr_lst", "read")
+        if name_check == 'true':
+            context = {}
+            return self.ucenter_api.user_check(context, parameters)
+        else:
+            try:
+                token = request.headers.get('token')
+                token_auth(token)
+            except Exception, e:
+                log.error('Token check error, token=%s, reason=%s' % (token, e))
+                return request_result(201)
 
-        return self.ucenter_api.user_list(context, parameters)
+            context = context_data(token, "uct_usr_usr_lst", "read")
+            return self.ucenter_api.user_list(context, parameters)
 
 
 class UcenterUserApi(Resource):

@@ -33,7 +33,7 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
 
     para_format = {
         "pstr": "[A-Za-z0-9-_]{1,60}$",
-        "pnam": "[A-Za-z]{1,30}[A-Za-z0-9-_]{0,10}$",
+        "pnam": "[A-Za-z]{1}[A-Za-z0-9-_]{4,19}$",
         "pint": "-{0,1}[0-9]{1,16}$",
         "pflt": "-{0,1}[0-9]{1,15}[.]{0,1}[0-9]{1,6}$",
         "peml": ("[A-Za-z1-9]{1,1}[A-Za-z0-9-_]{2,30}"
@@ -41,7 +41,7 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
                  "[.]{1,1}[A-Za-z]{1,5}$"),
         "puid": ("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-"
                  "[a-z0-9]{4}-[a-z0-9]{12}$"),
-        "ppwd": ".{5,60}"
+        "ppwd": ".{6,60}"
     }
 
     m = re.match(para_format[ptype], str(parameter))

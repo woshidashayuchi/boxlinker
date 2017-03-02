@@ -95,24 +95,42 @@ class UcenterRpcManager(object):
 
         return self.users_manager.user_status(user_uuid, status)
 
-    @acl_check
-    def user_list(self, context, parameters):
+    def user_check(self, context, parameters):
 
         try:
             user_name = parameters.get('user_name')
-            name_check = parameters.get('name_check')
 
             try:
                 user_name = parameter_check(user_name, ptype='pnam')
+                email = None
             except Exception:
-                user_name = parameter_check(user_name, ptype='peml')
-            name_check = parameter_check(name_check, ptype='pstr', exist='no')
+                email = parameter_check(user_name, ptype='peml')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.users_manager.user_list(user_name, name_check)
+        if email:
+            return self.users_manager.email_check(email)
+        else:
+            return self.users_manager.user_check(user_name)
+
+    @acl_check
+    def user_list(self, context, parameters):
+
+        try:
+            user_name = parameters.get('user_name')
+
+            try:
+                user_name = parameter_check(user_name, ptype='pnam')
+            except Exception:
+                user_name = parameter_check(user_name, ptype='peml')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.users_manager.user_list(user_name)
 
     @acl_check
     def user_info(self, context, parameters):

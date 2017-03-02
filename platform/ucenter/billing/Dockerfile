@@ -13,4 +13,4 @@ COPY ./common /billing/common/
 COPY ./billing /billing/billing/
 COPY ./ucenter /billing/ucenter/
 
-CMD python /billing/billing/restapi/restapi_server.py & python /billing/billing/manage/billing_service.py & python /billing/billing/service/billing_service.py
+CMD python /billing/billing/restserver/restapi_server.py & python /billing/billing/rpcserver/rpcapi_callserver.py & python /billing/billing/service/billing_service.py
