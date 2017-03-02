@@ -142,7 +142,7 @@
 
 
 """
-@api {post} /api/v1.0/application/service/<service_name> 1.1 创建服务
+@api {post} /api/v1.0/application/services 1.1 创建服务
 @apiName service create
 @apiGroup 1 create
 @apiVersion 1.0.0
@@ -152,6 +152,7 @@
 @apiParam {json} body
 @apiParamExample body
 {
+     "service_name":"aaa"
      "image_name":"index.boxlinker.com/boxlinker/web-index",
      "image_version":"latest",
      "policy":1,
@@ -184,7 +185,7 @@
 
 
 """
-@api {get} /api/v1.0/application/service 2.1 服务列表
+@api {get} /api/v1.0/application/services 2.1 服务列表
 @apiName service list
 @apiGroup 2 query
 @apiVersion 1.0.0
@@ -193,10 +194,19 @@
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_LIST_0
 """
-
+"""
+@api {get} /api/v1.0/application/services?service_name=<service_name> 2.2 服务列表模糊查询
+@apiName service list
+@apiGroup 2 query
+@apiVersion 1.0.0
+@apiDescription 服务列表模糊查询
+@apiPermission all
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_LIST_0
+"""
 
 """
-@api {get} /api/v1.0/application/service/<service_uuid>/details 2.2 服务详情
+@api {get} /api/v1.0/application/services/<service_uuid> 2.3 服务详情
 @apiName service details
 @apiGroup 2 query
 @apiVersion 1.0.0
@@ -206,7 +216,7 @@
 @apiUse CODE_DETAIL_0
 """
 """
-@api {delete} /api/v1.0/application/service/<service_uuid> 3.1 删除服务
+@api {delete} /api/v1.0/application/services/<service_uuid> 3.1 删除服务
 @apiName service delete
 @apiGroup 3 delete
 @apiVersion 1.0.0
@@ -217,7 +227,7 @@
 """
 
 """
-@api {put} /api/v1.0/application/service/<service_uuid>/container 4.1 pod容器更新
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=container 4.1 pod容器更新
 @apiName container update
 @apiGroup 4 update
 @apiVersion 1.0.0
@@ -241,7 +251,7 @@
 @apiUse CODE_UPDATE_0
 """
 """
-@api {put} /api/v1.0/application/service/<service_uuid>/env 4.2 环境变量更新
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=env 4.2 环境变量更新
 @apiName env update
 @apiGroup 4 update
 @apiVersion 1.0.0
@@ -263,7 +273,7 @@
 
 
 """
-@api {put} /api/v1.0/application/service/<service_uuid>/volume 4.3 存储卷更新
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=volume 4.3 存储卷更新
 @apiName volume update
 @apiGroup 4 update
 @apiVersion 1.0.0
@@ -285,7 +295,7 @@
 @apiUse CODE_UPDATE_0
 """
 """
-@api {put} /api/v1.0/application/service/<service_uuid>/status 4.4 服务状态更新
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=status 4.4 服务状态更新
 @apiName status update
 @apiGroup 4 update
 @apiVersion 1.0.0
@@ -299,9 +309,28 @@
 }
 @apiUse CODE_UPDATE_0
 """
-
 """
-@api {put} /api/v1.0/application/service/<service_uuid>/telescopic 4.5 服务伸缩
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=publish 4.8 服务发布更新
+@apiName status update
+@apiGroup 4 update
+@apiVersion 1.0.0
+@apiDescription 更新服务是否自动发布
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "policy":1
+}
+与
+{
+    "policy":0,
+    "image_id":int
+}
+@apiUse CODE_UPDATE_0
+"""
+"""
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=telescopic 4.5 服务伸缩
 @apiName telescopic update
 @apiGroup 4 update
 @apiVersion 1.0.0
@@ -316,7 +345,7 @@
 @apiUse CODE_UPDATE_0
 """
 """
-@api {put} /api/v1.0/application/service/<service_uuid>/command 4.6 服务启动命令
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=command 4.6 服务启动命令
 @apiName command update
 @apiGroup 4 update
 @apiVersion 1.0.0
@@ -331,7 +360,7 @@
 @apiUse CODE_UPDATE_0
 """
 """
-@api {put} /api/v1.0/application/service/<service_uuid>/domain 4.6 服务启动命令
+@api {put} /api/v1.0/application/services/<service_uuid>?rtype=domain 4.7 服务启动命令
 @apiName domain update
 @apiGroup 4 update
 @apiVersion 1.0.0
@@ -347,7 +376,7 @@
 """
 
 """
-@api {get} api/v1.0/application/service/<service_uuid>/pod/message 5.1 查询服务的pod信息
+@api {get} api/v1.0/application/services/<service_uuid>?pod=pod 5.1 查询服务的pod信息
 @apiName pods read
 @apiGroup 5 read_pods
 @apiVersion 1.0.0

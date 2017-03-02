@@ -18,7 +18,7 @@ class KubernetesClientApi(object):
     kuber = KubernetesRpcClient()
 
     @classmethod
-    def create_service(cls, service_name):
+    def create_service(cls):
 
         try:
             token = request.headers.get('token')
@@ -30,7 +30,6 @@ class KubernetesClientApi(object):
         try:
             parameters = json.loads(request.get_data())
             parameters['token'] = token
-            parameters['service_name'] = service_name
             parameters.update(token_ret.get('result'))
         except Exception, e:
             log.error("parameters error,reason=%s" % e)
@@ -41,6 +40,28 @@ class KubernetesClientApi(object):
         ret = cls.kuber.create_services(context, parameters)
 
         return json.dumps(ret)
+
+    @classmethod
+    def pod_message(cls, service_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error,reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        parameters = token_ret.get('result')
+        parameters['service_uuid'] = service_uuid
+        parameters['rtype'] = 'pods_msg'
+
+        context = context_data(token, service_uuid, "read")
+
+        try:
+            ret = cls.kuber.pod_msg(context, parameters)
+        except Exception, e:
+            log.error('get the pods messages error, reason=%s' % e)
+            return json.dumps(request_result(504))
+        return json.dumps(request_result(0, ret))
 
     @classmethod
     def get_all_service(cls):
@@ -69,6 +90,9 @@ class KubernetesClientApi(object):
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
             return json.dumps(request_result(201))
+
+        if request.args.get('pod') == 'pod':
+            return cls.pod_message(service_uuid)
 
         parameters = token_ret.get('result')
         parameters['service_uuid'] = service_uuid
@@ -99,7 +123,7 @@ class KubernetesClientApi(object):
         return json.dumps(ret)
 
     @classmethod
-    def put_service(cls, service_uuid, rtype):
+    def put_service(cls, service_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
@@ -108,9 +132,10 @@ class KubernetesClientApi(object):
             return json.dumps(request_result(201))
 
         parameters = token_ret.get('result')
+        rtype = request.args.get('rtype',)
+        parameters['rtype'] = rtype
         parameters['service_uuid'] = service_uuid
         parameters['token'] = token
-        parameters['rtype'] = rtype
 
         try:
             in_data = json.loads(request.get_data())
@@ -125,28 +150,6 @@ class KubernetesClientApi(object):
 
         ret = cls.kuber.update_service(context, parameters)
         return json.dumps(ret)
-
-    @classmethod
-    def pod_message(cls, service_uuid):
-        try:
-            token = request.headers.get('token')
-            token_ret = token_auth(token)
-        except Exception, e:
-            log.error('Token check error,reason=%s' % e)
-            return json.dumps(request_result(201))
-
-        parameters = token_ret.get('result')
-        parameters['service_uuid'] = service_uuid
-        parameters['rtype'] = 'pods_msg'
-
-        context = context_data(token, service_uuid, "read")
-
-        try:
-            ret = cls.kuber.pod_msg(context, parameters)
-        except Exception, e:
-            log.error('get the pods messages error, reason=%s' % e)
-            return json.dumps(request_result(504))
-        return json.dumps(request_result(0, ret))
 
     @classmethod
     def put_policy(cls, service_name):

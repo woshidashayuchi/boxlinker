@@ -10,6 +10,7 @@ from common.logs import logging as log
 from db.service_db import ServiceDB
 from db.metal_work import MetalWork
 from volume_driver import VolumeDriver
+from image_driver import images_message_get
 from rpcapi_client import KubernetesRpcClient
 
 
@@ -163,24 +164,27 @@ class KubernetesDriver(object):
 
     def unit_element(self, dict_data):
         namespace = dict_data.get('project_uuid')
-        image_name = dict_data.get('image_name')
-        image_version = dict_data.get('image_version')
         service_name = dict_data.get('service_name').replace('_', '-')
         pods_num = int(dict_data.get('pods_num'))
         team_name = dict_data.get('team_name')
         command = self.command_query(dict_data)
         policy1 = dict_data.get('policy')
-        images = image_name
         container = dict_data.get('container')
         env = dict_data.get('env')
         auto_startup = dict_data.get('auto_startup')
         user_uuid = dict_data.get('user_uuid')
 
+        try:
+            image_name, image_version = images_message_get(dict_data)
+        except Exception, e:
+            log.error('get the image message error, reason is: %s' % e)
+            return False
+
         if int(auto_startup) != 1:
             pods_num = 0
 
         if int(policy1) == 1:
-            rc_krud = images[20:].replace('/', '_').replace(':', '_')
+            rc_krud = image_name[20:].replace('/', '_').replace(':', '_')
             pullpolicy = 'Always'
         else:
             rc_krud = 'null'
@@ -629,14 +633,13 @@ class KubernetesDriver(object):
 
         try:
             log.info('context is %s, type is %s' % (context, type(context)))
+
             svc_detail = svc_detail_original.get('result')
             svc_detail['service_name'] = context.get('service_name')
             svc_detail['project_uuid'] = context.get('project_uuid')
             svc_detail['rtype'] = context.get('rtype')
-
-            # 需要删除
-            svc_detail['image_name'] = 'index.boxlinker.com/boxlinker/web-index'
-            svc_detail['image_version'] = 'latest'
+            svc_detail['image_id'] = svc_detail.get('image_id')
+            svc_detail['token'] = context.get('token')
         except Exception, e:
             log.error('struct the params when update service error, reason=%s' % e)
             return request_result(502)
@@ -799,7 +802,22 @@ class KubernetesDriver(object):
         return True
 
     def update_publish(self, context):
-        pass
+        try:
+            self.service_db.update_publish(context)
+        except Exception, e:
+            log.error('update the database error, reason is: %s' % e)
+            return request_result(403)
+
+        try:
+            rc_ret = self.update_rc(context)
+            if rc_ret is not True:
+                log.error('RC UPDATE RESULT IS:%s' % rc_ret)
+                return request_result(502)
+        except Exception, e:
+            log.error('update the service error, reason is: %s' % e)
+            return request_result(502)
+
+        return True
 
     def update_command(self, context):
         try:

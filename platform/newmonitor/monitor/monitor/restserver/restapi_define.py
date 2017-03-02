@@ -30,8 +30,9 @@ class MonitorClientApi(object):
         parameters = dict()
         try:
             parameters['time_long'] = request.values.get('time_long', '15m')
+            parameters['time_span'] = request.values.get('time_span', '1m')
             parameters['pod_name'] = pod_name
-            parameters['rtype'] = rtype
+            parameters['type'] = rtype
             parameters.update(token_ret.get('result'))
         except Exception, e:
             log.error("parameters error,reason=%s" % e)
@@ -40,5 +41,18 @@ class MonitorClientApi(object):
         # context = context_data(token, "service_create", "create")
 
         ret = cls.monitor.monitor_message_get(parameters)
+
+        return json.dumps(ret)
+
+    @classmethod
+    def broad_for(cls):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        ret = cls.monitor.broad_message_get(token_ret.get('result'))
 
         return json.dumps(ret)

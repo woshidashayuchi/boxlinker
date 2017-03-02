@@ -42,4 +42,4 @@ VOLUMEIP = '10.10.10.11:5000,10.10.10.12:5000,10.10.10.21:5000'
 IMAGE_SERVER = 'https://imageauth.boxlinker.com/api/v1.0/imagerepo/image/image_uuid/public_info'
 
 
-GRAFANA = 'grafana.boxlinker.com'
+GRAFANA = 'grafana-api:3000'

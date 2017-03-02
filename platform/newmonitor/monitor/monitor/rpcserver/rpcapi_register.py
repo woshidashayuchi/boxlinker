@@ -11,7 +11,6 @@ from common.rpc_api import RpcAPI
 class RabbitmqResponse(object):
 
     def __init__(self):
-
         self.rpc_api = RpcAPI()
         self.rpc_add_resource()
 
@@ -19,11 +18,14 @@ class RabbitmqResponse(object):
 
         self.rpcapi_define = rpcapi_define.MonitorRpcAPI()
 
-        self.rpc_api.add_resource('monitor_get', self.rpcapi_define.monitor_get)
+        self.rpc_api.add_resource('mon_get', self.rpcapi_define.monitor_get)
+
+        self.rpc_api.add_resource('broad_get', self.rpcapi_define.broad_get)
 
     def rpc_exec(self, rpc_body):
 
         try:
+            log.info('rpc_body==%s' % rpc_body)
             return self.rpc_api.rpcapp_run(rpc_body)
         except Exception, e:
             log.error('RPC Server exec error: %s' % e)

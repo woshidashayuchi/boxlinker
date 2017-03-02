@@ -105,7 +105,7 @@ class RabbitmqServer(object):
         self.mq_connect(heartbeat_time=heartbeat_time)
 
     def rpc_call_server(self, queue_name, rabbitmq_response):
-
+        log.info('server running..')
         try:
             self.queue_declare(queue_name)
             self.rbtmq_response = rabbitmq_response.RabbitmqResponse()

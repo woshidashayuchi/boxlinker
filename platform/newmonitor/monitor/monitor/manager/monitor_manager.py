@@ -11,4 +11,3 @@ class MonitorManager(object):
 
     def monitor_message_manager(self, parameters):
         return self.monitor_driver.get_monitor_message(parameters)
-

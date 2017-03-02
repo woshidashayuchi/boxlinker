@@ -7,7 +7,7 @@ from conf import conf
 
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     filename=conf.log_file,
     format=('%(asctime)s '
             '[%(levelname)s] '

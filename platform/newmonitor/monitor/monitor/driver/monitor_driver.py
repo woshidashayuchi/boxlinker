@@ -5,6 +5,7 @@ import json
 import requests
 from common.logs import logging as log
 from conf import conf
+from common.code import request_result
 
 
 class MonitorDriver(object):
@@ -16,19 +17,19 @@ class MonitorDriver(object):
         # client = InfluxDBClient(host='influxdb', port=8086, username='root', password='root', database='dashboard')
         time_long = parameters.get("time_long")
         time_span = parameters.get("time_span")
-        user_name = parameters.get("user_name")
+        project_uuid = parameters.get("project_uuid")
         pod_name = parameters.get("pod_name")
         STATICSQL = "SELECT sum(\"value\") FROM \"change\" WHERE \"type\" = \'pod_container\' " \
                     "AND \"namespace_name\" =~ /%s$/ " \
                     "AND \"pod_name\" =~ /%s$/ " \
-                    "AND time > now() - %s GROUP BY time(%s), \"container_name\" fill(null)&epoch=ms" % (user_name,
+                    "AND time > now() - %s GROUP BY time(%s), \"container_name\" fill(null)&epoch=ms" % (project_uuid,
                                                                                                 pod_name,
                                                                                                 time_long,
                                                                                                 time_span)
         STATICNET = "SELECT sum(\"value\") FROM \"change\" WHERE \"type\" = \'pod\' " \
                     "AND \"namespace_name\" =~ /%s$/ " \
                     "AND \"pod_name\" =~ /%s$/ " \
-                    "AND time > now() - %s GROUP BY time(%s) fill(null)&epoch=ms" % (user_name,
+                    "AND time > now() - %s GROUP BY time(%s) fill(null)&epoch=ms" % (project_uuid,
                                                                                      pod_name,
                                                                                      time_long,
                                                                                      time_span)
@@ -62,7 +63,6 @@ class MonitorDriver(object):
             return "error"
 
     def get_monitor_message(self, parameters):
-        log.info('goiiiiiiingggggggggg in...')
 
         BASEURL = "http://%s/api/datasources/proxy/1/query?db=k8s&q=" % conf.GRAFANA
         get_sql = ""
@@ -76,6 +76,7 @@ class MonitorDriver(object):
                 get_sql = self.struct_sql(parameters)
             if parameters.get("type") == "filesystem":
                 get_sql = self.struct_sql(parameters)
+            log.info('get_sql is: %s' % get_sql)
         except Exception, e:
             log.error("create sql(cpu) error, reason=%s" % e)
             return "error"
@@ -88,6 +89,7 @@ class MonitorDriver(object):
                 change = i
                 res_sql = get_sql.get(change)
                 re = json.loads(requests.get(BASEURL+res_sql).text)
+                log.info('1111111>>>>>>>>>>>>>>>>>>>>>')
                 log.info(re)
                 for i in re.get("results"):
                     if i.get("series") is None:
@@ -114,7 +116,7 @@ class MonitorDriver(object):
                         if j[1] < 0 and j[1] is not None:
                             j[1] = abs(j[1])
 
-            return result
+            return request_result(0, result)
 
         except Exception, e:
             log.error("get the result error, reason=%s" % e)

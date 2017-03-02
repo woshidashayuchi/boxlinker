@@ -39,5 +39,8 @@ storage_call_queue = 'storage_call_api'
 TEAM_MSG = 'http://ucenter:8001/api/v1.0/ucenter/teams'
 #VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
 VOLUMEIP = '10.10.10.11:5000,10.10.10.12:5000,10.10.10.21:5000'
-IMAGE_SERVER = 'https://imageauth.boxlinker.com/api/v1.0/imagerepo/image/image_uuid/public_info'
+
+
+IMAGE_S = 'imageauth:8001'
+IMAGE_H = 'index.boxlinker.com/'
 

@@ -390,3 +390,15 @@ class ServiceDB(MysqlInit):
         self.operate.connClose(conn, cur)
 
         return container_ret
+
+    def update_publish(self, context):
+
+        if context.get('policy') == 1:
+            sql = "update replicationcontrollers SET policy=%d where uuid=(SELECT rc_uuid from " \
+                  "font_service WHERE uuid='%s')" % (1, context.get('service_uuid'))
+        else:
+            sql = "update replicationcontrollers set policy=%d,image_id=%s WHERE " \
+                  "uuid=(SELECT rc_uuid from font_service WHERE " \
+                  "uuid='%s')" % (0, context.get('image_id'), context.get('service_uuid'))
+
+        return super(ServiceDB, self).exec_update_sql(sql)
