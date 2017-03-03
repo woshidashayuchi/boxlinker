@@ -54,3 +54,4 @@ class UpdateManager(object):
             return ret
 
         return request_result(0, 'service update successfully')
+

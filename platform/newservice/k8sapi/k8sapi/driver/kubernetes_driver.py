@@ -60,17 +60,18 @@ class KubernetesDriver(object):
         return result
 
     def service_domain(self, context):
-
+        log.info('6666666666666666666%s' % context)
         ser = context.get('container')
         service_name = context.get('service_name')
         team_name = context.get('team_name')
+        project_name = context.get('project_name')
         using_port = None
         tcp_lb = ''
         http_lb = ''
         m = 1
 
         for i in ser:
-            domain_http = '%s-%s.lb1.boxlinker.com:' % (team_name, service_name)
+            domain_http = '%s-%s-%s.lb1.boxlinker.com:' % (team_name, project_name, service_name)
             if i.get('access_mode').upper() == 'HTTP' and i.get('access_scope') == 'outsisde':
                 http_lbadd = domain_http + str(i.get('container_port'))
                 if http_lb == '':
@@ -164,7 +165,7 @@ class KubernetesDriver(object):
 
     def unit_element(self, dict_data):
         namespace = dict_data.get('project_uuid')
-        service_name = dict_data.get('service_name').replace('_', '-')
+        service_name = dict_data.get('service_name').lower().replace('_', '-')
         pods_num = int(dict_data.get('pods_num'))
         team_name = dict_data.get('team_name')
         command = self.command_query(dict_data)
@@ -222,7 +223,8 @@ class KubernetesDriver(object):
                   "selector": {"name": service_name},
                   "template": {
                      "metadata": {
-                        "labels": {"component": service_name, "name": service_name, "logs": service_name}
+                        "labels": {"component": dict_data.get("service_name"), "name": service_name,
+                                   "logs": service_name}
                      },
                      "spec": {
                         "nodeSelector": {"role": "user"},
@@ -388,7 +390,7 @@ class KubernetesDriver(object):
             return False
 
         try:
-            service_name1 = service_name.replace('_', '-')
+            service_name1 = service_name.lower().replace('_', '-')
             add_service = {
                            "rtype": "services", "kind": "Service", "apiVersion": "v1",
                            "metadata": {
@@ -402,7 +404,7 @@ class KubernetesDriver(object):
                            },
                            "spec": {
                               "ports": self.service_port(container),
-                              "selector": {"component": service_name1, "name": service_name1}
+                              "selector": {"component": dict_data.get("service_name")}  # "name": service_name1}
                            },
                         }
 
@@ -597,7 +599,7 @@ class KubernetesDriver(object):
             return request_result(503)
 
         namespace = context.get('project_uuid')
-        name = context.get('service_name')
+        name = context.get('service_name').lower().replace('_', '-')
 
         del_rc_json = {'namespace': namespace, 'name': name, 'rtype': 'replicationcontrollers'}
         del_svc_json = {'namespace': namespace, 'name': name, 'rtype': 'services'}

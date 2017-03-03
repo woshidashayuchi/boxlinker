@@ -26,6 +26,7 @@ database = 'servicedata'
 
 # ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
 ucenter_api = 'http://ucenter:8001/api/v1.0/ucenter/tokens'
+ucenter_api1 = 'http://ucenter:8001'
 rest_host = '0.0.0.0'
 rest_port = 8001
 rest_debug = True
@@ -35,12 +36,17 @@ rpc_timeout = 60
 
 STORAGE_HOST = 'https://storage.boxlinker.com/api/v1.0/storage/volumes'
 storage_call_queue = 'storage_call_api'
-#TEAM_MSG = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/teams'
+# PEOJECT_MSG = "https://ucenter.boxlinker.com/api/v1.0/ucenter/projects"
+PEOJECT_MSG = 'http://ucenter:8001/api/v1.0/ucenter/projects'
+# TEAM_MSG = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/teams'
 TEAM_MSG = 'http://ucenter:8001/api/v1.0/ucenter/teams'
-#VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
+# VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
 VOLUMEIP = '10.10.10.11:5000,10.10.10.12:5000,10.10.10.21:5000'
 
 
 IMAGE_S = 'imageauth:8001'
 IMAGE_H = 'index.boxlinker.com/'
 
+
+K8S_POD_API = 'https://kubernetes.default.svc:443/api/v1/pods'
+TOKEN_PATH = '/run/secrets/kubernetes.io/serviceaccount/token'

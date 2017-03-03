@@ -101,11 +101,12 @@ class CreateManager(object):
         if check_name == 'error':
             return request_result(404)
 
-        team_name = self.token_driver.gain_team_name(context)
+        team_name, project_name = self.token_driver.gain_team_name(context)
         if team_name is False:
             log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
             return request_result(501)
         context['team_name'] = team_name
+        context['project_name'] = project_name
 
         try:
             context['action'] = 'post'

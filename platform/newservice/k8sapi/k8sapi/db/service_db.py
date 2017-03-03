@@ -402,3 +402,14 @@ class ServiceDB(MysqlInit):
                   "uuid='%s')" % (0, context.get('image_id'), context.get('service_uuid'))
 
         return super(ServiceDB, self).exec_update_sql(sql)
+
+    def update_status_anytime(self, context):
+        service_status = context.get('service_status')
+        project_uuid = context.get('project_uuid')
+        service_name = context.get('service_name')
+
+        sql = "update font_service set service_status='%s' WHERE project_uuid='%s' " \
+              "and service_name='%s'" % (service_status, project_uuid, service_name)
+
+        log.info('333333===%s' % sql)
+        return super(ServiceDB, self).exec_update_sql(sql)
