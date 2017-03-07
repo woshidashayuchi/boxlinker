@@ -35,13 +35,13 @@ def rc_infix_element(dict_data):
     policy = dict_data.get('policy')
     auto_startup = dict_data.get('auto_startup')
     command = dict_data.get('command')
-    isUpdate = dict_data.get('isUpdate')
+    # isUpdate = dict_data.get('isUpdate')
 
-    return pods_num, image_id, container_cpu, container_memory, policy, auto_startup, command, isUpdate
+    return pods_num, image_id, container_cpu, container_memory, policy, auto_startup, command
 
 
 def container_element(dict_data):
-
+    log.info('the data when get the container element is: %s' % dict_data)
     rc_uuid = dict_data.get('rc_uuid')
     container_uuid = str(uuid.uuid4())
     container_port = dict_data.get('container_port')

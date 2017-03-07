@@ -42,8 +42,8 @@ class ServiceDB(MysqlInit):
         font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name, \
             image_dir = font_infix_element(dict_data)
 
-        pods_num, image_id, container_cpu, container_memory, policy, auto_startup, command, \
-            isUpdate = rc_infix_element(dict_data)
+        pods_num, image_id, container_cpu, container_memory, policy, auto_startup, \
+            command = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
                    "team_uuid, project_uuid, service_name,image_dir) VALUES('%s', '%s', '%s', '%s', " \
@@ -51,10 +51,10 @@ class ServiceDB(MysqlInit):
                                                 project_uuid, service_name, image_dir)
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
-                 "image_id, container_cpu, container_memory, policy, auto_startup, command, isUpdate) " \
+                 "image_id, container_cpu, container_memory, policy, auto_startup, command) " \
                  "VALUES ('%s', '%s', %d, '%s', '%s', '%s', %d, %d," \
-                 "'%s', %d)" % (rc_uuid, service_name, pods_num, image_id, container_cpu,
-                                container_memory, policy, auto_startup, command, isUpdate)
+                 "'%s')" % (rc_uuid, service_name, pods_num, image_id, container_cpu,
+                                container_memory, policy, auto_startup, command)
 
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
                   "user_uuid) VALUES ('%s','%s','%s','%s','%s'," \
@@ -62,6 +62,12 @@ class ServiceDB(MysqlInit):
                              dict_data.get('project_uuid'), dict_data.get('user_uuid'))
 
         return super(ServiceDB, self).exec_update_sql(sql_font, sql_rc, sql_acl)
+
+    def get_service_uuid(self, dict_data):
+        sql = "select uuid as service_uuid from font_service WHERE service_name='%s' and " \
+              "project_uuid='%s'" % (dict_data.get('service_name'), dict_data.get('project_uuid'))
+
+        return super(ServiceDB, self).exec_select_sql(sql)
 
     def get_rc_uuid(self, dict_data):
 
@@ -128,7 +134,8 @@ class ServiceDB(MysqlInit):
         service_uuid = dict_data.get('service_uuid')
         project_uuid = dict_data.get('project_uuid')
 
-        sql_rc = "select a.*, b.uuid service_uuid from replicationcontrollers a,font_service b " \
+        sql_rc = "select a.*, b.uuid service_uuid, b.service_name,b.service_status from " \
+                 "replicationcontrollers a,font_service b " \
                  "where a.uuid = (select rc_uuid from font_service where " \
                  "project_uuid='%s' and uuid='%s') and b.uuid='%s'" % (project_uuid, service_uuid, service_uuid)
 
@@ -224,7 +231,7 @@ class ServiceDB(MysqlInit):
                          "and project_uuid='%s'),%d,'%s','%s','%s','%s','%s','%s','%s'," \
                          "'%s')" % (uuid_c, service_name, project_uuid, int(container_port), protocol, access_mode,
                                     access_scope, tcp_port, http_domain, tcp_domain, i.get('domain'), i.get('identify'))
-
+            log.info('update the container sql is: %s' % sql_insert)
             super(ServiceDB, self).exec_update_sql(sql_insert)
 
     def update_env(self, dict_data):
@@ -411,5 +418,5 @@ class ServiceDB(MysqlInit):
         sql = "update font_service set service_status='%s' WHERE project_uuid='%s' " \
               "and service_name='%s'" % (service_status, project_uuid, service_name)
 
-        log.info('333333===%s' % sql)
+        log.info("update app status's sql is: %s" % sql)
         return super(ServiceDB, self).exec_update_sql(sql)

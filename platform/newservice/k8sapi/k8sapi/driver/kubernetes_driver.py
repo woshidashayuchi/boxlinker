@@ -12,6 +12,7 @@ from db.metal_work import MetalWork
 from volume_driver import VolumeDriver
 from image_driver import images_message_get
 from rpcapi_client import KubernetesRpcClient
+from token_driver import TokenDriver
 
 
 class KubernetesDriver(object):
@@ -21,6 +22,7 @@ class KubernetesDriver(object):
         self.krpc_client = KubernetesRpcClient()
         self.metal = MetalWork()
         self.volume = VolumeDriver()
+        self.token_driver = TokenDriver()
 
     @staticmethod
     def command_query(dict_data):
@@ -60,7 +62,17 @@ class KubernetesDriver(object):
         return result
 
     def service_domain(self, context):
-        log.info('6666666666666666666%s' % context)
+
+        # team_name, project_name = self.token_driver.gain_team_name(context)
+        # log.info('the team and project name get from token is: %s,%s' % (team_name, project_name))
+        # a = dict()
+        # if team_name is False:
+        #     log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
+        #     return request_result(501)
+        # a['team_name'] = team_name
+        # a['project_name'] = project_name
+        # context.update(a)
+
         ser = context.get('container')
         service_name = context.get('service_name')
         team_name = context.get('team_name')
@@ -126,8 +138,8 @@ class KubernetesDriver(object):
             for x in re.split(',', tcp_lb):
                 num = x.rfind(':')
                 c_port = x[num+1:]
-                tcp_domain = 'lb1.boxlinker.com' + ':' + x[:num]
-                # tcp_domain = "boxlinker.com" + ":" + x[:num]
+                # tcp_domain = 'lb1.boxlinker.com' + ':' + x[:num]
+                tcp_domain = "boxlinker.com" + ":" + x[:num]
                 for y in container:
                     if y.get('access_mode').upper() == 'TCP' and y.get('access_scope') == 'inside':
                         y['tcp_domain'] = None
@@ -164,16 +176,20 @@ class KubernetesDriver(object):
         return result
 
     def unit_element(self, dict_data):
-        namespace = dict_data.get('project_uuid')
-        service_name = dict_data.get('service_name').lower().replace('_', '-')
-        pods_num = int(dict_data.get('pods_num'))
-        team_name = dict_data.get('team_name')
-        command = self.command_query(dict_data)
-        policy1 = dict_data.get('policy')
-        container = dict_data.get('container')
-        env = dict_data.get('env')
-        auto_startup = dict_data.get('auto_startup')
-        user_uuid = dict_data.get('user_uuid')
+        try:
+            namespace = dict_data.get('project_uuid')
+            service_name = dict_data.get('service_name').lower().replace('_', '-')
+            pods_num = int(dict_data.get('pods_num'))
+            team_name = dict_data.get('team_name')
+            command = self.command_query(dict_data)
+            policy1 = dict_data.get('policy')
+            container = dict_data.get('container')
+            env = dict_data.get('env')
+            auto_startup = dict_data.get('auto_startup')
+            user_uuid = dict_data.get('user_uuid')
+        except Exception, e:
+            log.error('parameters explain error, reason is: %s' % e)
+            return False
 
         try:
             image_name, image_version = images_message_get(dict_data)
@@ -207,8 +223,13 @@ class KubernetesDriver(object):
             env, user_uuid, rc_krud, pullpolicy, volumes, volume_mounts
 
     def add_rc(self, dict_data):
-        namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
-            env, user_uuid, rc_krud, pullpolicy, volumes, volume_mounts = self.unit_element(dict_data)
+        log.info('add rc json data is: %s' % dict_data)
+        try:
+            namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
+                env, user_uuid, rc_krud, pullpolicy, volumes, volume_mounts = self.unit_element(dict_data)
+        except Exception, e:
+            log.error('get the explain parameters error, reason is: %s' % e)
+            return False
 
         try:
             add_rc = {
@@ -267,17 +288,20 @@ class KubernetesDriver(object):
         return add_rc
 
     def del_pod_element(self, dict_data):
-
-        command = ''
-        pullpolicy = ''
-        rc_krud = ''
-        image_name = "index.boxlinker.com/boxlinker/web-index"
-        image_version = "latest"
-        service_name = dict_data.get('service_name').replace('_', '-')
-        namespace = dict_data.get('project_uuid')
-        pods_num = 0
-        container = []
-        images = image_name + image_version
+        try:
+            command = ''
+            pullpolicy = ''
+            rc_krud = ''
+            image_name = "index.boxlinker.com/boxlinker/web-index"
+            image_version = "latest"
+            service_name = dict_data.get('service_name').lower().replace('_', '-')
+            namespace = dict_data.get('project_uuid')
+            pods_num = 0
+            container = []
+            images = image_name + image_version
+        except Exception, e:
+            log.error('parameters explain error, reason is:' % e)
+            return
 
         try:
             rc_ret, containers_ret, env_ret, volume_ret = self.service_db.service_detail
@@ -374,6 +398,7 @@ class KubernetesDriver(object):
             return ret
 
     def add_service(self, dict_data):
+        log.info('update the service(k8s) data is: %s' % dict_data)
         namespace = dict_data.get('project_uuid')
         service_name = dict_data.get('service_name')
 
@@ -396,7 +421,8 @@ class KubernetesDriver(object):
                            "metadata": {
                               "annotations": {"serviceloadbalancer/lb.http": http_lb,
                                               "serviceloadbalancer/lb.tcp": tcp_lb,
-                                              "serviceloadbalancer/lb.node": "lb1"
+                                              # "serviceloadbalancer/lb.node": "lb1"
+                                              "serviceloadbalancer/lb.node": "main"
                                               },
                               "name": service_name1,
                               "namespace": namespace,
@@ -580,7 +606,6 @@ class KubernetesDriver(object):
         add_rc = self.add_rc(context)
         add_service = self.add_service(context)
         if add_rc is False or add_service is False:
-            log.info('CREATE SERVICE ERROR WHEN CREATE JSON DATA...')
             return request_result(501)
 
         add_rc['token'] = context.get('token')
@@ -727,6 +752,7 @@ class KubernetesDriver(object):
 
         try:
             container = self.container_domain(context)
+            log.info('struct the container result when update the container is: %s' % container)
         except Exception, e:
             log.error('list the container message error, reason is: %s' % e)
             return request_result(502)
@@ -863,7 +889,7 @@ class KubernetesDriver(object):
             return self.update_status(context)
         if rtype == 'telescopic':
             return self.update_telescopic(context)
-        if rtype == 'publish':
+        if rtype == 'policy':
             return self.update_publish(context)
         if rtype == 'command':
             return self.update_command(context)

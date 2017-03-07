@@ -42,8 +42,8 @@ class AppStatusManager(object):
                     continue
                 pod_status_info = rc_info['status']['containerStatuses'][0]['state']
             except Exception, e:
-                # log.warning('Get rc info error, rc_info=%s, reason=%s'
-                #            % (rc_info, e))
+                log.warning('Get rc info error, rc_info=%s, reason=%s'
+                            % (rc_info, e))
                 continue
 
             for k, v in pod_status_info.items():

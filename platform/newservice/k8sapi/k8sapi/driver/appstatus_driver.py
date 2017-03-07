@@ -39,7 +39,7 @@ class K8sDriver(object):
             return request_result(103)
 
     def rc_status_update(self, parameters):
-        log.info('5555555555555=%s' % parameters)
+
         try:
             ret = self.service_db.update_status_anytime(parameters)
             if ret is not None:

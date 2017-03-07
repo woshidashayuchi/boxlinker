@@ -26,11 +26,16 @@ class UpdateManager(object):
             log.error('get the service name error, reason=%s' % e)
             return request_result(404)
 
-        team_name = self.token_driver.gain_team_name(context)
-        if team_name is False:
-            log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
-            return request_result(501)
+        try:
+            team_name, project_name = self.token_driver.gain_team_name(context)
+            if team_name is False:
+                log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
+                return request_result(501)
+        except Exception, e:
+            log.error('get the team name, project name error, reason is: %s' % e)
+            return request_result(502)
         context['team_name'] = team_name
+        context['project_name'] = project_name
 
         try:
             result_old = self.kuber.update_volume_status(context)

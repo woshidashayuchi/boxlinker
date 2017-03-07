@@ -153,14 +153,12 @@
 @apiParamExample body
 {
      "service_name":"aaa"
-     "image_name":"index.boxlinker.com/boxlinker/web-index",
-     "image_version":"latest",
+     "image_id":int,
      "policy":1,
      "pods_num":1,
      "containerNum":1,
      "isUpdate":1,
      "auto_startup":1,
-     "image_id":"1359447b-3327-3a69-bec0-cdf7d4f6c6df",
      "command":"",
      "container_cpu":1,
      "container_memory":"50M",

@@ -61,7 +61,7 @@
 ###################################################################
 
 """
-@api {get} /api/v1.0/model/pods/<pod_name>/metrics/<rtype> 1.1 监控信息
+@api {get} /api/v1.0/monitors/pods/<pod_name>/<rtype> 1.1 监控信息
 @apiName monitor message
 @apiGroup 1 details
 @apiVersion 1.0.0
@@ -72,7 +72,7 @@
 """
 
 """
-@api {get} /api/v1.0/broad 1.2 控制台监控信息
+@api {get} /api/v1.0/monitors/broads 1.2 控制台监控信息
 @apiName monitor message
 @apiGroup 2 broad
 @apiVersion 1.0.0

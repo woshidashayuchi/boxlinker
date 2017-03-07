@@ -61,23 +61,23 @@
 ###################################################################
 
 """
-@api {get} /api/v1.0/model/pods/<pod_name>/metrics/<rtype> 1.1 监控信息
+@api {get} /api/v1.0/monitors/pods/<pod_name>/<rtype> 1.1 监控信息
 @apiName monitor message
 @apiGroup 1 details
 @apiVersion 1.0.0
 @apiDescription 监控信息
 @apiPermission all
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_GET_0
+@apiUse CODE_POST_0
 """
 
 """
-@api {get} /api/v1.0/broad 1.2 控制台监控信息
+@api {get} /api/v1.0/monitors/broads 1.2 控制台监控信息
 @apiName monitor message
 @apiGroup 2 broad
 @apiVersion 1.0.0
 @apiDescription 控制台监控信息
 @apiPermission all
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_GET_1
+@apiUse CODE_POST_1
 """

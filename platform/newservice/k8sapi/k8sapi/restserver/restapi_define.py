@@ -29,8 +29,13 @@ class KubernetesClientApi(object):
 
         try:
             parameters = json.loads(request.get_data())
+            log.info('parameters body is: %s' % parameters)
             parameters['token'] = token
-            parameters.update(token_ret.get('result'))
+            # parameters.update(token_ret.get('result'))
+            parameters = dict(parameters.items() + token_ret.get('result').items())
+            log.info('parameters body(1) is:%s' % parameters)
+            if parameters.get('service_name') is None:
+                return json.dumps(request_result(101))
         except Exception, e:
             log.error("parameters error,reason=%s" % e)
             return json.dumps(request_result(101))
@@ -150,52 +155,3 @@ class KubernetesClientApi(object):
 
         ret = cls.kuber.update_service(context, parameters)
         return json.dumps(ret)
-
-    @classmethod
-    def put_policy(cls, service_name):
-        pass
-    '''
-        try:
-            token_get1 = request.headers.get("token")
-            token_get2 = token_get1.decode("utf-8")
-            token_get = token_get2.encode("utf-8")
-            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-            user_msg = {"user_id": user_id, "user_name": user_name}
-        except Exception, e:
-            log.error("authentication error, reason=%s" % e)
-            return json.dumps(code.request_result(201))
-        json_list = json.loads(request.get_data())
-        json_name = {"service_name": service_name, "user_id": user_msg.get("user_id"), "user_name": user_name,
-                     "user_orga": user_orga, "role_uuid": role_uuid}
-        json_list["token"] = token_get1
-        json_list.update(json_name)
-        try:
-            controller = SheetController()
-            response = controller.update_service(json_list)
-            return json.dumps(response)
-        except Exception, e:
-            log.error("update error, reason = %s" % e)
-            return json.dumps(code.request_result(502))
-    '''
-    @classmethod
-    def domain_identify(cls):
-        pass
-    '''
-        try:
-            token_get1 = request.headers.get("token")
-            token_get2 = token_get1.decode("utf-8")
-            token_get = token_get2.encode("utf-8")
-            user_id, user_name, user_orga, role_uuid = TokenForApi.get_msg(token_get)
-        except Exception, e:
-            log.error("authentication error, reason=%s" % e)
-            return json.dumps(code.request_result(201))
-        json_data = json.loads(request.get_data())
-        change_info = {"domain": json_data.get("domain"), "identify": json_data.get("identify"), "user_name": user_name,
-                       "user_orga": user_orga, "role_uuid": role_uuid, "user_id": user_id, "token": token_get1}
-        change = ChangeDomain()
-        try:
-            return json.dumps(change.change_identify(change_info))
-        except Exception, e:
-            log.error("change the domain identify error, reason=%s" % e)
-            return code.request_result(502)
-    '''

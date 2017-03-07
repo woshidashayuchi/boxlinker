@@ -37,15 +37,21 @@ class CreateManager(object):
             log.info('the infix result is %s,type is %s' % (infix, type(infix)))
             if infix is not None:
                 return False
+
+            service_uuid = self.service_db.get_service_uuid(context)
+            log.info('get the service_uuid is: %s' % service_uuid)
+            service_uuid = service_uuid[0][0]
         except Exception, e:
             log.error('Database infix error when create the service..., reason=%s' % e)
             return False
 
-        return True
+        return service_uuid
 
     def diff_infix_db(self, dict_data):
         try:
-            rc_uuid = self.service_db.get_rc_uuid(dict_data)[0][0]
+            rc_uuid = self.service_db.get_rc_uuid(dict_data)
+            log.info('get rc uuid is: %s' % rc_uuid)
+            rc_uuid = rc_uuid[0][0]
         except Exception, e:
             log.error('Database error when get the rc_uuid...,reason=%s' % e)
             return False
@@ -137,4 +143,4 @@ class CreateManager(object):
         if infix is False or diff is False:
             return request_result(401)
 
-        return request_result(0, 'service is creating')
+        return request_result(0, infix)

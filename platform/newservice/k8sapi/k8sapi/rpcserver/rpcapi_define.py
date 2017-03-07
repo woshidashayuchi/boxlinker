@@ -24,6 +24,7 @@ class KubernetesRpcAPI(object):
 
     @acl_check
     def service_create(self, context, parameters):
+        log.info('rpc server get the data is : %s' % parameters)
         return self.create_manager.service_create(parameters)
 
     @acl_check

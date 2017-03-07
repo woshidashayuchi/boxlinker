@@ -14,12 +14,12 @@ app = Flask(__name__)
 CORS(app=app)
 
 
-@app.route('/api/v1.0/model/pods/<pod_name>/metrics/<rtype>', methods=['GET'])
+@app.route('/api/v1.0/monitors/pods/<pod_name>/<rtype>', methods=['GET'])
 def monitor_service(pod_name, rtype):
     return MonitorClientApi.monitor_for(pod_name, rtype)
 
 
-@app.route('/api/v1.0/broad', methods=['GET'])
+@app.route('/api/v1.0/monitors/broads', methods=['GET'])
 def broad_service():
     return MonitorClientApi.broad_for()
 

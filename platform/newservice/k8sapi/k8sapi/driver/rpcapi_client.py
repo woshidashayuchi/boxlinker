@@ -103,7 +103,7 @@ class KubernetesRpcClient(object):
 
             return ret
         except Exception, e:
-            log.error('Rpc client exec error when delete rc and service...,reason=%s' % e)
+            log.error('Rpc client exec error when get pods messages...,reason=%s' % e)
 
     def update_service(self, context, parameters=None):
 
