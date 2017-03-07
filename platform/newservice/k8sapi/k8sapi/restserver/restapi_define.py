@@ -31,7 +31,7 @@ class KubernetesClientApi(object):
             parameters = json.loads(request.get_data())
             log.info('parameters body is: %s' % parameters)
             parameters['token'] = token
-            # parameters.update(token_ret.get('result'))
+            log.info('token result is: %s' % token_ret.get('result'))
             parameters = dict(parameters.items() + token_ret.get('result').items())
             log.info('parameters body(1) is:%s' % parameters)
             if parameters.get('service_name') is None:

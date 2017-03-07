@@ -54,7 +54,7 @@ class ServiceDB(MysqlInit):
                  "image_id, container_cpu, container_memory, policy, auto_startup, command) " \
                  "VALUES ('%s', '%s', %d, '%s', '%s', '%s', %d, %d," \
                  "'%s')" % (rc_uuid, service_name, pods_num, image_id, container_cpu,
-                                container_memory, policy, auto_startup, command)
+                            container_memory, policy, auto_startup, command)
 
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
                   "user_uuid) VALUES ('%s','%s','%s','%s','%s'," \

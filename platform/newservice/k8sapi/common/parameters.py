@@ -23,86 +23,34 @@ def rpc_data(api, context, parameters):
                "parameters": parameters
            }
 
-'''
-def rc_data(context):
-
-    log.info("create rc json, the based dict data is: %s" % context)
-
-    namespace = context.get('project_uuid')
-    image_name = context.get('image_name')
-    image_version = context.get('image_version')
-    service_name = context.get('service_name')
-    pods_num = context.get('pods_num')
-    policy = context.get('policy')
-    container = context.get('container')
-    env = context.get('env')
-    auto_startup = context.get('auto_startup')
-    command = context.get('command')
-
-    if int(auto_startup) != 1:
-        pods_num = 0
-    if int(policy) == 1:
-        rc_krud = image_name[20:].replace('/', '_').replace(':', '_')
-        pull_policy = 'Always'
-    else:
-        rc_krud = None
-        pull_policy = 'IfNotPresent'
-
-    add_rc = {
-               "kind": "ReplicationController", "apiVersion": "v1",
-               "metadata": {
-                  "namespace": namespace, "name": service_name,
-                  "labels": {
-                     "component": service_name, "rc-krud": rc_krud, "name": service_name
-                  }
-               },
-               "spec": {
-                  "replicas": pods_num,
-                  "selector": {"name": service_name},
-                  "template": {
-                     "metadata": {
-                        "labels": {
-                           "component": service_name, "name": service_name, "logs": service_name
-                        }
-                     },
-                     "spec": {
-                        "nodeSelector": {"role": "user"},
-                        "containers": [
-                           {
-                                "name": service_name, "image": image_name+":"+image_version,
-                                "imagePullPolicy": pull_policy, "command": command,
-                                "ports": ArrayIterator.container(container), "env": ArrayIterator.env(env),
-                                "volumeMounts": volume.fill_containerfor_volume(context)
-                           }
-                        ],
-                        "volumes": volumes
-                     }
-                  }
-               },
-            }
-
-    return add_rc
-'''
-
 
 def parameter_check(parameter, ptype='pstr', exist='yes'):
 
-    if (parameter is None) and (exist == 'no'):
+    if (parameter is None or parameter == '') and (exist == 'no'):
         return parameter
-    elif (parameter is None) and (exist == 'yes'):
+    elif (parameter is None or parameter == '') and (exist == 'yes'):
         raise(Exception('Parameter is not allowed to be None'))
 
     para_format = {
         "pstr": "[A-Za-z0-9-_]{1,60}$",
-        "pnam": "[A-Za-z]{1,30}[A-Za-z0-9-_]{0,10}$",
+        "pnam": "[A-Za-z]{1}[A-Za-z0-9-_]{4,19}$",
         "pint": "-{0,1}[0-9]{1,16}$",
         "pflt": "-{0,1}[0-9]{1,15}[.]{0,1}[0-9]{1,6}$",
-        "peml": ("[A-Za-z]{1,1}[A-Za-z0-9-_]{2,30}"
+        "peml": ("[A-Za-z1-9]{1,1}[A-Za-z0-9-_]{2,30}"
                  "@[A-Za-z0-9]{1,1}[A-Za-z0-9-_.]{1,20}"
                  "[.]{1,1}[A-Za-z]{1,5}$"),
-        "ppwd": ".{5,60}"
+        "puid": ("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-"
+                 "[a-z0-9]{4}-[a-z0-9]{12}$"),
+        "ppwd": ".{6,60}",
+        "pimgid": "^[0-9]*$",
+        "choice": "^[01]$",
+        "pod_num": "^([0-9]|10)$",
+        "command": "^[A-Za-z]{1}[A-Za-z0-9-_@,& ]{1,130}[A-Za-z0-9]{1}$",
+        "container_cpu": "^[1-8]{1}$",
+        "container_memory": "50M",
+        "container_port": "^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$",
+        "domain": "^((http://)|(https://))?([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}(/)?"
     }
-
     m = re.match(para_format[ptype], str(parameter))
     if m is None:
         log.warning('Parameter format error, parameter=%s, ptype=%s, exist=%s'

@@ -9,6 +9,7 @@ from common.code import request_result
 from driver.token_driver import TokenDriver
 from driver.kubernetes_driver import KubernetesDriver
 from driver.volume_driver import VolumeDriver
+from driver.photo_driver import photo_dir
 
 
 class CreateManager(object):
@@ -113,6 +114,12 @@ class CreateManager(object):
             return request_result(501)
         context['team_name'] = team_name
         context['project_name'] = project_name
+
+        try:
+            photo_ret = photo_dir(context)
+            context = photo_ret
+        except Exception, e:
+            log.error('from the photo url make the photo for service error, reason is: ' % e)
 
         try:
             context['action'] = 'post'
