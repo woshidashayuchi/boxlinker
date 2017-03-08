@@ -36,22 +36,14 @@ class UcenterRpcManager(object):
             user_name = parameters.get('user_name')
             password = parameters.get('password')
             email = parameters.get('email')
-            real_name = parameters.get('real_name')
             mobile = parameters.get('mobile')
-            sex = parameters.get('sex')
-            birth_date = parameters.get('birth_date')
             code_id = parameters.get('code_id')
             code_str = parameters.get('code_str')
 
             user_name = parameter_check(user_name, ptype='pnam')
             password = parameter_check(password, ptype='ppwd')
             email = parameter_check(email, ptype='peml')
-            real_name = parameter_check(real_name, ptype='pnam', exist='no')
             mobile = parameter_check(mobile, ptype='pint', exist='no')
-            sex = parameter_check(sex, ptype='pstr', exist='no')
-            birth_date = parameter_check(birth_date, ptype='pflt', exist='no')
-            if sex and (sex != 'man') and (sex != 'woman'):
-                raise(Exception('parameter error'))
             code_id = parameter_check(code_id, ptype='pstr', exist='no')
             code_str = parameter_check(code_str, ptype='pstr', exist='no')
         except Exception, e:
@@ -61,8 +53,7 @@ class UcenterRpcManager(object):
 
         return self.users_manager.user_create(
                     user_name, password, email,
-                    real_name, mobile, sex,
-                    birth_date, code_id, code_str)
+                    mobile, code_id, code_str)
 
     def user_activate(self, context, parameters):
 
@@ -176,6 +167,7 @@ class UcenterRpcManager(object):
     def role_create(self, context, parameters):
 
         try:
+            token = context['token']
             user_info = token_auth(context['token'])['result']
             user_uuid = user_info.get('user_uuid')
             team_uuid = user_info.get('team_uuid')
@@ -196,7 +188,8 @@ class UcenterRpcManager(object):
             return request_result(101)
 
         return self.roles_manager.role_create(
-                    role_name, role_priv, user_uuid, team_uuid)
+                    token, role_name, role_priv,
+                    user_uuid, team_uuid)
 
     @acl_check
     def role_list(self, context, parameters):
@@ -379,6 +372,7 @@ class UcenterRpcManager(object):
     def team_create(self, context, parameters):
 
         try:
+            token = context['token']
             user_info = token_auth(context['token'])['result']
             team_owner = user_info.get('user_uuid')
 
@@ -393,7 +387,8 @@ class UcenterRpcManager(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.teams_manager.team_create(team_name, team_owner, team_desc)
+        return self.teams_manager.team_create(
+                    token, team_name, team_owner, team_desc)
 
     @acl_check
     def team_list(self, context, parameters):
@@ -474,6 +469,7 @@ class UcenterRpcManager(object):
     def project_create(self, context, parameters):
 
         try:
+            token = context['token']
             user_info = token_auth(context['token'])['result']
             project_owner = user_info.get('user_uuid')
             project_team = user_info.get('team_uuid')
@@ -492,7 +488,7 @@ class UcenterRpcManager(object):
             return request_result(101)
 
         return self.projects_manager.project_create(
-                    project_name, project_owner,
+                    token, project_name, project_owner,
                     project_team, project_desc)
 
     @acl_check
@@ -569,6 +565,7 @@ class UcenterRpcManager(object):
     def user_team_add(self, context, parameters):
 
         try:
+            token = context['token']
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
 
@@ -584,7 +581,7 @@ class UcenterRpcManager(object):
             return request_result(101)
 
         return self.userteam_manager.user_team_add(
-                    user_uuid, team_uuid, role_uuid)
+                    token, user_uuid, team_uuid, role_uuid)
 
     @acl_check
     def user_team_list(self, context, parameters):
@@ -667,6 +664,7 @@ class UcenterRpcManager(object):
     def user_project_add(self, context, parameters):
 
         try:
+            token = context['token']
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
             project_uuid = user_info.get('project_uuid')
@@ -684,7 +682,8 @@ class UcenterRpcManager(object):
             return request_result(101)
 
         return self.userproject_manager.user_project_add(
-                    user_uuid, role_uuid, project_uuid, team_uuid)
+                    token, user_uuid, role_uuid,
+                    project_uuid, team_uuid)
 
     @acl_check
     def user_project_list(self, context, parameters):

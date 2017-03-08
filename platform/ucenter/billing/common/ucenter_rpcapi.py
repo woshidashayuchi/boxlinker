@@ -51,6 +51,16 @@ class UcenterRpcApi(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
+    def user_check(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("uct_usr_usr_chk", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
     def user_list(self, context, parameters=None):
 
         try:

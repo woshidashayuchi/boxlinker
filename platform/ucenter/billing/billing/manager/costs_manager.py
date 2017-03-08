@@ -22,14 +22,15 @@ class CostsManager(object):
         self.ssd_datum_cost = conf.ssd_datum_cost
         self.bwh_datum_cost = conf.bwh_datum_cost
         self.fip_datum_cost = conf.fip_datum_cost
+        self.def_datum_cost = conf.def_datum_cost
 
         self.balances_manager = balances_manager.BalancesManager()
         self.vouchers_manager = vouchers_manager.VouchersManager()
         self.bills_manager = bills_manager.BillsManager()
         self.billing_db = BillingDB()
 
-    def cost_accounting(self, resource_type,
-                        resource_conf, resource_status):
+    def cost_accounting(self, resource_type, resource_conf,
+                        resource_status, hours=1):
 
         resource_conf = float(resource_conf[:-1])
 
@@ -37,20 +38,29 @@ class CostsManager(object):
             if resource_status == 'off':
                 resource_cost = 0
             else:
-                resource_cost = resource_conf * self.app_datum_cost
+                resource_cost = self.app_datum_cost * resource_conf * hours
         elif resource_type == 'volume':
-            resource_cost = resource_conf * self.hdd_datum_cost
+            resource_cost = self.hdd_datum_cost * resource_conf * hours
         else:
-            resource_cost = resource_conf * 0.1
+            resource_cost = self.def_datum_cost * resource_conf * hours
 
-        return resource_cost
+        result = {
+                     "resource_type": resource_type,
+                     "resource_conf": resource_conf,
+                     "resource_status": resource_status,
+                     "hours": hours,
+                     "resource_cost": resource_cost
+                 }
+
+        return request_result(0, result)
 
     def cost_statistics(self, resource_uuid, resource_type,
                         team_uuid, project_uuid, user_uuid,
                         resource_conf, resource_status):
 
         resource_cost = self.cost_accounting(
-                             resource_type, resource_conf, resource_status)
+                             resource_type, resource_conf,
+                             resource_status)['result']['resource_cost']
 
         try:
             voucher_uuid = self.billing_db.voucher_check(

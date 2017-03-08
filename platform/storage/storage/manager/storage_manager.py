@@ -8,6 +8,7 @@ from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
+from common.limit import limit_check
 
 from storage.db import storage_db
 from storage.driver import storage_driver
@@ -21,8 +22,9 @@ class StorageManager(object):
         self.storage_db = storage_db.StorageDB()
         self.storage_driver = storage_driver.StorageDriver()
 
+    @limit_check('volumes')
     def volume_create(self, token, team_uuid, project_uuid, user_uuid,
-                      volume_name, volume_size, fs_type):
+                      volume_name, volume_size, fs_type, cost):
 
         try:
             disk_name_ch = self.storage_db.name_duplicate_check(

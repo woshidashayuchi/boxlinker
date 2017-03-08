@@ -28,7 +28,7 @@ class OrdersManager(object):
                                          project_uuid, order_uuid,
                                          resource_uuid, cost, status)
         except Exception, e:
-            log.error('Database insert error')
+            log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
         result = {

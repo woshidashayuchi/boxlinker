@@ -8,6 +8,7 @@ import time
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
+from common.limit_local import limit_check
 
 from ucenter.db import ucenter_db
 
@@ -18,7 +19,8 @@ class UserProjectManager(object):
 
         self.ucenter_db = ucenter_db.UcenterDB()
 
-    def user_project_add(self, user_uuid, role_uuid,
+    @limit_check('projectusers')
+    def user_project_add(self, token, user_uuid, role_uuid,
                          project_uuid, project_team):
 
         if role_uuid is None:

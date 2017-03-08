@@ -172,22 +172,58 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_select_sql(sql)
 
-    def balance_insert(self, team_uuid):
+    def level_init(self, team_uuid):
 
-        sql = "insert into balances(team_uuid, balance, create_time, update_time) \
-               values('%s', 0, now(), now())" \
+        sql = "insert into levels(team_uuid, level, \
+               experience, up_required, create_time, update_time) \
+               values('%s', 1, 0, 100, now(), now())" \
                % (team_uuid)
+
+        return super(BillingDB, self).exec_update_sql(sql)
+
+    def level_info(self, team_uuid):
+
+        sql = "select level, experience, up_required, \
+               create_time, update_time \
+               from levels where team_uuid='%s'" \
+               % (team_uuid)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def level_update(self, team_uuid, level,
+                     experience, up_required):
+
+        sql = "update levels set level=%d, experience=%d, \
+               up_required=%d, update_time=now() \
+               where team_uuid='%s'" \
+               % (level, experience, up_required, team_uuid)
+
+        return super(BillingDB, self).exec_update_sql(sql)
+
+    def balance_init(self, team_uuid, balance):
+
+        sql = "insert into balances(team_uuid, total, balance, \
+               create_time, update_time) \
+               values('%s', 0, %d, now(), now())" \
+               % (team_uuid, int(balance))
 
         return super(BillingDB, self).exec_update_sql(sql)
 
     def balance_update(self, team_uuid, amount):
 
-        amount = float(amount)
-        sql = "update balances set balance=balance + %f, update_time=now() \
-               where team_uuid='%s'" \
-               % (amount, team_uuid)
+        sql_01 = "update balances set total=total + %d, \
+                  balance=balance + %f, update_time=now() \
+                  where team_uuid='%s'" \
+                  % (int(amount), float(amount), team_uuid)
 
-        return super(BillingDB, self).exec_update_sql(sql)
+        sql_02 = "update balances set balance=balance + %f, update_time=now() \
+                  where team_uuid='%s'" \
+                  % (float(amount), team_uuid)
+
+        if float(amount) >= 0:
+            return super(BillingDB, self).exec_update_sql(sql_01)
+        else:
+            return super(BillingDB, self).exec_update_sql(sql_02)
 
     def balance_info(self, team_uuid):
 
@@ -196,6 +232,52 @@ class BillingDB(MysqlInit):
                % (team_uuid)
 
         return super(BillingDB, self).exec_select_sql(sql)
+
+    def recharge_create(self, recharge_uuid, recharge_amount,
+                        recharge_type, team_uuid, recharge_user):
+
+        sql = "insert into recharge_records(recharge_uuid, recharge_amount, \
+               recharge_type, team_uuid, user_name, create_time) \
+               values('%s', %d, '%s', '%s', '%s', now())" \
+               % (recharge_uuid, int(recharge_amount), recharge_type,
+                  team_uuid, recharge_user)
+
+        return super(BillingDB, self).exec_update_sql(sql)
+
+    def recharge_list(self, team_uuid, start_time, end_time):
+
+        sql = "select recharge_uuid, recharge_amount, \
+               recharge_type, user_name, create_time \
+               from recharge_records where team_uuid='%s' \
+               and create_time between '%s' and '%s'" \
+               % (team_uuid, start_time, end_time)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def limit_info(self, team_uuid, resource_type):
+
+        sql = "select a.%s from limits a join levels b \
+               where a.team_level=b.level and b.team_uuid='%s'" \
+               % (resource_type, team_uuid)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def limit_list(self):
+
+        sql = "select team_level, teams, teamusers, \
+               projects, projectusers, roles, images, \
+               services, volumes, create_time, update_time \
+               from limits"
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def limit_update(self, team_level, resource_type, limit):
+
+        sql = "update limits set %s=%d, update_time=now() \
+               where team_level='%s'" \
+               % (resource_type, int(limit), team_level)
+
+        return super(BillingDB, self).exec_update_sql(sql)
 
     def bill_insert(self, user_uuid, team_uuid, project_uuid,
                     resource_uuid, resource_cost, voucher_cost):

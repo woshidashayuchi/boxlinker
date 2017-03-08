@@ -36,6 +36,8 @@ verify_code = False
 log_level = 'INFO'
 log_file = '/var/log/cloud.log'
 
+init_balance = 100
+
 ucenter_call_queue = 'ucenter_call_api'
 billing_call_queue = 'billing_call_api'
 

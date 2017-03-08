@@ -28,7 +28,7 @@ class ResourcesManager(object):
                             resource_status, user_uuid,
                             team_uuid, project_uuid)
         except Exception, e:
-            log.error('Database insert error')
+            log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
         result = {
@@ -49,7 +49,7 @@ class ResourcesManager(object):
         try:
             self.billing_db.resource_delete(resource_uuid)
         except Exception, e:
-            log.error('Database delete error')
+            log.error('Database delete error, reason=%s' % (e))
             return request_result(402)
 
         return request_result(0)
@@ -64,7 +64,7 @@ class ResourcesManager(object):
                             resource_status, user_uuid,
                             team_uuid, project_uuid)
         except Exception, e:
-            log.error('Database update error')
+            log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
         result = {
@@ -90,7 +90,7 @@ class ResourcesManager(object):
             resources_list_info = self.billing_db.resource_list(
                                        team_uuid)
         except Exception, e:
-            log.error('Database select error')
+            log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
         resources_list = []

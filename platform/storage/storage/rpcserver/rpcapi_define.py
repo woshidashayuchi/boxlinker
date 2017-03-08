@@ -26,13 +26,15 @@ class StorageRpcManager(object):
             team_uuid = user_info.get('team_uuid')
             project_uuid = user_info.get('project_uuid')
 
-            volume_name = parameters['volume_name']
-            volume_size = parameters['volume_size']
-            fs_type = parameters['fs_type']
+            volume_name = parameters.get('volume_name')
+            volume_size = parameters.get('volume_size')
+            fs_type = parameters.get('fs_type')
+            cost = parameters.get('cost')
 
             token = parameter_check(token, ptype='pstr')
             volume_name = parameter_check(volume_name, ptype='pnam')
             volume_size = parameter_check(volume_size, ptype='pint')
+            cost = parameter_check(cost, ptype='pflt', exist='no')
             if (fs_type != 'xfs') and (fs_type != 'ext4'):
                 raise
         except Exception, e:
@@ -42,7 +44,7 @@ class StorageRpcManager(object):
 
         return self.storage_manager.volume_create(
                     token, team_uuid, project_uuid, user_uuid,
-                    volume_name, volume_size, fs_type)
+                    volume_name, volume_size, fs_type, cost)
 
     @acl_check
     def volume_delete(self, context, parameters):

@@ -43,26 +43,26 @@ class UcenterDB(MysqlInit):
 
         return super(UcenterDB, self).exec_select_sql(sql)
 
-    def user_create(self, user_uuid, user_name,
-                    passwd, salt, email, real_name,
-                    mobile, sex, birth_date):
+    def user_register(self, user_uuid, user_name,
+                      passwd, salt, email, mobile):
 
-        sql_01 = "insert into resources_acl(resource_uuid, resource_type, \
-                  admin_uuid, team_uuid, project_uuid, user_uuid, \
-                  create_time, update_time) \
-                  values('%s', 'user', '%s', '0', '0', '%s', now(), now())" \
-                  % (user_uuid, user_uuid, user_uuid)
+        sql = "insert into users_register(user_uuid, user_name, \
+               password, salt, email, mobile, status, \
+               create_time, update_time) \
+               values('%s', '%s', '%s', '%s', '%s', '%s', \
+               'unactive', now(), now())" \
+              % (user_uuid, user_name, passwd, salt, email, mobile)
 
-        sql_02 = "insert into users(user_uuid, user_name, real_name, \
-                  password, salt, email, mobile, status, sex, birth_date, \
-                  create_time, update_time) \
-                  values('%s', '%s', '%s', '%s', '%s', '%s', '%s', \
-                  'disable', '%s', '%s', now(), now())" \
-                  % (user_uuid, user_name, real_name or 'None',
-                     passwd, salt, email or 'None', mobile or 'None',
-                     sex or 'None', birth_date)
+        return super(UcenterDB, self).exec_update_sql(sql)
 
-        return super(UcenterDB, self).exec_update_sql(sql_01, sql_02)
+    def register_info(self, user_uuid):
+
+        sql = "select user_name, password, salt, email, mobile, \
+               status, create_time, update_time \
+               from users_register where user_uuid='%s'" \
+               % (user_uuid)
+
+        return super(UcenterDB, self).exec_select_sql(sql)
 
     def user_delete(self, user_uuid):
 
@@ -123,52 +123,65 @@ class UcenterDB(MysqlInit):
 
         return super(UcenterDB, self).exec_update_sql(sql)
 
-    def user_activate(self, user_uuid, user_name,
-                      team_uuid, project_uuid, role_uuid):
+    def user_activate(self, user_uuid, user_name, passwd, salt,
+                      email, mobile, team_uuid, project_uuid, role_uuid):
 
         sql_01 = "insert into resources_acl(resource_uuid, resource_type, \
+                  admin_uuid, team_uuid, project_uuid, user_uuid, \
+                  create_time, update_time) \
+                  values('%s', 'user', '%s', '0', '0', '%s', now(), now())" \
+                  % (user_uuid, user_uuid, user_uuid)
+
+        sql_02 = "insert into users(user_uuid, user_name, real_name, \
+                  password, salt, email, mobile, status, sex, birth_date, \
+                  create_time, update_time) \
+                  values('%s', '%s', 'None', '%s', '%s', '%s', '%s', \
+                  'enable', 'None', 0, now(), now())" \
+                  % (user_uuid, user_name, passwd, salt, email, mobile)
+
+        sql_03 = "insert into resources_acl(resource_uuid, resource_type, \
                   admin_uuid, team_uuid, project_uuid, user_uuid, \
                   create_time, update_time) \
                   values('%s', 'team', '0', '0', '0', '%s', now(), now())" \
                   % (team_uuid, user_uuid)
 
-        sql_02 = "insert into teams(team_uuid, team_name, team_owner, \
+        sql_04 = "insert into teams(team_uuid, team_name, team_owner, \
                   team_type, team_desc, status, create_time, update_time) \
                   values('%s', '%s', '%s', 'system', 'user default team', \
                   'enable', now(), now())" \
                   % (team_uuid, user_name, user_uuid)
 
-        sql_03 = "insert into users_teams(user_uuid, team_uuid, \
+        sql_05 = "insert into users_teams(user_uuid, team_uuid, \
                   team_role, status, create_time, update_time) \
                   values('%s', '%s', '%s', 'enable', now(), now())" \
                   % (user_uuid, team_uuid, role_uuid)
 
-        sql_04 = "insert into resources_acl(resource_uuid, resource_type, \
+        sql_06 = "insert into resources_acl(resource_uuid, resource_type, \
                   admin_uuid, team_uuid, project_uuid, user_uuid, \
                   create_time, update_time) \
                   values('%s', 'project', '0', '0', '0', '%s', now(), now())" \
                   % (project_uuid, user_uuid)
 
-        sql_05 = "insert into projects(project_uuid, project_name, \
+        sql_07 = "insert into projects(project_uuid, project_name, \
                   project_owner, project_team, project_type, project_desc, \
                   status, create_time, update_time) \
                   values('%s', '%s', '%s', '%s', 'system', \
                   'team default project', 'enable', now(), now())" \
                   % (project_uuid, user_name, user_uuid, team_uuid)
 
-        sql_06 = "insert into users_projects(user_uuid, project_uuid, \
+        sql_08 = "insert into users_projects(user_uuid, project_uuid, \
                   project_role, status, create_time, update_time) \
                   values('%s', '%s', '%s', 'enable', now(), now())" \
                   % (user_uuid, project_uuid, role_uuid)
 
-        sql_07 = "update users set status='enable', update_time=now() \
+        sql_09 = "update users_register set status='active' \
                   where user_uuid='%s'" \
-                  % (user_uuid)
+                 % (user_uuid)
 
         return super(UcenterDB, self).exec_update_sql(
                                       sql_01, sql_02, sql_03,
                                       sql_04, sql_05, sql_06,
-                                      sql_07)
+                                      sql_07, sql_08, sql_09)
 
     def user_status_update(self, user_uuid, status):
 

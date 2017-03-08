@@ -8,8 +8,11 @@ import time
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
+from common.md5_encrypt import md5_encrypt
+from common.limit_local import limit_check
 
 from ucenter.db import ucenter_db
+from ucenter.driver import ucenter_driver
 
 
 class TeamsManager(object):
@@ -17,8 +20,11 @@ class TeamsManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
+        self.ucenter_driver = ucenter_driver.UcenterDriver()
 
-    def team_create(self, team_name, team_owner, team_desc=None):
+    @limit_check('teams')
+    def team_create(self, token, team_name,
+                    team_owner, team_desc=None):
 
         try:
             team_check = self.ucenter_db.team_duplicate_check(
@@ -34,6 +40,29 @@ class TeamsManager(object):
 
         team_uuid = str(uuid.uuid4())
         project_uuid = str(uuid.uuid4())
+
+        user_token = str(uuid.uuid4())
+        token = md5_encrypt(user_token)
+
+        try:
+            self.ucenter_db.token_create(
+                 token, team_owner, team_uuid, project_uuid)
+        except Exception, e:
+            log.error('Database insert error, reason=%s' % (e))
+            return request_result(401)
+
+        level_init = self.ucenter_driver.level_init(
+                          user_token).get('status')
+        if int(level_init) != 0:
+            log.error('Team(%s) level init error' % (team_name))
+            return request_result(599)
+
+        balance_init = self.ucenter_driver.balance_init(
+                            user_token).get('status')
+        if int(balance_init) != 0:
+            log.error('Team(%s) balance init error' % (team_name))
+            return request_result(599)
+
         try:
             self.ucenter_db.team_create(
                  team_uuid, team_name, team_owner,

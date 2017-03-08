@@ -11,6 +11,5 @@ RUN yum install -y MySQL-python
 COPY ./conf /ucenter/conf/
 COPY ./common /billing/common/
 COPY ./billing /billing/billing/
-COPY ./ucenter /billing/ucenter/
 
 CMD python /billing/billing/restserver/restapi_server.py & python /billing/billing/rpcserver/rpcapi_callserver.py & python /billing/billing/service/billing_service.py

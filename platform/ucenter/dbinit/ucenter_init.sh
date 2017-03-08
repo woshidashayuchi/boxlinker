@@ -55,6 +55,22 @@ ENGINE=InnoDB"
 $v_connect_mysql "create index type_project_user_idx on resources_acl(resource_type, project_uuid, user_uuid)"
 
 
+$v_connect_mysql "CREATE TABLE IF NOT EXISTS users_register (
+        user_uuid           VARCHAR(64) NULL DEFAULT NULL,
+        user_name           VARCHAR(64) NULL DEFAULT NULL,
+        password            VARCHAR(64) NULL DEFAULT NULL,
+        salt                VARCHAR(32) NULL DEFAULT NULL,
+        email               VARCHAR(32) NULL DEFAULT NULL,
+        mobile              VARCHAR(32) NULL DEFAULT NULL,
+        status              VARCHAR(32) NULL DEFAULT NULL,
+        create_time         DATETIME NULL DEFAULT NULL,
+        update_time         DATETIME NULL DEFAULT NULL,
+        PRIMARY KEY (user_uuid)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB"
+
+
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS users (
         user_uuid           VARCHAR(64) NULL DEFAULT NULL,
         user_name           VARCHAR(64) NULL DEFAULT NULL UNIQUE,
@@ -228,8 +244,10 @@ fi
 user_check=$($v_connect_mysql "select count(*) from users" | tail -n+2)
 if [ $user_check -eq 0 ]; then
 
-    team_uuid=$(uuidgen)
-    project_uuid=$(uuidgen)
+    # team_uuid=$(uuidgen)
+    # project_uuid=$(uuidgen)
+    team_uuid='sysadmin_team_uuid'
+    project_uuid='sysadmin_project_uuid'
 
     $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
                       admin_uuid, team_uuid, project_uuid, user_uuid, \

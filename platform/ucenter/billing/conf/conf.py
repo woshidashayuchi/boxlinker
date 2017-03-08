@@ -38,11 +38,23 @@ billing_port = 8002
 log_level = 'INFO'
 log_file = '/var/log/cloud.log'
 
+balance_check = True
+limit_check = True
+
 ucenter_call_queue = 'ucenter_call_api'
 billing_call_queue = 'billing_call_api'
+
+level_up_exp = {
+                   1: 100,
+                   2: 1000,
+                   3: 10000,
+                   4: 100000,
+                   5: 1000000
+               }
 
 app_datum_cost = 0.2
 hdd_datum_cost = 0.1
 ssd_datum_cost = 0.4
 bwh_datum_cost = 0.5
 fip_datum_cost = 0.1
+def_datum_cost = 0.1

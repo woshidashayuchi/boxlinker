@@ -39,6 +39,7 @@ class UcenterDriver(object):
                 raise(Exception('request_code not equal 0'))
         except Exception, e:
             log.error('Email send error: reason=%s' % (e))
+            log.info('email api body=%s' % (body))
             return request_result(601)
 
         return request_result(0)
@@ -60,8 +61,15 @@ class UcenterDriver(object):
 
         return request_result(0)
 
-    def balance_init(self, token):
+    def level_init(self, token):
+
+        context = context_data(token, "bil_lvl_lvl_ini", "create")
+
+        return self.billing_api.level_init(context)
+
+    def balance_init(self, token, balance=0):
 
         context = context_data(token, "bil_blc_blc_add", "create")
+        parameters = {"balance": balance}
 
-        return self.billing_api.balance_init(context)
+        return self.billing_api.balance_init(context, parameters)

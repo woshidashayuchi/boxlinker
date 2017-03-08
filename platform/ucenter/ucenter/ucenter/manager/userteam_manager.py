@@ -8,6 +8,7 @@ import time
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
+from common.limit_local import limit_check
 
 from ucenter.db import ucenter_db
 
@@ -18,7 +19,9 @@ class UserTeamManager(object):
 
         self.ucenter_db = ucenter_db.UcenterDB()
 
-    def user_team_add(self, user_uuid, team_uuid, team_role):
+    @limit_check('teamusers')
+    def user_team_add(self, token, user_uuid,
+                      team_uuid, team_role):
 
         if team_role is None:
             team_role = 'user'

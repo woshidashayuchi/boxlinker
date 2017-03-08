@@ -25,7 +25,7 @@ class VouchersManager(object):
             self.billing_db.voucher_insert(
                  user_uuid, denomination, invalid_time)
         except Exception, e:
-            log.error('Database insert error')
+            log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
         result = {
@@ -43,7 +43,7 @@ class VouchersManager(object):
                  voucher_uuid, user_uuid,
                  team_uuid, project_uuid)
         except Exception, e:
-            log.error('Database update error')
+            log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
         result = {

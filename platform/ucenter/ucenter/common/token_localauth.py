@@ -3,11 +3,11 @@
 
 import time
 import inspect
+import ucenter_rpcapi
 
 from common.logs import logging as log
 from common.local_cache import LocalCache
 from common.code import request_result
-from ucenter.rpcapi import rpc_api as ucenter_rpcapi
 
 caches = LocalCache(100)
 

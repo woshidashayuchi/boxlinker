@@ -16,6 +16,182 @@ from common.token_localauth import token_auth
 from billing.rpcapi import rpc_api as billing_rpcapi
 
 
+class LevelApi(Resource):
+
+    def __init__(self):
+
+        self.billing_api = billing_rpcapi.BillingRpcApi()
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        context = context_data(token, "bil_lvl_lvl_inf", "read")
+
+        return self.billing_api.level_info(context)
+
+
+class BalanceApi(Resource):
+
+    def __init__(self):
+
+        self.billing_api = billing_rpcapi.BillingRpcApi()
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        context = context_data(token, "bil_blc_blc_inf", "read")
+
+        return self.billing_api.balance_info(context)
+
+
+class RechargesApi(Resource):
+
+    def __init__(self):
+
+        self.billing_api = billing_rpcapi.BillingRpcApi()
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            start_time = request.args.get('start_time')
+            end_time = request.args.get('end_time')
+            parameters = {
+                             "start_time": start_time,
+                             "end_time": end_time
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        context = context_data(token, "bil_rcg_rcg_lst", "read")
+
+        return self.billing_api.recharge_list(context, parameters)
+
+
+class CostsApi(Resource):
+
+    def __init__(self):
+
+        self.billing_api = billing_rpcapi.BillingRpcApi()
+
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "bil_cst_cst_inf", "create")
+
+        return self.billing_api.cost_accounting(context, parameters)
+
+
+class LimitsApi(Resource):
+
+    def __init__(self):
+
+        self.billing_api = billing_rpcapi.BillingRpcApi()
+
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "bil_lmt_lmt_chk", "create")
+
+        return self.billing_api.limit_check(context, parameters)
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        context = context_data(token, "bil_lmt_lmt_lst", "read")
+
+        return self.billing_api.limit_list(context)
+
+    @time_log
+    def put(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "bil_lmt_lmt_udt", "update")
+
+        return self.billing_api.limit_update(context, parameters)
+
+
 class ResourcesApi(Resource):
 
     def __init__(self):
@@ -221,51 +397,6 @@ class BillsAPI(Resource):
         context = context_data(token, "bil_bls_bls_lst", "read")
 
         return self.billing_api.bill_list(context, parameters)
-
-
-class BalancesApi(Resource):
-
-    def __init__(self):
-
-        self.billing_api = billing_rpcapi.BillingRpcApi()
-
-    @time_log
-    def put(self):
-
-        try:
-            token = request.headers.get('token')
-            token_auth(token)
-        except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
-
-            return request_result(201)
-
-        try:
-            body = request.get_data()
-            parameters = json.loads(body)
-        except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
-
-            return request_result(101)
-
-        context = context_data(token, "bil_blc_blc_put", "update")
-
-        return self.billing_api.balance_update(context, parameters)
-
-    @time_log
-    def get(self):
-
-        try:
-            token = request.headers.get('token')
-            token_auth(token)
-        except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
-
-            return request_result(201)
-
-        context = context_data(token, "bil_blc_blc_inf", "read")
-
-        return self.billing_api.balance_info(context)
 
 
 class OrdersApi(Resource):

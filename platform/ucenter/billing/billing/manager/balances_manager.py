@@ -16,17 +16,17 @@ class BalancesManager(object):
 
         self.billing_db = BillingDB()
 
-    def balance_init(self, team_uuid):
+    def balance_init(self, team_uuid, balance):
 
         try:
-            self.billing_db.balance_insert(team_uuid)
+            self.billing_db.balance_init(team_uuid, balance)
         except Exception, e:
-            log.error('Database insert error')
+            log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
         result = {
                      "team_uuid": team_uuid,
-                     "balance": 0
+                     "balance": balance
                  }
 
         return request_result(0, result)
@@ -36,7 +36,7 @@ class BalancesManager(object):
         try:
             self.billing_db.balance_update(team_uuid, amount)
         except Exception, e:
-            log.error('Database update error')
+            log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
         result = {
@@ -51,7 +51,7 @@ class BalancesManager(object):
         try:
             balance_info = self.billing_db.balance_info(team_uuid)
         except Exception, e:
-            log.error('Database select error')
+            log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
         balance = balance_info[0][0]
