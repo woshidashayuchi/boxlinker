@@ -154,7 +154,8 @@
 {
     "volume_name": "string",
     "volume_size": int,
-    "fs_type": "xfs/ext4"
+    "fs_type": "xfs/ext4",
+    "cost": float
 }
 @apiUse CODE_POST_0
 """
