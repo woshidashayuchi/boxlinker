@@ -2,20 +2,14 @@
 # Author: YanHua <it-yanh@all-reach.com>
 
 import time
-import json
 import inspect
-import requests
+import billing_rpcapi
 
-from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.parameters import context_data
-from common.token_ucenterauth import token_auth
+from common.token_localauth import token_auth
 from common.db import resources_db
-
-
-requests.adapters.DEFAULT_RETRIES = 5
-limit_url = '%s%s' % (conf.billing_api, '/api/v1.0/billing/limits')
 
 
 def billing_limit_check(token, resource_type, cost):
@@ -25,15 +19,9 @@ def billing_limit_check(token, resource_type, cost):
                   'token=%s, resource_type=%s, cost=%s'
                   % (token, resource_type, cost))
 
-        headers = {'token': token}
-        body = {
-                   "resource_type": resource_type,
-                   "cost": cost
-               }
-
-        limit = requests.post(limit_url, headers=headers,
-                              data=json.dumps(body),
-                              timeout=5).json()
+        context = context_data(token, "bil_lmt_lmt_chk", "create")
+        parameters = {"resource_type": resource_type, "cost": cost}
+        limit = billing_rpcapi.BillingRpcApi().limit_check(context, parameters)
 
         log.debug('Billing limit result=%s' % (limit))
 

@@ -21,6 +21,8 @@ status_code = {
         201: "Authentication failure",
         202: "Operation denied",
         301: "Resource name already exists",
+        302: "Balance not enough",
+        303: "Limit denied",
         401: "Database insert error",
         402: "Database delete error",
         403: "Database update error",
