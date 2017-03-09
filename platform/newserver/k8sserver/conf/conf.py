@@ -10,9 +10,9 @@ mq_server01 = 'rabbitmq'
 mq_server02 = 'rabbitmq'
 mq_port = 5672
 
-db_server01 = 'boxlinker.com'
-db_server02 = 'boxlinker.com'
-db_port = 30000
+db_server01 = 'database'
+db_server02 = 'database'
+db_port = 3306
 db_user = 'cloudsvc'
 db_passwd = 'cloudsvc'
 database = 'servicedata'
@@ -30,3 +30,4 @@ STORAGE_HOST = 'https://storage.boxlinker.com/api/v1.0/storage/volumes'
 PROJECT_MSG = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/projects'
 VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
 
+BILLING_URL = 'http://billing:8002/api/v1.0/billing/resources'

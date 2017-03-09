@@ -10,8 +10,5 @@ class DataInit(object):
     service_db = ServiceDB()
     try:
         ret = service_db.init_insert()
-        # if ret is not None:
-        #     raise Exception('resources acl init error')
     except Exception, e:
         log.error('init api(insert into database) error, reason=%s' % e)
-        # raise

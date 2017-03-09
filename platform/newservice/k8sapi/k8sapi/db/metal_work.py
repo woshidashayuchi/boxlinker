@@ -36,7 +36,7 @@ class MetalWork(object):
         service = list(set(service))
 
         if len(a) == 0:
-            return []
+            return request_result(0, [])
 
         for x in a:
 

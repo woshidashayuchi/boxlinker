@@ -30,6 +30,7 @@ def rc_infix_element(dict_data):
 
     pods_num = dict_data.get('pods_num')
     image_id = dict_data.get('image_id')
+    cm_format = dict_data.get('cm_format')
     container_cpu = dict_data.get('container_cpu')
     container_memory = dict_data.get('container_memory')
     policy = dict_data.get('policy')
@@ -37,7 +38,7 @@ def rc_infix_element(dict_data):
     command = dict_data.get('command')
     # isUpdate = dict_data.get('isUpdate')
 
-    return pods_num, image_id, container_cpu, container_memory, policy, auto_startup, command
+    return pods_num, image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command
 
 
 def container_element(dict_data):

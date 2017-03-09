@@ -35,8 +35,13 @@ class KubernetesRpcAPI(object):
             parameter_check(parameters.get('pods_num'), ptype='pod_num')
             parameter_check(parameters.get('auto_startup'), ptype='choice')
             parameter_check(parameters.get('command'), ptype='command', exist='no')
-            parameter_check(parameters.get('container_cpu'), ptype='container_cpu')
-            parameter_check(parameters.get('container_memory'), ptype='container_memory')
+
+            if int(parameters.get('container_cpu')) not in [1, 2, 4, 8]:
+                raise Exception('container_cpu parameters error')
+            if parameters.get('container_memory') not in ['256M', '512M', '1G', '2G']:
+                raise Exception('container_memory parameters error')
+            if parameters.get('cm_format').lower() not in ['1x', '2x', '4x', '8x']:
+                raise Exception('cm_format parameters error')
 
             for i in parameters.get('container'):
                 parameter_check(i.get('container_port'), ptype='container_port')
@@ -63,6 +68,9 @@ class KubernetesRpcAPI(object):
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s' % (context, parameters, e))
             return request_result(101)
+
+        # token = parameters.get('token')
+        # cost = parameters.get('cost')
 
         return self.create_manager.service_create(parameters)
 
@@ -98,7 +106,8 @@ class KubernetesRpcAPI(object):
             parameter_check(parameters.get('token'), ptype='pstr')
             parameter_check(parameters.get('service_uuid'), ptype='puid')
 
-            if rtype not in ['env', 'volume', 'container', 'status', 'telescopic', 'policy', 'command', 'domain']:
+            if rtype not in ['env', 'volume', 'container', 'status', 'telescopic',
+                             'policy', 'command', 'domain', 'identify']:
                 raise Exception('rtype error, not have this resource type')
 
             if rtype == 'env' and parameters.get('env') is not None and parameters.get('env') != '':
@@ -137,6 +146,11 @@ class KubernetesRpcAPI(object):
 
             if rtype == 'domain' and parameters.get('domain') is not None and parameters.get('domain') != '':
                 parameter_check(parameters.get('domain'), ptype='domain', exist='no')
+
+            if rtype == 'identify':
+                if (parameters.get('domain') is None or parameters.get('domain') == '') or (parameters.get('identify')
+                   is None or parameters.get('identify') == '') or (str(parameters.get('identify')) not in ['0', '1']):
+                    raise Exception('identify parameter error')
 
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s' % (context, parameters, e))

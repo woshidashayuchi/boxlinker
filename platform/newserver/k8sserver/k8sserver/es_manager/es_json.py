@@ -10,7 +10,7 @@ import os
 
 
 def create_esjson(json_list, log_info):
-    host = "http://es.boxlinker.com"
+    host = "http://elasticsearch:9200"
     rtype = 'fluentd'
     log_dict = get_index(json_list, log_info)
     es_url = host + '/' + 'logstash-' + get_now_time_ymd(part='.') + '/' + rtype
@@ -18,13 +18,13 @@ def create_esjson(json_list, log_info):
         "log": json.dumps(log_dict),
         "kubernetes":
             {
-                "namespace_name": "%s" % json_list.get("user_name"),
-                "pod_id": "%s" % json_list.get("user_name")+json_list.get("service_name"),
-                "pod_name": "%s" % json_list.get("user_name")+json_list.get("service_name"),
-                "container_name": "%s" % json_list.get("user_name")+json_list.get("service_name"),
+                "namespace_name": "%s" % json_list.get("project_uuid"),
+                "pod_id": "%s" % json_list.get("service_name").lower().replace('_', '-'),
+                "pod_name": "%s" % json_list.get("service_name").lower().replace('_', '-'),
+                "container_name": "%s" % json_list.get("service_name").lower().replace('_', '-'),
                 "labels":
                     {
-                        "logs": "%s" % json_list.get("user_name")+json_list.get("service_name")
+                        "logs": "%s" % json_list.get("service_name").lower().replace('_', '-')
                     },
             },
         "@timestamp": str(get_now_time_ss_z())

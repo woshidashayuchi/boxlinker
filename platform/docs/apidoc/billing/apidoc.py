@@ -36,6 +36,107 @@
 
 
 """
+@apiDefine POST_COSTS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "resource_type": "string",
+        "resource_conf": "string",
+        "resource_status": "string",
+        "hours": int,
+        "resource_cost": float
+    }
+}
+"""
+
+
+"""
+@apiDefine POST_LIMITS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "team_uuid": "string",
+        "resource_type": "string",
+        "balance_check": 0/1,
+        "limit_check": 0/1
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_LIMITS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "limits_list": [
+            {
+                "team_level": int,
+                "teams": int,
+                "teamusers": int,
+                "projects": int,
+                "projectusers": int,
+                "roles": int,
+                "images": int,
+                "services": int,
+                "volumes": int,
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "team_level": int,
+                "teams": int,
+                "teamusers": int,
+                "projects": int,
+                "projectusers": int,
+                "roles": int,
+                "images": int,
+                "services": int,
+                "volumes": int,
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "team_level": int,
+                "teams": int,
+                "teamusers": int,
+                "projects": int,
+                "projectusers": int,
+                "roles": int,
+                "images": int,
+                "services": int,
+                "volumes": int,
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine PUT_LIMITS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "team_level": int,
+        "resource_type": "string",
+        "limit": int
+    }
+}
+"""
+
+
+"""
 @apiDefine PUT_RESOURCES_0
 @apiSuccessExample 返回
 {
@@ -225,14 +326,18 @@
 
 
 """
-@apiDefine PUT_BALANCES_0
+@apiDefine GET_LEVELS_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
         "team_uuid": "string",
-        "amount": int
+        "level": int,
+        "experience": int,
+        "up_required": int,
+        "create_time": "YYYY-MM-DD HH:MM:SS",
+        "update_time": "YYYY-MM-DD HH:MM:SS"
     }
 }
 """
@@ -248,6 +353,44 @@
         "team_uuid": "string",
         "balance": float,
         "update_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "recharge_list": [
+            {
+                "team_uuid": "string",
+                "recharge_uuid": "string",
+                "recharge_amount": int,
+                "recharge_type": "string",
+                "user_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "team_uuid": "string",
+                "recharge_uuid": "string",
+                "recharge_amount": int,
+                "recharge_type": "string",
+                "user_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "team_uuid": "string",
+                "recharge_uuid": "string",
+                "recharge_amount": int,
+                "recharge_type": "string",
+                "user_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS"
+            }
+        ]
     }
 }
 """
@@ -497,26 +640,70 @@
 
 
 """
-@api {put} /api/v1.0/billing/balances 4.1 余额更新
-@apiName update balances
-@apiGroup 4 balances
+@api {post} /api/v1.0/billing/limits 4.1 限额检查
+@apiName limits check
+@apiGroup 4 limits
 @apiVersion 1.0.0
-@apiDescription 用户充值完成后更新余额信息
+@apiDescription 检查限额值
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
 @apiParamExample body
 {
-    "amount": int
+    "resource_type": "string",
+    "cost": float
 }
-@apiUse PUT_BALANCES_0
+@apiUse POST_LIMITS_0
 """
 
 
 """
-@api {get} /api/v1.0/billing/balances 4.2 余额信息
+@api {get} /api/v1.0/billing/limits 4.2 限额列表
+@apiName limits list
+@apiGroup 4 limits
+@apiVersion 1.0.0
+@apiDescription 系统管理员查询限额列表
+@apiPermission system admin
+@apiParam {json} header {"token": "string"}
+@apiUse GET_LIMITS_0
+"""
+
+
+"""
+@api {put} /api/v1.0/billing/limits 4.3 限额更新
+@apiName limits update
+@apiGroup 4 limits
+@apiVersion 1.0.0
+@apiDescription 系统管理员更新限额信息
+@apiPermission system admin
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "team_level": "string",
+    "resource_type": "string",
+    "limit": int
+}
+@apiUse PUT_LIMITS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/levels 5.1 等级信息
+@apiName get levels
+@apiGroup 5 levels
+@apiVersion 1.0.0
+@apiDescription 查询等级信息
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse GET_LEVELS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/balances 6.1 余额信息
 @apiName get balances
-@apiGroup 4 balances
+@apiGroup 6 balances
 @apiVersion 1.0.0
 @apiDescription 查询余额信息
 @apiPermission user and organization
@@ -526,9 +713,41 @@
 
 
 """
-@api {get} /api/v1.0/billing/bills?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 5.1 账单查询
+@api {post} /api/v1.0/billing/costs 7.1 费用信息
+@apiName get resource cost
+@apiGroup 7 costs
+@apiVersion 1.0.0
+@apiDescription 计算资源费用
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "resource_type": "string",
+    "resource_conf": "string",
+    "resource_status": "string",
+    "hours": int
+}
+@apiUse POST_COSTS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/recharges?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 8.1 充值查询
+@apiName get recharge_records
+@apiGroup 8 recharges
+@apiVersion 1.0.0
+@apiDescription 查询充值记录
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse GET_RECHARGES_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/bills?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 9.1 账单查询
 @apiName get bills
-@apiGroup 5 bills
+@apiGroup 9 bills
 @apiVersion 1.0.0
 @apiDescription 查询账单信息
 @apiPermission user and organization

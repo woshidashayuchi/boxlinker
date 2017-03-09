@@ -34,12 +34,6 @@ class KubernetesDriver(object):
             return command
 
     @staticmethod
-    def get_image_msg(dict_data):
-        image_id = dict_data.get('image_id')
-        url = conf.IMAGE_SERVER
-        headers = {"token": dict_data.get("token")}
-
-    @staticmethod
     def container(con):
         ret = []
         for i in con:
@@ -83,7 +77,7 @@ class KubernetesDriver(object):
         m = 1
 
         for i in ser:
-            domain_http = '%s-%s-%s.lb1.boxlinker.com:' % (team_name, project_name, service_name)
+            domain_http = '%s-%s-%s.boxlinker.com:' % (team_name, project_name, service_name)
             if i.get('access_mode').upper() == 'HTTP' and i.get('access_scope') == 'outsisde':
                 http_lbadd = domain_http + str(i.get('container_port'))
                 if http_lb == '':
@@ -175,11 +169,33 @@ class KubernetesDriver(object):
 
         return result
 
+    @staticmethod
+    def cm_spec(cm_format):
+        if cm_format.lower() == '1x':
+            container_cpu = '200m'
+            container_memory = '256M'
+        elif cm_format.lower() == '2x':
+            container_cpu = '200m'
+            container_memory = '256M'
+        elif cm_format.lower() == '4x':
+            container_cpu = '300m'
+            container_memory = '512M'
+        elif cm_format.lower() == '8x':
+            container_cpu = '300m'
+            container_memory = '512M'
+        else:
+            container_cpu = '200m'
+            container_memory = '256M'
+
+        return container_cpu, container_memory
+
     def unit_element(self, dict_data):
         try:
             namespace = dict_data.get('project_uuid')
             service_name = dict_data.get('service_name').lower().replace('_', '-')
             pods_num = int(dict_data.get('pods_num'))
+            cm_format = dict_data.get('cm_format')
+            container_cpu, container_memory = self.cm_spec(cm_format)
             team_name = dict_data.get('team_name')
             command = self.command_query(dict_data)
             policy1 = dict_data.get('policy')
@@ -219,14 +235,16 @@ class KubernetesDriver(object):
             log.error('volume define error, reason=%s' % e)
             return False
 
-        return namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
-            env, user_uuid, rc_krud, pullpolicy, volumes, volume_mounts
+        return namespace, image_name, image_version, service_name, pods_num, cm_format, container_cpu, \
+            container_memory, team_name, command, container, env, user_uuid, rc_krud, pullpolicy, volumes, \
+            volume_mounts
 
     def add_rc(self, dict_data):
         log.info('add rc json data is: %s' % dict_data)
         try:
-            namespace, image_name, image_version, service_name, pods_num, team_name, command, container, \
-                env, user_uuid, rc_krud, pullpolicy, volumes, volume_mounts = self.unit_element(dict_data)
+            namespace, image_name, image_version, service_name, pods_num, cm_format, container_cpu, \
+                container_memory, team_name, command, container, env, user_uuid, rc_krud, pullpolicy, \
+                volumes, volume_mounts = self.unit_element(dict_data)
         except Exception, e:
             log.error('get the explain parameters error, reason is: %s' % e)
             return False
@@ -252,6 +270,7 @@ class KubernetesDriver(object):
                         "containers": [
                            {"name": service_name, "image": image_name+":"+image_version, "imagePullPolicy": pullpolicy,
                             "command": command, "ports": self.container(container), "env": self.env(env),
+                            "resources": {"limits": {"cpu": container_cpu, "memory": container_memory}},
                             "volumeMounts": volume_mounts}
                         ], "volumes": volumes,
                      }
@@ -434,7 +453,7 @@ class KubernetesDriver(object):
                            },
                         }
 
-            if dict_data.get('rtype') is not None:
+            if dict_data.get('rtype') == 'container':
                 ret = self.get_one_re(add_service)
 
                 if ret is False:
@@ -585,7 +604,6 @@ class KubernetesDriver(object):
 
         try:
             check = self.service_db.create_svcaccount_or_not(context)
-
         except Exception, e:
             log.error('check the namespace if is exist(database select)...,reason=%s' % e)
             return request_result(501)
@@ -667,6 +685,9 @@ class KubernetesDriver(object):
             svc_detail['rtype'] = context.get('rtype')
             svc_detail['image_id'] = svc_detail.get('image_id')
             svc_detail['token'] = context.get('token')
+            if context.get('rtype') == 'container':
+                svc_detail['team_name'] = context.get('team_name')
+                svc_detail['project_name'] = context.get('project_name')
         except Exception, e:
             log.error('struct the params when update service error, reason=%s' % e)
             return request_result(502)
@@ -701,6 +722,48 @@ class KubernetesDriver(object):
             return ret
 
         return True
+
+    def identify_update(self, context):
+
+        try:
+            svc_detail_original = self.metal.service_detail(context)
+        except Exception, e:
+            log.error('get the service original details(kubernetes_driver) message error, reason=%s' % e)
+            return request_result(404)
+
+        if svc_detail_original.get('status') != 0:
+            return request_result(404)
+
+        try:
+            log.info('context is %s, type is %s' % (context, type(context)))
+
+            svc_detail = svc_detail_original.get('result')
+            svc_detail['service_name'] = context.get('service_name')
+            svc_detail['project_uuid'] = context.get('project_uuid')
+            svc_detail['rtype'] = 'container'
+            svc_detail['image_id'] = svc_detail.get('image_id')
+            svc_detail['token'] = context.get('token')
+            svc_detail['team_name'] = context.get('team_name')
+            svc_detail['project_name'] = context.get('project_name')
+        except Exception, e:
+            log.error('struct the params when update service error, reason=%s' % e)
+            return request_result(502)
+
+        try:
+
+            svc_up_json = self.add_service(svc_detail)
+            svc_up_json['rtype'] = 'services'
+        except Exception, e:
+            log.error('svc json struct error, reason=%s' % e)
+            return request_result(502)
+
+        log.info('update service(be structed to k8s) json data is: %s' % svc_up_json)
+        svc_up_ret = self.krpc_client.update_service(svc_up_json)
+        if svc_up_ret.get('result') != '<Response [200]>':
+            log.error('SERVICE UPDATE RESULT IS: %s' % svc_up_ret)
+            return request_result(502)
+
+        return request_result(0, 'update successfully')
 
     def update_volume_status(self, dict_data):
         using_volume = self.service_db.get_using_volume(dict_data)
@@ -864,15 +927,53 @@ class KubernetesDriver(object):
         return True
 
     def update_domain(self, context):
-        try:
-            db_result = self.service_db.update_domain(context)
-        except Exception, e:
-            log.error('update status error, reason is:%s' % e)
-            return request_result(403)
-        if db_result is False:
-            return request_result(301)
+        if context.get('domain') is not None and context.get('domain') != '':
+            try:
+                db_result = self.service_db.update_domain(context)
+            except Exception, e:
+                log.error('update status error, reason is:%s' % e)
+                return request_result(403)
+            if db_result is False:
+                return request_result(301)
+
+        else:
+            try:
+                domain = self.service_db.get_domain(context)
+            except Exception, e:
+                log.error('get the domain message error, reason is: %s' % e)
+                return request_result(404)
+
+            try:
+                if len(domain[0]) != 0:
+                    up_ret = self.service_db.update_domain_to_none(context)
+                    if up_ret is not None:
+                        log.info('UPDATE THE DATABASE ERROR')
+                        return request_result(403)
+
+                    if int(domain[0][1]) == 1:
+                        result = self.identify_update(context)
+                        return result
+
+                return request_result(0, 'update successfully')
+
+            except Exception, e:
+                log.error('after get the domain message, update the service error, reason is:%s' % e)
+                return request_result(502)
 
         return True
+
+    def update_identify(self, context):
+        try:
+            domain = self.service_db.get_domain(context)
+        except Exception, e:
+            log.error('get the domain message error, reason is: %s' % e)
+            return request_result(404)
+
+        if int(context.get('identify')) == 0:
+            if int(domain[0][1]) == 1:
+                pass
+
+        return request_result(0, 'update successfully')
 
     def update_main(self, context):
         rtype = context.get('rtype')
@@ -895,5 +996,7 @@ class KubernetesDriver(object):
             return self.update_command(context)
         if rtype == 'domain':
             return self.update_domain(context)
+        if rtype == 'identify':
+            return self.update_identify(context)
 
         return True

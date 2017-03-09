@@ -10,14 +10,18 @@ import json
 from common.logs import logging as log
 from kubernetes.kapi import KApiMethods
 from es_manager.to_es import post_es
+from billing_manager.billing_manager import BillingResource
 
 
 class KubernetesRpcAPIs(object):
 
     def __init__(self):
         self.kubernetes = KApiMethods()
+        self.billing = BillingResource()
 
     def service_crea(self, context, parameters=None):
+        log.info('create the service base data is: %s' % context)
+        ret = dict()
         try:
             token = context.pop('token')
             ret = self.kubernetes.post_namespace_resource(context)
@@ -25,17 +29,22 @@ class KubernetesRpcAPIs(object):
 
             context['token'] = token
             if ret.get('kind') != 'ReplicationController' and ret.get('kind') != 'Service':
-
-                log.info('CREATE SERVICE ERROR WHEN USE KUBERNETES API TO CREATE... result is:%s,'
-                         'type is:%s' % (ret, type(ret)))
+                log.info('CREATE SERVICE ERROR... result is:%s, type is:%s' % (ret, type(ret)))
                 post_es(context, 'service create failure')
-
-            log.info('create service success, result is:%s, type is: %s' % (ret, type(ret)))
-
-            es = post_es(context, 'service create success')
-            log.info('zzzzzzzzzaaaaaaaaaaaaaa%s' % es)
         except Exception, e:
             log.error('create the service(kubernetes) error, reason=%s' % e)
+
+        # create the billing resources
+        if ret.get('kind') == 'ReplicationController':
+            try:
+                billing_ret = self.billing.create_billing(context)
+                if billing_ret is not True:
+                    log.error('create the billing resources error')
+            except Exception, e:
+                log.error('create the billing resources error, reason is: %s' % e)
+
+        log.info('create service success, result is:%s, type is: %s' % (ret, type(ret)))
+        post_es(context, 'service create success')
 
     def ns_show(self, context, parameters=None):
         try:

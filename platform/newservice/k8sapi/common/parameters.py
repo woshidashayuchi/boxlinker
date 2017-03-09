@@ -46,8 +46,6 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
         "choice": "^[01]$",
         "pod_num": "^([0-9]|10)$",
         "command": "^[A-Za-z]{1}[A-Za-z0-9-_@,& ]{1,130}[A-Za-z0-9]{1}$",
-        "container_cpu": "^[1-8]{1}$",
-        "container_memory": "50M",
         "container_port": "^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$",
         "domain": "^((http://)|(https://))?([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}(/)?"
     }

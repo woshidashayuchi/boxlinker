@@ -42,7 +42,7 @@ class ServiceDB(MysqlInit):
         font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name, \
             image_dir = font_infix_element(dict_data)
 
-        pods_num, image_id, container_cpu, container_memory, policy, auto_startup, \
+        pods_num, image_id, cm_format, container_cpu, container_memory, policy, auto_startup, \
             command = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
@@ -51,9 +51,9 @@ class ServiceDB(MysqlInit):
                                                 project_uuid, service_name, image_dir)
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
-                 "image_id, container_cpu, container_memory, policy, auto_startup, command) " \
-                 "VALUES ('%s', '%s', %d, '%s', '%s', '%s', %d, %d," \
-                 "'%s')" % (rc_uuid, service_name, pods_num, image_id, container_cpu,
+                 "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command) " \
+                 "VALUES ('%s', '%s', %d, '%s', '%s', '%s', '%s', %d, %d," \
+                 "'%s')" % (rc_uuid, service_name, pods_num, image_id, cm_format, container_cpu,
                             container_memory, policy, auto_startup, command)
 
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
@@ -122,7 +122,7 @@ class ServiceDB(MysqlInit):
 
         sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, " \
               "a.service_status, a.image_dir, a.service_update_time ltime FROM font_service a, " \
-              "containers b WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s')" % project_uuid
+              "containers b WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s') ORDER BY ltime DESC " % project_uuid
 
         conn, cur = self.operate.connection()
         ret = self.operate.exeQuery(cur, sql)
@@ -235,20 +235,28 @@ class ServiceDB(MysqlInit):
             super(ServiceDB, self).exec_update_sql(sql_insert)
 
     def update_env(self, dict_data):
-        uuid_e = uuid_ele()
         env = dict_data.get('env')
         project_uuid, service_name = normal_call(dict_data)
 
-        for i in env:
-            sql_delete = "delete from env where rc_uuid=(select rc_uuid from font_service where " \
-                         "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+        sql_delete = "delete from env where rc_uuid=(select rc_uuid from font_service where " \
+                     "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
 
+        try:
+            del_result = super(ServiceDB, self).exec_update_sql(sql_delete)
+            if del_result is not None:
+                return False
+        except Exception, e:
+            log.error('database delete(env) error, reason=%s' % e)
+            return False
+
+        for i in env:
+            uuid_e = uuid_ele()
             sql_insert = "insert INTO env(uuid,rc_uuid,env_key,env_value) VALUES ('%s'," \
                          "((select rc_uuid from font_service where service_name='%s' " \
                          "and project_uuid='%s')),'%s','%s')" % (uuid_e, service_name, project_uuid,
                                                                  i.get('env_key'), i.get('env_value'))
             try:
-                if super(ServiceDB, self).exec_update_sql(sql_delete, sql_insert) is not None:
+                if super(ServiceDB, self).exec_update_sql(sql_insert) is not None:
                     return False
             except Exception, e:
                 log.error('database update(env) error, reason=%s' % e)
@@ -257,13 +265,22 @@ class ServiceDB(MysqlInit):
         return True
 
     def update_volume(self, dict_data):
-        uuid_v = uuid_ele()
         volume = dict_data.get('volume')
         project_uuid, service_name = normal_call(dict_data)
-        for i in volume:
-            sql_delete = "delete from volume where rc_uuid=(SELECT rc_uuid from font_service WHERE " \
-                         "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
 
+        sql_delete = "delete from volume where rc_uuid=(SELECT rc_uuid from font_service WHERE " \
+                     "project_uuid='%s' and service_name='%s')" % (project_uuid, service_name)
+
+        try:
+            del_result = super(ServiceDB, self).exec_update_sql(sql_delete)
+            if del_result is not None:
+                return False
+        except Exception, e:
+            log.error('database delete(volume) error, reason=%s' % e)
+            return False
+
+        for i in volume:
+            uuid_v = uuid_ele()
             sql_insert = "insert into volume(uuid,rc_uuid,volume_uuid,disk_path,readonly) VALUES " \
                          "('%s',(select rc_uuid from font_service where service_name='%s' and " \
                          "project_uuid='%s'),'%s','%s','%s')" % (uuid_v, service_name, project_uuid,
@@ -271,10 +288,10 @@ class ServiceDB(MysqlInit):
                                                                  i.get('readonly'))
 
             try:
-                if super(ServiceDB, self).exec_update_sql(sql_delete, sql_insert) is not None:
+                if super(ServiceDB, self).exec_update_sql(sql_insert) is not None:
                     return False
             except Exception, e:
-                log.error('database update(env) error, reason=%s' % e)
+                log.error('database update(volume) error, reason=%s' % e)
                 return False
 
         return True
@@ -350,6 +367,24 @@ class ServiceDB(MysqlInit):
             return True
         else:
             raise Exception('database update error')
+
+    def get_domain(self, dict_data):
+        log.info('the data(operate database) when get the domain is: %s' % dict_data)
+
+        project_uuid, service_name = normal_call(dict_data)
+        sql = "select private_domain as domain, identify from containers WHERE " \
+              "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
+              "service_name='%s') and http_domain is not NULL and http_domain != 'None'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def update_domain_to_none(self, dict_data):
+        project_uuid, service_name = normal_call(dict_data)
+        sql = "update containers SET private_domain=NULL ,identify=NULL WHERE " \
+              "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
+              "service_name='%s') and http_domain is not NULL and http_domain != 'None'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql)
 
     def identify_check(self, dict_data):
 

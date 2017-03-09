@@ -56,6 +56,7 @@ class DBInit(object):
         Column('labels_name', String(64)),
         Column('pods_num', Integer),
         Column('image_id', String(64)),
+        Column('cm_format', String(32)),
         Column('container_cpu', String(64)),
         Column('container_memory', String(64)),
         Column('policy', Integer),

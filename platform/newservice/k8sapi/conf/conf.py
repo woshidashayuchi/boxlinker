@@ -42,7 +42,7 @@ PEOJECT_MSG = 'http://ucenter:8001/api/v1.0/ucenter/projects'
 TEAM_MSG = 'http://ucenter:8001/api/v1.0/ucenter/teams'
 # VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
 VOLUMEIP = '10.10.10.11:5000,10.10.10.12:5000,10.10.10.21:5000'
-
+ELASTIC_SEARCH = 'elasticsearch:9200'
 
 IMAGE_S = 'imageauth:8001'
 IMAGE_H = 'index.boxlinker.com/'
@@ -51,3 +51,4 @@ IMAGE_H = 'index.boxlinker.com/'
 K8S_POD_API = 'https://kubernetes.default.svc:443/api/v1/pods'
 TOKEN_PATH = '/run/secrets/kubernetes.io/serviceaccount/token'
 
+BILLING_URL = 'http://billing:8002/api/v1.0/billing/resources'

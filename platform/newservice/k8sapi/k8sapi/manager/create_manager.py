@@ -4,12 +4,14 @@
 
 from db.service_db import ServiceDB
 from driver.rpcapi_client import KubernetesRpcClient
+# from common.limit import limit_check
 from common.logs import logging as log
 from common.code import request_result
 from driver.token_driver import TokenDriver
 from driver.kubernetes_driver import KubernetesDriver
 from driver.volume_driver import VolumeDriver
 from driver.photo_driver import photo_dir
+from driver.es_driver.to_es import post_es
 
 
 class CreateManager(object):
@@ -99,6 +101,7 @@ class CreateManager(object):
 
         return True
 
+    # @limit_check('services')
     def service_create(self, context):
         log.info('the create service data is: %s' % context)
 
@@ -108,6 +111,7 @@ class CreateManager(object):
         if check_name == 'error':
             return request_result(404)
 
+        post_es(context, 'check the service name successed!')
         team_name, project_name = self.token_driver.gain_team_name(context)
         if team_name is False:
             log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
@@ -131,6 +135,7 @@ class CreateManager(object):
             log.error('change the volume status error, reason is:%s' % e)
             return request_result(501)
 
+        post_es(context, 'load the major successed!')
         ret = self.kuber_driver.create_service(context)
         if ret is not True:
             log.info('kubernetes resource create result is: %s' % ret)
@@ -150,4 +155,7 @@ class CreateManager(object):
         if infix is False or diff is False:
             return request_result(401)
 
+        ret = post_es(context, 'service is creating...please wait')
+        log.info('wwwwwwwwwwwwwwwwwww')
+        log.info(ret)
         return request_result(0, infix)

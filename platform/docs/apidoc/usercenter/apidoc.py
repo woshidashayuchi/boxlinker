@@ -24,10 +24,7 @@
     "result": {
         "user_name": "string",
         "email": "string",
-        "mobile": "string",
-        "real_name": "string",
-        "sex": "string",
-        "birth_date": "YYYY-MM-DD HH:MM:SS"
+        "mobile": "string"
     }
 }
 """
@@ -637,10 +634,7 @@
     "user_name": "string",
     "password": "string",
     "email": "string",
-    "real_name": "string",
     "mobile": "string",
-    "sex": "man/woman",
-    "birth_date": epoch_milliseconds
     "code_id": "string",
     "code_str": "string"
 }
