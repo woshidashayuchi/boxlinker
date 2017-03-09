@@ -8,3 +8,6 @@ kibana初始化
 3. 【Time-field name】项点击输入框，选择【@timestamp】
 4. 点击创建，完成初始化配置。
 
+1. 创建elasticsearch镜像
+
+# docker build -t index.boxlinker.com/boxlinker/elasticsearch:1.0.1 ./

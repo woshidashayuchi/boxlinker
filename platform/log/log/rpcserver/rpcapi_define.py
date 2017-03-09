@@ -29,7 +29,7 @@ class LogRpcManager(object):
             end_time = parameters['end_time']
 
             label_value = parameter_check(label_value, ptype='pstr')
-            date_time = parameter_check(date_time, ptype='pint', exist='no')
+            date_time = parameter_check(date_time, ptype='pdat', exist='no')
             start_time = parameter_check(start_time, ptype='pint', exist='no')
             end_time = parameter_check(end_time, ptype='pint', exist='no')
         except Exception, e:

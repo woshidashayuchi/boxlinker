@@ -28,7 +28,7 @@ items:
             capabilities:
               add:
                 - IPC_LOCK
-          image: index.boxlinker.com/boxlinker/elasticsearch:latest
+          image: index.boxlinker.com/boxlinker/elasticsearch:1.0.1
           env:
           - name: KUBERNETES_CA_CERTIFICATE_FILE
             value: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -52,7 +52,7 @@ items:
             name: transport
             protocol: TCP
           volumeMounts:
-          - mountPath: /data
+          - mountPath: /usr/share/elasticsearch/data
             name: storage
         volumes:
         - name: storage

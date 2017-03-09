@@ -13,22 +13,45 @@ def time_log(func):
 
     def __wrapper(*args, **kwargs):
 
-        func_info = inspect.getcallargs(func, *args, **kwargs)
-        log.info('function(%s.%s) start execute' % (func_info, func.__name__))
-
+        func_info = type(inspect.getcallargs(
+                         func, *args, **kwargs).get('self'))
+        log.info('Method(%s.%s) start execute'
+                 % (func_info, func.__name__))
         start_time = time.time()
 
         try:
             result = func(*args, **kwargs)
         except Exception, e:
-            log.error('function(%s.%s) exec error, reason = %s'
+            log.error('Method(%s.%s) exec error, reason = %s'
                       % (func_info, func.__name__, e))
             return request_result(601)
 
-        end_time = time.time()
-        exec_time = end_time - start_time
-        log.info('function(%s.%s) end execute, execute_time = %d'
+        exec_time = time.time() - start_time
+        log.info('Method(%s.%s) end execute, execute_time = %f'
                  % (func_info, func.__name__, exec_time))
+
+        return result
+
+    return __wrapper
+
+
+def func_time_log(func):
+
+    def __wrapper(*args, **kwargs):
+
+        log.info('Function(%s) start execute' % (func.__name__))
+        start_time = time.time()
+
+        try:
+            result = func(*args, **kwargs)
+        except Exception, e:
+            log.error('Function(%s) exec error, reason = %s'
+                      % (func.__name__, e))
+            return request_result(601)
+
+        exec_time = time.time() - start_time
+        log.info('Function(%s) end execute, execute_time = %f'
+                 % (func.__name__, exec_time))
 
         return result
 

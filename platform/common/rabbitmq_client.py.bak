@@ -82,7 +82,7 @@ class RabbitmqClient(object):
 
     def get_response(self, timeout, queue_name):
         cnt = 0
-        timeout = int(timeout) * 10
+        timeout = int(timeout) * 100
         while self.response is None:
             cnt += 1
             if cnt >= timeout:
@@ -90,7 +90,7 @@ class RabbitmqClient(object):
                             % (queue_name))
                 self.response = json.dumps(request_result(597))
                 return
-            self.connection.sleep(0.1)
+            self.connection.sleep(0.01)
             self.connection.process_data_events()
 
     def rpc_call_client(self, queue_name, timeout, dict_data):
