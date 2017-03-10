@@ -8,6 +8,7 @@ from db.service_db import ServiceDB
 from driver.token_driver import TokenDriver
 from driver.kubernetes_driver import KubernetesDriver
 from driver.volume_driver import VolumeDriver
+from driver.billing_driver import BillingResource
 
 
 class UpdateManager(object):
@@ -17,6 +18,7 @@ class UpdateManager(object):
         self.service_db = ServiceDB()
         self.token_driver = TokenDriver()
         self.volume = VolumeDriver()
+        self.billing = BillingResource()
 
     def service_update(self, context):
         log.info('the data(in) when update service....is: %s' % context)
@@ -57,6 +59,15 @@ class UpdateManager(object):
 
         if ret is not True:
             return ret
+
+        if context.get('rtype') == 'cm' or context.get('rtype') == 'telescopic' or \
+                context.get('rtype') == 'status':
+            try:
+                b_ret = self.billing.update_billing(context)
+                if not b_ret:
+                    log.error('update the billing resources error, result is: %s' % b_ret)
+            except Exception, e:
+                log.error('update the billing resources error, reason is: %s' % e)
 
         return request_result(0, 'service update successfully')
 

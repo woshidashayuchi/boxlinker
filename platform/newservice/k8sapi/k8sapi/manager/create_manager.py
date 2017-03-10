@@ -4,7 +4,7 @@
 
 from db.service_db import ServiceDB
 from driver.rpcapi_client import KubernetesRpcClient
-# from common.limit import limit_check
+from common.limit import limit_check
 from common.logs import logging as log
 from common.code import request_result
 from driver.token_driver import TokenDriver
@@ -101,8 +101,8 @@ class CreateManager(object):
 
         return True
 
-    # @limit_check('services')
-    def service_create(self, context):
+    @limit_check('services')
+    def service_create(self, token, context, cost):
         log.info('the create service data is: %s' % context)
 
         check_name = self.check_name(context)

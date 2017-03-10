@@ -9,7 +9,7 @@ sys.path.insert(1, p_path)
 from time import sleep
 
 from common.logs import logging as log
-from appstatus.manager.appstatus_manager import AppStatusManager
+from k8sapi.manager.appstatus_manager import AppStatusManager
 
 
 def appstatus_service():

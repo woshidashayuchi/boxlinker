@@ -69,10 +69,10 @@ class KubernetesRpcAPI(object):
             log.error('parameters error, context=%s, parameters=%s, reason=%s' % (context, parameters, e))
             return request_result(101)
 
-        # token = parameters.get('token')
-        # cost = parameters.get('cost')
+        token = parameters.get('token')
+        cost = parameters.get('costs')
 
-        return self.create_manager.service_create(parameters)
+        return self.create_manager.service_create(token, parameters, cost)
 
     @acl_check
     def service_query(self, context, parameters):
@@ -107,7 +107,7 @@ class KubernetesRpcAPI(object):
             parameter_check(parameters.get('service_uuid'), ptype='puid')
 
             if rtype not in ['env', 'volume', 'container', 'status', 'telescopic',
-                             'policy', 'command', 'domain', 'identify']:
+                             'policy', 'command', 'domain', 'identify', 'cm']:
                 raise Exception('rtype error, not have this resource type')
 
             if rtype == 'env' and parameters.get('env') is not None and parameters.get('env') != '':
@@ -151,6 +151,18 @@ class KubernetesRpcAPI(object):
                 if (parameters.get('domain') is None or parameters.get('domain') == '') or (parameters.get('identify')
                    is None or parameters.get('identify') == '') or (str(parameters.get('identify')) not in ['0', '1']):
                     raise Exception('identify parameter error')
+
+            if rtype == 'cm':
+                try:
+                    if int(parameters.get('container_cpu')) not in [1, 2, 4, 8]:
+                        raise Exception('container_cpu parameters error')
+                    if parameters.get('container_memory') not in ['256M', '512M', '1G', '2G']:
+                        raise Exception('container_memory parameters error')
+                    if parameters.get('cm_format').lower() not in ['1x', '2x', '4x', '8x']:
+                        raise Exception('cm_format parameters error')
+                except Exception, e:
+                    log.error('parameters explain error, reason is: %s' % e)
+                    raise Exception('cm parameter error')
 
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s' % (context, parameters, e))

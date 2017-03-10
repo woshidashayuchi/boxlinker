@@ -12,7 +12,9 @@ from common.logs import logging as log
 def post_es(json_list, log_info):
     headers = {"token": json_list.get("token")}
     msg_json, es_url = create_esjson(json_list, log_info)
+    log.info('post the messages to es, the struct base data is: %s' % msg_json)
     try:
-        requests.post(url=es_url, headers=headers, data=json.dumps(msg_json)+"\n", timeout=1)
+        ret = requests.post(url=es_url, headers=headers, data=json.dumps(msg_json)+"\n", timeout=1)
+        log.info('post to es result is: %s' % ret.text)
     except Exception, e:
         log.error("es data give error,reason=%s" % e)

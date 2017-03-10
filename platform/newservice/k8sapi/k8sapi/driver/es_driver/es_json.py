@@ -24,7 +24,8 @@ def create_esjson(dict_data, log_info):
                 "container_name": "%s" % dict_data.get('service_name').lower().replace('_', '-'),
                 "labels":
                     {
-                        "logs": "%s" % dict_data.get('service_name').lower().replace('_', '-')
+                        "logs": "%s" % dict_data.get('service_name').lower().replace('_', '-') +
+                                dict_data.get("project_uuid")
                     },
             },
         "@timestamp": str(get_now_time_ss_z())

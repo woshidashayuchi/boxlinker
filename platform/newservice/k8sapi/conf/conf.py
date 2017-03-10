@@ -52,3 +52,4 @@ K8S_POD_API = 'https://kubernetes.default.svc:443/api/v1/pods'
 TOKEN_PATH = '/run/secrets/kubernetes.io/serviceaccount/token'
 
 BILLING_URL = 'http://billing:8002/api/v1.0/billing/resources'
+billing_api = 'http://billing:8002'

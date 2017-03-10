@@ -101,6 +101,8 @@ class MetalWork(object):
         rc_ret, containers_ret, env_ret, volume_ret = self.service_db.service_detail(dict_data)
 
         for x in containers_ret:
+            x['domain'] = x.get('private_domain')
+            del x['private_domain']
             containers.append(x)
         for y in env_ret:
             env.append(y)

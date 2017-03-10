@@ -13,6 +13,7 @@ from volume_driver import VolumeDriver
 from image_driver import images_message_get
 from rpcapi_client import KubernetesRpcClient
 from token_driver import TokenDriver
+from billing_driver import BillingResource
 
 
 class KubernetesDriver(object):
@@ -23,6 +24,7 @@ class KubernetesDriver(object):
         self.metal = MetalWork()
         self.volume = VolumeDriver()
         self.token_driver = TokenDriver()
+        self.billing = BillingResource()
 
     @staticmethod
     def command_query(dict_data):
@@ -263,7 +265,7 @@ class KubernetesDriver(object):
                   "template": {
                      "metadata": {
                         "labels": {"component": dict_data.get("service_name"), "name": service_name,
-                                   "logs": service_name}
+                                   "logs": service_name+namespace}
                      },
                      "spec": {
                         "nodeSelector": {"role": "user"},
@@ -793,7 +795,19 @@ class KubernetesDriver(object):
         return True
 
     def update_cm(self, context):
-        pass
+        try:
+            database_ret = self.service_db.update_cm(context)
+        except Exception, e:
+            log.error('database update error, reason is: %s' % e)
+            return request_result(403)
+        if database_ret is not None:
+            return request_result(403)
+
+        service_ret = self.update_rc(context)
+        if service_ret is not True:
+            return service_ret
+
+        return True
 
     def update_volume(self, context):
         database_ret = self.service_db.update_volume(context)

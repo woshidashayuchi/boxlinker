@@ -46,14 +46,14 @@ class ServiceDB(MysqlInit):
             command = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
-                   "team_uuid, project_uuid, service_name,image_dir) VALUES('%s', '%s', '%s', '%s', " \
-                   "'%s', '%s', '%s', '%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
-                                                project_uuid, service_name, image_dir)
+                   "team_uuid, project_uuid, service_name,service_status,image_dir) VALUES('%s', '%s', '%s', '%s', " \
+                   "'%s', '%s', '%s', '%s','%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
+                                                     project_uuid, service_name, 'pending', image_dir)
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
                  "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command) " \
                  "VALUES ('%s', '%s', %d, '%s', '%s', '%s', '%s', %d, %d," \
-                 "'%s')" % (rc_uuid, service_name, pods_num, image_id, cm_format, container_cpu,
+                 "'%s')" % (rc_uuid, service_name+project_uuid, pods_num, image_id, cm_format, container_cpu,
                             container_memory, policy, auto_startup, command)
 
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
@@ -445,13 +445,41 @@ class ServiceDB(MysqlInit):
 
         return super(ServiceDB, self).exec_update_sql(sql)
 
-    def update_status_anytime(self, context):
-        service_status = context.get('service_status')
-        project_uuid = context.get('project_uuid')
-        service_name = context.get('service_name')
+    def update_status_anytime(self, ps, service_status):
+        try:
+            service_name = ps.split('#')[0]
+            project_uuid = ps.split('#')[1]
+        except Exception, e:
+            log.error('parameters explain error, reason is: %s' % e)
+            raise Exception('parameters explain error')
 
         sql = "update font_service set service_status='%s' WHERE project_uuid='%s' " \
               "and service_name='%s'" % (service_status, project_uuid, service_name)
 
         log.info("update app status's sql is: %s" % sql)
+        return super(ServiceDB, self).exec_update_sql(sql)
+
+    def rc_for_billing(self, dict_data):
+
+        sql = "select a.uuid, a.service_status, b.cm_format, b.pods_num from font_service a, " \
+              "replicationcontrollers b WHERE a.project_uuid='%s' and a.service_name='%s' and " \
+              "a.rc_uuid=b.uuid" % (dict_data.get('project_uuid'), dict_data.get('service_name'))
+
+        conn, cur = self.operate.connection()
+        billing_ret = self.operate.exeQuery(cur, sql)
+        self.operate.connClose(conn, cur)
+
+        return billing_ret
+
+    def update_cm(self, dict_data):
+        cm_format = dict_data.get('cm_format')
+        container_cpu = dict_data.get('container_cpu')
+        container_memory = dict_data.get('container_memory')
+        service_name = dict_data.get('service_name')
+        project_uuid = dict_data.get('project_uuid')
+
+        sql = "update replicationcontrollers set cm_format='%s',container_cpu='%s',container_memory='%s' " \
+              "WHERE uuid=(SELECT rc_uuid from font_service WHERE service_name='%s' AND " \
+              "project_uuid='%s' )" % (cm_format, container_cpu, container_memory, service_name, project_uuid)
+
         return super(ServiceDB, self).exec_update_sql(sql)

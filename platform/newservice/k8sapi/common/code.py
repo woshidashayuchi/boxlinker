@@ -32,6 +32,7 @@ status_code = {
         502: "Kubernetes resource update failure",
         503: "Kubernetes resource delete failure",
         504: "Kubernetes resource select failure",
+        505: "Update the billing resource failure",
         701: "Monitor message select failure",
         511: "Ceph disk create failure",
         512: "Ceph disk delete failure",
