@@ -23,15 +23,15 @@ class LogRpcManager(object):
             user_info = token_auth(context['token'])['result']
             user_uuid = user_info.get('user_uuid')
 
-            label_value = parameters['label_value']
-            date_time = parameters['date_time']
-            start_time = parameters['start_time']
-            end_time = parameters['end_time']
+            label_value = parameters.get('label_value')
+            date_time = parameters.get('date_time')
+            start_time = parameters.get('start_time')
+            end_time = parameters.get('end_time')
 
             label_value = parameter_check(label_value, ptype='pstr')
-            date_time = parameter_check(date_time, ptype='pdat', exist='no')
-            start_time = parameter_check(start_time, ptype='pint', exist='no')
-            end_time = parameter_check(end_time, ptype='pint', exist='no')
+            date_time = parameter_check(date_time, ptype='pflt', exist='no')
+            start_time = parameter_check(start_time, ptype='pflt', exist='no')
+            end_time = parameter_check(end_time, ptype='pflt', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -49,15 +49,15 @@ class LogRpcManager(object):
             user_info = token_auth(context['token'])['result']
             user_uuid = user_info.get('user_uuid')
 
-            pod_name = parameters['pod_name']
-            date_time = parameters['date_time']
-            start_time = parameters['start_time']
-            end_time = parameters['end_time']
+            pod_name = parameters.get('pod_name')
+            date_time = parameters.get('date_time')
+            start_time = parameters.get('start_time')
+            end_time = parameters.get('end_time')
 
             pod_name = parameter_check(pod_name, ptype='pstr')
-            date_time = parameter_check(date_time, ptype='pint', exist='no')
-            start_time = parameter_check(start_time, ptype='pint', exist='no')
-            end_time = parameter_check(end_time, ptype='pint', exist='no')
+            date_time = parameter_check(date_time, ptype='pflt', exist='no')
+            start_time = parameter_check(start_time, ptype='pflt', exist='no')
+            end_time = parameter_check(end_time, ptype='pflt', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -75,11 +75,11 @@ class LogRpcManager(object):
             user_info = token_auth(context['token'])['result']
             user_uuid = user_info.get('user_uuid')
 
-            label_value = parameters['label_value']
-            start_time = parameters['start_time']
+            label_value = parameters.get('label_value')
+            start_time = parameters.get('start_time')
 
             label_value = parameter_check(label_value, ptype='pstr')
-            start_time = parameter_check(start_time, ptype='pint', exist='no')
+            start_time = parameter_check(start_time, ptype='pflt', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))

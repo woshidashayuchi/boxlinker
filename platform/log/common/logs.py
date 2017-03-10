@@ -7,7 +7,7 @@ from conf import conf
 
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     filename=conf.log_file,
     format=('%(asctime)s '
             '[%(levelname)s] '
@@ -18,7 +18,7 @@ logging.basicConfig(
     )
 
 console = logging.StreamHandler()
-console.setLevel(logging.DEBUG)
+console.setLevel(logging.INFO)
 formatter = logging.Formatter(
     ('{"time": \"%(asctime)s\", '
      '"level": \"%(levelname)s\", '
