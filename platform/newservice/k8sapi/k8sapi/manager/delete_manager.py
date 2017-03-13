@@ -39,19 +39,19 @@ class DeleteManager(object):
             return ret
 
         try:
-            ret_database = self.service_db.delete_all(context)
-            if ret_database is not None:
-                return request_result(402)
-        except Exception, e:
-            log.error('database delete error, reason=%s' % e)
-            return request_result(402)
-
-        try:
             b_ret = self.billing.delete_billing(context)
             if not b_ret:
                 log.error('update the billing resources error, result is: %s' % b_ret)
             log.info('delete billing success, result is: %s' % b_ret)
         except Exception, e:
             log.error('delete billing resource error, reason is: %s' % e)
+
+        try:
+            ret_database = self.service_db.delete_all(context)
+            if ret_database is not None:
+                return request_result(402)
+        except Exception, e:
+            log.error('database delete error, reason=%s' % e)
+            return request_result(402)
 
         return request_result(0, 'service deleted successfully')

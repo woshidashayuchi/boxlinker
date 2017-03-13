@@ -10,12 +10,15 @@ from common.parameters import context_data
 from common.token_ucenterauth import token_auth
 from rpcapi.rpc_client import MonitorRpcClient
 
+from manager.monitor_manager import MonitorManager
+
 
 class MonitorClientApi(object):
     def __init__(self):
         pass
 
-    monitor = MonitorRpcClient()
+    broad = MonitorRpcClient()
+    monitor = MonitorManager()
 
     @classmethod
     def monitor_for(cls, pod_name, rtype):
@@ -40,7 +43,9 @@ class MonitorClientApi(object):
 
         # context = context_data(token, "service_create", "create")
 
-        ret = cls.monitor.monitor_message_get(parameters)
+        # ret = cls.broad.monitor_message_get(parameters)
+
+        ret = cls.monitor.monitor_message_manager(parameters)
 
         return json.dumps(ret)
 
@@ -53,6 +58,6 @@ class MonitorClientApi(object):
             log.error('Token check error, reason=%s' % e)
             return json.dumps(request_result(201))
 
-        ret = cls.monitor.broad_message_get(token_ret.get('result'))
+        ret = cls.broad.broad_message_get(token_ret.get('result'))
 
         return json.dumps(ret)

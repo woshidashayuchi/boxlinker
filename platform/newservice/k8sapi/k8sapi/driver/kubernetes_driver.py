@@ -629,7 +629,9 @@ class KubernetesDriver(object):
             return request_result(501)
 
         add_rc['token'] = context.get('token')
+        add_rc['user_uuid'] = context.get('user_uuid')
         add_service['token'] = context.get('token')
+        add_service['user_uuid'] = context.get('user_uuid')
 
         self.krpc_client.create_services(add_rc)
         self.krpc_client.create_services(add_service)

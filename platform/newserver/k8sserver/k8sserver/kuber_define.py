@@ -24,17 +24,18 @@ class KubernetesRpcAPIs(object):
         ret = dict()
         try:
             token = context.pop('token')
+            user_uuid = context.pop('user_uuid')
             ret = self.kubernetes.post_namespace_resource(context)
             ret = json.loads(ret)
 
             context['token'] = token
+            context['user_uuid'] = user_uuid
             if ret.get('kind') != 'ReplicationController' and ret.get('kind') != 'Service':
                 log.info('CREATE SERVICE ERROR... result is:%s, type is:%s' % (ret, type(ret)))
                 post_es(context, 'service create failure')
         except Exception, e:
             log.error('create the service(kubernetes) error, reason=%s' % e)
 
-        # create the billing resources
         if ret.get('kind') == 'ReplicationController':
             try:
                 billing_ret = self.billing.create_billing(context)

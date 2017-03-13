@@ -19,9 +19,12 @@ def create_esjson(dict_data, log_info):
         "kubernetes":
             {
                 "namespace_name": "%s" % dict_data.get("project_uuid"),
-                "pod_id": "%s" % dict_data.get('service_name').lower().replace('_', '-'),
-                "pod_name": "%s" % dict_data.get('service_name').lower().replace('_', '-'),
-                "container_name": "%s" % dict_data.get('service_name').lower().replace('_', '-'),
+                "pod_id": "%s" % dict_data.get('service_name').lower().replace('_', '-') +
+                          dict_data.get('project_uuid'),
+                "pod_name": "%s" % dict_data.get('service_name').lower().replace('_', '-') +
+                            dict_data.get('project_uuid'),
+                "container_name": "%s" % dict_data.get('service_name').lower().replace('_', '-') +
+                                  dict_data.get('project_uuid'),
                 "labels":
                     {
                         "logs": "%s" % dict_data.get('service_name').lower().replace('_', '-') +

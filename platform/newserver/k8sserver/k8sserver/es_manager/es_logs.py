@@ -14,7 +14,7 @@ def get_index(json_list, log_info):
         "time": get_timestamp_13(),
         "level": "INFO",
         "log": {
-            "userid": json_list.get("user_id"),
+            "userid": json_list.get('user_uuid'),
             "log_info": log_info
         }
     }

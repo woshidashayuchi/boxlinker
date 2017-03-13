@@ -18,7 +18,7 @@ from common.rabbitmq_server import RabbitmqServer
 
 def server_start(n):
 
-    queue = 'monitorcall_wwwapi'
+    queue = 'monitorcall_broad'
 
     while True:
 

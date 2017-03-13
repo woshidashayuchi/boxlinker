@@ -460,16 +460,18 @@ class ServiceDB(MysqlInit):
         return super(ServiceDB, self).exec_update_sql(sql)
 
     def rc_for_billing(self, dict_data):
+        log.info('rc fot billing data is: %s' % dict_data)
 
         sql = "select a.uuid, a.service_status, b.cm_format, b.pods_num from font_service a, " \
               "replicationcontrollers b WHERE a.project_uuid='%s' and a.service_name='%s' and " \
               "a.rc_uuid=b.uuid" % (dict_data.get('project_uuid'), dict_data.get('service_name'))
 
-        conn, cur = self.operate.connection()
-        billing_ret = self.operate.exeQuery(cur, sql)
-        self.operate.connClose(conn, cur)
+        # conn, cur = self.operate.connection()
+        log.info('get the rc message for billings sql is: %s' % sql)
+        # billing_ret = self.operate.exeQuery(cur, sql)
+        # self.operate.connClose(conn, cur)
 
-        return billing_ret
+        return super(ServiceDB, self).exec_select_sql(sql)
 
     def update_cm(self, dict_data):
         cm_format = dict_data.get('cm_format')

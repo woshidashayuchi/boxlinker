@@ -7,4 +7,4 @@ RUN easy_install rfc3339
 RUN easy_install pika
 COPY ./monitor /data/
 EXPOSE 9008
-CMD python /data/monitor/restserver/restapi_server.py & python /data/monitor/rpcserver/rpcapi_callserver.py
+CMD python /data/monitor/restserver/restapi_server.py & python /data/monitor/rpcserver/rpcapi_broadserver.py & python /data/monitor/rpcserver/rpcapi_monitorserver.py

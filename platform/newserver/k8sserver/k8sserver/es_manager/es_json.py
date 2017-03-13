@@ -23,13 +23,13 @@ def create_esjson(json_list, log_info):
         "log": json.dumps(log_dict),
         "kubernetes":
             {
-                "namespace_name": "%s" % namespace,
-                "pod_id": "%s" % service_name.lower().replace('_', '-'),
-                "pod_name": "%s" % service_name.lower().replace('_', '-'),
-                "container_name": "%s" % service_name.lower().replace('_', '-'),
+                "namespace_name": "%s" % service_name + namespace,
+                "pod_id": "%s" % service_name + namespace,
+                "pod_name": "%s" % service_name + namespace,
+                "container_name": "%s" % service_name + namespace,
                 "labels":
                     {
-                        "logs": "%s" % service_name.lower().replace('_', '-') + namespace
+                        "logs": "%s" % service_name + namespace
                     },
             },
         "@timestamp": str(get_now_time_ss_z())

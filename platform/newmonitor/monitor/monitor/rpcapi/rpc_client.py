@@ -14,7 +14,8 @@ class MonitorRpcClient(object):
 
     def __init__(self):
         self.rbtmq = RabbitmqClient()
-        self.queue = 'monitorcall_wwwapi'
+        self.queue = 'monitorcall_monitor'
+        self.queue1 = 'monitorcall_broad'
         self.timeout = 8
 
     def monitor_message_get(self, context, parameters=None):
@@ -33,7 +34,7 @@ class MonitorRpcClient(object):
         try:
             rpc_body = rpc_data('broad_get', context, parameters)
 
-            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+            return self.rbtmq.rpc_call_client(self.queue1, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(701)

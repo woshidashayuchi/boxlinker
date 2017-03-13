@@ -155,7 +155,6 @@ class CreateManager(object):
         if infix is False or diff is False:
             return request_result(401)
 
-        ret = post_es(context, 'service is creating...please wait')
-        log.info('wwwwwwwwwwwwwwwwwww')
-        log.info(ret)
+        post_es(context, 'service is creating...please wait')
+
         return request_result(0, infix)
