@@ -1,16 +1,30 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
+import platform
 
-queue = 'imagetoken'
-service_name = 'imagerepo'
+
+# 业务数据库
+sysstr = platform.system()  # Windows测试模式
+
+queue = 'rpc_queue'
+
+github_queue = 'gitauth_rpc_queue'
+
+if 'Darwin' == sysstr:  # mac
+    mq_server01 = '127.0.0.1'
+    mq_server02 = '127.0.0.1'
+elif 'Linux' == sysstr:
+    mq_server01 = 'rabbitmq'
+    mq_server02 = 'rabbitmq'
+
+mq_port = 5672
 
 log_level = 'INFO'
 log_file = '/var/log/cloud.log'
 
-mq_server01 = 'rabbitmq'
-mq_server02 = 'rabbitmq'
-mq_port = 5672
+
+
 
 
 # mq_server01 = '192.168.1.10'
@@ -18,12 +32,7 @@ mq_port = 5672
 # mq_port = 30001
 
 
-db_server01 = 'mysql'
-db_server02 = 'mysql'
-db_port = 3306
-db_user = 'root'
-db_passwd = 'root123admin'
-database = 'registry'
+
 
 issuer = "Auth Service"  # 和镜像库配置相同,用于register token生成
 # private_key = '/Users/lzp/Desktop/v1.0/boxlinker-auth-test/ssl/ca.key'  # 加密
@@ -54,11 +63,8 @@ else:
     SEND_EMAIL_URL = 'https://email.boxlinker.com/send'
 
 
-import platform
 
 
-# 业务数据库
-sysstr = platform.system()  # Windows测试模式
 
 class hub_db:
     charset = 'utf8'
@@ -67,7 +73,10 @@ class hub_db:
         user = 'root'
         pawd = 'root123admin'
         cydb = 'registry'
-        host = 'mysql'
+        if 'Darwin' == sysstr:  # mac
+            host = '192.168.1.6'
+        elif 'Linux' == sysstr:
+            host = 'mysql'
         mysql_engine = 'mysql://' + user + ':' + pawd + '@' + host + ':' + str(port) + '/' + cydb + '?charset=utf8'
     else:
         host = 'mysql'  # 线上
@@ -75,9 +84,20 @@ class hub_db:
         pawd = 'root123admin'
         cydb = 'registry'
         mysql_engine = 'mysql://' + user + ':' + pawd + '@' + host + ':' + str(port) + '/' + cydb + '?charset=utf8'
+#
 
 
+if 'Darwin' == sysstr:  # mac
+    db_server01 = '192.168.1.6'
+    db_server02 = '192.168.1.6'
+elif 'Linux' == sysstr:
+    db_server01 = 'mysql'
+    db_server02 = 'mysql'
 
+db_port = 3306
+db_user = 'root'
+db_passwd = 'root123admin'
+database = 'registry'
 
 # aliyun
 

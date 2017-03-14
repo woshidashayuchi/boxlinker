@@ -27,9 +27,6 @@ from pyTools.token.ctools import random_str
 auth_code = {}
 TIMEOUT = 60 * 60 * 100 #3600 * 2  # 过期时间
 
-
-
-
 BIGMEGA = 10
 
 BIGFILESIZE = 1024 * 1024 * BIGMEGA
@@ -204,8 +201,9 @@ def get_payload(token):
         result['payload'] = decoded_token[:-16]
         # ret = request_result(0, ret=result)
         return result
-    except Exception as msg:
+    except Exception, e:
         # ret = request_result(602, ret={"msg": str(msg)})
+        print e.args
         return None
 
 def get_pwd(username, userpwd):
@@ -245,3 +243,37 @@ def GenerateRandomString(randlen=32):
         randstr = str(time.time()).replace('.', '-') + str(random.random()).replace('.', '-')
         randomstr += hashlib.md5(randstr).hexdigest() + randstr
     return randomstr[0:randlen]
+
+
+if __name__ == '__main__':
+    state_msg = {
+        'team_uuid': 'sssss',  # 组织uuid
+        'src_type': 'ssssss',  # 第三方平台类型, github, coding
+        'redirect_url': 'ssssssss',
+        'expires': time.time() + 30 * 24 * 60 * 60
+    }
+
+    state_ret = gen_token(key='ssssssssssdsdwew', data=state_msg)
+    print state_ret
+
+    state_ret = u"eyJzcmNfdHlwZSI6ICJjb2RpbmciLCAiZXhwaXJlcyI6IDE0OTE0NDMxOTguMTA5NTU2LCAic2FsdCI6ICIwLjk1NzMzNDk2NDg0NiIsICJ0ZWFtX3V1aWQiOiAiMmU4ZTdiMzctYTk1Ny00NzcwLTkwNzUtYWFhNjdlYWE0OWNlIiwgInJlZGlyZWN0X3VybCI6ICJodHRwOi8vdGVzdC5ib3hsaW5rZXIuY29tL2J1aWxkaW5nL2NyZWF0ZSJ9-0yJ-AmKMDaVcnTYLaSsKg=="
+    print '------>'
+    print len(state_ret)
+    print state_ret
+
+    less_equal = 3 - len(state_ret) % 3
+
+    # coding 无故吃掉 =
+    if 3 == less_equal:
+        state_ret = state_ret
+    elif 2 == less_equal:
+        state_ret = state_ret + u'=='
+    elif 1 == less_equal:
+        state_ret = state_ret + u'='
+
+    print 'less_equal'
+    print less_equal
+    print state_ret
+
+    ret = get_payload(token=state_ret)
+    print ret

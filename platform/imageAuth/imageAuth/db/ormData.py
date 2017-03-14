@@ -6,21 +6,16 @@
 @author: liuzhangpei
 @contact: liuzhangpei@126.com
 @site: http://www.livenowhy.com
-@time: 17/2/7 13:56
+@time: 17/2/28 14:07
+@ orm 数据结构
 """
 
 
+
+
 import sqlalchemy as sa
-from sqlalchemy import create_engine
 from sqlalchemy.dialects import mysql
-from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
-
-# from sqlalchemy.pool import QueuePool
-
-import conf.conf as DB
-
-
 
 # 创建对象的基类:
 Base = declarative_base()
@@ -146,11 +141,11 @@ class CodeRepo(Base):
     repo_branch = sa.Column(sa.String(64))  # 项目名,分支
     repo_hook_token = sa.Column(sa.String(64))  # web hooks token
 
-    hook_url = sa.Column(sa.String(256))  # web hook_url
+    hook_id = sa.Column(sa.String(256))  # web hook id,删除和修改时用
 
     html_url = sa.Column(sa.String(256))  # 项目 url
     ssh_url = sa.Column(sa.String(256))   # 项目 git clone 地址
-    url = sa.Column(sa.String(256))
+    git_url = sa.Column(sa.String(256))
     description = sa.Column(sa.String(256))
 
     is_hook = sa.Column(sa.String(1), nullable=False, server_default='0')  # 是否已经被授权hook
@@ -162,13 +157,3 @@ class CodeRepo(Base):
 
     creation_time = sa.Column(mysql.TIMESTAMP, nullable=True)
     update_time = sa.Column(mysql.TIMESTAMP, nullable=True)
-
-engine = create_engine(DB.hub_db.mysql_engine, echo=True) #, poolclass=QueuePool)  # , encoding='utf8', pool_size=30, max_overflow=20)
-Session = sessionmaker(bind=engine)
-
-
-def init_create_hub_db():
-    # 在这里导入定义模型所需要的所有模块，这样它们就会正确的注册在元数据上。
-    # 否则你就必须在调用 init_db() 之前导入它们。
-    print "init_create_hub_db"
-    Base.metadata.create_all(bind=engine, checkfirst=True)

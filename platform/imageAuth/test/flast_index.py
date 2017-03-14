@@ -24,7 +24,7 @@ app.debug = True  # apache 中 main 的设置无效
 CORS(app=app)   # 全局跨域访问
 
 
-from imageAuth.db.db import init_create_hub_db
+from imageAuth.db.orm_db_old import init_create_hub_db
 
 
 

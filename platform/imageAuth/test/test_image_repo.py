@@ -11,12 +11,13 @@
 """
 
 import requests
-
+from imageAuth.manager.userTools import username_password_authentication
 
 
 image_repo_prefix = 'https://registrytoken.boxlinker.com:8843'
 image_repo_prefix = 'http://192.168.1.6:8843'
-token = 'fc6ddb4e-c5e9-46dd-a7e3-a3260d3bbc65'
+retbool, token = username_password_authentication(username='liuzhangpei', password='QAZwsx123')
+
 
 verify_crt = '/root/v1.0/registry/ssl/ca.crt'
 verify_key = '/root/v1.0/registry/ssl/ca.key'
@@ -80,6 +81,7 @@ def test_ImageRepo(repoid):
     url_suffix = '/api/v1.0/imagerepo/image/' + repoid
     url = image_repo_prefix + url_suffix
     headers = {'token': token}
+    print token
     ret = requests.get(url, headers=headers, timeout=5, cert=(verify_crt, verify_key), verify=True)
     print ret.json()
 
@@ -92,6 +94,51 @@ def test_ImageRepoSystem(repoid):
     ret = requests.get(url, headers=headers, timeout=5, cert=(verify_crt, verify_key), verify=True)
     print ret.json()
 
+
+
+def test_ImageTag(tagid):
+    """  通过tagid拿到镜像名和版本 """
+    url_suffix = '/api/v1.0/imagerepo/image/tagid/' + tagid
+    url = image_repo_prefix + url_suffix
+    headers = {'token': token}
+    ret = requests.get(url, headers=headers, timeout=5, cert=(verify_crt, verify_key), verify=True)
+    print ret.json()
+
+def test_Picture():
+    """ 镜像名得到镜像id """
+    url_suffix = '/api/v1.0/pictures'
+    url = image_repo_prefix + url_suffix
+    headers = {'token': token}
+    data = """{
+        "name": "sdsdsd"
+        }"""
+    ret = requests.post(url, data=data, headers=headers, timeout=5, cert=(verify_crt, verify_key), verify=True)
+    print ret
+    print ret.json()
+
+
+def test_ImageRepoDetail(repoid, detail_type):
+    """ 修改详情 """
+    url_suffix = '/api/v1.0/imagerepo/image/' + repoid + '/detail/' + detail_type
+    url = image_repo_prefix + url_suffix
+
+    headers = {'token': token}
+    data = """{"detail": "test_ImageRepoDetail modify"}"""
+
+    ret = requests.put(url, data=data, headers=headers, timeout=5, cert=(verify_crt, verify_key), verify=True)
+    print ret
+    print ret.json()
+
+def test_ImageRepoDetail_publice(repoid, detail_type):
+    """ 修改详情,是否公开 """
+    url_suffix = '/api/v1.0/imagerepo/image/' + repoid + '/detail/' + detail_type
+    url = image_repo_prefix + url_suffix
+
+    headers = {'token': token}
+    data = """{"detail": "1"}"""
+    ret = requests.put(url, data=data, headers=headers, timeout=5, cert=(verify_crt, verify_key), verify=True)
+    print ret
+    print ret.json()
 
 
 if __name__ == '__main__':
@@ -120,13 +167,31 @@ if __name__ == '__main__':
     # test_OwnImageRepo_Search(1, 10)
     # print '\n'
     #
-    # print 'test_ImageRepo'
-    # test_ImageRepo('4bd1ca3f-1752-33e6-b8d0-b9348a58ced7')
-    # print '\n'
-    #
-    print 'test_ImageRepoSystem'
-    test_ImageRepoSystem('4bd1ca3f-1752-33e6-b8d0-b9348a58ced7')
+
+    print 'test_ImageRepo'
+    test_ImageRepo('4c64fc3e-3cef-3b02-8ebf-f63aab009874')
     print '\n'
+    #
+    # print 'test_ImageRepoSystem'
+    # test_ImageRepoSystem('4bd1ca3f-1752-33e6-b8d0-b9348a58ced7')
+    # print '\n'
+
+    # print 'test_ImageRepoDetail'
+    # test_ImageRepoDetail('86a3c651-2fe7-3ea1-9e61-fb663f4afafa', 'detail')
+    # print '\n'
+
+
+    # print 'test_ImageRepoDetail'
+    # test_ImageRepoDetail_publice('bf1f9123-d5c9-31c5-988a-d417bfb37915', 'is_public')
+    # print '\n'
+
+
+
+    # print 'test_ImageTag'
+    # test_ImageTag('4')
+    # print '\n'
+
+    # test_Picture()
 
     # import uuid
     #

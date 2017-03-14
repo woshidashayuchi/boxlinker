@@ -32,7 +32,7 @@ notifications:
     disabled: false
     headers:
         Authorization: [rolling-update-headers-no-ti]
-    url: http://index.boxlinker.com:8843/api/v1.0/registry/notifications
+    url: http://172.20.1.6:8843/api/v1.0/registry/notifications
     # docker registry 之间访问,和 token 不一样
     #url: http://authtoken:8001/api/v1.0/registry/notifications
     timeout: 3000ms

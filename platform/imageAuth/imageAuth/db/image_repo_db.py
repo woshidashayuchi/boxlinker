@@ -48,12 +48,26 @@ class ImageRepoDB(MysqlInit):
         sql = "select image_uuid from image_repository where repository='%s'" % (imagename)
         return super(ImageRepoDB, self).exec_select_sql(sql)
 
+    def get_imagename_tag_by_tagid(self, tagid):
+        """ 通过 tagid 得到 """
+        sql = "select repository, tag from repository_events where id='%s'" % (tagid)
+        return super(ImageRepoDB, self).exec_select_sql(sql)
+
     def get_repo_detail_by_uuid(self, repoid):
         """获取一个镜像的详细"""
         sql = "select image_uuid, team_uuid, repository, deleted, creation_time, update_time, is_public, short_description, detail, \
               download_num, enshrine_num, review_num, version, latest_version, pushed, is_code, logo, src_type from image_repository where image_uuid='%s' and deleted=0" % (repoid)
         return super(ImageRepoDB, self).exec_select_sql(sql)
 
+    def get_repo_publice(self, repoid):
+        """获取一个镜像的 is_public 属性"""
+        sql = "select is_public from image_repository where image_uuid='%s'" % (repoid)
+        return super(ImageRepoDB, self).exec_select_sql(sql)
+
+    def get_repo_team_uuid(self, repoid):
+        """获取一个镜像的 team_uuid 属性"""
+        sql = "select team_uuid from image_repository where image_uuid='%s'" % (repoid)
+        return super(ImageRepoDB, self).exec_select_sql(sql)
 
     def get_repo_detail_by_imagename(self, imagename):
         """获取一个镜像的详细, 镜像名是否存在"""
@@ -84,7 +98,9 @@ class ImageRepoDB(MysqlInit):
 
     def get_repo_events_by_imagename(self, imagerep_name):
         """获取一个镜像的全部 RepositoryEvents 信息"""
-        sql = "select repository, url, lengths, tag, actor, actions, digest, sizes, repo_id, source_instanceID, source_addr, deleted, creation_time, update_time from repository_events where repository='%s'" % (imagerep_name)
+        sql = "select id, repository, url, lengths, tag, actor, actions, digest, sizes, repo_id, \
+               source_instanceID, source_addr, deleted, creation_time, update_time \
+               from repository_events where repository='%s'" % (imagerep_name)
         return super(ImageRepoDB, self).exec_select_sql(sql)
 
     def modify_image_repo(self, image_uuid, detail_type, detail):
@@ -239,12 +255,25 @@ class ImageRepoDB(MysqlInit):
                               digest, size, repo_id, source_instanceID, source_addr)
 
 
+    def get_repo_publice_manger(self, repoid):
+        ret = self.get_repo_publice(repoid=repoid)
+        if len(ret) > 0:
+            return True if 1 == ret[0][0] else False
+        else:
+            return False
 
 
-# resources_acl
-# image_repository
-# repository_events
-# repository_pull
+        # get_repo_team_uuid
+    def get_repo_team_uuid_manger(self, repoid):
+        ret = self.get_repo_team_uuid(repoid=repoid)
+        print ret
+        if len(ret) > 0:
+            return ret[0][0]
+        return None
+
+
+
+
 
 if __name__ == '__main__':
     IRDB = ImageRepoDB()
@@ -253,14 +282,20 @@ if __name__ == '__main__':
     # print type(ret)
     # print ret
 
-    while True:
-        import time
-        time.sleep(1)
-        ret = IRDB.get_image_repo_uuid_by_name(imagename='zhangsan/paussdsd')
-        print ret
-    #
+    # while True:
+    #     import time
+    #     time.sleep(1)
+    #     ret = IRDB.get_image_repo_uuid_by_name(imagename='zhangsan/paussdsd')
+    #     print ret
+    # #
     # ret = IRDB.get_repo_uuid_by_image_name(imagename='sssss')
     # print ret[0][0]
+
+
+    # ret = IRDB.get_repo_publice_manger("239f8d4e-f3ce-3788-8c83-bc9d847d113a")
+    # print ret
+    # ret = IRDB.get_repo_team_uuid_manger("239f8d4e-f3ce-3788-8c83-bc9d847d113a")
+    # print ret
 
 
     #

@@ -18,9 +18,9 @@ SECRET_KEY = 'wwq44rw3drwkr2o334i34343'
 
 if DEBUG:
     # OAUTH_CALLBACK = 'http://192.168.1.6:8080/api/v2.0/oauths/callback'
-    OAUTH_CALLBACK = 'https://registrytoken.boxlinker.com:8843/api/v1.0/oauthclient/callback'
+    OAUTH_CALLBACK = 'http://imageauth.boxlinker.com/api/v1.0/oauthclient/callback'
     # OAUTH_CALLBACK = 'http://0.0.0.0:8000/api/v2.0/oauths/callback'
-    OAUTH_WEBHOOKS = 'https://registrytoken.boxlinker.com:8843/api/v1.0/oauthclient/webhoos'
+    OAUTH_WEBHOOKS = 'http://imageauth.boxlinker.com/api/v1.0/oauthclient/webhoos'
 
     # github Developer applications
     github_client_id = '9a8c43fa5301c02fb2f4'  # Client ID
@@ -44,12 +44,20 @@ else:
 
 # github_repos_url = 'https://api.github.com/users/{0}/repos'
 
-
-# state 用于防止垮站点攻击
-user_oauth_url = 'https://github.com/login/oauth/authorize?client_id=' + github_client_id + '&scope=user%20repo:email&state={0}'
+# state 用于防止垮站点攻击,
+# 20170306 githut 权限升级  https://github.com/settings/tokens
+user_oauth_url = 'https://github.com/login/oauth/authorize?client_id=' + github_client_id + '&state={0}' \
+                 '&scope=user%20repo%20admin:org%20admin:public_key%20admin:repo_hook%20admin:org_hook%20admin:gpg_key%20notifications'
 
 
 
 coding_scope = "user,user:email,notification,project,project:depot,project:key"
 coding_oauth_url = "https://coding.net/oauth_authorize.html?client_id=" + coding_client_id + \
-                   "&redirect_uri=" + OAUTH_CALLBACK + "&response_type=code&scope=" + coding_scope + "&state={0}"
+                   "&response_type=code" \
+                   "&state={0}" + \
+                   "&fsds=ssss" + \
+                   "&scope=" + coding_scope + \
+                   "&redirect_uri=" + OAUTH_CALLBACK
+
+
+# https://imageauth.boxlinker.com/api/v1.0/oauthclient/callback/?code=a2e9490a293cdae96278f4715b9cb35c&scope=user%2Cuser%3Aemail%2Cnotification%2Cproject%2Cproject%3Adepot%2Cproject%3Akey&state=eyJzcmNfdHlwZSI6ICJjb2RpbmciLCAiZXhwaXJlcyI6IDE0OTEzODY3NDcuNTg0ODAxLCAic2FsdCI6ICIwLjYxNjg1NzU2MTkwMSIsICJ0ZWFtX3V1aWQiOiAiMmU4ZTdiMzctYTk1Ny00NzcwLTkwNzUtYWFhNjdlYWE0OWNlIiwgInJlZGlyZWN0X3VybCI6ICJodHRwOi8vdGVzdC5ib3hsaW5rZXIuY29tL2J1aWxkaW5nL2NyZWF0ZSJ9F_pBekZgLBUkhesHDRmjBw

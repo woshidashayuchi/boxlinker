@@ -40,6 +40,9 @@ class RabbitmqResponse(object):
         # image_repo_detail_modify     修改详情 (old image_repo_modify_detail)
 
         self.rpc_api.add_resource(
+            "get_pictures", self.rpc_image_api_define.get_pictures)
+
+        self.rpc_api.add_resource(
             "image_repo_rank", self.rpc_image_api_define.image_repo_rank)
 
         self.rpc_api.add_resource(
@@ -48,7 +51,6 @@ class RabbitmqResponse(object):
         # 获取镜像公开信息,token 对即可
         self.rpc_api.add_resource(
             "image_repo_public_info", self.rpc_image_api_define.image_repo_get_public_detail)
-
 
         self.rpc_api.add_resource(
             "image_repo_own", self.rpc_image_api_define.image_repo_own)
@@ -66,11 +68,13 @@ class RabbitmqResponse(object):
         self.rpc_api.add_resource(
             "get_image_uuid_by_name", self.rpc_image_api_define.image_repo_name_exist)
 
+        # 通过tagid得到镜像名和tag
+        self.rpc_api.add_resource(
+            "image_tag_id", self.rpc_image_api_define.image_tag_id)
 
         # registry token 第一接口
         self.rpc_api.add_resource(
             'registry_token', self.rpc_image_api_define.registry_token)
-
 
         #  登录获取token, 有用户token  直接调用该接口
         self.rpc_api.add_resource(
@@ -81,9 +85,13 @@ class RabbitmqResponse(object):
 
 
         ####  第三方绑定
+        self.rpc_api.add_resource("oauth_status", self.rpc_oauth_api_define.OauthStatus)
         self.rpc_api.add_resource("get_oauth_url", self.rpc_oauth_api_define.OauthUrl)
         self.rpc_api.add_resource("oauth_callback", self.rpc_oauth_api_define.CallBack)
+
+        self.rpc_api.add_resource("get_oauth_code_repo", self.rpc_oauth_api_define.OauthCodeRepo)
         self.rpc_api.add_resource("set_web_hook", self.rpc_oauth_api_define.WebHook)
+        self.rpc_api.add_resource("del_oauth_status", self.rpc_oauth_api_define.DelOauthStatus)
 
 
         # get_oauth_url   获取用户授权跳转链接  (token 对即可)
@@ -91,8 +99,6 @@ class RabbitmqResponse(object):
         # get_oauth_code_repo 获取用户代码对应平台下的代码项目(token 对即可)
         # set_web_hook    授权平台可以对某个项目具有 hooks 权限(token 对即可)
 
-        self.rpc_api.add_resource(
-            "get_oauth_code_repo", self.rpc_oauth_api_define.OauthCodeRepo)
 
 
     def rpc_exec(self, dict_data):

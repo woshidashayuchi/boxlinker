@@ -9,8 +9,8 @@
 @time: 17/2/22 10:34
 """
 
-
-from imageAuth.manager.userTools import username_password_authentication, get_team_uuid, username_password_teams_token
+import json
+from pyTools.token.token import get_payload
 
 import conf.oauthConf as openOauth
 
@@ -20,7 +20,6 @@ from common.parameters import parameter_check, context_data
 from common.acl import acl_check
 
 from imageAuth.manager import oauth_manage
-from imageAuth.db.db import Session
 
 
 
@@ -31,7 +30,34 @@ class OauthCodeRpcApi(object):
         self.oauth_callback = oauth_manage.CallBackManager()
         self.oauth_webhook = oauth_manage.WebHookManager()
         self.oauth_coderepo = oauth_manage.OauthCodeRepoManager()
-        self.db_session = Session()
+        self.oauth = oauth_manage.CodeOauthManager()
+
+    @acl_check
+    def OauthStatus(self, context, parameters):
+        try:
+            team_uuid = parameters['team_uuid']
+            team_uuid = parameter_check(team_uuid, ptype='pstr')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+        return self.oauth.OauthStatue(team_uuid=team_uuid)
+
+
+    @acl_check
+    def DelOauthStatus(self, context, parameters):
+        """ 取消绑定 """
+        try:
+            team_uuid = parameters['team_uuid']
+            src_type = parameters['src_type']
+            team_uuid = parameter_check(team_uuid, ptype='pstr')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+        return self.oauth.DelOauthStatus(team_uuid=team_uuid, src_type=src_type)
+
+
 
     @acl_check
     def OauthUrl(self, context, parameters):
@@ -65,24 +91,19 @@ class OauthCodeRpcApi(object):
                       % (context, parameters, e))
             return request_result(101)
 
+        state_ret = state.replace('.', '=')  # coding 无故吃掉 =
 
-        import json
-        from pyTools.token.token import get_payload
-
-        payloadRet = get_payload(token=state)  # token合法
+        payloadRet = get_payload(token=state_ret)  # token合法
         if payloadRet is None:
+            log.error('get_payload is error state_ret: %s' % (state_ret))
+            log.error('get_payload is error : %s' % (str(payloadRet)))
             return request_result(601)
 
         payload = payloadRet['payload']
-
         payload = json.loads(payload)
-
         team_uuid = payload['team_uuid']
         src_type = payload['src_type']
-        # redirect_url = payload['redirect_url']
-
-        ret = self.oauth_callback.callback(db_session=self.db_session, src_type=src_type,
-                                           code=code, team_uuid=team_uuid)
+        ret = self.oauth_callback.callback(src_type=src_type, code=code, team_uuid=team_uuid)
 
         if 'redirect_url' not in payload:
             redirect_url = "oauth/gredirect"
@@ -94,6 +115,7 @@ class OauthCodeRpcApi(object):
 
     @acl_check
     def OauthCodeRepo(self, context, parameters):
+        """ 获取代码列表 """
         try:
             src_type = parameters['src_type']
             team_uuid = parameters['team_uuid']
@@ -108,14 +130,13 @@ class OauthCodeRpcApi(object):
             return request_result(101)
 
         if refresh is True:
-            self.oauth_coderepo
+            return self.oauth_coderepo.refresh_repos(team_uuid, src_type)
         else:
-            return self.oauth_coderepo.get_repo(db_session=self.db_session, team_uuid=team_uuid, src_type=src_type, repo_name=repo_name)
-
-
+            return self.oauth_coderepo.GetCodeRepoList(team_uuid=team_uuid, src_type=src_type)
 
     @acl_check
     def WebHook(self, context, parameters):
+        """ 设置webhook """
         try:
             src_type = parameters['src_type']
             team_uuid = parameters['team_uuid']
@@ -123,7 +144,6 @@ class OauthCodeRpcApi(object):
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
             repo_name = parameter_check(repo_name, ptype='pstr')
-
             if src_type not in openOauth.OpenType:
                 log.error('src_type is error: %' % (src_type))
                 return request_result(101)
@@ -133,8 +153,7 @@ class OauthCodeRpcApi(object):
                       % (context, parameters, e))
             return request_result(101)
 
-
-        return self.oauth_webhook.create_web_hook(db_session=self.db_session, team_uuid=team_uuid, src_type=src_type, repo_name=repo_name)
+        return self.oauth_webhook.create_web_hook(team_uuid=team_uuid, src_type=src_type, repo_name=repo_name)
 
 
 

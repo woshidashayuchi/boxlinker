@@ -15,17 +15,46 @@ from common.parameters import parameter_check, context_data
 from common.acl import acl_check
 from common.token_ucenterauth import token_auth
 
-
-
 from imageAuth.manager import images_manage, user_manage
-
 from imageAuth.db import image_repo_db
+
+import os
+import conf.conf as CONF
+
+
+from pyTools.tools.images import CreatePutRetUrl
 
 class ImageRepoRpcAPI(object):
     def __init__(self):
         self.images_manage = images_manage.ImageRepoManager()
         self.usercenter = user_manage.UcenterManager()
         self.image_repo_db = image_repo_db.ImageRepoDB()
+
+
+    @acl_check
+    def get_pictures(self, context, parameters):
+        """ 获取图片"""
+        try:
+            name = parameters.get('name').decode('utf-8').encode('utf-8')
+            if name == '':
+                return request_result(101)
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        retbool, image_dir = CreatePutRetUrl(name, localpath=CONF.LOCAL_PATH, remopath=CONF.RepositoryObject,
+                             fonttype=CONF.FONTTYPE, access_key_id=CONF.AccessKeyID,
+                             access_key_secret=CONF.AccessKeySecret, endpoint=CONF.Endpoint,
+                             bucker_name=CONF.BucketName)
+
+        if retbool is False:
+            return request_result(601)
+        ret = dict()
+        ret['oss_host'] = CONF.OssHost
+        ret['image_dir'] = image_dir
+        ret['image_url'] = CONF.OssHost + os.path.sep + image_dir
+        return request_result(0, ret=ret)
 
     @acl_check
     def image_repo_rank(self, context, parameters):
@@ -87,9 +116,29 @@ class ImageRepoRpcAPI(object):
 
 
     # image_repo_own  image_repo_get_detail
-    # 获取一个镜像的详情
-    @acl_check
+
+    # @acl_check  由于对于public 属性的镜像非组织成员不能查看详细, 第一步, 不能采用 acl 控制
     def image_repo_get_detail(self, context, parameters):
+        try:
+            repoid = parameters.get('repoid')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        is_publice = self.image_repo_db.get_repo_publice_manger(repoid=repoid)
+
+        if is_publice:
+            log.info('image_repo_get_detail: %s is publie' % (repoid))
+            return self.images_manage.GetRepoDetail(repoid)
+
+        log.info('image_repo_get_detail: %s not is publie' % (repoid))
+        return self.image_repo_get_detail_acl(context=context, parameters=parameters)
+
+
+    # 获取一个镜像的详情 acl 控制权限
+    @acl_check
+    def image_repo_get_detail_acl(self, context, parameters):
         try:
             repoid = parameters.get('repoid')
         except Exception, e:
@@ -119,23 +168,31 @@ class ImageRepoRpcAPI(object):
     @acl_check
     def image_repo_del(self, context, parameters):
         try:
-
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
             repoid = parameters.get('repoid')
-
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.images_manage.delRepo(repoid, team_uuid)
+        own_team_uuid = self.image_repo_db.get_repo_team_uuid_manger(repoid=repoid)
+
+        if own_team_uuid is None:
+            return request_result(701)
+        if own_team_uuid == team_uuid:
+            return self.images_manage.delRepo(repoid, team_uuid)
+        else:
+            return request_result(101)
 
 
     # 修改镜像详情
     @acl_check
     def image_repo_modify_detail(self, context, parameters):
         try:
+            user_info = token_auth(context['token'])['result']
+            team_uuid = user_info.get('team_uuid')
+
             repoid = parameters.get('repoid')
             detail_type = parameters.get('detail_type')
             detail = parameters.get('detail')
@@ -157,7 +214,19 @@ class ImageRepoRpcAPI(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.images_manage.modifyRepoDetail(repoid, detail_type, detail)
+        # 是否是资源拥有者
+        own_team_uuid = self.image_repo_db.get_repo_team_uuid_manger(repoid=repoid)
+
+        log.info('own_team_uuid : %s' % (own_team_uuid))
+        log.info('team_uuid : %s' % (team_uuid))
+
+        if own_team_uuid is None:
+            return request_result(701)
+        if own_team_uuid == team_uuid:
+            return self.images_manage.modifyRepoDetail(repoid, detail_type, detail)
+        else:
+            return request_result(101)
+
 
 
     # 镜像名是否存在
@@ -173,6 +242,21 @@ class ImageRepoRpcAPI(object):
             return request_result(101)
 
         return self.images_manage.image_repo_name_exist(imagename)
+
+
+    def image_tag_id(self, context, parameters):
+        """ 通过tagid得到镜像名和tag """
+        try:
+            tagid = parameters.get('tagid')
+            if tagid is None or tagid == '':
+                log.error('tagid is null')
+                return request_result(101)
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.images_manage.get_imagename_tag_by_tagid(tagid)
 
 
     # 第一接口
@@ -227,11 +311,11 @@ class ImageRepoRpcAPI(object):
 
             retbool, team_info = self.usercenter.get_team_uuid(token=token, team_name=team_name)
             if retbool is False:
+                log.error('registry_token get_team_uuid is error')
                 return request_result(101)
 
             team_uuid = team_info['team_uuid']
             log.info('registry_token token new : %s, team_uuid: %s' % (token, team_uuid))
-
         except Exception, e:
             log.error('get token  error %s ' % (e))
             return request_result(201)
@@ -245,7 +329,8 @@ class ImageRepoRpcAPI(object):
         actionlist = actions.split(',')
         retbool, repo_uuid = self.images_manage.get_repo_uuid(scopes, team_uuid, is_public=0)
         if retbool is False:
-            log.error('get_repo_uuid is error')
+            log.error('get_repo_uuid is error, no Resource')
+            log.error('get_repo_uuid is error, scopes: %s, team_uuid: %s' % (scopes, team_uuid))
             return request_result(601)
 
         # admin 账号  只要token正确  可以任意权限, 不能比 self.images_manage.get_repo_uuid 先执行,否则无法初始化数据

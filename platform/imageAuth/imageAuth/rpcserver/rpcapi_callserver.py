@@ -27,7 +27,6 @@ def server_start(n):
     while True:
         try:
             log.info('Starting RPC Call API Server, topic=%s' % queue)
-            # db_session = Session()
             rbtmq = RabbitmqServer(60)
             rbtmq.rpc_call_server(queue, rpcapi_register)
         except Exception, e:

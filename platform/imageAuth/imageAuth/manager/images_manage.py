@@ -203,6 +203,7 @@ class ImageRepoManager(object):
         ret_d['creation_time'] = creation_time
         ret_d['update_time'] = update_time
         ret_d['is_public'] = is_public
+        ret_d['team_uuid'] = team_uuid
         if private:
             ret_d['short_description'] = short_description
             ret_d['detail'] = detail
@@ -221,12 +222,13 @@ class ImageRepoManager(object):
 
         repo_tags = list()
         for repo_event_node in repo_event:
-            repository, url, lengths, tag, actor, actions, digest, \
+            tagid, repository, url, lengths, tag, actor, actions, digest, \
             sizes, repo_id, source_instanceID, source_addr, deleted, \
             creation_time, update_time = repo_event_node
             tag_temp = dict()
             tag_temp['repo_id'] = repo_id
             tag_temp['tag'] = tag
+            tag_temp['tagid'] = tagid
 
             if private:
                 tag_temp['url'] = url
@@ -261,6 +263,7 @@ class ImageRepoManager(object):
         ret_d['repository'] = repository
         ret_d['creation_time'] = creation_time
         ret_d['update_time'] = update_time
+        ret_d['team_uuid'] = team_uuid
 
         if logo == '' or logo is None:
             ret_d['logo'] = OssHost + '/' + 'repository/default.png'
@@ -272,10 +275,11 @@ class ImageRepoManager(object):
 
         repo_tags = list()
         for repo_event_node in repo_event:
-            repository, url, lengths, tag, actor, actions, digest, \
+            tagid, repository, url, lengths, tag, actor, actions, digest, \
             sizes, repo_id, source_instanceID, source_addr, deleted, \
             creation_time, update_time = repo_event_node
             tag_temp = dict()
+            tag_temp['tagid'] = tagid
             tag_temp['url'] = url
             tag_temp['length'] = lengths
             tag_temp['tag'] = tag
@@ -316,10 +320,32 @@ class ImageRepoManager(object):
             log.error("image_repo_name_exist is error: %s", (e))
             return request_result(404)
 
+    def get_imagename_tag_by_tagid(self, tagid):
+        try:
+            image_repo = self.image_repo_db.get_imagename_tag_by_tagid(tagid)
+            if len(image_repo) <= 0:
+                return request_result(701)
 
 
-    # 修改镜像详情
+
+            repository, tag = image_repo[0]
+            msg = dict()
+            msg['image_name'] = repository
+            msg['tag'] = tag
+
+            image_repo = self.image_repo_db.get_repo_uuid_by_image_name(repository)
+            if len(image_repo) <= 0:
+                return request_result(701)
+
+            msg['image_uuid'] = image_repo[0][0]
+
+            return request_result(0, ret=msg)
+        except Exception, e:
+            log.error("image_repo_name_exist is error: %s", (e))
+            return request_result(404)
+
     def modifyRepoDetail(self, repoid, detail_type, detail):
+        """ 修改镜像详情 """
         try:
             ret = self.image_repo_db.modify_image_repo(image_uuid=repoid, detail_type=detail_type, detail=detail)
             return request_result(0)

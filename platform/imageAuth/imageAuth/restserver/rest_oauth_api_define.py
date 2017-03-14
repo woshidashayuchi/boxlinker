@@ -26,6 +26,78 @@ from imageAuth.rpcapi import rpc_client as imagerepo_rpcapi
 
 import conf.oauthConf as openOauth
 
+class OauthStatus(Resource):
+    def __init__(self):
+        self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
+        self.githubclient_api = imagerepo_rpcapi.GithubOauthClient()
+
+
+    @time_log
+    def delete(self, src_type):
+        """
+        @apiGroup  OauthClient
+        @apiDescription   解除用户绑定
+        @apiVersion 1.0.0
+        @apiHeader {String} token 请求接口的token,放在请求头中
+        @api {delete} /api/v1.0/oauthclient/oauth/<string:src_type>   2.6 解除用户绑定
+        @apiUse CODE_IS_OK_0
+        @apiParam {String} src_type 第三方平台类型; github, coding
+        """
+        try:
+            token = request.headers.get('token')
+            log.info('OauthStatus token: %s' % (token))
+            user_info = token_auth(token)['result']
+        except Exception, e:
+            log.error('OauthStatus is error: %s' % (e))
+            return request_result(201)
+
+        if src_type not in openOauth.OpenType:
+            log.error("src_type is error : %s " % (src_type))
+            return request_result(101)
+
+        parameters = dict()
+        parameters['team_uuid'] = user_info['team_uuid']
+        parameters['src_type'] = src_type
+        context = context_data(token, 'oauth_status', 'delete')
+        if 'coding' == src_type:
+            return self.imagerepo_api.RunImageRepoClient(api='del_oauth_status', context=context, parameters=parameters)
+        elif 'github' == src_type:
+            return self.imagerepo_api.RunImageRepoClient(api='del_oauth_status', context=context, parameters=parameters)
+
+
+    @time_log
+    def get(self):
+        """
+        @apiGroup  OauthClient
+        @apiDescription   用户绑定状态
+        @apiVersion 1.0.0
+        @apiHeader {String} token 请求接口的token,放在请求头中
+        @api {get} /api/v1.0/oauthclient/oauth   2.0 获取用户绑定状态
+        @apiSuccessExample {json} Success-Response:
+        {
+            "msg": "OK",
+            "result":
+            {
+                "coding": "1",
+                "github": "1"
+            },
+            "status": 0
+        }
+        """
+        try:
+            token = request.headers.get('token')
+            log.info('OauthStatus token: %s' % (token))
+            user_info = token_auth(token)['result']
+        except Exception, e:
+            log.error('OauthStatus is error: %s' % (e))
+            return request_result(201)
+
+        parameters = dict()
+        parameters['team_uuid'] = user_info['team_uuid']
+        context = context_data(token, 'oauth_status', 'read')
+        return self.imagerepo_api.RunImageRepoClient(api='oauth_status', context=context, parameters=parameters)
+
+
 
 class OauthUrl(Resource):
 
@@ -35,11 +107,11 @@ class OauthUrl(Resource):
     @time_log
     def post(self):
         """
-        @apiGroup  OauthUrl
+        @apiGroup  OauthClient
         @apiDescription   获取用户授权跳转链接
-        @apiVersion 2.0.0
+        @apiVersion 1.0.0
         @apiHeader {String} token 请求接口的token,放在请求头中
-        @api {post} /api/v1.0/oauthclient/url   2.1获取用户授权跳转链接
+        @api {post} /api/v1.0/oauthclient/url   2.1 获取用户授权跳转链接
 
         @apiExample {POST} Example usage:
             {
@@ -92,6 +164,12 @@ class CallBack(Resource):
 
     @time_log
     def get(self):
+        """
+        @apiGroup  OauthClient
+        @apiDescription   认证授权回调(前端页面不需要处理该接口)
+        @apiVersion 1.0.0
+        @api {get} /api/v1.0/oauthclient/callback/   2.2 认证授权回调
+        """
         try:
             code = request.args.get('code', '').decode('utf-8').encode('utf-8')
             # 如果不考虑用户篡改认证链接,可以不用加state
@@ -120,15 +198,16 @@ class CallBack(Resource):
 class WebHook(Resource):
     def __init__(self):
         self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
+        self.githubclient_api = imagerepo_rpcapi.GithubOauthClient()
 
     @time_log
     def post(self, src_type, repo_name):
         """
-        @apiGroup  WebHooks
+        @apiGroup  OauthClient
         @apiDescription   授权平台可以对某个项目具有 hooks 权限
         @apiVersion 1.0.0
 
-        @api {post} /api/v2.0/oauths/webhooks/<string:src_type>/<string:repo_name> 设置webhook
+        @api {post} /api/v2.0/oauths/webhooks/<string:src_type>/<string:repo_name> 2.5 设置webhook
 
         @apiHeader {String} token  请求接口的token,放在请求头中
 
@@ -151,35 +230,28 @@ class WebHook(Resource):
         parameters['repo_name'] = repo_name
 
         context = context_data(token, 'set_web_hook', 'read')
-        return self.imagerepo_api.RunImageRepoClient(api='set_web_hook', context=context, parameters=parameters)
+        if 'coding' == src_type:
+            return self.imagerepo_api.RunImageRepoClient(api='set_web_hook', context=context, parameters=parameters)
+        elif 'github' == src_type:
+            return self.githubclient_api.RunImageRepoClient(api='set_web_hook', context=context, parameters=parameters)
+
 
 
 class OauthCodeRepo(Resource):
     def __init__(self):
         self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
+        self.githubclient_api = imagerepo_rpcapi.GithubOauthClient()
 
     @time_log
     def get(self, src_type):
         """
-        @apiGroup  OauthRepo
+        @apiGroup  OauthClient
         @apiDescription         获取用户代码对应平台下的代码项目
-        @apiVersion 2.0.0
+        @apiVersion 1.0.0
         @apiHeader {String} token 请求接口的token,放在请求头中
-        @api {get} /api/v1.0/oauthclient/repos/<string:src_type>   获取用户代码对应平台下的代码项目
-
-
-        @apiSuccessExample {json} Success-Response:
-        status 为 0 成功,其中result-->msg中即用户需要点击进行授权的地址
-        {
-            "msg": "OK",
-            "result":
-            {
-                "msg": "https://github.com/login/oauth/authorize?client_id=44df81c41ee415b7debd&scope=user%20repo&state=eyJleHBpcmVzIjogMTQ3NTgzNzAxNi4wNzg2ODksICJzYWx0IjogIjAuMjQwNjIyOTU2NjgyIiwgInVpZCI6ICIzIn2ag7sMa7sSf6-vmhEMykRL"
-            },
-            "status": 0
-        }
-
+        @api {get} /api/v1.0/oauthclient/repos/<string:src_type>  2.4 获取用户代码对应平台下的代码项目
         @apiParam {String} src_type 第三方平台类型; github, coding
+        @apiUse CODE_IMAGE_REPO_DETAIL_1
         """
         try:
             token = request.headers.get('token')
@@ -196,31 +268,27 @@ class OauthCodeRepo(Resource):
         parameters['src_type'] = src_type
         parameters['team_uuid'] = user_info['team_uuid']
         parameters['refresh'] = False
-
         context = context_data(token, 'get_oauth_code_repo', 'read')
-        return self.imagerepo_api.RunImageRepoClient(api='get_oauth_code_repo', context=context, parameters=parameters)
+
+        if 'coding' == src_type:
+            return self.imagerepo_api.RunImageRepoClient(api='get_oauth_code_repo', context=context,
+                                                         parameters=parameters)
+        elif 'github' == src_type:
+            return self.githubclient_api.RunImageRepoClient(api='get_oauth_code_repo', context=context,
+                                                            parameters=parameters)
+        else:
+            return request_result(101)
+
 
     def put(self, src_type):
         """
-        @apiGroup  OauthRepo
-        @apiDescription    刷新获取用户对应代码平台下的代码项目, 从对应平台获取最新的数据
-        @apiVersion 2.0.0
+        @apiGroup  OauthClient
+        @apiVersion 1.0.0
+        @apiDescription         刷新获取代码项目
         @apiHeader {String} token 请求接口的token,放在请求头中
-        @api {put} /api/v1.0/oauthclient/repos/<string:src_type>   刷新代码项目
-
-
-        @apiSuccessExample {json} Success-Response:
-        status 为 0 成功,其中result-->msg中即用户需要点击进行授权的地址
-        {
-            "msg": "OK",
-            "result":
-            {
-                "msg": "https://github.com/login/oauth/authorize?client_id=44df81c41ee415b7debd&scope=user%20repo&state=eyJleHBpcmVzIjogMTQ3NTgzNzAxNi4wNzg2ODksICJzYWx0IjogIjAuMjQwNjIyOTU2NjgyIiwgInVpZCI6ICIzIn2ag7sMa7sSf6-vmhEMykRL"
-            },
-            "status": 0
-        }
-
+        @api {put} /api/v1.0/oauthclient/repos/<string:src_type>  2.3 刷新获取代码项目
         @apiParam {String} src_type 第三方平台类型; github, coding
+        @apiUse CODE_IMAGE_REPO_DETAIL_1
         """
         try:
             token = request.headers.get('token')
@@ -238,8 +306,15 @@ class OauthCodeRepo(Resource):
         parameters['team_uuid'] = user_info['team_uuid']
         parameters['refresh'] = True
 
-        context = context_data(token, 'get_oauth_code_repo', 'read')
-        return self.imagerepo_api.RunImageRepoClient(api='get_oauth_code_repo', context=context, parameters=parameters)
+        context = context_data(token, 'get_oauth_code_repo', 'update')
+
+        if 'coding' == src_type:
+            return self.imagerepo_api.RunImageRepoClient(api='get_oauth_code_repo', context=context, parameters=parameters)
+        elif 'github' == src_type:
+            return self.githubclient_api.RunImageRepoClient(api='get_oauth_code_repo', context=context,
+                                                         parameters=parameters)
+        else:
+            return request_result(101)
 
 # get_oauth_url   获取用户授权跳转链接  (token 对即可)
 # oauth_callback  第三方授权回调,不需要用调用

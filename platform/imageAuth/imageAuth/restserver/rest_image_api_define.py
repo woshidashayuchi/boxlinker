@@ -33,9 +33,12 @@ from imageAuth.rpcapi import rpc_client as imagerepo_rpcapi
 
 class TestApi(Resource):
     @time_log
+    def __init__(self):
+        self.github_apiclient = imagerepo_rpcapi.ImageRepoClient()
     def get(self):
-        log.info('test api is ok')
-        return request_result(0, 'test api is ok')
+        context = context_data(None, 'testapi', 'update')
+        return self.github_apiclient.RunImageRepoClient(api='testapi', context=context, parameters=None)
+
 
 
 def get_token(username, password, team_name):
@@ -61,6 +64,65 @@ def get_token(username, password, team_name):
     except Exception, e:
         log.error('Token check error, token=, reason=%s', (e))
         return False, ''
+
+
+class CreateImage(Resource):
+    """ 图片服务 """
+    def __init__(self):
+        self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
+
+    """
+    @apiGroup imageServer
+    @apiDescription       生成一个图片并获取在oss中的地址
+    @apiVersion 1.0.0
+    @apiHeader {String} token 请求接口的token,放在请求头中
+
+    @api {post} /api/v1.0/pictures  3.0 生成图片
+
+    @apiExample {post} Example usage:
+
+        {
+            "name": "rere"
+        }
+
+    @apiParamExample {json} Request-Param-Example:
+        {
+            "msg": "OK",
+            "result":
+            {
+                "image_dir": "repository/1480992116391rere.png",
+                "image_url": "http://boxlinker-develop.oss-cn-shanghai.aliyuncs.com/repository/1480992116391rere.png",
+                "oss_host": "http://boxlinker-develop.oss-cn-shanghai.aliyuncs.com"
+            },
+            "status": 0
+        }
+        成功时,result返回用户推荐镜像列表
+
+    @apiParam {String} name    需要生成图片的字符
+    @apiParam {String} image_dir  图片在oss的相对路径
+    @apiParam {String} image_url  绝对路径
+    @apiParam {String} oss_host   oss 图片外网访问地址
+    """
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            return request_result(101)
+
+        context = context_data(token, 'get_pictures', 'read')
+        return self.imagerepo_api.RunImageRepoClient(api='get_pictures', context=context, parameters=parameters)
+
 
 
 class ImageRepoExist(Resource):
@@ -312,7 +374,33 @@ class OwnImageRepo(Resource):
         parameters['repo_fuzzy'] = repo_fuzzy
 
         context = context_data(token, 'image_repo_own', 'read')
-        return self.imagerepo_api.RunImageRepoClient(context, parameters, api='image_repo_own')
+        return self.imagerepo_api.RunImageRepoClient(api='image_repo_own', context=context, parameters=parameters)
+
+class ImageTag(Resource):
+    def __init__(self):
+        self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
+
+    """
+    @api {get} /api/v1.0/imagerepo/image/tagid/<string:tagid>  1.10 通过tagid得到镜像名和tag
+    @apiName image tagid info
+    @apiGroup ImageRepo
+    @apiVersion 1.0.0
+    @apiDescription 通过tagid得到镜像名和tag
+    @apiHeader {String} token 请求接口的token,放在请求头中
+    @apiUse CODE_IMAGE_REPO_DETAIL_1
+    """
+    @time_log
+    def get(self, tagid):
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            return request_result(201)
+        parameters = {}
+        parameters['tagid'] = tagid
+        context = context_data(token, 'image_tag_id', 'read')
+        return self.imagerepo_api.RunImageRepoClient(api='image_tag_id', context=context, parameters=parameters)
 
 
 class ImageRepoSystem(Resource):
@@ -446,4 +534,4 @@ class ImageRepoDetail(Resource):
         parameters['detail_type'] = detail_type
 
         context = context_data(token, repoid, 'update')
-        return self.imagerepo_api.RunImageRepoClient(api='user_team_token', context=context, parameters=parameters)
+        return self.imagerepo_api.RunImageRepoClient(api='image_repo_detail_modify', context=context, parameters=parameters)
