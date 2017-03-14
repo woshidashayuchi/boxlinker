@@ -261,6 +261,7 @@
     "msg": "OK",
     "result": {
         "user_uuid": "string",
+        "user_name": "string",
         "team_uuid": "string",
         "team_priv": "string",
         "project_uuid": "string",

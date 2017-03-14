@@ -244,6 +244,15 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_update_sql(sql)
 
+    def recharge_info(self, recharge_uuid, team_uuid):
+
+        sql = "select recharge_amount, recharge_type, \
+               user_name, create_time from recharge_records \
+               where recharge_uuid='%s' and team_uuid='%s'" \
+              % (recharge_uuid, team_uuid)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
     def recharge_list(self, team_uuid, start_time, end_time):
 
         sql = "select recharge_uuid, recharge_amount, \

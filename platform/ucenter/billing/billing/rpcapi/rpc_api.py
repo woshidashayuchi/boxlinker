@@ -14,6 +14,7 @@ class BillingRpcApi(object):
 
         self.rbtmq = RabbitmqClient()
         self.queue = conf.billing_call_queue
+        self.cast_queue = conf.billing_cast_queue
         self.timeout = 60
 
     def level_init(self, context, parameters=None):
@@ -56,10 +57,40 @@ class BillingRpcApi(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
+    def recharge_precreate(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("bil_rcg_rcg_pcr", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
+    def recharge_create(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("bil_rcg_rcg_crt", context, parameters)
+            return self.rbtmq.rpc_cast_client(
+                        self.cast_queue, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
     def recharge_list(self, context, parameters=None):
 
         try:
             rpc_body = rpc_data("bil_rcg_rcg_lst", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
+    def recharge_info(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("bil_rcg_rcg_inf", context, parameters)
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, rpc_body)
         except Exception, e:

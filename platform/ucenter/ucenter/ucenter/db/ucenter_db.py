@@ -299,8 +299,10 @@ class UcenterDB(MysqlInit):
 
     def token_check(self, token):
 
-        sql = "select user_uuid, team_uuid, project_uuid from tokens \
-               where token='%s' and expiry_time>=now()" \
+        sql = "select a.user_uuid, a.team_uuid, a.project_uuid, \
+               b.user_name from tokens a left join users b \
+               on a.user_uuid=b.user_uuid \
+               and a.token='%s' and a.expiry_time>=now()" \
                % (token)
 
         return super(UcenterDB, self).exec_select_sql(sql)

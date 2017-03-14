@@ -327,6 +327,52 @@ class BillingRpcManager(object):
         return self.balances_manager.balance_info(team_uuid)
 
     @acl_check
+    def recharge_precreate(self, context, parameters):
+
+        try:
+            token = context.get('token')
+            user_info = token_auth(context['token'])['result']
+            user_name = user_info.get('user_name')
+
+            recharge_type = parameters.get('recharge_type')
+            recharge_amount = parameters.get('recharge_amount')
+
+            recharge_amount = parameter_check(recharge_amount, ptype='pint')
+            if (recharge_type != 'zhifubao') and (recharge_type != 'weixin'):
+                raise(Exception('Parameter error'))
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.recharges_manager.recharge_precreate(
+                    token, user_name, recharge_type, recharge_amount)
+
+    @acl_check
+    def recharge_create(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+            team_uuid = user_info.get('team_uuid')
+            user_name = user_info.get('user_name')
+
+            recharge_uuid = parameters.get('recharge_uuid')
+            recharge_type = parameters.get('recharge_type')
+            recharge_amount = parameters.get('recharge_amount')
+
+            recharge_uuid = parameter_check(recharge_uuid, ptype='pint')
+            recharge_type = parameter_check(recharge_type, ptype='pstr')
+            recharge_amount = parameter_check(recharge_amount, ptype='pint')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.recharges_manager.recharge_create(
+                    recharge_uuid, recharge_type, recharge_amount,
+                    team_uuid, user_name)
+
+    @acl_check
     def recharge_list(self, context, parameters):
 
         try:
@@ -345,6 +391,24 @@ class BillingRpcManager(object):
 
         return self.recharges_manager.recharge_list(
                     team_uuid, start_time, end_time)
+
+    @acl_check
+    def recharge_info(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+            team_uuid = user_info.get('team_uuid')
+
+            recharge_uuid = parameters.get('recharge_uuid')
+
+            recharge_uuid = parameter_check(recharge_uuid, ptype='pint')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.recharges_manager.recharge_info(
+                    recharge_uuid, team_uuid)
 
     @acl_check
     def order_create(self, context, parameters):

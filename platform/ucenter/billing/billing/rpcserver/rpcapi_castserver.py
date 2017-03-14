@@ -21,18 +21,18 @@ sys.setdefaultencoding('utf8')
 
 def server_start(n):
 
-    queue = conf.billing_call_queue
+    queue = conf.billing_cast_queue
 
     while True:
 
         try:
-            log.info('Starting RPC Call API Server, topic=%s'
+            log.info('Starting RPC Cast API Server, topic=%s'
                      % (queue))
-            rbtmq = RabbitmqServer()
-            rbtmq.rpc_call_server(queue, rpcapi_register)
+            rbtmq = RabbitmqServer(320)
+            rbtmq.rpc_cast_server(queue, rpcapi_register)
         except Exception, e:
             log.warning(
-                'RPC Call API Server running error, queue=%s, reason=%s'
+                'RPC Cast API Server running error, queue=%s, reason=%s'
                 % (queue, e))
         sleep(10)
 

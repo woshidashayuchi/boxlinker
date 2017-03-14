@@ -359,7 +359,42 @@
 
 
 """
+@apiDefine POST_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "recharge_uuid": int,
+        "recharge_type": "string",
+        "recharge_amount": int,
+        "user_name": "string",
+        "qr_code": "url"
+    }
+}
+"""
+
+
+"""
 @apiDefine GET_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "recharge_uuid": int,
+        "recharge_amount": int,
+        "recharge_type": "string",
+        "team_uuid": "string",
+        "user_name": "string",
+        "create_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine LIST_RECHARGES_0
 @apiSuccessExample 返回
 {
     "status": 0,
@@ -733,14 +768,44 @@
 
 
 """
-@api {get} /api/v1.0/billing/recharges?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 8.1 充值查询
+@api {post} /api/v1.0/billing/recharges 8.1 用户充值
+@apiName create recharge records
+@apiGroup 8 recharges
+@apiVersion 1.0.0
+@apiDescription 用户执行充值
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "recharge_type": "zhifubao/weixin",
+    "recharge_amount": int
+}
+@apiUse POST_RECHARGES_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/recharges/<recharge_uuid> 8.2 充值查询
+@apiName get recharge info record
+@apiGroup 8 recharges
+@apiVersion 1.0.0
+@apiDescription 查询充值结果
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse GET_RECHARGES_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/recharges?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 8.3 充值记录
 @apiName get recharge_records
 @apiGroup 8 recharges
 @apiVersion 1.0.0
 @apiDescription 查询充值记录
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiUse GET_RECHARGES_0
+@apiUse LIST_RECHARGES_0
 """
 
 

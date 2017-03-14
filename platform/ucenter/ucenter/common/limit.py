@@ -2,6 +2,7 @@
 # Author: YanHua <it-yanh@all-reach.com>
 
 import time
+import json
 import inspect
 import requests
 
@@ -30,9 +31,9 @@ def billing_limit_check(token, resource_type, cost):
                    "cost": cost
                }
 
-        limit = requests.put(limit_url, headers=headers,
-                             data=json.dumps(body),
-                             timeout=5).json()
+        limit = requests.post(limit_url, headers=headers,
+                              data=json.dumps(body),
+                              timeout=5).json()
 
         log.debug('Billing limit result=%s' % (limit))
 

@@ -186,7 +186,7 @@ $v_connect_mysql "create index insert_time_idx on bills(insert_time)"
 acl_check=$($v_connect_mysql "select count(*) from resources_acl" | tail -n+2)
 if [ $acl_check -eq 0 ]; then
 
-    admin_api_list="bil_lmt_lmt_lst bil_lmt_lmt_udt bil_voc_voc_crt"
+    admin_api_list="bil_bil_adm_com bil_lmt_lmt_lst bil_lmt_lmt_udt bil_voc_voc_crt"
     for admin_api in $admin_api_list
     do
         $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
@@ -195,7 +195,7 @@ if [ $acl_check -eq 0 ]; then
                           values('"$admin_api"', 'api', 'global', '0', '0', '0', now(), now())"
     done
 
-    team_api_list="bil_rcg_rcg_lst"
+    team_api_list="bil_bil_tem_com bil_rcg_rcg_lst"
     for team_api in $team_api_list
     do
         $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
@@ -216,7 +216,7 @@ if [ $acl_check -eq 0 ]; then
     user_api_list="bil_lvl_lvl_ini bil_lvl_lvl_inf bil_blc_blc_add bil_blc_blc_inf
                    bil_rss_rss_crt bil_rss_rss_lst bil_odr_odr_crt bil_odr_odr_lst
                    bil_voc_voc_act bil_voc_voc_lst bil_bls_bls_lst bil_cst_cst_inf
-                   bil_lmt_lmt_chk"
+                   bil_lmt_lmt_chk bil_bil_usr_com"
     for user_api in $user_api_list
     do
         $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
@@ -234,7 +234,7 @@ if [ $acl_check -eq 0 ]; then
     $v_connect_mysql "insert into limits(team_level, teams, teamusers, \
                       projects, projectusers, roles, images, services, volumes, \
                       create_time, update_time)
-                      values(1, 1, 0, 0, 0, 0, 10, 10, 10, now(), now())"
+                      values(1, 1, 0, 0, 0, 0, 3, 3, 3, now(), now())"
 
     $v_connect_mysql "insert into limits(team_level, teams, teamusers, \
                       projects, projectusers, roles, images, services, volumes, \

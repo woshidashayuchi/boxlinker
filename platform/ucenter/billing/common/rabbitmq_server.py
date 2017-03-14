@@ -99,7 +99,7 @@ class RabbitmqServer(object):
             self.connection.close()
             raise
 
-    def __init__(self, heartbeat_time):
+    def __init__(self, heartbeat_time=30):
 
         self.mq_connect(heartbeat_time=heartbeat_time)
 

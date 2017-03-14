@@ -33,7 +33,7 @@ class LimitsManager(object):
             except Exception, e:
                 log.error('Database select error, reason=%s' % (e))
                 return request_result(404)
-            if cost > balance:
+            if float(cost) > float(balance):
                 result['balance_check'] = 1
                 return request_result(0, result)
             else:

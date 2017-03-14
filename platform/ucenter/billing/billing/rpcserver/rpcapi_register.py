@@ -32,7 +32,16 @@ class RabbitmqResponse(object):
              'bil_blc_blc_inf', self.rpcapi_define.balance_info)
 
         self.rpc_api.add_resource(
+             'bil_rcg_rcg_pcr', self.rpcapi_define.recharge_precreate)
+
+        self.rpc_api.add_resource(
+             'bil_rcg_rcg_crt', self.rpcapi_define.recharge_create)
+
+        self.rpc_api.add_resource(
              'bil_rcg_rcg_lst', self.rpcapi_define.recharge_list)
+
+        self.rpc_api.add_resource(
+             'bil_rcg_rcg_inf', self.rpcapi_define.recharge_info)
 
         self.rpc_api.add_resource(
              'bil_cst_cst_inf', self.rpcapi_define.cost_accounting)
@@ -84,5 +93,5 @@ class RabbitmqResponse(object):
         try:
             return self.rpc_api.rpcapp_run(rpc_body)
         except Exception, e:
-            log.error('RPC Server exec error: %s' % (e))
+            log.error('RPC Server exec error: reason=%s' % (e))
             return request_result(599)

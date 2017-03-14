@@ -128,6 +128,7 @@ class TokensManager(object):
             user_uuid = token_info[0][0]
             team_uuid = token_info[0][1]
             project_uuid = token_info[0][2]
+            user_name = token_info[0][3]
         except Exception, e:
             log.warning('Token authentication failure, token=%s'
                         % (user_token))
@@ -155,6 +156,7 @@ class TokensManager(object):
 
         result = {
                      "user_uuid": user_uuid,
+                     "user_name": user_name,
                      "team_uuid": team_uuid,
                      "team_priv": team_priv,
                      "project_uuid": project_uuid,

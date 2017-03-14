@@ -25,6 +25,9 @@ def rest_app_run():
     api.add_resource(restapi_define.RechargesApi,
                      '/api/v1.0/billing/recharges')
 
+    api.add_resource(restapi_define.RechargeApi,
+                     '/api/v1.0/billing/recharges/<recharge_uuid>')
+
     api.add_resource(restapi_define.CostsApi,
                      '/api/v1.0/billing/costs')
 

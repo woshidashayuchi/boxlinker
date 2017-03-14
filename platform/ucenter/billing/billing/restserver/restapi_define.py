@@ -67,6 +67,29 @@ class RechargesApi(Resource):
         self.billing_api = billing_rpcapi.BillingRpcApi()
 
     @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "bil_bil_usr_com", "create")
+
+        return self.billing_api.recharge_precreate(context, parameters)
+
+    @time_log
     def get(self):
 
         try:
@@ -92,6 +115,32 @@ class RechargesApi(Resource):
         context = context_data(token, "bil_rcg_rcg_lst", "read")
 
         return self.billing_api.recharge_list(context, parameters)
+
+
+class RechargeApi(Resource):
+
+    def __init__(self):
+
+        self.billing_api = billing_rpcapi.BillingRpcApi()
+
+    @time_log
+    def get(self, recharge_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        parameters = {
+                         "recharge_uuid": recharge_uuid
+                     }
+
+        context = context_data(token, "bil_bil_usr_com", "read")
+
+        return self.billing_api.recharge_info(context, parameters)
 
 
 class CostsApi(Resource):
