@@ -71,6 +71,9 @@ class RabbitmqResponse(object):
              'bil_voc_voc_crt', self.rpcapi_define.voucher_create)
 
         self.rpc_api.add_resource(
+             'bil_voc_voc_udt', self.rpcapi_define.voucher_distribute)
+
+        self.rpc_api.add_resource(
              'bil_voc_voc_act', self.rpcapi_define.voucher_active)
 
         self.rpc_api.add_resource(

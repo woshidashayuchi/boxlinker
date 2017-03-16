@@ -157,6 +157,7 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS vouchers (
         balance             DOUBLE(5,2) NULL DEFAULT NULL,
         active_time         DATETIME NULL DEFAULT NULL,
         invalid_time        DATETIME NULL DEFAULT NULL,
+        status              VARCHAR(32) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (vouchers_uuid)

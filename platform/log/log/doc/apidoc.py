@@ -70,7 +70,7 @@
 
 
 """
-@api {get} /api/v1.0/logs/labels/<label_value>?date_time=<epoch_milliseconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 1.1 根据label查日志
+@api {get} /api/v1.0/logs/labels/<label_value>?date_time=<epoch_seconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 1.1 根据label查日志
 @apiName Get log from label_value
 @apiGroup 1 log
 @apiVersion 1.0.0

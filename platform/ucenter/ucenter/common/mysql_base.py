@@ -44,8 +44,8 @@ class MysqlInit(object):
             self.conn = self.pool.connection()
             self.cursor = self.conn.cursor()
             self.cursor.execute('SET NAMES utf8')
-            self.cursor.execute('SET CHARACTER SET utf8')
-            self.cursor.execute('SET character_set_connection=utf8')
+            # self.cursor.execute('SET CHARACTER SET utf8')
+            # self.cursor.execute('SET character_set_connection=utf8')
         except Exception, e:
             log.error('Get MySQL cursor error: reason=%s' % (e))
             self.cursor.close()

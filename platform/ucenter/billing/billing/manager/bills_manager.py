@@ -38,20 +38,34 @@ class BillsManager(object):
                                      time.gmtime(float(end_time)))
             bills_list_info = self.billing_db.bill_list(
                                    team_uuid, start_time, end_time)
+            bills_total_info = self.billing_db.bill_total(
+                                   team_uuid, start_time, end_time)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
+
+        resource_cost_total = bills_total_info[0][0]
+        voucher_cost_total = bills_total_info[0][1]
+
+        bills_total = {
+                          "resource_cost": resource_cost_total,
+                          "voucher_cost": voucher_cost_total
+                      }
+
+        result = {"bills_total": bills_total}
 
         bills_list = []
         for bills_info in bills_list_info:
             resource_uuid = bills_info[0]
             resource_name = bills_info[1]
-            resource_type = bills_info[2]
-            team_uuid = bills_info[3]
-            project_uuid = bills_info[4]
-            user_uuid = bills_info[5]
-            resource_cost = bills_info[6]
-            voucher_cost = bills_info[7]
+            resource_conf = bills_info[2]
+            resource_status = bills_info[3]
+            resource_type = bills_info[4]
+            team_uuid = bills_info[5]
+            project_uuid = bills_info[6]
+            user_uuid = bills_info[7]
+            resource_cost = bills_info[8]
+            voucher_cost = bills_info[9]
 
             v_bills_info = {
                                "team_uuid": team_uuid,
@@ -60,6 +74,8 @@ class BillsManager(object):
                                "resource_uuid": resource_uuid,
                                "resource_name": resource_name,
                                "resource_type": resource_type,
+                               "resource_conf": resource_conf,
+                               "resource_status": resource_status,
                                "resource_cost": resource_cost,
                                "voucher_cost": voucher_cost,
                                "start_time": start_time,
@@ -67,8 +83,9 @@ class BillsManager(object):
                            }
             v_bills_info = json.dumps(v_bills_info, cls=CJsonEncoder)
             v_bills_info = json.loads(v_bills_info)
+
             bills_list.append(v_bills_info)
 
-        result = {"bills_list": bills_list}
+        result["bills_list"] = bills_list
 
         return request_result(0, result)

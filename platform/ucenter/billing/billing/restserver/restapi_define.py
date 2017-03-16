@@ -395,7 +395,7 @@ class VoucherApi(Resource):
         self.billing_api = billing_rpcapi.BillingRpcApi()
 
     @time_log
-    def put(self, voucher_uuid):
+    def post(self, voucher_uuid):
 
         try:
             token = request.headers.get('token')
@@ -409,9 +409,34 @@ class VoucherApi(Resource):
                          "voucher_uuid": voucher_uuid
                      }
 
-        context = context_data(token, "bil_voc_voc_act", "update")
+        context = context_data(token, "bil_voc_voc_act", "create")
 
         return self.billing_api.voucher_active(context, parameters)
+
+    @time_log
+    def put(self, voucher_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        parameters['voucher_uuid'] = voucher_uuid
+
+        context = context_data(token, "bil_bil_adm_com", "update")
+
+        return self.billing_api.voucher_distribute(context, parameters)
 
 
 class BillsAPI(Resource):

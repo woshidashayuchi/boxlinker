@@ -3,17 +3,17 @@
 import sys
 from time import sleep
 
-sys.path.insert(1, '/logtest')
+sys.path.insert(1, '../..')
 
 from common.logs import logging as log
 
 
 def test_log():
 
-    while True:
-        log.info('{"userid": "boxlinker", "log_info": "log test"}')
-        sleep(5)
-
+    log.debug('####### debug log #######')
+    log.info('####### info log #######')
+    log.warning('####### warning log #######')
+    log.error('####### error log #######')
 
 if __name__ == '__main__':
     test_log()

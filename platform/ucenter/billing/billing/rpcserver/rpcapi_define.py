@@ -231,6 +231,21 @@ class BillingRpcManager(object):
                     voucher_uuid, user_uuid, team_uuid, project_uuid)
 
     @acl_check
+    def voucher_distribute(self, context, parameters):
+
+        try:
+            voucher_uuid = parameters.get('voucher_uuid')
+
+            voucher_uuid = parameter_check(voucher_uuid, ptype='pstr')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.vouchers_manager.voucher_distribute(
+                    voucher_uuid)
+
+    @acl_check
     def voucher_list(self, context, parameters):
 
         try:

@@ -33,11 +33,19 @@ class LimitsManager(object):
             except Exception, e:
                 log.error('Database select error, reason=%s' % (e))
                 return request_result(404)
-            if float(cost) > float(balance):
-                result['balance_check'] = 1
-                return request_result(0, result)
-            else:
+            if float(balance) > float(cost):
                 result['balance_check'] = 0
+                balance_check = True
+            else:
+                balance_check = False
+
+            if balance_check is False:
+                try:
+                    self.billing_db.voucher_check(
+                                    team_uuid, cost)[0][0]
+                    result['balance_check'] = 0
+                except Exception:
+                    result['balance_check'] = 1
         else:
             result['balance_check'] = 0
 

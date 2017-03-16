@@ -422,7 +422,7 @@ class UcenterRpcManager(object):
         try:
             team_uuid = context.get('resource_uuid')
 
-            team_uuid = parameter_check(team_uuid, ptype='puid')
+            team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))

@@ -33,13 +33,11 @@ class BillingDB(MysqlInit):
 
     def resource_delete(self, resource_uuid):
 
-        sql_01 = "delete from resources where resource_uuid='%s'" \
-                 % (resource_uuid)
+        sql = "update resources set resource_status='delete', update_time=now() \
+               where resource_uuid='%s'" \
+              % (resource_uuid)
 
-        sql_02 = "delete from resources_acl where resource_uuid='%s'" \
-                 % (resource_uuid)
-
-        return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
+        return super(BillingDB, self).exec_update_sql(sql)
 
     def resource_update(self, resource_uuid, resource_conf=None,
                         resource_status=None, user_uuid=None,
@@ -89,7 +87,8 @@ class BillingDB(MysqlInit):
                a.create_time, a.update_time, \
                b.resource_name, b.resource_conf, b.resource_status \
                from resources_acl a join resources b \
-               where a.resource_uuid=b.resource_uuid and a.team_uuid='%s'" \
+               where a.resource_uuid=b.resource_uuid \
+               and a.team_uuid='%s' and b.resource_status!='delete'" \
                % (team_uuid)
 
         return super(BillingDB, self).exec_select_sql(sql)
@@ -100,20 +99,31 @@ class BillingDB(MysqlInit):
                a.team_uuid, a.project_uuid, a.user_uuid, \
                b.resource_conf, b.resource_status \
                from resources_acl a join resources b \
-               where a.resource_uuid=b.resource_uuid"
+               where a.resource_uuid=b.resource_uuid \
+               and b.resource_status!='delete'"
 
         return super(BillingDB, self).exec_select_sql(sql)
 
-    def voucher_insert(self, user_uuid, denomination, invalid_time):
+    def voucher_insert(self, voucher_uuid, user_uuid,
+                       denomination, invalid_time):
 
         denomination = int(denomination)
         sql = "insert into vouchers(vouchers_uuid, createuser_uuid, \
                denomination, balance, active_time, invalid_time, \
-               create_time, update_time) \
-               values(uuid(), '%s', '%d', '%d', 0, '%s', now(), now())" \
-               % (user_uuid, denomination, denomination, invalid_time)
+               status, create_time, update_time) \
+               values('%s', '%s', '%d', '%d', 0, '%s', 'unused', now(), now())" \
+               % (voucher_uuid, user_uuid, denomination,
+                  denomination, invalid_time)
 
         return super(BillingDB, self).exec_update_sql(sql)
+
+    def voucher_uuid_check(self, voucher_uuid):
+
+        sql = "select count(*) from vouchers \
+               where vouchers_uuid='%s' and status='unactive'" \
+              % (voucher_uuid)
+
+        return super(BillingDB, self).exec_select_sql(sql)
 
     def voucher_active(self, voucher_uuid, user_uuid,
                        team_uuid, project_uuid):
@@ -124,7 +134,8 @@ class BillingDB(MysqlInit):
                   values('%s', 'voucher', '0', '%s', '%s', '%s', now(), now())" \
                   % (voucher_uuid, team_uuid, project_uuid, user_uuid)
 
-        sql_02 = "update vouchers set active_time=now(), update_time=now() \
+        sql_02 = "update vouchers set active_time=now(), \
+                  status='active', update_time=now() \
                   where vouchers_uuid='%s'" \
                   % (voucher_uuid)
 
@@ -135,12 +146,21 @@ class BillingDB(MysqlInit):
         amount = float(amount)
         sql = "select a.vouchers_uuid from vouchers a join resources_acl b \
                where a.vouchers_uuid=b.resource_uuid  \
-               and a.invalid_time >= now() and a.balance >= %f \
+               and a.status='active' and a.invalid_time >= now() \
+               and a.balance >= %f \
                and b.team_uuid='%s' \
                order by a.invalid_time asc limit 1" \
                % (amount, team_uuid)
 
         return super(BillingDB, self).exec_select_sql(sql)
+
+    def voucher_distribute(self, voucher_uuid):
+
+        sql = "update vouchers set status='unactive', update_time=now() \
+               where vouchers_uuid='%s' and status='unused'" \
+              % (voucher_uuid)
+
+        return super(BillingDB, self).exec_update_sql(sql)
 
     def voucher_update(self, voucher_uuid, amount):
 
@@ -153,10 +173,13 @@ class BillingDB(MysqlInit):
 
     def voucher_list_admin(self, user_uuid, start_time, end_time):
 
-        sql = "select vouchers_uuid, denomination, \
-               invalid_time, create_time, update_time \
-               from vouchers where createuser_uuid='%s' \
-               and active_time=0 and create_time between '%s' and '%s'" \
+        sql = "select a.vouchers_uuid, a.denomination, a.balance, \
+               a.active_time, a.invalid_time, a.status, a.create_time, \
+               a.update_time, b.team_uuid, b.user_uuid \
+               from vouchers a left join resources_acl b \
+               on a.vouchers_uuid=b.resource_uuid \
+               where a.createuser_uuid='%s' \
+               and a.create_time between '%s' and '%s'" \
                % (user_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)
@@ -302,6 +325,7 @@ class BillingDB(MysqlInit):
     def bill_list(self, team_uuid, start_time, end_time):
 
         sql = "select a.resource_uuid, a.resource_name, \
+               a.resource_conf, a.resource_status, \
                b.resource_type, b.team_uuid, b.project_uuid, b.user_uuid, \
                round(sum(c.resource_cost), 2), round(sum(c.voucher_cost), 2) \
                from resources a join resources_acl b join bills c \
@@ -310,7 +334,16 @@ class BillingDB(MysqlInit):
                and c.team_uuid='%s' \
                and c.insert_time between '%s' and '%s' \
                group by a.resource_uuid" \
-               % (team_uuid, start_time, end_time)
+              % (team_uuid, start_time, end_time)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def bill_total(self, team_uuid, start_time, end_time):
+
+        sql = "select round(sum(resource_cost), 2), round(sum(voucher_cost), 2) \
+               from bills where team_uuid='%s' \
+               and insert_time between '%s' and '%s'" \
+              % (team_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)
 

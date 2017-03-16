@@ -40,6 +40,9 @@ class K8sLogManager(object):
         ret = self.log_driver.pod_log_info(
                    label_value, date_time,
                    start_time, end_time)
+        log.debug('label_value=%s, date_time=%s, '
+                  'start_time=%s, end_time=%s'
+                  % (label_value, date_time, start_time, end_time))
         log.debug('Log driver get log result, pod_log_info=%s' % (ret))
         status_code = int(ret['status'])
         if status_code != 0:

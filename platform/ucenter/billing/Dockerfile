@@ -12,4 +12,4 @@ COPY ./conf /ucenter/conf/
 COPY ./common /billing/common/
 COPY ./billing /billing/billing/
 
-CMD python /billing/billing/restserver/restapi_server.py & python /billing/billing/rpcserver/rpcapi_callserver.py & python /billing/billing/service/billing_service.py
+CMD python /billing/billing/restserver/restapi_server.py & python /billing/billing/rpcserver/rpcapi_callserver.py & python /billing/billing/rpcserver/rpcapi_castserver.py & python /billing/billing/service/billing_service.py
