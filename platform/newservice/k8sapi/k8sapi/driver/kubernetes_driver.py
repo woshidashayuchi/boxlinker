@@ -611,7 +611,7 @@ class KubernetesDriver(object):
             return request_result(501)
 
         ns_if_exist = self.show_namespace(context)
-
+        log.info('namespace ns_if_exist result is: %s' % ns_if_exist)
         if len(check) == 0:
             if ns_if_exist.get('kind') != 'Namespace':
                 ret_ns = self.create_namespace(context)
@@ -985,11 +985,26 @@ class KubernetesDriver(object):
             log.error('get the domain message error, reason is: %s' % e)
             return request_result(404)
 
-        if int(context.get('identify')) == 0:
-            if int(domain[0][1]) == 1:
-                pass
+        if int(context.get('identify')) == 0 and int(domain[0][1]) == 1:
+            return request_result(0, "sorry admin, we don't need to do this")
 
-        return request_result(0, 'update successfully')
+        if int(context.get('identify')) == 1 and int(domain[0][1]) == 0:
+                try:
+                    self.service_db.update_identify_to_1(context)
+                except Exception, e:
+                    log.error('update the databse for domain to can not use error, reason is: %s' % e)
+                    return request_result(403)
+
+                try:
+                    ret = self.identify_update(context)
+                    return ret
+                except Exception, e:
+                    log.error('update the service(k8s) error, reason is: %s' % e)
+                    return request_result(502)
+
+        else:
+            log.info('not need to change anything...')
+            return request_result(0, 'update successfully')
 
     def update_main(self, context):
         rtype = context.get('rtype')

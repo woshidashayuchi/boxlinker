@@ -20,15 +20,35 @@ class UpdateManager(object):
         self.volume = VolumeDriver()
         self.billing = BillingResource()
 
+    def identify_change_uuid(self, context):
+        try:
+            uuids = self.service_db.get_uuid_from_admin(context)
+            if len(uuids[0]) != 0:
+                team_uuid = uuids[0][0]
+                project_uuid = uuids[0][1]
+            else:
+                return False
+        except Exception, e:
+            log.error('get the team_uuid and project_uuid for admin error, reason is: %s' % e)
+            return False
+
+        new_dict = {'team_uuid': team_uuid, 'project_uuid': project_uuid}
+        context.update(new_dict)
+
+        return context
+
     def service_update(self, context):
         log.info('the data(in) when update service....is: %s' % context)
         try:
-            context = self.service_db.get_service_name(context)
+            if context.get('rtype') != 'identify':
+                context = self.service_db.get_service_name(context)
         except Exception, e:
             log.error('get the service name error, reason=%s' % e)
             return request_result(404)
 
         try:
+            if context.get('rtype') == 'identify':
+                context = self.identify_change_uuid(context)
             team_name, project_name = self.token_driver.gain_team_name(context)
             if team_name is False:
                 log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')

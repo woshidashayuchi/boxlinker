@@ -53,7 +53,6 @@ class CreateManager(object):
     def diff_infix_db(self, dict_data):
         try:
             rc_uuid = self.service_db.get_rc_uuid(dict_data)
-            log.info('get rc uuid is: %s' % rc_uuid)
             rc_uuid = rc_uuid[0][0]
         except Exception, e:
             log.error('Database error when get the rc_uuid...,reason=%s' % e)
@@ -120,12 +119,6 @@ class CreateManager(object):
         context['project_name'] = project_name
 
         try:
-            photo_ret = photo_dir(context)
-            context = photo_ret
-        except Exception, e:
-            log.error('from the photo url make the photo for service error, reason is: ' % e)
-
-        try:
             context['action'] = 'post'
             change_volume = self.volume.storage_status(context)
             if change_volume is False:
@@ -154,6 +147,12 @@ class CreateManager(object):
 
         if infix is False or diff is False:
             return request_result(401)
+
+        try:
+            context['service_uuid'] = infix
+            photo_dir(context)
+        except Exception, e:
+            log.error('from the photo url make the photo for service error, reason is: ' % e)
 
         post_es(context, 'service is creating...please wait')
 

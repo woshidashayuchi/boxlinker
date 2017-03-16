@@ -7,6 +7,7 @@ from common.db_operate import DbOperate
 from common.code import request_result
 from service_db import ServiceDB
 import re
+from k8sapi.driver.photo_driver import get_services_photos
 
 
 class MetalWork(object):
@@ -14,6 +15,47 @@ class MetalWork(object):
     def __init__(self):
         self.operate = DbOperate()
         self.service_db = ServiceDB()
+
+    @staticmethod
+    def merge_list_and_photos(dict_data, arr):
+        avatars = []
+        for x in arr:
+            avatars.append(x.get('service_uuid'))
+        dict_data['avatars_uuid'] = avatars
+        try:
+            photos = get_services_photos(dict_data)
+        except Exception, e:
+            log.error('get the photos error, reason is: %s' % e)
+            return False
+        log.info('---------arr:%s,photos:%s' % (arr, photos))
+        try:
+            for i in arr:
+                for j in photos:
+                    if i.get('service_uuid') == j.get('service_uuid'):
+                        i.update({'image_dir': j.get('image_dir')})
+        except Exception, e:
+            log.error('explain the result error, reason is: %s' % e)
+            return False
+        return arr
+
+    @staticmethod
+    def merge_details_and_photos(dict_data, rc):
+        dict_data['avatars_uuid'] = [rc.get('service_uuid')]
+        try:
+            photos = get_services_photos(dict_data)
+        except Exception, e:
+            log.error('get the photos error, reason is: %s' % e)
+            return False
+
+        try:
+            for i in photos:
+                if i.get('service_uuid') == rc.get('service_uuid'):
+                    rc.update({'image_dir': i.get('image_dir')})
+        except Exception, e:
+            log.error('explain the result error, reason is: %s' % e)
+            return False
+
+        return rc
 
     def query_service(self, dict_data):
         log.info('query the service data(in) is %s' % dict_data)
@@ -76,7 +118,12 @@ class MetalWork(object):
                                                        'http_domain': x.get('http_domain'),
                                                        'tcp_domain': x.get('tcp_domain')}]})
 
-        return request_result(0, ret)
+        result = self.merge_list_and_photos(dict_data, ret)
+        if ret is False:
+            log.info('PRODUCE THE PHOTOS ERROR')
+            return request_result(0, ret)
+
+        return request_result(0, result)
 
     def query_only_service(self, dict_data):
         log.info('query only service, the data(in) is: %s,type:%s' % (dict_data, type(dict_data)))
@@ -89,7 +136,12 @@ class MetalWork(object):
             if re.search(match_string, i.get("service_name")):
                 ret.append(i)
 
-        return request_result(0, ret)
+        result = self.merge_list_and_photos(dict_data, ret)
+        if ret is False:
+            log.info('PRODUCE THE PHOTOS ERROR')
+            return request_result(0, ret)
+
+        return request_result(0, result)
 
     def service_detail(self, dict_data):
         log.info('query service detail, the data(in) is: %s' % dict_data)
@@ -120,4 +172,9 @@ class MetalWork(object):
         del rc['rc_update_time']
         del rc['rc_create_time']
 
-        return request_result(0, rc)
+        ret = self.merge_details_and_photos(dict_data, rc)
+        if ret is False:
+            log.info('PRODUCE THE PHOTOS ERROR')
+            return request_result(0, rc)
+
+        return request_result(0, ret)

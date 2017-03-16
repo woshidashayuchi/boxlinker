@@ -211,8 +211,22 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "voucher_uuid": "string",
         "denomination": int,
         "invalid_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine PUT_VOUCHERS_STATUS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "voucher_uuid": "string"
     }
 }
 """
@@ -279,6 +293,10 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "bills_total": {
+                           "resource_cost": float,
+                           "voucher_cost": float
+                       },
         "bills_list": [
             {
                 "start_time": "YY-MM-DD",
@@ -290,6 +308,7 @@
                 "resource_name": "string",
                 "resource_type": "string",
                 "resource_conf": "string",
+                "resource_status": "string",
                 "resource_cost": float,
                 "voucher_cost": float
             },
@@ -303,6 +322,7 @@
                 "resource_name": "string",
                 "resource_type": "string",
                 "resource_conf": "string",
+                "resource_status": "string",
                 "resource_cost": float,
                 "voucher_cost": float
             },
@@ -316,6 +336,7 @@
                 "resource_name": "string",
                 "resource_type": "string",
                 "resource_conf": "string",
+                "resource_status": "string",
                 "resource_cost": float,
                 "voucher_cost": float
             }
@@ -359,7 +380,42 @@
 
 
 """
+@apiDefine POST_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "recharge_uuid": int,
+        "recharge_type": "string",
+        "recharge_amount": int,
+        "user_name": "string",
+        "qr_code": "url"
+    }
+}
+"""
+
+
+"""
 @apiDefine GET_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "recharge_uuid": int,
+        "recharge_amount": int,
+        "recharge_type": "string",
+        "team_uuid": "string",
+        "user_name": "string",
+        "create_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine LIST_RECHARGES_0
 @apiSuccessExample 返回
 {
     "status": 0,
@@ -560,14 +616,31 @@
 @apiParamExample body
 {
     "denomination": int,
-    "invalid_time": "epoch_milliseconds"
+    "invalid_time": "epoch_seconds"
 }
 @apiUse POST_VOUCHERS_0
 """
 
 
 """
-@api {put} /api/v1.0/billing/vouchers/<voucher_uuid> 2.2 礼券领用
+@api {put} /api/v1.0/billing/vouchers/<voucher_uuid> 2.2 礼券分发
+@apiName distribute vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 系统管理员分发礼券给用户
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "user_email": "string"
+}
+@apiUse PUT_VOUCHERS_STATUS_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/vouchers/<voucher_uuid> 2.3 礼券领用
 @apiName active vouchers
 @apiGroup 2 vouchers
 @apiVersion 1.0.0
@@ -579,12 +652,12 @@
 
 
 """
-@api {get} /api/v1.0/billing/vouchers?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 2.3 礼券列表
+@api {get} /api/v1.0/billing/vouchers?start_time=<epoch_seconds>&end_time=<epoch_seconds> 2.4 礼券列表
 @apiName get vouchers
 @apiGroup 2 vouchers
 @apiVersion 1.0.0
 @apiDescription 查询用户已激活的礼劵列表
-@apiPermission user and organization
+@apiPermission user and organization and admin
 @apiParam {json} header {"token": "string"}
 @apiUse GET_VOUCHERS_0
 """
@@ -628,7 +701,7 @@
 
 
 """
-@api {get} /api/v1.0/billing/orders?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 3.3 订单列表
+@api {get} /api/v1.0/billing/orders?start_time=<epoch_seconds>&end_time=<epoch_seconds> 3.3 订单列表
 @apiName get orders
 @apiGroup 3 orders
 @apiVersion 1.0.0
@@ -733,11 +806,29 @@
 
 
 """
-@api {get} /api/v1.0/billing/recharges?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 8.1 充值查询
-@apiName get recharge_records
+@api {post} /api/v1.0/billing/recharges 8.1 用户充值
+@apiName create recharge records
 @apiGroup 8 recharges
 @apiVersion 1.0.0
-@apiDescription 查询充值记录
+@apiDescription 用户执行充值
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "recharge_type": "zhifubao/weixin",
+    "recharge_amount": int
+}
+@apiUse POST_RECHARGES_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/recharges/<recharge_uuid> 8.2 充值查询
+@apiName get recharge info record
+@apiGroup 8 recharges
+@apiVersion 1.0.0
+@apiDescription 查询充值结果
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiUse GET_RECHARGES_0
@@ -745,7 +836,19 @@
 
 
 """
-@api {get} /api/v1.0/billing/bills?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 9.1 账单查询
+@api {get} /api/v1.0/billing/recharges?start_time=<epoch_seconds>&end_time=<epoch_seconds> 8.3 充值记录
+@apiName get recharge_records
+@apiGroup 8 recharges
+@apiVersion 1.0.0
+@apiDescription 查询充值记录
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse LIST_RECHARGES_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/bills?start_time=<epoch_seconds>&end_time=<epoch_seconds> 9.1 账单查询
 @apiName get bills
 @apiGroup 9 bills
 @apiVersion 1.0.0

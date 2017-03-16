@@ -46,9 +46,9 @@ class ServiceDB(MysqlInit):
             command = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
-                   "team_uuid, project_uuid, service_name,service_status,image_dir) VALUES('%s', '%s', '%s', '%s', " \
-                   "'%s', '%s', '%s', '%s','%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
-                                                     project_uuid, service_name, 'pending', image_dir)
+                   "team_uuid, project_uuid, service_name,service_status) VALUES('%s', '%s', '%s', '%s', " \
+                   "'%s', '%s', '%s', '%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
+                                                     project_uuid, service_name, 'pending')
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
                  "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command) " \
@@ -58,7 +58,7 @@ class ServiceDB(MysqlInit):
 
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
                   "user_uuid) VALUES ('%s','%s','%s','%s','%s'," \
-                  "'%s')" % (font_uuid, 'service', '0', dict_data.get('team_uuid'),
+                  "'%s')" % (font_uuid, 'service', 'global', dict_data.get('team_uuid'),
                              dict_data.get('project_uuid'), dict_data.get('user_uuid'))
 
         return super(ServiceDB, self).exec_update_sql(sql_font, sql_rc, sql_acl)
@@ -386,6 +386,16 @@ class ServiceDB(MysqlInit):
 
         return super(ServiceDB, self).exec_update_sql(sql)
 
+    def update_identify_to_1(self, dict_data):
+        project_uuid, service_name = normal_call(dict_data)
+        sql = "update containers SET private_domain='%s',identify='%s' WHERE " \
+              "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
+              "service_name='%s') and http_domain is not NULL AND http_domain !='None'" % (dict_data.get('domain'),
+                                                                                           dict_data.get('identify'),
+                                                                                           project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql)
+
     def identify_check(self, dict_data):
 
         project_uuid, service_name = normal_call(dict_data)
@@ -393,6 +403,12 @@ class ServiceDB(MysqlInit):
         sql = "select private_domain, identify from containers where rc_uuid=(SELECT rc_uuid from font_service " \
               "WHERE project_uuid='%s' and service_name='%s') and http_domain is not NULL and " \
               "http_domain != 'None'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def get_uuid_from_admin(self, dict_data):
+        sql = "select team_uuid,project_uuid from font_service WHERE " \
+              "rc_uuid=(SELECT rc_uuid from containers WHERE private_domain='%s')" % dict_data.get('domain')
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
@@ -485,3 +501,10 @@ class ServiceDB(MysqlInit):
               "project_uuid='%s' )" % (cm_format, container_cpu, container_memory, service_name, project_uuid)
 
         return super(ServiceDB, self).exec_update_sql(sql)
+
+    def get_user_uuid(self, project_uuid, service_name):
+
+        sql = "select user_uuid from font_service WHERE service_name='%s' and " \
+              "project_uuid='%s'" % (service_name, project_uuid)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
