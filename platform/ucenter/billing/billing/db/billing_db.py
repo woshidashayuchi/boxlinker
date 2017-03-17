@@ -126,7 +126,7 @@ class BillingDB(MysqlInit):
         return super(BillingDB, self).exec_select_sql(sql)
 
     def voucher_active(self, voucher_uuid, user_uuid,
-                       team_uuid, project_uuid):
+                       team_uuid, project_uuid, activator):
 
         sql_01 = "insert into resources_acl(resource_uuid, resource_type, \
                   admin_uuid, team_uuid, project_uuid, user_uuid, \
@@ -134,10 +134,10 @@ class BillingDB(MysqlInit):
                   values('%s', 'voucher', '0', '%s', '%s', '%s', now(), now())" \
                   % (voucher_uuid, team_uuid, project_uuid, user_uuid)
 
-        sql_02 = "update vouchers set active_time=now(), \
-                  status='active', update_time=now() \
+        sql_02 = "update vouchers set active_time=now(), status='active', \
+                  activator='%s', update_time=now() \
                   where vouchers_uuid='%s'" \
-                  % (voucher_uuid)
+                  % (activator, voucher_uuid)
 
         return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
 
@@ -154,11 +154,12 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_select_sql(sql)
 
-    def voucher_distribute(self, voucher_uuid):
+    def voucher_distribute(self, voucher_uuid, accepter):
 
-        sql = "update vouchers set status='unactive', update_time=now() \
+        sql = "update vouchers set status='unactive', \
+               accepter='%s', update_time=now() \
                where vouchers_uuid='%s' and status='unused'" \
-              % (voucher_uuid)
+              % (accepter, voucher_uuid)
 
         return super(BillingDB, self).exec_update_sql(sql)
 
@@ -171,27 +172,54 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_update_sql(sql)
 
+    def voucher_status(self, voucher_uuid):
+
+        sql = "select status from vouchers where vouchers_uuid='%s'" \
+              % (voucher_uuid)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def voucher_status_update(self):
+
+        sql = "update vouchers set status='expired' \
+               where invalid_time < now() and status!='expired'"
+
+        return super(BillingDB, self).exec_update_sql(sql)
+
     def voucher_list_admin(self, user_uuid, start_time, end_time):
 
         sql = "select a.vouchers_uuid, a.denomination, a.balance, \
-               a.active_time, a.invalid_time, a.status, a.create_time, \
-               a.update_time, b.team_uuid, b.user_uuid \
+               a.active_time, a.invalid_time, a.status, \
+               a.accepter, a.activator, a.create_time, \
+               a.update_time, b.team_uuid \
                from vouchers a left join resources_acl b \
                on a.vouchers_uuid=b.resource_uuid \
                where a.createuser_uuid='%s' \
                and a.create_time between '%s' and '%s'" \
-               % (user_uuid, start_time, end_time)
+              % (user_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)
 
     def voucher_list(self, team_uuid, start_time, end_time):
 
         sql = "select a.resource_uuid, a.user_uuid, \
-               b.denomination, b.balance, b.active_time, b.invalid_time \
+               b.denomination, b.balance, b.active_time, \
+               b.invalid_time, b.status \
                from resources_acl a join vouchers b \
-               where a.resource_uuid=b.vouchers_uuid and a.team_uuid='%s' \
+               where a.resource_uuid=b.vouchers_uuid \
+               and a.team_uuid='%s' \
                and b.create_time between '%s' and '%s'" \
-               % (team_uuid, start_time, end_time)
+              % (team_uuid, start_time, end_time)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def voucher_list_accept(self, user_name):
+
+        sql = "select vouchers_uuid, denomination, \
+               invalid_time, status \
+               from vouchers where accepter='%s' \
+               and invalid_time >= now()" \
+              % (user_name)
 
         return super(BillingDB, self).exec_select_sql(sql)
 

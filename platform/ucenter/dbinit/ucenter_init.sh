@@ -246,8 +246,8 @@ if [ $user_check -eq 0 ]; then
 
     # team_uuid=$(uuidgen)
     # project_uuid=$(uuidgen)
-    team_uuid='sysadmin_team_uuid'
-    project_uuid='sysadmin_project_uuid'
+    team_uuid='sysadmin-team-uuid'
+    project_uuid='sysadmin-project-uuid'
 
     $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
                       admin_uuid, team_uuid, project_uuid, user_uuid, \

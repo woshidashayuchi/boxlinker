@@ -372,6 +372,7 @@ class VouchersApi(Resource):
             return request_result(201)
 
         try:
+            voucher_accept = request.args.get('voucher_accept')
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
             parameters = {
@@ -383,9 +384,12 @@ class VouchersApi(Resource):
 
             return request_result(101)
 
-        context = context_data(token, "bil_voc_voc_lst", "read")
-
-        return self.billing_api.voucher_list(context, parameters)
+        if voucher_accept == 'true':
+            context = context_data(token, "bil_bil_usr_com", "read")
+            return self.billing_api.voucher_accept(context)
+        else:
+            context = context_data(token, "bil_voc_voc_lst", "read")
+            return self.billing_api.voucher_list(context, parameters)
 
 
 class VoucherApi(Resource):

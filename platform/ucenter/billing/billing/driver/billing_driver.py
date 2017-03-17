@@ -8,7 +8,7 @@ import requests
 import datetime
 
 from conf import conf
-from common import rsa_sign
+# from common import rsa_sign
 from common.logs import logging as log
 from common.code import request_result
 
@@ -23,8 +23,8 @@ class BillingDriver(object):
         self.ali_pay_api = conf.ali_pay_api
         self.ali_pay_app_id = conf.ali_pay_app_id
         self.weixin_pay_api = conf.weixin_pay_api
-        self.sign = rsa_sign.sign
-        self.verify = rsa_sign.verify
+        # self.sign = rsa_sign.sign
+        # self.verify = rsa_sign.verify
 
     def ali_precreate(self, recharge_uuid, amount):
         # 用于调用支付宝预下单接口，返回付款二维码
@@ -32,16 +32,13 @@ class BillingDriver(object):
 
         log.info('exec zhi fu bao precreate')
 
-        return 'http://erweima_url'
+        # return 'http://erweima_url'
 
         method = 'alipay.trade.precreate'
         charset = 'utf-8'
         sign_type = 'RSA2'
-        # timestamp = time.strftime("%Y-%m-%d %H:%M:%S",
-        #                          time.gmtime(time.time()))
-
-        timestamp = '2017-03-13 19:31:41'
         # timestamp = str(datetime.datetime.now())[:-7]
+        timestamp = '2017-03-16 17:44:21'
         log.info('timestamp=%s' % (timestamp))
 
         recharge_uuid = "20150320010101001"
@@ -76,8 +73,8 @@ class BillingDriver(object):
 
         log.info('need_sign_data=%s' % (need_sign_data))
 
-        #sign_data = self.sign(need_sign_data)
-        sign_data = 'cyGVY/Mp23bFFDzlW7jT42rbJPrIPjYREu0YI20qN/NyxDFj1DF/Lq69v6HftSHZUo1+VeVxCWpE2LJqOyAJV7QNvAUfIwo/H6GN2DXIn5fyDpzTv/8ECSp+/yJXCaX3l1VWraZMhXskO9wQ5NnNnG4NHp8xr9s/094VfZ4qdiIiqkTi1JP2CvRRp4OorPRdsXmn+kdqK0W06MJSuWgVzprr5I4keaCKvfpszPVVLAaqAQZ5FfLurFrRQ8El/1PfcmsR0UV6++3eQELg2acUfyOtmGGpevKyxcEAy7KcKk1KZ4wHyWA8rRJ72OmS2lvX951M3fm7OqtWr9qJipn/fA=='
+        # sign_data = self.sign(need_sign_data)
+        sign_data = '0PZ1z6qw4aNhge06j2dypdXMP3uDt2DyXMYTfGa9mRgBp3Qlj0p9woWiFMoHzTrHDOBITM5GoYV0ADZhAyk9eraz+wbxuFKXTr2aL+Akpt0GOszvpYLcJ1dtaXTFbHjAAGAK7Cipoxg9s2ZPGjlbcBtC0HxnNq9P8/6kww6Hss9eElezk+v4ntbWeRjNxbtT0t9ENMSiUcATqj9miRqS8+4hZXlUlqZLkRNjgQKq4jTDnRB3okGhSP3ORLikq+4HTGrWtRJSW0Efft+4BR8gR7SaqGlaA/vP4h0lGTvhWINC9aAvVRfKe5KuSeWu1vuEdwpD4HQuh4nLyhtW77W2QA=='
 
         log.info('data_sign=%s' % (sign_data))
 
@@ -94,6 +91,7 @@ class BillingDriver(object):
             result = requests.post(ali_precreate_url,
                                    timeout=5).json()
             return result
+
             if int(status) != 0:
                 raise(Exception('request_code not equal 0'))
         except Exception, e:

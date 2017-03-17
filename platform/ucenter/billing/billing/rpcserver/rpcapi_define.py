@@ -218,6 +218,7 @@ class BillingRpcManager(object):
             user_uuid = user_info.get('user_uuid')
             team_uuid = user_info.get('team_uuid')
             project_uuid = user_info.get('project_uuid')
+            user_name = user_info.get('user_name')
 
             voucher_uuid = parameters.get('voucher_uuid')
 
@@ -228,22 +229,25 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.vouchers_manager.voucher_active(
-                    voucher_uuid, user_uuid, team_uuid, project_uuid)
+                    voucher_uuid, user_uuid, team_uuid,
+                    project_uuid, user_name)
 
     @acl_check
     def voucher_distribute(self, context, parameters):
 
         try:
             voucher_uuid = parameters.get('voucher_uuid')
+            accepter = parameters.get('accepter')
 
             voucher_uuid = parameter_check(voucher_uuid, ptype='pstr')
+            accepter = parameter_check(accepter, ptype='pnam')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
         return self.vouchers_manager.voucher_distribute(
-                    voucher_uuid)
+                    voucher_uuid, accepter)
 
     @acl_check
     def voucher_list(self, context, parameters):
@@ -265,6 +269,20 @@ class BillingRpcManager(object):
 
         return self.vouchers_manager.voucher_list(
                     user_uuid, team_uuid, start_time, end_time)
+
+    @acl_check
+    def voucher_accept(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+            user_name = user_info.get('user_name')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.vouchers_manager.voucher_list_accept(
+                    user_name)
 
     @acl_check
     def bill_list(self, context, parameters):

@@ -260,25 +260,63 @@
                 "vouchers_uuid": "string",
                 "denomination": int,
                 "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
                 "active_time": "YYYY-MM-DD HH:MM:SS",
                 "invalid_time": "YYYY-MM-DD HH:MM:SS",
-                "user_uuid": "string"
             },
             {
                 "vouchers_uuid": "string",
                 "denomination": int,
                 "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
                 "active_time": "YYYY-MM-DD HH:MM:SS",
                 "invalid_time": "YYYY-MM-DD HH:MM:SS",
-                "user_uuid": "string"
             },
             {
                 "vouchers_uuid": "string",
                 "denomination": int,
                 "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
                 "active_time": "YYYY-MM-DD HH:MM:SS",
                 "invalid_time": "YYYY-MM-DD HH:MM:SS",
-                "user_uuid": "string"
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_ACCPET_VOUCHERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "vouchers_list": [
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
             }
         ]
     }
@@ -633,14 +671,26 @@
 @apiParam {json} body
 @apiParamExample body
 {
-    "user_email": "string"
+    "accepter": "string"
 }
 @apiUse PUT_VOUCHERS_STATUS_0
 """
 
 
 """
-@api {post} /api/v1.0/billing/vouchers/<voucher_uuid> 2.3 礼券领用
+@api {get} /api/v1.0/billing/vouchers?voucher_accept=<true> 2.3 礼券查询
+@apiName get accept vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 用户查询收到的礼券列表
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiUse GET_ACCPET_VOUCHERS_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/vouchers/<voucher_uuid> 2.4 礼券激活
 @apiName active vouchers
 @apiGroup 2 vouchers
 @apiVersion 1.0.0
@@ -652,7 +702,7 @@
 
 
 """
-@api {get} /api/v1.0/billing/vouchers?start_time=<epoch_seconds>&end_time=<epoch_seconds> 2.4 礼券列表
+@api {get} /api/v1.0/billing/vouchers?start_time=<epoch_seconds>&end_time=<epoch_seconds> 2.5 礼券列表
 @apiName get vouchers
 @apiGroup 2 vouchers
 @apiVersion 1.0.0

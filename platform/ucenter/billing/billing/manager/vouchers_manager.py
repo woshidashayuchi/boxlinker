@@ -39,7 +39,7 @@ class VouchersManager(object):
         return request_result(0, result)
 
     def voucher_active(self, voucher_uuid, user_uuid,
-                       team_uuid, project_uuid):
+                       team_uuid, project_uuid, activator):
 
         try:
             voucher_check = self.billing_db.voucher_uuid_check(
@@ -55,7 +55,7 @@ class VouchersManager(object):
         try:
             self.billing_db.voucher_active(
                  voucher_uuid, user_uuid,
-                 team_uuid, project_uuid)
+                 team_uuid, project_uuid, activator)
         except Exception, e:
             log.error('Database update error, reason=%s' % (e))
             return request_result(403)
@@ -64,23 +64,37 @@ class VouchersManager(object):
                      "voucher_uuid": voucher_uuid,
                      "user_uuid": user_uuid,
                      "team_uuid": team_uuid,
-                     "project_uuid": project_uuid
+                     "project_uuid": project_uuid,
+                     "activator": activator
                  }
 
         return request_result(0, result)
 
-    def voucher_distribute(self, voucher_uuid):
+    def voucher_distribute(self, voucher_uuid, accepter):
 
         try:
-            self.billing_db.voucher_distribute(voucher_uuid)
+            voucher_status = self.billing_db.voucher_status(
+                                  voucher_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if voucher_status != 'unused':
+            log.warning('Voucher distribute error, '
+                        'voucher(%s) status=%s'
+                        % (voucher_uuid, voucher_status))
+            return request_result(202)
+
+        try:
+            self.billing_db.voucher_distribute(
+                            voucher_uuid, accepter)
         except Exception, e:
             log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
-        # 考虑是否增加将礼劵激活码发送到用户邮箱
-
         result = {
-                     "voucher_uuid": voucher_uuid
+                     "voucher_uuid": voucher_uuid,
+                     "accepter": accepter
                  }
 
         return request_result(0, result)
@@ -115,10 +129,11 @@ class VouchersManager(object):
             active_time = vouchers_info[3]
             invalid_time = vouchers_info[4]
             status = vouchers_info[5]
-            create_time = vouchers_info[6]
-            update_time = vouchers_info[7]
-            team_uuid = vouchers_info[8]
-            user_uuid = vouchers_info[9]
+            accepter = vouchers_info[6]
+            activator = vouchers_info[7]
+            create_time = vouchers_info[8]
+            update_time = vouchers_info[9]
+            team_uuid = vouchers_info[10]
 
             v_vouchers_info = {
                                   "voucher_uuid": voucher_uuid,
@@ -128,7 +143,8 @@ class VouchersManager(object):
                                   "invalid_time": invalid_time,
                                   "status": status,
                                   "team_uuid": team_uuid,
-                                  "user_uuid": user_uuid,
+                                  "accepter": accepter,
+                                  "activator": activator,
                                   "create_time": create_time,
                                   "update_time": update_time
                               }
@@ -161,12 +177,14 @@ class VouchersManager(object):
             balance = vouchers_info[3]
             active_time = vouchers_info[4]
             invalid_time = vouchers_info[5]
+            status = vouchers_info[6]
 
             v_vouchers_info = {
                                   "voucher_uuid": voucher_uuid,
                                   "user_uuid": user_uuid,
                                   "denomination": denomination,
                                   "balance": balance,
+                                  "status": status,
                                   "active_time": active_time,
                                   "invalid_time": invalid_time
                               }
@@ -178,7 +196,44 @@ class VouchersManager(object):
 
         return request_result(0, result)
 
+    def voucher_list_accept(self, user_name):
+
+        try:
+            vouchers_list_info = self.billing_db.voucher_list_accept(
+                                      user_name)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        vouchers_list = []
+        for vouchers_info in vouchers_list_info:
+            voucher_uuid = vouchers_info[0]
+            denomination = vouchers_info[1]
+            invalid_time = vouchers_info[2]
+            status = vouchers_info[3]
+
+            v_vouchers_info = {
+                                  "gift_type": "voucher",
+                                  "voucher_uuid": voucher_uuid,
+                                  "denomination": denomination,
+                                  "status": status,
+                                  "invalid_time": invalid_time
+                              }
+            v_vouchers_info = json.dumps(v_vouchers_info, cls=CJsonEncoder)
+            v_vouchers_info = json.loads(v_vouchers_info)
+            vouchers_list.append(v_vouchers_info)
+
+        result = {"vouchers_list": vouchers_list}
+
+        return request_result(0, result)
+
     def voucher_list(self, user_uuid, team_uuid, start_time, end_time):
+
+        try:
+            self.billing_db.voucher_status_update()
+        except Exception, e:
+            log.error('Database update error, reason=%s' % (e))
+            return request_result(403)
 
         if user_uuid == 'sysadmin':
             return self.voucher_list_admin(user_uuid, start_time, end_time)

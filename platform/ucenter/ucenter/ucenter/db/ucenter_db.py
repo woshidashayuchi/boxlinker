@@ -64,6 +64,13 @@ class UcenterDB(MysqlInit):
 
         return super(UcenterDB, self).exec_select_sql(sql)
 
+    def register_check(self, user_name):
+
+        sql = "select status from users_register where user_name='%s'" \
+               % (user_name)
+
+        return super(UcenterDB, self).exec_select_sql(sql)
+
     def user_delete(self, user_uuid):
 
         sql_01 = "delete from users where user_uuid='%s'" \

@@ -158,6 +158,8 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS vouchers (
         active_time         DATETIME NULL DEFAULT NULL,
         invalid_time        DATETIME NULL DEFAULT NULL,
         status              VARCHAR(32) NULL DEFAULT NULL,
+        accepter            VARCHAR(64) NULL DEFAULT NULL,
+        activator           VARCHAR(64) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (vouchers_uuid)
@@ -265,7 +267,7 @@ if [ $level_check -eq 0 ]; then
 
     $v_connect_mysql "insert into levels(team_uuid, level, experience, \
                       up_required, create_time, update_time)
-                      values('sysadmin_team_uuid', 5, 10000, 0, now(), now())"
+                      values('sysadmin-team-uuid', 5, 10000, 0, now(), now())"
 
 fi
 
@@ -275,7 +277,7 @@ if [ $balance_check -eq 0 ]; then
 
     $v_connect_mysql "insert into balances(team_uuid, total, balance, \
                       create_time, update_time)
-                      values('sysadmin_team_uuid', 100, 100, now(), now())"
+                      values('sysadmin-team-uuid', 100, 100, now(), now())"
 
 fi
 
