@@ -70,7 +70,7 @@
 
 
 """
-@api {get} /api/v1.0/logs/labels/<label_value>?date_time=<epoch_seconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 1.1 根据label查日志
+@api {get} /api/v1.0/logs/labels/<label_value>?service_uuid=<service_uuid>?date_time=<epoch_seconds>&start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 1.1 根据label查日志
 @apiName Get log from label_value
 @apiGroup 1 log
 @apiVersion 1.0.0
@@ -82,7 +82,7 @@
 
 
 """
-@api {get} /api/v1.0/logs/polling/labels/<label_value>?start_time=<epoch_milliseconds> 1.2 根据label轮询日志
+@api {get} /api/v1.0/logs/polling/labels/<label_value>?service_uuid=<service_uuid>?start_time=<epoch_milliseconds> 1.2 根据label轮询日志
 @apiName Get log polling from label_value
 @apiGroup 1 log
 @apiVersion 1.0.0

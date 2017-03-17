@@ -6,6 +6,7 @@ RUN pip install flask-restful
 RUN pip install requests
 RUN pip install flask-cors
 RUN pip install pika
+RUN yum install -y MySQL-python
 
 COPY ./conf /log/conf/
 COPY ./common /log/common/

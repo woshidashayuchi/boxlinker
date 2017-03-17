@@ -37,6 +37,7 @@ class LabelLogApi(Resource):
             return request_result(201)
 
         try:
+            service_uuid = request.args.get('service_uuid')
             date_time = request.args.get('date_time')
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
@@ -51,7 +52,7 @@ class LabelLogApi(Resource):
 
             return request_result(101)
 
-        context = context_data(token, "service_uuid", "read")
+        context = context_data(token, service_uuid, "read")
 
         return self.log_api.label_log(context, parameters)
 
@@ -114,6 +115,7 @@ class LogPollApi(Resource):
             return request_result(201)
 
         try:
+            service_uuid = request.args.get('service_uuid')
             start_time = request.args.get('start_time')
             parameters = {
                              "label_value": label_value,
@@ -124,7 +126,7 @@ class LogPollApi(Resource):
 
             return request_result(101)
 
-        context = context_data(token, "service_uuid", "read")
+        context = context_data(token, service_uuid, "read")
 
         try:
             return Response(self.log_producer(context, parameters))
