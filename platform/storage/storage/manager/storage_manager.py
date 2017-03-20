@@ -162,6 +162,7 @@ class StorageManager(object):
         try:
             volume_info = self.storage_db.volume_info(volume_uuid)
         except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
         volume_name = volume_info[0][0]
@@ -197,13 +198,15 @@ class StorageManager(object):
                     project_uuid, project_priv):
 
         try:
-            if ('R' in project_priv) or ('R' in team_priv):
+            if ((project_priv is not None) and ('R' in project_priv)) \
+               or ((team_priv is not None) and ('R' in team_priv)):
                 volume_list_info = self.storage_db.volume_list_project(
                                         team_uuid, project_uuid)
             else:
                 volume_list_info = self.storage_db.volume_list_user(
                                         team_uuid, project_uuid, user_uuid)
         except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
         disk_list = []
