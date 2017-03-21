@@ -29,7 +29,9 @@ class BillsManager(object):
 
         return
 
-    def bill_list(self, team_uuid, start_time, end_time):
+    def bill_list(self, team_uuid,
+                  start_time, end_time,
+                  page_size, page_num):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
@@ -37,7 +39,8 @@ class BillsManager(object):
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(float(end_time)))
             bills_list_info = self.billing_db.bill_list(
-                                   team_uuid, start_time, end_time)
+                                   team_uuid, start_time, end_time,
+                                   page_size, page_num)
             bills_total_info = self.billing_db.bill_total(
                                    team_uuid, start_time, end_time)
         except Exception, e:
@@ -54,8 +57,11 @@ class BillsManager(object):
 
         result = {"bills_total": bills_total}
 
+        user_bills_list = bills_list_info.get('bills_list')
+        count = bills_list_info.get('count')
+
         bills_list = []
-        for bills_info in bills_list_info:
+        for bills_info in user_bills_list:
             resource_uuid = bills_info[0]
             resource_name = bills_info[1]
             resource_conf = bills_info[2]
@@ -87,5 +93,6 @@ class BillsManager(object):
             bills_list.append(v_bills_info)
 
         result["bills_list"] = bills_list
+        result['count'] = count
 
         return request_result(0, result)

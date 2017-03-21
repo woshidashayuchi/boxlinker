@@ -184,7 +184,18 @@ class TeamsManager(object):
 
         return request_result(0, result)
 
-    def team_info(self, team_uuid):
+    def team_info(self, team_uuid, user_uuid):
+
+        if (user_uuid != 'sysadmin'):
+            try:
+                user_team_check = self.ucenter_db.user_team_check(
+                                       user_uuid, team_uuid)
+            except Exception, e:
+                log.error('Database select error, reason=%s' % (e))
+                return request_result(404)
+
+            if user_team_check == 0:
+                return request_result(202)
 
         try:
             team_single_info = self.ucenter_db.team_info(team_uuid)

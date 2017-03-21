@@ -108,7 +108,8 @@ class VouchersManager(object):
 
         return
 
-    def voucher_list_admin(self, user_uuid, start_time, end_time):
+    def voucher_list_admin(self, user_uuid, start_time,
+                           end_time, page_size, page_num):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
@@ -116,13 +117,17 @@ class VouchersManager(object):
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(float(end_time)))
             vouchers_list_info = self.billing_db.voucher_list_admin(
-                                      user_uuid, start_time, end_time)
+                                      user_uuid, start_time, end_time,
+                                      page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        admin_vouchers_list = vouchers_list_info.get('vouchers_list')
+        count = vouchers_list_info.get('count')
+
         vouchers_list = []
-        for vouchers_info in vouchers_list_info:
+        for vouchers_info in admin_vouchers_list:
             voucher_uuid = vouchers_info[0]
             denomination = vouchers_info[1]
             balance = vouchers_info[2]
@@ -152,25 +157,31 @@ class VouchersManager(object):
             v_vouchers_info = json.loads(v_vouchers_info)
             vouchers_list.append(v_vouchers_info)
 
-        result = {"vouchers_list": vouchers_list}
+        result = {"count": count}
+        result['vouchers_list'] = vouchers_list
 
         return request_result(0, result)
 
-    def voucher_list_user(self, team_uuid, start_time, end_time):
+    def voucher_list_user(self, team_uuid, start_time,
+                          end_time, page_size, page_num):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                        time.gmtime(float(start_time)))
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(float(end_time)))
-            vouchers_list_info = self.billing_db.voucher_list(
-                                      team_uuid, start_time, end_time)
+            vouchers_list_info = self.billing_db.voucher_list_user(
+                                      team_uuid, start_time, end_time,
+                                      page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        user_vouchers_list = vouchers_list_info.get('vouchers_list')
+        count = vouchers_list_info.get('count')
+
         vouchers_list = []
-        for vouchers_info in vouchers_list_info:
+        for vouchers_info in user_vouchers_list:
             voucher_uuid = vouchers_info[0]
             user_uuid = vouchers_info[1]
             denomination = vouchers_info[2]
@@ -192,21 +203,25 @@ class VouchersManager(object):
             v_vouchers_info = json.loads(v_vouchers_info)
             vouchers_list.append(v_vouchers_info)
 
-        result = {"vouchers_list": vouchers_list}
+        result = {"count": count}
+        result['vouchers_list'] = vouchers_list
 
         return request_result(0, result)
 
-    def voucher_list_accept(self, user_name):
+    def voucher_list_accept(self, user_name, page_size, page_num):
 
         try:
             vouchers_list_info = self.billing_db.voucher_list_accept(
-                                      user_name)
+                                      user_name, page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        accept_vouchers_list = vouchers_list_info.get('vouchers_list')
+        count = vouchers_list_info.get('count')
+
         vouchers_list = []
-        for vouchers_info in vouchers_list_info:
+        for vouchers_info in accept_vouchers_list:
             voucher_uuid = vouchers_info[0]
             denomination = vouchers_info[1]
             invalid_time = vouchers_info[2]
@@ -223,11 +238,14 @@ class VouchersManager(object):
             v_vouchers_info = json.loads(v_vouchers_info)
             vouchers_list.append(v_vouchers_info)
 
-        result = {"vouchers_list": vouchers_list}
+        result = {"count": count}
+        result['vouchers_list'] = vouchers_list
 
         return request_result(0, result)
 
-    def voucher_list(self, user_uuid, team_uuid, start_time, end_time):
+    def voucher_list(self, user_uuid, team_uuid,
+                     start_time, end_time,
+                     page_size, page_num):
 
         try:
             self.billing_db.voucher_status_update()
@@ -236,6 +254,10 @@ class VouchersManager(object):
             return request_result(403)
 
         if user_uuid == 'sysadmin':
-            return self.voucher_list_admin(user_uuid, start_time, end_time)
+            return self.voucher_list_admin(
+                        user_uuid, start_time, end_time,
+                        page_size, page_num)
         else:
-            return self.voucher_list_user(team_uuid, start_time, end_time)
+            return self.voucher_list_user(
+                        team_uuid, start_time, end_time,
+                        page_size, page_num)

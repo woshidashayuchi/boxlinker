@@ -103,9 +103,13 @@ class RechargesApi(Resource):
         try:
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
             parameters = {
                              "start_time": start_time,
-                             "end_time": end_time
+                             "end_time": end_time,
+                             "page_size": page_size,
+                             "page_num": page_num
                          }
         except Exception, e:
             log.error('Parameters error, reason=%s' % (e))
@@ -213,9 +217,22 @@ class LimitsApi(Resource):
 
             return request_result(201)
 
+        try:
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+
         context = context_data(token, "bil_lmt_lmt_lst", "read")
 
-        return self.billing_api.limit_list(context)
+        return self.billing_api.limit_list(context, parameters)
 
     @time_log
     def put(self):
@@ -281,9 +298,21 @@ class ResourcesApi(Resource):
 
             return request_result(201)
 
+        try:
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
         context = context_data(token, "bil_rss_rss_lst", "read")
 
-        return self.billing_api.resource_list(context)
+        return self.billing_api.resource_list(context, parameters)
 
 
 class ResourceApi(Resource):
@@ -375,9 +404,13 @@ class VouchersApi(Resource):
             voucher_accept = request.args.get('voucher_accept')
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
             parameters = {
                              "start_time": start_time,
-                             "end_time": end_time
+                             "end_time": end_time,
+                             "page_size": page_size,
+                             "page_num": page_num
                          }
         except Exception, e:
             log.error('Parameters error, reason=%s' % (e))
@@ -386,7 +419,7 @@ class VouchersApi(Resource):
 
         if voucher_accept == 'true':
             context = context_data(token, "bil_bil_usr_com", "read")
-            return self.billing_api.voucher_accept(context)
+            return self.billing_api.voucher_accept(context, parameters)
         else:
             context = context_data(token, "bil_voc_voc_lst", "read")
             return self.billing_api.voucher_list(context, parameters)
@@ -463,9 +496,13 @@ class BillsAPI(Resource):
         try:
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
             parameters = {
                              "start_time": start_time,
-                             "end_time": end_time
+                             "end_time": end_time,
+                             "page_size": page_size,
+                             "page_num": page_num
                          }
         except Exception, e:
             log.error('Parameters error, reason=%s' % (e))
@@ -520,9 +557,13 @@ class OrdersApi(Resource):
         try:
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
             parameters = {
                              "start_time": start_time,
-                             "end_time": end_time
+                             "end_time": end_time,
+                             "page_size": page_size,
+                             "page_num": page_num
                          }
         except Exception, e:
             log.error('Parameters error, reason=%s' % (e))

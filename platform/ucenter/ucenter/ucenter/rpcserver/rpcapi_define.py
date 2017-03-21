@@ -420,7 +420,10 @@ class UcenterRpcManager(object):
     def team_info(self, context, parameters):
 
         try:
-            team_uuid = context.get('resource_uuid')
+            user_info = token_auth(context['token'])['result']
+            user_uuid = user_info.get('user_uuid')
+
+            team_uuid = parameters.get('team_uuid')
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
@@ -428,7 +431,7 @@ class UcenterRpcManager(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.teams_manager.team_info(team_uuid)
+        return self.teams_manager.team_info(team_uuid, user_uuid)
 
     @acl_check
     def team_update(self, context, parameters):
@@ -590,13 +593,19 @@ class UcenterRpcManager(object):
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
 
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
             team_uuid = parameter_check(team_uuid, ptype='pstr')
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.userteam_manager.user_team_list(team_uuid)
+        return self.userteam_manager.user_team_list(
+                    team_uuid, page_size, page_num)
 
     @acl_check
     def user_team_activate(self, context, parameters):
@@ -692,13 +701,19 @@ class UcenterRpcManager(object):
             user_info = token_auth(context['token'])['result']
             project_uuid = user_info.get('project_uuid')
 
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
             project_uuid = parameter_check(project_uuid, ptype='pstr')
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.userproject_manager.user_project_list(project_uuid)
+        return self.userproject_manager.user_project_list(
+                    project_uuid, page_size, page_num)
 
     @acl_check
     def user_project_update(self, context, parameters):

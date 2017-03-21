@@ -196,28 +196,28 @@ if [ $acl_check -eq 0 ]; then
                           values('"$role"', 'role', 'global', 'global', 'global', '0', now(), now())"
     done
 
-    admin_api_list="uct_usr_usr_stu"
+    admin_api_list="uct_usr_adm_com uct_usr_usr_stu"
     for admin_api in $admin_api_list
     do
         $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)
                           values('"$admin_api"', 'api', 'global', '0', '0', '0', now(), now())"
     done
 
-    team_api_list="uct_rol_rol_crt uct_pro_pro_crt"
+    team_api_list="uct_usr_tem_com uct_rol_rol_crt uct_pro_pro_crt"
     for team_api in $team_api_list
     do
         $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)
                           values('"$team_api"', 'api', 'global', 'global', '0', '0', now(), now())"
     done
 
-    project_api_list="uct_rol_rol_lst"
+    project_api_list="uct_usr_pro_com uct_rol_rol_lst"
     for project_api in $project_api_list
     do
         $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)
                           values('"$project_api"', 'api', 'global', 'global', 'global', '0', now(), now())"
     done
 
-    user_api_list="uct_usr_usr_lst uct_tem_tem_crt uct_tem_tem_lst uct_pro_pro_lst"
+    user_api_list="uct_usr_usr_com uct_usr_usr_lst uct_tem_tem_crt uct_tem_tem_lst uct_pro_pro_lst"
     for user_api in $user_api_list
     do
         $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid, project_uuid, user_uuid, create_time, update_time)

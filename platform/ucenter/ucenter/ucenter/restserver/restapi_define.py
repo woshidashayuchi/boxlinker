@@ -72,7 +72,8 @@ class UcenterUsersApi(Resource):
                 token = request.headers.get('token')
                 token_auth(token)
             except Exception, e:
-                log.error('Token check error, token=%s, reason=%s' % (token, e))
+                log.error('Token check error, token=%s, reason=%s'
+                          % (token, e))
                 return request_result(201)
 
             context = context_data(token, "uct_usr_usr_lst", "read")
@@ -483,9 +484,11 @@ class UcenterTeamApi(Resource):
 
             return request_result(201)
 
-        context = context_data(token, team_uuid, "read")
+        context = context_data(token, "uct_usr_usr_com", "read")
 
-        return self.ucenter_api.team_info(context)
+        parameters = {"team_uuid": team_uuid}
+
+        return self.ucenter_api.team_info(context, parameters)
 
     @time_log
     def put(self, team_uuid):
@@ -671,9 +674,21 @@ class UcenterUsersTeamsApi(Resource):
 
             return request_result(201)
 
+        try:
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
         context = context_data(token, user_info['team_uuid'], "read")
 
-        return self.ucenter_api.user_team_list(context)
+        return self.ucenter_api.user_team_list(context, parameters)
 
     @time_log
     def delete(self):
@@ -805,9 +820,21 @@ class UcenterUsersProjectsApi(Resource):
 
             return request_result(201)
 
+        try:
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
         context = context_data(token, user_info['project_uuid'], "read")
 
-        return self.ucenter_api.user_project_list(context)
+        return self.ucenter_api.user_project_list(context, parameters)
 
 
 class UcenterUserProjectApi(Resource):

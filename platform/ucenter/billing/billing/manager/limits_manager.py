@@ -63,10 +63,11 @@ class LimitsManager(object):
 
         return request_result(0, result)
 
-    def limit_list(self):
+    def limit_list(self, page_size, page_num):
 
         try:
-            limits_list_info = self.billing_db.limit_list()
+            limits_list_info = self.billing_db.limit_list(
+                                    page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)

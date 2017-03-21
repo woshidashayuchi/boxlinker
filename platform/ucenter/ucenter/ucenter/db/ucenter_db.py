@@ -636,15 +636,31 @@ class UcenterDB(MysqlInit):
 
         return super(UcenterDB, self).exec_update_sql(sql)
 
-    def user_team_list(self, team_uuid):
+    def user_team_list(self, team_uuid, page_size, page_num):
 
-        sql = "select a.user_uuid, b.user_name, a.team_role, \
-               a.create_time, a.update_time \
-               from users_teams a join users b \
-               where a.user_uuid=b.user_uuid and a.team_uuid='%s'" \
-               % (team_uuid)
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
 
-        return super(UcenterDB, self).exec_select_sql(sql)
+        sql_01 = "select a.user_uuid, b.user_name, c.role_name, \
+                  a.create_time, a.update_time \
+                  from users_teams a join users b join roles c \
+                  where a.user_uuid=b.user_uuid \
+                  and a.team_role=c.role_uuid \
+                  and a.team_uuid='%s' \
+                  limit %d,%d" \
+                 % (team_uuid, start_position, page_size)
+
+        sql_02 = "select count(*) from users_teams where team_uuid='%s'" \
+                 % (team_uuid)
+
+        team_user_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "team_user_list": team_user_list,
+                   "count": count
+               }
 
     def user_team_del(self, user_uuid, team_uuid):
 
@@ -688,15 +704,29 @@ class UcenterDB(MysqlInit):
 
         return super(UcenterDB, self).exec_update_sql(sql)
 
-    def user_project_list(self, project_uuid):
+    def user_project_list(self, project_uuid, page_size, page_num):
 
-        sql = "select a.user_uuid, b.user_name, a.project_role, \
-               a.create_time, a.update_time \
-               from users_projects a join users b \
-               where a.user_uuid=b.user_uuid and a.project_uuid='%s'" \
-               % (project_uuid)
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
 
-        return super(UcenterDB, self).exec_select_sql(sql)
+        sql_01 = "select a.user_uuid, b.user_name, a.project_role, \
+                  a.create_time, a.update_time \
+                  from users_projects a join users b \
+                  where a.user_uuid=b.user_uuid and a.project_uuid='%s' \
+                  limit %d,%d" \
+                  % (project_uuid, start_position, page_size)
+
+        sql_02 = "select count(*) from users_projects where project_uuid='%s'" \
+                 % (project_uuid)
+
+        project_user_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "project_user_list": project_user_list,
+                   "count": count
+               }
 
     def user_project_del(self, user_uuid, project_uuid):
 

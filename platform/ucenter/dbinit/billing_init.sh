@@ -237,7 +237,7 @@ if [ $acl_check -eq 0 ]; then
     $v_connect_mysql "insert into limits(team_level, teams, teamusers, \
                       projects, projectusers, roles, images, services, volumes, \
                       create_time, update_time)
-                      values(1, 1, 0, 0, 0, 0, 3, 3, 3, now(), now())"
+                      values(1, 1, 5, 3, 5, 2, 5, 5, 5, now(), now())"
 
     $v_connect_mysql "insert into limits(team_level, teams, teamusers, \
                       projects, projectusers, roles, images, services, volumes, \

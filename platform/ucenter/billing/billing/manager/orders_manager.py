@@ -65,7 +65,9 @@ class OrdersManager(object):
 
         return request_result(0, result)
 
-    def order_list(self, team_uuid, start_time, end_time):
+    def order_list(self, team_uuid,
+                   start_time, end_time,
+                   page_size, page_num):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
@@ -73,7 +75,8 @@ class OrdersManager(object):
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(float(end_time)))
             orders_list_info = self.billing_db.order_list(
-                                    team_uuid, start_time, end_time)
+                                    team_uuid, start_time, end_time,
+                                    page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
