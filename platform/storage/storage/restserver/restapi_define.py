@@ -56,9 +56,21 @@ class VolumesApi(Resource):
 
             return request_result(201)
 
+        try:
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
         context = context_data(token, "stg_ceh_dsk_lst", "read")
 
-        return self.storage_api.disk_list(context)
+        return self.storage_api.disk_list(context, parameters)
 
 
 class VolumeApi(Resource):

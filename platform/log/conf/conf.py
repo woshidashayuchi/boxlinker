@@ -12,6 +12,13 @@ mq_port = 5672
 # mq_server02 = os.environ.get('MQ_SERVER02')
 # mq_port = os.environ.get('MQ_PORT')
 
+db_server01 = 'database'
+db_server02 = 'database'
+db_port = 3306
+db_user = 'cloudsvc'
+db_passwd = 'cloudsvc'
+database = 'servicedata'
+
 api_host = '0.0.0.0'
 api_port = 8001
 api_debug = True

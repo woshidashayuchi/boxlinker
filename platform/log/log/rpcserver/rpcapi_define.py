@@ -3,7 +3,7 @@
 
 from common.logs import logging as log
 from common.code import request_result
-# from common.acl import acl_check
+from common.acl import acl_check
 from common.parameters import parameter_check
 from common.token_ucenterauth import token_auth
 
@@ -16,7 +16,7 @@ class LogRpcManager(object):
 
         self.k8slog_manager = k8slog_manager.K8sLogManager()
 
-    # @acl_check
+    @acl_check
     def log_label(self, context, parameters):
 
         try:
@@ -42,7 +42,7 @@ class LogRpcManager(object):
                     date_time=date_time, start_time=start_time,
                     end_time=end_time)
 
-    # @acl_check
+    @acl_check
     def log_pod(self, context, parameters):
 
         try:
@@ -68,7 +68,7 @@ class LogRpcManager(object):
                     date_time=date_time, start_time=start_time,
                     end_time=end_time)
 
-    # @acl_check
+    @acl_check
     def log_poll(self, context, parameters):
 
         try:

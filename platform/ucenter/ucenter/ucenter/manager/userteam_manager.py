@@ -49,18 +49,22 @@ class UserTeamManager(object):
 
         return request_result(0, result)
 
-    def user_team_list(self, team_uuid):
+    def user_team_list(self, team_uuid, page_size, page_num):
 
         'show team user and role list'
 
         try:
-            user_list_info = self.ucenter_db.user_team_list(team_uuid)
+            user_list_info = self.ucenter_db.user_team_list(
+                                  team_uuid, page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        team_user_list = user_list_info.get('team_user_list')
+        count = user_list_info.get('count')
+
         t_user_list = []
-        for user_info in user_list_info:
+        for user_info in team_user_list:
             user_uuid = user_info[0]
             user_name = user_info[1]
             team_role = user_info[2]
@@ -79,7 +83,8 @@ class UserTeamManager(object):
             v_user_info = json.loads(v_user_info)
             t_user_list.append(v_user_info)
 
-        result = {"user_list": t_user_list}
+        result = {"count": count}
+        result['user_list'] = t_user_list
 
         return request_result(0, result)
 

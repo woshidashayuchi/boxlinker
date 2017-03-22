@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.acl import acl_check
@@ -14,6 +15,7 @@ class StorageRpcManager(object):
 
     def __init__(self):
 
+        self.balancecheck = conf.balance_check
         self.storage_manager = storage_manager.StorageManager()
 
     @acl_check
@@ -34,7 +36,13 @@ class StorageRpcManager(object):
             token = parameter_check(token, ptype='pstr')
             volume_name = parameter_check(volume_name, ptype='pnam')
             volume_size = parameter_check(volume_size, ptype='pint')
-            cost = parameter_check(cost, ptype='pflt', exist='no')
+            if self.balancecheck is True:
+                cost = parameter_check(cost, ptype='pflt')
+                if float(cost) < 0:
+                    raise(Exception('Parameter cost error, '
+                                    'cost must greater than 0'))
+            else:
+                cost = parameter_check(cost, ptype='pflt', exist='no')
             if (fs_type != 'xfs') and (fs_type != 'ext4'):
                 raise
         except Exception, e:
@@ -86,6 +94,12 @@ class StorageRpcManager(object):
             team_priv = user_info.get('team_priv')
             project_uuid = user_info.get('project_uuid')
             project_priv = user_info.get('project_priv')
+
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -93,7 +107,8 @@ class StorageRpcManager(object):
 
         return self.storage_manager.volume_list(
                     user_uuid, team_uuid, team_priv,
-                    project_uuid, project_priv)
+                    project_uuid, project_priv,
+                    page_size, page_num)
 
     @acl_check
     def volume_update(self, context, parameters):

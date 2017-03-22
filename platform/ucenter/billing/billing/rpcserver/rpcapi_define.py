@@ -80,7 +80,19 @@ class BillingRpcManager(object):
     @acl_check
     def limit_list(self, context, parameters):
 
-        return self.limits_manager.limit_list()
+        try:
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.limits_manager.limit_list(
+                    page_size, page_num)
 
     @acl_check
     def limit_update(self, context, parameters):
@@ -183,12 +195,19 @@ class BillingRpcManager(object):
         try:
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
+
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.resources_manager.resource_list(team_uuid)
+        return self.resources_manager.resource_list(
+                    team_uuid, page_size, page_num)
 
     @acl_check
     def voucher_create(self, context, parameters):
@@ -218,6 +237,7 @@ class BillingRpcManager(object):
             user_uuid = user_info.get('user_uuid')
             team_uuid = user_info.get('team_uuid')
             project_uuid = user_info.get('project_uuid')
+            user_name = user_info.get('user_name')
 
             voucher_uuid = parameters.get('voucher_uuid')
 
@@ -228,7 +248,25 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.vouchers_manager.voucher_active(
-                    voucher_uuid, user_uuid, team_uuid, project_uuid)
+                    voucher_uuid, user_uuid, team_uuid,
+                    project_uuid, user_name)
+
+    @acl_check
+    def voucher_distribute(self, context, parameters):
+
+        try:
+            voucher_uuid = parameters.get('voucher_uuid')
+            accepter = parameters.get('accepter')
+
+            voucher_uuid = parameter_check(voucher_uuid, ptype='pstr')
+            accepter = parameter_check(accepter, ptype='pnam')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.vouchers_manager.voucher_distribute(
+                    voucher_uuid, accepter)
 
     @acl_check
     def voucher_list(self, context, parameters):
@@ -240,16 +278,41 @@ class BillingRpcManager(object):
 
             start_time = parameters.get('start_time')
             end_time = parameters.get('end_time')
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
 
             start_time = parameter_check(start_time, ptype='pflt')
             end_time = parameter_check(end_time, ptype='pflt')
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
         return self.vouchers_manager.voucher_list(
-                    user_uuid, team_uuid, start_time, end_time)
+                    user_uuid, team_uuid, start_time,
+                    end_time, page_size, page_num)
+
+    @acl_check
+    def voucher_accept(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+            user_name = user_info.get('user_name')
+
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.vouchers_manager.voucher_list_accept(
+                    user_name, page_size, page_num)
 
     @acl_check
     def bill_list(self, context, parameters):
@@ -260,16 +323,21 @@ class BillingRpcManager(object):
 
             start_time = parameters.get('start_time')
             end_time = parameters.get('end_time')
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
 
             start_time = parameter_check(start_time, ptype='pflt')
             end_time = parameter_check(end_time, ptype='pflt')
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
         return self.bills_manager.bill_list(
-                    team_uuid, start_time, end_time)
+                    team_uuid, start_time, end_time,
+                    page_size, page_num)
 
     @acl_check
     def level_init(self, context, parameters):
@@ -381,16 +449,21 @@ class BillingRpcManager(object):
 
             start_time = parameters.get('start_time')
             end_time = parameters.get('end_time')
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
 
             start_time = parameter_check(start_time, ptype='pflt')
             end_time = parameter_check(end_time, ptype='pflt')
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
         return self.recharges_manager.recharge_list(
-                    team_uuid, start_time, end_time)
+                    team_uuid, start_time, end_time,
+                    page_size, page_num)
 
     @acl_check
     def recharge_info(self, context, parameters):
@@ -463,13 +536,18 @@ class BillingRpcManager(object):
 
             start_time = parameters.get('start_time')
             end_time = parameters.get('end_time')
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
 
             start_time = parameter_check(start_time, ptype='pflt')
             end_time = parameter_check(end_time, ptype='pflt')
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
         return self.orders_manager.order_list(
-                    team_uuid, start_time, end_time)
+                    team_uuid, start_time, end_time,
+                    page_size, page_num)

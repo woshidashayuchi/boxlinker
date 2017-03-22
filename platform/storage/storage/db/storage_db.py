@@ -74,27 +74,61 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_select_sql(sql)
 
-    def volume_list_project(self, team_uuid, project_uuid):
+    def volume_list_project(self, team_uuid, project_uuid,
+                            page_size, page_num):
 
-        sql = "select a.volume_uuid, a.volume_name, a.volume_size, \
-               a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-               a.pool_name, a.create_time, a.update_time \
-               from volumes a join resources_acl b \
-               where a.volume_uuid=b.resource_uuid \
-               and b.team_uuid='%s' and b.project_uuid='%s'" \
-               % (team_uuid, project_uuid)
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
 
-        return super(StorageDB, self).exec_select_sql(sql)
+        sql_01 = "select a.volume_uuid, a.volume_name, a.volume_size, \
+                  a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
+                  a.pool_name, a.create_time, a.update_time \
+                  from volumes a join resources_acl b \
+                  where a.volume_uuid=b.resource_uuid \
+                  and b.team_uuid='%s' and b.project_uuid='%s' \
+                  limit %d,%d" \
+                 % (team_uuid, project_uuid,
+                    start_position, page_size)
 
-    def volume_list_user(self, team_uuid, project_uuid, user_uuid):
+        sql_02 = "select count(*) from resources_acl \
+                  where team_uuid='%s' and project_uuid='%s'" \
+                 % (team_uuid, project_uuid)
 
-        sql = "select a.volume_uuid, a.volume_name, a.volume_size, \
-               a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-               a.pool_name, a.create_time, a.update_time \
-               from volumes a join resources_acl b \
-               where a.volume_uuid=b.resource_uuid \
-               and b.team_uuid='%s' and b.project_uuid='%s' \
-               and b.user_uuid='%s'" \
-               % (team_uuid, project_uuid, user_uuid)
+        volumes_list = super(StorageDB, self).exec_select_sql(sql_01)
+        count = super(StorageDB, self).exec_select_sql(sql_02)[0][0]
 
-        return super(StorageDB, self).exec_select_sql(sql)
+        return {
+                   "volumes_list": volumes_list,
+                   "count": count
+               }
+
+    def volume_list_user(self, team_uuid, project_uuid,
+                         user_uuid, page_size, page_num):
+
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        sql_01 = "select a.volume_uuid, a.volume_name, a.volume_size, \
+                  a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
+                  a.pool_name, a.create_time, a.update_time \
+                  from volumes a join resources_acl b \
+                  where a.volume_uuid=b.resource_uuid \
+                  and b.team_uuid='%s' and b.project_uuid='%s' \
+                  and b.user_uuid='%s'" \
+                 % (team_uuid, project_uuid, user_uuid,
+                    start_position, page_size)
+
+        sql_02 = "select count(*) from resources_acl \
+                  where team_uuid='%s' and project_uuid='%s' \
+                  and user_uuid='%s'" \
+                 % (team_uuid, project_uuid, user_uuid)
+
+        volumes_list = super(StorageDB, self).exec_select_sql(sql_01)
+        count = super(StorageDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "volumes_list": volumes_list,
+                   "count": count
+               }

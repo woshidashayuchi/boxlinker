@@ -84,17 +84,20 @@ class ResourcesManager(object):
 
         return request_result(0, result)
 
-    def resource_list(self, team_uuid):
+    def resource_list(self, team_uuid, page_size, page_num):
 
         try:
             resources_list_info = self.billing_db.resource_list(
-                                       team_uuid)
+                                       team_uuid, page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        bill_resources_list = resources_list_info.get('resource_list')
+        count = resources_list_info.get('count')
+
         resources_list = []
-        for resources_info in resources_list_info:
+        for resources_info in bill_resources_list:
             resource_uuid = resources_info[0]
             resource_type = resources_info[1]
             team_uuid = resources_info[2]
@@ -123,6 +126,7 @@ class ResourcesManager(object):
             v_resources_info = json.loads(v_resources_info)
             resources_list.append(v_resources_info)
 
-        result = {"resources_list": resources_list}
+        result = {"count": count}
+        result['resources_list'] = resources_list
 
         return request_result(0, result)

@@ -93,6 +93,7 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "volume_list": [
             {
                 "volume_uuid": "string",
@@ -162,7 +163,7 @@
 
 
 """
-@api {get} /api/v1.0/storage/volumes 1.2 存储卷列表
+@api {get} /api/v1.0/storage/volumes?page_size=<int>&page_num=<int> 1.2 存储卷列表
 @apiName list volumes
 @apiGroup 1 storage
 @apiVersion 1.0.0

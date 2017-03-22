@@ -157,6 +157,9 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS vouchers (
         balance             DOUBLE(5,2) NULL DEFAULT NULL,
         active_time         DATETIME NULL DEFAULT NULL,
         invalid_time        DATETIME NULL DEFAULT NULL,
+        status              VARCHAR(32) NULL DEFAULT NULL,
+        accepter            VARCHAR(64) NULL DEFAULT NULL,
+        activator           VARCHAR(64) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (vouchers_uuid)
@@ -234,7 +237,7 @@ if [ $acl_check -eq 0 ]; then
     $v_connect_mysql "insert into limits(team_level, teams, teamusers, \
                       projects, projectusers, roles, images, services, volumes, \
                       create_time, update_time)
-                      values(1, 1, 0, 0, 0, 0, 3, 3, 3, now(), now())"
+                      values(1, 1, 5, 3, 5, 2, 5, 5, 5, now(), now())"
 
     $v_connect_mysql "insert into limits(team_level, teams, teamusers, \
                       projects, projectusers, roles, images, services, volumes, \
@@ -264,7 +267,7 @@ if [ $level_check -eq 0 ]; then
 
     $v_connect_mysql "insert into levels(team_uuid, level, experience, \
                       up_required, create_time, update_time)
-                      values('sysadmin_team_uuid', 5, 10000, 0, now(), now())"
+                      values('sysadmin-team-uuid', 5, 10000, 0, now(), now())"
 
 fi
 
@@ -274,7 +277,7 @@ if [ $balance_check -eq 0 ]; then
 
     $v_connect_mysql "insert into balances(team_uuid, total, balance, \
                       create_time, update_time)
-                      values('sysadmin_team_uuid', 100, 100, now(), now())"
+                      values('sysadmin-team-uuid', 100, 100, now(), now())"
 
 fi
 

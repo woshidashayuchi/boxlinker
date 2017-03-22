@@ -70,7 +70,7 @@ class KubernetesRpcAPI(object):
             return request_result(101)
 
         token = parameters.get('token')
-        cost = parameters.get('costs')
+        cost = parameters.get('cost')
 
         return self.create_manager.service_create(token, parameters, cost)
 

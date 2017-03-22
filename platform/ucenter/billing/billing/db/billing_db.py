@@ -33,13 +33,11 @@ class BillingDB(MysqlInit):
 
     def resource_delete(self, resource_uuid):
 
-        sql_01 = "delete from resources where resource_uuid='%s'" \
-                 % (resource_uuid)
+        sql = "update resources set resource_status='delete', update_time=now() \
+               where resource_uuid='%s'" \
+              % (resource_uuid)
 
-        sql_02 = "delete from resources_acl where resource_uuid='%s'" \
-                 % (resource_uuid)
-
-        return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
+        return super(BillingDB, self).exec_update_sql(sql)
 
     def resource_update(self, resource_uuid, resource_conf=None,
                         resource_status=None, user_uuid=None,
@@ -82,17 +80,34 @@ class BillingDB(MysqlInit):
 
         return
 
-    def resource_list(self, team_uuid):
+    def resource_list(self, team_uuid, page_size, page_num):
 
-        sql = "select a.resource_uuid, a.resource_type, \
-               a.team_uuid, a.project_uuid, a.user_uuid, \
-               a.create_time, a.update_time, \
-               b.resource_name, b.resource_conf, b.resource_status \
-               from resources_acl a join resources b \
-               where a.resource_uuid=b.resource_uuid and a.team_uuid='%s'" \
-               % (team_uuid)
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
 
-        return super(BillingDB, self).exec_select_sql(sql)
+        sql_01 = "select a.resource_uuid, a.resource_type, \
+                  a.team_uuid, a.project_uuid, a.user_uuid, \
+                  a.create_time, a.update_time, \
+                  b.resource_name, b.resource_conf, b.resource_status \
+                  from resources_acl a join resources b \
+                  where a.resource_uuid=b.resource_uuid \
+                  and a.team_uuid='%s' and b.resource_status!='delete' \
+                  limit %d,%d" \
+                 % (team_uuid, start_position, page_size)
+
+        sql_02 = "select count(*) from resources_acl a join resources b \
+                  where a.resource_uuid=b.resource_uuid \
+                  and a.team_uuid='%s' and b.resource_status!='delete'" \
+                 % (team_uuid)
+
+        db_resource_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "resource_list": db_resource_list,
+                   "count": count
+               }
 
     def resources_list(self):
 
@@ -100,23 +115,34 @@ class BillingDB(MysqlInit):
                a.team_uuid, a.project_uuid, a.user_uuid, \
                b.resource_conf, b.resource_status \
                from resources_acl a join resources b \
-               where a.resource_uuid=b.resource_uuid"
+               where a.resource_uuid=b.resource_uuid \
+               and b.resource_status!='delete'"
 
         return super(BillingDB, self).exec_select_sql(sql)
 
-    def voucher_insert(self, user_uuid, denomination, invalid_time):
+    def voucher_insert(self, voucher_uuid, user_uuid,
+                       denomination, invalid_time):
 
         denomination = int(denomination)
         sql = "insert into vouchers(vouchers_uuid, createuser_uuid, \
                denomination, balance, active_time, invalid_time, \
-               create_time, update_time) \
-               values(uuid(), '%s', '%d', '%d', 0, '%s', now(), now())" \
-               % (user_uuid, denomination, denomination, invalid_time)
+               status, create_time, update_time) \
+               values('%s', '%s', '%d', '%d', 0, '%s', 'unused', now(), now())" \
+               % (voucher_uuid, user_uuid, denomination,
+                  denomination, invalid_time)
 
         return super(BillingDB, self).exec_update_sql(sql)
 
+    def voucher_uuid_check(self, voucher_uuid):
+
+        sql = "select count(*) from vouchers \
+               where vouchers_uuid='%s' and status='unactive'" \
+              % (voucher_uuid)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
     def voucher_active(self, voucher_uuid, user_uuid,
-                       team_uuid, project_uuid):
+                       team_uuid, project_uuid, activator):
 
         sql_01 = "insert into resources_acl(resource_uuid, resource_type, \
                   admin_uuid, team_uuid, project_uuid, user_uuid, \
@@ -124,9 +150,10 @@ class BillingDB(MysqlInit):
                   values('%s', 'voucher', '0', '%s', '%s', '%s', now(), now())" \
                   % (voucher_uuid, team_uuid, project_uuid, user_uuid)
 
-        sql_02 = "update vouchers set active_time=now(), update_time=now() \
+        sql_02 = "update vouchers set active_time=now(), status='active', \
+                  activator='%s', update_time=now() \
                   where vouchers_uuid='%s'" \
-                  % (voucher_uuid)
+                  % (activator, voucher_uuid)
 
         return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
 
@@ -135,12 +162,22 @@ class BillingDB(MysqlInit):
         amount = float(amount)
         sql = "select a.vouchers_uuid from vouchers a join resources_acl b \
                where a.vouchers_uuid=b.resource_uuid  \
-               and a.invalid_time >= now() and a.balance >= %f \
+               and a.status='active' and a.invalid_time >= now() \
+               and a.balance >= %f \
                and b.team_uuid='%s' \
                order by a.invalid_time asc limit 1" \
                % (amount, team_uuid)
 
         return super(BillingDB, self).exec_select_sql(sql)
+
+    def voucher_distribute(self, voucher_uuid, accepter):
+
+        sql = "update vouchers set status='unactive', \
+               accepter='%s', update_time=now() \
+               where vouchers_uuid='%s' and status='unused'" \
+              % (accepter, voucher_uuid)
+
+        return super(BillingDB, self).exec_update_sql(sql)
 
     def voucher_update(self, voucher_uuid, amount):
 
@@ -151,26 +188,109 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_update_sql(sql)
 
-    def voucher_list_admin(self, user_uuid, start_time, end_time):
+    def voucher_status(self, voucher_uuid):
 
-        sql = "select vouchers_uuid, denomination, \
-               invalid_time, create_time, update_time \
-               from vouchers where createuser_uuid='%s' \
-               and active_time=0 and create_time between '%s' and '%s'" \
-               % (user_uuid, start_time, end_time)
+        sql = "select status from vouchers where vouchers_uuid='%s'" \
+              % (voucher_uuid)
 
         return super(BillingDB, self).exec_select_sql(sql)
 
-    def voucher_list(self, team_uuid, start_time, end_time):
+    def voucher_status_update(self):
 
-        sql = "select a.resource_uuid, a.user_uuid, \
-               b.denomination, b.balance, b.active_time, b.invalid_time \
-               from resources_acl a join vouchers b \
-               where a.resource_uuid=b.vouchers_uuid and a.team_uuid='%s' \
-               and b.create_time between '%s' and '%s'" \
-               % (team_uuid, start_time, end_time)
+        sql = "update vouchers set status='expired' \
+               where invalid_time < now() and status!='expired'"
 
-        return super(BillingDB, self).exec_select_sql(sql)
+        return super(BillingDB, self).exec_update_sql(sql)
+
+    def voucher_list_admin(self, user_uuid,
+                           start_time, end_time,
+                           page_size, page_num):
+
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        sql_01 = "select a.vouchers_uuid, a.denomination, a.balance, \
+                  a.active_time, a.invalid_time, a.status, \
+                  a.accepter, a.activator, a.create_time, \
+                  a.update_time, b.team_uuid \
+                  from vouchers a left join resources_acl b \
+                  on a.vouchers_uuid=b.resource_uuid \
+                  where a.createuser_uuid='%s' \
+                  and a.create_time between '%s' and '%s' \
+                  limit %d,%d" \
+                 % (user_uuid, start_time, end_time,
+                    start_position, page_size)
+
+        sql_02 = "select count(*) from vouchers where createuser_uuid='%s' \
+                  and create_time between '%s' and '%s'" \
+                 % (user_uuid, start_time, end_time)
+
+        vouchers_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "vouchers_list": vouchers_list,
+                   "count": count
+               }
+
+    def voucher_list_user(self, team_uuid,
+                          start_time, end_time,
+                          page_size, page_num):
+
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        sql_01 = "select a.resource_uuid, a.user_uuid, \
+                  b.denomination, b.balance, b.active_time, \
+                  b.invalid_time, b.status \
+                  from resources_acl a join vouchers b \
+                  where a.resource_uuid=b.vouchers_uuid \
+                  and a.team_uuid='%s' \
+                  and b.create_time between '%s' and '%s' \
+                  limit %d,%d" \
+                 % (team_uuid, start_time, end_time,
+                    start_position, page_size)
+
+        sql_02 = "select count(*) from resources_acl a join vouchers b \
+                  where a.resource_uuid=b.vouchers_uuid \
+                  and a.team_uuid='%s' \
+                  and b.create_time between '%s' and '%s'" \
+                 % (team_uuid, start_time, end_time)
+
+        vouchers_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "vouchers_list": vouchers_list,
+                   "count": count
+               }
+
+    def voucher_list_accept(self, user_name, page_size, page_num):
+
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        sql_01 = "select vouchers_uuid, denomination, \
+                  invalid_time, status \
+                  from vouchers where accepter='%s' \
+                  and invalid_time >= now() \
+                  limit %d,%d" \
+                 % (user_name, start_position, page_size)
+
+        sql_02 = "select count(*) from vouchers where accepter='%s' \
+                  and invalid_time >= now()" \
+                 % (user_name)
+    
+        vouchers_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "vouchers_list": vouchers_list,
+                   "count": count
+               }
 
     def level_init(self, team_uuid):
 
@@ -253,15 +373,34 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_select_sql(sql)
 
-    def recharge_list(self, team_uuid, start_time, end_time):
+    def recharge_list(self, team_uuid,
+                      start_time, end_time,
+                      page_size, page_num):
 
-        sql = "select recharge_uuid, recharge_amount, \
-               recharge_type, user_name, create_time \
-               from recharge_records where team_uuid='%s' \
-               and create_time between '%s' and '%s'" \
-               % (team_uuid, start_time, end_time)
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
 
-        return super(BillingDB, self).exec_select_sql(sql)
+        sql_01 = "select recharge_uuid, recharge_amount, \
+                  recharge_type, user_name, create_time \
+                  from recharge_records where team_uuid='%s' \
+                  and create_time between '%s' and '%s' \
+                  limit %d,%d" \
+                 % (team_uuid, start_time, end_time,
+                    start_position, page_size)
+
+        sql_02 = "select count(*) from recharge_records \
+                  where team_uuid='%s' \
+                  and create_time between '%s' and '%s'" \
+                 % (team_uuid, start_time, end_time)
+
+        db_recharge_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "recharge_list": db_recharge_list,
+                   "count": count
+               }
 
     def limit_info(self, team_uuid, resource_type):
 
@@ -299,18 +438,46 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_update_sql(sql)
 
-    def bill_list(self, team_uuid, start_time, end_time):
+    def bill_list(self, team_uuid,
+                  start_time, end_time,
+                  page_size, page_num):
 
-        sql = "select a.resource_uuid, a.resource_name, \
-               b.resource_type, b.team_uuid, b.project_uuid, b.user_uuid, \
-               round(sum(c.resource_cost), 2), round(sum(c.voucher_cost), 2) \
-               from resources a join resources_acl b join bills c \
-               where a.resource_uuid=b.resource_uuid \
-               and b.resource_uuid = c.resource_uuid \
-               and c.team_uuid='%s' \
-               and c.insert_time between '%s' and '%s' \
-               group by a.resource_uuid" \
-               % (team_uuid, start_time, end_time)
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        sql_01 = "select a.resource_uuid, a.resource_name, \
+                  a.resource_conf, a.resource_status, \
+                  b.resource_type, b.team_uuid, b.project_uuid, b.user_uuid, \
+                  round(sum(c.resource_cost), 2), round(sum(c.voucher_cost), 2) \
+                  from resources a join resources_acl b join bills c \
+                  where a.resource_uuid=b.resource_uuid \
+                  and b.resource_uuid = c.resource_uuid \
+                  and c.team_uuid='%s' \
+                  and c.insert_time between '%s' and '%s' \
+                  group by a.resource_uuid \
+                  limit %d,%d" \
+                 % (team_uuid, start_time, end_time,
+                    start_position, page_size)
+
+        sql_02 = "select count(*) from (select * from bills where team_uuid='%s' \
+                  and insert_time between '%s' and '%s' group by resource_uuid) t" \
+                 % (team_uuid, start_time, end_time)
+
+        db_bills_list = super(UcenterDB, self).exec_select_sql(sql_01)
+        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "bills_list": db_bills_list,
+                   "count": count
+               }
+
+    def bill_total(self, team_uuid, start_time, end_time):
+
+        sql = "select round(sum(resource_cost), 2), round(sum(voucher_cost), 2) \
+               from bills where team_uuid='%s' \
+               and insert_time between '%s' and '%s'" \
+              % (team_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)
 

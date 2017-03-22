@@ -163,7 +163,9 @@ class RechargesManager(object):
 
         return request_result(0, result)
 
-    def recharge_list(self, team_uuid, start_time, end_time):
+    def recharge_list(self, team_uuid,
+                      start_time, end_time,
+                      page_size, page_num):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
@@ -171,13 +173,17 @@ class RechargesManager(object):
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                      time.gmtime(float(end_time)))
             recharge_list_info = self.billing_db.recharge_list(
-                                      team_uuid, start_time, end_time)
+                                      team_uuid, start_time, end_time,
+                                      page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        user_recharge_list = recharge_list_info.get('recharge_list')
+        count = recharge_list_info.get('count')
+
         recharges_list = []
-        for recharge_info in recharge_list_info:
+        for recharge_info in user_recharge_list:
             recharge_uuid = recharge_info[0]
             recharge_amount = recharge_info[1]
             recharge_type = recharge_info[2]
@@ -197,5 +203,6 @@ class RechargesManager(object):
             recharges_list.append(v_recharge_info)
 
         result = {"recharge_list": recharges_list}
+        result['count'] = count
 
         return request_result(0, result)

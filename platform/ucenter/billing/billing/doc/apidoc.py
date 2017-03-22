@@ -75,6 +75,7 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "limits_list": [
             {
                 "team_level": int,
@@ -161,6 +162,7 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "resources_list": [
             {
                 "resource_uuid": "string",
@@ -211,8 +213,22 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "voucher_uuid": "string",
         "denomination": int,
         "invalid_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine PUT_VOUCHERS_STATUS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "voucher_uuid": "string"
     }
 }
 """
@@ -241,30 +257,70 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "vouchers_list": [
             {
                 "vouchers_uuid": "string",
                 "denomination": int,
                 "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
                 "active_time": "YYYY-MM-DD HH:MM:SS",
                 "invalid_time": "YYYY-MM-DD HH:MM:SS",
-                "user_uuid": "string"
             },
             {
                 "vouchers_uuid": "string",
                 "denomination": int,
                 "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
                 "active_time": "YYYY-MM-DD HH:MM:SS",
                 "invalid_time": "YYYY-MM-DD HH:MM:SS",
-                "user_uuid": "string"
             },
             {
                 "vouchers_uuid": "string",
                 "denomination": int,
                 "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
                 "active_time": "YYYY-MM-DD HH:MM:SS",
                 "invalid_time": "YYYY-MM-DD HH:MM:SS",
-                "user_uuid": "string"
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_ACCPET_VOUCHERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "count": int,
+        "vouchers_list": [
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
             }
         ]
     }
@@ -279,6 +335,11 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
+        "bills_total": {
+                           "resource_cost": float,
+                           "voucher_cost": float
+                       },
         "bills_list": [
             {
                 "start_time": "YY-MM-DD",
@@ -290,6 +351,7 @@
                 "resource_name": "string",
                 "resource_type": "string",
                 "resource_conf": "string",
+                "resource_status": "string",
                 "resource_cost": float,
                 "voucher_cost": float
             },
@@ -303,6 +365,7 @@
                 "resource_name": "string",
                 "resource_type": "string",
                 "resource_conf": "string",
+                "resource_status": "string",
                 "resource_cost": float,
                 "voucher_cost": float
             },
@@ -316,6 +379,7 @@
                 "resource_name": "string",
                 "resource_type": "string",
                 "resource_conf": "string",
+                "resource_status": "string",
                 "resource_cost": float,
                 "voucher_cost": float
             }
@@ -400,6 +464,7 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "recharge_list": [
             {
                 "team_uuid": "string",
@@ -472,6 +537,7 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "orders_list": [
             {
                 "order_uuid": "string",
@@ -539,7 +605,7 @@
 
 
 """
-@api {get} /api/v1.0/billing/resources 1.2 资源列表
+@api {get} /api/v1.0/billing/resources?page_size=<int>&page_num=<int> 1.2 资源列表
 @apiName get resources record
 @apiGroup 1 resources
 @apiVersion 1.0.0
@@ -595,14 +661,43 @@
 @apiParamExample body
 {
     "denomination": int,
-    "invalid_time": "epoch_milliseconds"
+    "invalid_time": "epoch_seconds"
 }
 @apiUse POST_VOUCHERS_0
 """
 
 
 """
-@api {put} /api/v1.0/billing/vouchers/<voucher_uuid> 2.2 礼券领用
+@api {put} /api/v1.0/billing/vouchers/<voucher_uuid> 2.2 礼券分发
+@apiName distribute vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 系统管理员分发礼券给用户
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "accepter": "string"
+}
+@apiUse PUT_VOUCHERS_STATUS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/vouchers?voucher_accept=<true>&page_size=<int>&page_num=<int> 2.3 礼券查询
+@apiName get accept vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 用户查询收到的礼券列表
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiUse GET_ACCPET_VOUCHERS_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/vouchers/<voucher_uuid> 2.4 礼券激活
 @apiName active vouchers
 @apiGroup 2 vouchers
 @apiVersion 1.0.0
@@ -614,12 +709,12 @@
 
 
 """
-@api {get} /api/v1.0/billing/vouchers?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 2.3 礼券列表
+@api {get} /api/v1.0/billing/vouchers?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 2.5 礼券列表
 @apiName get vouchers
 @apiGroup 2 vouchers
 @apiVersion 1.0.0
 @apiDescription 查询用户已激活的礼劵列表
-@apiPermission user and organization
+@apiPermission user and organization and admin
 @apiParam {json} header {"token": "string"}
 @apiUse GET_VOUCHERS_0
 """
@@ -663,7 +758,7 @@
 
 
 """
-@api {get} /api/v1.0/billing/orders?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 3.3 订单列表
+@api {get} /api/v1.0/billing/orders?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 3.3 订单列表
 @apiName get orders
 @apiGroup 3 orders
 @apiVersion 1.0.0
@@ -693,7 +788,7 @@
 
 
 """
-@api {get} /api/v1.0/billing/limits 4.2 限额列表
+@api {get} /api/v1.0/billing/limits?page_size=<int>&page_num=<int> 4.2 限额列表
 @apiName limits list
 @apiGroup 4 limits
 @apiVersion 1.0.0
@@ -798,7 +893,7 @@
 
 
 """
-@api {get} /api/v1.0/billing/recharges?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 8.3 充值记录
+@api {get} /api/v1.0/billing/recharges?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 8.3 充值记录
 @apiName get recharge_records
 @apiGroup 8 recharges
 @apiVersion 1.0.0
@@ -810,7 +905,7 @@
 
 
 """
-@api {get} /api/v1.0/billing/bills?start_time=<epoch_milliseconds>&end_time=<epoch_milliseconds> 9.1 账单查询
+@api {get} /api/v1.0/billing/bills?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 9.1 账单查询
 @apiName get bills
 @apiGroup 9 bills
 @apiVersion 1.0.0

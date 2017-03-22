@@ -9,4 +9,5 @@ RUN easy_install pymysql
 RUN yum install MySQL-python -y
 COPY ./k8sapi /data/
 EXPOSE 9000
-CMD python /data/k8sapi/restserver/restapi_server.py & python /data/k8sapi/rpcserver/rpcapi_callserver.py & python /data/k8sapi/service/appstatus_service.py
+CMD python /data/k8sapi/restserver/restapi_server.py & python /data/k8sapi/rpcserver/rpcapi_callserver.py
+#& python /data/k8sapi/service/appstatus_service.py

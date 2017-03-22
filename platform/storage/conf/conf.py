@@ -34,6 +34,8 @@ api_debug = True
 log_level = 'INFO'
 log_file = '/var/log/cloud.log'
 
+balance_check = True
+
 ceph_pool_name = 'pool_hdd'
 
 storage_call_queue = 'storage_call_api'
