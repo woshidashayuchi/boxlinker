@@ -94,6 +94,12 @@ class StorageRpcManager(object):
             team_priv = user_info.get('team_priv')
             project_uuid = user_info.get('project_uuid')
             project_priv = user_info.get('project_priv')
+
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -101,7 +107,8 @@ class StorageRpcManager(object):
 
         return self.storage_manager.volume_list(
                     user_uuid, team_uuid, team_priv,
-                    project_uuid, project_priv)
+                    project_uuid, project_priv,
+                    page_size, page_num)
 
     @acl_check
     def volume_update(self, context, parameters):

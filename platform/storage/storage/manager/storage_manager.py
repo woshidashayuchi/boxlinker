@@ -195,22 +195,28 @@ class StorageManager(object):
         return request_result(0, result)
 
     def volume_list(self, user_uuid, team_uuid, team_priv,
-                    project_uuid, project_priv):
+                    project_uuid, project_priv,
+                    page_size, page_num):
 
         try:
             if ((project_priv is not None) and ('R' in project_priv)) \
                or ((team_priv is not None) and ('R' in team_priv)):
-                volume_list_info = self.storage_db.volume_list_project(
-                                        team_uuid, project_uuid)
+                volumes_list_info = self.storage_db.volume_list_project(
+                                         team_uuid, project_uuid,
+                                         page_size, page_num)
             else:
-                volume_list_info = self.storage_db.volume_list_user(
-                                        team_uuid, project_uuid, user_uuid)
+                volumes_list_info = self.storage_db.volume_list_user(
+                                         team_uuid, project_uuid, user_uuid,
+                                         page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        user_volumes_list = volumes_list_info.get('volumes_list')
+        count = volumes_list_info.get('count')
+
         disk_list = []
-        for volume_info in volume_list_info:
+        for volume_info in user_volumes_list:
             volume_uuid = volume_info[0]
             volume_name = volume_info[1]
             volume_size = volume_info[2]
@@ -240,6 +246,7 @@ class StorageManager(object):
             disk_list.append(v_disk_info)
 
         result = {"volume_list": disk_list}
+        result['count'] = count
 
         return request_result(0, result)
 
