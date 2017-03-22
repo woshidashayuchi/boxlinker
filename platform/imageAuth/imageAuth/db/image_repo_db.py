@@ -48,6 +48,7 @@ class ImageRepoDB(MysqlInit):
         sql = "select image_uuid from image_repository where repository='%s'" % (imagename)
         return super(ImageRepoDB, self).exec_select_sql(sql)
 
+
     def get_imagename_tag_by_tagid(self, tagid):
         """ 通过 tagid 得到 """
         sql = "select repository, tag from repository_events where id='%s'" % (tagid)
@@ -75,6 +76,12 @@ class ImageRepoDB(MysqlInit):
               download_num, enshrine_num, review_num, version, latest_version, pushed, is_code, logo, src_type from image_repository where repository='%s'" % (imagename)
         return super(ImageRepoDB, self).exec_select_sql(sql)
 
+
+    def get_image_uuid_and_team_uuid_by_imagename(self, imagename):
+        """ image_uuid, team_uuid 镜像名是否存在"""
+        sql = "select image_uuid, team_uuid from image_repository where repository='%s'" % (imagename)
+        return super(ImageRepoDB, self).exec_select_sql(sql)
+
     def init_image_repo(self, repo_uuid, imagename, resource_type, user_uuid, admin_uuid, team_uuid, project_uuid, is_public=1):
         """ 初始化记录 """
 
@@ -96,12 +103,7 @@ class ImageRepoDB(MysqlInit):
         sql = "select image_uuid from image_repository where repository='%s'" % (imagename)
         return super(ImageRepoDB, self).exec_select_sql(sql)
 
-    def get_repo_events_by_imagename(self, imagerep_name):
-        """获取一个镜像的全部 RepositoryEvents 信息"""
-        sql = "select id, repository, url, lengths, tag, actor, actions, digest, sizes, repo_id, \
-               source_instanceID, source_addr, deleted, creation_time, update_time \
-               from repository_events where repository='%s'" % (imagerep_name)
-        return super(ImageRepoDB, self).exec_select_sql(sql)
+
 
     def modify_image_repo(self, image_uuid, detail_type, detail):
         """修改镜像信息"""
@@ -118,7 +120,6 @@ class ImageRepoDB(MysqlInit):
             sql = sql_is_public
 
         return super(ImageRepoDB, self).exec_update_sql(sql)
-
 
     def get_image_repo_own_search_count(self, repovalue, team_uuid):
         """ 得到我的镜像满足搜索条件的个数,  repovalue 不需要再 % """
@@ -243,6 +244,14 @@ class ImageRepoDB(MysqlInit):
               (action, url, length, actor, digest, size, repo_id, source_instanceID, source_addr, repository, tag)
         return super(ImageRepoDB, self).exec_update_sql(sql)
 
+
+    def get_repo_events_by_imagename(self, imagerep_name):
+        """获取一个镜像的全部 RepositoryEvents 信息"""
+        sql = "select id, repository, url, lengths, tag, actor, actions, digest, sizes, repo_id, \
+               source_instanceID, source_addr, deleted, creation_time, update_time \
+               from repository_events where repository='%s'" % (imagerep_name)
+        return super(ImageRepoDB, self).exec_select_sql(sql)
+
     def image_repo_push_event(self, repository, tag, url, length, actor, action, timestamp,
                               digest, size, repo_id, source_instanceID, source_addr):
         """ 通知 """
@@ -298,9 +307,15 @@ if __name__ == '__main__':
     # print ret
 
 
-    #
+
     # ret = IRDB.get_repo_detail_by_imagename('sss')
     # print ret
+    #
+    ret = IRDB.get_image_uuid_and_team_uuid_by_imagename('sss')
+    print ret
+
+
+
     # ret = IRDB.modify_image_repo(image_uuid='002a7f39-2208-3415-baf2-62ae7bd3c316', detail_type='is_public', detail=1)
     # print ret
 

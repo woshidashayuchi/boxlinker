@@ -246,6 +246,8 @@ class RegistryToken(Resource):
             parameters['imagename'] = image
 
         context = context_data(None, 'registry_token', 'create')
+
+
         return self.imagerepo_api.RunImageRepoClient(api='registry_token', context=context, parameters=parameters)
 
 

@@ -15,14 +15,36 @@ from common.parameters import parameter_check, context_data
 from common.acl import acl_check
 from common.token_ucenterauth import token_auth
 
-from imageAuth.manager import images_manage, user_manage
+from imageAuth.manager import images_manage, user_manage, resoucesStorage
 from imageAuth.db import image_repo_db
 
 import os
 import conf.conf as CONF
 
-
 from pyTools.tools.images import CreatePutRetUrl
+
+
+
+
+
+def SetImageIco(team_uuid, resource_type, resource_uuid, resource_domain, imagename):
+    retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid, resource_type, resource_uuid, resource_domain)
+    if retbool:
+        return True
+
+    retbool, image_dir = CreatePutRetUrl(imagename, localpath=CONF.LOCAL_PATH, remopath=CONF.RepositoryObject,
+                                         fonttype=CONF.FONTTYPE, access_key_id=CONF.AccessKeyID,
+                                         access_key_secret=CONF.AccessKeySecret, endpoint=CONF.Endpoint,
+                                         bucker_name=CONF.BucketName)
+
+    if retbool is False:
+        log.info("retbool is False")
+        log.info(image_dir)
+        return False
+    log.info(image_dir)
+
+    resoucesStorage.SetFileUrlSave(team_uuid, resource_type, resource_uuid, resource_domain, image_dir)
+
 
 class ImageRepoRpcAPI(object):
     def __init__(self):
@@ -329,7 +351,6 @@ class ImageRepoRpcAPI(object):
         actionlist = actions.split(',')
         retbool, repo_uuid = self.images_manage.get_repo_uuid(scopes, team_uuid, is_public=0)
         if retbool is False:
-            log.error('get_repo_uuid is error, no Resource')
             log.error('get_repo_uuid is error, scopes: %s, team_uuid: %s' % (scopes, team_uuid))
             return request_result(601)
 
@@ -400,10 +421,30 @@ class ImageRepoRpcAPI(object):
                         log.info('registry_notice push')
                         self.image_repo_db.image_repo_push_event(repository, tag, url, length, actor, action, timestamp,
                               digest, size, repo_id, source_instanceID, source_addr)
+                        ret = self.images_manage.get_image_team_uuid_by_imagename(repository)
+                        if ret is None:
+                            pass
+                        else:
+                            image_uuid, team_uuid = ret
+                            log.info(image_uuid)
+                            log.info(team_uuid)
+
+                            repository = str(repository).split('/')
+                            if len(repository) > 1:
+                                repository = repository[1]
+
+                            log.info(repository)
+                            log.info(type(repository))
+
+
+                            SetImageIco(team_uuid=team_uuid, resource_type='ImageAvatars',
+                                        resource_uuid=image_uuid, resource_domain='boxlinker', imagename=repository)
+
                     elif 'pull' == action:
                         log.info('registry_notice pull')
                         # 对于 pull 操作,也就是download + 1
                         self.image_repo_db.image_repo_download_add(imagename=repository)
+
 
             return request_result(0)
         except Exception, e:

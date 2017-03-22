@@ -37,7 +37,7 @@ class OauthDb(MysqlInit):
 
     def get_code_oauth_type(self, team_uuid):
         """ 获取一个用户的绑定类型 """
-        sql = "select src_type from code_oauth where team_uuid='%s'" % (team_uuid)
+        sql = "select src_type, git_name from code_oauth where team_uuid='%s'" % (team_uuid)
         return super(OauthDb, self).exec_select_sql(sql)
 
     def save_access_token(self, code_oauth_uuid, team_uuid, src_type, access_token):
@@ -255,18 +255,16 @@ class OauthDbManager(object):
     def update_code_oauth_access_token(self, team_uuid, src_type, access_token):
         return self.oauthdb.update_code_oauth_access_token(team_uuid, src_type, access_token)
 
-
     def get_code_oauth_type(self, team_uuid):
         src_types = self.oauthdb.get_code_oauth_type(team_uuid)
-        temp = dict()
-        for src_type in src_types:
-            temp[src_type[0]] = '1'
-        return temp
+        # li = [{src_type: '1', 'name': git_name} for src_type, git_name in src_types]
+        # # [{u'github': '1', 'name': u'livenowhy'}, {u'coding': '1', 'name': u'bowumanman'}]
+        li = {src_type: git_name for src_type, git_name in src_types}  # {u'github': u'livenowhy'}
+        return li
 
 
 
-
-
+# 09757939-b6dc-4da3-add6-b3775c8efb7a
 
 if __name__ == '__main__':
     OADBM = OauthDbManager()
@@ -279,5 +277,5 @@ if __name__ == '__main__':
     #
     # if '75517981' in codeOauth:
     #     print 'is ok STR '
-    ret = OADBM.get_code_oauth_type(team_uuid='2e8e7b37-a957-4770-9075-aaa67eaa49ce')
+    ret = OADBM.get_code_oauth_type(team_uuid='cabb719f-4a9a-475f-89f1-717231ae7eb5')
     print ret

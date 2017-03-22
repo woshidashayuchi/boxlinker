@@ -89,29 +89,6 @@ class RepositoryEvents(Base):
 
 
 
-class RepositoryPull(Base):
-    """ 仓库事件通知,记录镜像的pull操作 """
-    __tablename__ = 'repository_pull'
-    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True, nullable=False)
-
-    repository = sa.Column(sa.String(128))  # 镜像名
-    url = sa.Column(sa.String(256))
-    length = sa.Column(sa.String(24))
-    tag = sa.Column(sa.String(60))
-
-    actor = sa.Column(sa.String(128))
-    action = sa.Column(sa.String(24), server_default="pull")
-
-    digest = sa.Column(sa.String(256))
-    size = sa.Column(sa.String(256))
-    repo_id = sa.Column(sa.String(256))
-    source_instanceID = sa.Column(sa.String(256))
-    source_addr = sa.Column(sa.String(256))
-
-    timestamp = sa.Column(mysql.TIMESTAMP)
-
-
-
 # 第三方认证, 用户认证表
 class CodeOauth(Base):
     __tablename__ = 'code_oauth'

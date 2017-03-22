@@ -24,7 +24,7 @@ from pyTools.token.jwt_token import safe_JwtToken
 from pyTools.token.token import get_md5
 
 from collections import namedtuple
-
+from imageAuth.manager import resoucesStorage
 
 from conf.conf import issuer, private_key
 from imageAuth.db import image_repo_db
@@ -58,11 +58,15 @@ def retImageRepo(page, page_size, count, repolist):
         temp_d['is_code'] = is_code
         temp_d['src_type'] = src_type
 
-        # 图片
-        if logo == '' or logo is None:
-            temp_d['logo'] = OssHost + '/' + 'repository/default.png'
+        # 每次都调用是否影响性能
+        retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid=team_uuid, resource_type="ImageAvatars",
+                                                               resource_uuid=image_uuid,
+                                                               resource_domain="boxlinker")
+        if retbool:
+            temp_d['logo'] = OssHost + '/' + image_dir
         else:
-            temp_d['logo'] = OssHost + '/' + logo
+            temp_d['logo'] = OssHost + '/' + 'repository/default.png'
+
         temp_d = json.dumps(temp_d, cls=CJsonEncoder)
         temp_d = json.loads(temp_d)
         retlist.append(temp_d)
@@ -204,6 +208,9 @@ class ImageRepoManager(object):
         ret_d['update_time'] = update_time
         ret_d['is_public'] = is_public
         ret_d['team_uuid'] = team_uuid
+
+
+
         if private:
             ret_d['short_description'] = short_description
             ret_d['detail'] = detail
@@ -213,10 +220,14 @@ class ImageRepoManager(object):
             ret_d['pushed'] = pushed
             ret_d['is_code'] = is_code
 
-            if logo == '' or logo is None:
-                ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+            retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid=team_uuid, resource_type="ImageAvatars",
+                                                                   resource_uuid=image_uuid,
+                                                                   resource_domain="boxlinker")
+            if retbool:
+                ret_d['logo'] = OssHost + '/' + image_dir
             else:
-                ret_d['logo'] = OssHost + '/' + logo
+                ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+
 
         repo_event = self.image_repo_db.get_repo_events_by_imagename(repository)
 
@@ -265,12 +276,15 @@ class ImageRepoManager(object):
         ret_d['update_time'] = update_time
         ret_d['team_uuid'] = team_uuid
 
-        if logo == '' or logo is None:
-            ret_d['logo'] = OssHost + '/' + 'repository/default.png'
-        else:
-            ret_d['logo'] = OssHost + '/' + logo
+        retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid=team_uuid, resource_type="ImageAvatars",
+                                                               resource_uuid=image_uuid, resource_domain="boxlinker")
 
-        ####
+        if retbool:
+            ret_d['logo'] = OssHost + '/' + image_dir
+        else:
+            ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+
+
         repo_event = self.image_repo_db.get_repo_events_by_imagename(repository)
 
         repo_tags = list()
@@ -326,8 +340,6 @@ class ImageRepoManager(object):
             if len(image_repo) <= 0:
                 return request_result(701)
 
-
-
             repository, tag = image_repo[0]
             msg = dict()
             msg['image_name'] = repository
@@ -381,3 +393,9 @@ class ImageRepoManager(object):
 
         res = {"token": token}
         return res
+
+    def get_image_team_uuid_by_imagename(self, imagename):
+        ret = self.image_repo_db.get_image_uuid_and_team_uuid_by_imagename(imagename=imagename)
+        if len(ret) == 0:
+            return None
+        return ret[0]

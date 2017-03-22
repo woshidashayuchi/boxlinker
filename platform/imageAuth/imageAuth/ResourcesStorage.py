@@ -9,9 +9,6 @@
 @time: 17/3/14 11:32
 """
 
-
-
-
 """
 @apiDefine ResourcesStorageRetList
 @apiSuccessExample 返回:
@@ -37,14 +34,20 @@
 
 """
 
+"""
+UserAvatars:    用户头像
+ImageAvatars:   镜像头像
+ServiceAvatars: 服务头像
+"""
+
 
 
 """
 @apiGroup  ResourcesStorage
 @apiVersion 1.0.0
-@apiDescription         获取一类资源的信息
+@apiDescription         申请上传key
 @apiHeader {String} token 请求接口的token,放在请求头中
-@api {post} /api/v1.0/files/team_uuid  4.0 上传申请key
+@api {post} http://192.168.1.6:8765/api/v1.0/files/policy  4.0 申请key
 
 @apiExample {post} Example usage:
     {
@@ -52,8 +55,6 @@
         "resource_uuid": "39828489-1bf6-334b-acdb-6a15bbd7c5a3",
         "resource_domain": "boxlinker"
     }
-
-
 @apiUse CODE_IMAGE_REPO_0
 """
 
@@ -138,5 +139,22 @@
 @apiHeader {String} token 请求接口的token,放在请求头中
 @api {get} /api/v1.0/files/{resource_type}/{resource_uuid}/{resource_domain}  4.4 资源参数中不含team_uuid
 
+@apiUse ResourcesStorageRetList
+"""
+
+
+"""
+@apiGroup  ResourcesStorage
+@apiVersion 1.0.0
+@apiDescription         设置一个资源
+@apiHeader {String} token 请求接口的token,放在请求头中
+@api {post} /api/v1.0/files/{team_uuid}/{resource_type}/{resource_uuid}/{resource_domain}  4.5 设置一个资源
+
+@apiExample {post} Example usage:
+    {
+        "file_url": "file_urltest"
+    }
+
+@apiParam {String} file_url   资源的路径
 @apiUse ResourcesStorageRetList
 """
