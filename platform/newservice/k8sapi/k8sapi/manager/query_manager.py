@@ -16,10 +16,11 @@ class QueryManager(object):
         self.service_db = ServiceDB()
 
     def service_list(self, context):
+
         if context.get('service_name') is None:
             try:
                 query_result = self.metal_work.query_service(context)
-                log.info('the query service list result is:%s, type is %s' % (query_result, type(query_result)))
+                log.info('66666666the query service list result is:%s, type is %s' % (query_result, type(query_result)))
 
                 return query_result
             except Exception, e:

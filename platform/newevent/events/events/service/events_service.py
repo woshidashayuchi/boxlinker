@@ -26,7 +26,7 @@ def appstatus_service():
             rc_status_cache = {}
             log.warning('Appstatus Service running error, reason=%s'
                         % e)
-        sleep(15)
+        sleep(10)
 
 
 if __name__ == "__main__":

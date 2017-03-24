@@ -32,7 +32,6 @@ class KubernetesRpcAPIs(object):
             context['user_uuid'] = user_uuid
             if ret.get('kind') != 'ReplicationController' and ret.get('kind') != 'Service':
                 log.info('CREATE SERVICE ERROR... result is:%s, type is:%s' % (ret, type(ret)))
-                post_es(context, 'service create failure')
         except Exception, e:
             log.error('create the service(kubernetes) error, reason=%s' % e)
 
@@ -45,7 +44,7 @@ class KubernetesRpcAPIs(object):
                 log.error('create the billing resources error, reason is: %s' % e)
 
         log.info('create service success, result is:%s, type is: %s' % (ret, type(ret)))
-        post_es(context, 'service create success')
+        post_es(context, 'scheduling...')
 
     def ns_show(self, context, parameters=None):
         try:

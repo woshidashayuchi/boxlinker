@@ -82,6 +82,8 @@ class KubernetesClientApi(object):
 
         parameters = token_ret.get('result')
         parameters['service_name'] = request.args.get('service_name',)
+        parameters['page_size'] = request.args.get('page_size')
+        parameters['page_num'] = request.args.get('page_num')
 
         context = context_data(token, "service_list", "read")
 

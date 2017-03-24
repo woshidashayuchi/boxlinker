@@ -7,6 +7,7 @@ from common.logs import logging as log
 from unit_element import font_infix_element, rc_infix_element, container_element, env_element, volume_element,\
     normal_call, uuid_ele
 from common.db_operate import DbOperate
+from common.time_log import func_time_log
 
 
 class ServiceDB(MysqlInit):
@@ -48,7 +49,7 @@ class ServiceDB(MysqlInit):
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
                    "team_uuid, project_uuid, service_name,service_status) VALUES('%s', '%s', '%s', '%s', " \
                    "'%s', '%s', '%s', '%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
-                                                     project_uuid, service_name, 'pending')
+                                                project_uuid, service_name, 'pending')
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
                  "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command) " \
@@ -64,10 +65,12 @@ class ServiceDB(MysqlInit):
         return super(ServiceDB, self).exec_update_sql(sql_font, sql_rc, sql_acl)
 
     def get_service_uuid(self, dict_data):
-        sql = "select uuid as service_uuid from font_service WHERE service_name='%s' and " \
-              "project_uuid='%s'" % (dict_data.get('service_name'), dict_data.get('project_uuid'))
+        sql = "select uuid from font_service WHERE service_name='%s' and \
+               project_uuid='%s'" % (dict_data.get('service_name'), dict_data.get('project_uuid'))
 
-        return super(ServiceDB, self).exec_select_sql(sql)
+        ret = super(ServiceDB, self).exec_select_sql(sql)
+
+        return ret[0][0]
 
     def get_rc_uuid(self, dict_data):
 
@@ -77,7 +80,9 @@ class ServiceDB(MysqlInit):
         sql = "select rc_uuid from font_service where service_name='%s' and project_uuid='%s'" % (service_name,
                                                                                                   project_uuid)
 
-        return super(ServiceDB, self).exec_select_sql(sql)
+        ret = super(ServiceDB, self).exec_select_sql(sql)
+        log.info('&&&&&&&&&%s' % ret[0][0])
+        return ret[0][0]
 
     def container_infix_db(self, dict_data):
 
@@ -85,9 +90,9 @@ class ServiceDB(MysqlInit):
             tcp_domain = container_element(dict_data)
 
         sql = "insert into containers(uuid,rc_uuid,container_port,protocol,access_mode,access_scope," \
-              "tcp_port,http_domain,tcp_domain) VALUES('%s','%s', %d, '%s', '%s', '%s', '%s', '%s'," \
-              "'%s')" % (container_uuid, rc_uuid, container_port, protocol, access_mode, access_scope,
-                         tcp_port, http_domain, tcp_domain)
+              "tcp_port,http_domain,cname,tcp_domain) VALUES('%s','%s', %d, '%s', '%s', '%s', '%s', '%s'," \
+              "'%s','%s')" % (container_uuid, rc_uuid, container_port, protocol, access_mode, access_scope,
+                              tcp_port, http_domain, http_domain, tcp_domain)
 
         return super(ServiceDB, self).exec_update_sql(sql)
 
@@ -116,53 +121,86 @@ class ServiceDB(MysqlInit):
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
+    @func_time_log
     def service_list(self, dict_data):
 
         project_uuid, service_name = normal_call(dict_data)
+        page_size = int(dict_data.get('page_size'))
+        page_num = int(dict_data.get('page_num'))
+        start_position = (page_num - 1) * page_size
 
-        sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, " \
-              "a.service_status, a.image_dir, a.service_update_time ltime FROM font_service a, " \
-              "containers b WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s') ORDER BY ltime DESC " % project_uuid
+        sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
+               a.service_status, a.image_dir, a.service_update_time ltime FROM font_service a join containers b \
+               WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND ((b.http_domain is not \
+               NULL and b.http_domain != 'None' and b.http_domain != '') OR (b.tcp_domain is not NULL AND \
+               b.tcp_domain != 'None' and b.tcp_domain != ''))) ORDER BY ltime DESC \
+               limit %d, %d" % (project_uuid, start_position, page_size)
 
-        conn, cur = self.operate.connection()
-        ret = self.operate.exeQuery(cur, sql)
-        self.operate.connClose(conn, cur)
+        # sql_count = "select count(*) from font_service a where a.project_uuid='%s'" % project_uuid
 
-        return ret
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def service_list_count(self, dict_data):
+        project_uuid = dict_data.get('project_uuid')
+        sql = "select count(*) from font_service a where a.project_uuid='%s'" % project_uuid
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def service_list_user(self, dict_data):
+        project_uuid = dict_data.get('project_uuid')
+        user_uuid = dict_data.get('project_uuid')
+        page_size = int(dict_data.get('page_size'))
+        page_num = int(dict_data.get('page_num'))
+        start_position = (page_num - 1) * page_size
+
+        sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
+               a.service_status, a.image_dir, a.service_update_time ltime FROM font_service a join containers b \
+               WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND a.user_uuid='%s' \
+               AND ((b.http_domain is not NULL and b.http_domain != '' AND b.http_domain != 'None') \
+               OR (b.tcp_domain is not NULL AND b.tcp_domain != 'None' AND b.tcp_domain != '')) \
+               ) ORDER BY ltime DESC limit %d, %d" % (project_uuid, user_uuid, start_position, page_size)
+
+        # sql_count = "select count(*) from font_service a where a.project_uuid='%s' AND " \
+        #             "a.user_uuid='%s'" % (project_uuid, user_uuid)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def service_list_user_count(self, dict_data):
+        project_uuid = dict_data.get('project_uuid')
+        user_uuid = dict_data.get('user_uuid')
+        sql_count = "select count(*) from font_service a where a.project_uuid='%s' AND " \
+                    "a.user_uuid='%s'" % (project_uuid, user_uuid)
+        return super(ServiceDB, self).exec_select_sql(sql_count)
 
     def service_detail(self, dict_data):
         service_uuid = dict_data.get('service_uuid')
         project_uuid = dict_data.get('project_uuid')
 
-        sql_rc = "select a.*, b.uuid service_uuid, b.service_name,b.service_status from " \
-                 "replicationcontrollers a,font_service b " \
-                 "where a.uuid = (select rc_uuid from font_service where " \
-                 "project_uuid='%s' and uuid='%s') and b.uuid='%s'" % (project_uuid, service_uuid, service_uuid)
+        sql_rc = "select a.labels_name,a.pods_num,a.image_id,a.cm_format,a.container_cpu,a.container_memory,a.policy, \
+                  a.auto_startup,a.command,a.rc_create_time,a.rc_update_time, b.uuid service_uuid, b.service_name, \
+                  b.service_status from \
+                  replicationcontrollers a,font_service b \
+                  where a.uuid = (select rc_uuid from font_service where \
+                  project_uuid='%s' and uuid='%s') and b.uuid='%s'" % (project_uuid, service_uuid, service_uuid)
 
-        sql_container = "select * from containers where rc_uuid = (select rc_uuid from font_service where " \
-                        "project_uuid='%s' and uuid='%s')" % (project_uuid, service_uuid)
+        sql_container = "select container_port, protocol, access_mode,access_scope,tcp_port,http_domain,tcp_domain," \
+                        "private_domain,identify,cname from containers where rc_uuid = (select rc_uuid from " \
+                        "font_service where project_uuid='%s' and uuid='%s') ORDER BY container_port" % (project_uuid,
+                                                                                                         service_uuid)
 
-        sql_env = "select * from env where rc_uuid = (select rc_uuid from font_service where " \
-                  "project_uuid='%s' and uuid='%s')" % (project_uuid, service_uuid)
+        sql_env = "select env_key,env_value from env where rc_uuid = (select rc_uuid from font_service where \
+                   project_uuid='%s' and uuid='%s') ORDER BY env_key" % (project_uuid, service_uuid)
 
-        sql_volume = "select * from volume where rc_uuid = (select rc_uuid from font_service where " \
-                     "project_uuid='%s' and uuid='%s')" % (project_uuid, service_uuid)
+        sql_volume = "select volume_uuid,disk_path,readonly from volume where rc_uuid = (select rc_uuid from " \
+                     "font_service where project_uuid='%s' and uuid='%s') ORDER BY disk_path " % (project_uuid,
+                                                                                                  service_uuid)
 
-        conn, cur = self.operate.connection()
-        rc_ret = self.operate.exeQuery(cur, sql_rc)
-        self.operate.connClose(conn, cur)
+        rc_ret = super(ServiceDB, self).exec_select_sql(sql_rc)
 
-        conn, cur = self.operate.connection()
-        env_ret = self.operate.exeQuery(cur, sql_env)
-        self.operate.connClose(conn, cur)
+        containers_ret = super(ServiceDB, self).exec_select_sql(sql_container)
 
-        conn, cur = self.operate.connection()
-        volume_ret = self.operate.exeQuery(cur, sql_volume)
-        self.operate.connClose(conn, cur)
+        env_ret = super(ServiceDB, self).exec_select_sql(sql_env)
 
-        conn, cur = self.operate.connection()
-        containers_ret = self.operate.exeQuery(cur, sql_container)
-        self.operate.connClose(conn, cur)
+        volume_ret = super(ServiceDB, self).exec_select_sql(sql_volume)
 
         return rc_ret, containers_ret, env_ret, volume_ret
 
@@ -170,23 +208,32 @@ class ServiceDB(MysqlInit):
 
         sql = "select service_name from font_service where uuid='%s'" % dict_data.get('service_uuid')
 
-        conn, cur = self.operate.connection()
-        rc_ret = self.operate.exeQuery(cur, sql)
-        for i in rc_ret:
-            dict_data.update({'service_name': i.get('service_name')})
-        self.operate.connClose(conn, cur)
+        ret = super(ServiceDB, self).exec_select_sql(sql)
+        log.info('************%s' % ret)
+        dict_data.update({'service_name': ret[0][0]})
 
         return dict_data
 
     def get_using_volume(self, dict_data):
-        sql = "select * from volume where rc_uuid=(SELECT rc_uuid from font_service where " \
+        volume_ret = []
+        sql = "select volume_uuid,disk_path,readonly from volume where " \
+              "rc_uuid=(SELECT rc_uuid from font_service where " \
               "service_name='%s' and project_uuid='%s')" % (dict_data.get('service_name'),
                                                             dict_data.get('project_uuid'))
-        conn, cur = self.operate.connection()
-        volume_ret = self.operate.exeQuery(cur, sql)
-        self.operate.connClose(conn, cur)
+
+        ret = super(ServiceDB, self).exec_select_sql(sql)
+        if len(ret) == 0 or len(ret[0]) == 0:
+            return []
+        else:
+            for i in ret:
+                volume_ret.append({'volume_uuid': i[0], 'disk_path': i[1], 'readonly': i[2]})
 
         return volume_ret
+        # conn, cur = self.operate.connection()
+        # volume_ret = self.operate.exeQuery(cur, sql)
+        # self.operate.connClose(conn, cur)
+        #
+        # return volume_ret
 
     def delete_all(self, dict_data):
 
@@ -357,9 +404,8 @@ class ServiceDB(MysqlInit):
 
         sql_up = "update containers SET private_domain='%s', identify='%s' WHERE " \
                  "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
-                 "service_name='%s') and http_domain is not NULL and http_domain != 'None'" % (domain, '0',
-                                                                                               project_uuid,
-                                                                                               service_name)
+                 "service_name='%s') and http_domain is not NULL and " \
+                 "http_domain != 'None' and http_domain != ''" % (domain, '0', project_uuid, service_name)
 
         ret = super(ServiceDB, self).exec_update_sql(sql_up)
 
@@ -374,7 +420,8 @@ class ServiceDB(MysqlInit):
         project_uuid, service_name = normal_call(dict_data)
         sql = "select private_domain as domain, identify from containers WHERE " \
               "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
-              "service_name='%s') and http_domain is not NULL and http_domain != 'None'" % (project_uuid, service_name)
+              "service_name='%s') and http_domain is not NULL and http_domain != 'None' " \
+              "and http_domain !=''" % (project_uuid, service_name)
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
@@ -382,15 +429,30 @@ class ServiceDB(MysqlInit):
         project_uuid, service_name = normal_call(dict_data)
         sql = "update containers SET private_domain=NULL ,identify=NULL WHERE " \
               "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
-              "service_name='%s') and http_domain is not NULL and http_domain != 'None'" % (project_uuid, service_name)
+              "service_name='%s') and http_domain is not NULL and http_domain != 'None' " \
+              "and http_domain != ''" % (project_uuid, service_name)
 
         return super(ServiceDB, self).exec_update_sql(sql)
+
+    def update_http_domain(self, dict_data):
+        project_uuid, service_name = normal_call(dict_data)
+        sql = "update containers SET http_domain=private_domain WHERE " \
+              "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
+              "service_name='%s') and http_domain is not NULL and http_domain != 'None' " \
+              "and http_domain != ''" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql)
+
+    def get_http_domain(self, dict_data):
+        sql = "select count(*) from containers WHERE http_domain='%s'" % dict_data.get('domain')
+        return super(ServiceDB, self).exec_select_sql(sql)
 
     def update_identify_to_1(self, dict_data):
         project_uuid, service_name = normal_call(dict_data)
         sql = "update containers SET private_domain='%s',identify='%s' WHERE " \
               "rc_uuid=(SELECT rc_uuid from font_service WHERE project_uuid='%s' and " \
-              "service_name='%s') and http_domain is not NULL AND http_domain !='None'" % (dict_data.get('domain'),
+              "service_name='%s') and http_domain is not NULL AND http_domain !='None' " \
+              "and http_domain != ''" % (dict_data.get('domain'),
                                                                                            dict_data.get('identify'),
                                                                                            project_uuid, service_name)
 

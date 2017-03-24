@@ -53,12 +53,16 @@ class KubernetesRpcAPI(object):
                     raise Exception('access_scope parameters error')
 
             if parameters.get('volume') is not None and parameters.get('volume') != '':
+                disk_path = []
                 for j in parameters.get('volume'):
                     parameter_check(j.get('volume_uuid'), ptype='puid')
                     if j.get('readonly') not in ['True', 'False']:
                         raise Exception('volume_uuid parameter error')
                     if j.get('disk_path') is None:
                         raise Exception('disk path parameter error')
+                    disk_path.append(j.get('disk_path'))
+                if len(disk_path) != len(set(disk_path)):
+                    raise Exception('disk path can not be same')
 
             if parameters.get('env') is not None and parameters.get('env') != '':
                 for q in parameters.get('env'):
@@ -76,7 +80,13 @@ class KubernetesRpcAPI(object):
 
     @acl_check
     def service_query(self, context, parameters):
-        return self.query_manager.service_list(parameters)
+        try:
+            ret = self.query_manager.service_list(parameters)
+            log.info('get the service list result is: %s, type is: %s' % (ret, type(ret)))
+            return ret
+        except Exception, e:
+            log.error('get the service list error, reason is: %s' % e)
+            return request_result(404)
 
     @acl_check
     def service_detail(self, context, parameters):
@@ -117,12 +127,16 @@ class KubernetesRpcAPI(object):
                         raise Exception('env parameter error')
 
             if rtype == 'volume' and parameters.get('volume') is not None and parameters.get('volume') != '':
+                disk_path = []
                 for j in parameters.get('volume'):
                     parameter_check(j.get('volume_uuid'), ptype='puid')
                     if j.get('readonly') not in ['True', 'False']:
                         raise Exception('volume_uuid parameter error')
                     if j.get('disk_path') is None:
                         raise Exception('disk path parameter error')
+                    disk_path.append(j.get('disk_path'))
+                if len(disk_path) != len(set(disk_path)):
+                    raise Exception('disk path can not be same')
 
             if rtype == 'container':
                 for i in parameters.get('container'):

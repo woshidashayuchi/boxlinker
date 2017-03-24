@@ -40,7 +40,6 @@ class K8sDriver(object):
         url = self.get_events_url+namespace+'/events'
         try:
             r = requests.get(url, headers=self.headers, verify=False, timeout=5)
-            log.debug('events=%s' % r.text)
             return request_result(0, r.text)
         except Exception, e:
             log.error('requests k8s api(events) error, reason=%s' % e)

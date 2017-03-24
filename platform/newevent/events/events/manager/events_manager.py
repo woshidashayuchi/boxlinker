@@ -35,7 +35,6 @@ class AppStatusManager(object):
         except Exception, e:
             log.error('Get rc status list error, reason=%s' % (e))
             return events_cache
-
         events_new = {}
         for rc_info in rc_status_list:
             try:
@@ -44,11 +43,9 @@ class AppStatusManager(object):
                 if len(project_uuid) < 30:
                     continue
                 rc_name1 = rc_info['metadata']['labels'].get('component')
-                log.info('in the kubernetes users resources, the name is: %s, namespace is: %s' % (rc_name1,
-                                                                                                   project_uuid))
-                rc_name = rc_name1 + '#' + project_uuid
+
                 user_uuid = self.service_db.get_user_uuid(project_uuid, rc_name1)
-                user_uuid = user_uuid[0][0]
+                log.info('user uuid is: %s' % user_uuid)
             except Exception, e:
                 log.error('get the user_uuid error, reason is: %s' % e)
                 return events_cache
@@ -68,64 +65,64 @@ class AppStatusManager(object):
                 return events_cache
 
             try:
-                log.info('7777')
-                for events in events_list:
-                    if events.get('involvedObject').get('kind') == 'Pod':
-                        rc_name1 = events.get('involvedObject').get('name')[:-6]
-                    project_uuid = events.get('involvedObject').get('namespace')
-                    rc_name = rc_name1 + '#' + project_uuid
-                    event = events.get('message')
 
-                    if rc_name not in events_new.keys():
-                        events_new[rc_name] = {"events_info": [{rc_name: event}]}
+                for i in events_list:
+
+                    if i.get('involvedObject').get('kind') == 'Pod':
+                        rc_name_event = i.get('involvedObject').get('name')[:-6]
+                    else:
+                        rc_name_event = i.get('involvedObject').get('name')
+
+                    namespace = i.get('involvedObject').get('namespace')
+
+                    inner_name = rc_name_event + '#' + namespace
+                    event = i.get('message')
+
+                    # events_new:{'rc_name':['message','message']},  cache:'rc_name':['message','message']
+                    # if events_new.get(inner_name) is None:
+                    events_new[inner_name] = []
+                    events_new[inner_name].append(event)
+                    if events_cache != {}:
+                        # if events_cache.get(inner_name)
+                        # l2 = list(set(events_cache[inner_name]))
+                        # log.info('444444444xxxxxxxxxxxxx')
+                        # events_cache[inner_name] = l2
+                        if inner_name not in events_cache.keys():
+                            events_cache[inner_name] = events_new[inner_name]
+                            for q in events_new[inner_name]:
+
+                                message_es = {'user_uuid': user_uuid, 'project_uuid': project_uuid,
+                                              'service_name': rc_name_event}
+                                if 'image' in q:
+                                    log.info('11111111111>>>>>>>>>%s' % q)
+                                    post_es(message_es, q)
+
+                        if inner_name in events_cache.keys():
+                            message_es = {'user_uuid': user_uuid, 'project_uuid': project_uuid, 'service_name':
+                                          rc_name_event}
+                            if not set(events_new[inner_name]).issubset(set(events_cache[inner_name])):
+
+                                for x in events_new[inner_name]:
+                                    if x not in events_cache[inner_name]:
+
+                                        events_cache[inner_name].append(x)
+                                        if 'image' in x:
+                                            log.info('2222222222>>>>>>>%s' % x)
+                                            post_es(message_es, x)
+
+                                        events_cache[inner_name].append(x)
 
                     else:
-                        events_new[rc_name]['events_info'].append({rc_name: event})
-                    log.info('88888888888---events_new is: %s' % events_new)
-            except Exception, e:
-                log.error('explain the events parameters error, reason is: %s' % e)
-                return events_cache
-
-            try:
-                # rc_off_list = dict.fromkeys([x for x in events_cache if x not in events_new]).keys()
-                # log.info('101010,cache is: %s, events_new is: %s,off_list is: %s' % (events_cache, events_new,
-                #                                                                      rc_off_list))
-                # for rc_off_name in rc_off_list:
-                #     del events_cache[rc_off_name]
-                for rc_name, rc_info in events_new.items():
-                    log.info('2222222----rc_name is: %s, events_cache.keys is: %s' % (rc_name, events_cache.keys()))
-                    if (rc_name is not None) and (rc_name not in events_cache.keys()):
-
-                        # log.info('len test:events_cache is: %d, rc_info is: %d' % (len(events_cache[rc_name]),
-                        #                                                            len(rc_info['events_info'])))
-                        events_info = rc_info['events_info']
-                        log.info('project_uuid is: %s' % project_uuid)
-
-                        if events_cache.get('rc_name') is None:
-                            events_cache[rc_name] = events_info
-                        else:
-                            events_cache[rc_name]['events_info'].append(events_info.get('events_info'))
-                        # events_cache[rc_name]['events_info'].append(events_info)
-
-                        for event_info in events_info:
-                            events_msg = event_info.values()[0]
-                            if 'image' in events_msg:
-                                message_es = {'user_uuid': user_uuid, "project_uuid": project_uuid,
-                                              "service_name": rc_name1}
-                                post_es(message_es, events_msg)
-                        break
-
-                    else:
-                        log.info('len test:events_cache is: %d, rc_info is: %d' % (len(events_cache[rc_name]),
-                                                                                   len(rc_info['events_info'])))
-                        return events_cache
-
-                # rc_off_new = dict.fromkeys([x for x in events_new if x in events_cache]).keys()
-                # for rc_off_name in rc_off_new:
-                #     del events_new[rc_off_name]
+                        message_es = {'user_uuid': user_uuid, 'project_uuid': project_uuid, 'service_name': rc_name_event}
+                        events_cache = dict()
+                        events_cache[inner_name] = events_new[inner_name]
+                        for q in events_new[inner_name]:
+                            if 'image' in q or 'err' in q:
+                                log.info('333333333>>>>%s' % q)
+                                post_es(message_es, q)
 
             except Exception, e:
-                log.error('export error, reason is: %s' % e)
+                log.error('explain the events error, reason is: %s' % e)
                 return events_cache
 
         return events_cache

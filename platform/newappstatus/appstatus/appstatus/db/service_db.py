@@ -27,3 +27,10 @@ class ServiceDB(MysqlInit):
         log.info("update app status's sql is: %s" % sql)
         return super(ServiceDB, self).exec_update_sql(sql)
 
+    def get_user_uuid(self, project_uuid, service_name):
+
+        sql = "select user_uuid from font_service WHERE service_name='%s' and " \
+              "project_uuid='%s'" % (service_name, project_uuid)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+

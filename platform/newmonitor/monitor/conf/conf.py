@@ -25,7 +25,7 @@ db_passwd = 'cloudsvc'
 database = 'servicedata'
 
 # ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
-ucenter_api = 'http://ucenter:8001/api/v1.0/ucenter/tokens'
+ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
 rest_host = '0.0.0.0'
 rest_port = 8001
 rest_debug = True

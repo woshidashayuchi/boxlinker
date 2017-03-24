@@ -12,7 +12,9 @@ from common.json_encode import CJsonEncoder
 
 from appstatus.db import service_db
 from appstatus.driver import status_driver
+from appstatus.driver.events_driver import EventsDriver
 from appstatus.driver.es_driver.to_es import post_es
+from time import sleep
 
 
 class AppStatusManager(object):
@@ -21,6 +23,30 @@ class AppStatusManager(object):
 
         self.service_db = service_db.ServiceDB()
         self.k8s_driver = status_driver.K8sDriver()
+        self.events = EventsDriver()
+
+    def p_es(self, project_uuid, rc_name, msg):
+        try:
+            ret = self.service_db.get_user_uuid(project_uuid, rc_name)
+
+            if len(ret) == 0 or len(ret[0]) == 0:
+                return 'not_need'
+            else:
+                user_uuid = ret[0][0]
+                message_es = {'user_uuid': user_uuid, 'project_uuid': project_uuid, 'service_name': rc_name}
+
+                if msg != 'service is stopped forced' and msg != 'waiting...':
+                    events_message = self.events.app_events_es(project_uuid)
+                    if len(events_message) != 0:
+                        events_message = list(set(events_message))
+                    for i in events_message:
+                        if 'pulled' in i:
+                            post_es(message_es, i)
+
+                sleep(1)
+                post_es(message_es, msg)
+        except Exception, e:
+            log.error('get the user_uuid error, reason is: %s' % e)
 
     def rc_status_update(self, rc_status_cache):
 
@@ -37,7 +63,6 @@ class AppStatusManager(object):
         except Exception, e:
             log.error('Get rc status list error, reason=%s' % (e))
             return rc_status_cache
-
         rc_status_new = {}
 
         for rc_info in rc_status_list:
@@ -93,6 +118,10 @@ class AppStatusManager(object):
             del rc_status_cache[rc_off_name]
             log.info('Update rc(%s) status off' % (rc_off_name))
 
+            rc_name1 = rc_off_name.split('#')[0]
+            project_uuid = rc_off_name.split('#')[1]
+            self.p_es(project_uuid, rc_name1, 'service is stopped forced')
+
         for rc_name, rc_info in rc_status_new.items():
             pods_info = rc_info['pods_info']
             for pod_info in pods_info:
@@ -114,67 +143,17 @@ class AppStatusManager(object):
                 self.service_db.update_status_anytime(
                      rc_name, pod_status)
 
+                try:
+                    rc_name1 = rc_name.split('#')[0]
+                    project_uuid = rc_name.split('#')[1]
+                    if pod_status.lower() == 'running':
+                        self.p_es(project_uuid, rc_name1, 'service create successfully')
+                    elif pod_status.lower() == 'containercreating' or pod_status.lower() == 'pending':
+                        self.p_es(project_uuid, rc_name1, 'waiting...')
+                    if 'err' in pod_status.lower() or 'error' in pod_status.lower():
+                        self.p_es(project_uuid, rc_name1, 'service create failed')
+                except Exception, e:
+                    log.error('post to es error, reason is: %s' % e)
+
         return rc_status_cache
 
-    def app_events_es(self, events_cache):
-        rc_status_info = self.k8s_driver.rc_status_info()
-        status = rc_status_info['status']
-        if status != 0:
-            log.debug('Get pods status from k8s error')
-            return events_cache
-
-        try:
-            rc_status_info = json.loads(rc_status_info['result'])
-            rc_status_list = rc_status_info['items']
-        except Exception, e:
-            log.error('Get rc status list error, reason=%s' % (e))
-            return events_cache
-
-        events_new = {}
-
-        for rc_info in rc_status_list:
-            try:
-                rc_name1 = rc_info['metadata']['labels'].get('component')
-                project_uuid = rc_info.get('metadata').get('namespace')
-                rc_name = rc_name1 + '#' + project_uuid
-                user_uuid = self.service_db.get_user_uuid(project_uuid, rc_name)
-                ns_events_info = self.k8s_driver.app_events_info(project_uuid)
-
-                if ns_events_info.get('status') != 0:
-                    log.debug('Get events from k8s error')
-                    return events_cache
-
-                try:
-                    events_info = json.loads(ns_events_info['result'])
-                    events_list = events_info['items']
-                except Exception, e:
-                    log.error('Get events info list error, reason=%s' % (e))
-                    return events_cache
-
-                for events in events_list:
-                    rc_name = events.get('involvedObject').get('name')
-                    event = events.get('involvedObject').get('message')
-                    if rc_name not in events_new.keys():
-                        events_new[rc_name] = {
-                                             "events_info": [
-                                                 {
-                                                     rc_name: event
-                                                 }
-                                             ]
-                                         }
-                    else:
-                        events_new[rc_name]['events_info'].append(
-                            {rc_name: event})
-
-                for rc_name, rc_info in events_new.items():
-                    events_info = rc_info['events_info']
-                    for event_info in events_info:
-                        events_msg = event_info.values()[0]
-                        message_es = {'user_uuid': user_uuid, "project_uuid":project_uuid,
-                                      "service_name": rc_name1}
-                        post_es(message_es, events_msg)
-
-                return events_cache
-            except Exception, e:
-                log.error('get the rc_name and namespace error, reason is: %s' % e)
-                return events_cache

@@ -9,17 +9,19 @@ import pymysql
 import pymysql.cursors
 import os
 from common.logs import logging as log
+from conf import conf
 
 
 class DbOperate(object):
 
     def __init__(self):
-        pass
+        self.db = conf.db_server01
+        self.port = conf.db_port
 
     def connection(self):
-        conn = pymysql.connect(host=os.environ.get('MYSQL_HOST'),
+        conn = pymysql.connect(host=self.db,
                                db='servicedata',
-                               port=int(os.environ.get('MYSQL_PORT')),
+                               port=self.port,
                                user='cloudsvc',
                                passwd='cloudsvc',
                                charset='UTF8',

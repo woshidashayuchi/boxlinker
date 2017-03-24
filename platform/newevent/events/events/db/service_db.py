@@ -32,5 +32,11 @@ class ServiceDB(MysqlInit):
         sql = "select user_uuid from font_service WHERE service_name='%s' and " \
               "project_uuid='%s'" % (service_name, project_uuid)
 
-        return super(ServiceDB, self).exec_select_sql(sql)
+        conn, cur = self.operate.connection()
+        ret = self.operate.exeQuery(cur, sql)
+        self.operate.connClose(conn, cur)
+
+        for i in ret:
+            user_uuid = i.get('user_uuid')
+            return user_uuid
 

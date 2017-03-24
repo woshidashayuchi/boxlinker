@@ -81,7 +81,6 @@ class KApiMethods(object):
         url = '%s/namespaces/%s/%s' % (self.host_address, namespace, rtype)
 
         msg = requests.get(url, headers=self.HEADERS, verify=False).text
-        log.info('the resources messages is %s,type is %s' % (msg, type(msg)))
         response = json.loads(str(msg))
 
         return response
