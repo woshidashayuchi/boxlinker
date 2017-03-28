@@ -105,7 +105,7 @@ class RabbitmqClient(object):
         except Exception, e:
             log.error('RabbitMQ call client exec error: queue=%s, reason=%s'
                       % (queue_name, e))
-            raise
+            raise Exception(e)
 
     def rpc_cast_client(self, queue_name, dict_data):
         try:

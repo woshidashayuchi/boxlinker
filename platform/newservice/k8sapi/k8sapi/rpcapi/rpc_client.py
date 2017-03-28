@@ -9,6 +9,8 @@ from common.code import request_result
 from common.local_cache import LocalCache
 from common.parameters import rpc_data
 from common.rabbitmq_client import RabbitmqClient
+from conf import conf
+
 
 caches = LocalCache(1000)
 
@@ -17,8 +19,8 @@ class KubernetesRpcClient(object):
 
     def __init__(self):
         self.rbtmq = RabbitmqClient()
-        self.queue = 'kubernetescall_api'
-        self.timeout = 8
+        self.queue = conf.call_queue
+        self.timeout = 60
 
     def create_services(self, context, parameters=None):
         try:
@@ -27,7 +29,7 @@ class KubernetesRpcClient(object):
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
-            return request_result(501)
+            return request_result(598)
 
     def query_service(self, context, parameters=None):
 
@@ -37,7 +39,7 @@ class KubernetesRpcClient(object):
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
-            return request_result(404)
+            return request_result(598)
 
     def detail_service(self, context, parameters=None):
 
@@ -47,7 +49,7 @@ class KubernetesRpcClient(object):
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
-            return request_result(404)
+            return request_result(598)
 
     def delete_service(self, context, parameters=None):
 
@@ -57,7 +59,7 @@ class KubernetesRpcClient(object):
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
-            return request_result(503)
+            return request_result(598)
 
     def update_service(self, context, parameters=None):
 
@@ -67,7 +69,7 @@ class KubernetesRpcClient(object):
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
-            return request_result(502)
+            return request_result(598)
 
     def pod_msg(self, context, parameters=None):
 
@@ -77,4 +79,4 @@ class KubernetesRpcClient(object):
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % e)
-            return request_result(502)
+            return request_result(598)

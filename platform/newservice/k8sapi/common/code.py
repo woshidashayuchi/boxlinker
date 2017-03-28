@@ -33,7 +33,6 @@ status_code = {
         503: "Kubernetes resource delete failure",
         504: "Kubernetes resource select failure",
         505: "Update the billing resource failure",
-        701: "Monitor message select failure",
         511: "Ceph disk create failure",
         512: "Ceph disk delete failure",
         513: "Ceph disk resize failure",
@@ -47,9 +46,20 @@ status_code = {
 def request_result(code, ret={}):
 
     result = {
-                 "status": code,
-                 "msg": status_code[code],
-                 "result": ret
-             }
+             "status": code,
+             "msg": status_code[code],
+             "result": ret
+    }
+
+    return result
+
+
+def request_result_for_query(code, count, ret={}):
+
+    result = {
+            "status": code,
+            "msg": status_code[code],
+            "result": {"count": count, "service_list": ret}
+    }
 
     return result

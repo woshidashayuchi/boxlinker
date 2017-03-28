@@ -539,15 +539,19 @@ class KubernetesDriver(object):
             containers = self.service_db.detail_container(context)
         except Exception, e:
             log.error('query the database of containers error, reason=%s' % e)
-            return False
+            raise Exception('query the data of containers error')
 
-        for i in containers:
-            for j in context.get('ports'):
-                if j.get('containerPort') is not None and i.get('container_port') is not None:
-                    if int(j.get('containerPort')) == int(i.get('container_port')):
-                        access = {'container_port': j.get('containerPort'), 'protocol': i.get('protocol'),
-                                  'access_mode': i.get('access_mode')}
-                        con.append(access)
+        try:
+            for i in containers:
+                for j in context.get('ports'):
+                    if j.get('containerPort') is not None and i.get('container_port') is not None:
+                        if int(j.get('containerPort')) == int(i.get('container_port')):
+                            access = {'container_port': j.get('containerPort'), 'protocol': i.get('protocol'),
+                                      'access_mode': i.get('access_mode')}
+                            con.append(access)
+        except Exception, e:
+            log.error('explain the containers data error, reason is: %s' % e)
+            raise Exception('explain the containers data error')
 
         return con
 
@@ -943,7 +947,29 @@ class KubernetesDriver(object):
         return True
 
     def update_domain(self, context):
+        try:
+            ret_http = self.service_db.get_http_domain(context)
+            log.info('get the http_domain message is: %s,ret_http[0] is: %s' % (ret_http, ret_http[0]))
+            if int(ret_http[0][0]) != 0:
+                return request_result(301)
+        except Exception, e:
+            log.error('get the http_domain to identify the domain error, reason is: %s' % e)
+            return request_result(404)
+
+        try:
+            domain = self.service_db.get_domain(context)
+        except Exception, e:
+            log.error('get the domain message error, reason is: %s' % e)
+            return request_result(404)
+
         if context.get('domain') is not None and context.get('domain') != '':
+            if len(domain[0]) != 0 and str(domain[0][1]) == '1':
+                try:
+                    self.service_db.update_http_domain(context)
+                except Exception, e:
+                    log.error('update the http_domain error, reason is: %s' % e)
+                    return request_result(403)
+
             try:
                 db_result = self.service_db.update_domain(context)
             except Exception, e:
@@ -953,12 +979,6 @@ class KubernetesDriver(object):
                 return request_result(301)
 
         else:
-            try:
-                domain = self.service_db.get_domain(context)
-            except Exception, e:
-                log.error('get the domain message error, reason is: %s' % e)
-                return request_result(404)
-
             try:
                 if len(domain[0]) != 0:
                     up_ret = self.service_db.update_domain_to_none(context)

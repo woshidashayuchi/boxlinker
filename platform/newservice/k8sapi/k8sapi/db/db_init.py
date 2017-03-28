@@ -9,6 +9,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import func
 from sqlalchemy import String, Column, Integer
 from sqlalchemy import DateTime
+from common.logs import logging as log
+from conf import conf
 import os
 
 
@@ -18,21 +20,24 @@ class DBInit(object):
         pass
 
     db_config = {
-        'host': os.environ.get('MYSQL_HOST'),
+        'host': conf.db_server01,
         'user': 'cloudsvc',
         'passwd': 'cloudsvc',
         'db': 'servicedata',
         'charset': 'UTF8',
-        'port': os.environ.get('MYSQL_PORT')
+        'port': conf.db_port
     }
-
-    engine = create_engine('mysql://%s:%s@%s:%s/%s?charset=%s' % (db_config['user'],
-                                                                  db_config['passwd'],
-                                                                  db_config['host'],
-                                                                  db_config['port'],
-                                                                  db_config['db'],
-                                                                  db_config['charset'],
-                                                                  ), echo=True)
+    try:
+        engine = create_engine('mysql://%s:%s@%s:%s/%s?charset=%s' % (db_config['user'],
+                                                                      db_config['passwd'],
+                                                                      db_config['host'],
+                                                                      db_config['port'],
+                                                                      db_config['db'],
+                                                                      db_config['charset'],
+                                                                      ), echo=True)
+    except Exception, e:
+        log.error('connect the database error, please check')
+        raise Exception('connect the database error, please check')
 
     metadata = MetaData(engine)
 
@@ -67,18 +72,18 @@ class DBInit(object):
         Column('rc_update_time', DateTime, server_default=func.now())
     )
 
-    service_table = Table('service', metadata,
-        Column('uuid', String(64), primary_key=True),
-        Column('service_name', String(64)),
-        Column('labels', String(64)),
-        Column('selector_name', String(64)),
-        Column('ports_name', String(64)),
-        Column('ports_port', Integer),
-        Column('ports_targetport', Integer),
-        Column('service_domain_name', String(64)),
-        Column('service_create_time', DateTime, server_default=func.now()),
-        Column('service_update_time', DateTime, server_default=func.now())
-    )
+    # service_table = Table('service', metadata,
+    #     Column('uuid', String(64), primary_key=True),
+    #     Column('service_name', String(64)),
+    #     Column('labels', String(64)),
+    #     Column('selector_name', String(64)),
+    #     Column('ports_name', String(64)),
+    #     Column('ports_port', Integer),
+    #     Column('ports_targetport', Integer),
+    #     Column('service_domain_name', String(64)),
+    #     Column('service_create_time', DateTime, server_default=func.now()),
+    #     Column('service_update_time', DateTime, server_default=func.now())
+    # )
 
     container = Table('containers', metadata,
         Column('uuid', String(64), primary_key=True),
@@ -91,10 +96,10 @@ class DBInit(object):
         Column('access_scope', String(32)),
         Column('tcp_port', String(32)),
         Column('http_domain', String(64)),
+        Column('cname', String(64)),
         Column('tcp_domain', String(64)),
         Column('private_domain', String(64)),
         Column('identify', String(32))
-
     )
 
     env = Table('env', metadata,

@@ -17,9 +17,9 @@ class DbOperate(object):
         pass
 
     def connection(self):
-        conn = pymysql.connect(host=os.environ.get('MYSQL_HOST'),
+        conn = pymysql.connect(host='database',
                                db='servicedata',
-                               port=int(os.environ.get('MYSQL_PORT')),
+                               port=3306,
                                user='cloudsvc',
                                passwd='cloudsvc',
                                charset='UTF8',

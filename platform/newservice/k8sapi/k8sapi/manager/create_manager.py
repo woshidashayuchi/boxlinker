@@ -43,7 +43,6 @@ class CreateManager(object):
 
             service_uuid = self.service_db.get_service_uuid(context)
             log.info('get the service_uuid is: %s' % service_uuid)
-            service_uuid = service_uuid[0][0]
         except Exception, e:
             log.error('Database infix error when create the service..., reason=%s' % e)
             return False
@@ -53,7 +52,6 @@ class CreateManager(object):
     def diff_infix_db(self, dict_data):
         try:
             rc_uuid = self.service_db.get_rc_uuid(dict_data)
-            rc_uuid = rc_uuid[0][0]
         except Exception, e:
             log.error('Database error when get the rc_uuid...,reason=%s' % e)
             return False
@@ -110,7 +108,6 @@ class CreateManager(object):
         if check_name == 'error':
             return request_result(404)
 
-        post_es(context, 'check the service name successed!')
         team_name, project_name = self.token_driver.gain_team_name(context)
         if team_name is False:
             log.info('CREATE SERVICE ERROR WHEN GET THE PROJECT NAME FROM TOKEN...')
@@ -128,7 +125,6 @@ class CreateManager(object):
             log.error('change the volume status error, reason is:%s' % e)
             return request_result(501)
 
-        post_es(context, 'load the major successed!')
         ret = self.kuber_driver.create_service(context)
         if ret is not True:
             log.info('kubernetes resource create result is: %s' % ret)
@@ -141,6 +137,7 @@ class CreateManager(object):
             context.update({'container': domain})
 
             diff = self.diff_infix_db(context)
+
         except Exception, e:
             log.error('resource in database error, reason=%s' % e)
             return request_result(401)
@@ -153,7 +150,5 @@ class CreateManager(object):
             photo_dir(context)
         except Exception, e:
             log.error('from the photo url make the photo for service error, reason is: ' % e)
-
         post_es(context, 'service is creating...please wait')
-
         return request_result(0, infix)
