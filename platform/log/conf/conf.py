@@ -28,5 +28,5 @@ log_file = '/var/log/cloud.log'
 
 log_call_queue = 'log_call_api'
 
-ucenter_api = 'http://ucenter:8001'
+ucenter_api = 'https://ucenter.boxlinker.com'
 kibana_log_api = 'http://kibana:5601/elasticsearch/_msearch'

@@ -13,8 +13,8 @@ mq_port = 5672
 # mq_port = os.environ.get('MQ_PORT')
 
 
-db_server01 = 'database'
-db_server02 = 'database'
+db_server01 = 'database01'
+db_server02 = 'database02'
 db_port = 3306
 db_user = 'cloud'
 db_passwd = 'cloud'
@@ -42,5 +42,5 @@ storage_call_queue = 'storage_call_api'
 ceph_call_queue = 'ceph_call'
 ceph_exchange_name = 'ceph_bcast'
 
-ucenter_api = 'http://ucenter:8001'
-billing_api = 'http://billing:8002'
+ucenter_api = 'https://ucenter.boxlinker.com'
+billing_api = 'https://ucenter.boxlinker.com'

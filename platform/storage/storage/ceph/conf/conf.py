@@ -14,4 +14,4 @@ log_file = '/var/log/cloud.log'
 ceph_call_queue = 'ceph_call'
 ceph_exchange_name = 'ceph_bcast'
 
-ucenter_api = 'http://ucenter:8001'
+ucenter_api = 'https://ucenter.boxlinker.com'
