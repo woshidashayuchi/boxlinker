@@ -6,6 +6,7 @@ RUN pip install flask-restful
 RUN pip install requests
 RUN pip install flask-cors
 RUN pip install pika
+RUN pip install pycrypto
 RUN yum install -y MySQL-python
 
 COPY ./conf /ucenter/conf/

@@ -40,16 +40,26 @@ class RechargesManager(object):
                             ':', '').replace('.', '')
 
         log.info('User(%s) exec recharge precreate, '
-                 'recharge_uuid=%s'
-                 % (user_name, recharge_uuid))
+                 'recharge_uuid=%s, amount=%s'
+                 % (user_name, recharge_uuid, recharge_amount))
 
         if recharge_type == 'zhifubao':
             # 调用支付宝预付款接口，获取付款二维码地址
-            qr_code = self.billing_driver.ali_precreate(
-                           recharge_uuid, recharge_amount)
+            try:
+                qr_code = self.billing_driver.ali_precreate(
+                               recharge_uuid, recharge_amount)['qr_code']
+            except Exception, e:
+                log.error('exec ali precreate error, reason=%s' % (e))
+                return request_result(601)
+
         elif recharge_type == 'weixin':
             # 调用微信预付款接口，获取付款二维码地址
-            qr_code = 'http://weixin'
+            try:
+                qr_code = self.billing_driver.weixin_pay_precreate(
+                               recharge_uuid, recharge_amount)['code_url']
+            except Exception, e:
+                log.error('exec weixin precreate error, reason=%s' % (e))
+                return request_result(601)
 
         # 通过cast方式异步调用recharge_create接口
 
@@ -84,7 +94,7 @@ class RechargesManager(object):
                 if recharge_type == 'zhifubao':
                     self.billing_driver.ali_pay_cancel(recharge_uuid)
                 elif recharge_type == 'weixin':
-                    pass
+                    self.billing_driver.weixin_pay_cancel(recharge_uuid)
 
                 return
 
@@ -93,7 +103,7 @@ class RechargesManager(object):
                 pay_check = self.billing_driver.ali_pay_check(recharge_uuid)
             elif recharge_type == 'weixin':
                 # 调用微信充值查询接口
-                pay_check = False
+                pay_check = self.billing_driver.weixin_pay_check(recharge_uuid)
 
             if pay_check:
                 break
@@ -106,7 +116,11 @@ class RechargesManager(object):
                  recharge_type, team_uuid, recharge_user)
         except Exception, e:
             log.error('Database insert error, reason=%s' % (e))
-            return request_result(401)
+            log.error('Recharge create error, recharge_uuid=%s, '
+                      'recharge_amount=%s, recharge_type=%s, '
+                      'team_uuid=%s, recharge_user=%s'
+                      % (recharge_uuid, recharge_amount,
+                         recharge_type, team_uuid, recharge_user))
 
         experience = recharge_amount
         level_update = self.levels_manager.level_update(
@@ -146,7 +160,7 @@ class RechargesManager(object):
             user_name = recharge_record[0][2]
             create_time = recharge_record[0][3]
         except Exception, e:
-            result=0
+            result = 0
             return request_result(0, result)
 
         v_recharge_info = {
@@ -169,9 +183,9 @@ class RechargesManager(object):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                       time.gmtime(float(start_time)))
+                                       time.localtime(float(start_time)))
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(float(end_time)))
+                                     time.localtime(float(end_time)))
             recharge_list_info = self.billing_db.recharge_list(
                                       team_uuid, start_time, end_time,
                                       page_size, page_num)

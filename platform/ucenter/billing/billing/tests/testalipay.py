@@ -15,9 +15,36 @@ def test_alipay_precreate(recharge_uuid, amount):
     return alipay_driver.ali_precreate(
                          recharge_uuid, amount)
 
+
+def test_alipay_query(recharge_uuid):
+
+    alipay_driver = billing_driver.BillingDriver()
+
+    return alipay_driver.ali_pay_check(recharge_uuid)
+
+
+def test_alipay_cancel(recharge_uuid):
+
+    alipay_driver = billing_driver.BillingDriver()
+
+    return alipay_driver.ali_pay_cancel(recharge_uuid)
+
+
 if __name__ == '__main__':
 
-    recharge_uuid = 'xxx'
+    parameter = sys.argv[1]
+
+    recharge_uuid = '20160320010101001'
     amount = 10
 
-    print test_alipay_precreate(recharge_uuid, amount)
+    if parameter == 'precreate':
+
+        print test_alipay_precreate(recharge_uuid, amount)
+
+    elif parameter == 'check':
+
+        print test_alipay_query(recharge_uuid)
+
+    elif parameter == 'cancel':
+
+        print test_alipay_cancel(recharge_uuid)

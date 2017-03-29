@@ -35,9 +35,9 @@ class BillsManager(object):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                       time.gmtime(float(start_time)))
+                                       time.localtime(float(start_time)))
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(float(end_time)))
+                                     time.localtime(float(end_time)))
             bills_list_info = self.billing_db.bill_list(
                                    team_uuid, start_time, end_time,
                                    page_size, page_num)

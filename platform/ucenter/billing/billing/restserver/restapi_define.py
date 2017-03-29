@@ -229,8 +229,7 @@ class LimitsApi(Resource):
 
             return request_result(101)
 
-
-        context = context_data(token, "bil_lmt_lmt_lst", "read")
+        context = context_data(token, "bil_bil_usr_com", "read")
 
         return self.billing_api.limit_list(context, parameters)
 

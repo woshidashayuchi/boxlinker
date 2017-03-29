@@ -72,8 +72,11 @@ class LimitsManager(object):
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        user_limits_list = limits_list_info.get('limits_list')
+        count = limits_list_info.get('count')
+
         limits_list = []
-        for limits_info in limits_list_info:
+        for limits_info in user_limits_list:
             team_level = limits_info[0]
             teams = limits_info[1]
             teamusers = limits_info[2]
@@ -104,6 +107,7 @@ class LimitsManager(object):
             limits_list.append(v_limits_info)
 
         result = {"limits_list": limits_list}
+        result['count'] = count
 
         return request_result(0, result)
 

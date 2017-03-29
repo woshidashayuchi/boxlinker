@@ -101,8 +101,8 @@ class BillingDB(MysqlInit):
                   and a.team_uuid='%s' and b.resource_status!='delete'" \
                  % (team_uuid)
 
-        db_resource_list = super(UcenterDB, self).exec_select_sql(sql_01)
-        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+        db_resource_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "resource_list": db_resource_list,
@@ -226,8 +226,8 @@ class BillingDB(MysqlInit):
                   and create_time between '%s' and '%s'" \
                  % (user_uuid, start_time, end_time)
 
-        vouchers_list = super(UcenterDB, self).exec_select_sql(sql_01)
-        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+        vouchers_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "vouchers_list": vouchers_list,
@@ -259,8 +259,8 @@ class BillingDB(MysqlInit):
                   and b.create_time between '%s' and '%s'" \
                  % (team_uuid, start_time, end_time)
 
-        vouchers_list = super(UcenterDB, self).exec_select_sql(sql_01)
-        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+        vouchers_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "vouchers_list": vouchers_list,
@@ -284,8 +284,8 @@ class BillingDB(MysqlInit):
                   and invalid_time >= now()" \
                  % (user_name)
     
-        vouchers_list = super(UcenterDB, self).exec_select_sql(sql_01)
-        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+        vouchers_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "vouchers_list": vouchers_list,
@@ -394,8 +394,8 @@ class BillingDB(MysqlInit):
                   and create_time between '%s' and '%s'" \
                  % (team_uuid, start_time, end_time)
 
-        db_recharge_list = super(UcenterDB, self).exec_select_sql(sql_01)
-        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+        db_recharge_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "recharge_list": db_recharge_list,
@@ -410,14 +410,28 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_select_sql(sql)
 
-    def limit_list(self):
+    def limit_list(self, page_size, page_num):
 
-        sql = "select team_level, teams, teamusers, \
-               projects, projectusers, roles, images, \
-               services, volumes, create_time, update_time \
-               from limits"
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
 
-        return super(BillingDB, self).exec_select_sql(sql)
+        sql_01 = "select team_level, teams, teamusers, \
+                  projects, projectusers, roles, images, \
+                  services, volumes, create_time, update_time \
+                  from limits \
+                  limit %d,%d" \
+                 % (start_position, page_size)
+
+        sql_02 = "select count(*) from limits"
+
+        db_limit_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "limits_list": db_limit_list,
+                   "count": count
+               }
 
     def limit_update(self, team_level, resource_type, limit):
 
@@ -464,8 +478,8 @@ class BillingDB(MysqlInit):
                   and insert_time between '%s' and '%s' group by resource_uuid) t" \
                  % (team_uuid, start_time, end_time)
 
-        db_bills_list = super(UcenterDB, self).exec_select_sql(sql_01)
-        count = super(UcenterDB, self).exec_select_sql(sql_02)[0][0]
+        db_bills_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "bills_list": db_bills_list,
@@ -513,14 +527,33 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_update_sql(sql)
 
-    def order_list(self, team_uuid, start_time, end_time):
+    def order_list(self, team_uuid,
+                   start_time, end_time,
+                   page_size, page_num):
 
-        sql = "select a.team_uuid, a.project_uuid, a.user_uuid, \
-               b.orders_uuid, b.resource_uuid, b.cost, b.status, \
-               b.create_time, b.update_time \
-               from resources_acl a join orders b \
-               where a.resource_uuid=b.orders_uuid \
-               and a.team_uuid='%s' and b.create_time between '%s' and '%s'" \
-               % (team_uuid, start_time, end_time)
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
 
-        return super(BillingDB, self).exec_select_sql(sql)
+        sql_01 = "select a.team_uuid, a.project_uuid, a.user_uuid, \
+                  b.orders_uuid, b.resource_uuid, b.cost, b.status, \
+                  b.create_time, b.update_time \
+                  from resources_acl a join orders b \
+                  where a.resource_uuid=b.orders_uuid \
+                  and a.team_uuid='%s' and b.create_time between '%s' and '%s' \
+                  limit %d,%d" \
+                 % (team_uuid, start_time, end_time,
+                    start_position, page_size)
+
+        sql_02 = "select count(*) from resources_acl a join orders b \
+                  where a.resource_uuid=b.orders_uuid \
+                  and a.team_uuid='%s' and b.create_time between '%s' and '%s'" \
+                 % (team_uuid, start_time, end_time)
+
+        user_orders_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "orders_list": user_orders_list,
+                   "count": count
+               }

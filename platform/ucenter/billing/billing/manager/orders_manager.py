@@ -71,9 +71,9 @@ class OrdersManager(object):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                       time.gmtime(float(start_time)))
+                                       time.localtime(float(start_time)))
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(float(end_time)))
+                                     time.localtime(float(end_time)))
             orders_list_info = self.billing_db.order_list(
                                     team_uuid, start_time, end_time,
                                     page_size, page_num)
@@ -81,8 +81,11 @@ class OrdersManager(object):
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        user_orders_list = orders_list_info.get('orders_list')
+        count = orders_list_info.get('count')
+
         orders_list = []
-        for orders_info in orders_list_info:
+        for orders_info in user_orders_list:
             team_uuid = orders_info[0]
             project_uuid = orders_info[1]
             user_uuid = orders_info[2]
@@ -110,5 +113,6 @@ class OrdersManager(object):
             orders_list.append(v_orders_info)
 
         result = {"orders_list": orders_list}
+        result['count'] = count
 
         return request_result(0, result)

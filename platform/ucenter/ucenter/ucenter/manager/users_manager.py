@@ -198,7 +198,7 @@ class UsersManager(object):
     def user_update(self, user_uuid, real_name, mobile, sex, birth_date):
 
         birth_date = time.strftime("%Y-%m-%d %H:%M:%S",
-                                   time.gmtime(float(birth_date or 0)))
+                                   time.localtime(float(birth_date or 0)))
 
         try:
             self.ucenter_db.user_update(

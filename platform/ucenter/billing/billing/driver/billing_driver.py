@@ -1,232 +1,122 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
+# github最新python alipay sdk
+# https://github.com/fzlee/alipay
 
-import json
-import time
-import requests
-import datetime
+import os
 
 from conf import conf
-# from common import rsa_sign
 from common.logs import logging as log
 from common.code import request_result
 
-
-requests.adapters.DEFAULT_RETRIES = 5
+from alipay.alipay_sdk import AliPay
+from weixinpay.weixinpay_sdk import WeiXinPay
 
 
 class BillingDriver(object):
 
     def __init__(self):
 
-        self.ali_pay_api = conf.ali_pay_api
-        self.ali_pay_app_id = conf.ali_pay_app_id
-        self.weixin_pay_api = conf.weixin_pay_api
-        # self.sign = rsa_sign.sign
-        # self.verify = rsa_sign.verify
+        pwd_path = os.path.dirname(os.path.abspath(__file__))
+        private_key_path = '%s/alipay/private.pem' % (pwd_path)
+        ali_public_key_path = '%s/alipay/zhifubao_public.pem' % (pwd_path)
+
+        self.local_wan_ip = conf.spbill_create_ip
+
+        self.ali_pay = AliPay(appid=conf.ali_pay_app_id,
+                              app_notify_url="boxlinker.com",
+                              app_private_key_path=private_key_path,
+                              app_alipay_public_key_path=ali_public_key_path,
+                              debug=conf.ali_pay_debug)
+
+        self.weixin_pay = WeiXinPay(appid=conf.weixin_pay_app_id,
+                                    mch_id=conf.weixin_pay_mch_id,
+                                    key=conf.weixin_pay_key,
+                                    notify_url=conf.notify_url,
+                                    debug=conf.weixin_pay_debug)
 
     def ali_precreate(self, recharge_uuid, amount):
-        # 用于调用支付宝预下单接口，返回付款二维码
-        # 请求方法POST
 
-        log.info('exec zhi fu bao precreate')
+        # 调用支付宝预下单接口，返回付款二维码
+        log.info('exec zhifubao precreate, recharge_uuid=%s, amount=%s'
+                 % (recharge_uuid, amount))
 
-        # return 'http://erweima_url'
-
-        method = 'alipay.trade.precreate'
-        charset = 'utf-8'
-        sign_type = 'RSA2'
-        # timestamp = str(datetime.datetime.now())[:-7]
-        timestamp = '2017-03-16 17:44:21'
-        log.info('timestamp=%s' % (timestamp))
-
-        recharge_uuid = "20150320010101001"
-
-        biz_content = {
-            "out_trade_no": recharge_uuid,
-            "total_amount": amount,
-            "subject": "boxlinker recharge",
-            "timeout_express": "5m"
-        }
-
-        biz_content_str = '{"%s":"%s","%s":"%s","%s":"%s","%s":"%s"}' \
-                          % ('out_trade_no', recharge_uuid,
-                             'subject', 'boxlinker recharge',
-                             'timeout_express', '5m',
-                             'total_amount', amount)
-
-        log.info('biz_content_str=%s' % (biz_content_str))
-
-        app_id_str = 'app_id=%s' % (self.ali_pay_app_id)
-        biz_content_str = 'biz_content=%s' % (biz_content_str)
-        charset_str = 'charset=%s' % (charset)
-        method_str = 'method=%s' % (method)
-        sign_type_str = 'sign_type=%s' % (sign_type)
-        timestamp_str = 'timestamp=%s' % (timestamp)
-        version_str = 'version=1.0'
-
-        need_sign_data = '%s&%s&%s&%s&%s&%s&%s' \
-                         % (app_id_str, biz_content_str, charset_str,
-                            method_str, sign_type_str, timestamp_str,
-                            version_str)
-
-        log.info('need_sign_data=%s' % (need_sign_data))
-
-        # sign_data = self.sign(need_sign_data)
-        sign_data = '0PZ1z6qw4aNhge06j2dypdXMP3uDt2DyXMYTfGa9mRgBp3Qlj0p9woWiFMoHzTrHDOBITM5GoYV0ADZhAyk9eraz+wbxuFKXTr2aL+Akpt0GOszvpYLcJ1dtaXTFbHjAAGAK7Cipoxg9s2ZPGjlbcBtC0HxnNq9P8/6kww6Hss9eElezk+v4ntbWeRjNxbtT0t9ENMSiUcATqj9miRqS8+4hZXlUlqZLkRNjgQKq4jTDnRB3okGhSP3ORLikq+4HTGrWtRJSW0Efft+4BR8gR7SaqGlaA/vP4h0lGTvhWINC9aAvVRfKe5KuSeWu1vuEdwpD4HQuh4nLyhtW77W2QA=='
-
-        log.info('data_sign=%s' % (sign_data))
-
-        ali_precreate_url = ('%s?timestamp=%s&method=%s&app_id=%s'
-                             '&charset=%s&sign_type=%s&sign=%s'
-                             '&version=1.0&biz_content=%s'
-                             % (self.ali_pay_api, timestamp, method,
-                                self.ali_pay_app_id, charset, sign_type,
-                                sign_data, biz_content))
-
-        log.info('ali_precreate_url=%s' % (ali_precreate_url))
-
-        try:
-            result = requests.post(ali_precreate_url,
-                                   timeout=5).json()
-            return result
-
-            if int(status) != 0:
-                raise(Exception('request_code not equal 0'))
-        except Exception, e:
-            log.error('ali pay precreate create error: reason=%s' % (e))
-            return request_result(601)
-
-        return request_result(0)
+        return self.ali_pay.precreate_face_to_face_trade(
+                               out_trade_no=recharge_uuid,
+                               total_amount=amount,
+                               subject="boxlinker")
 
     def ali_pay_check(self, recharge_uuid):
-        # 用于调用支付宝支付结果查询接口
-        log.info('exec zhi fu bao pay check')
 
-        return False
+        # 调用支付宝支付结果查询接口
+        log.debug('exec zhifubao pay check')
+
+        try:
+            result = self.ali_pay.query_face_to_face_trade(
+                                  out_trade_no=recharge_uuid)
+            log.debug('ali_pay_check result=%s' % (result))
+            if result.get("trade_status", "") == "TRADE_SUCCESS":
+                return True
+            else:
+                return False
+        except Exception, e:
+            log.error('alipay query exec error, reason=%s' % (e))
+            return False
 
     def ali_pay_cancel(self, recharge_uuid):
-        # 用于调用支付宝取消预下单的支付操作
-        log.info('exec zhi fu bao pay cancel')
 
-        return
+        # 调用支付宝取消预下单的支付操作
+        log.info('exec zhifubao paycancel, recharge_uuid=%s'
+                 % (recharge_uuid))
 
-    def ali_pay_refund(self):
+        return self.ali_pay.cancel_face_to_face_trade(
+                    out_trade_no=recharge_uuid)
+
+    def ali_pay_refund(self, recharge_uuid, amount):
+
         # 增加充值失败退款接口
         pass
 
+    def weixin_pay_precreate(self, recharge_uuid, amount):
 
+        # 调用微信预下单接口，返回付款二维码
+        log.info('exec weixin precreate, recharge_uuid=%s, amount=%s'
+                 % (recharge_uuid, amount))
 
-    def disk_create(self, token, pool_name, disk_name, disk_size):
+        amount = int(float(amount) * 100)
 
-        context = {"token": token}
+        return self.weixin_pay.generate_prepay_order(
+                               out_trade_no=recharge_uuid,
+                               product_id=recharge_uuid,
+                               total_fee=amount,
+                               spbill_create_ip=self.local_wan_ip)
 
-        disk_size = int(disk_size) * 1024
-        parameters = {
-                         "pool_name": pool_name,
-                         "disk_name": disk_name,
-                         "disk_size": disk_size
-                     }
+    def weixin_pay_check(self, recharge_uuid):
 
-        return self.ceph_api.rbd_create(context, parameters)
-
-    def disk_delete(self, token, pool_name, disk_name):
-
-        context = {"token": token}
-
-        parameters = {
-                         "pool_name": pool_name,
-                         "disk_name": disk_name
-                     }
-
-        return self.ceph_api.rbd_delete(context, parameters)
-
-    def disk_resize(self, token, pool_name, disk_name, disk_size):
-
-        context = {"token": token}
-
-        disk_size = int(disk_size) * 1024
-        parameters = {
-                         "pool_name": pool_name,
-                         "disk_name": disk_name,
-                         "disk_size": disk_size
-                     }
-
-        return self.ceph_api.rbd_resize(context, parameters)
-
-    def disk_growfs(self, token, image_name):
-
-        context = {"token": token}
-
-        parameters = {"image_name": image_name}
-
-        return self.ceph_api.rbd_growfs(context, parameters)
-
-    def billing_create(self, token, volume_uuid,
-                       volume_name, volume_conf):
+        # 调用微信支付结果查询接口
+        log.debug('exec weixin pay check')
 
         try:
-            url = '%s/api/v1.0/billing/resources' % (self.billing_api)
-            headers = {'token': token}
-            body = {
-                       "resource_uuid": volume_uuid,
-                       "resource_name": volume_name,
-                       "resource_type": "volume",
-                       "resource_conf": volume_conf,
-                       "resource_status": "using"
-                   }
-
-            status = requests.post(url, headers=headers,
-                                   data=json.dumps(body),
-                                   timeout=5).json()['status']
-            if int(status) != 0:
-                raise(Exception('request_code not equal 0'))
+            result = self.weixin_pay.order_query_result(
+                                  out_trade_no=recharge_uuid)
+            log.debug('weixin_pay_check result=%s' % (result))
+            if result.get("trade_state", "") == "SUCCESS":
+                return True
+            else:
+                return False
         except Exception, e:
-            log.error('Billing resource create error: reason=%s' % (e))
-            return request_result(601)
+            log.error('weixin query exec error, reason=%s' % (e))
+            return False
 
-        return request_result(0)
+    def weixin_pay_cancel(self, recharge_uuid):
 
-    def billing_delete(self, token, volume_uuid):
+        pass
 
-        try:
-            url = '%s/api/v1.0/billing/resources/%s' \
-                  % (self.billing_api, volume_uuid)
-            headers = {'token': token}
+    def weixin_pay_refund(self, recharge_uuid, amount):
 
-            status = requests.delete(url, headers=headers,
-                                     timeout=5).json()['status']
-            if int(status) != 0:
-                raise(Exception('request_code not equal 0'))
-        except Exception, e:
-            log.error('Billing info delete error: reason=%s' % (e))
+        pass
 
-        return request_result(0)
+    def weixin_pay_get_sandbox_key(self):
 
-    def billing_update(self, token, volume_uuid,
-                       volume_conf=None, team_uuid=None,
-                       project_uuid=None, user_uuid=None):
-
-        try:
-            url = '%s/api/v1.0/billing/resources/%s' \
-                  % (self.billing_api, volume_uuid)
-            headers = {'token': token}
-            body = {
-                       "resource_conf": volume_conf,
-                       "resource_status": "using",
-                       "team_uuid": team_uuid,
-                       "project_uuid": project_uuid,
-                       "user_uuid": user_uuid
-                   }
-
-            status = requests.put(url, headers=headers,
-                                  data=json.dumps(body),
-                                  timeout=5).json()['status']
-            if int(status) != 0:
-                raise(Exception('request_code not equal 0'))
-        except Exception, e:
-            log.error('Billing info update error: reason=%s' % (e))
-            return request_result(601)
-
-        return request_result(0)
+        return self.weixin_pay.get_sandbox_key()

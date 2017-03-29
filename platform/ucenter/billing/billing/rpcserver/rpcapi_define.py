@@ -405,7 +405,9 @@ class BillingRpcManager(object):
             recharge_type = parameters.get('recharge_type')
             recharge_amount = parameters.get('recharge_amount')
 
-            recharge_amount = parameter_check(recharge_amount, ptype='pint')
+            recharge_amount = parameter_check(recharge_amount, ptype='pflt')
+            if float(recharge_amount) < 0.01:
+                raise(Exception('Parameter error'))
             if (recharge_type != 'zhifubao') and (recharge_type != 'weixin'):
                 raise(Exception('Parameter error'))
         except Exception, e:
@@ -430,7 +432,7 @@ class BillingRpcManager(object):
 
             recharge_uuid = parameter_check(recharge_uuid, ptype='pint')
             recharge_type = parameter_check(recharge_type, ptype='pstr')
-            recharge_amount = parameter_check(recharge_amount, ptype='pint')
+            recharge_amount = parameter_check(recharge_amount, ptype='pflt')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))

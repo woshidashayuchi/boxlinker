@@ -23,7 +23,7 @@ class VouchersManager(object):
         voucher_uuid = str(uuid.uuid4())
         try:
             invalid_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                         time.gmtime(float(invalid_time)))
+                                         time.localtime(float(invalid_time)))
             self.billing_db.voucher_insert(
                  voucher_uuid, user_uuid, denomination, invalid_time)
         except Exception, e:
@@ -113,9 +113,9 @@ class VouchersManager(object):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                       time.gmtime(float(start_time)))
+                                       time.localtime(float(start_time)))
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(float(end_time)))
+                                     time.localtime(float(end_time)))
             vouchers_list_info = self.billing_db.voucher_list_admin(
                                       user_uuid, start_time, end_time,
                                       page_size, page_num)
@@ -167,9 +167,9 @@ class VouchersManager(object):
 
         try:
             start_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                       time.gmtime(float(start_time)))
+                                       time.localtime(float(start_time)))
             end_time = time.strftime("%Y-%m-%d %H:%M:%S",
-                                     time.gmtime(float(end_time)))
+                                     time.localtime(float(end_time)))
             vouchers_list_info = self.billing_db.voucher_list_user(
                                       team_uuid, start_time, end_time,
                                       page_size, page_num)
