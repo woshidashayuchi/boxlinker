@@ -1,0 +1,183 @@
+# -*- coding: utf-8 -*-
+# Author: wang-xf <it-wangxf@all-reach.com>
+# Date: 2017/02/06
+
+import json
+from flask import request
+from common.logs import logging as log
+from common.code import request_result
+from common.parameters import context_data
+from common.token_ucenterauth import token_auth
+from rpcapi.rpc_client import KubernetesRpcClient
+
+
+class KubernetesClientApi(object):
+    def __init__(self):
+        self.kubernetes = KubernetesRpcClient()
+
+    kuber = KubernetesRpcClient()
+
+    @classmethod
+    def create_service(cls):
+
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        try:
+            parameters = json.loads(request.get_data())
+            log.info('parameters body is: %s' % parameters)
+            parameters['token'] = token
+            token_rets = token_ret.get('result')
+            if 'service_name' in token_rets.keys():
+                del token_rets['service_name']
+            parameters.update(token_rets)
+            log.info('parameters body(1) is:%s' % parameters)
+            if parameters.get('service_name') is None:
+                return json.dumps(request_result(101))
+        except Exception, e:
+            log.error("parameters error,reason=%s" % e)
+            return json.dumps(request_result(101))
+
+        context = context_data(token, "service_create", "create")
+
+        ret = cls.kuber.create_services(context, parameters)
+
+        return json.dumps(ret)
+
+    @classmethod
+    def pod_message(cls, service_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error,reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        parameters = token_ret.get('result')
+        parameters['service_uuid'] = service_uuid
+        parameters['rtype'] = 'pods_msg'
+
+        context = context_data(token, service_uuid, "read")
+
+        try:
+            ret = cls.kuber.pod_msg(context, parameters)
+        except Exception, e:
+            log.error('get the pods messages error, reason=%s' % e)
+            return json.dumps(request_result(504))
+        return json.dumps(request_result(0, ret))
+
+    def get_all_service(self):
+
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        parameters = token_ret.get('result')
+        parameters['service_name'] = request.args.get('service_name',)
+        parameters['page_size'] = request.args.get('page_size')
+        parameters['page_num'] = request.args.get('page_num')
+
+        context = context_data(token, "service_list", "read")
+
+        ret = self.kubernetes.query_service(context, parameters)
+
+        return json.dumps(ret)
+
+    @classmethod
+    def detail_service(cls, service_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        if request.args.get('pod') == 'pod':
+            return cls.pod_message(service_uuid)
+
+        parameters = token_ret.get('result')
+        parameters['service_uuid'] = service_uuid
+
+        context = context_data(token, service_uuid, "read")
+
+        ret = cls.kuber.detail_service(context, parameters)
+
+        return json.dumps(ret)
+
+    @classmethod
+    def del_service(cls, service_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error,reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        parameters = token_ret.get('result')
+        parameters['token'] = token
+        parameters['service_uuid'] = service_uuid
+
+        context = context_data(token, service_uuid, 'delete')
+
+        ret = cls.kuber.delete_service(context, parameters)
+
+        return json.dumps(ret)
+
+    @classmethod
+    def put_service(cls, service_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error,reason=%s' % e)
+            return json.dumps(request_result(201))
+
+        parameters = token_ret.get('result')
+        rtype = request.args.get('rtype',)
+        parameters['rtype'] = rtype
+        parameters['service_uuid'] = service_uuid
+        parameters['token'] = token
+
+        try:
+            in_data = json.loads(request.get_data())
+            if not in_data and rtype == 'container':
+                return json.dumps(request_result(101))
+            parameters.update(in_data)
+        except Exception, e:
+            log.error('parameters error, reason is: %s' % e)
+            return json.dumps(request_result(101))
+
+        context = context_data(token, service_uuid, "update")
+
+        ret = cls.kuber.update_service(context, parameters)
+        return json.dumps(ret)
+
+    @classmethod
+    def if_service_name_exist(cls, service_name):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error,reason=%s' % e)
+            return json.dumps(request_result(201))
+        rtype = request.args.get('rtype')
+
+        context = token_ret.get('result')
+        if rtype == 'service':
+            context['service_name'] = service_name
+        elif rtype == 'domain':
+            context['domain'] = service_name
+        else:
+            return json.dumps(request_result(101))
+
+        context['rtype'] = rtype
+        ret = cls.kuber.service_name_get(context)
+
+        return json.dumps(ret)
