@@ -67,3 +67,28 @@ class BalancesManager(object):
         result = json.loads(result)
 
         return request_result(0, result)
+
+    def balance_check(self):
+
+        # 获取24小时内更新过并且余额小于0的team列表
+        try:
+            teams_balance_info = self.billing_db.balance_check()
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        teams_list = []
+        for teams_info in teams_balance_info:
+            team_uuid = teams_info[0]
+            balance = teams_info[1]
+
+            v_list_info = {
+                               "team_uuid": team_uuid,
+                               "balance": balance
+                          }
+
+            teams_list.append(v_list_info)
+
+        result = {"teams_list": teams_list}
+
+        return request_result(0, result)

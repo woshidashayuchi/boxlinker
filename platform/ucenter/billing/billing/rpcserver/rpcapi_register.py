@@ -32,6 +32,9 @@ class RabbitmqResponse(object):
              'bil_blc_blc_inf', self.rpcapi_define.balance_info)
 
         self.rpc_api.add_resource(
+             'bil_blc_blc_chk', self.rpcapi_define.balance_check)
+
+        self.rpc_api.add_resource(
              'bil_rcg_rcg_pcr', self.rpcapi_define.recharge_precreate)
 
         self.rpc_api.add_resource(
@@ -66,6 +69,9 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource(
              'bil_rss_rss_lst', self.rpcapi_define.resource_list)
+
+        self.rpc_api.add_resource(
+             'bil_rss_rss_chk', self.rpcapi_define.resource_check)
 
         self.rpc_api.add_resource(
              'bil_voc_voc_crt', self.rpcapi_define.voucher_create)

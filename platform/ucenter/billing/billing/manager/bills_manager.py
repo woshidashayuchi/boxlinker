@@ -7,6 +7,7 @@ import json
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
+from common.time_log import time_log
 
 from billing.db.billing_db import BillingDB
 
@@ -96,3 +97,38 @@ class BillsManager(object):
         result['count'] = count
 
         return request_result(0, result)
+
+    @time_log
+    def bills_merge(self):
+
+        # 为了防止服务器时间和数据库时间出现时区不统一的情况，
+        # 该情况会导致刚写入bills库的数据被当成前一天的数据进行汇总，
+        # 所以汇总合并时需要多减去8小时时区。
+        now_time = time.time()
+        yesterday_time = now_time - 115200
+        yesterday = time.strftime("%Y-%m-%d",
+                                  time.localtime(yesterday_time))
+        start_time = str(yesterday) + ' ' + '00:00:00'
+        end_time = str(yesterday) + ' ' + '23:59:59'
+        log.info('bills merge exec, start_time=%s, end_time=%s'
+                 % (start_time, end_time))
+
+        # 获取前一天所有的资源id
+        try:
+            bills_resources_uuid = self.billing_db.bill_resource(
+                                        start_time, end_time)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        # 使用for循环根据资源id合并数据，
+        # 将每项资源一天的24条数据合并为一条，
+        # 并写入bills_days表，然后删除bills中记录
+        for resources_uuid in bills_resources_uuid:
+            resource_uuid = resources_uuid[0]
+            try:
+                self.billing_db.bills_merge(
+                     resource_uuid, start_time, end_time)
+            except Exception, e:
+                log.error('bills merge error, reason=%s' % (e))
+                return

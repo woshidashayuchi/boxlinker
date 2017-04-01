@@ -55,9 +55,19 @@ class BalanceApi(Resource):
 
             return request_result(201)
 
-        context = context_data(token, "bil_blc_blc_inf", "read")
+        try:
+            balance_check = request.args.get('balance_check')
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
 
-        return self.billing_api.balance_info(context)
+            return request_result(101)
+
+        context = context_data(token, "bil_bil_usr_com", "read")
+
+        if balance_check == 'true':
+            return self.billing_api.balance_check(context)
+        else:
+            return self.billing_api.balance_info(context)
 
 
 class RechargesApi(Resource):
@@ -312,6 +322,29 @@ class ResourcesApi(Resource):
         context = context_data(token, "bil_rss_rss_lst", "read")
 
         return self.billing_api.resource_list(context, parameters)
+
+    @time_log
+    def put(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "bil_bil_tem_com", "update")
+
+        return self.billing_api.resource_check(context, parameters)
 
 
 class ResourceApi(Resource):
@@ -602,3 +635,20 @@ class OrderApi(Resource):
         context = context_data(token, order_uuid, "update")
 
         return self.billing_api.order_update(context, parameters)
+
+
+class WeiXinNotifyApi(Resource):
+
+    @time_log
+    def get(self):
+
+        try:
+            body = request.get_data()
+            #parameters = json.loads(body)
+            log.info('Notify data=%s' % (body))
+        except Exception, e:
+            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        return '<xml><return_code>SUCCESS</return_code><return_msg>OK</return_msg></xml>'

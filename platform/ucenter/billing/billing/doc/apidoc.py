@@ -423,6 +423,32 @@
 
 
 """
+@apiDefine BALANCES_CHECK_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "teams_list": [
+            {
+                "team_uuid": "string",
+                "balance": float
+            },
+            {
+                "team_uuid": "string",
+                "balance": float
+            },
+            {
+                "team_uuid": "string",
+                "balance": float
+            }
+        ]
+    }
+}
+"""
+
+
+"""
 @apiDefine POST_RECHARGES_0
 @apiSuccessExample 返回
 {
@@ -650,6 +676,58 @@
 
 
 """
+@api {put} /api/v1.0/billing/resources 1.5 资源核对
+@apiName check resources record
+@apiGroup 1 resources
+@apiVersion 1.0.0
+@apiDescription 核对需要计费的资源信息与资源提供端信息是否匹配
+@apiPermission organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    add_list: [
+        {
+            "resource_uuid": "string",
+            "resource_name": "string",
+            "resource_type": "string",
+            "resource_conf": "string",
+            "resource_status": "string",
+            "team_uuid": "string",
+            "project_uuid": "string",
+            "user_uuid": "string"
+        }
+    ],
+    delete_list: [
+        {
+            "resource_uuid": "string",
+            "resource_name": "string",
+            "resource_type": "string",
+            "resource_conf": "string",
+            "resource_status": "string",
+            "team_uuid": "string",
+            "project_uuid": "string",
+            "user_uuid": "string"
+        }
+    ],
+    update_list: [
+        {
+            "resource_uuid": "string",
+            "resource_name": "string",
+            "resource_type": "string",
+            "resource_conf": "string",
+            "resource_status": "string",
+            "team_uuid": "string",
+            "project_uuid": "string",
+            "user_uuid": "string"
+        }
+    ]
+}
+@apiUse DELETE_0
+"""
+
+
+"""
 @api {post} /api/v1.0/billing/vouchers 2.1 礼券生成
 @apiName create vouchers
 @apiGroup 2 vouchers
@@ -839,6 +917,18 @@
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiUse GET_BALANCES_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/balances?balance_check=<true> 6.2 余额检查
+@apiName check balances
+@apiGroup 6 balances
+@apiVersion 1.0.0
+@apiDescription 查询余额小于零的组织并进行资源回收
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse BALANCES_CHECK_0
 """
 
 

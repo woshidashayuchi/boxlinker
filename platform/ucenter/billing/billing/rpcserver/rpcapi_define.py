@@ -210,6 +210,27 @@ class BillingRpcManager(object):
                     team_uuid, page_size, page_num)
 
     @acl_check
+    def resource_check(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+            user_name = user_info.get('user_name')
+
+            add_list = parameters['add_list']
+            delete_list = parameters['delete_list']
+            update_list = parameters['update_list']
+
+            if user_name != 'service':
+                return request_result(202)
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.resources_manager.resource_check(
+                    add_list, delete_list, update_list)
+
+    @acl_check
     def voucher_create(self, context, parameters):
 
         try:
@@ -393,6 +414,22 @@ class BillingRpcManager(object):
             return request_result(101)
 
         return self.balances_manager.balance_info(team_uuid)
+
+    @acl_check
+    def balance_check(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+
+            user_name = user_info.get('user_name')
+            if user_name != 'service':
+                return request_result(202)
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.balances_manager.balance_check()
 
     @acl_check
     def recharge_precreate(self, context, parameters):

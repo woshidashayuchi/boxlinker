@@ -241,7 +241,7 @@ if [ $role_check -eq 0 ]; then
 
 fi
 
-user_check=$($v_connect_mysql "select count(*) from users" | tail -n+2)
+user_check=$($v_connect_mysql "select count(*) from users where user_name='admin'" | tail -n+2)
 if [ $user_check -eq 0 ]; then
 
     # team_uuid=$(uuidgen)
@@ -289,6 +289,57 @@ if [ $user_check -eq 0 ]; then
     $v_connect_mysql "insert into users_projects(user_uuid, project_uuid, \
                       project_role, status, create_time, update_time) \
                       values('sysadmin', '"$project_uuid"', 'owner', 'enable', now(), now())"
+
+fi
+
+user_check=$($v_connect_mysql "select count(*) from users where user_name='service'" | tail -n+2)
+if [ $user_check -eq 0 ]; then
+
+    user_name='service'
+    user_uuid=$(uuidgen)
+    team_uuid=$(uuidgen)
+    project_uuid=$(uuidgen)
+
+    $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
+                      admin_uuid, team_uuid, project_uuid, user_uuid, \
+                      create_time, update_time) \
+                      values('"$user_uuid"', 'user', '0', '0', '0', '"$user_uuid"', now(), now())"
+
+    $v_connect_mysql "insert into users(user_uuid, user_name, real_name, \
+                      password, salt, email, mobile, status, sex, birth_date, \
+                      create_time, update_time) \
+                      values('"$user_uuid"', '"$user_name"', '"$user_name"', '59230c9135fc7211fe30eedf8953f0bf', \
+                      'e08222a8b6', 'service@boxlinker.com', 'None', \
+                      'enable', 'man', now(), now(), now())"
+
+    $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
+                      admin_uuid, team_uuid, project_uuid, user_uuid, \
+                      create_time, update_time) \
+                      values('"$team_uuid"', 'team', '0', '0', '0', '"$user_uuid"', now(), now())"
+
+    $v_connect_mysql "insert into teams(team_uuid, team_name, team_owner, team_type, \
+                      team_desc, status, create_time, update_time) \
+                      values('"$team_uuid"', '"$user_name"', '"$user_uuid"', 'system', \
+                      'user default team', 'enable', now(), now())"
+
+    $v_connect_mysql "insert into users_teams(user_uuid, team_uuid, \
+                      team_role, status, create_time, update_time) \
+                      values('"$user_uuid"', '"$team_uuid"', 'owner', 'enable', now(), now())"
+
+    $v_connect_mysql "insert into resources_acl(resource_uuid, resource_type, \
+                      admin_uuid, team_uuid, project_uuid, user_uuid, \
+                      create_time, update_time) \
+                      values('"$project_uuid"', 'project', '0', '0', '0', '"$user_uuid"', now(), now())"
+
+    $v_connect_mysql "insert into projects(project_uuid, project_name, \
+                      project_owner, project_team, project_type, project_desc, status, \
+                      create_time, update_time) \
+                      values('"$project_uuid"', '"$user_name"', '"$user_uuid"', '"$team_uuid"', \
+                      'system', 'team default project', 'enable', now(), now())"
+
+    $v_connect_mysql "insert into users_projects(user_uuid, project_uuid, \
+                      project_role, status, create_time, update_time) \
+                      values('"$user_uuid"', '"$project_uuid"', 'owner', 'enable', now(), now())"
 
 fi
 

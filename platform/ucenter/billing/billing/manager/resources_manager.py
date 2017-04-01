@@ -130,3 +130,23 @@ class ResourcesManager(object):
         result['resources_list'] = resources_list
 
         return request_result(0, result)
+
+    def resource_check(self, add_list, delete_list, update_list):
+
+        # 获取计费系统中24小时内新增资源列表
+        # 获取计费系统中24小时内删除资源列表
+        # 获取计费系统中24小时内更新资源列表,需要获取资源归属信息
+
+
+        for resources_add in add_list:
+            pass
+
+
+
+        for resources_delete in delete_list:
+            pass
+
+        for resources_update in update_list:
+            pass
+
+        return request_result(0)

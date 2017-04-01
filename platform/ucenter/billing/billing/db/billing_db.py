@@ -353,6 +353,14 @@ class BillingDB(MysqlInit):
 
         return super(BillingDB, self).exec_select_sql(sql)
 
+    def balance_check(self):
+
+        sql = "select team_uuid, balance from balances \
+               where balance<=0 \
+               and update_time>=date_sub(now(), interval 24 hour)"
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
     def recharge_create(self, recharge_uuid, recharge_amount,
                         recharge_type, team_uuid, recharge_user):
 
@@ -460,23 +468,72 @@ class BillingDB(MysqlInit):
         page_num = int(page_num)
         start_position = (page_num - 1) * page_size
 
-        sql_01 = "select a.resource_uuid, a.resource_name, \
-                  a.resource_conf, a.resource_status, \
-                  b.resource_type, b.team_uuid, b.project_uuid, b.user_uuid, \
-                  round(sum(c.resource_cost), 2), round(sum(c.voucher_cost), 2) \
-                  from resources a join resources_acl b join bills c \
-                  where a.resource_uuid=b.resource_uuid \
-                  and b.resource_uuid = c.resource_uuid \
-                  and c.team_uuid='%s' \
-                  and c.insert_time between '%s' and '%s' \
-                  group by a.resource_uuid \
-                  limit %d,%d" \
+        #sql_01 = "select a.resource_uuid, a.resource_name, \
+        #          a.resource_conf, a.resource_status, \
+        #          b.resource_type, b.team_uuid, b.project_uuid, b.user_uuid, \
+        #          round(sum(c.resource_cost), 2), round(sum(c.voucher_cost), 2) \
+        #          from resources a join resources_acl b join bills_days c \
+        #          where a.resource_uuid=b.resource_uuid \
+        #          and b.resource_uuid = c.resource_uuid \
+        #          and c.team_uuid='%s' \
+        #          and c.insert_time between '%s' and '%s' \
+        #          group by a.resource_uuid \
+        #          limit %d,%d" \
+        #         % (team_uuid, start_time, end_time,
+        #            start_position, page_size)
+
+        sql_01 = "select t.resource_uuid, t.resource_name, \
+                  t.resource_conf, t.resource_status, \
+                  t.resource_type, t.team_uuid, t.project_uuid, t.user_uuid, \
+                  sum(t.resource_cost), sum(t.voucher_cost) \
+                  from(select a.resource_uuid resource_uuid, \
+                       a.resource_name resource_name, \
+                       a.resource_conf resource_conf, \
+                       a.resource_status resource_status, \
+                       b.resource_type resource_type, \
+                       b.team_uuid team_uuid, b.project_uuid \
+                       project_uuid, b.user_uuid user_uuid, \
+                       c.resource_cost resource_cost, \
+                       c.voucher_cost voucher_cost \
+                       from resources a join resources_acl b join bills_days c \
+                       where a.resource_uuid=b.resource_uuid \
+                       and b.resource_uuid = c.resource_uuid \
+                       and c.team_uuid='%s' \
+                       and c.insert_time between '%s' and '%s' \
+                  union all \
+                       select a.resource_uuid resource_uuid, \
+                       a.resource_name resource_name, \
+                       a.resource_conf resource_conf, \
+                       a.resource_status resource_status, \
+                       b.resource_type resource_type, \
+                       b.team_uuid team_uuid, b.project_uuid \
+                       project_uuid, b.user_uuid user_uuid, \
+                       c.resource_cost resource_cost, c.voucher_cost voucher_cost \
+                       from resources a join resources_acl b join bills c \
+                       where a.resource_uuid=b.resource_uuid \
+                       and b.resource_uuid = c.resource_uuid \
+                       and c.team_uuid='%s' \
+                       and c.insert_time between '%s' and '%s' \
+                  ) t group by t.resource_uuid limit %d,%d" \
                  % (team_uuid, start_time, end_time,
+                    team_uuid, start_time, end_time,
                     start_position, page_size)
 
-        sql_02 = "select count(*) from (select * from bills where team_uuid='%s' \
-                  and insert_time between '%s' and '%s' group by resource_uuid) t" \
-                 % (team_uuid, start_time, end_time)
+        #sql_02 = "select count(*) from (select * from bills_days where team_uuid='%s' \
+        #          and insert_time between '%s' and '%s' group by resource_uuid) t" \
+        #         % (team_uuid, start_time, end_time)
+
+        sql_02 = "select count(*) from ( \
+                      select t.resource_uuid \
+                      from(select resource_uuid from bills_days where team_uuid='%s' \
+                           and insert_time between '%s' and '%s' \
+                           union all \
+                           select resource_uuid from bills where team_uuid='%s' \
+                           and insert_time between '%s' and '%s' \
+                          ) t group by t.resource_uuid \
+                      ) t" \
+                 % (team_uuid, start_time, end_time,
+                    team_uuid, start_time, end_time)
 
         db_bills_list = super(BillingDB, self).exec_select_sql(sql_01)
         count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
@@ -488,12 +545,53 @@ class BillingDB(MysqlInit):
 
     def bill_total(self, team_uuid, start_time, end_time):
 
-        sql = "select round(sum(resource_cost), 2), round(sum(voucher_cost), 2) \
-               from bills where team_uuid='%s' \
-               and insert_time between '%s' and '%s'" \
-              % (team_uuid, start_time, end_time)
+        # sql = "select round(sum(resource_cost), 2), round(sum(voucher_cost), 2) \
+        #        from bills_days where team_uuid='%s' \
+        #        and insert_time between '%s' and '%s'" \
+        #       % (team_uuid, start_time, end_time)
+
+        sql = "select sum(t.resource_cost), sum(t.voucher_cost) \
+               from( \
+               select sum(a.resource_cost) resource_cost, \
+               sum(a.voucher_cost) voucher_cost \
+               from bills_days a \
+               where a.team_uuid='%s' \
+               and a.insert_time between '%s' and '%s' \
+               union all \
+               select sum(b.resource_cost) , sum(b.voucher_cost) \
+               from bills b \
+               where b.team_uuid='%s' \
+               and b.insert_time between '%s' and '%s' \
+               ) t" \
+              % (team_uuid, start_time, end_time,
+                 team_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_select_sql(sql)
+
+    def bill_resource(self, start_time, end_time):
+
+        sql = "select distinct(resource_uuid) from bills \
+               where insert_time between '%s' and '%s'" \
+              % (start_time, end_time)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def bills_merge(self, resource_uuid, start_time, end_time):
+
+        # "查询插入, 插入时间等于当前时间减去24小时"
+        sql_01 = "insert into bills_days(resource_uuid, resource_cost, \
+                  voucher_cost, team_uuid, project_uuid, user_uuid, insert_time) \
+                  select resource_uuid, round(sum(resource_cost), 2), \
+                  round(sum(voucher_cost), 2), team_uuid, project_uuid, \
+                  user_uuid, insert_time from bills where resource_uuid='%s' \
+                  and insert_time between '%s' and '%s'" \
+                 % (resource_uuid, start_time, end_time)
+
+        sql_02 = "delete from bills where resource_uuid='%s' \
+                  and insert_time between '%s' and '%s'" \
+                 % (resource_uuid, start_time, end_time)
+
+        return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
 
     def order_insert(self, user_uuid, team_uuid, project_uuid,
                      order_uuid, resource_uuid, cost, status):

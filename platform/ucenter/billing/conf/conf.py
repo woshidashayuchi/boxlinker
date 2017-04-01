@@ -31,10 +31,6 @@ api_host = '0.0.0.0'
 api_port = 8002
 api_debug = True
 
-rest_host = '0.0.0.0'
-rest_debug = True
-billing_port = 8002
-
 log_level = 'INFO'
 log_file = '/var/log/cloud.log'
 
@@ -71,5 +67,5 @@ weixin_pay_mch_id = '1319447801'  #微信支付分配的商户号
 weixin_pay_key = 'e8fa4f4952d5008fbff09e3448320d72'  #沙箱key
 #spbill_create_ip = '101.201.56.35'  #Native支付为调用微信支付API的机器IP
 spbill_create_ip = '106.38.76.170'  #本地测试
-notify_url = 'https://ucenter.boxlinker.com'  #微信支付结果发回地址
+notify_url = 'https://ucenter.boxlinker.com/api/v1.0/billing/weixin/notify'  #微信支付结果发回地址
 weixin_pay_debug = True

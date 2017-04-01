@@ -10,11 +10,13 @@ from time import sleep
 
 from common.logs import logging as log
 from billing.manager.costs_manager import CostsManager
+from billing.manager.bills_manager import BillsManager
 
 
 def billing_service():
 
     costs_manager = CostsManager()
+    bills_manager = BillsManager()
 
     log.info('Starting Billing Service')
     while True:
@@ -22,6 +24,7 @@ def billing_service():
         try:
             log.info('Start billing')
             costs_manager.billing_statistics()
+            bills_manager.bills_merge()
             log.info('Finish billing')
         except Exception, e:
             log.warning('Billing Service running error, reason=%s'

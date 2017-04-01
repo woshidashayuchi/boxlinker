@@ -57,6 +57,16 @@ class BillingRpcApi(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
+    def balance_check(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("bil_blc_blc_chk", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
     def recharge_precreate(self, context, parameters=None):
 
         try:
@@ -171,6 +181,16 @@ class BillingRpcApi(object):
 
         try:
             rpc_body = rpc_data("bil_rss_rss_lst", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
+    def resource_check(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("bil_rss_rss_chk", context, parameters)
             return self.rbtmq.rpc_call_client(
                         self.queue, self.timeout, rpc_body)
         except Exception, e:
