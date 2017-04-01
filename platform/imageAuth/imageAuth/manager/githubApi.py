@@ -265,8 +265,12 @@ if __name__ == '__main__':
     token = 'a810a8c18997ad9825713928e806fb655544aff9'
     token = 'd769b2320e13aa8d86ff1d58738a0aadb17e4298'
     token = 'a810a8c18997ad9825713928e806fb655544aff9'
+    token = '70e6209f57cab04bb391f924bdf3f03a48b6d618'
+    token = 'ef021819bbc40a844103ffd920f15a164102265f'
+    username = 'livenowhy'
     username = 'liuzhangpei'
 
+    token = 'd024c75559dfe99b2f30032c91e014d5423548b1'
     # from authServer.conf.openOauth import OAUTH_WEBHOOKS
     # del_hooks_url = OAUTH_WEBHOOKS
 

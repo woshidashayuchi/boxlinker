@@ -30,12 +30,15 @@ if DEBUG:
     coding_client_id = 'e40b63f1f68c2ac6c8a56393882738f5'  # Client ID
     coding_client_secret = 'e0bedfdb802f3bdb9c28df3ba90ecc909f008e27'  # Client Secret
 else:
-    OAUTH_CALLBACK = 'https://auth.boxlinker.com/api/v2.0/oauths/callback'
-    OAUTH_WEBHOOKS = 'https://auth.boxlinker.com/api/v2.0/oauths/webhoos'
+    OAUTH_CALLBACK = 'http://imageauth.boxlinker.com/api/v1.0/oauthclient/callback'
+    # OAUTH_CALLBACK = 'http://0.0.0.0:8000/api/v2.0/oauths/callback'
+    OAUTH_WEBHOOKS = 'http://imageauth.boxlinker.com/api/v1.0/oauthclient/webhoos'
 
     # github Developer applications
     github_client_id = '44df81c41ee415b7debd'  # Client ID
     github_client_secret = '2ee2f93d511b0ba753a8e55e51b94b256ab44b40'  # Client Secret
+
+
 
     # coding
     coding_client_id = 'd624d2f871e8253dc7f947eece312a20'  # Client ID

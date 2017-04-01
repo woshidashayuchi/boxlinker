@@ -40,6 +40,9 @@ class RabbitmqResponse(object):
         # image_repo_detail_modify     修改详情 (old image_repo_modify_detail)
 
         self.rpc_api.add_resource(
+            "testapi", self.rpc_image_api_define.test_api)
+
+        self.rpc_api.add_resource(
             "get_pictures", self.rpc_image_api_define.get_pictures)
 
         self.rpc_api.add_resource(
@@ -82,6 +85,11 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource(
             "registry_notice", self.rpc_image_api_define.registry_notice)
+
+        self.rpc_api.add_resource(
+            "image_get_tagid", self.rpc_image_api_define.image_get_tagid)
+
+        #
 
 
         ####  第三方绑定

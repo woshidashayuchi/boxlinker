@@ -82,7 +82,6 @@ def ValueAndTimeMd5(md5_str):
     return get_md5(value)
 
 
-
 # 生成一个随机的key
 def make_random_key():
     random_s = random_str(le=24, letter=False)
@@ -243,6 +242,11 @@ def GenerateRandomString(randlen=32):
         randstr = str(time.time()).replace('.', '-') + str(random.random()).replace('.', '-')
         randomstr += hashlib.md5(randstr).hexdigest() + randstr
     return randomstr[0:randlen]
+
+
+
+
+
 
 
 if __name__ == '__main__':

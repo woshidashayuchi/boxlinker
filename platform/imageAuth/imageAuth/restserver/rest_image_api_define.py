@@ -20,7 +20,7 @@ Scope = namedtuple('Scope', ['type', 'image', 'actions'])
 import json
 from base64 import b64decode
 
-from flask import request
+from flask import request, make_response, jsonify,Response
 from flask_restful import Resource
 
 from common.logs import logging as log
@@ -187,6 +187,7 @@ class RegistryNotice(Resource):
     def get(self):
         return request_result(0)
 
+
 class RegistryToken(Resource):
     def __init__(self):
         self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
@@ -247,8 +248,50 @@ class RegistryToken(Resource):
 
         context = context_data(None, 'registry_token', 'create')
 
+        ret = self.imagerepo_api.RunImageRepoClient(api='registry_token', context=context, parameters=parameters)
 
-        return self.imagerepo_api.RunImageRepoClient(api='registry_token', context=context, parameters=parameters)
+        log.info("RegistryToken: %s" % (str(ret)))
+
+        if 'token' in ret and '' != ret['token']:
+            return ret
+
+        # status-codes > 100 status-codes < 500 时
+        # 401: StatusUnauthorized  未经授权的
+        # 429: StatusTooManyRequests  Too Many Requests
+        # 其他一律是 unknown
+
+        # docker/docker/vendor/github.com/docker/distribution/registry/client/errors.go
+        # 117
+        # docker/docker/vendor/github.com/docker/distribution/registry/client/auth/challenge/authchallenge.go +134
+        # 401 Authentication failure
+        # 没有权限推送,不让其一直 Retrying, 立即返回,提高体验
+
+        # 错误时,会一直 Retrying, 401 使其不再Retrying
+        if 'status' in ret and 201 == ret['status']:
+            log.info("return 401 --->  ")
+            details = {"details": u"用户名密码错 或 当前用户不是该组织成员"}
+            return details, 401
+
+        if 'status' in ret and 702 == ret['status']:  # 组织不存在  702 == ret['status']
+            log.info("return 401 --->  ")
+            details = {"details": u"组织名称不存在,请注册 或 检查镜像名"}
+            return details, 401
+
+        if 'status' in ret and 101 == ret['status']:
+            log.info("return 401 --->  ")
+            details = {"details": u"参数有误, 密码太短, 用户名不合法"}
+            return details, 401
+
+        if 'status' in ret and 0 != ret['status']:
+            details = {"details": ret['msg']}
+            return details, 404
+
+        details = {"details": "unknown error"}
+        return details, 404
+
+        # response = Response("7777777", status=700)
+        # response.data = "700700700700700"  # not date
+        # response.content_type = ''
 
 
 class ImageRepoRankApi(Resource):
@@ -276,9 +319,6 @@ class ImageRepoRankApi(Resource):
             return request_result(201)
         context = context_data(token, 'image_repo_rank', 'read')
         return self.imagerepo_api.RunImageRepoClient(api='image_repo_rank', context=context)
-
-
-
 
 
 # /api/v1.0/repository/repos/<int:page>/<int:page_size>/?repo_fuzzy=library%2Fnginx   平台镜像; 镜像搜索
@@ -332,11 +372,8 @@ class ImageRepoPublic(Resource):
         return self.imagerepo_api.RunImageRepoClient(api='image_repo_public', context=context, parameters=parameters)
 
 
-
-
-
-# 自己的镜像
 class OwnImageRepo(Resource):
+    """ 自己的镜像 """
     def __init__(self):
         self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
 
@@ -408,7 +445,6 @@ class ImageTag(Resource):
 class ImageRepoSystem(Resource):
     def __init__(self):
         self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
-
     """
     @api {get} /api/v1.0/imagerepo/image/<string:repoid>/public_info  1.9 镜像详情(公开的镜像详情)
     @apiName image public info
@@ -428,10 +464,8 @@ class ImageRepoSystem(Resource):
         except Exception, e:
             log.error('Token check error, token=%s, reason=%s' % (token, e))
             return request_result(201)
-
         parameters = {}
         parameters['repoid'] = repoid
-
         context = context_data(token, 'image_repo_public_info', 'read')
         return self.imagerepo_api.RunImageRepoClient(api='image_repo_public_info', context=context, parameters=parameters)
 
@@ -491,6 +525,40 @@ class ImageRepo(Resource):
         return self.imagerepo_api.RunImageRepoClient(api='image_repo_del', context=context, parameters=parameters)
 
 
+
+class ImageRepoTagID(Resource):
+    def __init__(self):
+        self.imagerepo_api = imagerepo_rpcapi.ImageRepoClient()
+
+    # http://imageauth.boxlinker.com/api/v1.0/imagerepo/image/<string:repo_name>/tagid/<string:repo_tag>
+    """
+    @api {get} /api/v1.0/imagerepo/image/tagids/?repo_name=repo_name&repo_tag=repo_tag  1.10 由镜像名和tag获取唯一自增id
+    @apiName get image tag id
+    @apiGroup ImageRepo
+    @apiVersion 1.0.0
+    @apiDescription 获取唯一id
+
+    @apiParam {String} repo_name  镜像名
+    @apiParam {String} repo_tag   镜像标签
+
+    @apiUse CODE_IS_OK_0
+    """
+    @time_log
+    def get(self):
+        try:
+            parameters = dict()
+            repo_name = request.args.get('repo_name')
+            repo_tag = request.args.get('repo_tag')
+            parameters['repo_name'] = repo_name
+            parameters['repo_tag'] = repo_tag
+        except Exception, e:
+            log.error('ImageRepoTagID is error')
+            return request_result(101)
+
+        context = context_data(None, "image_get_tagid", 'read')
+        return self.imagerepo_api.RunImageRepoClient(api='image_get_tagid', context=context, parameters=parameters)
+
+
 # 修改镜像详情
 class ImageRepoDetail(Resource):
     def __init__(self):
@@ -534,6 +602,5 @@ class ImageRepoDetail(Resource):
 
         parameters['repoid'] = repoid
         parameters['detail_type'] = detail_type
-
         context = context_data(token, repoid, 'update')
         return self.imagerepo_api.RunImageRepoClient(api='image_repo_detail_modify', context=context, parameters=parameters)

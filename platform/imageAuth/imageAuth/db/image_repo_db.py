@@ -54,6 +54,12 @@ class ImageRepoDB(MysqlInit):
         sql = "select repository, tag from repository_events where id='%s'" % (tagid)
         return super(ImageRepoDB, self).exec_select_sql(sql)
 
+
+    def get_image_tagid(self, repo_name, repo_tag):
+        """ 通过镜像名和tag 获取 tagid """
+        sql = "select id from repository_events where repository='%s' and tag='%s'" % (repo_name, repo_tag)
+        return super(ImageRepoDB, self).exec_select_sql(sql)
+
     def get_repo_detail_by_uuid(self, repoid):
         """获取一个镜像的详细"""
         sql = "select image_uuid, team_uuid, repository, deleted, creation_time, update_time, is_public, short_description, detail, \
@@ -107,11 +113,13 @@ class ImageRepoDB(MysqlInit):
 
     def modify_image_repo(self, image_uuid, detail_type, detail):
         """修改镜像信息"""
+        sql_detail = "update image_repository set detail=%(detail)s, update_time=now() where image_uuid=%(image_uuid)s"
+        sql_short_description = "update image_repository set short_description=%(detail)s, update_time=now() where image_uuid=%(image_uuid)s"
+        sql_is_public = "update image_repository set is_public=%(detail)s, update_time=now() where image_uuid=%(image_uuid)s"
 
-        sql_detail = "update image_repository set detail='%s', update_time=now() where image_uuid='%s'" % (detail, image_uuid)
-        sql_short_description = "update image_repository set short_description='%s', update_time=now() where image_uuid='%s'" % (detail, image_uuid)
-        sql_is_public = "update image_repository set is_public='%s', update_time=now() where image_uuid='%s'" % (detail, image_uuid)
-
+        detail_dict =dict()
+        detail_dict['image_uuid'] = image_uuid
+        detail_dict['detail'] = detail
         if 'detail' == detail_type:
             sql = sql_detail
         elif 'short_description' == detail_type:
@@ -119,7 +127,8 @@ class ImageRepoDB(MysqlInit):
         elif 'is_public' == detail_type:
             sql = sql_is_public
 
-        return super(ImageRepoDB, self).exec_update_sql(sql)
+        return super(ImageRepoDB, self).exec_update_sql_dict(sql, detail_dict)
+        # return super(ImageRepoDB, self).exec_update_sql(sql)
 
     def get_image_repo_own_search_count(self, repovalue, team_uuid):
         """ 得到我的镜像满足搜索条件的个数,  repovalue 不需要再 % """

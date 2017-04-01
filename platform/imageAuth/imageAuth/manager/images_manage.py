@@ -399,3 +399,10 @@ class ImageRepoManager(object):
         if len(ret) == 0:
             return None
         return ret[0]
+
+    def get_image_tagid(self, repo_name, repo_tag):
+        ret = self.image_repo_db.get_image_tagid(repo_name=repo_name, repo_tag=repo_tag)
+        if len(ret) == 0:
+            return request_result(703)
+        return request_result(0, ret=ret[0][0])
+

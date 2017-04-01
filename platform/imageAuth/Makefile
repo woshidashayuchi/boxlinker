@@ -13,11 +13,17 @@ gitpush:
 gitpull:
 	git pull origin develop
 
-restart:
-	git pull origin develop
+restart: gitpull
 	docker-compose stop
 	docker-compose rm -f
 	docker-compose up -d
+
+debugrestart:
+	git pull origin develop
+	docker-compose -f docker-compose-debug.yml stop
+	docker-compose -f docker-compose-debug.yml rm -f
+	docker-compose -f docker-compose-debug.yml up -d
+
 
 build:
 	docker build -t $(PREFIX):$(TAG) .

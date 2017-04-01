@@ -34,7 +34,7 @@ def server_start(n):
         sleep(10)
 
 
-def service_start(workers=4):
+def service_start(workers=1):
     pool = Pool(workers)
     pool.map(server_start, range(workers))
 

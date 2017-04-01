@@ -34,7 +34,6 @@ def rest_app_run():
             item = code
         return render_template('front_building.html', item=item)
 
-
     api.add_resource(rest_image_api_define.TestApi, '/api/v1.0/imagerepo/test')
 
     api.add_resource(rest_image_api_define.CreateImage, '/api/v1.0/pictures')
@@ -79,7 +78,11 @@ def rest_app_run():
     api.add_resource(rest_image_api_define.ImageRepoDetail,
                      '/api/v1.0/imagerepo/image/<string:repoid>/detail/<string:detail_type>')
 
+    # 修改详情
+    api.add_resource(rest_image_api_define.ImageRepoTagID,
+                     '/api/v1.0/imagerepo/image/tagids/')
 
+    # http://imageauth.boxlinker.com/api/v1.0/imagerepo/image/tagids/?repo_name=boxlinker/pause&repo_tag=2.0
 
 
     # 第三方认证

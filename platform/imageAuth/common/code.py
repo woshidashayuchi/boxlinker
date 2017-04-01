@@ -34,7 +34,9 @@ status_code = {
         598: "RabbitMQ rpc client exec error",
         599: "RabbitMQ rpc server exec error",
         601: "System error",
-        701: "There is no resources"
+        701: "There is no resources",
+        702: "Team name is error, please register or create a new team",
+        703: "image not found"
 }
 
 
