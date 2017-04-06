@@ -5,6 +5,7 @@ import uuid
 import json
 import time
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
@@ -19,6 +20,8 @@ class TeamsManager(object):
 
     def __init__(self):
 
+        self.user_image = conf.user_image
+        self.default_avatar = conf.default_avatar
         self.ucenter_db = ucenter_db.UcenterDB()
         self.ucenter_driver = ucenter_driver.UcenterDriver()
 
@@ -186,6 +189,16 @@ class TeamsManager(object):
 
     def team_info(self, team_uuid, user_uuid):
 
+        if self.user_image is True:
+            # 获取用户头像存储地址
+            ret = self.ucenter_driver.image_info(team_uuid)
+            if int(ret.get('status')) == 0:
+                team_avatar = ret.get('result')
+            else:
+                team_avatar = self.default_avatar
+        else:
+            team_avatar = self.default_avatar
+
         if (user_uuid != 'sysadmin'):
             try:
                 user_team_check = self.ucenter_db.user_team_check(
@@ -216,6 +229,7 @@ class TeamsManager(object):
                           "team_name": team_name,
                           "team_owner": team_owner,
                           "team_type": team_type,
+                          "team_avatar": team_avatar,
                           "team_desc": team_desc,
                           "status": status,
                           "create_time": create_time,

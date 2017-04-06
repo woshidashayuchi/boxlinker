@@ -27,6 +27,8 @@ class UsersManager(object):
         self.verify_code = conf.verify_code
         self.ucenter_api = conf.ucenter_api
         self.init_balance = conf.init_balance
+        self.user_image = conf.user_image
+        self.default_avatar = conf.default_avatar
 
     def user_create(self, user_name, password, email, mobile,
                     code_id=None, code_str=None):
@@ -159,13 +161,26 @@ class UsersManager(object):
 
         return request_result(0, result)
 
-    def user_info(self, user_uuid):
+    def user_info(self, user_uuid, team_uuid):
 
         try:
             user_single_info = self.ucenter_db.user_info(user_uuid)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
+
+        try:
+            if self.user_image is True:
+                # 获取用户头像存储地址
+                ret = self.ucenter_driver.image_info(team_uuid)
+                if int(ret.get('status')) == 0:
+                    user_avatar = ret.get('result')
+                else:
+                    user_avatar = self.default_avatar
+            else:
+                user_avatar = self.default_avatar
+        except Exception, e:
+            log.warning('Get user avatar error: reason=%s' % (e))
 
         user_name = user_single_info[0][0]
         real_name = user_single_info[0][1]
@@ -184,6 +199,7 @@ class UsersManager(object):
                           "email": email,
                           "mobile": mobile,
                           "status": status,
+                          "user_avatar": user_avatar,
                           "sex": sex,
                           "birth_date": birth_date,
                           "create_time": create_time,

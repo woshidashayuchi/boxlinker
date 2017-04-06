@@ -700,14 +700,7 @@
     ],
     delete_list: [
         {
-            "resource_uuid": "string",
-            "resource_name": "string",
-            "resource_type": "string",
-            "resource_conf": "string",
-            "resource_status": "string",
-            "team_uuid": "string",
-            "project_uuid": "string",
-            "user_uuid": "string"
+            "resource_uuid": "string"
         }
     ],
     update_list: [

@@ -109,6 +109,29 @@ class BillingDB(MysqlInit):
                    "count": count
                }
 
+    def resources_add_list(self):
+
+        sql = "select resource_uuid from resources \
+               where create_time>=date_sub(now(), interval 24 hour)"
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def resources_delete_list(self):
+
+        sql = "select resource_uuid from resources \
+               where resource_status='delete' \
+               and update_time>=date_sub(now(), interval 24 hour)"
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
+    def resources_update_list(self):
+
+        sql = "select resource_uuid from resources \
+               where resource_status!='delete' \
+               and update_time>=date_sub(now(), interval 24 hour)"
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
     def resources_list(self):
 
         sql = "select a.resource_uuid, a.resource_type, \

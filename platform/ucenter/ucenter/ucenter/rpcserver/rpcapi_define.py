@@ -127,6 +127,10 @@ class UcenterRpcManager(object):
     def user_info(self, context, parameters):
 
         try:
+            token = context['token']
+            user_info = token_auth(context['token'])['result']
+            team_uuid = user_info.get('team_uuid')
+
             user_uuid = context.get('resource_uuid')
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
@@ -135,7 +139,7 @@ class UcenterRpcManager(object):
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.users_manager.user_info(user_uuid)
+        return self.users_manager.user_info(user_uuid, team_uuid)
 
     @acl_check
     def user_update(self, context, parameters):

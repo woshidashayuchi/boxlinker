@@ -71,7 +71,7 @@ ENGINE=InnoDB"
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS balances (
         team_uuid           VARCHAR(64) NULL DEFAULT NULL,
         total               INT(16) NULL DEFAULT NULL,
-        balance             DOUBLE(10,2) NULL DEFAULT NULL,
+        balance             DOUBLE(16,6) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (team_uuid)
@@ -171,8 +171,8 @@ ENGINE=InnoDB"
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS bills (
         id                  INT(11) NOT NULL AUTO_INCREMENT,
         resource_uuid       VARCHAR(64) NULL DEFAULT NULL,
-        resource_cost       DOUBLE(10,6) NULL DEFAULT NULL,
-        voucher_cost        DOUBLE(10,6) NULL DEFAULT NULL,
+        resource_cost       DOUBLE(12,6) NULL DEFAULT NULL,
+        voucher_cost        DOUBLE(12,6) NULL DEFAULT NULL,
         team_uuid           VARCHAR(64) NULL DEFAULT NULL,
         project_uuid        VARCHAR(64) NULL DEFAULT NULL,
         user_uuid           VARCHAR(64) NULL DEFAULT NULL,
@@ -189,8 +189,8 @@ $v_connect_mysql "create index insert_time_idx on bills(insert_time)"
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS bills_days (
         id                  INT(11) NOT NULL AUTO_INCREMENT,
         resource_uuid       VARCHAR(64) NULL DEFAULT NULL,
-        resource_cost       DOUBLE(10,6) NULL DEFAULT NULL,
-        voucher_cost        DOUBLE(10,6) NULL DEFAULT NULL,
+        resource_cost       DOUBLE(12,6) NULL DEFAULT NULL,
+        voucher_cost        DOUBLE(12,6) NULL DEFAULT NULL,
         team_uuid           VARCHAR(64) NULL DEFAULT NULL,
         project_uuid        VARCHAR(64) NULL DEFAULT NULL,
         user_uuid           VARCHAR(64) NULL DEFAULT NULL,

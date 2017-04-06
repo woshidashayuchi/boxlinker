@@ -135,18 +135,91 @@ class ResourcesManager(object):
 
         # 获取计费系统中24小时内新增资源列表
         # 获取计费系统中24小时内删除资源列表
-        # 获取计费系统中24小时内更新资源列表,需要获取资源归属信息
+        # 获取计费系统中24小时内更新资源列表
 
+        if len(add_list) != 0:
+            try:
+                resources_add_info = self.billing_db.resources_add_list()
+            except Exception, e:
+                log.error('Database select error, reason=%s' % (e))
 
-        for resources_add in add_list:
-            pass
+            resources_list = []
+            for resources_info in resources_add_info:
+                resource_uuid = resources_info[0]
+                resources_list.append(resource_uuid)
 
+            try:
+                for resources_add in add_list:
+                    resource_uuid = resources_add['resource_uuid']
+                    if resource_uuid not in resources_list:
+                        # 获取新建资源信息并创建资源
+                        resource_name = resources_add['resource_name']
+                        resource_type = resources_add['resource_type']
+                        resource_conf = resources_add['resource_conf']
+                        resource_status = resources_add['resource_status']
+                        user_uuid = resources_add['user_uuid']
+                        team_uuid = resources_add['team_uuid']
+                        project_uuid = resources_add['project_uuid']
+                        self.resource_create(resource_uuid, resource_name,
+                                             resource_type, resource_conf,
+                                             resource_status, user_uuid,
+                                             team_uuid, project_uuid)
+            except Exception, e:
+                log.error('resource add check error, resources_list=%s, '
+                          'add_list=%s, reason=%s'
+                          % (resources_list, add_list, e))
+                return request_result(101)
 
+        if len(delete_list) != 0:
+            try:
+                resources_delete_info = self.billing_db.resources_delete_list()
+            except Exception, e:
+                log.error('Database select error, reason=%s' % (e))
 
-        for resources_delete in delete_list:
-            pass
+            resources_list = []
+            for resources_info in resources_delete_info:
+                resource_uuid = resources_info[0]
+                resources_list.append(resource_uuid)
 
-        for resources_update in update_list:
-            pass
+            try:
+                for resources_delete in delete_list:
+                    resource_uuid = resources_delete['resource_uuid']
+                    if resource_uuid not in resources_list:
+                        self.resource_delete(resource_uuid)
+            except Exception, e:
+                log.error('resource delete check error, resources_list=%s, '
+                          'delete_list=%s, reason=%s'
+                          % (resources_list, delete_list, e))
+                return request_result(101)
+
+        if len(update_list) !=0:
+            try:
+                resources_update_info = self.billing_db.resources_update_list()
+            except Exception, e:
+                log.error('Database select error, reason=%s' % (e))
+
+            resources_list = []
+            for resources_info in resources_update_info:
+                resource_uuid = resources_info[0]
+                resources_list.append(resource_uuid)
+
+            try:
+                for resources_update in update_list:
+                    resource_uuid = resources_update['resource_uuid']
+                    if resource_uuid not in resources_list:
+                        resource_name = resources_add['resource_name']
+                        resource_conf = resources_add['resource_conf']
+                        resource_status = resources_add['resource_status']
+                        user_uuid = resources_add['user_uuid']
+                        team_uuid = resources_add['team_uuid']
+                        project_uuid = resources_add['project_uuid']
+                        self.resource_update(resource_uuid, resource_conf,
+                                             resource_status, user_uuid,
+                                             team_uuid, project_uuid)
+            except Exception, e:
+                log.error('resource update check error, resources_list=%s, '
+                          'update_list=%s, reason=%s'
+                          % (resources_list, update_list, e))
+                return request_result(101)
 
         return request_result(0)

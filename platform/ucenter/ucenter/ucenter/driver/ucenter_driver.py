@@ -22,6 +22,7 @@ class UcenterDriver(object):
 
         self.email_api = conf.email_api
         self.verify_code_api = conf.verify_code_api
+        self.image_api = conf.image_api
         self.billing_api = BillingRpcApi()
 
     def email_send(self, data):
@@ -73,3 +74,26 @@ class UcenterDriver(object):
         parameters = {"balance": balance}
 
         return self.billing_api.balance_init(context, parameters)
+
+    def image_info(self, team_uuid, resource_type='UserAvatars',
+                   resource_domain='boxlinker'):
+
+        resource_uuid = team_uuid
+        url = '%s/api/v1.0/files/%s/%s/%s/%s' % (self.image_api, team_uuid,
+                                                 resource_type, resource_uuid,
+                                                 resource_domain)
+
+        try:
+            r = requests.get(url, timeout=3, verify=True)
+            status = r.json()['status']
+            log.debug('Image info url=%s, request_status=%s'
+                      % (url, status))
+            if int(status) != 0:
+                raise(Exception('request_code not equal 0'))
+            else:
+                result = r.json()['result'][0]['storage_url']
+        except Exception, e:
+            log.warning('Image info get error: reason=%s' % (e))
+            return request_result(601)
+
+        return request_result(0, result)
