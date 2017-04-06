@@ -39,6 +39,8 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('get_one', self.rpcapi_define.get_one_re)
 
+        self.rpc_api.add_resource('del_ns', self.rpcapi_define.delete_ns)
+
     def rpc_exec(self, rpc_body):
 
         try:

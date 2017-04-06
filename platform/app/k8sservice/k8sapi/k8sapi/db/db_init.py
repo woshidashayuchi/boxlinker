@@ -50,7 +50,7 @@ class DBInit(object):
         Column('rc_uuid', String(64)),
         Column('service_name', String(64)),
         Column('service_status', String(20)),
-        Column('all_name', String(64)),
+        Column('lifecycle', String(64)),
         Column('image_dir', String(200)),
         Column('service_create_time', DateTime, server_default=func.now()),
         Column('service_update_time', DateTime, server_default=func.now())
@@ -103,7 +103,6 @@ class DBInit(object):
         Column('user_uuid', String(64)),
         Column('create_time', DateTime, server_default=func.now()),
         Column('update_time', DateTime, server_default=func.now())
-
         )
 
     volume = Table('volume', metadata,

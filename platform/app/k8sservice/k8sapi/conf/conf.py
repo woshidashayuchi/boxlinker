@@ -15,9 +15,9 @@ mq_server02 = 'rabbitmq'
 mq_port = 5672
 
 node = 'lb1'
-# node = 'main'
 lb = 'lb1.boxlinker.com'
-# lb = 'boxlinker.com
+# node = 'main'
+# lb = 'boxlinker.com'
 
 # db_server01 = 'boxlinker.com'
 # db_server02 = 'boxlinker.com'

@@ -114,6 +114,7 @@ class RabbitmqServer(object):
         except Exception, e:
             log.error('RabbitMQ call server run error: queue=%s, reason=%s'
                       % (queue_name, e))
+
             raise
 
     def rpc_cast_server(self, queue_name, rabbitmq_response):

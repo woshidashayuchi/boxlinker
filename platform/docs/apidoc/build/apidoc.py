@@ -1,11 +1,11 @@
 #! /usr/bin python
 # -*- coding:utf8 -*-
-# Date:2016-08-31
+# Date:2016-10-12
 # Author: YanHua
 
 
 """
-@apiDefine CODE_DELETE_0
+@apiDefine DELETE_0
 @apiSuccessExample 返回
 {
     "status": 0,
@@ -16,548 +16,103 @@
 
 
 """
-@apiDefine CODE_USER_REGISTER_0
+@apiDefine POST_RESOURCES_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "user_name": "string",
-        "email": "string",
-        "mobile": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USER_ACTIVATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_uuid": "string",
-        "user_name": "string",
+        "resource_uuid": "string",
+        "resource_name": "string",
+        "resource_type": "string",
+        "resource_conf": "string",
+        "resource_status": "string",
         "team_uuid": "string",
-        "project_uuid": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USER_INFO_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_uuid": "string",
-        "user_name": "string",
-        "real_name": "string",
-        "email": "string",
-        "mobile": "string",
-        "sex": "string",
-        "status": "string",
-        "birth_date": "YYYY-MM-DD HH:MM:SS",
-        "create_time": "YYYY-MM-DD HH:MM:SS",
-        "update_time": "YYYY-MM-DD HH:MM:SS"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USER_CHECK_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": 0/1
-}
-"""
-
-
-"""
-@apiDefine CODE_USER_LIST_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_list": [
-            {
-                "user_uuid": "string",
-                "user_name": "string"
-            },
-            {
-                "user_uuid": "string",
-                "user_name": "string"
-            },
-            {
-                "user_uuid": "string",
-                "user_name": "string"
-            }
-        ]
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USER_UPDATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_uuid": "string",
-        "real_name": "string",
-        "mobile": "string",
-        "sex": "man/woman",
-        "birth_date": "YYYY-MM-DD HH:MM:SS"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USER_STATUS_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_uuid": "string",
-        "user_status": "enable/disable"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_ROLE_CREATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "role_uuid": "string",
-        "role_name": "string",
-        "role_priv": "string",
-        "role_owner": "string",
-        "role_team": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_ROLE_LIST_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "role_list": [
-            {
-                "role_uuid": "string",
-                "role_name": "string",
-                "role_priv": "string",
-                "role_type": "string",
-                "status": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            },
-            {
-                "role_uuid": "string",
-                "role_name": "string",
-                "role_priv": "string",
-                "role_type": "string",
-                "status": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            },
-            {
-                "role_uuid": "string",
-                "role_name": "string",
-                "role_priv": "string",
-                "role_type": "string",
-                "status": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            }
-        ]
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_ROLE_INFO_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "role_uuid": "string",
-        "role_name": "string",
-        "role_priv": "string",
-        "role_type": "string",
-        "status": "string",
-        "create_time": "YYYY-MM-DD HH:MM:SS",
-        "update_time": "YYYY-MM-DD HH:MM:SS"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_ROLE_UPDATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "role_uuid": "string",
-        "role_priv": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_PASSWORD_CHANGE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_name": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USER_LOGIN_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_token": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_TOKEN_AUTH_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_uuid": "string",
-        "user_name": "string",
-        "team_uuid": "string",
-        "team_priv": "string",
         "project_uuid": "string",
-        "project_priv": "string"
+        "user_uuid": "string"
     }
 }
 """
 
 
 """
-@apiDefine CODE_TOKEN_SWITCH_0
+@apiDefine POST_COSTS_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "orga_token": "string"
+        "resource_type": "string",
+        "resource_conf": "string",
+        "resource_status": "string",
+        "hours": int,
+        "resource_cost": float
     }
 }
 """
 
 
 """
-@apiDefine CODE_TEAM_CREATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "team_uuid": "string",
-        "team_name": "string",
-        "team_owner": "string",
-        "team_desc": "string",
-        "project_uuid": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_TEAM_LIST_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "team_list": [
-            {
-                "team_uuid": "string",
-                "team_name": "string",
-                "team_owner": "string",
-                "team_type": "string",
-                "team_desc": "string",
-                "status": "string",
-                "role_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            },
-            {
-                "team_uuid": "string",
-                "team_name": "string",
-                "team_owner": "string",
-                "team_type": "string",
-                "team_desc": "string",
-                "status": "string",
-                "role_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            },
-            {
-                "team_uuid": "string",
-                "team_name": "string",
-                "team_owner": "string",
-                "team_type": "string",
-                "team_desc": "string",
-                "status": "string",
-                "role_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            }
-        ]
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_TEAM_UUID_0
+@apiDefine POST_LIMITS_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
         "team_uuid": "string",
-        "team_name": "string",
-        "team_owner": "string"
+        "resource_type": "string",
+        "balance_check": 0/1,
+        "limit_check": 0/1
     }
 }
 """
 
 
 """
-@apiDefine CODE_TEAM_INFO_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "team_uuid": "string",
-        "team_name": "string",
-        "team_owner": "string",
-        "team_type": "string",
-        "team_desc": "string",
-        "status": "string",
-        "create_time": "YYYY-MM-DD HH:MM:SS",
-        "update_time": "YYYY-MM-DD HH:MM:SS"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_TEAM_UPDATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "team_uuid": "string",
-        "team_owner": "string",
-        "team_type": "string",
-        "team_desc": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_PROJECTS_CREATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "project_uuid": "string",
-        "project_name": "string",
-        "project_owner": "string",
-        "project_team": "string",
-        "project_desc": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_PROJECTS_LIST_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "project_list": [
-            {
-                "project_uuid": "string",
-                "project_name": "string",
-                "project_owner": "string",
-                "project_team": "string",
-                "project_type": "string",
-                "project_desc": "string",
-                "status": "string",
-                "role_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            },
-            {
-                "project_uuid": "string",
-                "project_name": "string",
-                "project_owner": "string",
-                "project_team": "string",
-                "project_type": "string",
-                "project_desc": "string",
-                "status": "string",
-                "role_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            },
-            {
-                "project_uuid": "string",
-                "project_name": "string",
-                "project_owner": "string",
-                "project_team": "string",
-                "project_type": "string",
-                "project_desc": "string",
-                "status": "string",
-                "role_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
-            }
-        ]
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_PROJECTS_INFO_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "project_uuid": "string",
-        "project_name": "string",
-        "project_owner": "string",
-        "project_team": "string",
-        "project_type": "string",
-        "project_desc": "string",
-        "status": "string",
-        "create_time": "YYYY-MM-DD HH:MM:SS",
-        "update_time": "YYYY-MM-DD HH:MM:SS"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_PROJECTS_UPDATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "project_uuid": "string",
-        "project_owner": "string",
-        "project_desc": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USERSTEAMS_ADD_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_uuid": "string",
-        "team_uuid": "string",
-        "team_role": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USERSTEAMS_ACTIVATE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "user_uuid": "string",
-        "team_uuid": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_USERSTEAMS_LIST_0
+@apiDefine GET_LIMITS_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
         "count": int,
-        "user_list": [
+        "limits_list": [
             {
-                "user_uuid": "string",
-                "user_name": "string",
-                "team_role": "string",
+                "team_level": int,
+                "teams": int,
+                "teamusers": int,
+                "projects": int,
+                "projectusers": int,
+                "roles": int,
+                "images": int,
+                "services": int,
+                "volumes": int,
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
-                "user_uuid": "string",
-                "user_name": "string",
-                "team_role": "string",
+                "team_level": int,
+                "teams": int,
+                "teamusers": int,
+                "projects": int,
+                "projectusers": int,
+                "roles": int,
+                "images": int,
+                "services": int,
+                "volumes": int,
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
-                "user_uuid": "string",
-                "user_name": "string",
-                "team_role": "string",
+                "team_level": int,
+                "teams": int,
+                "teamusers": int,
+                "projects": int,
+                "projectusers": int,
+                "roles": int,
+                "images": int,
+                "services": int,
+                "volumes": int,
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             }
@@ -568,47 +123,478 @@
 
 
 """
-@apiDefine CODE_USERSPROJECTS_ADD_0
+@apiDefine PUT_LIMITS_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "user_uuid": "string",
-        "project_uuid": "string",
-        "project_role": "string"
+        "team_level": int,
+        "resource_type": "string",
+        "limit": int
     }
 }
 """
 
 
 """
-@apiDefine CODE_USERSPROJECTS_LIST_0
+@apiDefine PUT_RESOURCES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "resource_uuid": "string",
+        "resource_conf": "string",
+        "resource_status": "string",
+        "team_uuid": "string",
+        "project_uuid": "string",
+        "user_uuid": "string"
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_RESOURCES_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
         "count": int,
-        "user_list": [
+        "resources_list": [
             {
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "resource_conf": "string",
+                "resource_status": "string",
+                "team_uuid": "string",
+                "project_uuid": "string",
                 "user_uuid": "string",
-                "user_name": "string",
-                "project_role": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "resource_conf": "string",
+                "resource_status": "string",
+                "team_uuid": "string",
+                "project_uuid": "string",
                 "user_uuid": "string",
-                "user_name": "string",
-                "project_role": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "resource_conf": "string",
+                "resource_status": "string",
+                "team_uuid": "string",
+                "project_uuid": "string",
                 "user_uuid": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine POST_VOUCHERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "voucher_uuid": "string",
+        "denomination": int,
+        "invalid_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine PUT_VOUCHERS_STATUS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "voucher_uuid": "string"
+    }
+}
+"""
+
+
+"""
+@apiDefine PUT_VOUCHERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "vouchers_uuid": "string",
+        "team_uuid": "string",
+        "project_uuid": "string",
+        "user_uuid": "string"
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_VOUCHERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "count": int,
+        "vouchers_list": [
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
+                "active_time": "YYYY-MM-DD HH:MM:SS",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
+                "active_time": "YYYY-MM-DD HH:MM:SS",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "balance": float,
+                "status": "string",
+                "accepter": "string",
+                "activator": "string",
+                "active_time": "YYYY-MM-DD HH:MM:SS",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_ACCPET_VOUCHERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "count": int,
+        "vouchers_list": [
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            },
+            {
+                "vouchers_uuid": "string",
+                "denomination": int,
+                "status": "string",
+                "invalid_time": "YYYY-MM-DD HH:MM:SS",
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_BILLS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "count": int,
+        "bills_total": {
+                           "resource_cost": float,
+                           "voucher_cost": float
+                       },
+        "bills_list": [
+            {
+                "start_time": "YY-MM-DD",
+                "end_time": "YY-MM-DD",
+                "team_uuid": "string",
+                "project_uuid": "string",
+                "user_uuid": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "resource_conf": "string",
+                "resource_status": "string",
+                "resource_cost": float,
+                "voucher_cost": float
+            },
+            {
+                "start_time": "YY-MM-DD",
+                "end_time": "YY-MM-DD",
+                "team_uuid": "string",
+                "project_uuid": "string",
+                "user_uuid": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "resource_conf": "string",
+                "resource_status": "string",
+                "resource_cost": float,
+                "voucher_cost": float
+            },
+            {
+                "start_time": "YY-MM-DD",
+                "end_time": "YY-MM-DD",
+                "team_uuid": "string",
+                "project_uuid": "string",
+                "user_uuid": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "resource_conf": "string",
+                "resource_status": "string",
+                "resource_cost": float,
+                "voucher_cost": float
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_LEVELS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "team_uuid": "string",
+        "level": int,
+        "experience": int,
+        "up_required": int,
+        "create_time": "YYYY-MM-DD HH:MM:SS",
+        "update_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_BALANCES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "team_uuid": "string",
+        "balance": float,
+        "update_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine BALANCES_CHECK_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "teams_list": [
+            {
+                "team_uuid": "string",
+                "balance": float
+            },
+            {
+                "team_uuid": "string",
+                "balance": float
+            },
+            {
+                "team_uuid": "string",
+                "balance": float
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine POST_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "recharge_uuid": int,
+        "recharge_type": "string",
+        "recharge_amount": int,
+        "user_name": "string",
+        "qr_code": "url"
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "recharge_uuid": int,
+        "recharge_amount": int,
+        "recharge_type": "string",
+        "team_uuid": "string",
+        "user_name": "string",
+        "create_time": "YYYY-MM-DD HH:MM:SS"
+    }
+}
+"""
+
+
+"""
+@apiDefine LIST_RECHARGES_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "count": int,
+        "recharge_list": [
+            {
+                "team_uuid": "string",
+                "recharge_uuid": "string",
+                "recharge_amount": int,
+                "recharge_type": "string",
                 "user_name": "string",
-                "project_role": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "team_uuid": "string",
+                "recharge_uuid": "string",
+                "recharge_amount": int,
+                "recharge_type": "string",
+                "user_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "team_uuid": "string",
+                "recharge_uuid": "string",
+                "recharge_amount": int,
+                "recharge_type": "string",
+                "user_name": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS"
+            }
+        ]
+    }
+}
+"""
+
+
+"""
+@apiDefine POST_ORDERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "order_uuid": "string",
+        "resource_uuid": "string",
+        "cost": float,
+        "status": "string",
+        "team_uuid": "string",
+        "project_uuid": "string",
+        "user_uuid": "string"
+    }
+}
+"""
+
+
+"""
+@apiDefine PUT_ORDERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "order_uuid": "string",
+        "cost": float,
+        "status": "string"
+    }
+}
+"""
+
+
+"""
+@apiDefine GET_ORDERS_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "count": int,
+        "orders_list": [
+            {
+                "order_uuid": "string",
+                "resource_uuid": "string",
+                "cost": float,
+                "status": "string",
+                "team_uuid": "string",
+                "project_uuid": "string",
+                "user_uuid": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
+            },
+                "order_uuid": "string",
+                "resource_uuid": "string",
+                "cost": float,
+                "status": "string",
+                "team_uuid": "string",
+                "project_uuid": "string",
+                "user_uuid": "string",
+                "create_time": "YYYY-MM-DD HH:MM:SS",
+                "update_time": "YYYY-MM-DD HH:MM:SS"
+            {
+            },
+            {
+                "order_uuid": "string",
+                "resource_uuid": "string",
+                "cost": float,
+                "status": "string",
+                "team_uuid": "string",
+                "project_uuid": "string",
+                "user_uuid": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             }
@@ -619,603 +605,402 @@
 
 
 ###################################################################
-#                        用户服务接口定义                         #
+#                       计费服务接口定义                          #
 ###################################################################
 
 
-
 """
-@api {post} /api/v1.0/ucenter/users 1.1 用户注册
-@apiName user register
-@apiGroup 1 users
+@api {post} /api/v1.0/billing/resources 1.1 资源创建
+@apiName create resources record
+@apiGroup 1 resources
 @apiVersion 1.0.0
-@apiDescription 用户注册
-@apiPermission user
-@apiParam {json} body
-@apiParamExample body
-{
-    "user_name": "string",
-    "password": "string",
-    "email": "string",
-    "mobile": "string",
-    "code_id": "string",
-    "code_str": "string"
-}
-@apiUse CODE_USER_REGISTER_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/users/status/<user_uuid> 1.2 用户激活
-@apiName user activate
-@apiGroup 1 users
-@apiVersion 1.0.0
-@apiDescription 用户激活
-@apiPermission user
-@apiUse CODE_USER_ACTIVATE_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/users?user_name=<string> 1.3 用户列表
-@apiName user list
-@apiGroup 1 users
-@apiVersion 1.0.0
-@apiDescription 根据用户输入模糊查询用户列表
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_USER_LIST_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/users?user_name=<string>&name_check=<true> 1.4 用户检测
-@apiName user exist check
-@apiGroup 1 users
-@apiVersion 1.0.0
-@apiDescription 用户注册时检测用户名是否存在
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_USER_CHECK_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/users/<user_uuid> 1.5 用户信息
-@apiName user info
-@apiGroup 1 users
-@apiVersion 1.0.0
-@apiDescription 用户详细信息查询
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_USER_INFO_0
-"""
-
-
-"""
-@api {put} /api/v1.0/ucenter/users/<user_uuid> 1.6 用户更新
-@apiName user update
-@apiGroup 1 users
-@apiVersion 1.0.0
-@apiDescription 用户信息更新
+@apiDescription 创建需要计费的资源信息
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
 @apiParamExample body
 {
-    "real_name": "string",
-    "mobile": "string",
-    "sex": "man/woman",
-    "birth_date": epoch_milliseconds
+    "resource_uuid": "string",
+    "resource_name": "string",
+    "resource_type": "string",
+    "resource_conf": "string",
+    "resource_status": "string"
 }
-@apiUse CODE_USER_UPDATE_0
+@apiUse POST_RESOURCES_0
 """
 
 
 """
-@api {put} /api/v1.0/ucenter/users/status/<user_uuid> 1.7 用户状态
-@apiName user status update
-@apiGroup 1 users
+@api {get} /api/v1.0/billing/resources?page_size=<int>&page_num=<int> 1.2 资源列表
+@apiName get resources record
+@apiGroup 1 resources
 @apiVersion 1.0.0
-@apiDescription 用户状态更新（启用/禁用）
+@apiDescription 获取需要计费的资源列表
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse GET_RESOURCES_0
+"""
+
+
+"""
+@api {put} /api/v1.0/billing/resources/<resource_uuid> 1.3 资源更新
+@apiName update resources record
+@apiGroup 1 resources
+@apiVersion 1.0.0
+@apiDescription 更新需要计费的资源信息
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "resource_conf": "string",
+    "resource_status": "string",
+    "team_uuid": "string",
+    "project_uuid": "string",
+    "user_uuid": "string"
+}
+@apiUse PUT_RESOURCES_0
+"""
+
+
+"""
+@api {delete} /api/v1.0/billing/resources/<resource_uuid> 1.4 资源删除
+@apiName delete resources record
+@apiGroup 1 resources
+@apiVersion 1.0.0
+@apiDescription 删除需要计费的资源信息
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse DELETE_0
+"""
+
+
+"""
+@api {put} /api/v1.0/billing/resources 1.5 资源核对
+@apiName check resources record
+@apiGroup 1 resources
+@apiVersion 1.0.0
+@apiDescription 核对需要计费的资源信息与资源提供端信息是否匹配
+@apiPermission organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    add_list: [
+        {
+            "resource_uuid": "string",
+            "resource_name": "string",
+            "resource_type": "string",
+            "resource_conf": "string",
+            "resource_status": "string",
+            "team_uuid": "string",
+            "project_uuid": "string",
+            "user_uuid": "string"
+        }
+    ],
+    delete_list: [
+        {
+            "resource_uuid": "string",
+            "resource_name": "string",
+            "resource_type": "string",
+            "resource_conf": "string",
+            "resource_status": "string",
+            "team_uuid": "string",
+            "project_uuid": "string",
+            "user_uuid": "string"
+        }
+    ],
+    update_list: [
+        {
+            "resource_uuid": "string",
+            "resource_name": "string",
+            "resource_type": "string",
+            "resource_conf": "string",
+            "resource_status": "string",
+            "team_uuid": "string",
+            "project_uuid": "string",
+            "user_uuid": "string"
+        }
+    ]
+}
+@apiUse DELETE_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/vouchers 2.1 礼券生成
+@apiName create vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 系统管理员生成礼券
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "denomination": int,
+    "invalid_time": "epoch_seconds"
+}
+@apiUse POST_VOUCHERS_0
+"""
+
+
+"""
+@api {put} /api/v1.0/billing/vouchers/<voucher_uuid> 2.2 礼券分发
+@apiName distribute vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 系统管理员分发礼券给用户
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "accepter": "string"
+}
+@apiUse PUT_VOUCHERS_STATUS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/vouchers?voucher_accept=<true>&page_size=<int>&page_num=<int> 2.3 礼券查询
+@apiName get accept vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 用户查询收到的礼券列表
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiUse GET_ACCPET_VOUCHERS_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/vouchers/<voucher_uuid> 2.4 礼券激活
+@apiName active vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 用户激活领用到的礼券
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse PUT_VOUCHERS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/vouchers?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 2.5 礼券列表
+@apiName get vouchers
+@apiGroup 2 vouchers
+@apiVersion 1.0.0
+@apiDescription 查询用户已激活的礼劵列表
+@apiPermission user and organization and admin
+@apiParam {json} header {"token": "string"}
+@apiUse GET_VOUCHERS_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/orders 3.1 订单创建
+@apiName create orders
+@apiGroup 3 orders
+@apiVersion 1.0.0
+@apiDescription 创建订单信息
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "resource_uuid": "string",
+    "cost": float,
+    "status": "string"
+}
+@apiUse POST_ORDERS_0
+"""
+
+
+"""
+@api {put} /api/v1.0/billing/orders/<order_uuid> 3.2 订单更新
+@apiName update orders
+@apiGroup 3 orders
+@apiVersion 1.0.0
+@apiDescription 更新订单信息
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "cost": float,
+    "status": "string"
+}
+@apiUse PUT_ORDERS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/orders?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 3.3 订单列表
+@apiName get orders
+@apiGroup 3 orders
+@apiVersion 1.0.0
+@apiDescription 查询订单信息
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse GET_ORDERS_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/limits 4.1 限额检查
+@apiName limits check
+@apiGroup 4 limits
+@apiVersion 1.0.0
+@apiDescription 检查限额值
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "resource_type": "string",
+    "cost": float
+}
+@apiUse POST_LIMITS_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/limits?page_size=<int>&page_num=<int> 4.2 限额列表
+@apiName limits list
+@apiGroup 4 limits
+@apiVersion 1.0.0
+@apiDescription 系统管理员查询限额列表
+@apiPermission system admin
+@apiParam {json} header {"token": "string"}
+@apiUse GET_LIMITS_0
+"""
+
+
+"""
+@api {put} /api/v1.0/billing/limits 4.3 限额更新
+@apiName limits update
+@apiGroup 4 limits
+@apiVersion 1.0.0
+@apiDescription 系统管理员更新限额信息
 @apiPermission system admin
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
 @apiParamExample body
 {
-    "user_status": "enable/disable"
+    "team_level": "string",
+    "resource_type": "string",
+    "limit": int
 }
-@apiUse CODE_USER_STATUS_0
+@apiUse PUT_LIMITS_0
 """
 
 
 """
-@api {post} /api/v1.0/ucenter/roles 2.1 角色创建
-@apiName role create
-@apiGroup 2 roles
+@api {get} /api/v1.0/billing/levels 5.1 等级信息
+@apiName get levels
+@apiGroup 5 levels
 @apiVersion 1.0.0
-@apiDescription 角色创建
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "role_name": "string",
-    "role_priv": "CRUD"
-}
-@apiUse CODE_ROLE_CREATE_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/roles 2.2 角色列表
-@apiName role list
-@apiGroup 2 roles
-@apiVersion 1.0.0
-@apiDescription 角色列表查询
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_ROLE_LIST_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/roles/<role_uuid> 2.3 角色信息
-@apiName role info
-@apiGroup 2 roles
-@apiVersion 1.0.0
-@apiDescription 角色详细信息查询
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_ROLE_INFO_0
-"""
-
-
-"""
-@api {put} /api/v1.0/ucenter/roles/<role_uuid> 2.4 角色更新
-@apiName role update
-@apiGroup 2 roles
-@apiVersion 1.0.0
-@apiDescription 角色权限更新
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "role_priv": "CRUD"
-}
-@apiUse CODE_ROLE_UPDATE_0
-"""
-
-
-"""
-@api {delete} /api/v1.0/ucenter/roles/<role_uuid> 2.5 角色删除
-@apiName role delete
-@apiGroup 2 roles
-@apiVersion 1.0.0
-@apiDescription 角色删除
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
-"""
-
-
-"""
-@api {post} /api/v1.0/ucenter/passwords/<user_uuid> 3.1 密码修改
-@apiName password change
-@apiGroup 3 passwords
-@apiVersion 1.0.0
-@apiDescription 用户主动修改密码
-@apiPermission user
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "old_password": "string",
-    "new_password": "string"
-}
-@apiUse CODE_PASSWORD_CHANGE_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/passwords/<user_name> 3.2 密码找回
-@apiName password find
-@apiGroup 3 passwords
-@apiVersion 1.0.0
-@apiDescription 密码找回邮件发送
-@apiPermission user
-@apiUse CODE_PASSWORD_CHANGE_0
-"""
-
-
-"""
-@api {put} /api/v1.0/ucenter/passwords/<user_uuid> 3.3 密码重置
-@apiName password reset
-@apiGroup 3 passwords
-@apiVersion 1.0.0
-@apiDescription 密码找回时用新密码重置
-@apiPermission user
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "password": "string"
-}
-@apiUse CODE_PASSWORD_CHANGE_0
-"""
-
-
-"""
-@api {post} /api/v1.0/ucenter/tokens 4.1 Token创建（登录）
-@apiName user login
-@apiGroup 4 tokens
-@apiVersion 1.0.0
-@apiDescription 用户登录时创建Token
-@apiPermission user
-@apiParam {json} body
-@apiParamExample body
-{
-    "user_name": "string",
-    "password": "string"
-}
-@apiUse CODE_USER_LOGIN_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/tokens 4.2 Token验证
-@apiName token auth
-@apiGroup 4 tokens
-@apiVersion 1.0.0
-@apiDescription 验证Token正确性
+@apiDescription 查询等级信息
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_TOKEN_AUTH_0
+@apiUse GET_LEVELS_0
 """
 
 
 """
-@api {put} /api/v1.0/ucenter/tokens 4.3 Token切换
-@apiName token switch
-@apiGroup 4 tokens
+@api {get} /api/v1.0/billing/balances 6.1 余额信息
+@apiName get balances
+@apiGroup 6 balances
 @apiVersion 1.0.0
-@apiDescription 用户切换组织或项目时更新Token
+@apiDescription 查询余额信息
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse GET_BALANCES_0
+"""
+
+
+"""
+@api {get} /api/v1.0/billing/balances?balance_check=<true> 6.2 余额检查
+@apiName check balances
+@apiGroup 6 balances
+@apiVersion 1.0.0
+@apiDescription 查询余额小于零的组织并进行资源回收
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse BALANCES_CHECK_0
+"""
+
+
+"""
+@api {post} /api/v1.0/billing/costs 7.1 费用信息
+@apiName get resource cost
+@apiGroup 7 costs
+@apiVersion 1.0.0
+@apiDescription 计算资源费用
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
 @apiParamExample body
 {
-    "team_uuid": "string",
-    "project_uuid": "string"
+    "resource_type": "string",
+    "resource_conf": "string",
+    "resource_status": "string",
+    "hours": int
 }
-@apiUse CODE_TOKEN_SWITCH_0
+@apiUse POST_COSTS_0
 """
 
 
 """
-@api {delete} /api/v1.0/ucenter/tokens 4.4 Token注销
-@apiName token delete
-@apiGroup 4 tokens
+@api {post} /api/v1.0/billing/recharges 8.1 用户充值
+@apiName create recharge records
+@apiGroup 8 recharges
 @apiVersion 1.0.0
-@apiDescription 用户注销时删除Token
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
-"""
-
-
-"""
-@api {post} /api/v1.0/ucenter/teams 5.1.1 组织创建
-@apiName team create
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 组织创建
+@apiDescription 用户执行充值
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiParam {json} body
 @apiParamExample body
 {
-    "team_name": "string",
-    "team_desc": "string"
+    "recharge_type": "zhifubao/weixin",
+    "recharge_amount": int
 }
-@apiUse CODE_TEAM_CREATE_0
+@apiUse POST_RECHARGES_0
 """
 
 
 """
-@api {get} /api/v1.0/ucenter/teams 5.1.2 组织列表
-@apiName team list
-@apiGroup 5 teams
+@api {get} /api/v1.0/billing/recharges/<recharge_uuid> 8.2 充值查询
+@apiName get recharge info record
+@apiGroup 8 recharges
 @apiVersion 1.0.0
-@apiDescription 查询用户所属的组织列表
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_TEAM_LIST_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/teams?team_name=<team_name>&name_check=<true> 5.1.3 组织检测
-@apiName team exist check
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 创建组织时检测组织名是否存在
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_USER_CHECK_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/teams?team_name=<team_name>&uuid_info=<true> 5.1.4 组织UUID
-@apiName team uuid get
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 根据组织名查询组织UUID
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_TEAM_UUID_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/teams?team_name=<team_name>&public_info=<true> 5.1.5 组织列表(公开团队)
-@apiName public team uuid get
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 根据组织名查询平台公开的组织信息
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_TEAM_INFO_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/teams/<team_uuid> 5.1.6 组织信息
-@apiName team info
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 组织详细信息查询
+@apiDescription 查询充值结果
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_TEAM_INFO_0
+@apiUse GET_RECHARGES_0
 """
 
 
 """
-@api {put} /api/v1.0/ucenter/teams/<team_uuid> 5.1.7 组织更新
-@apiName team update
-@apiGroup 5 teams
+@api {get} /api/v1.0/billing/recharges?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 8.3 充值记录
+@apiName get recharge_records
+@apiGroup 8 recharges
 @apiVersion 1.0.0
-@apiDescription 更新组织拥有者或描述信息
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "team_owner": "string",
-    "team_type": "private/public"
-    "team_desc": "string"
-}
-@apiUse CODE_TEAM_UPDATE_0
-"""
-
-
-"""
-@api {delete} /api/v1.0/ucenter/teams/<team_uuid> 5.1.8 组织删除
-@apiName team delete
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 组织删除
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
-"""
-
-
-"""
-@api {post} /api/v1.0/ucenter/projects 6.1.1 项目创建
-@apiName projects create
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 项目创建
+@apiDescription 查询充值记录
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "project_name": "string",
-    "project_desc": "string"
-}
-@apiUse CODE_PROJECTS_CREATE_0
+@apiUse LIST_RECHARGES_0
 """
 
 
 """
-@api {get} /api/v1.0/ucenter/projects 6.1.2 项目列表
-@apiName project list
-@apiGroup 6 projects
+@api {get} /api/v1.0/billing/bills?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 9.1 账单查询
+@apiName get bills
+@apiGroup 9 bills
 @apiVersion 1.0.0
-@apiDescription 查询用户在某一特定组织下所属的项目列表
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_PROJECTS_LIST_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/projects/<project_uuid> 6.1.3 项目信息
-@apiName project info
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 项目详细信息查询
+@apiDescription 查询账单信息
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_PROJECTS_INFO_0
-"""
-
-
-"""
-@api {put} /api/v1.0/ucenter/projects/<project_uuid> 6.1.4 项目更新
-@apiName project update
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 项目更新
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "project_owner": "string",
-    "project_desc": "string"
-}
-@apiUse CODE_PROJECTS_UPDATE_0
-"""
-
-
-"""
-@api {delete} /api/v1.0/ucenter/projects/<project_uuid> 6.1.5 项目删除
-@apiName project delete
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 项目删除
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
-"""
-
-
-"""
-@api {post} /api/v1.0/ucenter/usersteams 5.2.1 组织用户添加
-@apiName team user add
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 添加用户到组织
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "user_uuid": "string",
-    "role_uuid": "string"
-}
-@apiUse CODE_USERSTEAMS_ADD_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/usersteams?page_size=<int>&page_num=<int> 5.2.2 组织用户列表
-@apiName team user list
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 查询一个组织下的用户列表
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_USERSTEAMS_LIST_0
-"""
-
-
-"""
-@api {post} /api/v1.0/ucenter/usersteams/<user_uuid> 5.2.3 组织用户激活
-@apiName team user activate
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 用户确认是否加入特定组织
-@apiPermission user
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "team_uuid": "string"
-}
-@apiUse CODE_USERSTEAMS_ACTIVATE_0
-"""
-
-
-"""
-@api {put} /api/v1.0/ucenter/usersteams/<user_uuid> 5.2.4 组织用户权限
-@apiName team user update
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 修改用户在特定组织中的角色
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "role_uuid": "string"
-}
-@apiUse CODE_USERSTEAMS_ADD_0
-"""
-
-
-"""
-@api {delete} /api/v1.0/ucenter/usersteams?user_uuid=<string>&team_uuid=<string> 5.2.5 组织用户删除
-@apiName team user delete
-@apiGroup 5 teams
-@apiVersion 1.0.0
-@apiDescription 将用户移出特定组织
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
-"""
-
-
-"""
-@api {post} /api/v1.0/ucenter/usersprojects 6.2.1 项目用户添加
-@apiName project user add
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 添加用户到项目
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "user_uuid": "string",
-    "role_uuid": "string"
-}
-@apiUse CODE_USERSPROJECTS_ADD_0
-"""
-
-
-"""
-@api {get} /api/v1.0/ucenter/usersprojects?page_size=<int>&page_num=<int> 6.2.2 项目用户列表
-@apiName project user list
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 查询一个项目下的用户列表
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_USERSPROJECTS_LIST_0
-"""
-
-
-"""
-@api {put} /api/v1.0/ucenter/usersprojects/<user_uuid> 6.2.3 项目用户权限
-@apiName project user update
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 修改用户在特定组织中的角色
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "role_uuid": "string"
-}
-@apiUse CODE_USERSPROJECTS_ADD_0
-"""
-
-
-"""
-@api {delete} /api/v1.0/ucenter/usersprojects/<user_uuid> 6.2.4 项目用户删除
-@apiName project user delete
-@apiGroup 6 projects
-@apiVersion 1.0.0
-@apiDescription 将用户移出特定项目
-@apiPermission organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
+@apiUse GET_BILLS_0
 """

@@ -20,6 +20,14 @@ class KApiMethods(object):
         self.HEADERS = {'Authorization': auth_info}
         self.host_address = 'https://kubernetes.default.svc:443/api/v1'
 
+    def delete_namespace(self, dict_data):
+        log.info('delete the ns dict is: %s' % dict_data)
+        namespace = dict_data.get('namespace')
+        url = '%s/namespaces/%s' % (self.host_address, namespace)
+        msg = requests.delete(url, headers=self.HEADERS, verify=False)
+        log.info('delete the kubernetes ns result is : %s' % msg.text)
+        return json.loads(msg.text)
+
     def get_account(self, dict_data):
         account_name = dict_data.get('name')
         namespace = dict_data.get('namespace')

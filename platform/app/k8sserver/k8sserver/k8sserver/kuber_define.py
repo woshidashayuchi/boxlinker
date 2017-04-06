@@ -101,3 +101,10 @@ class KubernetesRpcAPIs(object):
             return self.kubernetes.get_name_resource(context)
         except Exception, e:
             log.error('get resource(%s) error, reason=%s' % (context.get('rtype'), e))
+
+    def delete_ns(self, context, parameters=None):
+        try:
+            return self.kubernetes.delete_namespace(context)
+        except Exception, e:
+            log.error('delete the namespace error, reason is: %s' % e)
+            return False

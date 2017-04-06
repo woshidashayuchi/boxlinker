@@ -9,7 +9,7 @@ from common.logs import logging as log
 
 def photo_dir(dict_data):
     photo_url = 'http://%s/api/v1.0/pictures' % conf.IMAGE_S
-    file_url = 'http://101.200.45.76:8765/api/v1.0/files/%s/ServiceAvatars/%s/boxlinker' % (dict_data.get('team_uuid'),
+    file_url = 'http://101.201.56.57:8765/api/v1.0/files/%s/ServiceAvatars/%s/boxlinker' % (dict_data.get('team_uuid'),
                                                                                           dict_data.get('service_uuid'))
     service_name = dict_data.get('service_name')
     token = dict_data.get('token')
@@ -56,7 +56,7 @@ def parameters_to_avatars(dict_data):
 def get_services_photos(dict_data):
     response = []
     header = {'token': dict_data.get('token')}
-    avatars_url = 'http://101.200.45.76:8765/api/v1.0/files/team_uuid'
+    avatars_url = 'http://101.201.56.57:8765/api/v1.0/files/team_uuid'
     try:
         to_avatars = parameters_to_avatars(dict_data)
     except Exception, e:
