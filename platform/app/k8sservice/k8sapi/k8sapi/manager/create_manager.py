@@ -102,11 +102,12 @@ class CreateManager(object):
     def service_create(self, token, context, cost):
         log.info('the create service data is: %s' % context)
 
-        check_name = self.check_name(context)
-        if check_name is False:
-            return request_result(301)
-        if check_name == 'error':
-            return request_result(404)
+        if context.get('rtype') != 'lifecycle':
+            check_name = self.check_name(context)
+            if check_name is False:
+                return request_result(301)
+            if check_name == 'error':
+                return request_result(404)
 
         team_name, project_name = self.token_driver.gain_team_name(context)
         if team_name is False:
@@ -130,25 +131,28 @@ class CreateManager(object):
             log.info('kubernetes resource create result is: %s' % ret)
             return request_result(501)
 
-        try:
-            infix = self.infix_db(context)
+        if context.get('rtype') != 'lifecycle':
+            try:
+                infix = self.infix_db(context)
 
-            domain = self.kuber_driver.container_domain(context)
-            context.update({'container': domain})
+                domain = self.kuber_driver.container_domain(context)
+                context.update({'container': domain})
 
-            diff = self.diff_infix_db(context)
+                diff = self.diff_infix_db(context)
 
-        except Exception, e:
-            log.error('resource in database error, reason=%s' % e)
-            return request_result(401)
+            except Exception, e:
+                log.error('resource in database error, reason=%s' % e)
+                return request_result(401)
 
-        if infix is False or diff is False:
-            return request_result(401)
+            if infix is False or diff is False:
+                return request_result(401)
 
-        try:
-            context['service_uuid'] = infix
-            photo_dir(context)
-        except Exception, e:
-            log.error('from the photo url make the photo for service error, reason is: ' % e)
-        post_es(context, 'service is creating...please wait')
-        return request_result(0, infix)
+            try:
+                context['service_uuid'] = infix
+                photo_dir(context)
+            except Exception, e:
+                log.error('from the photo url make the photo for service error, reason is: ' % e)
+            post_es(context, 'service is creating...please wait')
+            return request_result(0, infix)
+        else:
+            return request_result(0, 'recovering...')

@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app=app)
 
 
-@app.route('/api/v1.0/application/services', methods=['POST', 'GET'])
+@app.route('/api/v1.0/application/services', methods=['POST', 'GET', 'DELETE'])
 def create_service():
     return KubernetesClientApi.services_server()
 

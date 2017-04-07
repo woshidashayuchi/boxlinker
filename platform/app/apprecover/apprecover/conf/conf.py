@@ -41,3 +41,6 @@ BILLING_URL = 'https://ucenter.boxlinker.com/api/v1.0/billing/resources'
 ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
 IMAGE_S = 'imageauth:8843'
 IMAGE_H = 'index.boxlinker.com/'
+
+billing_api = 'https://ucenter.boxlinker.com'
+k8s_api = 'https://api.boxlinker.com/api/v1.0/application/services'

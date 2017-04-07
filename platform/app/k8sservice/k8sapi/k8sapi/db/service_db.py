@@ -132,7 +132,8 @@ class ServiceDB(MysqlInit):
                a.service_status, a.image_dir, a.service_update_time ltime FROM font_service a join containers b \
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND ((b.http_domain is not \
                NULL and b.http_domain != 'None' and b.http_domain != '') OR (b.tcp_domain is not NULL AND \
-               b.tcp_domain != 'None' and b.tcp_domain != ''))) and a.lifecycle != 'stop' ORDER BY ltime DESC \
+               b.tcp_domain != 'None' and b.tcp_domain != ''))) and (a.lifecycle is NULL \
+               OR lifecycle='') ORDER BY ltime DESC \
                limit %d, %d" % (project_uuid, start_position, page_size)
 
         # sql_count = "select count(*) from font_service a where a.project_uuid='%s'" % project_uuid
@@ -141,7 +142,8 @@ class ServiceDB(MysqlInit):
 
     def service_list_count(self, dict_data):
         project_uuid = dict_data.get('project_uuid')
-        sql = "select count(*) from font_service a where a.project_uuid='%s' AND lifecycle !='stop'" % project_uuid
+        sql = "select count(*) from font_service a where a.project_uuid='%s' AND " \
+              "(lifecycle is NULL OR lifecycle='')" % project_uuid
         return super(ServiceDB, self).exec_select_sql(sql)
 
     def service_list_user(self, dict_data):
@@ -156,8 +158,8 @@ class ServiceDB(MysqlInit):
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND a.user_uuid='%s' \
                AND ((b.http_domain is not NULL and b.http_domain != '' AND b.http_domain != 'None') \
                OR (b.tcp_domain is not NULL AND b.tcp_domain != 'None' AND b.tcp_domain != '')) \
-               ) and a.lifecycle != 'stop' ORDER BY ltime DESC limit %d, %d" % (project_uuid, user_uuid,
-                                                                                start_position, page_size)
+               ) and (a.lifecycle is NULL or a.lifecycle='') ORDER BY ltime DESC  \
+               limit %d, %d" % (project_uuid, user_uuid, start_position, page_size)
 
         # sql_count = "select count(*) from font_service a where a.project_uuid='%s' AND " \
         #             "a.user_uuid='%s'" % (project_uuid, user_uuid)
@@ -168,7 +170,7 @@ class ServiceDB(MysqlInit):
         project_uuid = dict_data.get('project_uuid')
         user_uuid = dict_data.get('user_uuid')
         sql_count = "select count(*) from font_service a where a.project_uuid='%s' AND " \
-                    "a.user_uuid='%s' and a.lifecycle != 'stop'" % (project_uuid, user_uuid)
+                    "a.user_uuid='%s' and (a.lifecycle IS NULL OR a.lifecycle='')" % (project_uuid, user_uuid)
         return super(ServiceDB, self).exec_select_sql(sql_count)
 
     def service_detail(self, dict_data):

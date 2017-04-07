@@ -6,7 +6,7 @@ from common.logs import logging as log
 from db.service_db import ServiceDB
 from rpcapi_client import KubernetesRpc
 from common.db_operate import DbOperate
-
+from common.code import request_result
 from conf import conf
 import requests
 import json
@@ -23,6 +23,7 @@ class RecoverDriver(object):
         self.service_db = ServiceDB()
         self.rpc_client = KubernetesRpc()
         self.operate = DbOperate()
+        self.k8s_url = conf.k8s_api
 
     def login_get_token(self):
         try:
@@ -123,16 +124,16 @@ class RecoverDriver(object):
                     if result.get('kind') != 'Namespace':
                         raise Exception('kubernetes resources delete error')
 
-                    resource_uuid = i[2]
-                    try:
-                        billing_ret = self.delete_billing(resource_uuid)
-                        if billing_ret is not True:
-                            raise Exception('billing upate result is not 0')
-                    except Exception, e:
-                        log.error('delete service billing error, reason is: %s' % e)
-                        raise Exception('delete service billing error')
+                    # resource_uuid = i[2]
+                    # try:
+                    #     billing_ret = self.delete_billing(resource_uuid)
+                    #     if billing_ret is not True:
+                    #         raise Exception('billing upate result is not 0')
+                    # except Exception, e:
+                    #     log.error('delete service billing error, reason is: %s' % e)
+                    #     raise Exception('delete service billing error')
         except Exception, e:
-            log.error('delete the namespace from k8s or billing error, reason is: %s' % e)
+            log.error('delete the namespace for k8s or billing error, reason is: %s' % e)
             raise Exception('delete ns or billing error')
 
     def get_recycle_services(self, project_uuid):
@@ -143,9 +144,36 @@ class RecoverDriver(object):
                 return []
             else:
                 for i in db_ret:
-                    list_recycle.append({'service_name': i[0], 'ltime': self.operate.time_diff(i[1])})
+                    list_recycle.append({'service_name': i[0], 'ltime': self.operate.time_diff(i[1]),
+                                         'service_uuid': i[2]})
 
                 return list_recycle
         except Exception, e:
             log.error('get the recycle service list error, reason is: %s' % e)
             raise Exception('get the recycle service list error')
+
+    def create_service(self, dict_data):
+        header = {'token': dict_data.get('token')}
+        try:
+            ret = requests.post(self.k8s_url, headers=header, data=json.dumps(dict_data), timeout=5)
+            log.info('use k8s api create the service result is: %s' % ret.text)
+            ret = json.loads(ret.text)
+        except Exception, e:
+            log.error('create the service error, reason is: %s' % e)
+            raise Exception('create the service error')
+
+        if ret.get('status') != 0:
+            raise Exception('create the service status is not 0')
+        else:
+            return ret
+
+    def delete_py(self, services_uuid):
+        try:
+            ret = self.service_db.delete_physics(services_uuid)
+            if ret is not None:
+                raise Exception('physics delete error')
+        except Exception, e:
+            log.error('physics delete the service error, reason is: %s' % e)
+            raise Exception('physics delete the service error')
+
+        return request_result(0, 'delete success')

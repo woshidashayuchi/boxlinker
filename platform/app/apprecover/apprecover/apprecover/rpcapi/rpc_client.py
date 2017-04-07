@@ -24,7 +24,7 @@ class KubernetesRpcClient(object):
 
     def create_services(self, context, parameters=None):
         try:
-            rpc_body = rpc_data("svc_cre", context, parameters)
+            rpc_body = rpc_data("zero_svc_regain", context, parameters)
             log.info('rpc client to server data is : %s' % rpc_body)
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
@@ -41,3 +41,12 @@ class KubernetesRpcClient(object):
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(598)
 
+    def delete_service(self, context, parameters=None):
+        try:
+
+            rpc_body = rpc_data("zero_pyh_del", context, parameters)
+
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % e)
+            return request_result(598)

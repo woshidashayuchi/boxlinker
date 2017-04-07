@@ -603,24 +603,24 @@ class KubernetesDriver(object):
 
     def create_service(self, context):
 
-        try:
-            check = self.service_db.create_svcaccount_or_not(context)
-        except Exception, e:
-            log.error('check the namespace if is exist(database select)...,reason=%s' % e)
-            return request_result(501)
+        # try:
+        #     check = self.service_db.create_svcaccount_or_not(context)
+        # except Exception, e:
+        #     log.error('check the namespace if is exist(database select)...,reason=%s' % e)
+        #     return request_result(501)
 
         ns_if_exist = self.show_namespace(context)
         log.info('namespace ns_if_exist result is: %s' % ns_if_exist)
-        if len(check) == 0:
-            if ns_if_exist.get('kind') != 'Namespace':
-                ret_ns = self.create_namespace(context)
-                ret_secret = self.create_secret(context)
-                ret_account = self.create_svc_account(context)
+        # if len(check) == 0:
+        if ns_if_exist.get('kind') != 'Namespace':
+            ret_ns = self.create_namespace(context)
+            ret_secret = self.create_secret(context)
+            ret_account = self.create_svc_account(context)
 
-                if not ret_ns or not ret_secret or not ret_account:
-                    log.error('CREATE NS,SECRET,ACCOUNT ERROR, RESULT:NS: %s,SECRET: %s, ACCOUNT: %s' %
-                              (ret_ns, ret_secret, ret_account))
-                    return request_result(501)
+            if not ret_ns or not ret_secret or not ret_account:
+                log.error('CREATE NS,SECRET,ACCOUNT ERROR, RESULT:NS: %s,SECRET: %s, ACCOUNT: %s' %
+                          (ret_ns, ret_secret, ret_account))
+                return request_result(501)
 
         add_rc = self.add_rc(context)
         add_service = self.add_service(context)
