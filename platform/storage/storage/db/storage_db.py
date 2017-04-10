@@ -40,12 +40,20 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_update_sql(sql_01, sql_02)
 
-    def volume_delete(self, volume_uuid):
+    def volume_logical_delete(self, volume_uuid):
+
+        sql = "update volumes set volume_status='delete', update_time=now() \
+               where volume_uuid='%s'" \
+              % (volume_uuid)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def volume_physical_delete(self, volume_uuid):
 
         sql_01 = "delete from resources_acl where resource_uuid='%s'" \
-                  % (volume_uuid)
+                 % (volume_uuid)
         sql_02 = "delete from volumes where volume_uuid='%s'" \
-                  % (volume_uuid)
+                 % (volume_uuid)
 
         return super(StorageDB, self).exec_update_sql(sql_01, sql_02)
 
@@ -69,7 +77,7 @@ class StorageDB(MysqlInit):
 
         sql = "select volume_name, volume_size, volume_status, disk_name, \
                fs_type, mount_point, pool_name, create_time, update_time \
-               from volumes where volume_uuid='%s'" \
+               from volumes where volume_uuid='%s' and volume_status!='delete'" \
                % (volume_uuid)
 
         return super(StorageDB, self).exec_select_sql(sql)
@@ -86,13 +94,16 @@ class StorageDB(MysqlInit):
                   a.pool_name, a.create_time, a.update_time \
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
+                  and a.volume_status!='delete' \
                   and b.team_uuid='%s' and b.project_uuid='%s' \
                   limit %d,%d" \
                  % (team_uuid, project_uuid,
                     start_position, page_size)
 
-        sql_02 = "select count(*) from resources_acl \
-                  where team_uuid='%s' and project_uuid='%s'" \
+        sql_02 = "select count(*) from volumes a join resources_acl b \
+                  where a.volume_uuid=b.resource_uuid \
+                  and a.volume_status!='delete' \
+                  and b.team_uuid='%s' and b.project_uuid='%s'" \
                  % (team_uuid, project_uuid)
 
         volumes_list = super(StorageDB, self).exec_select_sql(sql_01)
@@ -115,14 +126,17 @@ class StorageDB(MysqlInit):
                   a.pool_name, a.create_time, a.update_time \
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
+                  and a.volume_status!='delete' \
                   and b.team_uuid='%s' and b.project_uuid='%s' \
                   and b.user_uuid='%s'" \
                  % (team_uuid, project_uuid, user_uuid,
                     start_position, page_size)
 
-        sql_02 = "select count(*) from resources_acl \
-                  where team_uuid='%s' and project_uuid='%s' \
-                  and user_uuid='%s'" \
+        sql_02 = "select count(*) from volumes a join resources_acl b \
+                  where a.volume_uuid=b.resource_uuid \
+                  and a.volume_status!='delete' \
+                  and b.team_uuid='%s' and b.project_uuid='%s' \
+                  and b.user_uuid='%s'" \
                  % (team_uuid, project_uuid, user_uuid)
 
         volumes_list = super(StorageDB, self).exec_select_sql(sql_01)
@@ -132,3 +146,32 @@ class StorageDB(MysqlInit):
                    "volumes_list": volumes_list,
                    "count": count
                }
+
+    def volume_add_list(self):
+
+        sql = "select a.volume_uuid, a.volume_name, a.volume_size, \
+               a.volume_status, b.resource_type, b.team_uuid, \
+               b.project_uuid, b.user_uuid from volumes a \
+               join resources_acl b where a.volume_uuid=b.resource_uuid \
+               and a.create_time>=date_sub(now(), interval 24 hour)"
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def volume_delete_list(self):
+
+        sql = "select volume_uuid from volumes \
+               where volume_status='delete' \
+               and update_time>=date_sub(now(), interval 24 hour)"
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def volume_update_list(self):
+
+        sql = "select a.volume_uuid, a.volume_name, a.volume_size, \
+               a.volume_status, b.resource_type, b.team_uuid, \
+               b.project_uuid, b.user_uuid from volumes a \
+               join resources_acl b where a.volume_uuid=b.resource_uuid \
+               and a.volume_status!='delete' \
+               and  a.update_time>=date_sub(now(), interval 24 hour)"
+
+        return super(StorageDB, self).exec_select_sql(sql)

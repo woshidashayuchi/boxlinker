@@ -61,14 +61,14 @@ class StorageRpcManager(object):
             token = context['token']
             volume_uuid = context['resource_uuid']
 
-            token = parameter_check(token, ptype='pstr')
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
-        return self.storage_manager.volume_delete(token, volume_uuid)
+        return self.storage_manager.volume_logical_delete(
+                    token, volume_uuid)
 
     @acl_check
     def volume_info(self, context, parameters):

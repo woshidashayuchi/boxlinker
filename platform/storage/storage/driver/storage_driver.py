@@ -20,6 +20,7 @@ class StorageDriver(object):
     def __init__(self):
 
         self.ceph_api = CephRpcApi()
+        self.ucenter_api = conf.ucenter_api
         self.billing_api = conf.billing_api
 
     def disk_create(self, token, pool_name, disk_name, disk_size):
@@ -105,6 +106,7 @@ class StorageDriver(object):
                 raise(Exception('request_code not equal 0'))
         except Exception, e:
             log.error('Billing info delete error: reason=%s' % (e))
+            return request_result(601)
 
         return request_result(0)
 
@@ -131,6 +133,47 @@ class StorageDriver(object):
                 raise(Exception('request_code not equal 0'))
         except Exception, e:
             log.error('Billing info update error: reason=%s' % (e))
+            return request_result(601)
+
+        return request_result(0)
+
+    def resources_check(self, add_list=[],
+                        delete_list=[], update_list=[]):
+
+        try:
+            url = '%s/api/v1.0/ucenter/tokens' % (self.ucenter_api)
+            body = {
+                       "user_name": "service",
+                       "password": "service@2017"
+                   }
+
+            ret = requests.post(url, data=json.dumps(body),
+                                timeout=5).json()
+            if int(ret.get('status')) == 0:
+                token = ret['result']['user_token']
+            else:
+                raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Get service token error: reason=%s' % (e))
+            return request_result(601)
+
+        try:
+            url = '%s/api/v1.0/billing/resources' \
+                  % (self.billing_api)
+            headers = {'token': token}
+            body = {
+                       "add_list": add_list,
+                       "delete_list": delete_list,
+                       "update_list": update_list
+                   }
+
+            status = requests.put(url, headers=headers,
+                                  data=json.dumps(body),
+                                  timeout=15).json()['status']
+            if int(status) != 0:
+                raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Billing resources check error: reason=%s' % (e))
             return request_result(601)
 
         return request_result(0)
