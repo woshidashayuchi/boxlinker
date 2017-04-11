@@ -137,8 +137,20 @@ class StorageDriver(object):
 
         return request_result(0)
 
-    def resources_check(self, add_list=[],
-                        delete_list=[], update_list=[]):
+    def team_balance(self, token):
+
+        try:
+            url = '%s/api/v1.0/billing/balances' \
+                  % (self.billing_api)
+            headers = {'token': token}
+
+            return requests.get(url, headers=headers,
+                                timeout=5).json()
+        except Exception, e:
+            log.error('Billing get balance error: reason=%s' % (e))
+            return request_result(601)
+
+    def service_token(self):
 
         try:
             url = '%s/api/v1.0/ucenter/tokens' % (self.ucenter_api)
@@ -147,8 +159,14 @@ class StorageDriver(object):
                        "password": "service@2017"
                    }
 
-            ret = requests.post(url, data=json.dumps(body),
-                                timeout=5).json()
+            return requests.post(url, data=json.dumps(body),
+                                 timeout=5).json()
+
+    def resources_check(self, add_list=[],
+                        delete_list=[], update_list=[]):
+
+        try:
+            ret = self.service_token()
             if int(ret.get('status')) == 0:
                 token = ret['result']['user_token']
             else:
@@ -177,3 +195,29 @@ class StorageDriver(object):
             return request_result(601)
 
         return request_result(0)
+
+    def balances_check(self):
+
+        try:
+            ret = self.service_token()
+            if int(ret.get('status')) == 0:
+                token = ret['result']['user_token']
+            else:
+                raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Get service token error: reason=%s' % (e))
+            return request_result(601)
+
+        try:
+            url = '%s/api/v1.0/billing/resources?balance_check=true' \
+                  % (self.billing_api)
+            headers = {'token': token}
+
+            return requests.get(url, headers=headers,
+                                timeout=10).json()
+
+            #if int(status) != 0:
+            #    raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Billing balances check error: reason=%s' % (e))
+            return request_result(601)

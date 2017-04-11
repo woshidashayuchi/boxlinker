@@ -22,5 +22,11 @@ def rest_app_run():
     api.add_resource(restapi_define.VolumeApi,
                      '/api/v1.0/storage/volumes/<volume_uuid>')
 
+    api.add_resource(restapi_define.VolumesReclaimsApi,
+                     '/api/v1.0/storage/volumes/reclaims')
+
+    api.add_resource(restapi_define.VolumeReclaimApi,
+                     '/api/v1.0/storage/volumes/reclaims/<volume_uuid>')
+
     app.run(host=conf.api_host, port=conf.api_port,
             threaded=True, debug=conf.api_debug)

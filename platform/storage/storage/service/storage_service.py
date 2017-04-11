@@ -23,6 +23,14 @@ def storage_service():
             log.info('Start storage resource check')
             storage_manager.volume_check()
             log.info('Finish storage resource check')
+
+            log.info('Start storage reclaim check')
+            storage_manager.volume_reclaim_check()
+            log.info('Finish storage reclaim check')
+
+            log.info('Start storage reclaim delete')
+            storage_manager.volume_reclaim_delete()
+            log.info('Finish storage reclaim delete')
         except Exception, e:
             log.warning('Storage Service running error, reason=%s'
                         % (e))

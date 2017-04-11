@@ -65,3 +65,23 @@ class StorageRpcApi(object):
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
+
+    def disk_reclaim_list(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("stg_ceh_rcm_lst", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
+    def disk_reclaim_recovery(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("stg_ceh_rcm_rcv", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)

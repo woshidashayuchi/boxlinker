@@ -138,3 +138,45 @@ class StorageRpcManager(object):
         return self.storage_manager.volume_update(
                     token, volume_uuid, update,
                     volume_size, volume_status)
+
+    @acl_check
+    def volume_reclaim_list(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+            user_uuid = user_info.get('user_uuid')
+            team_uuid = user_info.get('team_uuid')
+            team_priv = user_info.get('team_priv')
+            project_uuid = user_info.get('project_uuid')
+            project_priv = user_info.get('project_priv')
+
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.storage_manager.volume_reclaim_list(
+                    user_uuid, team_uuid, team_priv,
+                    project_uuid, project_priv,
+                    page_size, page_num)
+
+    @acl_check
+    def volume_reclaim_recovery(self, context, parameters):
+
+        try:
+            token = context['token']
+            volume_uuid = context['resource_uuid']
+
+            volume_uuid = parameter_check(volume_uuid, ptype='pstr')
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.storage_manager.volume_reclaim_recovery(
+                    token, volume_uuid)

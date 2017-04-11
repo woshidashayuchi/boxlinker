@@ -34,6 +34,12 @@ class RabbitmqResponse(object):
         self.rpc_api.add_resource(
              'stg_ceh_dsk_udt', self.rpcapi_define.volume_update)
 
+        self.rpc_api.add_resource(
+             'stg_ceh_rcm_lst', self.rpcapi_define.volume_reclaim_list)
+
+        self.rpc_api.add_resource(
+             'stg_ceh_rcm_rcv', self.rpcapi_define.volume_reclaim_recovery)
+
     def rpc_exec(self, rpc_body):
 
         try:

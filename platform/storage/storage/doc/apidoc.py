@@ -65,6 +65,19 @@
 
 
 """
+@apiDefine CODE_PUT_RECLAIM0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "volume_uuid": "string"
+    }
+}
+"""
+
+
+"""
 @apiDefine CODE_GET_0
 @apiSuccessExample 返回
 {
@@ -229,4 +242,28 @@
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_DELETE_0
+"""
+
+
+"""
+@api {get} /api/v1.0/storage/volumes/reclaims?page_size=<int>&page_num=<int> 1.7 回收站列表
+@apiName list reclaim volumes
+@apiGroup 1 storage
+@apiVersion 1.0.0
+@apiDescription 回收站中存储卷列表查询
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_GET_LIST_0
+"""
+
+
+"""
+@api {put} /api/v1.0/storage/volumes/reclaims/<volume_uuid> 1.8 回收站恢复
+@apiName recovery volume from reclaim
+@apiGroup 1 storage
+@apiVersion 1.0.0
+@apiDescription 从回收站中恢复已删除的存储卷
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_PUT_RECLAIM0
 """

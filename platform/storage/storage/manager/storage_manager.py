@@ -19,6 +19,7 @@ class StorageManager(object):
     def __init__(self):
 
         self.pool_name = conf.ceph_pool_name
+        self.balancecheck = conf.balance_check
         self.storage_db = storage_db.StorageDB()
         self.storage_driver = storage_driver.StorageDriver()
 
@@ -76,7 +77,7 @@ class StorageManager(object):
         try:
             self.storage_db.volume_logical_delete(volume_uuid)
         except Exception, e:
-            log.error('Database delete error')
+            log.error('Database delete error, reason=%s' % (e))
             return request_result(402)
 
         self.storage_driver.billing_delete(token, volume_uuid)
@@ -103,10 +104,10 @@ class StorageManager(object):
         try:
             self.storage_db.volume_physical_delete(volume_uuid)
         except Exception, e:
-            log.error('Database delete error')
+            log.error('Database delete error, reason=%s' % (e))
             return request_result(402)
 
-        self.storage_driver.billing_delete(token, volume_uuid)
+        # self.storage_driver.billing_delete(token, volume_uuid)
 
         return request_result(0)
 
@@ -133,7 +134,7 @@ class StorageManager(object):
         try:
             self.storage_db.volume_resize(volume_uuid, volume_size)
         except Exception, e:
-            log.error('Database update error')
+            log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
         volume_conf = str(volume_size) + 'G'
@@ -156,7 +157,7 @@ class StorageManager(object):
         try:
             self.storage_db.volume_status(volume_uuid, volume_status)
         except Exception, e:
-            log.error('Database update error')
+            log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
         result = {
@@ -268,6 +269,135 @@ class StorageManager(object):
         elif update == 'status':
             return self.volume_status(
                         volume_uuid, volume_status)
+
+    def volume_reclaim_check(self):
+
+        balances_check = self.storage_driver.balances_check()
+        if balances_check.get('status') != 0:
+            log.error('Billing balances check error, '
+                      'balances_check=%s' % (balances_check))
+            return
+        else:
+            teams_list = balances_check.get('result').get('teams_list')
+
+        for team_info in teams_list:
+            try:
+                team_uuid = team_info['team_uuid']
+                balance = team_info['balance']
+                if float(balance) <= 0:
+                    # 获取该team下的所有存储资源列表，然后进行逻辑删除
+                    volumes_list_info = self.storage_db.volume_list_team(
+                                             team_uuid)
+                    for volume_info in volumes_list_info:
+                        volume_uuid = volume_info[0]
+                        self.storage_db.volume_logical_delete(volume_uuid)
+            except Exception, e:
+                log.error('volume reclaim exec error, reason=%s' % (e))
+
+    def volume_reclaim_list(self, user_uuid, team_uuid,
+                            team_priv, project_uuid, project_priv,
+                            page_size, page_num):
+
+        try:
+            if ((project_priv is not None) and ('R' in project_priv)) \
+               or ((team_priv is not None) and ('R' in team_priv)):
+                volumes_list_info = self.storage_db.volume_reclaim_list_project(
+                                         team_uuid, project_uuid,
+                                         page_size, page_num)
+            else:
+                volumes_list_info = self.storage_db.volume_reclaim_list_user(
+                                         team_uuid, project_uuid, user_uuid,
+                                         page_size, page_num)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        user_volumes_list = volumes_list_info.get('volumes_list')
+        count = volumes_list_info.get('count')
+
+        disk_list = []
+        for volume_info in user_volumes_list:
+            volume_uuid = volume_info[0]
+            volume_name = volume_info[1]
+            volume_size = volume_info[2]
+            volume_status = volume_info[3]
+            image_name = volume_info[4]
+            fs_type = volume_info[5]
+            mount_point = volume_info[6]
+            pool_name = volume_info[7]
+            create_time = volume_info[8]
+            update_time = volume_info[9]
+
+            v_disk_info = {
+                              "volume_uuid": volume_uuid,
+                              "volume_name": volume_name,
+                              "volume_size": volume_size,
+                              "volume_status": volume_status,
+                              "image_name": image_name,
+                              "fs_type": fs_type,
+                              "mount_point": mount_point,
+                              "pool_name": pool_name,
+                              "create_time": create_time,
+                              "update_time": update_time
+                          }
+
+            v_disk_info = json.dumps(v_disk_info, cls=CJsonEncoder)
+            v_disk_info = json.loads(v_disk_info)
+            disk_list.append(v_disk_info)
+
+        result = {"volume_list": disk_list}
+        result['count'] = count
+
+        return request_result(0, result)
+
+    def volume_reclaim_recovery(self, token, volume_uuid):
+
+        if self.balancecheck is True:
+            # 获取并检查用户余额，只有当余额大于0时才允许执行恢复操作
+            team_balance = self.storage_driver.team_balance(token)
+            if team_balance.get('status') != 0:
+                log.error('Get balance info error, '
+                          'team_balance=%s' % (team_balance))
+                return request_result(601)
+            else:
+                balance = team_balance.get('result').get('balance')
+                if float(balance) <= 0:
+                    return request_result(302)
+
+        try:
+            self.storage_db.volume_recovery(volume_uuid)
+        except Exception, e:
+            log.error('Database update error, reason=%s' % (e))
+            return request_result(403)
+
+        self.storage_driver.billing_update(
+                            token, volume_uuid)
+
+        result = {
+                     "volume_uuid": volume_uuid
+                 }
+
+        return request_result(0, result)
+
+    def volume_reclaim_delete(self):
+
+        try:
+            ret = self.storage_driver.service_token()
+            if int(ret.get('status')) == 0:
+                token = ret['result']['user_token']
+            else:
+                raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Get service token error: reason=%s' % (e))
+            return request_result(601)
+
+        try:
+            volumes_list_info = self.storage_db.volume_list_dead()
+            for volume_info in volumes_list_info:
+                volume_uuid = volume_info[0]
+                self.volume_physical_delete(token, volume_uuid)
+        except Exception, e:
+            log.error('volume reclaim delete exec error, reason=%s' % (e))
 
     def volume_check(self):
 

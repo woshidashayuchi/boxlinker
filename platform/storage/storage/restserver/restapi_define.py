@@ -133,3 +133,58 @@ class VolumeApi(Resource):
         context = context_data(token, volume_uuid, "delete")
 
         return self.storage_api.disk_delete(context)
+
+class VolumesReclaimsApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.error('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_ceh_dsk_lst", "read")
+
+        return self.storage_api.disk_reclaim_list(context, parameters)
+
+
+class VolumeReclaimApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def put(self, volume_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.error('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        context = context_data(token, volume_uuid, "create")
+
+        return self.storage_api.disk_reclaim_recovery(context, parameters)
