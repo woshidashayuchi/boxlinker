@@ -47,6 +47,14 @@ class DeleteManager(object):
             log.error('delete billing resource error, reason is: %s' % e)
 
         try:
+            ret_logic = self.service_db.phy_insert(context)
+            if ret_logic is not None:
+                return request_result(402)
+        except Exception, e:
+            log.error('update the logic error, reason is: %s' % e)
+            return request_result(402)
+
+        try:
             ret_database = self.service_db.delete_all(context)
             if ret_database is not None:
                 return request_result(402)

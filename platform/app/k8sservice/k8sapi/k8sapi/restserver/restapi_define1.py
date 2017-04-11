@@ -4,28 +4,28 @@
 
 import json
 from flask import request
+from flask_restful import Resource
 from common.logs import logging as log
 from common.code import request_result
+from common.time_log import time_log
 from common.parameters import context_data
 from common.token_ucenterauth import token_auth
 from rpcapi.rpc_client import KubernetesRpcClient
 
 
-class KubernetesClientApi(object):
+class ServicesApi(Resource):
     def __init__(self):
         self.kubernetes = KubernetesRpcClient()
 
-    kuber = KubernetesRpcClient()
-
-    @classmethod
-    def create_service(cls):
+    @time_log
+    def post(self):
 
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
-            return json.dumps(request_result(201))
+            return request_result(201)
 
         try:
             parameters = json.loads(request.get_data())
@@ -37,47 +37,26 @@ class KubernetesClientApi(object):
             parameters.update(token_rets)
             log.info('parameters body(1) is:%s' % parameters)
             if parameters.get('service_name') is None:
-                return json.dumps(request_result(101))
+                return request_result(101)
         except Exception, e:
             log.error("parameters error,reason=%s" % e)
-            return json.dumps(request_result(101))
+            return request_result(101)
 
         context = context_data(token, "service_create", "create")
 
-        ret = cls.kuber.create_services(context, parameters)
+        ret = self.kubernetes.create_services(context, parameters)
 
-        return json.dumps(ret)
+        return ret
 
-    @classmethod
-    def pod_message(cls, service_uuid):
-        try:
-            token = request.headers.get('token')
-            token_ret = token_auth(token)
-        except Exception, e:
-            log.error('Token check error,reason=%s' % e)
-            return json.dumps(request_result(201))
-
-        parameters = token_ret.get('result')
-        parameters['service_uuid'] = service_uuid
-        parameters['rtype'] = 'pods_msg'
-
-        context = context_data(token, service_uuid, "read")
-
-        try:
-            ret = cls.kuber.pod_msg(context, parameters)
-        except Exception, e:
-            log.error('get the pods messages error, reason=%s' % e)
-            return json.dumps(request_result(504))
-        return json.dumps(request_result(0, ret))
-
-    def get_all_service(self):
+    @time_log
+    def get(self):
 
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
-            return json.dumps(request_result(201))
+            return request_result(201)
 
         parameters = token_ret.get('result')
         parameters['service_name'] = request.args.get('service_name',)
@@ -88,37 +67,53 @@ class KubernetesClientApi(object):
 
         ret = self.kubernetes.query_service(context, parameters)
 
-        return json.dumps(ret)
+        return ret
 
-    @classmethod
-    def detail_service(cls, service_uuid):
+
+class ServiceApi(Resource):
+    def __init__(self):
+        self.kuber = KubernetesRpcClient()
+
+    @time_log
+    def get(self, service_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
-            return json.dumps(request_result(201))
+            return request_result(201)
 
         if request.args.get('pod') == 'pod':
-            return cls.pod_message(service_uuid)
+            parameters = token_ret.get('result')
+            parameters['service_uuid'] = service_uuid
+            parameters['rtype'] = 'pods_msg'
+
+            context = context_data(token, service_uuid, "read")
+
+            try:
+                ret = self.kuber.pod_msg(context, parameters)
+            except Exception, e:
+                log.error('get the pods messages error, reason=%s' % e)
+                return request_result(504)
+            return request_result(0, ret)
 
         parameters = token_ret.get('result')
         parameters['service_uuid'] = service_uuid
 
         context = context_data(token, service_uuid, "read")
 
-        ret = cls.kuber.detail_service(context, parameters)
+        ret = self.kuber.detail_service(context, parameters)
 
-        return json.dumps(ret)
+        return ret
 
-    @classmethod
-    def del_service(cls, service_uuid):
+    @time_log
+    def delete(self, service_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error,reason=%s' % e)
-            return json.dumps(request_result(201))
+            return request_result(201)
 
         parameters = token_ret.get('result')
         parameters['token'] = token
@@ -126,18 +121,18 @@ class KubernetesClientApi(object):
 
         context = context_data(token, service_uuid, 'delete')
 
-        ret = cls.kuber.delete_service(context, parameters)
+        ret = self.kuber.delete_service(context, parameters)
 
-        return json.dumps(ret)
+        return ret
 
-    @classmethod
-    def put_service(cls, service_uuid):
+    @time_log
+    def put(self, service_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error,reason=%s' % e)
-            return json.dumps(request_result(201))
+            return request_result(201)
 
         parameters = token_ret.get('result')
         rtype = request.args.get('rtype',)
@@ -148,25 +143,30 @@ class KubernetesClientApi(object):
         try:
             in_data = json.loads(request.get_data())
             if not in_data and rtype == 'container':
-                return json.dumps(request_result(101))
+                return request_result(101)
             parameters.update(in_data)
         except Exception, e:
             log.error('parameters error, reason is: %s' % e)
-            return json.dumps(request_result(101))
+            return request_result(101)
 
         context = context_data(token, service_uuid, "update")
 
-        ret = cls.kuber.update_service(context, parameters)
-        return json.dumps(ret)
+        ret = self.kuber.update_service(context, parameters)
+        return ret
 
-    @classmethod
-    def if_service_name_exist(cls, service_name):
+
+class ServiceName(Resource):
+    def __init__(self):
+        self.kuber = KubernetesRpcClient()
+
+    @time_log
+    def get(self, service_name):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error,reason=%s' % e)
-            return json.dumps(request_result(201))
+            return request_result(201)
         rtype = request.args.get('rtype')
 
         context = token_ret.get('result')
@@ -175,9 +175,9 @@ class KubernetesClientApi(object):
         elif rtype == 'domain':
             context['domain'] = service_name
         else:
-            return json.dumps(request_result(101))
+            return request_result(101)
 
         context['rtype'] = rtype
-        ret = cls.kuber.service_name_get(context)
+        ret = self.kuber.service_name_get(context)
 
-        return json.dumps(ret)
+        return ret

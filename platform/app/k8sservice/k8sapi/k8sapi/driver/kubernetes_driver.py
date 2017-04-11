@@ -72,9 +72,9 @@ class KubernetesDriver(object):
 
         for i in ser:
             if project_name is not None and project_name != '' and project_name != team_name:
-                domain_http = '%s-%s-%s.lb1.boxlinker.com:' % (team_name, project_name, service_name)
+                domain_http = '%s-%s-%s.%s:' % (team_name, project_name, service_name, self.lb)
             else:
-                domain_http = '%s-%s.lb1.boxlinker.com:' % (team_name, service_name)
+                domain_http = '%s-%s.%s:' % (team_name, service_name, self.lb)
             if i.get('access_mode').upper() == 'HTTP' and i.get('access_scope') == 'outsisde':
                 http_lbadd = domain_http + str(i.get('container_port'))
                 if http_lb == '':

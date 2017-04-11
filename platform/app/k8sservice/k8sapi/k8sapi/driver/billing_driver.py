@@ -5,6 +5,7 @@ import sys
 p_path = sys.path[0] + '/..'
 sys.path.append(p_path)
 from common.logs import logging as log
+from common.code import request_result
 from db.service_db import ServiceDB
 from conf import conf
 import requests
@@ -16,6 +17,7 @@ class BillingResource(object):
     def __init__(self):
         self.billing_url = conf.BILLING_URL
         self.service_db = ServiceDB()
+        self.billing_api = conf.billing_api
 
     def base_element(self, context):
         try:
@@ -86,4 +88,45 @@ class BillingResource(object):
         except Exception, e:
             log.error('delete the resource of billing error, reason is: %s' % e)
             raise Exception('delete the resource of billing error')
+
+    def service_check(self, add_list=[], update_list=[], delete_list=[]):
+        log.info('to_billing check , add list is: %s' % str(add_list))
+        log.info('to_billing check, update list is: %s' % str(update_list))
+        log.info('to_billing check, delete list is: %s' % str(delete_list))
+        try:
+            url = '%s/api/v1.0/ucenter/tokens' % self.billing_api
+            body = {
+                       "user_name": "service",
+                       "password": "service@2017"
+                   }
+
+            ret = requests.post(url, data=json.dumps(body),
+                                timeout=5).json()
+            if int(ret.get('status')) == 0:
+                token = ret['result']['user_token']
+            else:
+                raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Get service token error: reason=%s' % (e))
+            return request_result(601)
+
+        try:
+            url = '%s/api/v1.0/billing/resources' % self.billing_api
+            headers = {'token': token}
+            body = {
+                       "add_list": add_list,
+                       "delete_list": delete_list,
+                       "update_list": update_list
+                   }
+
+            status = requests.put(url, headers=headers,
+                                  data=json.dumps(body),
+                                  timeout=15).json()['status']
+            if int(status) != 0:
+                raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Billing resources check error: reason=%s' % (e))
+            return request_result(601)
+
+        return request_result(0)
 

@@ -105,6 +105,10 @@ class DBInit(object):
         Column('update_time', DateTime, server_default=func.now())
         )
 
+    logic = Table('logic', metadata,
+                  Column('service_uuid', String(64)),
+                  Column('delete_time', DateTime, server_default=func.now()))
+
     volume = Table('volume', metadata,
         Column('uuid', String(64), primary_key=True),
         Column('rc_uuid', String(64)),

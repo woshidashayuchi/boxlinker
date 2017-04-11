@@ -141,3 +141,12 @@ class RecoverManager(object):
             return request_result(402)
 
         return ret
+
+    def delete_in30_days(self):
+        try:
+            db_ret = self.service_db.delete_30days()
+            if db_ret is None:
+                raise Exception('db result is not zero')
+        except Exception, e:
+            log.error('delete the recover services in 30 days error, reason is: %s' % e)
+            raise Exception('delete the recover services in 30 days error')

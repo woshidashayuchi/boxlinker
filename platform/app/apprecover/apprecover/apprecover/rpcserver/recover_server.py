@@ -15,6 +15,7 @@ def run_app():
     while True:
         recover = RecoverManager()
         recover.recover_manager()
+        recover.delete_in30_days()
         sleep(3600)
 
 if __name__ == '__main__':

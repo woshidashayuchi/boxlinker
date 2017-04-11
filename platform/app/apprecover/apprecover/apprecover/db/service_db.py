@@ -24,19 +24,20 @@ class ServiceDB(MysqlInit):
         return sql
 
     def update_zero_services(self, teams_list):
-        # sql = "update font_service set lifecycle='stop' where team_uuid in " + self.element_explain(teams_list)
-        sql = "update font_service set lifecycle='stop' where team_uuid='99acbcae-76f0-42b4-90e8-279a6f96c327'"
+        sql = "update font_service set lifecycle='stop'," \
+              "service_update_time=now() where team_uuid in " + self.element_explain(teams_list)
+        # sql = "update font_service set lifecycle='stop' where team_uuid='99acbcae-76f0-42b4-90e8-279a6f96c327'"
         log.info('update the db sql is: %s,type is: %s' % (sql, type(sql)))
 
         return super(ServiceDB, self).exec_update_sql(sql)
 
     def get_zero_services(self, teams_list):
 
-        # sql = "select service_name, project_uuid, uuid from " \
-        #       "font_service WHERE team_uuid IN " + self.element_explain(teams_list)
-
         sql = "select service_name, project_uuid, uuid from " \
-              "font_service WHERE team_uuid='99acbcae-76f0-42b4-90e8-279a6f96c327'"
+              "font_service WHERE team_uuid IN " + self.element_explain(teams_list)
+
+        # sql = "select service_name, project_uuid, uuid from " \
+        #       "font_service WHERE team_uuid='99acbcae-76f0-42b4-90e8-279a6f96c327'"
         log.info('get the zero money service sql is: %s' % sql)
 
         return super(ServiceDB, self).exec_select_sql(sql)
@@ -91,3 +92,24 @@ class ServiceDB(MysqlInit):
         log.info('##sql_volume is: %s' % sql_volume)
 
         return super(ServiceDB, self).exec_update_sql(sql_volume, sql_env, sql_container, sql_rc, sql_font, sql_acl)
+
+    def delete_30days(self):
+
+        sql_volume = "delete from volume WHERE rc_uuid in (SELECT rc_uuid from font_service WHERE " \
+                     "lifecycle='stop' and to_days(now())-to_days(service_update_time) >30)"
+
+        sql_env = "delete from env WHERE rc_uuid in (SELECT rc_uuid from font_service WHERE " \
+                  "lifecycle='stop' and to_days(now())-to_days(service_update_time) >30)"
+
+        sql_container = "delete from containers WHERE rc_uuid in (SELECT rc_uuid from font_service WHERE " \
+                        "lifecycle='stop' and to_days(now())-to_days(service_update_time) >30)"
+
+        sql_rc = "delete from replicationcontrollers WHERE uuid in (SELECT rc_uuid from font_service WHERE " \
+                 "lifecycle='stop' and to_days(now())-to_days(service_update_time) >30)"
+
+        sql_acl = "delete from resources_acl WHERE resource_uuid in (select uuid from font_Service WHERE " \
+                  "lifecycle='stop' and to_days(now())-to_days(service_update_time) >30)"
+
+        sql_font = "delete from font_service WHERE lifecycle='stop' and to_days(now())-to_days(service_update_time) >30"
+
+        return super(ServiceDB, self).exec_update_sql(sql_volume, sql_env, sql_container, sql_rc, sql_acl, sql_font)

@@ -124,14 +124,6 @@ class RecoverDriver(object):
                     if result.get('kind') != 'Namespace':
                         raise Exception('kubernetes resources delete error')
 
-                    # resource_uuid = i[2]
-                    # try:
-                    #     billing_ret = self.delete_billing(resource_uuid)
-                    #     if billing_ret is not True:
-                    #         raise Exception('billing upate result is not 0')
-                    # except Exception, e:
-                    #     log.error('delete service billing error, reason is: %s' % e)
-                    #     raise Exception('delete service billing error')
         except Exception, e:
             log.error('delete the namespace for k8s or billing error, reason is: %s' % e)
             raise Exception('delete ns or billing error')

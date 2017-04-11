@@ -47,9 +47,9 @@ class ServiceDB(MysqlInit):
             command = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
-                   "team_uuid, project_uuid, service_name,service_status) VALUES('%s', '%s', '%s', '%s', " \
-                   "'%s', '%s', '%s', '%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
-                                                project_uuid, service_name, 'pending')
+                   "team_uuid, project_uuid, service_name,service_status) VALUES('%s', '%s', '%s', " \
+                   "'%s','%s', '%s', '%s', '%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
+                                                     project_uuid, service_name, 'pending')
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
                  "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command) " \
@@ -129,7 +129,7 @@ class ServiceDB(MysqlInit):
         start_position = (page_num - 1) * page_size
 
         sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
-               a.service_status, a.image_dir, a.service_update_time ltime FROM font_service a join containers b \
+               a.service_status, a.image_dir, a.service_create_time ltime FROM font_service a join containers b \
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND ((b.http_domain is not \
                NULL and b.http_domain != 'None' and b.http_domain != '') OR (b.tcp_domain is not NULL AND \
                b.tcp_domain != 'None' and b.tcp_domain != ''))) and (a.lifecycle is NULL \
@@ -154,7 +154,7 @@ class ServiceDB(MysqlInit):
         start_position = (page_num - 1) * page_size
 
         sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
-               a.service_status, a.image_dir, a.service_update_time ltime FROM font_service a join containers b \
+               a.service_status, a.image_dir, a.service_create_time ltime FROM font_service a join containers b \
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND a.user_uuid='%s' \
                AND ((b.http_domain is not NULL and b.http_domain != '' AND b.http_domain != 'None') \
                OR (b.tcp_domain is not NULL AND b.tcp_domain != 'None' AND b.tcp_domain != '')) \
@@ -279,6 +279,9 @@ class ServiceDB(MysqlInit):
             log.info('update the container sql is: %s' % sql_insert)
             super(ServiceDB, self).exec_update_sql(sql_insert)
 
+        sql_update_time = "update font_service SET service_update_time=now() WHERE rc_uuid='%s'" % rc_uuid
+        super(ServiceDB, self).exec_update_sql(sql_update_time)
+
     def update_env(self, dict_data):
         env = dict_data.get('env')
         project_uuid, service_name = normal_call(dict_data)
@@ -306,6 +309,14 @@ class ServiceDB(MysqlInit):
             except Exception, e:
                 log.error('database update(env) error, reason=%s' % e)
                 return False
+
+        try:
+            sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                              "and service_name='%s'" % (project_uuid, service_name)
+            super(ServiceDB, self).exec_update_sql(sql_update_time)
+        except Exception, e:
+            log.error('database update(font_service) error, reason=%s' % e)
+            return False
 
         return True
 
@@ -338,6 +349,13 @@ class ServiceDB(MysqlInit):
             except Exception, e:
                 log.error('database update(volume) error, reason=%s' % e)
                 return False
+        try:
+            sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                              "and service_name='%s'" % (project_uuid, service_name)
+            super(ServiceDB, self).exec_update_sql(sql_update_time)
+        except Exception, e:
+            log.error('database update(font_service) error, reason=%s' % e)
+            return False
 
         return True
 
@@ -349,6 +367,14 @@ class ServiceDB(MysqlInit):
 
         sql_stop = "update font_service SET service_status='%s' WHERE service_name='%s'" \
                    "and project_uuid='%s'" % ('Stopping', service_name, project_uuid)
+
+        try:
+            sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                              "and service_name='%s'" % (project_uuid, service_name)
+            super(ServiceDB, self).exec_update_sql(sql_update_time)
+        except Exception, e:
+            log.error('database update(font_service) error, reason=%s' % e)
+            return False
 
         if dict_data.get('operate') == 'start':
             return super(ServiceDB, self).exec_update_sql(sql_start)
@@ -364,7 +390,11 @@ class ServiceDB(MysqlInit):
               "font_service WHERE service_name='%s' and project_uuid='%s')" % (pods_num,
                                                                                service_name,
                                                                                project_uuid)
-        return super(ServiceDB, self).exec_update_sql(sql)
+
+        sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                          "and service_name='%s'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
 
     def update_command(self, dict_data):
         project_uuid, service_name = normal_call(dict_data)
@@ -373,7 +403,10 @@ class ServiceDB(MysqlInit):
               "font_service WHERE service_name='%s' and project_uuid='%s')" % (command,
                                                                                service_name, project_uuid)
 
-        return super(ServiceDB, self).exec_update_sql(sql)
+        sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                          "and service_name='%s'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
 
     def domain_list(self, dict_data):
         domain = dict_data.get('domain')
@@ -405,7 +438,10 @@ class ServiceDB(MysqlInit):
                  "service_name='%s') and http_domain is not NULL and " \
                  "http_domain != 'None' and http_domain != ''" % (domain, '0', project_uuid, service_name)
 
-        ret = super(ServiceDB, self).exec_update_sql(sql_up)
+        sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                          "and service_name='%s'" % (project_uuid, service_name)
+
+        ret = super(ServiceDB, self).exec_update_sql(sql_up, sql_update_time)
 
         if ret is None:
             return True
@@ -430,7 +466,10 @@ class ServiceDB(MysqlInit):
               "service_name='%s') and http_domain is not NULL and http_domain != 'None' " \
               "and http_domain != ''" % (project_uuid, service_name)
 
-        return super(ServiceDB, self).exec_update_sql(sql)
+        sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                          "and service_name='%s'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
 
     def update_http_domain(self, dict_data):
         project_uuid, service_name = normal_call(dict_data)
@@ -439,7 +478,10 @@ class ServiceDB(MysqlInit):
               "service_name='%s') and http_domain is not NULL and http_domain != 'None' " \
               "and http_domain != ''" % (project_uuid, service_name)
 
-        return super(ServiceDB, self).exec_update_sql(sql)
+        sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                          "and service_name='%s'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
 
     def get_http_domain(self, dict_data):
         if dict_data.get('domain') == '' or dict_data.get('domain') is None:
@@ -456,7 +498,10 @@ class ServiceDB(MysqlInit):
                                                                                            dict_data.get('identify'),
                                                                                            project_uuid, service_name)
 
-        return super(ServiceDB, self).exec_update_sql(sql)
+        sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                          "and service_name='%s'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
 
     def identify_check(self, dict_data):
 
@@ -521,7 +566,10 @@ class ServiceDB(MysqlInit):
                   "uuid=(SELECT rc_uuid from font_service WHERE " \
                   "uuid='%s')" % (0, context.get('image_id'), context.get('service_uuid'))
 
-        return super(ServiceDB, self).exec_update_sql(sql)
+        sql_update_time = "update font_service SET service_update_time=now() WHERE " \
+                          "uuid='%s' " % context.get('service_uuid')
+
+        return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
 
     def update_status_anytime(self, ps, service_status):
         try:
@@ -558,11 +606,45 @@ class ServiceDB(MysqlInit):
               "WHERE uuid=(SELECT rc_uuid from font_service WHERE service_name='%s' AND " \
               "project_uuid='%s' )" % (cm_format, container_cpu, container_memory, service_name, project_uuid)
 
-        return super(ServiceDB, self).exec_update_sql(sql)
+        sql_update_time = "update font_service SET service_update_time=now() WHERE project_uuid='%s' " \
+                          "and service_name='%s'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
 
     def get_user_uuid(self, project_uuid, service_name):
 
         sql = "select user_uuid from font_service WHERE service_name='%s' and " \
               "project_uuid='%s'" % (service_name, project_uuid)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def phy_insert(self, dict_data):
+        project_uuid = dict_data.get('project_uuid')
+        service_name = dict_data.get('service_name')
+
+        sql = "insert into logic(service_uuid) select uuid from font_service WHERE project_uuid='%s' and " \
+              "service_name='%s'" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_update_sql(sql)
+
+    def delete_in24(self):
+
+        sql = "select service_uuid from logic WHERE delete_time>=date_sub(now(), interval 24 hour)"
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def create_in24(self):
+
+        sql = "select a.uuid resource_uuid, a.service_name resource_name, a.service_status," \
+              "a.team_uuid, a.project_uuid, a.user_uuid,b.pods_num, b.cm_format FROM font_service a, " \
+              "replicationcontrollers b WHERE a.service_create_time>=date_sub(now(), interval 24 hour)"
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def update_in24(self):
+
+        sql = "select a.uuid resource_uuid, a.service_name resource_name, a.service_status," \
+              "a.team_uuid, a.project_uuid, a.user_uuid,b.pods_num, b.cm_format FROM font_service a, " \
+              "replicationcontrollers b WHERE a.service_update_time>=date_sub(now(), interval 24 hour)"
 
         return super(ServiceDB, self).exec_select_sql(sql)
