@@ -126,9 +126,13 @@ class BillingDB(MysqlInit):
 
     def resources_update_list(self):
 
-        sql = "select resource_uuid from resources \
-               where resource_status!='delete' \
-               and update_time>=date_sub(now(), interval 24 hour)"
+        sql = "select a.resource_uuid, a.resource_name, \
+               a.resource_conf, a.resource_status, \
+               b.team_uuid, b.project_uuid, b.user_uuid \
+               from resources a join resources_acl b \
+               where a.resource_uuid=b.resource_uuid \
+               and a.resource_status!='delete' \
+               and a.update_time>=date_sub(now(), interval 24 hour)"
 
         return super(BillingDB, self).exec_select_sql(sql)
 
@@ -174,8 +178,7 @@ class BillingDB(MysqlInit):
                   % (voucher_uuid, team_uuid, project_uuid, user_uuid)
 
         sql_02 = "update vouchers set active_time=now(), status='active', \
-                  activator='%s', update_time=now() \
-                  where vouchers_uuid='%s'" \
+                  activator='%s' where vouchers_uuid='%s'" \
                   % (activator, voucher_uuid)
 
         return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
@@ -195,8 +198,7 @@ class BillingDB(MysqlInit):
 
     def voucher_distribute(self, voucher_uuid, accepter):
 
-        sql = "update vouchers set status='unactive', \
-               accepter='%s', update_time=now() \
+        sql = "update vouchers set status='unactive', accepter='%s' \
                where vouchers_uuid='%s' and status='unused'" \
               % (accepter, voucher_uuid)
 
@@ -206,8 +208,11 @@ class BillingDB(MysqlInit):
 
         amount = float(amount)
         sql = "update vouchers set balance=balance - %f, update_time=now() \
-               where vouchers_uuid='%s'" \
-               % (amount, voucher_uuid)
+               where vouchers_uuid='%s' \
+               and \
+               (create_time=update_time \
+                or update_time<=date_sub(now(), interval 1 hour))" \
+              % (amount, voucher_uuid)
 
         return super(BillingDB, self).exec_update_sql(sql)
 
@@ -306,7 +311,7 @@ class BillingDB(MysqlInit):
         sql_02 = "select count(*) from vouchers where accepter='%s' \
                   and invalid_time >= now()" \
                  % (user_name)
-    
+
         vouchers_list = super(BillingDB, self).exec_select_sql(sql_01)
         count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
 
@@ -354,14 +359,16 @@ class BillingDB(MysqlInit):
 
     def balance_update(self, team_uuid, amount):
 
-        sql_01 = "update balances set total=total + %d, \
-                  balance=balance + %f, update_time=now() \
+        sql_01 = "update balances set total=total + %d, balance=balance + %f \
                   where team_uuid='%s'" \
-                  % (int(amount), float(amount), team_uuid)
+                 % (int(amount), float(amount), team_uuid)
 
         sql_02 = "update balances set balance=balance + %f, update_time=now() \
-                  where team_uuid='%s'" \
-                  % (float(amount), team_uuid)
+                  where team_uuid='%s' \
+                  and \
+                  (create_time=update_time \
+                   or update_time<=date_sub(now(), interval 1 hour))" \
+                 % (float(amount), team_uuid)
 
         if float(amount) >= 0:
             return super(BillingDB, self).exec_update_sql(sql_01)
@@ -433,6 +440,63 @@ class BillingDB(MysqlInit):
                    "count": count
                }
 
+    def recharge_check_list(self, recharge_type,
+                            start_time, end_time,
+                            page_size, page_num):
+
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        if recharge_type == 'all':
+            sql_01 = "select recharge_uuid, recharge_amount, \
+                      recharge_type, team_uuid, user_name, create_time \
+                      from recharge_records \
+                      where create_time between '%s' and '%s' \
+                      limit %d,%d" \
+                     % (start_time, end_time,
+                        start_position, page_size)
+
+            sql_02 = "select count(*) from recharge_records \
+                      where create_time between '%s' and '%s'" \
+                     % (start_time, end_time)
+        else:
+            sql_01 = "select recharge_uuid, recharge_amount, \
+                      recharge_type, team_uuid, user_name, create_time \
+                      from recharge_records where recharge_type='%s' \
+                      and create_time between '%s' and '%s' \
+                      limit %d,%d" \
+                     % (recharge_type, start_time, end_time,
+                        start_position, page_size)
+
+            sql_02 = "select count(*) from recharge_records \
+                      where recharge_type='%s' \
+                      and create_time between '%s' and '%s'" \
+                     % (recharge_type, start_time, end_time)
+
+        db_recharge_list = super(BillingDB, self).exec_select_sql(sql_01)
+        count = super(BillingDB, self).exec_select_sql(sql_02)[0][0]
+
+        return {
+                   "recharge_list": db_recharge_list,
+                   "count": count
+               }
+
+    def recharge_check_total(self, recharge_type,
+                             start_time, end_time):
+
+        if recharge_type == 'all':
+            sql = "select sum(recharge_amount) from recharge_records \
+                   where create_time between '%s' and '%s'" \
+                  % (start_time, end_time)
+        else:
+            sql = "select sum(recharge_amount) from recharge_records \
+                   where recharge_type='%s' \
+                   and create_time between '%s' and '%s'" \
+                  % (recharge_type, start_time, end_time)
+
+        return super(BillingDB, self).exec_select_sql(sql)
+
     def limit_info(self, team_uuid, resource_type):
 
         sql = "select a.%s from limits a join levels b \
@@ -475,11 +539,20 @@ class BillingDB(MysqlInit):
     def bill_insert(self, user_uuid, team_uuid, project_uuid,
                     resource_uuid, resource_cost, voucher_cost):
 
-        sql = "insert into bills(resource_uuid, resource_cost, voucher_cost, \
-               team_uuid, project_uuid, user_uuid, insert_time) \
-               values('%s', '%f', '%f', '%s', '%s', '%s', now())" \
-               % (resource_uuid, float(resource_cost), float(voucher_cost),
-                  team_uuid, project_uuid, user_uuid)
+        # sql = "insert into bills(resource_uuid, resource_cost, voucher_cost, \
+        #       team_uuid, project_uuid, user_uuid, insert_time) \
+        #       values('%s', '%f', '%f', '%s', '%s', '%s', now())" \
+        #       % (resource_uuid, float(resource_cost), float(voucher_cost),
+        #          team_uuid, project_uuid, user_uuid)
+
+        sql = "INSERT into bills \
+               SELECT NULL, '%s', '%f', '%f', '%s', '%s', '%s', now() \
+               FROM dual WHERE NOT EXISTS \
+               (SELECT resource_uuid FROM bills \
+                WHERE resource_uuid='%s' \
+                and insert_time>date_sub(now(), interval 1 hour))" \
+              % (resource_uuid, float(resource_cost), float(voucher_cost),
+                 team_uuid, project_uuid, user_uuid, resource_uuid)
 
         return super(BillingDB, self).exec_update_sql(sql)
 
@@ -491,7 +564,7 @@ class BillingDB(MysqlInit):
         page_num = int(page_num)
         start_position = (page_num - 1) * page_size
 
-        #sql_01 = "select a.resource_uuid, a.resource_name, \
+        # sql_01 = "select a.resource_uuid, a.resource_name, \
         #          a.resource_conf, a.resource_status, \
         #          b.resource_type, b.team_uuid, b.project_uuid, b.user_uuid, \
         #          round(sum(c.resource_cost), 2), round(sum(c.voucher_cost), 2) \
@@ -523,7 +596,7 @@ class BillingDB(MysqlInit):
                        and b.resource_uuid = c.resource_uuid \
                        and c.team_uuid='%s' \
                        and c.insert_time between '%s' and '%s' \
-                  union all \
+                       union all \
                        select a.resource_uuid resource_uuid, \
                        a.resource_name resource_name, \
                        a.resource_conf resource_conf, \
@@ -542,7 +615,7 @@ class BillingDB(MysqlInit):
                     team_uuid, start_time, end_time,
                     start_position, page_size)
 
-        #sql_02 = "select count(*) from (select * from bills_days where team_uuid='%s' \
+        # sql_02 = "select count(*) from (select * from bills_days where team_uuid='%s' \
         #          and insert_time between '%s' and '%s' group by resource_uuid) t" \
         #         % (team_uuid, start_time, end_time)
 
@@ -615,6 +688,14 @@ class BillingDB(MysqlInit):
                  % (resource_uuid, start_time, end_time)
 
         return super(BillingDB, self).exec_update_sql(sql_01, sql_02)
+
+    def bills_cost(self):
+
+        sql = "select team_uuid, round(sum(resource_cost), 5) \
+               from bills where insert_time>date_sub(now(), interval 1 hour) \
+               group by team_uuid"
+
+        return super(BillingDB, self).exec_select_sql(sql)
 
     def order_insert(self, user_uuid, team_uuid, project_uuid,
                      order_uuid, resource_uuid, cost, status):

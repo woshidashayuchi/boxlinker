@@ -988,6 +988,18 @@
 
 
 """
+@api {get} /api/v1.0/billing/recharges?recharge_type=<all/zhifubao/weixin>&start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 8.4 充值核对
+@apiName check recharge_records
+@apiGroup 8 recharges
+@apiVersion 1.0.0
+@apiDescription 管理员查询核对充值记录
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiUse LIST_RECHARGES_0
+"""
+
+
+"""
 @api {get} /api/v1.0/billing/bills?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 9.1 账单查询
 @apiName get bills
 @apiGroup 9 bills

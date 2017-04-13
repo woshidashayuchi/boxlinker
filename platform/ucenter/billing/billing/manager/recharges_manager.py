@@ -217,6 +217,64 @@ class RechargesManager(object):
             recharges_list.append(v_recharge_info)
 
         result = {"recharge_list": recharges_list}
-        result['count'] = count
+        result["count"] = count
+
+        return request_result(0, result)
+
+    def recharge_check(self, user_uuid, recharge_type,
+                       start_time, end_time,
+                       page_size, page_num):
+
+        if user_uuid != 'sysadmin':
+
+            return request_result(202)
+
+        try:
+            start_time = time.strftime("%Y-%m-%d %H:%M:%S",
+                                       time.localtime(float(start_time)))
+            end_time = time.strftime("%Y-%m-%d %H:%M:%S",
+                                     time.localtime(float(end_time)))
+            recharge_list_info = self.billing_db.recharge_check_list(
+                                      recharge_type,
+                                      start_time, end_time,
+                                      page_size, page_num)
+            recharge_total_info = self.billing_db.recharge_check_total(
+                                      recharge_type, start_time, end_time)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        user_recharge_list = recharge_list_info.get('recharge_list')
+        count = recharge_list_info.get('count')
+        recharges_total = recharge_total_info[0][0]
+        log.debug('recharges_total_info=%s, recharges_total=%s'
+                  % (recharge_total_info, recharges_total))
+
+        result = {"recharges_total": float('%.2f' % (recharges_total))}
+        result["count"] = count
+
+        recharges_list = []
+        for recharge_info in user_recharge_list:
+            recharge_uuid = recharge_info[0]
+            recharge_amount = recharge_info[1]
+            recharge_type = recharge_info[2]
+            team_uuid = recharge_info[3]
+            user_name = recharge_info[4]
+            create_time = recharge_info[5]
+
+            v_recharge_info = {
+                                  "team_uuid": team_uuid,
+                                  "recharge_uuid": recharge_uuid,
+                                  "recharge_amount": recharge_amount,
+                                  "recharge_type": recharge_type,
+                                  "team_uuid": team_uuid,
+                                  "user_name": user_name,
+                                  "create_time": create_time
+                              }
+            v_recharge_info = json.dumps(v_recharge_info, cls=CJsonEncoder)
+            v_recharge_info = json.loads(v_recharge_info)
+            recharges_list.append(v_recharge_info)
+
+        result["recharge_list"] = recharges_list
 
         return request_result(0, result)

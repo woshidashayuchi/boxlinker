@@ -71,6 +71,7 @@ class BalancesManager(object):
     def balance_check(self):
 
         # 获取24小时内更新过并且余额小于0的team列表
+        # 需要排除账户下有礼劵的情况
         try:
             teams_balance_info = self.billing_db.balance_check()
         except Exception, e:
@@ -81,6 +82,13 @@ class BalancesManager(object):
         for teams_info in teams_balance_info:
             team_uuid = teams_info[0]
             balance = teams_info[1]
+
+            try:
+                self.billing_db.voucher_check(
+                     team_uuid, 0.1)[0][0]
+                continue
+            except Exception, e:
+                pass
 
             v_list_info = {
                                "team_uuid": team_uuid,

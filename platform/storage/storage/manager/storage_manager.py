@@ -87,12 +87,11 @@ class StorageManager(object):
     def volume_physical_delete(self, token, volume_uuid):
 
         try:
-            volume_info = self.storage_db.volume_info(volume_uuid)
+            disk_name = self.storage_db.volume_delete_info(
+                             volume_uuid)[0][0]
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
-
-        disk_name = volume_info[0][3]
 
         status_code = self.storage_driver.disk_delete(
                            token, self.pool_name,

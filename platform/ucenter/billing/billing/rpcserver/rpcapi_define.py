@@ -442,8 +442,8 @@ class BillingRpcManager(object):
             recharge_type = parameters.get('recharge_type')
             recharge_amount = parameters.get('recharge_amount')
 
-            recharge_amount = parameter_check(recharge_amount, ptype='pflt')
-            if float(recharge_amount) < 0.01:
+            recharge_amount = parameter_check(recharge_amount, ptype='pint')
+            if int(recharge_amount) < 1:
                 raise(Exception('Parameter error'))
             if (recharge_type != 'zhifubao') and (recharge_type != 'weixin'):
                 raise(Exception('Parameter error'))
@@ -469,7 +469,7 @@ class BillingRpcManager(object):
 
             recharge_uuid = parameter_check(recharge_uuid, ptype='pint')
             recharge_type = parameter_check(recharge_type, ptype='pstr')
-            recharge_amount = parameter_check(recharge_amount, ptype='pflt')
+            recharge_amount = parameter_check(recharge_amount, ptype='pint')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
@@ -521,6 +521,35 @@ class BillingRpcManager(object):
 
         return self.recharges_manager.recharge_info(
                     recharge_uuid, team_uuid)
+
+    @acl_check
+    def recharge_check(self, context, parameters):
+
+        try:
+            user_info = token_auth(context['token'])['result']
+            user_uuid = user_info.get('user_uuid')
+
+            recharge_type = parameters.get('recharge_type')
+            start_time = parameters.get('start_time')
+            end_time = parameters.get('end_time')
+            page_size = parameters.get('page_size')
+            page_num = parameters.get('page_num')
+
+            start_time = parameter_check(start_time, ptype='pflt')
+            end_time = parameter_check(end_time, ptype='pflt')
+            page_size = parameter_check(page_size, ptype='pint')
+            page_num = parameter_check(page_num, ptype='pint')
+            if recharge_type not in ('all', 'zhifubao', 'weixin'):
+                raise(Exception('Parameter error'))
+        except Exception, e:
+            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+                      % (context, parameters, e))
+            return request_result(101)
+
+        return self.recharges_manager.recharge_check(
+                    user_uuid, recharge_type,
+                    start_time, end_time,
+                    page_size, page_num)
 
     @acl_check
     def order_create(self, context, parameters):

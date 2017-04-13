@@ -104,18 +104,20 @@ class RechargesApi(Resource):
 
         try:
             token = request.headers.get('token')
-            token_auth(token)
+            user_info = token_auth(token)['result']
         except Exception, e:
             log.error('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
         try:
+            recharge_type = request.args.get('recharge_type')
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
             page_size = request.args.get('page_size')
             page_num = request.args.get('page_num')
             parameters = {
+                             "recharge_type": recharge_type,
                              "start_time": start_time,
                              "end_time": end_time,
                              "page_size": page_size,
@@ -126,9 +128,14 @@ class RechargesApi(Resource):
 
             return request_result(101)
 
-        context = context_data(token, "bil_rcg_rcg_lst", "read")
+        if user_info['user_uuid'] == 'sysadmin':
+            context = context_data(token, "bil_bil_adm_com", "read")
 
-        return self.billing_api.recharge_list(context, parameters)
+            return self.billing_api.recharge_check(context, parameters)
+        else:
+            context = context_data(token, "bil_rcg_rcg_lst", "read")
+
+            return self.billing_api.recharge_list(context, parameters)
 
 
 class RechargeApi(Resource):
@@ -640,7 +647,7 @@ class OrderApi(Resource):
 class WeiXinNotifyApi(Resource):
 
     @time_log
-    def get(self):
+    def post(self):
 
         try:
             body = request.get_data()
@@ -651,4 +658,4 @@ class WeiXinNotifyApi(Resource):
 
             return request_result(101)
 
-        return '<xml><return_code>SUCCESS</return_code><return_msg>OK</return_msg></xml>'
+        return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'

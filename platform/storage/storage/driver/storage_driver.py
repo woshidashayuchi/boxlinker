@@ -161,6 +161,9 @@ class StorageDriver(object):
 
             return requests.post(url, data=json.dumps(body),
                                  timeout=5).json()
+        except Exception, e:
+            log.error('Get service token error: reason=%s' % (e))
+            return request_result(601)
 
     def resources_check(self, add_list=[],
                         delete_list=[], update_list=[]):
@@ -209,9 +212,10 @@ class StorageDriver(object):
             return request_result(601)
 
         try:
-            url = '%s/api/v1.0/billing/resources?balance_check=true' \
+            url = '%s/api/v1.0/billing/balances?balance_check=true' \
                   % (self.billing_api)
             headers = {'token': token}
+            log.debug('balances_check_url=%s, headers=%s' % (url, headers))
 
             return requests.get(url, headers=headers,
                                 timeout=10).json()

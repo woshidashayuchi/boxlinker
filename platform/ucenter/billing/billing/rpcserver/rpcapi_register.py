@@ -47,6 +47,9 @@ class RabbitmqResponse(object):
              'bil_rcg_rcg_inf', self.rpcapi_define.recharge_info)
 
         self.rpc_api.add_resource(
+             'bil_rcg_rcg_chk', self.rpcapi_define.recharge_check)
+
+        self.rpc_api.add_resource(
              'bil_cst_cst_inf', self.rpcapi_define.cost_accounting)
 
         self.rpc_api.add_resource(

@@ -64,25 +64,41 @@ class CostsManager(object):
 
         try:
             voucher_uuid = self.billing_db.voucher_check(
-                                team_uuid, resource_cost)[0][0]
+                                team_uuid, 0.01)[0][0]
         except Exception, e:
             voucher_uuid = None
             log.debug('Get voucher_uuid error, reason=%s' % (e))
 
         if voucher_uuid:
             voucher_cost = resource_cost
-            self.vouchers_manager.voucher_update(
-                 voucher_uuid, voucher_cost)
         else:
             voucher_cost = 0
-            self.balances_manager.balance_update(
-                 team_uuid, -resource_cost)
 
         self.bills_manager.bill_create(user_uuid, team_uuid,
                                        project_uuid, resource_uuid,
                                        resource_cost, voucher_cost)
 
-        return
+    def balance_voucher_update(self):
+
+        # 获取1小时内的计费信息，取出team_uuid和resource_cost
+        bills_cost_info = self.billing_db.bills_cost()
+        for cost_info in bills_cost_info:
+            team_uuid = cost_info[0]
+            resource_cost = cost_info[1]
+
+            try:
+                voucher_uuid = self.billing_db.voucher_check(
+                                    team_uuid, 0.01)[0][0]
+            except Exception, e:
+                voucher_uuid = None
+                log.debug('Get voucher_uuid error, reason=%s' % (e))
+
+            if voucher_uuid:
+                self.vouchers_manager.voucher_update(
+                     voucher_uuid, resource_cost)
+            else:
+                self.balances_manager.balance_update(
+                     team_uuid, -resource_cost)
 
     @time_log
     def billing_statistics(self):
@@ -106,4 +122,4 @@ class CostsManager(object):
                                  team_uuid, project_uuid, user_uuid,
                                  resource_conf, resource_status)
 
-        return
+        self.balance_voucher_update()

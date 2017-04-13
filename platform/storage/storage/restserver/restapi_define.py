@@ -187,4 +187,4 @@ class VolumeReclaimApi(Resource):
 
         context = context_data(token, volume_uuid, "create")
 
-        return self.storage_api.disk_reclaim_recovery(context, parameters)
+        return self.storage_api.disk_reclaim_recovery(context)

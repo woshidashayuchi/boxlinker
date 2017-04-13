@@ -55,8 +55,8 @@ def rest_app_run():
     api.add_resource(restapi_define.OrderApi,
                      '/api/v1.0/billing/orders/<order_uuid>')
 
-    api.add_resource(restapi_define.WeiXinNotifyApi,
-                     '/api/v1.0/billing/weixin/notify')
+    # api.add_resource(restapi_define.WeiXinNotifyApi,
+    #                 '/api/v1.0/billing/weixin/notify')
 
     app.run(host=conf.api_host, port=conf.api_port,
             threaded=True, debug=conf.api_debug)

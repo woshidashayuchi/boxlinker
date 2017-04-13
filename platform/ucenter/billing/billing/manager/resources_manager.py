@@ -192,30 +192,77 @@ class ResourcesManager(object):
                           % (resources_list, delete_list, e))
                 return request_result(101)
 
-        if len(update_list) !=0:
+        if len(update_list) != 0:
             try:
                 resources_update_info = self.billing_db.resources_update_list()
             except Exception, e:
                 log.error('Database select error, reason=%s' % (e))
 
             resources_list = []
+            resources_list_info = {}
             for resources_info in resources_update_info:
                 resource_uuid = resources_info[0]
+                resource_name = resources_info[1]
+                resource_conf = resources_info[2]
+                resource_status = resources_info[3]
+                team_uuid = resources_info[4]
+                project_uuid = resources_info[5]
+                user_uuid = resources_info[6]
+
                 resources_list.append(resource_uuid)
+                resource_info = {
+                                    "resource_name": resource_name,
+                                    "resource_conf": resource_conf,
+                                    "resource_status": resource_status,
+                                    "team_uuid": team_uuid,
+                                    "project_uuid": project_uuid,
+                                    "user_uuid": user_uuid
+                                }
+
+                resources_list_info[resource_uuid] = resource_info
 
             try:
                 for resources_update in update_list:
                     resource_uuid = resources_update['resource_uuid']
                     if resource_uuid not in resources_list:
-                        resource_name = resources_add['resource_name']
-                        resource_conf = resources_add['resource_conf']
-                        resource_status = resources_add['resource_status']
-                        user_uuid = resources_add['user_uuid']
-                        team_uuid = resources_add['team_uuid']
-                        project_uuid = resources_add['project_uuid']
+                        resource_name = resources_update['resource_name']
+                        resource_conf = resources_update['resource_conf']
+                        resource_status = resources_update['resource_status']
+                        user_uuid = resources_update['user_uuid']
+                        team_uuid = resources_update['team_uuid']
+                        project_uuid = resources_update['project_uuid']
                         self.resource_update(resource_uuid, resource_conf,
                                              resource_status, user_uuid,
                                              team_uuid, project_uuid)
+                    else:
+                        # 取出ucenter中存储的资源数据，逐项对比，不一致就执行更新
+                        # 查询更新记录时一次性将数据取出，然后整理放入一个字典中，
+                        # 字典的键为各资源id，字典的值为各资源配置。
+                        u_resource_info = resources_list_info[resource_uuid]
+                        u_resource_name = u_resource_info['resource_name']
+                        u_resource_conf = u_resource_info['resource_conf']
+                        u_resource_status = u_resource_info['resource_status']
+                        u_team_uuid = u_resource_info['team_uuid']
+                        u_project_uuid = u_resource_info['project_uuid']
+                        u_user_uuid = u_resource_info['user_uuid']
+
+                        resource_name = resources_update['resource_name']
+                        resource_conf = resources_update['resource_conf']
+                        resource_status = resources_update['resource_status']
+                        user_uuid = resources_update['user_uuid']
+                        team_uuid = resources_update['team_uuid']
+                        project_uuid = resources_update['project_uuid']
+
+                        if (u_resource_name != resource_name) \
+                           or (u_resource_conf != resource_conf) \
+                           or (u_resource_status != resource_status) \
+                           or (u_team_uuid != team_uuid) \
+                           or (u_project_uuid != project_uuid) \
+                           or (u_user_uuid != user_uuid):
+
+                            self.resource_update(resource_uuid, resource_conf,
+                                                 resource_status, user_uuid,
+                                                 team_uuid, project_uuid)
             except Exception, e:
                 log.error('resource update check error, resources_list=%s, '
                           'update_list=%s, reason=%s'

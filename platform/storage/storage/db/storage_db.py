@@ -82,6 +82,14 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_select_sql(sql)
 
+    def volume_delete_info(self, volume_uuid):
+
+        sql = "select disk_name from volumes \
+               where volume_uuid='%s' and volume_status='delete'" \
+               % (volume_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
     def volume_recovery(self, volume_uuid):
 
         sql = "update volumes set volume_status='unused', update_time=now() \
@@ -94,7 +102,7 @@ class StorageDB(MysqlInit):
 
         sql = "select volume_uuid from volumes \
                where volume_status='delete' \
-               and update_time>=date_sub(now(), interval 30 day)"
+               and update_time<date_sub(now(), interval 30 day)"
 
         return super(StorageDB, self).exec_select_sql(sql)
 
