@@ -36,7 +36,7 @@ class AppStatusManager(object):
                 message_es = {'user_uuid': user_uuid, 'project_uuid': project_uuid, 'service_name': rc_name}
 
                 if msg != 'old service is stopped forced' and msg != 'waiting...':
-                    events_message = self.events.app_events_es(project_uuid)
+                    events_message = self.events.app_events_es(project_uuid, rc_name)
                     if len(events_message) != 0:
                         events_message = list(set(events_message))
                     for i in events_message:

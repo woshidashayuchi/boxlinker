@@ -11,7 +11,7 @@ class EventsDriver(object):
     def __init__(self):
         self.k8s_driver = K8sDriver()
 
-    def app_events_es(self, project_uuid):
+    def app_events_es(self, project_uuid, rc_name):
         event = []
         try:
 
@@ -25,6 +25,12 @@ class EventsDriver(object):
             raise Exception('get the events error')
 
         for i in events_list:
-            event.append(i.get('message'))
+            if i.get('involvedObject').get('kind') == 'ReplicationController' and i.get('involvedObject').get('name') == rc_name:
+                log.info('will post to es is: %s' % i.get('message'))
+                event.append(i.get('message'))
+
+            if i.get('involvedObject').get('kind') == 'Pod' and (rc_name in i.get('involvedObject').get('name')[:-6]):
+                log.info('will post to es is: %s' % i.get('message'))
+                event.append(i.get('message'))
 
         return event

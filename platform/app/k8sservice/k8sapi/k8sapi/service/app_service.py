@@ -24,6 +24,5 @@ def check_server():
 
         sleep(3600)
 
-
 if __name__ == '__main__':
     check_server()

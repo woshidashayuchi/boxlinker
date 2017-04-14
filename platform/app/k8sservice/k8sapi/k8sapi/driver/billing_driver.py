@@ -122,6 +122,8 @@ class BillingResource(object):
             status = requests.put(url, headers=headers,
                                   data=json.dumps(body),
                                   timeout=15).json()['status']
+
+            log.info('billing check the result is: %s' % status)
             if int(status) != 0:
                 raise(Exception('request_code not equal 0'))
         except Exception, e:

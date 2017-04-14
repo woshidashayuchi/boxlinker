@@ -29,13 +29,14 @@ class KubernetesRpcAPI(object):
         log.info('rpc server get the data is : %s' % parameters)
         try:
             parameter_check(parameters.get('token'), ptype='pstr')
-            parameter_check(parameters.get('service_name'), ptype='pnam')
+            # parameter_check(parameters.get('service_name'), ptype='pnam')
             parameter_check(parameters.get('image_id'), ptype='pimgid')
             parameter_check(parameters.get('policy'), ptype='choice')
             parameter_check(parameters.get('pods_num'), ptype='pod_num')
             parameter_check(parameters.get('auto_startup'), ptype='choice')
             # parameter_check(parameters.get('command'), ptype='command', exist='no')
-
+            if '_' in parameters.get('service_name'):
+                raise Exception('service_name can not have _')
             if int(parameters.get('container_cpu')) not in [1, 2, 4, 8]:
                 raise Exception('container_cpu parameters error')
             if parameters.get('container_memory') not in ['256M', '512M', '1G', '2G']:

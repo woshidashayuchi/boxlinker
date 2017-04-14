@@ -20,13 +20,14 @@ mq_port = 5672
 db_server01 = 'database'
 db_server02 = 'database'
 db_port = 3306
+
 db_user = 'cloudsvc'
 db_passwd = 'cloudsvc'
 database = 'servicedata'
 
-# ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
-ucenter_api = 'http://ucenter:8001/api/v1.0/ucenter/tokens'
-ucenter_api1 = 'http://ucenter:8001'
+ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
+# ucenter_api = 'http://ucenter:8001/api/v1.0/ucenter/tokens'
+# ucenter_api1 = 'http://ucenter:8001'
 rest_host = '0.0.0.0'
 rest_port = 8001
 rest_debug = True

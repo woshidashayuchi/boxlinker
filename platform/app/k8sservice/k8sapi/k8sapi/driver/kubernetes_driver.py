@@ -30,12 +30,12 @@ class KubernetesDriver(object):
 
     @staticmethod
     def command_query(dict_data):
-        in_command = dict_data.get('command')
+        in_command = dict_data.get("command")
 
-        if in_command != '' and in_command is not None:
-            command = in_command.split(',')
+        if in_command != "" and in_command is not None:
+            commands = in_command.split(" ")
 
-            return command
+            return commands
 
     @staticmethod
     def container(con):
@@ -235,6 +235,10 @@ class KubernetesDriver(object):
         return namespace, image_name, image_version, service_name, pods_num, cm_format, container_cpu, \
             container_memory, team_name, command, container, env, user_uuid, rc_krud, pullpolicy, volumes, \
             volume_mounts
+
+    def add_ingress(self, dict_data):
+
+        pass
 
     def add_rc(self, dict_data):
         log.info('add rc json data is: %s' % dict_data)
@@ -574,8 +578,15 @@ class KubernetesDriver(object):
                             except Exception, e:
                                 log.error('corresponding containers ports error, reason=%s' % e)
                                 return False
+                    # state = i.get("status").get("containerStatuses")[0].get('state')
+                    # if state.has_key('waiting'):
+                    #     status = state.get('waiting').get('reason')
+                    # else:
+                    #     status = 'Running'
 
-                    pod_ms = {"pod_phase": i.get("status").get("phase"), "pod_name": i.get("metadata").get("name"),
+                    status = i.get('status').get('phase')
+
+                    pod_ms = {"pod_phase": status, "pod_name": i.get("metadata").get("name"),
                               "pod_ip": i.get("status").get("podIP"), 'containers': con_ret}
                     pod.append(pod_ms)
         except Exception, e:

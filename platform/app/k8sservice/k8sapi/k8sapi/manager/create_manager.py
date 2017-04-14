@@ -27,7 +27,11 @@ class CreateManager(object):
         try:
             using_name_info = self.service_db.name_if_used_check(context)
             if len(using_name_info) != 0:
-                return False
+                for i in using_name_info:
+                    service_name = i[0]
+                    if service_name.replace('_', '-') == context.get('service_name').replace('_', '-'):
+                        return False
+                # return False
         except Exception, e:
             log.error('Database select error when check the name..., reason=%s' % e)
             return 'error'

@@ -31,4 +31,4 @@ def server_start(service_name):
 
 if __name__ == "__main__":
 
-    server_start('Service')
+    server_start('Alarming')

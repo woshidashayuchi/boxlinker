@@ -30,32 +30,31 @@ class ServiceDB(MysqlInit):
 
     def name_if_used_check(self, dict_data):
 
-        service_name = dict_data.get("service_name")
         project_uuid = dict_data.get("project_uuid")
 
-        sql = "select * from font_service where service_name ='%s' and " \
-              "project_uuid = '%s'" % (service_name, project_uuid)
+        sql = "select service_name from font_service where " \
+              "project_uuid = '%s'" % project_uuid
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
     def infix_db(self, dict_data):
 
         font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name, \
-            image_dir = font_infix_element(dict_data)
+            image_dir, description = font_infix_element(dict_data)
 
         pods_num, image_id, cm_format, container_cpu, container_memory, policy, auto_startup, \
             command = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
-                   "team_uuid, project_uuid, service_name,service_status) VALUES('%s', '%s', '%s', " \
-                   "'%s','%s', '%s', '%s', '%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
-                                                     project_uuid, service_name, 'pending')
+                   "team_uuid, project_uuid, service_name,service_status, description) VALUES('%s', '%s', '%s', " \
+                   "'%s','%s', '%s', '%s', '%s','%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
+                                                          project_uuid, service_name, 'pending', description)
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
                  "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command) " \
                  "VALUES ('%s', '%s', %d, '%s', '%s', '%s', '%s', %d, %d," \
-                 "'%s')" % (rc_uuid, service_name+project_uuid, pods_num, image_id, cm_format, container_cpu,
-                            container_memory, policy, auto_startup, command)
+                 "'%s')" % (rc_uuid, service_name.replace('_', '-')+project_uuid, pods_num, image_id, cm_format,
+                            container_cpu, container_memory, policy, auto_startup, command)
 
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
                   "user_uuid) VALUES ('%s','%s','%s','%s','%s'," \
@@ -129,7 +128,8 @@ class ServiceDB(MysqlInit):
         start_position = (page_num - 1) * page_size
 
         sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
-               a.service_status, a.image_dir, a.service_create_time ltime FROM font_service a join containers b \
+               a.service_status, a.image_dir, a.service_create_time ltime, a.description FROM font_service a join \
+               containers b \
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND ((b.http_domain is not \
                NULL and b.http_domain != 'None' and b.http_domain != '') OR (b.tcp_domain is not NULL AND \
                b.tcp_domain != 'None' and b.tcp_domain != ''))) and (a.lifecycle is NULL \
@@ -154,7 +154,8 @@ class ServiceDB(MysqlInit):
         start_position = (page_num - 1) * page_size
 
         sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
-               a.service_status, a.image_dir, a.service_create_time ltime FROM font_service a join containers b \
+               a.service_status, a.image_dir, a.service_create_time ltime, a.description FROM font_service a join \
+               containers b \
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND a.user_uuid='%s' \
                AND ((b.http_domain is not NULL and b.http_domain != '' AND b.http_domain != 'None') \
                OR (b.tcp_domain is not NULL AND b.tcp_domain != 'None' AND b.tcp_domain != '')) \
@@ -179,7 +180,7 @@ class ServiceDB(MysqlInit):
 
         sql_rc = "select a.labels_name,a.pods_num,a.image_id,a.cm_format,a.container_cpu,a.container_memory,a.policy, \
                   a.auto_startup,a.command,a.rc_create_time,a.rc_update_time, b.uuid service_uuid, b.service_name, \
-                  b.service_status from \
+                  b.service_status, b.description from \
                   replicationcontrollers a,font_service b \
                   where a.uuid = (select rc_uuid from font_service where \
                   project_uuid='%s' and uuid='%s') and b.uuid='%s'" % (project_uuid, service_uuid, service_uuid)

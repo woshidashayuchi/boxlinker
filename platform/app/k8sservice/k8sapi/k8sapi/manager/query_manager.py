@@ -21,7 +21,7 @@ class QueryManager(object):
         if context.get('service_name') is None:
             try:
                 query_result = self.metal_work.query_service(context)
-                log.info('66666666the query service list result is:%s, type is %s' % (query_result, type(query_result)))
+                log.info('the query service list result is:%s, type is %s' % (query_result, type(query_result)))
 
                 return query_result
             except Exception, e:
@@ -70,7 +70,11 @@ class QueryManager(object):
             if context.get('rtype') == 'service':
                 using_name_info = self.service_db.name_if_used_check(context)
                 if len(using_name_info) != 0:
-                    return request_result(0, 1)
+                    for i in using_name_info:
+                        service_name = i[0]
+                        if service_name.replace('_', '-') == context.get('service_name').replace('_', '-'):
+                            return request_result(0, 1)
+
             else:
                 ret_http = self.service_db.get_http_domain(context)
                 domain = self.service_db.domain_list(context)

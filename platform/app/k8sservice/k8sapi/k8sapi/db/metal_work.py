@@ -47,7 +47,7 @@ class MetalWork(object):
         except Exception, e:
             log.error('get the photos error, reason is: %s' % e)
             return False
-        log.info('---------arr:%s,photos:%s' % (arr, photos))
+        # log.info('---------arr:%s,photos:%s' % (arr, photos))
         try:
             for i in arr:
                 for j in photos:
@@ -97,6 +97,7 @@ class MetalWork(object):
                         'service_status': i[5],
                         'image_dir': i[6],
                         'ltime': self.operate.time_diff(i[7]),
+                        'description': i[8],
                         'container': [{'http_domain': http_domain, 'tcp_domain': i[3], 'container_port': i[4]}]
                         })
         # for i in query_ret:
@@ -228,7 +229,8 @@ class MetalWork(object):
                   'service_uuid': m[11],
                   'service_name': m[12],
                   'service_status': m[13],
-                  'ltime': self.operate.time_diff(m[10])}
+                  'ltime': self.operate.time_diff(m[10]),
+                  'description': m[14]}
             # rc['ltime'] = self.operate.time_diff(m.get('rc_update_time'))
 
         rc['container'] = containers
