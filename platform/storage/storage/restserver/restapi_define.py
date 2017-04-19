@@ -29,7 +29,7 @@ class VolumesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -37,7 +37,7 @@ class VolumesApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -52,7 +52,7 @@ class VolumesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -64,7 +64,7 @@ class VolumesApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -86,7 +86,7 @@ class VolumeApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -101,7 +101,7 @@ class VolumeApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -111,7 +111,7 @@ class VolumeApi(Resource):
             update = request.args.get('update')
             parameters['update'] = update
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -126,7 +126,7 @@ class VolumeApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -147,7 +147,7 @@ class VolumesReclaimsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -159,7 +159,7 @@ class VolumesReclaimsApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -181,7 +181,7 @@ class VolumeReclaimApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 

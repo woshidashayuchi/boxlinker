@@ -23,9 +23,9 @@ def token_auth(token):
             ret = ucenter_rpcapi.UcenterRpcApi().token_check(context)
             status = ret['status']
             if status != 0:
-                raise(Exception('Token auth error'))
+                raise(Exception('Token auth denied'))
         except Exception, e:
-            log.error('Token local auth error: reason=%s' % (e))
+            log.warning('Token local auth error: reason=%s' % (e))
             raise(Exception('Token auth error'))
 
         expire = int(time.time()) + 300

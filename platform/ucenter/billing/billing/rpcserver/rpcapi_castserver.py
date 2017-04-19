@@ -26,14 +26,14 @@ def server_start(n):
     while True:
 
         try:
-            log.info('Starting RPC Cast API Server, topic=%s'
-                     % (queue))
-            rbtmq = RabbitmqServer(320)
+            log.critical('Starting RPC Cast API Server, topic=%s'
+                         % (queue))
+            rbtmq = RabbitmqServer(600)
             rbtmq.rpc_cast_server(queue, rpcapi_register)
         except Exception, e:
-            log.warning(
-                'RPC Cast API Server running error, queue=%s, reason=%s'
-                % (queue, e))
+            log.error('RPC Cast API Server running error, '
+                      'queue=%s, reason=%s'
+                      % (queue, e))
         sleep(10)
 
 

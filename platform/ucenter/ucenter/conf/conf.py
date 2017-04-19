@@ -33,7 +33,7 @@ api_debug = True
 
 verify_code = False
 
-log_level = 'INFO'
+log_level = 'WARNING'
 log_file = '/var/log/cloud.log'
 
 init_balance = 100

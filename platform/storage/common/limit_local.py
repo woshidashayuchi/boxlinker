@@ -57,7 +57,7 @@ def limit_check(resource_type):
                                  token, resource_type, cost)
                     balance_check = limit_info['result']['balance_check']
                     if int(balance_check) != 0:
-                        log.info('Limit check denied, not enough balance')
+                        log.warning('Limit check denied, not enough balance')
                         return request_result(302)
 
                     limit_check = limit_info['result']['limit_check']

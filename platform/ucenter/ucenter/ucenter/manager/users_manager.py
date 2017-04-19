@@ -250,12 +250,12 @@ class UsersManager(object):
             mobile = user_info[0][4]
             status = user_info[0][5]
         except Exception, e:
-            log.error('Get user register info error, '
-                      'user_uuid=%s, reason=%s' % (user_uuid, e))
+            log.warning('Get user register info error, '
+                        'user_uuid=%s, reason=%s' % (user_uuid, e))
             return request_result(601)
 
         if status == 'active':
-            log.info('User(%s) already activated' % (user_name))
+            log.warning('User(%s) already activated' % (user_name))
             return request_result(202)
 
         team_uuid = str(uuid.uuid4())
@@ -274,13 +274,13 @@ class UsersManager(object):
         level_init = self.ucenter_driver.level_init(
                           user_token).get('status')
         if int(level_init) != 0:
-            log.error('User(%s) level init error' % (user_name))
+            log.error('User(%s) level init failure' % (user_name))
             return request_result(599)
 
         balance_init = self.ucenter_driver.balance_init(
                             user_token, self.init_balance).get('status')
         if int(balance_init) != 0:
-            log.error('User(%s) balance init error' % (user_name))
+            log.error('User(%s) balance init failure' % (user_name))
             return request_result(599)
 
         role_uuid = 'owner'

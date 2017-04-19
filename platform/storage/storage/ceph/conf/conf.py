@@ -8,7 +8,7 @@ mq_server01 = 'rabbitmq'
 mq_server02 = 'rabbitmq'
 mq_port = 5672
 
-log_level = 'INFO'
+log_level = 'WARNING'
 log_file = '/var/log/cloud.log'
 
 ceph_call_queue = 'ceph_call'

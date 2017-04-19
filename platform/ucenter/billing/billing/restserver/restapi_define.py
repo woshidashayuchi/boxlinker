@@ -29,7 +29,7 @@ class LevelApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -51,14 +51,14 @@ class BalanceApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
         try:
             balance_check = request.args.get('balance_check')
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -83,7 +83,7 @@ class RechargesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -91,7 +91,7 @@ class RechargesApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -106,7 +106,7 @@ class RechargesApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -124,7 +124,7 @@ class RechargesApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -151,7 +151,7 @@ class RechargeApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -177,7 +177,7 @@ class CostsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -185,7 +185,7 @@ class CostsApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -207,7 +207,7 @@ class LimitsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -215,7 +215,7 @@ class LimitsApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -230,7 +230,7 @@ class LimitsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -242,7 +242,7 @@ class LimitsApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -257,7 +257,7 @@ class LimitsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -265,7 +265,7 @@ class LimitsApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -287,7 +287,7 @@ class ResourcesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -295,7 +295,7 @@ class ResourcesApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -310,7 +310,7 @@ class ResourcesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -322,7 +322,7 @@ class ResourcesApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -337,7 +337,7 @@ class ResourcesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -345,7 +345,7 @@ class ResourcesApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -367,7 +367,7 @@ class ResourceApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -382,7 +382,7 @@ class ResourceApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -390,7 +390,7 @@ class ResourceApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -412,7 +412,7 @@ class VouchersApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -420,7 +420,7 @@ class VouchersApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -435,7 +435,7 @@ class VouchersApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -452,7 +452,7 @@ class VouchersApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -477,7 +477,7 @@ class VoucherApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -496,7 +496,7 @@ class VoucherApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -504,7 +504,7 @@ class VoucherApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -528,7 +528,7 @@ class BillsAPI(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -544,7 +544,7 @@ class BillsAPI(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -566,7 +566,7 @@ class OrdersApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -574,7 +574,7 @@ class OrdersApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -589,7 +589,7 @@ class OrdersApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -605,7 +605,7 @@ class OrdersApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -627,7 +627,7 @@ class OrderApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -635,7 +635,7 @@ class OrderApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -654,7 +654,7 @@ class WeiXinNotifyApi(Resource):
             #parameters = json.loads(body)
             log.info('Notify data=%s' % (body))
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 

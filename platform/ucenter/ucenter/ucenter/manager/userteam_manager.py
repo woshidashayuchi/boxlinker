@@ -5,6 +5,7 @@ import uuid
 import json
 import time
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
@@ -18,6 +19,8 @@ class UserTeamManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
+        self.user_image = conf.user_image
+        self.default_avatar = conf.default_avatar
 
     @limit_check('teamusers')
     def user_team_add(self, token, user_uuid,

@@ -31,7 +31,7 @@ api_host = '0.0.0.0'
 api_port = 8002
 api_debug = True
 
-log_level = 'INFO'
+log_level = 'WARNING'
 log_file = '/var/log/cloud.log'
 
 balance_check = True

@@ -18,7 +18,7 @@ def billing_service():
     costs_manager = CostsManager()
     bills_manager = BillsManager()
 
-    log.info('Starting Billing Service')
+    log.critical('Starting Billing Service')
     while True:
         sleep(3600)
         try:
@@ -27,8 +27,8 @@ def billing_service():
             bills_manager.bills_merge()
             log.info('Finish billing')
         except Exception, e:
-            log.warning('Billing Service running error, reason=%s'
-                        % (e))
+            log.error('Billing Service running error, reason=%s'
+                      % (e))
 
 
 if __name__ == "__main__":

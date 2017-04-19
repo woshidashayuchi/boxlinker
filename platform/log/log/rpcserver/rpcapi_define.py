@@ -33,7 +33,7 @@ class LogRpcManager(object):
             start_time = parameter_check(start_time, ptype='pflt', exist='no')
             end_time = parameter_check(end_time, ptype='pflt', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -59,7 +59,7 @@ class LogRpcManager(object):
             start_time = parameter_check(start_time, ptype='pflt', exist='no')
             end_time = parameter_check(end_time, ptype='pflt', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -81,7 +81,7 @@ class LogRpcManager(object):
             label_value = parameter_check(label_value, ptype='pstr')
             start_time = parameter_check(start_time, ptype='pflt', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 

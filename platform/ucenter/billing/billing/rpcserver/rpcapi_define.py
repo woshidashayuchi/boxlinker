@@ -46,7 +46,7 @@ class BillingRpcManager(object):
             resource_status = parameter_check(resource_status, ptype='pstr')
             hours = parameter_check(hours, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -69,7 +69,7 @@ class BillingRpcManager(object):
             resource_type = parameter_check(resource_type, ptype='pstr')
             cost = parameter_check(cost, ptype='pflt', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -87,7 +87,7 @@ class BillingRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -106,7 +106,7 @@ class BillingRpcManager(object):
             resource_type = parameter_check(resource_type, ptype='pstr')
             limit = parameter_check(limit, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -134,7 +134,7 @@ class BillingRpcManager(object):
             resource_conf = parameter_check(resource_conf, ptype='pstr')
             resource_status = parameter_check(resource_status, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -151,7 +151,7 @@ class BillingRpcManager(object):
 
             resource_uuid = parameter_check(resource_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -181,7 +181,7 @@ class BillingRpcManager(object):
             project_uuid = parameter_check(project_uuid, ptype='pstr',
                                            exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -202,7 +202,7 @@ class BillingRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -223,7 +223,7 @@ class BillingRpcManager(object):
             if user_name != 'service':
                 return request_result(202)
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -243,7 +243,7 @@ class BillingRpcManager(object):
             denomination = parameter_check(denomination, ptype='pint')
             invalid_time = parameter_check(invalid_time, ptype='pflt')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -264,7 +264,7 @@ class BillingRpcManager(object):
 
             voucher_uuid = parameter_check(voucher_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -282,7 +282,7 @@ class BillingRpcManager(object):
             voucher_uuid = parameter_check(voucher_uuid, ptype='pstr')
             accepter = parameter_check(accepter, ptype='pnam')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -307,7 +307,7 @@ class BillingRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -328,7 +328,7 @@ class BillingRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -352,7 +352,7 @@ class BillingRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -367,7 +367,7 @@ class BillingRpcManager(object):
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -380,7 +380,7 @@ class BillingRpcManager(object):
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -396,7 +396,7 @@ class BillingRpcManager(object):
             balance = parameters.get('balance')
             balance = parameter_check(balance, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -409,7 +409,7 @@ class BillingRpcManager(object):
             user_info = token_auth(context['token'])['result']
             team_uuid = user_info.get('team_uuid')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -425,7 +425,7 @@ class BillingRpcManager(object):
             if user_name != 'service':
                 return request_result(202)
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -448,7 +448,7 @@ class BillingRpcManager(object):
             if (recharge_type != 'zhifubao') and (recharge_type != 'weixin'):
                 raise(Exception('Parameter error'))
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -471,7 +471,7 @@ class BillingRpcManager(object):
             recharge_type = parameter_check(recharge_type, ptype='pstr')
             recharge_amount = parameter_check(recharge_amount, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -496,7 +496,7 @@ class BillingRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -515,7 +515,7 @@ class BillingRpcManager(object):
 
             recharge_uuid = parameter_check(recharge_uuid, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -542,7 +542,7 @@ class BillingRpcManager(object):
             if recharge_type not in ('all', 'zhifubao', 'weixin'):
                 raise(Exception('Parameter error'))
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -568,7 +568,7 @@ class BillingRpcManager(object):
             cost = parameter_check(cost, ptype='pflt')
             status = parameter_check(status, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -588,7 +588,7 @@ class BillingRpcManager(object):
             cost = parameter_check(cost, ptype='pflt', exist='no')
             status = parameter_check(status, ptype='pstr', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -612,7 +612,7 @@ class BillingRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 

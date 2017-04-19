@@ -16,7 +16,7 @@ def storage_service():
 
     storage_manager = StorageManager()
 
-    log.info('Starting Storage Service')
+    log.critical('Starting Storage Service')
     while True:
         sleep(3600)
         try:
@@ -32,8 +32,8 @@ def storage_service():
             storage_manager.volume_reclaim_delete()
             log.info('Finish storage reclaim delete')
         except Exception, e:
-            log.warning('Storage Service running error, reason=%s'
-                        % (e))
+            log.error('Storage Service running error, reason=%s'
+                      % (e))
 
 
 if __name__ == "__main__":

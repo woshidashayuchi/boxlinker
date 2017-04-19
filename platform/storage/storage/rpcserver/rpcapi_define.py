@@ -46,7 +46,7 @@ class StorageRpcManager(object):
             if (fs_type != 'xfs') and (fs_type != 'ext4'):
                 raise
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -63,7 +63,7 @@ class StorageRpcManager(object):
 
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -78,7 +78,7 @@ class StorageRpcManager(object):
 
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -101,7 +101,7 @@ class StorageRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -131,7 +131,7 @@ class StorageRpcManager(object):
             else:
                 raise
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -156,7 +156,7 @@ class StorageRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -174,7 +174,7 @@ class StorageRpcManager(object):
 
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 

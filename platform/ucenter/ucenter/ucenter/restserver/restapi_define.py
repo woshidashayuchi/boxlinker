@@ -42,7 +42,7 @@ class UcenterUsersApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -60,7 +60,7 @@ class UcenterUsersApi(Resource):
                              "user_name": user_name
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -72,7 +72,7 @@ class UcenterUsersApi(Resource):
                 token = request.headers.get('token')
                 token_auth(token)
             except Exception, e:
-                log.error('Token check error, token=%s, reason=%s'
+                log.warning('Token check error, token=%s, reason=%s'
                           % (token, e))
                 return request_result(201)
 
@@ -93,7 +93,7 @@ class UcenterUserApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -108,7 +108,7 @@ class UcenterUserApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -116,7 +116,7 @@ class UcenterUserApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -138,7 +138,7 @@ class UcenterUserStatusApi(Resource):
 
         ret_status = self.ucenter_api.user_activate(context).get('status')
         if int(ret_status) != 0:
-            log.warning('User_id(%s) activate error' % (user_uuid))
+            log.warning('User_id(%s) activate failure' % (user_uuid))
 
         return redirect('/api/v1.0/ucenter/users/activate/%s'
                         % (ret_status))
@@ -150,7 +150,7 @@ class UcenterUserStatusApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -158,7 +158,7 @@ class UcenterUserStatusApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -182,7 +182,7 @@ class UcenterRolesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -190,7 +190,7 @@ class UcenterRolesApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -205,7 +205,7 @@ class UcenterRolesApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -227,7 +227,7 @@ class UcenterRoleApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -242,7 +242,7 @@ class UcenterRoleApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -250,7 +250,7 @@ class UcenterRoleApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -265,7 +265,7 @@ class UcenterRoleApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -287,7 +287,7 @@ class UcenterPasswordApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -295,7 +295,7 @@ class UcenterPasswordApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -317,7 +317,7 @@ class UcenterPasswordApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -325,7 +325,7 @@ class UcenterPasswordApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -347,7 +347,7 @@ class UcenterTokensApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -361,7 +361,7 @@ class UcenterTokensApi(Resource):
         try:
             token = request.headers.get('token')
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -375,7 +375,7 @@ class UcenterTokensApi(Resource):
         try:
             token = request.headers.get('token')
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -383,7 +383,7 @@ class UcenterTokensApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -397,7 +397,7 @@ class UcenterTokensApi(Resource):
         try:
             token = request.headers.get('token')
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -419,7 +419,7 @@ class UcenterTeamsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -427,7 +427,7 @@ class UcenterTeamsApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -442,7 +442,7 @@ class UcenterTeamsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -458,7 +458,7 @@ class UcenterTeamsApi(Resource):
                              "public_info": public_info
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -480,7 +480,7 @@ class UcenterTeamApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -497,7 +497,7 @@ class UcenterTeamApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -505,7 +505,7 @@ class UcenterTeamApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -520,7 +520,7 @@ class UcenterTeamApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -542,7 +542,7 @@ class UcenterProjectsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -550,7 +550,7 @@ class UcenterProjectsApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -565,7 +565,7 @@ class UcenterProjectsApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -587,7 +587,7 @@ class UcenterProjectApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -602,7 +602,7 @@ class UcenterProjectApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -610,7 +610,7 @@ class UcenterProjectApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -625,7 +625,7 @@ class UcenterProjectApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -647,7 +647,7 @@ class UcenterUsersTeamsApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -655,7 +655,7 @@ class UcenterUsersTeamsApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -670,7 +670,7 @@ class UcenterUsersTeamsApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -682,7 +682,7 @@ class UcenterUsersTeamsApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -697,7 +697,7 @@ class UcenterUsersTeamsApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -711,7 +711,7 @@ class UcenterUsersTeamsApi(Resource):
                              "team_uuid": team_uuid
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -738,7 +738,7 @@ class UcenterUserTeamApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -746,7 +746,7 @@ class UcenterUserTeamApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -761,7 +761,7 @@ class UcenterUserTeamApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -769,7 +769,7 @@ class UcenterUserTeamApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -793,7 +793,7 @@ class UcenterUsersProjectsApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -801,7 +801,7 @@ class UcenterUsersProjectsApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -816,7 +816,7 @@ class UcenterUsersProjectsApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -828,7 +828,7 @@ class UcenterUsersProjectsApi(Resource):
                              "page_num": page_num
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -850,7 +850,7 @@ class UcenterUserProjectApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -858,7 +858,7 @@ class UcenterUserProjectApi(Resource):
             body = request.get_data()
             parameters = json.loads(body)
         except Exception, e:
-            log.error('Parameters error, body=%s, reason=%s' % (body, e))
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 
             return request_result(101)
 
@@ -875,7 +875,7 @@ class UcenterUserProjectApi(Resource):
             token = request.headers.get('token')
             user_info = token_auth(token)['result']
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 

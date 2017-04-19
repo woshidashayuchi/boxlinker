@@ -26,14 +26,14 @@ def server_start(n):
     while True:
 
         try:
-            log.info('Starting RPC Call API Server, topic=%s'
-                     % (queue))
+            log.critical('Starting RPC Call API Server, topic=%s'
+                         % (queue))
             rbtmq = RabbitmqServer()
             rbtmq.rpc_call_server(queue, rpcapi_register)
         except Exception, e:
-            log.warning(
-                'RPC Call API Server running error, queue=%s, reason=%s'
-                % (queue, e))
+            log.error('RPC Call API Server running error, '
+                      'queue=%s, reason=%s'
+                      % (queue, e))
         sleep(10)
 
 

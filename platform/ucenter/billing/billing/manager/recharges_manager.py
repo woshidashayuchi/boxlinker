@@ -39,9 +39,9 @@ class RechargesManager(object):
                             '-', '').replace(' ', '').replace(
                             ':', '').replace('.', '')
 
-        log.info('User(%s) exec recharge precreate, '
-                 'recharge_uuid=%s, amount=%s'
-                 % (user_name, recharge_uuid, recharge_amount))
+        log.critical('User(%s) exec recharge precreate, '
+                     'recharge_uuid=%s, amount=%s'
+                     % (user_name, recharge_uuid, recharge_amount))
 
         if recharge_type == 'zhifubao':
             # 调用支付宝预付款接口，获取付款二维码地址

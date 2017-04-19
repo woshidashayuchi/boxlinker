@@ -26,14 +26,14 @@ def server_start(n):
     while True:
 
         try:
-            log.info('Starting RPC Bcast API Server, exchange=%s'
-                     % (exchange_name))
+            log.critical('Starting RPC Bcast API Server, exchange=%s'
+                         % (exchange_name))
             rbtmq = RabbitmqServer(60)
             rbtmq.broadcast_server(exchange_name, rpcapi_register)
         except Exception, e:
-            log.warning(
-                'RPC Bcast API Server running error, exchange=%s, reason=%s'
-                % (exchange_name, e))
+            log.error('RPC Bcast API Server running error, '
+                      'exchange=%s, reason=%s'
+                      % (exchange_name, e))
         sleep(10)
 
 

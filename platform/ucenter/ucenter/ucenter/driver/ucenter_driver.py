@@ -57,7 +57,7 @@ class UcenterDriver(object):
             if int(status) != 0:
                 raise(Exception('request_code not equal 0'))
         except Exception, e:
-            log.error('Verify code check error: reason=%s' % (e))
+            log.warning('Verify code check error: reason=%s' % (e))
             return request_result(601)
 
         return request_result(0)
@@ -75,11 +75,11 @@ class UcenterDriver(object):
 
         return self.billing_api.balance_init(context, parameters)
 
-    def image_info(self, team_uuid, resource_type='UserAvatars',
+    def image_info(self, image_uuid, resource_type='UserAvatars',
                    resource_domain='boxlinker'):
 
-        resource_uuid = team_uuid
-        url = '%s/api/v1.0/files/%s/%s/%s/%s' % (self.image_api, team_uuid,
+        resource_uuid = image_uuid
+        url = '%s/api/v1.0/files/%s/%s/%s/%s' % (self.image_api, image_uuid,
                                                  resource_type, resource_uuid,
                                                  resource_domain)
 

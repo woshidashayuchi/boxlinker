@@ -178,7 +178,7 @@ class RabbitmqClient(object):
                 self.broad_exchange(exchange_name)
                 self.broad_cast(exchange_name, json_data)
         except Exception, e:
-            log.error(
-                'RabbitMQ broadcast client exec error: exchange=%s, reason=%s'
-                % (exchange_name, e))
+            log.error('RabbitMQ broadcast client exec error: '
+                      'exchange=%s, reason=%s'
+                      % (exchange_name, e))
             raise

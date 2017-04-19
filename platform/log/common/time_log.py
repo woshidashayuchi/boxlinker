@@ -15,8 +15,8 @@ def time_log(func):
 
         func_info = type(inspect.getcallargs(
                          func, *args, **kwargs).get('self'))
-        log.info('Method(%s.%s) start execute'
-                 % (func_info, func.__name__))
+        log.critical('Method(%s.%s) start execute'
+                     % (func_info, func.__name__))
         start_time = time.time()
 
         try:
@@ -27,8 +27,8 @@ def time_log(func):
             return request_result(601)
 
         exec_time = time.time() - start_time
-        log.info('Method(%s.%s) end execute, execute_time = %f'
-                 % (func_info, func.__name__, exec_time))
+        log.critical('Method(%s.%s) end execute, execute_time = %f'
+                     % (func_info, func.__name__, exec_time))
 
         return result
 
@@ -39,7 +39,7 @@ def func_time_log(func):
 
     def __wrapper(*args, **kwargs):
 
-        log.info('Function(%s) start execute' % (func.__name__))
+        log.critical('Function(%s) start execute' % (func.__name__))
         start_time = time.time()
 
         try:
@@ -50,8 +50,8 @@ def func_time_log(func):
             return request_result(601)
 
         exec_time = time.time() - start_time
-        log.info('Function(%s) end execute, execute_time = %f'
-                 % (func.__name__, exec_time))
+        log.critical('Function(%s) end execute, execute_time = %f'
+                     % (func.__name__, exec_time))
 
         return result
 

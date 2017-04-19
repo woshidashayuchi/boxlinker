@@ -20,7 +20,7 @@ try:
 
     log_file = conf.log_file
 except Exception:
-    log_level = logging.INFO
+    log_level = logging.WARNING
     log_file = '/var/log/cloud.log'
 
 logging.basicConfig(

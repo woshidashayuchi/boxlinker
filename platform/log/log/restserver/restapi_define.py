@@ -32,7 +32,7 @@ class LabelLogApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -48,7 +48,7 @@ class LabelLogApi(Resource):
                              "end_time": end_time
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 
@@ -79,7 +79,7 @@ class LogPollApi(Resource):
                 log.debug('log_api_start_time=%s' % (start_time))
                 log_res = self.log_api.pod_log_list(context, parameters)
             except Exception, e:
-                log.error('Get log from kibana error, reason=%s' % (e))
+                log.warning('Get log from kibana error, reason=%s' % (e))
                 sleep(5)
                 continue
 
@@ -99,7 +99,7 @@ class LogPollApi(Resource):
                     yield '\n'
 
             except Exception, e:
-                log.error('Log format error, reason=%s' % (e))
+                log.warning('Log format error, reason=%s' % (e))
                 yield '\n'
 
             sleep(5)
@@ -110,7 +110,7 @@ class LogPollApi(Resource):
             token = request.headers.get('token')
             token_auth(token)
         except Exception, e:
-            log.error('Token check error, token=%s, reason=%s' % (token, e))
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
@@ -122,7 +122,7 @@ class LogPollApi(Resource):
                              "start_time": start_time
                          }
         except Exception, e:
-            log.error('Parameters error, reason=%s' % (e))
+            log.warning('Parameters error, reason=%s' % (e))
 
             return request_result(101)
 

@@ -43,14 +43,15 @@ class TokensManager(object):
             team_uuid = user_info[0][3]
             project_uuid = user_info[0][4]
         except Exception, e:
-            log.error('Get user token info error, user_name=%s'
-                      % (user_name))
+            log.warning('Get user token info error, '
+                        'user_name=%s, reason=%s'
+                        % (user_name, e))
             return request_result(201)
 
         passwd_user = passwd_encrypt(user_name, password, salt)
         if passwd_user != passwd_db:
-            log.info('user(%s) login error, password not correct'
-                     % (user_name))
+            log.warning('user(%s) login error, password not correct'
+                        % (user_name))
             return request_result(201)
 
         user_token = str(uuid.uuid4())
@@ -138,14 +139,14 @@ class TokensManager(object):
             team_priv = self.ucenter_db.team_priv(
                              user_uuid, team_uuid)[0][0]
         except Exception, e:
-            log.warning('Database select error, reason=%s' % (e))
+            log.info('Database select error, reason=%s' % (e))
             team_priv = None
 
         try:
             project_priv = self.ucenter_db.project_priv(
                                 user_uuid, project_uuid)[0][0]
         except Exception, e:
-            log.warning('Database select error, reason=%s' % (e))
+            log.info('Database select error, reason=%s' % (e))
             project_priv = None
 
         try:

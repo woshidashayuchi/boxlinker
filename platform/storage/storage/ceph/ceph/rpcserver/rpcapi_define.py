@@ -27,7 +27,7 @@ class CephRpcManager(object):
             disk_name = parameter_check(disk_name, ptype='pstr')
             disk_size = parameter_check(disk_size, ptype='pint')
         except Exception, e:
-            log.error('parameters error, parameters=%s, reason=%s'
+            log.warning('parameters error, parameters=%s, reason=%s'
                       % (parameters, e))
             return request_result(101)
 
@@ -44,7 +44,7 @@ class CephRpcManager(object):
             pool_name = parameter_check(pool_name, ptype='pnam')
             disk_name = parameter_check(disk_name, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, parameters=%s, reason=%s'
+            log.warning('parameters error, parameters=%s, reason=%s'
                       % (parameters, e))
             return request_result(101)
 
@@ -63,7 +63,7 @@ class CephRpcManager(object):
             disk_name = parameter_check(disk_name, ptype='pstr')
             disk_size = parameter_check(disk_size, ptype='pint')
         except Exception, e:
-            log.error('parameters error, parameters=%s, reason=%s'
+            log.warning('parameters error, parameters=%s, reason=%s'
                       % (parameters, e))
             return request_result(101)
 
@@ -78,7 +78,7 @@ class CephRpcManager(object):
 
             image_name = parameter_check(image_name, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, parameters=%s, reason=%s'
+            log.warning('parameters error, parameters=%s, reason=%s'
                       % (parameters, e))
             return request_result(101)
 

@@ -205,10 +205,9 @@ class ProjectsManager(object):
                 log.error('Database update error, reason=%s' % (e))
                 return request_result(403)
         else:
-            error_reason = "%s, %s" \
-                           % ("Project delete denied",
-                              "there are users in the project")
-            log.warning('%s' % (error_reason))
+            error_reason = ('Project delete denied, '
+                            'there are users in the project.')
+            log.warning(error_reason)
             result = {"reason": error_reason}
             return request_result(202, result)
         return request_result(0)

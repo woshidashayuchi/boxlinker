@@ -39,8 +39,8 @@ class BillingDriver(object):
     def ali_precreate(self, recharge_uuid, amount):
 
         # 调用支付宝预下单接口，返回付款二维码
-        log.info('exec zhifubao precreate, recharge_uuid=%s, amount=%s'
-                 % (recharge_uuid, amount))
+        log.critical('exec zhifubao precreate, recharge_uuid=%s, amount=%s'
+                     % (recharge_uuid, amount))
 
         return self.ali_pay.precreate_face_to_face_trade(
                                out_trade_no=recharge_uuid,
@@ -67,8 +67,8 @@ class BillingDriver(object):
     def ali_pay_cancel(self, recharge_uuid):
 
         # 调用支付宝取消预下单的支付操作
-        log.info('exec zhifubao paycancel, recharge_uuid=%s'
-                 % (recharge_uuid))
+        log.critical('exec zhifubao paycancel, recharge_uuid=%s'
+                     % (recharge_uuid))
 
         return self.ali_pay.cancel_face_to_face_trade(
                     out_trade_no=recharge_uuid)
@@ -81,8 +81,8 @@ class BillingDriver(object):
     def weixin_pay_precreate(self, recharge_uuid, amount):
 
         # 调用微信预下单接口，返回付款二维码
-        log.info('exec weixin precreate, recharge_uuid=%s, amount=%s'
-                 % (recharge_uuid, amount))
+        log.critical('exec weixin precreate, recharge_uuid=%s, amount=%s'
+                     % (recharge_uuid, amount))
 
         amount = int(float(amount) * 100)
 

@@ -57,13 +57,13 @@ class TeamsManager(object):
         level_init = self.ucenter_driver.level_init(
                           user_token).get('status')
         if int(level_init) != 0:
-            log.error('Team(%s) level init error' % (team_name))
+            log.error('Team(%s) level init failure' % (team_name))
             return request_result(599)
 
         balance_init = self.ucenter_driver.balance_init(
                             user_token).get('status')
         if int(balance_init) != 0:
-            log.error('Team(%s) balance init error' % (team_name))
+            log.error('Team(%s) balance init failure' % (team_name))
             return request_result(599)
 
         try:
@@ -326,7 +326,7 @@ class TeamsManager(object):
                 return request_result(402)
         else:
             error_reason = "Team delete denied, there are users in the team"
-            log.warning('%s' % (error_reason))
+            log.warning(error_reason)
             result = {"reason": error_reason}
             return request_result(202, result)
         return request_result(0)

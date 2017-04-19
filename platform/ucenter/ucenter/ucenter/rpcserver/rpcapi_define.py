@@ -47,7 +47,7 @@ class UcenterRpcManager(object):
             code_id = parameter_check(code_id, ptype='pstr', exist='no')
             code_str = parameter_check(code_str, ptype='pstr', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -62,7 +62,7 @@ class UcenterRpcManager(object):
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -80,7 +80,7 @@ class UcenterRpcManager(object):
             if (status != 'enable') and (status != 'disable'):
                 raise(Exception('parameter error'))
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -97,7 +97,7 @@ class UcenterRpcManager(object):
             except Exception:
                 email = parameter_check(user_name, ptype='peml')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -117,7 +117,7 @@ class UcenterRpcManager(object):
             except Exception:
                 user_name = parameter_check(user_name, ptype='peml')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -135,7 +135,7 @@ class UcenterRpcManager(object):
 
             user_uuid = parameter_check(user_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -160,7 +160,7 @@ class UcenterRpcManager(object):
             if sex and (sex != 'man') and (sex != 'woman'):
                 raise(Exception('parameter error'))
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -187,7 +187,7 @@ class UcenterRpcManager(object):
                 if (i not in 'CRUD'):
                     raise(Exception('parameter error'))
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -204,7 +204,7 @@ class UcenterRpcManager(object):
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -218,7 +218,7 @@ class UcenterRpcManager(object):
 
             role_uuid = parameter_check(role_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -237,7 +237,7 @@ class UcenterRpcManager(object):
                 if (i not in 'CRUD'):
                     raise(Exception('parameter error'))
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -251,7 +251,7 @@ class UcenterRpcManager(object):
 
             role_uuid = parameter_check(role_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -269,7 +269,7 @@ class UcenterRpcManager(object):
             old_password = parameter_check(old_password, ptype='ppwd')
             new_password = parameter_check(new_password, ptype='ppwd')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -286,7 +286,7 @@ class UcenterRpcManager(object):
             except Exception:
                 user_name = parameter_check(user_name, ptype='peml')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -302,7 +302,7 @@ class UcenterRpcManager(object):
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             password = parameter_check(password, ptype='ppwd')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -321,7 +321,7 @@ class UcenterRpcManager(object):
                 user_name = parameter_check(user_name, ptype='peml')
             password = parameter_check(password, ptype='ppwd')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -339,7 +339,7 @@ class UcenterRpcManager(object):
             project_uuid = parameter_check(project_uuid, ptype='pstr',
                                            exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -353,7 +353,7 @@ class UcenterRpcManager(object):
 
             user_token = parameter_check(user_token, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -366,7 +366,7 @@ class UcenterRpcManager(object):
 
             user_token = parameter_check(user_token, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -387,7 +387,7 @@ class UcenterRpcManager(object):
             team_owner = parameter_check(team_owner, ptype='pstr')
             team_desc = parameter_check(team_desc, ptype='pstr', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -412,7 +412,7 @@ class UcenterRpcManager(object):
             public_info = parameter_check(public_info, ptype='pstr',
                                           exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -431,7 +431,7 @@ class UcenterRpcManager(object):
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -451,7 +451,7 @@ class UcenterRpcManager(object):
             team_type = parameter_check(team_type, ptype='pstr', exist='no')
             team_desc = parameter_check(team_desc, ptype='pstr', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -466,7 +466,7 @@ class UcenterRpcManager(object):
 
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -490,7 +490,7 @@ class UcenterRpcManager(object):
             project_desc = parameter_check(project_desc, ptype='pstr',
                                            exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -509,7 +509,7 @@ class UcenterRpcManager(object):
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -523,7 +523,7 @@ class UcenterRpcManager(object):
 
             project_uuid = parameter_check(project_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -547,7 +547,7 @@ class UcenterRpcManager(object):
             project_desc = parameter_check(project_desc, ptype='pstr',
                                            exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -562,7 +562,7 @@ class UcenterRpcManager(object):
 
             project_uuid = parameter_check(project_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -583,7 +583,7 @@ class UcenterRpcManager(object):
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             role_uuid = parameter_check(role_uuid, ptype='pstr', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -604,7 +604,7 @@ class UcenterRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -621,7 +621,7 @@ class UcenterRpcManager(object):
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             team_uuid = parameter_check(team_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -644,7 +644,7 @@ class UcenterRpcManager(object):
             n_user_uuid = parameter_check(n_user_uuid, ptype='pstr')
             n_role_uuid = parameter_check(n_role_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -666,7 +666,7 @@ class UcenterRpcManager(object):
             n_team_uuid = parameter_check(n_team_uuid, ptype='pstr')
             team_priv = parameter_check(team_priv, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -690,7 +690,7 @@ class UcenterRpcManager(object):
             user_uuid = parameter_check(user_uuid, ptype='pstr')
             role_uuid = parameter_check(role_uuid, ptype='pstr', exist='no')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -712,7 +712,7 @@ class UcenterRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -735,7 +735,7 @@ class UcenterRpcManager(object):
             n_user_uuid = parameter_check(n_user_uuid, ptype='pstr')
             n_role_uuid = parameter_check(n_role_uuid, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
@@ -757,7 +757,7 @@ class UcenterRpcManager(object):
             project_uuid = parameter_check(project_uuid, ptype='pstr')
             project_priv = parameter_check(project_priv, ptype='pstr')
         except Exception, e:
-            log.error('parameters error, context=%s, parameters=%s, reason=%s'
+            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
                       % (context, parameters, e))
             return request_result(101)
 
