@@ -29,6 +29,6 @@ db_user = 'cloudsvc'
 db_passwd = 'cloudsvc'
 database = 'servicedata'
 
-
+# IMAGE_S = 'imageauth:8001'
 IMAGE_S = 'imageauth:8843'
 IMAGE_H = 'index.boxlinker.com/'

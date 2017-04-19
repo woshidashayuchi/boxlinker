@@ -11,10 +11,18 @@ class ServiceDB(MysqlInit):
     def __init__(self):
         super(ServiceDB, self).__init__()
 
-    def compare_image_id(self, image_id):
+    def compare_image_id(self, image_name):
         sql = "select a.service_name, a.project_uuid from font_service a, replicationcontrollers b " \
-              "WHERE a.rc_uuid=b.uuid AND b.image_id='%s' AND b.policy=%d" % (str(image_id), 1)
+              "WHERE a.rc_uuid=b.uuid AND b.image_name='%s' AND b.policy=%d" % (image_name, 1)
 
         log.info('select the database sql is: %s' % sql)
 
         return super(ServiceDB, self).exec_select_sql(sql)
+
+    def update_image_id(self, image_id, service_name, project_uuid):
+        sql = "update replicationcontrollers SET image_id='%s' WHERE uuid=(SELECT rc_uuid from font_service " \
+              "WHERE service_name='%s' AND project_uuid='%s')" % (image_id, service_name, project_uuid)
+
+        log.info('update the database sql is: %s' % sql)
+
+        return super(ServiceDB, self).exec_update_sql(sql)

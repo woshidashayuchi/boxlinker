@@ -12,6 +12,7 @@ from driver.kubernetes_driver import KubernetesDriver
 from driver.volume_driver import VolumeDriver
 from driver.photo_driver import photo_dir
 from driver.es_driver.to_es import post_es
+from driver.image_driver import images_message_get
 
 
 class CreateManager(object):
@@ -136,6 +137,13 @@ class CreateManager(object):
             return request_result(501)
 
         if context.get('rtype') != 'lifecycle':
+            try:
+                image_name, image_version = images_message_get(context)
+                context['image_name'] = image_name
+            except Exception, e:
+                log.error('get the image message error, reason is: %s' % e)
+                return request_result(501)
+
             try:
                 infix = self.infix_db(context)
 

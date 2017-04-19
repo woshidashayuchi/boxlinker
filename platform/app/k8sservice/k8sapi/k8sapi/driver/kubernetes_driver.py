@@ -1032,6 +1032,17 @@ class KubernetesDriver(object):
             log.info('not need to change anything...')
             return request_result(0, 'update successfully')
 
+    def update_description(self, context):
+        try:
+            ret = self.service_db.update_description(context)
+            if ret is not None:
+                log.error('UPDATE THE DATABASE ERROR')
+                return request_result(403)
+            return request_result(0, 'update successfully')
+        except Exception, e:
+            log.error('update the description error, reason is: %s' % e)
+            return request_result(403)
+
     def update_main(self, context):
         rtype = context.get('rtype')
 
@@ -1055,5 +1066,7 @@ class KubernetesDriver(object):
             return self.update_domain(context)
         if rtype == 'identify':
             return self.update_identify(context)
+        if rtype == 'description':
+            return self.update_description(context)
 
         return True

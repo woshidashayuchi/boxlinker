@@ -2,6 +2,7 @@
 # Author: wang-xf <it-wangxf@all-reach.com>
 # Date: 2017/02/07
 import re
+import uuid
 from common.mysql_base import MysqlInit
 from common.logs import logging as log
 from unit_element import font_infix_element, rc_infix_element, container_element, env_element, volume_element,\
@@ -26,7 +27,11 @@ class ServiceDB(MysqlInit):
                        "team_uuid, project_uuid, user_uuid) VALUES('%s', '%s', '%s', '%s', '%s'," \
                        "'%s')" % ('service_list', 'api', 'global', 'global', 'global', 'global')
 
-        return super(ServiceDB, self).exec_update_sql(sql_create_api, sql_list_api)
+        sql_alarm_init = "insert into alarming(uuid,wise,cpu_unit,cpu_value,memory_unit,memory_value," \
+                         "network_unit,network_value,storage_unit,storage_value,time_span,alarm_time) " \
+                         "values('default',10,'%',70,'%',70,'M',10,'%',70,'1h','12~14')"
+
+        return super(ServiceDB, self).exec_update_sql(sql_create_api, sql_list_api, sql_alarm_init)
 
     def name_if_used_check(self, dict_data):
 
@@ -38,12 +43,13 @@ class ServiceDB(MysqlInit):
         return super(ServiceDB, self).exec_select_sql(sql)
 
     def infix_db(self, dict_data):
+        alarm_uuid = str(uuid.uuid4())
 
         font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name, \
             image_dir, description = font_infix_element(dict_data)
 
         pods_num, image_id, cm_format, container_cpu, container_memory, policy, auto_startup, \
-            command = rc_infix_element(dict_data)
+            command, image_name = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
                    "team_uuid, project_uuid, service_name,service_status, description) VALUES('%s', '%s', '%s', " \
@@ -51,17 +57,20 @@ class ServiceDB(MysqlInit):
                                                           project_uuid, service_name, 'pending', description)
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
-                 "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command) " \
+                 "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command, image_name) " \
                  "VALUES ('%s', '%s', %d, '%s', '%s', '%s', '%s', %d, %d," \
-                 "'%s')" % (rc_uuid, service_name.replace('_', '-')+project_uuid, pods_num, image_id, cm_format,
-                            container_cpu, container_memory, policy, auto_startup, command)
+                 "'%s', '%s')" % (rc_uuid, service_name.replace('_', '-')+project_uuid, pods_num, image_id, cm_format,
+                                  container_cpu, container_memory, policy, auto_startup, command, image_name)
 
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
                   "user_uuid) VALUES ('%s','%s','%s','%s','%s'," \
                   "'%s')" % (font_uuid, 'service', 'global', dict_data.get('team_uuid'),
                              dict_data.get('project_uuid'), dict_data.get('user_uuid'))
 
-        return super(ServiceDB, self).exec_update_sql(sql_font, sql_rc, sql_acl)
+        sql_alarm_rules = "insert into alarm_service_rules(uuid,alarm_uuid,service_uuid) values " \
+                          "('%s', 'default', '%s')" % (alarm_uuid, font_uuid)
+
+        return super(ServiceDB, self).exec_update_sql(sql_font, sql_rc, sql_acl, sql_alarm_rules)
 
     def get_service_uuid(self, dict_data):
         sql = "select uuid from font_service WHERE service_name='%s' and \
@@ -250,12 +259,20 @@ class ServiceDB(MysqlInit):
         del_rc = "delete from replicationcontrollers where uuid=(select rc_uuid from font_service " \
                  "where service_name='%s' and project_uuid='%s')" % (service_name, project_uuid)
 
+        del_alarm = "delete from alarming WHERE uuid=(SELECT alarm_uuid from alarm_service_rules WHERE " \
+                    "service_uuid=(SELECT uuid FROM font_service WHERE service_name='%s' AND project_uuid='%s')) " \
+                    "AND uuid != 'default'" % (service_name, project_uuid)
+
+        del_rules = "delete from alarm_service_rules WHERE service_uuid=(select uuid from font_service WHERE " \
+                    "service_name='%s' AND project_uuid='%s')" % (service_name, project_uuid)
+
         del_font = "delete from font_service where project_uuid='%s' and service_name='%s'" % (project_uuid,
                                                                                                service_name)
 
         def_acl = "delete from resources_acl where resource_uuid='%s'" % (dict_data.get('service_uuid'))
 
-        return super(ServiceDB, self).exec_update_sql(del_volume, del_container, del_env, del_rc, del_font, def_acl)
+        return super(ServiceDB, self).exec_update_sql(del_volume, del_container, del_env, del_rc,
+                                                      del_alarm, del_rules, del_font, def_acl)
 
     def update_container(self, dict_data):
         project_uuid, service_name = normal_call(dict_data)
@@ -611,6 +628,16 @@ class ServiceDB(MysqlInit):
                           "and service_name='%s'" % (project_uuid, service_name)
 
         return super(ServiceDB, self).exec_update_sql(sql, sql_update_time)
+
+    def update_description(self, dict_data):
+        service_uuid = dict_data.get('service_uuid')
+        description = dict_data.get('description')
+
+        sql = "update font_service set description='%s' where uuid='%s'" % (description,
+                                                                            service_uuid)
+
+        log.info('update the database sql is: %s' % sql)
+        return super(ServiceDB, self).exec_update_sql(sql)
 
     def get_user_uuid(self, project_uuid, service_name):
 

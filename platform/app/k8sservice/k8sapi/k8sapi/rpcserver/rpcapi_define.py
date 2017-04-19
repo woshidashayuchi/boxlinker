@@ -118,7 +118,7 @@ class KubernetesRpcAPI(object):
             parameter_check(parameters.get('service_uuid'), ptype='puid')
 
             if rtype not in ['env', 'volume', 'container', 'status', 'telescopic',
-                             'policy', 'command', 'domain', 'identify', 'cm']:
+                             'policy', 'command', 'domain', 'identify', 'cm', 'description']:
                 raise Exception('rtype error, not have this resource type')
 
             if rtype == 'env' and parameters.get('env') is not None and parameters.get('env') != '':

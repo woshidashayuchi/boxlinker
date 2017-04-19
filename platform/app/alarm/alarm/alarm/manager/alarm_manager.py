@@ -5,11 +5,13 @@
 from common.logs import logging as log
 from db.alarm_db import AlarmDB
 from common.code import request_result
+from driver.alarm_driver import AlarmDriver
 
 
 class AlarmManager(object):
     def __init__(self):
         self.alarm_db = AlarmDB()
+        self.alarm_drv = AlarmDriver()
 
     def alarm_into_manager(self, dict_data):
         try:
@@ -59,3 +61,7 @@ class AlarmManager(object):
             return request_result(404)
 
         return request_result(0, ret)
+
+    def alarm_svc_manager(self):
+        dict_data = {'type': 'memory', 'time_long': '15m', 'time_span': '1m'}
+        self.alarm_drv.alarm_driver(dict_data)

@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 # Author: wang-xf <it-wangxf@all-reach.com>
-# Date: 17/4/14 上午11:04
-
+# Date: 2017/02/06
 import sys
 p_path = sys.path[0] + '/../..'
 p_path1 = sys.path[0] + '/..'
-sys.path.insert(1, p_path)
+sys.path.append(p_path)
 sys.path.append(p_path1)
-
-from time import sleep
-
 from common.logs import logging as log
-from restapi_register import rest_app_run
-reload(sys)
-sys.setdefaultencoding('utf8')
+from time import sleep
+from restapi_register1 import rest_app_run
 
 
 def server_start(service_name):
@@ -30,4 +25,4 @@ def server_start(service_name):
 
 if __name__ == "__main__":
 
-    server_start('Service')
+    server_start('roll_update')

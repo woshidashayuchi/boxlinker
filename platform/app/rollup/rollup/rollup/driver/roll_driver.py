@@ -9,6 +9,7 @@ from conf import conf
 import requests
 import json
 import os
+from time import sleep
 import re
 
 
@@ -23,26 +24,33 @@ class RollDriver(object):
 
     @staticmethod
     def image_msg(tag, repository):
+        n = 0
         try:
-            image_ret = requests.get('http://%s/api/v1.0/imagerepo/image/tagids/?repo_name=%s&repo_tag=%s' % (conf.IMAGE_S,
-                                                                                                              repository,
-                                                                                                              tag))
-            image_ret = json.loads(image_ret.text)
-            log.info('image result is: %s' % image_ret)
-            if image_ret.get('status') != 0:
-                raise Exception('get the image message error')
-            image_id = image_ret.get('result')
+            for i in range(5):
+                image_ret = requests.get('http://%s/api/v1.0/imagerepo/image/tagids/?repo_name=%s&repo_tag=%s' % (conf.IMAGE_S,
+                                                                                                                  repository,
+                                                                                                                  tag))
+                image_ret = json.loads(image_ret.text)
+                log.info('image result is: %s' % image_ret)
+                if image_ret.get('status') != 0:
+                    if n == 3:
+                        raise Exception('get the image id error')
+                    else:
+                        n += 1
+                        sleep(0.2)
+                        continue
+                else:
+                    image_id = image_ret.get('result')
+                    return image_id
 
         except Exception, e:
             log.error('get the image if by image name error, reason is: %s' % e)
             raise Exception('get the image if by image name error')
 
-        return image_id
-
-    def compare_to_db(self, image_id):
+    def compare_to_db(self, image_id, image_name):
         ret = []
         try:
-            db_ret = self.roll_db.compare_image_id(image_id)
+            db_ret = self.roll_db.compare_image_id(image_name)
         except Exception, e:
             log.error('get the image message from db error, reason is: %s' % e)
             raise Exception('get the image message from db error')
@@ -53,6 +61,10 @@ class RollDriver(object):
                 for i in db_ret:
                     service_name = i[0]
                     project_uuid = i[1]
+                    up_result = self.roll_db.update_image_id(image_id, service_name, project_uuid)
+                    if up_result is not None:
+                        log.error('update the database result is not None, is: %s' % up_result)
+                        return
                     ret.append({'rc_name': service_name, 'namespace': project_uuid})
                 return ret
         except Exception, e:
@@ -66,7 +78,7 @@ class RollDriver(object):
             image_id = self.image_msg(tag, repository)
             log.info('change steps!!!')
 
-            compare_ret = self.compare_to_db(image_id)
+            compare_ret = self.compare_to_db(image_id, 'index.boxlinker.com/'+repository)
             if compare_ret is None:
                 return {}
             response = {'image': 'index.boxlinker.com/'+repository+':'+tag,
