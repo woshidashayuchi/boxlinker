@@ -28,6 +28,9 @@ class VolumesApi(Resource):
         try:
             token = request.headers.get('token')
             token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
         except Exception, e:
             log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
@@ -41,7 +44,7 @@ class VolumesApi(Resource):
 
             return request_result(101)
 
-        context = context_data(token, "stg_ceh_dsk_add", "create")
+        context = context_data(token, "stg_ceh_dsk_add", "create", source_ip)
 
         return self.storage_api.disk_create(context, parameters)
 
@@ -100,6 +103,9 @@ class VolumeApi(Resource):
         try:
             token = request.headers.get('token')
             token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
         except Exception, e:
             log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
@@ -115,7 +121,7 @@ class VolumeApi(Resource):
 
             return request_result(101)
 
-        context = context_data(token, volume_uuid, "update")
+        context = context_data(token, volume_uuid, "update", source_ip)
 
         return self.storage_api.disk_update(context, parameters)
 
@@ -125,14 +131,18 @@ class VolumeApi(Resource):
         try:
             token = request.headers.get('token')
             token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
         except Exception, e:
             log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
-        context = context_data(token, volume_uuid, "delete")
+        context = context_data(token, volume_uuid, "delete", source_ip)
 
         return self.storage_api.disk_delete(context)
+
 
 class VolumesReclaimsApi(Resource):
 
@@ -180,11 +190,14 @@ class VolumeReclaimApi(Resource):
         try:
             token = request.headers.get('token')
             token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
         except Exception, e:
             log.warning('Token check error, token=%s, reason=%s' % (token, e))
 
             return request_result(201)
 
-        context = context_data(token, volume_uuid, "create")
+        context = context_data(token, volume_uuid, "create", source_ip)
 
         return self.storage_api.disk_reclaim_recovery(context)

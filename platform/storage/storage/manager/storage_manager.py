@@ -3,6 +3,7 @@
 
 import uuid
 import json
+import socket
 
 from conf import conf
 from common.logs import logging as log
@@ -23,6 +24,7 @@ class StorageManager(object):
         self.balancecheck = conf.balance_check
         self.storage_db = storage_db.StorageDB()
         self.storage_driver = storage_driver.StorageDriver()
+        self.local_ip = socket.gethostbyname(socket.gethostname())
 
     @operation_record(resource_type='volume', action='create')
     @limit_check('volumes')
@@ -70,7 +72,8 @@ class StorageManager(object):
                      "pool_name": self.pool_name,
                      "image_name": disk_name,
                      "volume_size": volume_size,
-                     "fs_type": fs_type
+                     "fs_type": fs_type,
+                     "resource_uuid": volume_uuid
                  }
 
         return request_result(0, result)
@@ -80,6 +83,13 @@ class StorageManager(object):
                               source_ip, resource_uuid):
 
         try:
+            volume_name = self.storage_db.volume_name(
+                               volume_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        try:
             self.storage_db.volume_logical_delete(volume_uuid)
         except Exception, e:
             log.error('Database delete error, reason=%s' % (e))
@@ -87,11 +97,22 @@ class StorageManager(object):
 
         self.storage_driver.billing_delete(token, volume_uuid)
 
-        return request_result(0)
+        result = {
+                     "resource_name": volume_name
+                 }
+
+        return request_result(0, result)
 
     @operation_record(resource_type='volume', action='physical_delete')
     def volume_physical_delete(self, volume_uuid, token,
                                source_ip, resource_uuid):
+
+        try:
+            volume_name = self.storage_db.volume_name(
+                               volume_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
 
         try:
             disk_name = self.storage_db.volume_delete_info(
@@ -113,9 +134,11 @@ class StorageManager(object):
             log.error('Database delete error, reason=%s' % (e))
             return request_result(402)
 
-        # self.storage_driver.billing_delete(token, volume_uuid)
+        result = {
+                     "resource_name": volume_name
+                 }
 
-        return request_result(0)
+        return request_result(0, result)
 
     def volume_resize(self, token, volume_uuid, volume_size):
 
@@ -153,12 +176,20 @@ class StorageManager(object):
                      "volume_name": volume_name,
                      "pool_name": self.pool_name,
                      "image_name": disk_name,
-                     "volume_size": volume_size
+                     "volume_size": volume_size,
+                     "resource_name": volume_name
                  }
 
         return request_result(0, result)
 
     def volume_status(self, volume_uuid, volume_status):
+
+        try:
+            volume_name = self.storage_db.volume_name(
+                               volume_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
 
         try:
             self.storage_db.volume_status(volume_uuid, volume_status)
@@ -168,7 +199,8 @@ class StorageManager(object):
 
         result = {
                      "volume_uuid": volume_uuid,
-                     "volume_status": volume_status
+                     "volume_status": volume_status,
+                     "resource_name": volume_name
                  }
 
         return request_result(0, result)
@@ -375,6 +407,13 @@ class StorageManager(object):
                     return request_result(302)
 
         try:
+            volume_name = self.storage_db.volume_name(
+                               volume_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        try:
             self.storage_db.volume_recovery(volume_uuid)
         except Exception, e:
             log.error('Database update error, reason=%s' % (e))
@@ -384,7 +423,8 @@ class StorageManager(object):
                             token, volume_uuid)
 
         result = {
-                     "volume_uuid": volume_uuid
+                     "volume_uuid": volume_uuid,
+                     "resource_name": volume_name
                  }
 
         return request_result(0, result)
@@ -407,7 +447,7 @@ class StorageManager(object):
                 volume_uuid = volume_info[0]
                 self.volume_physical_delete(
                      volume_uuid, token=token,
-                     source_ip='1.1.1.1',
+                     source_ip=self.local_ip,
                      resource_uuid=volume_uuid)
         except Exception, e:
             log.error('volume reclaim delete exec error, reason=%s' % (e))

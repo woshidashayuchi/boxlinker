@@ -23,6 +23,7 @@ class StorageRpcManager(object):
 
         try:
             token = context['token']
+            source_ip = context.get('source_ip')
             user_info = token_auth(context['token'])['result']
             user_uuid = user_info.get('user_uuid')
             team_uuid = user_info.get('team_uuid')
@@ -33,7 +34,7 @@ class StorageRpcManager(object):
             fs_type = parameters.get('fs_type')
             cost = parameters.get('cost')
 
-            token = parameter_check(token, ptype='pstr')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
             volume_name = parameter_check(volume_name, ptype='pnam')
             volume_size = parameter_check(volume_size, ptype='pint')
             if self.balancecheck is True:
@@ -46,14 +47,15 @@ class StorageRpcManager(object):
             if (fs_type != 'xfs') and (fs_type != 'ext4'):
                 raise
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.storage_manager.volume_create(
                     team_uuid, project_uuid, user_uuid,
                     volume_name, volume_size, fs_type, cost,
-                    token=token, source_ip='1.1.1.1',
+                    token=token, source_ip=source_ip,
                     resource_name=volume_name)
 
     @acl_check
@@ -62,15 +64,18 @@ class StorageRpcManager(object):
         try:
             token = context['token']
             volume_uuid = context['resource_uuid']
+            source_ip = context.get('source_ip')
 
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.storage_manager.volume_logical_delete(
-                    volume_uuid, token=token, source_ip='1.1.1.1',
+                    volume_uuid, token=token, source_ip=source_ip,
                     resource_uuid=volume_uuid)
 
     @acl_check
@@ -81,8 +86,9 @@ class StorageRpcManager(object):
 
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.storage_manager.volume_info(volume_uuid)
@@ -104,8 +110,9 @@ class StorageRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.storage_manager.volume_list(
@@ -119,6 +126,7 @@ class StorageRpcManager(object):
         try:
             token = context['token']
             volume_uuid = context['resource_uuid']
+            source_ip = context.get('source_ip')
 
             update = parameters.get('update')
             volume_size = parameters.get('volume_size')
@@ -126,6 +134,7 @@ class StorageRpcManager(object):
 
             token = parameter_check(token, ptype='pstr')
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
             if update == 'size':
                 volume_size = parameter_check(volume_size, ptype='pint')
             elif update == 'status':
@@ -134,14 +143,15 @@ class StorageRpcManager(object):
             else:
                 raise
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.storage_manager.volume_update(
                     volume_uuid, update, volume_size,
                     volume_status, token=token,
-                    source_ip='1.1.1.1', resource_uuid=volume_uuid)
+                    source_ip=source_ip, resource_uuid=volume_uuid)
 
     @acl_check
     def volume_reclaim_list(self, context, parameters):
@@ -160,8 +170,9 @@ class StorageRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.storage_manager.volume_reclaim_list(
@@ -175,13 +186,16 @@ class StorageRpcManager(object):
         try:
             token = context['token']
             volume_uuid = context['resource_uuid']
+            source_ip = context.get('source_ip')
 
             volume_uuid = parameter_check(volume_uuid, ptype='pstr')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.storage_manager.volume_reclaim_recovery(
-                    volume_uuid, token=token, source_ip='1.1.1.1',
+                    volume_uuid, token=token, source_ip=source_ip,
                     resource_uuid=volume_uuid)

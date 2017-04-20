@@ -108,7 +108,7 @@ class SecurityRpcManager(object):
             resource_name = parameters.get('resource_name')
 
             record_uuid = parameter_check(record_uuid, ptype='pstr')
-            return_code = parameter_check(record_uuid, ptype='pint')
+            return_code = parameter_check(return_code, ptype='pint')
             resource_uuid = parameter_check(resource_uuid, ptype='pstr',
                                             exist='no')
             resource_name = parameter_check(resource_name, ptype='pnam',

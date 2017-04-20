@@ -21,6 +21,13 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_select_sql(sql)[0][0]
 
+    def volume_name(self, volume_uuid):
+
+        sql = "select volume_name from volumes where volume_uuid='%s'" \
+              % (volume_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
     def volume_create(self, volume_uuid, volume_name, disk_name,
                       volume_size, fs_type, pool_name,
                       team_uuid, project_uuid, user_uuid):
