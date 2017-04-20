@@ -51,8 +51,10 @@ class StorageRpcManager(object):
             return request_result(101)
 
         return self.storage_manager.volume_create(
-                    token, team_uuid, project_uuid, user_uuid,
-                    volume_name, volume_size, fs_type, cost)
+                    team_uuid, project_uuid, user_uuid,
+                    volume_name, volume_size, fs_type, cost,
+                    token=token, source_ip='1.1.1.1',
+                    resource_name=volume_name)
 
     @acl_check
     def volume_delete(self, context, parameters):
@@ -68,7 +70,8 @@ class StorageRpcManager(object):
             return request_result(101)
 
         return self.storage_manager.volume_logical_delete(
-                    token, volume_uuid)
+                    volume_uuid, token=token, source_ip='1.1.1.1',
+                    resource_uuid=volume_uuid)
 
     @acl_check
     def volume_info(self, context, parameters):
@@ -136,8 +139,9 @@ class StorageRpcManager(object):
             return request_result(101)
 
         return self.storage_manager.volume_update(
-                    token, volume_uuid, update,
-                    volume_size, volume_status)
+                    volume_uuid, update, volume_size,
+                    volume_status, token=token,
+                    source_ip='1.1.1.1', resource_uuid=volume_uuid)
 
     @acl_check
     def volume_reclaim_list(self, context, parameters):
@@ -179,4 +183,5 @@ class StorageRpcManager(object):
             return request_result(101)
 
         return self.storage_manager.volume_reclaim_recovery(
-                    token, volume_uuid)
+                    volume_uuid, token=token, source_ip='1.1.1.1',
+                    resource_uuid=volume_uuid)

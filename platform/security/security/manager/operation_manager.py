@@ -25,7 +25,7 @@ class OperationManager(object):
 
         try:
             self.security_db.operation_create(
-                 user_uuid, user_name, source_ip,
+                 record_uuid, user_uuid, user_name, source_ip,
                  resource_uuid, resource_name, resource_type,
                  action)
         except Exception, e:
@@ -61,7 +61,8 @@ class OperationManager(object):
             resource_name = record_info[4]
             resource_type = record_info[5]
             action = record_info[6]
-            result = record_info[7]
+            return_code = record_info[7]
+            return_msg = record_info[8]
 
             v_list_info = {
                               "user_uuid": user_uuid,
@@ -71,7 +72,8 @@ class OperationManager(object):
                               "resource_name": resource_name,
                               "resource_type": resource_type,
                               "action": action,
-                              "result": result,
+                              "return_code": return_code,
+                              "return_msg": return_msg,
                               "start_time": start_time,
                               "end_time": end_time
                           }
@@ -106,7 +108,8 @@ class OperationManager(object):
             resource_name = record_info[3]
             resource_type = record_info[4]
             action = record_info[5]
-            result = record_info[6]
+            return_code = record_info[6]
+            return_msg = record_info[7]
 
             v_list_info = {
                               "user_uuid": user_uuid,
@@ -116,7 +119,8 @@ class OperationManager(object):
                               "resource_name": resource_name,
                               "resource_type": resource_type,
                               "action": action,
-                              "result": result,
+                              "return_code": return_code,
+                              "return_msg": return_msg,
                               "start_time": start_time,
                               "end_time": end_time
                           }
@@ -129,11 +133,15 @@ class OperationManager(object):
 
         return request_result(0, result)
 
-    def operation_update(self, record_uuid, result):
+    def operation_update(self, record_uuid,
+                         return_code, return_msg,
+                         resource_uuid=None,
+                         resource_name=None):
 
         try:
             self.security_db.operation_update(
-                 record_uuid, result)
+                 record_uuid, return_code, return_msg,
+                 resource_uuid, resource_name)
         except Exception, e:
             log.error('Database update error, reason=%s' % (e))
             return request_result(403)

@@ -22,7 +22,7 @@ class SecurityRpcApi(object):
         try:
             rpc_body = rpc_data("sec_opr_rcd_crt", context, parameters)
             return self.rbtmq.rpc_call_client(
-                        self.cast_queue, self.timeout, rpc_body)
+                        self.call_queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)

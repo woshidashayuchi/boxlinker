@@ -15,7 +15,7 @@ from common.db import resources_db
 
 
 requests.adapters.DEFAULT_RETRIES = 5
-limit_url = '%s%s' % (conf.billing_api, '/api/v1.0/billing/limits')
+limit_url = '%s%s' % (conf.ucenter_api, '/api/v1.0/billing/limits')
 
 
 def billing_limit_check(token, resource_type, cost):

@@ -64,7 +64,8 @@ $v_connect_mysql "CREATE TABLE IF NOT EXISTS operation_records (
         resource_name       VARCHAR(64) NULL DEFAULT NULL,
         resource_type       VARCHAR(32) NULL DEFAULT NULL,
         action              VARCHAR(32) NULL DEFAULT NULL,
-        result              VARCHAR(128) NULL DEFAULT NULL,
+        return_code         INT(8) NULL DEFAULT NULL,
+        return_msg          VARCHAR(128) NULL DEFAULT NULL,
         start_time          DATETIME NULL DEFAULT NULL,
         end_time            DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (record_uuid)

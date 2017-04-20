@@ -9,6 +9,7 @@ from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
 from common.limit import limit_check
+from common.operation_record import operation_record
 
 from storage.db import storage_db
 from storage.driver import storage_driver
@@ -23,9 +24,11 @@ class StorageManager(object):
         self.storage_db = storage_db.StorageDB()
         self.storage_driver = storage_driver.StorageDriver()
 
+    @operation_record(resource_type='volume', action='create')
     @limit_check('volumes')
-    def volume_create(self, token, team_uuid, project_uuid, user_uuid,
-                      volume_name, volume_size, fs_type, cost):
+    def volume_create(self, team_uuid, project_uuid, user_uuid,
+                      volume_name, volume_size, fs_type, cost,
+                      token, source_ip, resource_name):
 
         try:
             disk_name_ch = self.storage_db.name_duplicate_check(
@@ -72,7 +75,9 @@ class StorageManager(object):
 
         return request_result(0, result)
 
-    def volume_logical_delete(self, token, volume_uuid):
+    @operation_record(resource_type='volume', action='logical_delete')
+    def volume_logical_delete(self, volume_uuid, token,
+                              source_ip, resource_uuid):
 
         try:
             self.storage_db.volume_logical_delete(volume_uuid)
@@ -84,7 +89,9 @@ class StorageManager(object):
 
         return request_result(0)
 
-    def volume_physical_delete(self, token, volume_uuid):
+    @operation_record(resource_type='volume', action='physical_delete')
+    def volume_physical_delete(self, volume_uuid, token,
+                               source_ip, resource_uuid):
 
         try:
             disk_name = self.storage_db.volume_delete_info(
@@ -165,6 +172,18 @@ class StorageManager(object):
                  }
 
         return request_result(0, result)
+
+    @operation_record(resource_type='volume', action='update')
+    def volume_update(self, volume_uuid, update,
+                      volume_size, volume_status,
+                      token, source_ip, resource_uuid):
+
+        if update == 'size':
+            return self.volume_resize(
+                        token, volume_uuid, volume_size)
+        elif update == 'status':
+            return self.volume_status(
+                        volume_uuid, volume_status)
 
     def volume_info(self, volume_uuid):
 
@@ -259,16 +278,6 @@ class StorageManager(object):
 
         return request_result(0, result)
 
-    def volume_update(self, token, volume_uuid, update,
-                      volume_size, volume_status):
-
-        if update == 'size':
-            return self.volume_resize(
-                        token, volume_uuid, volume_size)
-        elif update == 'status':
-            return self.volume_status(
-                        volume_uuid, volume_status)
-
     def volume_reclaim_check(self):
 
         balances_check = self.storage_driver.balances_check()
@@ -349,7 +358,9 @@ class StorageManager(object):
 
         return request_result(0, result)
 
-    def volume_reclaim_recovery(self, token, volume_uuid):
+    @operation_record(resource_type='volume', action='recovery')
+    def volume_reclaim_recovery(self, volume_uuid, token,
+                                source_ip, resource_uuid):
 
         if self.balancecheck is True:
             # 获取并检查用户余额，只有当余额大于0时才允许执行恢复操作
@@ -394,7 +405,10 @@ class StorageManager(object):
             volumes_list_info = self.storage_db.volume_list_dead()
             for volume_info in volumes_list_info:
                 volume_uuid = volume_info[0]
-                self.volume_physical_delete(token, volume_uuid)
+                self.volume_physical_delete(
+                     volume_uuid, token=token,
+                     source_ip='1.1.1.1',
+                     resource_uuid=volume_uuid)
         except Exception, e:
             log.error('volume reclaim delete exec error, reason=%s' % (e))
 

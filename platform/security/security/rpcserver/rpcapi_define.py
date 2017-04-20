@@ -33,15 +33,19 @@ class SecurityRpcManager(object):
             action = parameters.get('action')
 
             record_uuid = parameter_check(record_uuid, ptype='pstr')
-            source_ip = parameter_check(source_ip, ptype='pnip')
-            resource_uuid = parameter_check(resource_uuid, ptype='pstr')
-            resource_name = parameter_check(resource_name, ptype='pnam')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
+            resource_uuid = parameter_check(resource_uuid, ptype='pstr',
+                                            exist='no')
+            resource_name = parameter_check(resource_name, ptype='pnam',
+                                            exist='no')
             resource_type = parameter_check(resource_type, ptype='pstr')
-            if action not in ('create', 'delete', 'update'):
+            if action not in ('create', 'update', 'recovery',
+                              'logical_delete', 'physical_delete'):
                 raise(Exception('Parameter error'))
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.operation_manager.operation_create(
@@ -63,8 +67,9 @@ class SecurityRpcManager(object):
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.operation_manager.operation_list(
@@ -84,8 +89,9 @@ class SecurityRpcManager(object):
             start_time = parameter_check(start_time, ptype='pflt')
             end_time = parameter_check(end_time, ptype='pflt')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.operation_manager.operation_info(
@@ -96,13 +102,23 @@ class SecurityRpcManager(object):
 
         try:
             record_uuid = parameters.get('record_uuid')
-            result = parameters.get('result')
+            return_code = parameters.get('return_code')
+            return_msg = parameters.get('return_msg')
+            resource_uuid = parameters.get('resource_uuid')
+            resource_name = parameters.get('resource_name')
 
             record_uuid = parameter_check(record_uuid, ptype='pstr')
+            return_code = parameter_check(record_uuid, ptype='pint')
+            resource_uuid = parameter_check(resource_uuid, ptype='pstr',
+                                            exist='no')
+            resource_name = parameter_check(resource_name, ptype='pnam',
+                                            exist='no')
         except Exception, e:
-            log.warning('parameters error, context=%s, parameters=%s, reason=%s'
-                      % (context, parameters, e))
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
             return request_result(101)
 
         return self.operation_manager.operation_update(
-                    record_uuid, result)
+                    record_uuid, return_code, return_msg,
+                    resource_uuid, resource_name)

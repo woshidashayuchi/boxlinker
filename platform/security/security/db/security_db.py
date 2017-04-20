@@ -17,9 +17,10 @@ class SecurityDB(MysqlInit):
 
         sql = "insert into operation_records(record_uuid, user_uuid, \
                user_name, source_ip, resource_uuid, resource_name, \
-               resource_type, action, result, start_time, end_time) \
+               resource_type, action, return_code, return_msg, \
+               start_time, end_time) \
                values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', \
-               'executing', now(), now())" \
+               999, 'executing', now(), now())" \
               % (record_uuid, user_uuid, user_name, source_ip,
                  resource_uuid, resource_name, resource_type,
                  action)
@@ -34,7 +35,7 @@ class SecurityDB(MysqlInit):
 
         sql_01 = "select user_uuid, user_name, source_ip, \
                   resource_uuid, resource_name, resource_type, \
-                  action, result \
+                  action, return_code, return_msg \
                   from operation_records \
                   where start_time between '%s' and '%s' \
                   limit %d,%d" \
@@ -57,7 +58,7 @@ class SecurityDB(MysqlInit):
 
         sql = "select user_name, source_ip, \
                resource_uuid, resource_name, resource_type, \
-               action, result \
+               action, return_code, return_msg \
                from operation_records \
                where user_uuid='%s' \
                and start_time between '%s' and '%s'" \
@@ -65,10 +66,26 @@ class SecurityDB(MysqlInit):
 
         return super(SecurityDB, self).exec_select_sql(sql)
 
-    def operation_update(self, record_uuid, result):
+    def operation_update(self, record_uuid,
+                         return_code, return_msg,
+                         resource_uuid, resource_name):
 
-        sql = "update operation_records set result='%s', end_time=now() \
-               where record_uuid='%s'" \
-              % (result, record_uuid)
+        if resource_uuid:
+            sql = "update operation_records set resource_uuid='%s', \
+                   return_code=%d, return_msg='%s', end_time=now() \
+                   where record_uuid='%s'" \
+                  % (resource_uuid, return_code,
+                     return_msg, record_uuid)
+        elif resource_name:
+            sql = "update operation_records set resource_name='%s', \
+                   return_code=%d, return_msg='%s', end_time=now() \
+                   where record_uuid='%s'" \
+                  % (resource_name, return_code,
+                     return_msg, record_uuid)
+        else:
+            sql = "update operation_records set return_code=%d, \
+                   return_msg='%s', end_time=now() \
+                   where record_uuid='%s'" \
+                  % (return_code, return_msg, record_uuid)
 
         return super(SecurityDB, self).exec_update_sql(sql)
