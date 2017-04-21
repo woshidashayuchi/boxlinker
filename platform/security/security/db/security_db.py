@@ -35,9 +35,11 @@ class SecurityDB(MysqlInit):
 
         sql_01 = "select user_uuid, user_name, source_ip, \
                   resource_uuid, resource_name, resource_type, \
-                  action, return_code, return_msg \
+                  action, return_code, return_msg, \
+                  start_time, end_time \
                   from operation_records \
                   where start_time between '%s' and '%s' \
+                  order by start_time desc \
                   limit %d,%d" \
                  % (start_time, end_time,
                     start_position, page_size)
@@ -58,10 +60,12 @@ class SecurityDB(MysqlInit):
 
         sql = "select user_name, source_ip, \
                resource_uuid, resource_name, resource_type, \
-               action, return_code, return_msg \
+               action, return_code, return_msg, \
+               start_time, end_time \
                from operation_records \
                where user_uuid='%s' \
-               and start_time between '%s' and '%s'" \
+               and start_time between '%s' and '%s' \
+               order by start_time asc" \
               % (user_uuid, start_time, end_time)
 
         return super(SecurityDB, self).exec_select_sql(sql)

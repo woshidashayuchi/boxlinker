@@ -19,8 +19,5 @@ def rest_app_run():
     api.add_resource(restapi_define.OperationsApi,
                      '/api/v1.0/security/operations')
 
-    api.add_resource(restapi_define.OperationApi,
-                     '/api/v1.0/security/operations/<user_uuid>')
-
     app.run(host=conf.api_host, port=conf.api_port,
             threaded=True, debug=conf.api_debug)

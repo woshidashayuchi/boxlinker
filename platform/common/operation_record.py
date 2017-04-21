@@ -10,13 +10,16 @@ from common.parameters import context_data
 from common.security_rpcapi import SecurityRpcApi
 
 
+security_rpcapi = SecurityRpcApi()
+
+
 def operation_record(resource_type, action):
 
     def _retinfo(func):
 
         def __retinfo(*args, **kwargs):
 
-            security_rpcapi = SecurityRpcApi()
+            # security_rpcapi = SecurityRpcApi()
 
             record_uuid = str(uuid.uuid4())
 

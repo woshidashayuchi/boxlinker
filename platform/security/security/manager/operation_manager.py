@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
-import uuid
 import json
+import time
 
 from conf import conf
 from common.logs import logging as log
@@ -63,6 +63,8 @@ class OperationManager(object):
             action = record_info[6]
             return_code = record_info[7]
             return_msg = record_info[8]
+            start_time = record_info[9]
+            end_time = record_info[10]
 
             v_list_info = {
                               "user_uuid": user_uuid,
@@ -82,7 +84,7 @@ class OperationManager(object):
 
             operations_list.append(v_list_info)
 
-        result["operations_list"] = operations_list
+        result = {"operations_list": operations_list}
         result['count'] = count
 
         return request_result(0, result)
@@ -110,6 +112,8 @@ class OperationManager(object):
             action = record_info[5]
             return_code = record_info[6]
             return_msg = record_info[7]
+            start_time = record_info[8]
+            end_time = record_info[9]
 
             v_list_info = {
                               "user_uuid": user_uuid,
@@ -129,7 +133,7 @@ class OperationManager(object):
 
             operations_list.append(v_list_info)
 
-        result["operations_list"] = operations_list
+        result = {"operations_list": operations_list}
 
         return request_result(0, result)
 
