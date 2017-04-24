@@ -23,6 +23,16 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('alarm_que', self.rpcapi_define.alarm_query)
 
+        self.rpc_api.add_resource('alarm_update', self.rpcapi_define.alarm_update)
+
+        self.rpc_api.add_resource('only_create_alarm', self.rpcapi_define.only_alarm_create)
+
+        self.rpc_api.add_resource('only_list_alarm', self.rpcapi_define.only_alarm_query)
+
+        self.rpc_api.add_resource('only_detail_alarm', self.rpcapi_define.only_detail_alarm)
+
+        self.rpc_api.add_resource('only_update_alarm', self.rpcapi_define.only_update_alarm)
+
     def rpc_exec(self, rpc_body):
 
         try:

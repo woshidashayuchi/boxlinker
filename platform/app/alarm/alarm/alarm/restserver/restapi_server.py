@@ -9,7 +9,8 @@ sys.path.insert(1, p_path)
 sys.path.append(p_path1)
 
 from time import sleep
-
+from db.db_init import DBInit
+from db.data_init import DataInit
 from common.logs import logging as log
 from restapi_register import rest_app_run
 reload(sys)

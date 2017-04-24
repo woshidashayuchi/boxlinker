@@ -9,6 +9,7 @@ from driver.token_driver import TokenDriver
 from driver.kubernetes_driver import KubernetesDriver
 from driver.volume_driver import VolumeDriver
 from driver.billing_driver import BillingResource
+from common.operation_record import operation_record
 
 
 class UpdateManager(object):
@@ -37,7 +38,8 @@ class UpdateManager(object):
 
         return context
 
-    def service_update(self, context):
+    @operation_record(resource_type='app', action='update')
+    def service_update(self, context, token, source_ip, resource_uuid):
         log.info('the data(in) when update service....is: %s' % context)
         try:
             if context.get('rtype') != 'identify':
@@ -89,5 +91,5 @@ class UpdateManager(object):
             except Exception, e:
                 log.error('update the billing resources error, reason is: %s' % e)
 
-        return request_result(0, 'service update successfully')
+        return request_result(0, {'resource_name': context.get('service_name')})
 

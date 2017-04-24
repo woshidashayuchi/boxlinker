@@ -14,25 +14,25 @@ recover_login = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
 k8s_pod = 'https://api.boxlinker.com/api/v1.0/application/services/'
 
 
-# mq_server01 = 'boxlinker.com'
-# mq_server02 = 'boxlinker.com'
-# mq_port = 30001
+mq_server01 = 'boxlinker.com'
+mq_server02 = 'boxlinker.com'
+mq_port = 30001
+
+db_server01 = 'boxlinker.com'
+db_server02 = 'boxlinker.com'
+db_port = 30000
+
+# mq_server01 = 'rabbitmq'
+# mq_server02 = 'rabbitmq'
+# mq_port = 5672
 #
-# db_server01 = 'boxlinker.com'
-# db_server02 = 'boxlinker.com'
-# db_port = 30000
+# db_server01 = 'database01'
+# db_server02 = 'database01'
+# db_port = 3306
 
-mq_server01 = 'rabbitmq'
-mq_server02 = 'rabbitmq'
-mq_port = 5672
-
-db_server01 = 'database01'
-db_server02 = 'database01'
-db_port = 3306
-
-db_user = 'cloudsvc'
-db_passwd = 'cloudsvc'
-database = 'servicedata'
+db_user = 'cloudalarm'
+db_passwd = 'cloudalarm'
+database = 'monitor_alarm'
 
 alarm_queue = 'alarming'
 ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'

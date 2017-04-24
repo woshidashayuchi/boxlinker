@@ -13,7 +13,6 @@ class ElementExplain(object):
     @staticmethod
     def insert_alarm_ex(dict_data):
         a_uuid = uuid.uuid4()
-        alarm_uuid = uuid.uuid4()
         user_uuid = dict_data.get('user_uuid')
         service_uuid = dict_data.get('service_uuid')
         wise = dict_data.get('wise')
@@ -31,7 +30,9 @@ class ElementExplain(object):
         storage_value = dict_data.get('storage_value')
         time_span = dict_data.get('time_span')
         alarm_time = dict_data.get('alarm_time')
+        email = dict_data.get('email')
+        phone = dict_data.get('phone')
 
         return a_uuid, user_uuid, service_uuid, wise, cpu_unit, cpu_value, memory_unit, memory_value, network_unit, \
-            network_value, storage_unit, storage_value, time_span, alarm_time, alarm_uuid
+            network_value, storage_unit, storage_value, time_span, alarm_time, email, phone
 

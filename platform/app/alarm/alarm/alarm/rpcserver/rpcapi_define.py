@@ -22,3 +22,24 @@ class AlarmRpcAPI(object):
     @acl_check
     def alarm_query(self, context, parameters):
         return self.alarm_manager.query_manager(parameters)
+
+    @acl_check
+    def alarm_update(self, context, parameters):
+        return self.alarm_manager.update_manager(parameters)
+
+    @acl_check
+    def only_alarm_create(self, context, parameters):
+
+        return self.alarm_manager.only_alarm_create(parameters)
+
+    @acl_check
+    def only_alarm_query(self, context, parameters):
+        return self.alarm_manager.only_alarm_query(parameters)
+
+    @acl_check
+    def only_detail_alarm(self, context, parameters):
+        return self.alarm_manager.only_detail_query(parameters)
+
+    @acl_check
+    def only_update_alarm(self, context, parameters):
+        return self.alarm_manager.only_update_alarm(parameters)

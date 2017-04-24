@@ -67,3 +67,7 @@ TOKEN_PATH = '/run/secrets/kubernetes.io/serviceaccount/token'
 
 BILLING_URL = 'https://ucenter.boxlinker.com/api/v1.0/billing/resources'
 billing_api = 'https://ucenter.boxlinker.com'
+
+
+security_call_queue = 'security_call_api'
+security_cast_queue = 'security_cast_api'

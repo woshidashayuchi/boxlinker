@@ -5,95 +5,53 @@
 
 
 """
-@apiDefine CODE_POST_0
+@apiDefine CODE_GET_INFO_0
 @apiSuccessExample 返回
 {
     "status": 0,
     "msg": "OK",
     "result": {
-        "volume_uuid": "string",
-        "volume_name": "string",
-        "pool_name": "string",
-        "image_name": "string",
-        "volume_size": int,
-        "fs_type": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_DELETE_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {}
-}
-"""
-
-
-"""
-@apiDefine CODE_PUT_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "volume_uuid": "string",
-        "volume_name": "string",
-        "pool_name": "string",
-        "image_name": "string",
-        "volume_size": int
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_PUT_STATUS0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "volume_uuid": "string",
-        "volume_status": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_PUT_RECLAIM0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "volume_uuid": "string"
-    }
-}
-"""
-
-
-"""
-@apiDefine CODE_GET_0
-@apiSuccessExample 返回
-{
-    "status": 0,
-    "msg": "OK",
-    "result": {
-        "volume_uuid": "string",
-        "volume_name": "string",
-        "volume_size": int,
-        "volume_status": "string",
-        "image_name": "string",
-        "fs_type": "string",
-        "mount_point": "string",
-        "pool_name": "string",
-        "create_time": "YYYY-MM-DD HH:MM:SS",
-        "update_time": "YYYY-MM-DD HH:MM:SS"
+        "operations_list": [
+            {
+                "user_uuid": "string",
+                "user_name": "string",
+                "source_ip": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "action": "string",
+                "return_code": int,
+                "return_msg": "string",
+                "start_time": "YYYY-MM-DD HH:MM:SS",
+                "end_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "user_uuid": "string",
+                "user_name": "string",
+                "source_ip": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "action": "string",
+                "return_code": int,
+                "return_msg": "string",
+                "start_time": "YYYY-MM-DD HH:MM:SS",
+                "end_time": "YYYY-MM-DD HH:MM:SS"
+            },
+            {
+                "user_uuid": "string",
+                "user_name": "string",
+                "source_ip": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "action": "string",
+                "return_code": int,
+                "return_msg": "string",
+                "start_time": "YYYY-MM-DD HH:MM:SS",
+                "end_time": "YYYY-MM-DD HH:MM:SS"
+            }
+        ]
     }
 }
 """
@@ -107,42 +65,45 @@
     "msg": "OK",
     "result": {
         "count": int,
-        "volume_list": [
+        "operations_list": [
             {
-                "volume_uuid": "string",
-                "volume_name": "string",
-                "volume_size": int,
-                "volume_status": "string",
-                "image_name": "string",
-                "fs_type": "string",
-                "mount_point": "string",
-                "pool_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
+                "user_uuid": "string",
+                "user_name": "string",
+                "source_ip": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "action": "string",
+                "return_code": int,
+                "return_msg": "string",
+                "start_time": "YYYY-MM-DD HH:MM:SS",
+                "end_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
-                "volume_uuid": "string",
-                "volume_name": "string",
-                "volume_size": int,
-                "volume_status": "string",
-                "image_name": "string",
-                "fs_type": "string",
-                "mount_point": "string",
-                "pool_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
+                "user_uuid": "string",
+                "user_name": "string",
+                "source_ip": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "action": "string",
+                "return_code": int,
+                "return_msg": "string",
+                "start_time": "YYYY-MM-DD HH:MM:SS",
+                "end_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
-                "volume_uuid": "string",
-                "volume_name": "string",
-                "volume_size": int,
-                "volume_status": "string",
-                "image_name": "string",
-                "fs_type": "string",
-                "mount_point": "string",
-                "pool_name": "string",
-                "create_time": "YYYY-MM-DD HH:MM:SS",
-                "update_time": "YYYY-MM-DD HH:MM:SS"
+                "user_uuid": "string",
+                "user_name": "string",
+                "source_ip": "string",
+                "resource_uuid": "string",
+                "resource_name": "string",
+                "resource_type": "string",
+                "action": "string",
+                "return_code": int,
+                "return_msg": "string",
+                "start_time": "YYYY-MM-DD HH:MM:SS",
+                "end_time": "YYYY-MM-DD HH:MM:SS"
             }
         ]
     }
@@ -151,119 +112,29 @@
 
 
 ###################################################################
-#                       存储服务接口定义                          #
+#                       安全服务接口定义                          #
 ###################################################################
 
 
 """
-@api {post} /api/v1.0/storage/volumes 1.1 存储卷创建
-@apiName create volume
-@apiGroup 1 storage
+@api {get} /api/v1.0/security/operations?start_time=<epoch_seconds>&end_time=<epoch_seconds>&page_size=<int>&page_num=<int> 1.1 操作记录(管理员)
+@apiName list all operations record
+@apiGroup 1 operation
 @apiVersion 1.0.0
-@apiDescription 存储卷创建
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "volume_name": "string",
-    "volume_size": int,
-    "fs_type": "xfs/ext4",
-    "cost": float
-}
-@apiUse CODE_POST_0
-"""
-
-
-"""
-@api {get} /api/v1.0/storage/volumes?page_size=<int>&page_num=<int> 1.2 存储卷列表
-@apiName list volumes
-@apiGroup 1 storage
-@apiVersion 1.0.0
-@apiDescription 存储卷列表查询
-@apiPermission user and organization
+@apiDescription 管理员查询操作记录列表
+@apiPermission admin
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_GET_LIST_0
 """
 
 
 """
-@api {get} /api/v1.0/storage/volumes/<volume_uuid> 1.3 存储卷信息
-@apiName list single volume
-@apiGroup 1 storage
+@api {get} /api/v1.0/security/operations?start_time=<epoch_seconds>&end_time=<epoch_seconds> 1.2 操作记录(普通用户)
+@apiName list user operations record
+@apiGroup 1 operation
 @apiVersion 1.0.0
-@apiDescription 存储卷详细信息查询
-@apiPermission user and organization
+@apiDescription 普通用户查询操作记录列表
+@apiPermission user
 @apiParam {json} header {"token": "string"}
-@apiUse CODE_GET_0
-"""
-
-
-"""
-@api {put} /api/v1.0/storage/volumes/<volume_uuid>?update=<size> 1.4 存储卷更新（容量）
-@apiName update volume size
-@apiGroup 1 storage
-@apiVersion 1.0.0
-@apiDescription 存储卷容量更新
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "volume_size": int
-}
-@apiUse CODE_PUT_0
-"""
-
-
-"""
-@api {put} /api/v1.0/storage/volumes/<volume_uuid>?update=<status> 1.5 存储卷更新（状态）
-@apiName update volume status
-@apiGroup 1 storage
-@apiVersion 1.0.0
-@apiDescription 存储卷状态更新
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiParam {json} body
-@apiParamExample body
-{
-    "volume_status": "using/unused"
-}
-@apiUse CODE_PUT_STATUS0
-"""
-
-
-"""
-@api {delete} /api/v1.0/storage/volumes/<volume_uuid> 1.6 存储卷删除
-@apiName delete volume
-@apiGroup 1 storage
-@apiVersion 1.0.0
-@apiDescription 存储卷删除
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_DELETE_0
-"""
-
-
-"""
-@api {get} /api/v1.0/storage/volumes/reclaims?page_size=<int>&page_num=<int> 1.7 回收站列表
-@apiName list reclaim volumes
-@apiGroup 1 storage
-@apiVersion 1.0.0
-@apiDescription 回收站中存储卷列表查询
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_GET_LIST_0
-"""
-
-
-"""
-@api {put} /api/v1.0/storage/volumes/reclaims/<volume_uuid> 1.8 回收站恢复
-@apiName recovery volume from reclaim
-@apiGroup 1 storage
-@apiVersion 1.0.0
-@apiDescription 从回收站中恢复已删除的存储卷
-@apiPermission user and organization
-@apiParam {json} header {"token": "string"}
-@apiUse CODE_PUT_RECLAIM0
+@apiUse CODE_GET_INFO_0
 """

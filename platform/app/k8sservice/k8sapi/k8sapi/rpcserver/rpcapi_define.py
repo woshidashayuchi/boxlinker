@@ -28,12 +28,14 @@ class KubernetesRpcAPI(object):
     def service_create(self, context, parameters):
         log.info('rpc server get the data is : %s' % parameters)
         try:
+            source_ip = context.get('source_ip')
             parameter_check(parameters.get('token'), ptype='pstr')
             # parameter_check(parameters.get('service_name'), ptype='pnam')
             parameter_check(parameters.get('image_id'), ptype='pimgid')
             parameter_check(parameters.get('policy'), ptype='choice')
             parameter_check(parameters.get('pods_num'), ptype='pod_num')
             parameter_check(parameters.get('auto_startup'), ptype='choice')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
             # parameter_check(parameters.get('command'), ptype='command', exist='no')
             if '_' in parameters.get('service_name'):
                 raise Exception('service_name can not have _')
@@ -77,7 +79,9 @@ class KubernetesRpcAPI(object):
         token = parameters.get('token')
         cost = parameters.get('cost')
 
-        return self.create_manager.service_create(token, parameters, cost)
+        return self.create_manager.service_create(parameters, cost,
+                                                  token=token, source_ip=source_ip,
+                                                  resource_name=parameters.get('service_name'))
 
     @acl_check
     def service_query(self, context, parameters):
@@ -102,19 +106,28 @@ class KubernetesRpcAPI(object):
     @acl_check
     def service_delete(self, context, parameters):
         try:
+            source_ip = context.get('source_ip')
+            token = parameters.get('token')
+            service_uuid = parameters.get('service_uuid')
             parameter_check(parameters.get('token'), ptype='pstr')
             parameter_check(parameters.get('service_uuid'), ptype='puid')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
         except Exception, e:
             log.error('parameters error, context=%s, parameters=%s, reason=%s' % (context, parameters, e))
             return request_result(101)
 
-        return self.delete_manager.service_delete(parameters)
+        return self.delete_manager.service_delete(parameters, token=token, source_ip=source_ip,
+                                                  resource_uuid=service_uuid)
 
     @acl_check
     def service_update(self, context, parameters):
         try:
+            token = parameters.get('token')
+            service_uuid = parameters.get('service_uuid')
+            source_ip = context.get('source_ip')
             rtype = parameters.get('rtype')
             parameter_check(parameters.get('token'), ptype='pstr')
+            source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
             parameter_check(parameters.get('service_uuid'), ptype='puid')
 
             if rtype not in ['env', 'volume', 'container', 'status', 'telescopic',
@@ -183,7 +196,8 @@ class KubernetesRpcAPI(object):
             log.error('parameters error, context=%s, parameters=%s, reason=%s' % (context, parameters, e))
             return request_result(101)
 
-        return self.update_manager.service_update(parameters)
+        return self.update_manager.service_update(parameters, token=token, source_ip=source_ip,
+                                                  resource_uuid=service_uuid)
 
     @acl_check
     def pods_message(self, context, parameters):

@@ -12,8 +12,12 @@ def rest_app_run():
     app = Flask(__name__)
     CORS(app=app)
     api = Api(app)
-
+    api.add_resource(restapi_define.AlarmApiDefine,
+                     '/api/v1.0/application/alarm')
     api.add_resource(restapi_define.RestApiDefine,
                      '/api/v1.0/application/services/alarm')
+
+    api.add_resource(restapi_define.UpApiDefine,
+                     '/api/v1.0/application/alarm/<service_uuid>')
 
     app.run(host="0.0.0.0", port=9000, threaded=True, debug=True)

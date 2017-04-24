@@ -7,6 +7,7 @@ from driver.rpcapi_client import KubernetesRpcClient
 from common.limit import limit_check
 from common.logs import logging as log
 from common.code import request_result
+from common.operation_record import operation_record
 from driver.token_driver import TokenDriver
 from driver.kubernetes_driver import KubernetesDriver
 from driver.volume_driver import VolumeDriver
@@ -103,8 +104,9 @@ class CreateManager(object):
 
         return True
 
+    @operation_record(resource_type='app', action='create')
     @limit_check('services')
-    def service_create(self, token, context, cost):
+    def service_create(self, context, cost, token, source_ip, resource_name):
         log.info('the create service data is: %s' % context)
 
         if context.get('rtype') != 'lifecycle':
@@ -165,6 +167,6 @@ class CreateManager(object):
             except Exception, e:
                 log.error('from the photo url make the photo for service error, reason is: ' % e)
             post_es(context, 'service is creating...please wait')
-            return request_result(0, infix)
+            return request_result(0, {'resource_uuid': infix})
         else:
             return request_result(0, 'recovering...')

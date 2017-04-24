@@ -5,6 +5,7 @@
 from common.logs import logging as log
 from common.code import request_result
 from db.service_db import ServiceDB
+from common.operation_record import operation_record
 from driver.kubernetes_driver import KubernetesDriver
 from driver.billing_driver import BillingResource
 
@@ -16,7 +17,8 @@ class DeleteManager(object):
         self.kuber = KubernetesDriver()
         self.billing = BillingResource()
 
-    def service_delete(self, context):
+    @operation_record(resource_type='app', action='logical_delete')
+    def service_delete(self, context, token, source_ip, resource_uuid):
         log.info('the data(in) when delete service....is: %s' % context)
 
         try:
@@ -62,4 +64,4 @@ class DeleteManager(object):
             log.error('database delete error, reason=%s' % e)
             return request_result(402)
 
-        return request_result(0, 'service deleted successfully')
+        return request_result(0, {'resource_name': context.get('service_name')})

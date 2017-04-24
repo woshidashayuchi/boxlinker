@@ -16,10 +16,13 @@ def alarm_server(alarm):
     alarm_manager = AlarmManager()
     while True:
         try:
+            log.info('^^^^^^^^^xxxxxxx')
             alarm_manager.alarm_svc_manager()
-            sleep(3600)
+
         except Exception, e:
             log.error('start the service of %s error, reason is: %s' % (alarm, e))
+
+        sleep(3600)
 
 if __name__ == '__main__':
     alarm_server('alarming')

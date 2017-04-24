@@ -407,7 +407,7 @@ class KubernetesDriver(object):
         if str(db_ret[0][1]) == '0':
             return 'not_need'
         if str(db_ret[0][1]) == '1':
-            return db_ret[0]
+            return db_ret[0][0] + ':' + str(db_ret[0][2]) + ':' + str(db_ret[0][1])
 
     def get_one_re(self, dict_data):
         ret = self.krpc_client.get_one_re(dict_data)
@@ -468,7 +468,8 @@ class KubernetesDriver(object):
                 if identify_check == 'error':
                     return False
                 if identify_check and identify_check != 'not_need':
-                    add_service['metadata']['annotations']['serviceloadbalancer/lb.http'] = identify_check[0]
+                    add_service['metadata']['annotations']['serviceloadbalancer/lb.http'] = identify_check.split(':')[0] \
+                                                                                            + ':' + identify_check.split(':')[1]
 
             if http_lb == '' or http_lb is None:
                 add_service['metadata']['annotations'].pop('serviceloadbalancer/lb.http')
@@ -777,7 +778,7 @@ class KubernetesDriver(object):
             log.error('SERVICE UPDATE RESULT IS: %s' % svc_up_ret)
             return request_result(502)
 
-        return request_result(0, 'update successfully')
+        return True
 
     def update_volume_status(self, dict_data):
         using_volume = self.service_db.get_using_volume(dict_data)
@@ -848,8 +849,9 @@ class KubernetesDriver(object):
 
         if con_ret is not False and con_ret != 'not_need':
             try:
-                domain = con_ret[0]
-                identify = con_ret[1]
+                domain = con_ret.split(':')[0]
+                identify = con_ret.split(':')[2]
+                log.info('ccccccccccc: %s' % con_ret)
                 if domain:
                     for i in container:
                         if i.get('http_domain') is not None:
@@ -1030,7 +1032,7 @@ class KubernetesDriver(object):
 
         else:
             log.info('not need to change anything...')
-            return request_result(0, 'update successfully')
+            return True
 
     def update_description(self, context):
         try:
@@ -1038,7 +1040,7 @@ class KubernetesDriver(object):
             if ret is not None:
                 log.error('UPDATE THE DATABASE ERROR')
                 return request_result(403)
-            return request_result(0, 'update successfully')
+            return True
         except Exception, e:
             log.error('update the description error, reason is: %s' % e)
             return request_result(403)

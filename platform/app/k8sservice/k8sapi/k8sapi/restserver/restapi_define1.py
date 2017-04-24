@@ -23,6 +23,9 @@ class ServicesApi(Resource):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
             return request_result(201)
@@ -42,7 +45,7 @@ class ServicesApi(Resource):
             log.error("parameters error,reason=%s" % e)
             return request_result(101)
 
-        context = context_data(token, "service_create", "create")
+        context = context_data(token, "service_create", "create", source_ip)
 
         ret = self.kubernetes.create_services(context, parameters)
 
@@ -111,6 +114,9 @@ class ServiceApi(Resource):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
         except Exception, e:
             log.error('Token check error,reason=%s' % e)
             return request_result(201)
@@ -119,7 +125,7 @@ class ServiceApi(Resource):
         parameters['token'] = token
         parameters['service_uuid'] = service_uuid
 
-        context = context_data(token, service_uuid, 'delete')
+        context = context_data(token, service_uuid, 'delete', source_ip)
 
         ret = self.kuber.delete_service(context, parameters)
 
@@ -130,6 +136,9 @@ class ServiceApi(Resource):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
         except Exception, e:
             log.error('Token check error,reason=%s' % e)
             return request_result(201)
@@ -149,7 +158,7 @@ class ServiceApi(Resource):
             log.error('parameters error, reason is: %s' % e)
             return request_result(101)
 
-        context = context_data(token, service_uuid, "update")
+        context = context_data(token, service_uuid, "update", source_ip)
 
         ret = self.kuber.update_service(context, parameters)
         return ret

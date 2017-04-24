@@ -118,26 +118,6 @@ class DBInit(object):
                    Column('readonly', String(32), server_default='True')
                    )
 
-    alarm = Table('alarming', metadata,
-                  Column('uuid', String(64), primary_key=True),
-                  Column('wise', Integer, default=0),   # 0为横向,1为纵向
-                  Column('cpu_unit', String(32), default='%'),  # 可为'%','num'
-                  Column('cpu_value', Float),
-                  Column('memory_unit', String(32), default='M'),  # 也可为'%','G'
-                  Column('memory_value', Float),
-                  Column('network_unit', String(32), default='kBps'),
-                  Column('network_value', Float),
-                  Column('storage_unit', String(32), default='M'),  # 也可为'%', 'G'
-                  Column('storage_value', Float),
-                  Column('time_span', String(32), default='2h'),
-                  Column('alarm_time', DateTime),
-                  Column('update_time', DateTime, server_default=func.now()))
-
-    alarm_service_rules = Table('alarm_service_rules', metadata,
-                                Column('uuid', String(64), primary_key=True),
-                                Column('alarm_uuid', String(64)),
-                                Column('service_uuid', String(64)))
-
     metadata.create_all(engine)
 
     Table('replicationcontrollers', metadata, autoload=True)
@@ -146,6 +126,4 @@ class DBInit(object):
     Table('env', metadata, autoload=True)
     Table('volume', metadata, autoload=True)
     Table('logic', metadata, autoload=True)
-    Table('alarming', metadata, autoload=True)
-    Table('alarm_service_rules', metadata, autoload=True)
     Table('resources_acl', metadata, autoload=True)
