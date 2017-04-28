@@ -9,27 +9,27 @@ sys.path.insert(1, p_path)
 from time import sleep
 
 from common.logs import logging as log
-from storage.manager.storage_manager import StorageManager
+from storage.manager.clouddisk_manager import CloudDiskManager
 
 
 def storage_service():
 
-    storage_manager = StorageManager()
+    clouddisk_manager = CloudDiskManager()
 
     log.critical('Starting Storage Service')
     while True:
         sleep(3600)
         try:
             log.info('Start storage resource check')
-            storage_manager.volume_check()
+            clouddisk_manager.volume_check()
             log.info('Finish storage resource check')
 
             log.info('Start storage reclaim check')
-            storage_manager.volume_reclaim_check()
+            clouddisk_manager.volume_reclaim_check()
             log.info('Finish storage reclaim check')
 
             log.info('Start storage reclaim delete')
-            storage_manager.volume_reclaim_delete()
+            clouddisk_manager.volume_reclaim_delete()
             log.info('Finish storage reclaim delete')
         except Exception, e:
             log.error('Storage Service running error, reason=%s'

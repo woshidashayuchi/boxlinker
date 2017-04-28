@@ -17,6 +17,26 @@ class CephRpcApi(object):
         self.exchange = conf.ceph_exchange_name
         self.timeout = 60
 
+    def cephmon_init(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("drv_ceh_mon_ini", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
+    def cephmon_add(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("drv_ceh_mon_add", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
     def rbd_create(self, context, parameters=None):
 
         try:
@@ -51,6 +71,7 @@ class CephRpcApi(object):
 
         try:
             rpc_body = rpc_data("drv_ceh_dsk_gow", context, parameters)
+            log.info('send broadcast request')
             self.rbtmq.broadcast_client(
                  self.exchange, rpc_body)
             return request_result(0)

@@ -16,6 +16,12 @@ def rest_app_run():
     CORS(app=app)
     api = Api(app)
 
+    api.add_resource(restapi_define.CephClustersApi,
+                     '/api/v1.0/admin/storage/cephclusters')
+
+    api.add_resource(restapi_define.CephClusterApi,
+                     '/api/v1.0/admin/storage/cephclusters/<cluster_uuid>')
+
     api.add_resource(restapi_define.VolumesApi,
                      '/api/v1.0/storage/volumes')
 

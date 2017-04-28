@@ -10,7 +10,8 @@ from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 
-from ceph_rpcapi import CephRpcApi
+from storage.ceph.ceph.rpcapi.ceph_rpcapi import CephRpcApi
+
 
 requests.adapters.DEFAULT_RETRIES = 5
 
@@ -22,6 +23,46 @@ class StorageDriver(object):
         self.ceph_api = CephRpcApi()
         self.ucenter_api = conf.ucenter_api
         self.billing_api = conf.billing_api
+
+    def cephmon_init(self, token, cluster_info,
+                     mon01_hostip, mon01_rootpwd, mon01_snic,
+                     mon02_hostip, mon02_rootpwd, mon02_snic):
+
+        context = {"token": token}
+
+        parameters = {
+                         "cluster_info": cluster_info,
+                         "mon01_hostip": mon01_hostip,
+                         "mon01_rootpwd": mon01_rootpwd,
+                         "mon01_snic": mon01_snic,
+                         "mon02_hostip": mon02_hostip,
+                         "mon02_rootpwd": mon02_rootpwd,
+                         "mon02_snic": mon02_snic
+                     }
+
+        return self.ceph_api.cephmon_init(context, parameters)
+
+    def cephmon_add(self, token, cluster_info, mon_id,
+                    host_ip, rootpwd, storage_nic, mon_list):
+
+        context = {"token": token}
+
+        parameters = {
+                         "cluster_info": cluster_info,
+                         "mon_id": mon_id,
+                         "host_ip": host_ip,
+                         "rootpwd": rootpwd,
+                         "storage_nic": storage_nic,
+                         "mon_list": mon_list
+                     }
+
+        return self.ceph_api.cephmon_add(context, parameters)
+
+
+
+
+
+
 
     def disk_create(self, token, pool_name, disk_name, disk_size):
 
@@ -219,9 +260,6 @@ class StorageDriver(object):
 
             return requests.get(url, headers=headers,
                                 timeout=10).json()
-
-            #if int(status) != 0:
-            #    raise(Exception('request_code not equal 0'))
         except Exception, e:
             log.error('Billing balances check error: reason=%s' % (e))
             return request_result(601)

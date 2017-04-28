@@ -5,7 +5,7 @@
 from ceph.driver import ceph_driver
 
 
-class CephManager(object):
+class CephDiskManager(object):
 
     def __init__(self):
 

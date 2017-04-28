@@ -16,6 +16,82 @@ from common.token_ucenterauth import token_auth
 from storage.rpcapi import rpc_api as storage_rpcapi
 
 
+class CephClustersApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "create", source_ip)
+
+        return self.storage_api.cephcluster_create(context, parameters)
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephcluster_list(context)
+
+
+class CephClusterApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def get(self, cluster_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        parameters = {"cluster_uuid": cluster_uuid}
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephcluster_info(context, parameters)
+
+
+
+
+
+
 class VolumesApi(Resource):
 
     def __init__(self):

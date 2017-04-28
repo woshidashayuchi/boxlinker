@@ -20,6 +20,15 @@ class RabbitmqResponse(object):
         self.rpcapi_define = rpcapi_define.StorageRpcManager()
 
         self.rpc_api.add_resource(
+             'stg_ceh_cls_crt', self.rpcapi_define.cephcluster_create)
+
+        self.rpc_api.add_resource(
+             'stg_ceh_cls_inf', self.rpcapi_define.cephcluster_info)
+
+        self.rpc_api.add_resource(
+             'stg_ceh_cls_lst', self.rpcapi_define.cephcluster_list)
+
+        self.rpc_api.add_resource(
              'stg_ceh_dsk_crt', self.rpcapi_define.volume_create)
 
         self.rpc_api.add_resource(

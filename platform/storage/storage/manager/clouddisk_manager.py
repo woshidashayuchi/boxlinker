@@ -16,7 +16,7 @@ from storage.db import storage_db
 from storage.driver import storage_driver
 
 
-class StorageManager(object):
+class CloudDiskManager(object):
 
     def __init__(self):
 
