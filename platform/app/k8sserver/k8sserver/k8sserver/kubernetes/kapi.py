@@ -19,6 +19,7 @@ class KApiMethods(object):
         auth_info = 'Bearer %s' % token
         self.HEADERS = {'Authorization': auth_info}
         self.host_address = 'https://kubernetes.default.svc:443/api/v1'
+        self.ing_address = 'https://kubernetes.default.svc:443/apis/extensions/v1beta1/namespaces'
 
     def delete_namespace(self, dict_data):
         log.info('delete the ns dict is: %s' % dict_data)
@@ -114,12 +115,50 @@ class KApiMethods(object):
 
         return response
 
+    def post_ingress(self, dict_data):
+        namespace = dict_data.get('metadata').get('namespace')
+        url = '%s/%s/ingresses' % (self.ing_address, namespace)
+
+        result = requests.post(url, data=json.dumps(dict_data), headers=self.HEADERS, verify=False)
+        log.info('ingress:  create the ingress result is: %s, type is: %s' % (result, type(result)))
+
+        return json.loads(result.text)
+
+    def get_ingress(self, dict_data):
+        namespace = dict_data.get('namespace')
+        name = dict_data.get('name')
+        url = '%s/%s/ingresses/%s' % (self.ing_address, namespace, name)
+
+        result = requests.get(url, headers=self.HEADERS, verify=False)
+        log.info('get the default ingress msg is: %s, type is: %s' % (result, type(result)))
+
+        return json.loads(result.text)
+
+    def update_ingress(self, dict_data):
+        log.info('update the ingress, the json data is: %s' % dict_data)
+        namespace = dict_data.get('metadata').get('namespace')
+        name = dict_data.get('metadata').get('name')
+
+        url = '%s/%s/ingresses/%s' % (self.ing_address, namespace, name)
+
+        result = requests.put(url, data=json.dumps(dict_data), headers=self.HEADERS, verify=False)
+        log.info('update the ingress result is: %s' % result.text)
+        return json.loads(result.text)
+
     def delete_name_resource(self, json_list):
 
         rtype = json_list.pop('rtype')
-
         namespace = json_list.get('namespace')
-        url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, json_list.get('name'))
+        name = json_list.get('name')
+
+        if rtype == 'ingress':
+            url = '%s/%s/ingresses/%s' % (self.ing_address, namespace, name)
+            result = requests.delete(url, headers=self.HEADERS, verify=False)
+            log.info('ingress:  delete the ingress result is: %s' % result)
+
+            return json.loads(result.text)
+
+        url = '%s/namespaces/%s/%s/%s' % (self.host_address, namespace, rtype, name)
         response = requests.delete(url, headers=self.HEADERS, verify=False)
 
         log.info('delete resource result is %s, type is: %s' % (response, type(response)))

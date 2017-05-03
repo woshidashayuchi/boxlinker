@@ -56,7 +56,7 @@ VOLUMEIP = '10.10.10.11:5000,10.10.10.12:5000,10.10.10.21:5000'
 ELASTIC_SEARCH = 'elasticsearch:9200'
 
 IMAGE_S = 'imageauth:8001'
-# IMAGE_S = 'imageauth:8001'
+# IMAGE_S = 'imageauth.boxlinker.com'
 IMAGE_H = 'index.boxlinker.com/'
 
 

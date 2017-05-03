@@ -10,6 +10,7 @@ from sqlalchemy import func
 from sqlalchemy import String, Column, Integer
 from sqlalchemy import DateTime
 from sqlalchemy import Float
+from sqlalchemy.databases import mysql
 from common.logs import logging as log
 from conf import conf
 
@@ -53,6 +54,7 @@ class DBInit(object):
                          Column('description', String(320)),
                          Column('lifecycle', String(64)),
                          Column('image_dir', String(200)),
+                         Column('certify', Integer),
                          Column('service_create_time', DateTime, server_default=func.now()),
                          Column('service_update_time', DateTime, server_default=func.now())
                          )
@@ -117,6 +119,12 @@ class DBInit(object):
                    Column('disk_path', String(64)),
                    Column('readonly', String(32), server_default='True')
                    )
+
+    certify = Table('certify', metadata,
+                    Column('uuid', String(64), primary_key=True),
+                    Column('crt',  mysql.MSMediumText),
+                    Column('tls_key', mysql.MSMediumText),
+                    Column('certify_create_time', DateTime, server_default=func.now()))
 
     metadata.create_all(engine)
 

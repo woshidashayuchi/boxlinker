@@ -12,11 +12,15 @@ def rest_app_run():
     app = Flask(__name__)
     CORS(app=app)
     api = Api(app)
+
+    # 规则维护,即:增删改查告警规则
     api.add_resource(restapi_define.AlarmApiDefine,
                      '/api/v1.0/application/alarm')
+
     api.add_resource(restapi_define.RestApiDefine,
                      '/api/v1.0/application/services/alarm')
 
+    # 查看规则详情,为
     api.add_resource(restapi_define.UpApiDefine,
                      '/api/v1.0/application/alarm/<service_uuid>')
 

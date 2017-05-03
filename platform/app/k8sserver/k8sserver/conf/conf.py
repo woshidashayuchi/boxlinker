@@ -28,7 +28,8 @@ rpc_timeout = 60
 
 STORAGE_HOST = 'https://storage.boxlinker.com/api/v1.0/storage/volumes'
 PROJECT_MSG = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/projects'
-VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
+VOLUMEIP = '10.10.10.11:5000,10.10.10.12:5000,10.10.10.21:5000'
+# VOLUMEIP = '192.168.1.5:5000,192.168.1.8:5000,192.168.1.9:5000'
 
 # BILLING_URL = 'http://billing:8002/api/v1.0/billing/resources'
 BILLING_URL = 'https://ucenter.boxlinker.com/api/v1.0/billing/resources'

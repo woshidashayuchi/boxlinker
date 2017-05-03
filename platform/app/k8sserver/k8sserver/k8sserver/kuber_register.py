@@ -41,6 +41,14 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('del_ns', self.rpcapi_define.delete_ns)
 
+        self.rpc_api.add_resource('cre_ingress', self.rpcapi_define.default_ingress)
+
+        self.rpc_api.add_resource('g_default_ingress', self.rpcapi_define.get_default_ingress)
+
+        self.rpc_api.add_resource('up_ingress', self.rpcapi_define.update_ingress)
+
+        self.rpc_api.add_resource('secret_update', self.rpcapi_define.update_secret)
+
     def rpc_exec(self, rpc_body):
 
         try:

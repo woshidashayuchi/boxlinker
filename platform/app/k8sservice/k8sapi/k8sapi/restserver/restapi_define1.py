@@ -11,6 +11,7 @@ from common.time_log import time_log
 from common.parameters import context_data
 from common.token_ucenterauth import token_auth
 from rpcapi.rpc_client import KubernetesRpcClient
+from rpcapi.rpc_client import CertifyRpcClient
 
 
 class ServicesApi(Resource):
@@ -188,5 +189,92 @@ class ServiceName(Resource):
 
         context['rtype'] = rtype
         ret = self.kuber.service_name_get(context)
+
+        return ret
+
+
+class Certify(Resource):
+    def __init__(self):
+        self.certify = CertifyRpcClient()
+
+    def post(self):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return request_result(201)
+
+        try:
+            # 暂时数据上传格式:tls.crt在前, 中间关键字',tls.key:',最后key内容
+            data = request.get_data().split(',tls.key:')
+            crt = data[0]
+            key = data[1]
+            parameters = {'content': {'tls.crt': crt,
+                                      'tls.key': key}
+                          }
+            log.info('begin...')
+            parameters['token'] = token
+            token_rets = token_ret.get('result')
+            parameters.update(token_rets)
+        except Exception, e:
+            log.error('parameters error, reason is: %s' % e)
+            return request_result(101)
+
+        context = context_data(token, "certify_create", "create", source_ip)
+
+        ret = self.certify.create_certify(context, parameters)
+
+        return ret
+
+    def get(self):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return request_result(201)
+
+        parameters = token_ret.get('result')
+        context = context_data(token, "certify_list", "read")
+        ret = self.certify.query_certify(context, parameters)
+
+        return ret
+
+
+class CertifyUp(Resource):
+    def __init__(self):
+        self.certify = CertifyRpcClient()
+
+    def put(self, certify_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return request_result(201)
+        try:
+            data = request.get_data().split(',tls.key:')
+            crt = data[0]
+            key = data[1]
+            parameters = {'content': {'tls.crt': crt,
+                                      'tls.key': key}
+                          }
+
+            parameters.update(token_ret.get('result'))
+            parameters['certify_uuid'] = certify_uuid
+        except Exception, e:
+            log.error('parameters explain error, reason is: %s' % e)
+            return request_result(101)
+
+        context = context_data(token, certify_uuid, "update", source_ip)
+
+        ret = self.certify.update_certify(context, parameters)
 
         return ret

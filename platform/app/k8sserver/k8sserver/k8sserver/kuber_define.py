@@ -30,7 +30,8 @@ class KubernetesRpcAPIs(object):
 
             context['token'] = token
             context['user_uuid'] = user_uuid
-            if ret.get('kind') != 'ReplicationController' and ret.get('kind') != 'Service':
+            if ret.get('kind') != 'ReplicationController' and ret.get('kind') != 'Service' and \
+                    ret.get('kind') != 'ConfigMap':
                 log.info('CREATE SERVICE ERROR... result is:%s, type is:%s' % (ret, type(ret)))
         except Exception, e:
             log.error('create the service(kubernetes) error, reason=%s' % e)
@@ -108,3 +109,38 @@ class KubernetesRpcAPIs(object):
         except Exception, e:
             log.error('delete the namespace error, reason is: %s' % e)
             return False
+
+    def default_ingress(self, context, parameters=None):
+        token = context.pop('token')
+        user_uuid = context.pop('user_uuid')
+        try:
+            ret = self.kubernetes.post_ingress(context)
+
+            context['token'] = token
+            context['user_uuid'] = user_uuid
+
+            if ret.get('kind') != 'Ingress':
+                log.error('create the ingress result is: %s' % ret)
+                post_es(context, 'load create failure...')
+        except Exception, e:
+            log.error('create the default ingress error, reason is: %s' % e)
+
+    def get_default_ingress(self, context, parameters=None):
+        try:
+            return self.kubernetes.get_ingress(context)
+        except Exception, e:
+            log.error('get the default ingress message error, reason is: %s' % e)
+            return False
+
+    def update_ingress(self, context, parameters=None):
+        try:
+            return self.kubernetes.update_ingress(context)
+        except Exception, e:
+            log.error('update the ingress error, reason is: %s' % e)
+
+    def update_secret(self, context, parameters=None):
+        try:
+            context['rtype'] = 'secrets'
+            return self.kubernetes.put_name_resource(context)
+        except Exception, e:
+            log.error('update the secret error, reason is: %s' % e)

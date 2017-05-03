@@ -27,11 +27,20 @@ class ServiceDB(MysqlInit):
                        "team_uuid, project_uuid, user_uuid) VALUES('%s', '%s', '%s', '%s', '%s'," \
                        "'%s')" % ('service_list', 'api', 'global', 'global', 'global', 'global')
 
+        sql_create_certify_api = "insert into resources_acl(resource_uuid, resource_type, admin_uuid, " \
+                                 "team_uuid, project_uuid, user_uuid) VALUES('%s', '%s', '%s', '%s', '%s'," \
+                                 "'%s')" % ('certify_create', 'api', 'global', 'global', 'global', '0')
+
+        sql_list_certify_api = "insert into resources_acl(resource_uuid, resource_type, admin_uuid, " \
+                               "team_uuid, project_uuid, user_uuid) VALUES('%s', '%s', '%s', '%s', '%s'," \
+                               "'%s')" % ('certify_list', 'api', 'global', 'global', 'global', 'global')
+
         # sql_alarm_init = "insert into alarming(uuid,wise,cpu_unit,cpu_value,memory_unit,memory_value," \
         #                  "network_unit,network_value,storage_unit,storage_value,time_span,alarm_time) " \
         #                  "values('default',10,'%',80,'%',80,'M',10,'%',80,'1h','12~15')"
 
-        return super(ServiceDB, self).exec_update_sql(sql_create_api, sql_list_api)
+        return super(ServiceDB, self).exec_update_sql(sql_create_api, sql_list_api, sql_create_certify_api,
+                                                      sql_list_certify_api)
 
     def name_if_used_check(self, dict_data):
 
@@ -47,15 +56,15 @@ class ServiceDB(MysqlInit):
         email = dict_data.get('email')
         phone = dict_data.get('phone')
         font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name, \
-            image_dir, description = font_infix_element(dict_data)
+            image_dir, description, certify = font_infix_element(dict_data)
 
         pods_num, image_id, cm_format, container_cpu, container_memory, policy, auto_startup, \
             command, image_name = rc_infix_element(dict_data)
 
         sql_font = "insert into font_service(uuid, rc_uuid, service_uuid, user_uuid, " \
-                   "team_uuid, project_uuid, service_name,service_status, description) VALUES('%s', '%s', '%s', " \
-                   "'%s','%s', '%s', '%s', '%s','%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
-                                                          project_uuid, service_name, 'pending', description)
+                   "team_uuid, project_uuid, service_name,service_status, description, certify) VALUES('%s', '%s', '%s', " \
+                   "'%s','%s', '%s', '%s', '%s','%s','%s')" % (font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid,
+                                                               project_uuid, service_name, 'pending', description, certify)
 
         sql_rc = "insert into replicationcontrollers(uuid, labels_name, pods_num, " \
                  "image_id, cm_format, container_cpu, container_memory, policy, auto_startup, command, image_name) " \
@@ -658,6 +667,22 @@ class ServiceDB(MysqlInit):
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
+    def get_ingress_certify(self, project_uuid, service_name):
+        sql = "select certify from font_service WHERE project_uuid='%s' AND service_name='%s'" % (project_uuid,
+                                                                                                  service_name)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
+    def update_ingress_certify(self, dict_data):
+        project_uuid = dict_data.get('project_uuid')
+        service_name = dict_data.get('service_name')
+        certify = dict_data.get('certify')
+
+        sql = "update font_service set certify=%d WHERE project_uuid='%s' AND service_name='%s'" % (certify,
+                                                                                                    project_uuid,
+                                                                                                    service_name)
+        return super(ServiceDB, self).exec_update_sql(sql)
+
     def phy_insert(self, dict_data):
         project_uuid = dict_data.get('project_uuid')
         service_name = dict_data.get('service_name')
@@ -688,3 +713,47 @@ class ServiceDB(MysqlInit):
               "replicationcontrollers b WHERE a.service_update_time>=date_sub(now(), interval 24 hour)"
 
         return super(ServiceDB, self).exec_select_sql(sql)
+
+
+class CertifyDB(MysqlInit):
+    def __init__(self):
+        super(CertifyDB, self).__init__()
+        self.operate = DbOperate()
+
+    def infix_certify(self, dict_data):
+
+        content = dict_data.get('content')
+        crt = content.get('tls.crt')
+        tls_key = content.get('tls.key')
+        certify_uuid = str(uuid.uuid4())
+        team_uuid = dict_data.get('team_uuid')
+        project_uuid = dict_data.get('project_uuid')
+        user_uuid = dict_data.get('user_uuid')
+
+        sql_certify = "insert INTO certify (uuid,crt,tls_key) VALUES ('%s','%s','%s')" % (certify_uuid, crt, tls_key)
+
+        sql_acl = "insert INTO resources_acl(resource_uuid, resource_type, admin_uuid, team_uuid," \
+                  "project_uuid, user_uuid) VALUES ('%s', '%s', '%s', '%s', '%s', " \
+                  "'%s')" % (certify_uuid, 'certify', 0, team_uuid, project_uuid, user_uuid)
+
+        super(CertifyDB, self).exec_update_sql(sql_certify, sql_acl)
+
+        return certify_uuid
+
+    def query_certify(self, dict_data):
+
+        project_uuid = dict_data.get('project_uuid')
+        sql = "select crt, tls_key, uuid from certify WHERE uuid=(SELECT resource_uuid from resources_acl WHERE " \
+              "project_uuid='%s' and resource_type='certify')" % project_uuid
+
+        return super(CertifyDB, self).exec_select_sql(sql)
+
+    def update_certify(self, dict_data):
+        certify_uuid = dict_data.get('certify_uuid')
+        content = dict_data.get('content')
+        crt = content.get('tls.crt')
+        tls_key = content.get('tls.key')
+
+        sql = "update certify SET crt='%s', tls_key='%s' WHERE uuid='%s'" % (crt, tls_key, certify_uuid)
+
+        return super(CertifyDB, self).exec_update_sql(sql)

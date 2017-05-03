@@ -19,6 +19,8 @@ class RabbitmqResponse(object):
 
         self.rpcapi_define = rpcapi_define.KubernetesRpcAPI()
 
+        self.rpcapi_define_certify = rpcapi_define.CertifyRpcAPI()
+
         self.rpc_api.add_resource('svc_cre', self.rpcapi_define.service_create)
 
         self.rpc_api.add_resource('svc_query', self.rpcapi_define.service_query)
@@ -32,6 +34,12 @@ class RabbitmqResponse(object):
         self.rpc_api.add_resource('pod_msg', self.rpcapi_define.pods_message)
 
         self.rpc_api.add_resource('name_check', self.rpcapi_define.check_name_if_use)
+
+        self.rpc_api.add_resource('certify_cre', self.rpcapi_define_certify.create_identify)
+
+        self.rpc_api.add_resource('certify_query', self.rpcapi_define_certify.query_certify)
+
+        self.rpc_api.add_resource('certify_update', self.rpcapi_define_certify.update_certify)
 
     def rpc_exec(self, rpc_body):
 

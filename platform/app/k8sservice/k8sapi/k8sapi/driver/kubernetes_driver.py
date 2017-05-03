@@ -236,9 +236,130 @@ class KubernetesDriver(object):
             container_memory, team_name, command, container, env, user_uuid, rc_krud, pullpolicy, volumes, \
             volume_mounts
 
-    def add_ingress(self, dict_data):
+    def get_kubenete_ingress(self, namespace, ingress_name):
 
-        pass
+        try:
+            ingress_ret = self.krpc_client.get_ingress({'namespace': namespace, 'name': ingress_name})
+            log.info('get the ingress result is: %s' % ingress_ret)
+        except Exception, e:
+            log.error('get the ingress of namespace(%s) error, reason is: %s' % (namespace, e))
+            return False
+
+        return ingress_ret
+
+    @staticmethod
+    def name_struct(dict_data):
+        team_name = dict_data.get('team_name')
+        project_name = dict_data.get('project_name')
+        service_name = dict_data.get('service_name')
+        if project_name is not None and project_name != '' and project_name != team_name:
+            domain_http = '%s-%s-%s' % (team_name, project_name, service_name)
+        else:
+            domain_http = '%s-%s' % (team_name, service_name)
+
+        return domain_http
+
+    def ingress_port(self, dict_data):
+        container_port = 0
+        try:
+            for i in dict_data.get('container'):
+                if i.get('access_mode') == 'HTTP' and i.get('access_scope') == 'outsisde':
+                    container_port = i.get('container_port')
+        except Exception, e:
+            log.error('get the container_port error, reason is: %s' % e)
+            return False
+
+        if container_port == 0:
+            return False
+
+        return container_port
+
+    def add_ingress_http(self, dict_data):
+        certify = dict_data.get('certify')
+
+        for i in dict_data.get('container'):
+            if i.get('access_mode') == 'HTTP' and i.get('access_scope') == 'outsisde':
+                log.info('create the ingress, the data is: %s' % dict_data)
+                domain_http = self.name_struct(dict_data)
+
+                namespace = dict_data.get('project_uuid')
+                service_name = dict_data.get('service_name')
+                container_port = self.ingress_port(dict_data)
+
+                if not container_port:
+                    return False
+
+                ingress_json = {
+                    "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                    "metadata": {
+                        "name": service_name, "namespace": namespace,
+                        "annotations": {"kubernetes.io/ingress.class": "nginx"}
+                    },
+                    "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
+                                        "http": {"paths": [{"path": "/",
+                                                            "backend": {"serviceName": service_name,
+                                                                        "servicePort": container_port}
+                                                            }]
+                                                 }
+                                        }]
+                             }
+                }
+                if certify == 1 or (certify is not None and certify != 'None'):
+                    ingress_json = {
+                        "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                        "metadata": {
+                            "name": service_name, "namespace": namespace,
+                            "annotations": {"kubernetes.io/ingress.class": "nginx",
+                                            "nginx.org/ssl-services": service_name}
+                        },
+                        "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
+                                            "http": {"paths": [{"path": "/",
+                                                                "backend": {"serviceName": service_name,
+                                                                            "servicePort": 443}
+                                                                }]
+                                                     }
+                                            }],
+                                 "tls": [{'secretName': 'certify-https'}],
+                                 "backend": {"serviceName": service_name,
+                                             "servicePort": container_port}
+                                 }
+                    }
+
+                return ingress_json
+
+        return
+
+    def configmap_port(self, dict_data):
+        try:
+            max_use = self.service_db.max_used_port()[0][0]
+            log.info('the max used tcp port is: %s' % max_use)
+        except Exception, e:
+            log.error('get the max used tcp port error, reason is: %s' % e)
+            return False
+
+        if max_use == 0 or max_use is None:
+            return 30006
+        else:
+            return int(max_use) + 1
+
+    def add_config_map(self, dict_data):
+        for i in dict_data.get('container'):
+            if i.get('access_mode') == 'TCP' and i.get('access_scope') == 'outsisde':
+                log.info('create the ingress, the data is: %s' % dict_data)
+                namespace = dict_data.get('project_uuid')
+                service_name = dict_data.get('service_name')
+                container_port = self.configmap_port(dict_data)
+
+                conf_map_json = {"apiVersion": "v1",
+                                 "kind": "ConfigMap",
+                                 "metadata": {"name": service_name, "namespace": namespace},
+                                 "data": {"host": "boxlinker.com", "hostport": str(container_port),
+                                          "servicename": service_name}
+                                 }
+
+                return conf_map_json
+
+        return
 
     def add_rc(self, dict_data):
         log.info('add rc json data is: %s' % dict_data)
@@ -613,17 +734,17 @@ class KubernetesDriver(object):
 
         return True
 
-    def create_service(self, context):
+    @staticmethod
+    def easy_struct(context, target_json):
+        target_json['token'] = context.get('token')
+        target_json['user_uuid'] = context.get('user_uuid')
 
-        # try:
-        #     check = self.service_db.create_svcaccount_or_not(context)
-        # except Exception, e:
-        #     log.error('check the namespace if is exist(database select)...,reason=%s' % e)
-        #     return request_result(501)
+        return target_json
+
+    def create_service(self, context):
 
         ns_if_exist = self.show_namespace(context)
         log.info('namespace ns_if_exist result is: %s' % ns_if_exist)
-        # if len(check) == 0:
         if ns_if_exist.get('kind') != 'Namespace':
             ret_ns = self.create_namespace(context)
             ret_secret = self.create_secret(context)
@@ -636,16 +757,26 @@ class KubernetesDriver(object):
 
         add_rc = self.add_rc(context)
         add_service = self.add_service(context)
-        if add_rc is False or add_service is False:
+        ingress_json = self.add_ingress_http(context)
+        config_map_json = self.add_config_map(context)
+
+        log.info('--------+++++++=%s' % ingress_json)
+
+        if add_rc is False or add_service is False or ingress_json is False or config_map_json is False:
             return request_result(501)
 
-        add_rc['token'] = context.get('token')
-        add_rc['user_uuid'] = context.get('user_uuid')
-        add_service['token'] = context.get('token')
-        add_service['user_uuid'] = context.get('user_uuid')
+        add_rc = self.easy_struct(context, add_rc)
+        add_service = self.easy_struct(context, add_service)
 
         self.krpc_client.create_services(add_rc)
         self.krpc_client.create_services(add_service)
+        if ingress_json is not None and ingress_json is not False:
+            ingress_json = self.easy_struct(context, ingress_json)
+            self.krpc_client.create_ingress(ingress_json)
+        if config_map_json is not None and config_map_json is not False:
+            config_map_json = self.easy_struct(context, config_map_json)
+            config_map_json['rtype'] = 'configmaps'
+            self.krpc_client.create_services(config_map_json)
 
         return True
 
@@ -661,8 +792,14 @@ class KubernetesDriver(object):
 
         del_rc_json = {'namespace': namespace, 'name': name, 'rtype': 'replicationcontrollers'}
         del_svc_json = {'namespace': namespace, 'name': name, 'rtype': 'services'}
+        del_ing_json = {'namespace': namespace, 'name': name, 'rtype': 'ingress'}
+        del_confmap_json = {'namespace': namespace, 'name': name, 'rtype': 'configmaps'}
+
         rc_ret = self.krpc_client.delete_service_a_rc(del_rc_json)
         svc_ret = self.krpc_client.delete_service_a_rc(del_svc_json)
+        ing_ret = self.krpc_client.delete_service_a_rc(del_ing_json)
+        configmap_ret = self.krpc_client.delete_service_a_rc(del_confmap_json)
+        log.info('select configmap result is: %s' % configmap_ret)
 
         for i in pods:
             log.info('pod_name is: %s' % i.get('pod_name'))
@@ -674,8 +811,11 @@ class KubernetesDriver(object):
                 return request_result(503)
 
         if (rc_ret.get('code') != 200 and rc_ret.get('code') != 404) or \
-                (svc_ret.get('code') != 200 and svc_ret.get('code') != 404):
-            log.error('DELETE SERVICE RESULT IS--RC:%s;SERVICE:%s' % (rc_ret, svc_ret))
+                (svc_ret.get('code') != 200 and svc_ret.get('code') != 404) or \
+                (ing_ret.get('code') != 200 and ing_ret.get('code') != 404) or \
+                (configmap_ret.get('code') != 200 and configmap_ret.get('code') != 404):
+            log.error('DELETE SERVICE RESULT IS--RC:%s;SERVICE:%s,'
+                      'INGRESS: %s, CONFIGMAP: %s' % (rc_ret, svc_ret, ing_ret, configmap_ret))
 
             return request_result(503)
 
@@ -738,6 +878,70 @@ class KubernetesDriver(object):
 
         return True
 
+    def update_ingress(self, dict_data):
+        service_name = dict_data.get('service_name')
+        namespace = dict_data.get('project_uuid')
+        try:
+            certify = self.service_db.get_ingress_certify(namespace, service_name)[0][0]
+        except Exception, e:
+            log.error('get_ingress_certify error, reason is: %s' % e)
+            raise Exception('get ingress certify error')
+
+        domain_http = ''
+        for i in dict_data.get('container'):
+            if i.get('domain') is not None and i.get('domain') != 'NULL' and i.get('domain') != '':
+                domain_http = i.get('domain')
+            else:
+                team_name = dict_data.get('team_name')
+                project_name = dict_data.get('project_name')
+                if project_name is not None and project_name != '' and project_name != team_name:
+                    domain_http = '%s-%s-%s.boxlinker.com' % (team_name, project_name, service_name)
+                else:
+                    domain_http = '%s-%s.boxlinker.com' % (team_name, service_name)
+
+        log.info('update the ingress the domain_http is: %s' % domain_http)
+        container_port = self.ingress_port(dict_data)
+        if certify != 1:
+            ingress_json = {
+                        "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                        "metadata": {
+                            "name": service_name, "namespace": namespace,
+                            "annotations": {"kubernetes.io/ingress.class": "nginx"}
+                        },
+                        "spec": {"rules": [{"host": domain_http,
+                                            "http": {"paths": [{"path": "/",
+                                                                "backend": {"serviceName": service_name,
+                                                                            "servicePort": container_port}
+                                                                }]
+                                                     }
+                                            }]
+                                 }
+                    }
+        else:
+            ingress_json = {
+                        "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                        "metadata": {
+                            "name": service_name, "namespace": namespace,
+                            "annotations": {"kubernetes.io/ingress.class": "nginx",
+                                            "nginx.org/ssl-services": service_name}
+                        },
+                        "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
+                                            "http": {"paths": [{"path": "/",
+                                                                "backend": {"serviceName": service_name,
+                                                                            "servicePort": 443}
+                                                                }]
+                                                     }
+                                            }],
+                                 "tls": [{'secretName': 'certify-https'}],
+                                 "backend": {"serviceName": service_name,
+                                             "servicePort": container_port}
+                                 }
+                    }
+
+        ret = self.krpc_client.update_ingress(ingress_json)
+
+        return ret
+
     def identify_update(self, context):
 
         try:
@@ -778,7 +982,32 @@ class KubernetesDriver(object):
             log.error('SERVICE UPDATE RESULT IS: %s' % svc_up_ret)
             return request_result(502)
 
+        try:
+            ingress_ret = self.update_ingress(svc_detail)
+            log.info('update the ingress result is: %s' % ingress_ret)
+        except Exception, e:
+            log.error('update the ingress error, reason is: %s' % e)
+            return request_result(502)
+
+        if ingress_ret.get('kind') != 'Ingress':
+            return request_result(502)
+
         return True
+
+    def update_certify(self, context):
+        try:
+            self.service_db.update_ingress_certify(context)
+        except Exception, e:
+            log.error('update the database error, reason is: %s' % e)
+            return request_result(403)
+
+        try:
+            ingress_ret = self.identify_update(context)
+            if ingress_ret is True:
+                return request_result(0, {'resource_name': context.get('service_name')})
+        except Exception, e:
+            log.error('struct the update ingress json error, reason is: %s' % e)
+            return request_result(503)
 
     def update_volume_status(self, dict_data):
         using_volume = self.service_db.get_using_volume(dict_data)
@@ -851,7 +1080,6 @@ class KubernetesDriver(object):
             try:
                 domain = con_ret.split(':')[0]
                 identify = con_ret.split(':')[2]
-                log.info('ccccccccccc: %s' % con_ret)
                 if domain:
                     for i in container:
                         if i.get('http_domain') is not None:
@@ -1070,5 +1298,7 @@ class KubernetesDriver(object):
             return self.update_identify(context)
         if rtype == 'description':
             return self.update_description(context)
+        if rtype == 'certify':
+            return self.update_certify(context)
 
         return True

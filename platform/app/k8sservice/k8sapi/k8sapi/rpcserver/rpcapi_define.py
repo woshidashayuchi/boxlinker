@@ -14,6 +14,7 @@ from manager.create_manager import CreateManager
 from manager.query_manager import QueryManager
 from manager.delete_manager import DeleteManager
 from manager.update_manager import UpdateManager
+from manager.certify_manager.certify_manager import CertifyManager
 
 
 class KubernetesRpcAPI(object):
@@ -131,7 +132,7 @@ class KubernetesRpcAPI(object):
             parameter_check(parameters.get('service_uuid'), ptype='puid')
 
             if rtype not in ['env', 'volume', 'container', 'status', 'telescopic',
-                             'policy', 'command', 'domain', 'identify', 'cm', 'description']:
+                             'policy', 'command', 'domain', 'identify', 'cm', 'description', 'certify']:
                 raise Exception('rtype error, not have this resource type')
 
             if rtype == 'env' and parameters.get('env') is not None and parameters.get('env') != '':
@@ -209,3 +210,20 @@ class KubernetesRpcAPI(object):
     def check_name_if_use(self, context, parameters):
         log.info('check the name use or not , the data is: %s' % context)
         return self.query_manager.check_name_use_or_not(context)
+
+
+class CertifyRpcAPI(object):
+    def __init__(self):
+        self.certify_manager = CertifyManager()
+
+    @acl_check
+    def create_identify(self, context, parameters):
+        return self.certify_manager.create_manager(parameters)
+
+    @acl_check
+    def query_certify(self, context, parameters):
+        return self.certify_manager.query_manager(parameters)
+
+    @acl_check
+    def update_certify(self, context, parameters):
+        return self.certify_manager.update_manager(parameters)

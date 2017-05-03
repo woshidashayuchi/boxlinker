@@ -88,3 +88,35 @@ class KubernetesRpcClient(object):
         except Exception, e:
             log.error('check the name if used or not error, reason is: %s' % e)
             return request_result(598)
+
+
+class CertifyRpcClient(object):
+    def __init__(self):
+        self.rbtmq = RabbitmqClient()
+        self.queue = conf.call_queue
+        self.timeout = 60
+
+    def create_certify(self, context, parameters=None):
+        try:
+            rpc_body = rpc_data("certify_cre", context, parameters)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % e)
+            return request_result(598)
+
+    def query_certify(self, context, parameters=None):
+        try:
+            rpc_body = rpc_data("certify_query", context, parameters)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % e)
+            return request_result(598)
+
+    def update_certify(self, context, parameters=None):
+        try:
+            rpc_body = rpc_data("certify_update", context, parameters)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % e)
+            return request_result(598)
+
