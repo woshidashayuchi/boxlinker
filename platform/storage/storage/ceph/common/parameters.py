@@ -6,12 +6,14 @@ import re
 from common.logs import logging as log
 
 
-def context_data(token=None, resource_uuid=None, action=None):
+def context_data(token=None, resource_uuid=None,
+                 action=None, source_ip=None):
 
     return {
                "token": token,
                "resource_uuid": resource_uuid,
-               "action": action
+               "action": action,
+               "source_ip": source_ip
            }
 
 
@@ -42,6 +44,7 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
         "puid": ("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-"
                  "[a-z0-9]{4}-[a-z0-9]{12}$"),
         "pdat": "20{1}[0-9]{2}.[0-9]{2}.[0-9]{2}$",
+        "pnip": "[1-9]{1}[0-9]{0,2}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$",
         "ppwd": ".{6,60}"
     }
 

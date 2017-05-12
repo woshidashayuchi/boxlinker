@@ -22,6 +22,30 @@ def rest_app_run():
     api.add_resource(restapi_define.CephClusterApi,
                      '/api/v1.0/admin/storage/cephclusters/<cluster_uuid>')
 
+    api.add_resource(restapi_define.CephHostsApi,
+                     '/api/v1.0/admin/storage/cephhosts')
+
+    api.add_resource(restapi_define.CephHostApi,
+                     '/api/v1.0/admin/storage/cephhosts/<host_uuid>')
+
+    api.add_resource(restapi_define.CephMonsApi,
+                     '/api/v1.0/admin/storage/cephmons')
+
+    api.add_resource(restapi_define.CephMonApi,
+                     '/api/v1.0/admin/storage/cephmons/<mon_uuid>')
+
+    api.add_resource(restapi_define.CephOsdsApi,
+                     '/api/v1.0/admin/storage/cephosds')
+
+    api.add_resource(restapi_define.CephOsdApi,
+                     '/api/v1.0/admin/storage/cephosds/<osd_uuid>')
+
+    api.add_resource(restapi_define.CephPoolsApi,
+                     '/api/v1.0/admin/storage/cephpools')
+
+    api.add_resource(restapi_define.CephPoolApi,
+                     '/api/v1.0/admin/storage/cephpools/<pool_uuid>')
+
     api.add_resource(restapi_define.VolumesApi,
                      '/api/v1.0/storage/volumes')
 

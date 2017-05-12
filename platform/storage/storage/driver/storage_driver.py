@@ -24,6 +24,17 @@ class StorageDriver(object):
         self.ucenter_api = conf.ucenter_api
         self.billing_api = conf.billing_api
 
+    def host_info(self, token, host_ip, password):
+
+        context = {"token": token}
+
+        parameters = {
+                         "host_ip": host_ip,
+                         "password": password
+                     }
+
+        return self.ceph_api.host_info(context, parameters)
+
     def cephmon_init(self, token, cluster_info,
                      mon01_hostip, mon01_rootpwd, mon01_snic,
                      mon02_hostip, mon02_rootpwd, mon02_snic):
@@ -58,11 +69,75 @@ class StorageDriver(object):
 
         return self.ceph_api.cephmon_add(context, parameters)
 
+    def cephosd_add(self, token, cluster_info, mon_list,
+                    cephmon_ip, host_ip, rootpwd, storage_nic,
+                    jour_disk, data_disk, disk_type, weight):
 
+        context = {"token": token}
 
+        parameters = {
+                         "cluster_info": cluster_info,
+                         "mon_list": mon_list,
+                         "cephmon_ip": cephmon_ip,
+                         "host_ip": host_ip,
+                         "rootpwd": rootpwd,
+                         "storage_nic": storage_nic,
+                         "jour_disk": jour_disk,
+                         "data_disk": data_disk,
+                         "disk_type": disk_type,
+                         "weight": weight
+                     }
 
+        return self.ceph_api.cephosd_add(context, parameters)
 
+    def cephosd_delete(self, token, cephmon_ip,
+                       osd_id, host_ip, rootpwd):
 
+        context = {"token": token}
+
+        parameters = {
+                         "cephmon_ip": cephmon_ip,
+                         "osd_id": osd_id,
+                         "host_ip": host_ip,
+                         "rootpwd": rootpwd
+                     }
+
+        return self.ceph_api.cephosd_delete(context, parameters)
+
+    def cephosd_reweight(self, token, cephmon_ip,
+                         osd_id, weight):
+
+        context = {"token": token}
+
+        parameters = {
+                         "cephmon_ip": cephmon_ip,
+                         "osd_id": osd_id,
+                         "weight": weight
+                     }
+
+        return self.ceph_api.cephosd_reweight(context, parameters)
+
+    def cephpool_create(token, cephmon_ip, pool_type, pool_name):
+
+        context = {"token": token}
+
+        parameters = {
+                         "cephmon_ip": cephmon_ip,
+                         "pool_type": pool_type,
+                         "pool_name": pool_name
+                     }
+
+        return self.ceph_api.cephpool_create(context, parameters)
+
+    def cephpool_info(token, cephmon_ip):
+
+        context = {"token": token}
+
+        parameters = {
+                         "cephmon_ip": cephmon_ip
+                     }
+
+        return self.ceph_api.cephpool_info(context, parameters)
 
     def disk_create(self, token, pool_name, disk_name, disk_size):
 

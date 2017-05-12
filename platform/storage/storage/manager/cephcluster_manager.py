@@ -22,7 +22,8 @@ class CephClusterManager(object):
     def cephcluster_create(self, cluster_name, cluster_auth,
                            service_auth, client_auth, ceph_pgnum,
                            ceph_pgpnum, public_network, cluster_network,
-                           osd_full_ratio, osd_nearfull_ratio, journal_size,
+                           osd_full_ratio, osd_nearfull_ratio,
+                           journal_size, ntp_server,
                            token, source_ip, resource_name):
 
         cluster_auth = cluster_auth or 'none'
@@ -54,7 +55,8 @@ class CephClusterManager(object):
                  cluster_uuid, cluster_name, cluster_auth,
                  service_auth, client_auth, ceph_pgnum,
                  ceph_pgpnum, public_network, cluster_network,
-                 osd_full_ratio, osd_nearfull_ratio, journal_size)
+                 osd_full_ratio, osd_nearfull_ratio,
+                 journal_size, ntp_server)
         except Exception, e:
             log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
@@ -71,7 +73,8 @@ class CephClusterManager(object):
                      "cluster_network": cluster_network,
                      "osd_full_ratio": osd_full_ratio,
                      "osd_nearfull_ratio": osd_nearfull_ratio,
-                     "journal_size": journal_size
+                     "journal_size": journal_size,
+                     "ntp_server": ntp_server
                  }
 
         return request_result(0, result)
@@ -96,8 +99,9 @@ class CephClusterManager(object):
         osd_full_ratio = cluster_info[0][9]
         osd_nearfull_ratio = cluster_info[0][10]
         journal_size = cluster_info[0][11]
-        create_time = cluster_info[0][12]
-        update_time = cluster_info[0][13]
+        ntp_server = cluster_info[0][12]
+        create_time = cluster_info[0][13]
+        update_time = cluster_info[0][14]
 
         v_result = {
                        "cluster_uuid": cluster_uuid,
@@ -112,6 +116,7 @@ class CephClusterManager(object):
                        "osd_full_ratio": osd_full_ratio,
                        "osd_nearfull_ratio": osd_nearfull_ratio,
                        "journal_size": journal_size,
+                       "ntp_server": ntp_server,
                        "create_time": create_time,
                        "update_time": update_time
                    }
@@ -143,8 +148,9 @@ class CephClusterManager(object):
             osd_full_ratio = cluster_info[9]
             osd_nearfull_ratio = cluster_info[10]
             journal_size = cluster_info[11]
-            create_time = cluster_info[12]
-            update_time = cluster_info[13]
+            ntp_server = cluster_info[12]
+            create_time = cluster_info[13]
+            update_time = cluster_info[14]
 
             v_result = {
                            "cluster_uuid": cluster_uuid,
@@ -159,6 +165,7 @@ class CephClusterManager(object):
                            "osd_full_ratio": osd_full_ratio,
                            "osd_nearfull_ratio": osd_nearfull_ratio,
                            "journal_size": journal_size,
+                           "ntp_server": ntp_server,
                            "create_time": create_time,
                            "update_time": update_time
                        }

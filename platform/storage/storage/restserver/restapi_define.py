@@ -88,8 +88,437 @@ class CephClusterApi(Resource):
         return self.storage_api.cephcluster_info(context, parameters)
 
 
+class CephHostsApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "create", source_ip)
+
+        return self.storage_api.host_create(context, parameters)
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.warning('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.host_list(context, parameters)
 
 
+class CephHostApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def get(self, host_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        parameters = {"host_uuid": host_uuid}
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.host_info(context, parameters)
+
+    @time_log
+    def delete(self, host_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        parameters = {"host_uuid": host_uuid}
+
+        context = context_data(token, "stg_stg_adm_com", "delete", source_ip)
+
+        return self.storage_api.host_delete(context, parameters)
+
+
+class CephMonsApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "create", source_ip)
+
+        return self.storage_api.cephmon_init(context, parameters)
+
+    @time_log
+    def put(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "create", source_ip)
+
+        return self.storage_api.cephmon_add(context, parameters)
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            cluster_uuid = request.args.get('cluster_uuid')
+            parameters = {"cluster_uuid": cluster_uuid}
+        except Exception, e:
+            log.warning('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephmon_list(context, parameters)
+
+
+class CephMonApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def get(self, mon_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        parameters = {"mon_uuid": mon_uuid}
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephmon_info(context, parameters)
+
+
+class CephOsdsApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "create", source_ip)
+
+        return self.storage_api.cephosd_add(context, parameters)
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            cluster_uuid = request.args.get('cluster_uuid')
+            page_size = request.args.get('page_size')
+            page_num = request.args.get('page_num')
+            parameters = {
+                             "cluster_uuid": cluster_uuid,
+                             "page_size": page_size,
+                             "page_num": page_num
+                         }
+        except Exception, e:
+            log.warning('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephosd_list(context, parameters)
+
+
+class CephOsdApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def put(self, osd_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "update", source_ip)
+
+        return self.storage_api.cephosd_reweight(context, parameters)
+
+    @time_log
+    def get(self, osd_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        parameters = {"osd_uuid": osd_uuid}
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephosd_info(context, parameters)
+
+    @time_log
+    def delete(self, osd_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            cluster_uuid = request.args.get('cluster_uuid')
+            rootpwd = request.args.get('rootpwd')
+            parameters = {
+                             "osd_uuid": osd_uuid,
+                             "cluster_uuid": cluster_uuid,
+                             "rootpwd": rootpwd
+                         }
+        except Exception, e:
+            log.warning('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "delete", source_ip)
+
+        return self.storage_api.cephosd_delete(context, parameters)
+
+
+class CephPoolsApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def post(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "create", source_ip)
+
+        return self.storage_api.cephpool_create(context, parameters)
+
+    @time_log
+    def get(self):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            cluster_uuid = request.args.get('cluster_uuid')
+            parameters = {"cluster_uuid": cluster_uuid}
+        except Exception, e:
+            log.warning('Parameters error, reason=%s' % (e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephpool_list(context, parameters)
+
+
+class CephPoolApi(Resource):
+
+    def __init__(self):
+
+        self.storage_api = storage_rpcapi.StorageRpcApi()
+
+    @time_log
+    def get(self, pool_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        parameters = {"pool_uuid": pool_uuid}
+
+        context = context_data(token, "stg_stg_adm_com", "read")
+
+        return self.storage_api.cephpool_info(context, parameters)
 
 
 class VolumesApi(Resource):

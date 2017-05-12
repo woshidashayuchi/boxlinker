@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Author: YanHua <it-yanh@all-reach.com>
 
+import json
+
 from common.mysql_base import MysqlInit
 from common.logs import logging as log
 
@@ -20,24 +22,25 @@ class StorageDB(MysqlInit):
 
     def ceph_cluster_create(self, cluster_uuid, cluster_name,
                             cluster_auth, service_auth, client_auth,
-                            ceph_pgnum, ceph_pgpnum, public_network,
-                            cluster_network, osd_full_ratio,
-                            osd_nearfull_ratio, journal_size):
+                            ceph_pgnum, ceph_pgpnum,
+                            public_network, cluster_network,
+                            osd_full_ratio, osd_nearfull_ratio,
+                            journal_size, ntp_server):
 
         sql = "insert into ceph_clusters(cluster_uuid, cluster_name, \
                cluster_auth, service_auth, client_auth, ceph_pgnum, \
                ceph_pgpnum, public_network, cluster_network, \
                osd_full_ratio, osd_nearfull_ratio, journal_size, \
-               create_time, update_time) \
+               ntp_server, create_time, update_time) \
                values('%s', '%s', '%s', '%s', '%s', '%s', '%s', \
-               '%s', '%s', '%s', '%s', '%s', now(), now())" \
+               '%s', '%s', '%s', '%s', '%s', '%s', now(), now())" \
               % (cluster_uuid, cluster_name, cluster_auth or 'none',
                  service_auth or 'none', client_auth or 'none',
                  ceph_pgnum or 300, ceph_pgpnum or 300,
                  public_network or '192.168.1.0/24',
                  cluster_network or '10.10.1.0/24',
                  osd_full_ratio or '.85', osd_nearfull_ratio or '.70',
-                 journal_size)
+                 journal_size, ntp_server)
 
         return super(StorageDB, self).exec_update_sql(sql)
 
@@ -46,7 +49,7 @@ class StorageDB(MysqlInit):
         sql = "select cluster_uuid, cluster_name, cluster_auth, \
                service_auth, client_auth, ceph_pgnum, ceph_pgpnum, \
                public_network, cluster_network, osd_full_ratio, \
-               osd_nearfull_ratio, journal_size, \
+               osd_nearfull_ratio, journal_size, ntp_server, \
                create_time, update_time \
                from ceph_clusters where cluster_uuid='%s'" \
               % (cluster_uuid)
@@ -58,7 +61,7 @@ class StorageDB(MysqlInit):
         sql = "select cluster_uuid, cluster_name, cluster_auth, \
                service_auth, client_auth, ceph_pgnum, ceph_pgpnum, \
                public_network, cluster_network, osd_full_ratio, \
-               osd_nearfull_ratio, journal_size, \
+               osd_nearfull_ratio, journal_size, ntp_server, \
                create_time, update_time \
                from ceph_clusters"
 
@@ -66,66 +69,130 @@ class StorageDB(MysqlInit):
 
     def host_check(self, host_ip):
 
-        sql = "select count(*) from ceph_hosts \
-               where host_role='cephmon' and host_ip='%s'" \
+        sql = "select count(*) from ceph_hosts where host_ip='%s'" \
               % (host_ip)
 
         return super(StorageDB, self).exec_select_sql(sql)
 
+    def host_create(self, host_uuid, host_name, host_ip,
+                    host_cpu, host_mem, host_disk, host_nic):
+
+        host_disk = ";".join([json.dumps(x) for x in host_disk])
+        host_nic = ";".join([json.dumps(x) for x in host_nic])
+
+        sql = "insert into ceph_hosts(host_uuid, host_name, host_ip, \
+               host_cpu, host_mem, host_disk, host_nic, host_status, \
+               create_time, update_time) \
+               values('%s', '%s', '%s', '%s', '%s', '%s', '%s', \
+               'on', now(), now())" \
+              % (host_uuid, host_name, host_ip,
+                 host_cpu, host_mem, host_disk, host_nic)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def host_update(self, host_name, host_ip,
+                    host_cpu, host_mem, host_disk, host_nic):
+
+        host_disk = ";".join([json.dumps(x) for x in host_disk])
+        host_nic = ";".join([json.dumps(x) for x in host_nic])
+
+        sql = "update ceph_hosts set host_name='%s', \
+               host_cpu='%s', host_mem='%s', \
+               host_disk='%s', host_nic='%s', \
+               host_status='on', update_time=now() \
+               where host_ip='%s'" \
+              % (host_name, host_cpu, host_mem,
+                 host_disk, host_nic, host_ip)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def host_uuid(self, host_ip):
+
+        sql = "select host_uuid from ceph_hosts where host_ip='%s'" \
+              % (host_ip)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def host_delete(self, host_uuid):
+
+        sql = "delete from ceph_hosts where host_uuid='%s'" % (host_uuid)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def host_info(self, host_uuid):
+
+        sql = "select host_name, host_ip, host_cpu, host_mem, \
+               host_disk, host_nic, host_status, \
+               create_time, update_time from ceph_hosts \
+               where host_uuid='%s'" \
+              % (host_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def host_list(self, page_size, page_num):
+
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        sql_01 = "select host_uuid, host_name, host_ip, \
+                  host_cpu, host_mem, host_disk, host_nic, \
+                  host_status, create_time, update_time \
+                  from ceph_hosts limit %d,%d" \
+                 % (start_position, page_size)
+
+        sql_02 = "select count(*) from ceph_hosts"
+
+        db_host_list = super(StorageDB, self).exec_select_sql(sql_01)
+        count = super(StorageDB, self).exec_select_sql(sql_02)
+
+        return {
+                   "host_list": db_host_list,
+                   "count": count
+               }
+
+    def cephmon_check(self, host_uuid):
+
+        sql = "select count(*) from ceph_mons where host_uuid='%s'" \
+              % (host_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
     def cephmon_init(self, cluster_uuid,
-                     mon01_hostuuid, mon01_hostname, mon01_hostip,
-                     mon02_hostuuid, mon02_hostname, mon02_hostip,
+                     mon01_hostuuid, mon02_hostuuid,
                      mon01_uuid, mon01_id, mon01_storage_ip,
                      mon02_uuid, mon02_id, mon02_storage_ip):
 
-        sql_01 = "insert into ceph_hosts(host_uuid, host_name, host_role, \
-                  host_ip, host_status, create_time, update_time) \
-                  values('%s', '%s', 'cephmon', '%s', 'on', now(), now())" \
-                 % (mon01_hostuuid, mon01_hostname, mon01_hostip)
-
-        sql_02 = "insert into ceph_hosts(host_uuid, host_name, host_role, \
-                  host_ip, host_status, create_time, update_time) \
-                  values('%s', '%s', 'cephmon', '%s', 'on', now(), now())" \
-                 % (mon02_hostuuid, mon02_hostname, mon02_hostip)
-
-        sql_03 = "insert into ceph_mons(mon_uuid, cluster_uuid, \
+        sql_01 = "insert into ceph_mons(mon_uuid, cluster_uuid, \
                   mon_id, host_uuid, storage_ip, status, \
                   create_time, update_time) \
                   values('%s', '%s', '%s', '%s', '%s', \
-                  'on', '0', now(), now())" \
+                  'on', now(), now())" \
                  % (mon01_uuid, cluster_uuid, mon01_id,
                     mon01_hostuuid, mon01_storage_ip)
-
-        sql_04 = "insert into ceph_mons(mon_uuid, cluster_uuid, \
-                  mon_id, host_uuid, storage_ip, status, \
-                  create_time, update_time) \
-                  values('%s', '%s', '%s', '%s', '%s', \
-                  'on', '0', now(), now())" \
-                 % (mon02_uuid, cluster_uuid, mon02_id,
-                    mon02_hostuuid, mon02_storage_ip)
-
-        return super(StorageDB, self).exec_update_sql(
-                     sql_01, sql_02, sql_03, sql_04)
-
-    def cephmon_add(self, cluster_uuid,
-                    host_uuid, host_name, host_ip,
-                    mon_uuid, mon_id, storage_ip):
-
-        sql_01 = "insert into ceph_hosts(host_uuid, host_name, host_role, \
-                  host_ip, host_status, create_time, update_time) \
-                  values('%s', '%s', 'cephmon', '%s', 'on', now(), now())" \
-                 % (host_uuid, host_name, host_ip)
 
         sql_02 = "insert into ceph_mons(mon_uuid, cluster_uuid, \
                   mon_id, host_uuid, storage_ip, status, \
                   create_time, update_time) \
                   values('%s', '%s', '%s', '%s', '%s', \
-                  'on', '0', now(), now())" \
-                 % (mon_uuid, cluster_uuid, mon_id,
-                    host_uuid, storage_ip)
+                  'on', now(), now())" \
+                 % (mon02_uuid, cluster_uuid, mon02_id,
+                    mon02_hostuuid, mon02_storage_ip)
 
-        return super(StorageDB, self).exec_update_sql(
-                     sql_01, sql_02)
+        return super(StorageDB, self).exec_update_sql(sql_01, sql_02)
+
+    def cephmon_add(self, cluster_uuid, host_uuid,
+                    mon_uuid, mon_id, storage_ip):
+
+        sql = "insert into ceph_mons(mon_uuid, cluster_uuid, \
+               mon_id, host_uuid, storage_ip, status, \
+               create_time, update_time) \
+               values('%s', '%s', '%s', '%s', '%s', \
+               'on', now(), now())" \
+              % (mon_uuid, cluster_uuid, mon_id,
+                 host_uuid, storage_ip)
+
+        return super(StorageDB, self).exec_update_sql(sql)
 
     def mon_count(self, cluster_uuid):
 
@@ -144,12 +211,167 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_select_sql(sql)
 
+    def cephmon_manage_ip(self, cluster_uuid):
 
+        sql = "select a.host_ip from ceph_hosts a join ceph_mons b \
+               where a.host_uuid=b.host_uuid and a.host_status='on' \
+               and b.cluster_uuid='%s' limit 1" \
+              % (cluster_uuid)
 
+        return super(StorageDB, self).exec_select_sql(sql)
 
+    def ceph_mon_info(self, mon_uuid):
 
+        sql = "select a.cluster_uuid, a.mon_id, a.host_uuid, \
+               a.storage_ip, a.status, a.create_time, a.update_time, \
+               b.cluster_name, c.host_name, c.host_ip \
+               from ceph_mons a join ceph_clusters b join ceph_hosts c \
+               where a.cluster_uuid=b.cluster_uuid \
+               and a.host_uuid=c.host_uuid \
+               and a.mon_uuid='%s'" \
+              % (mon_uuid)
 
+        return super(StorageDB, self).exec_select_sql(sql)
 
+    def ceph_mon_list(self, cluster_uuid):
+
+        sql = "select a.mon_uuid, a.cluster_uuid, a.mon_id, a.host_uuid, \
+               a.storage_ip, a.status, a.create_time, a.update_time, \
+               b.cluster_name, c.host_name \
+               from ceph_mons a join ceph_clusters b join ceph_hosts c \
+               where a.cluster_uuid=b.cluster_uuid \
+               and a.host_uuid=c.host_uuid \
+               and a.cluster_uuid='%s'" \
+              % (cluster_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def cephosd_add(self, osd_uuid, cluster_uuid,
+                    osd_id, host_uuid, storage_ip,
+                    jour_disk, data_disk, disk_type, weight):
+
+        sql = "insert into ceph_osds(osd_uuid, cluster_uuid, \
+               osd_id, host_uuid, storage_ip, jour_disk, \
+               data_disk, disk_type, weight, status, \
+               create_time, update_time) \
+               values('%s', '%s', '%s', '%s', '%s', '%s', \
+               '%s', '%s', '%s', 'on', now(), now())" \
+              % (osd_uuid, cluster_uuid, osd_id, \
+                 host_uuid, storage_ip, jour_disk, \
+                 data_disk, disk_type, weight)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def cephosd_delete(self, osd_uuid):
+
+        sql = "delete from ceph_osds where osd_uuid='%s'" % (osd_uuid)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def cephosd_reweight(self, osd_uuid, weight):
+
+        sql = "update ceph_osds set weight='%s' where osd_uuid='%s'" \
+              % (weight, osd_uuid)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def cephosd_info(self, osd_uuid):
+
+        sql = "select a.cluster_uuid, a.osd_id, a.host_uuid, \
+               a.storage_ip, a.jour_disk, a.data_disk, \
+               a.disk_type, a.weight, a.status, \
+               a.create_time, a.update_time, \
+               b.cluster_name, c.host_name, c.host_ip \
+               from ceph_osds a join ceph_clusters b join ceph_hosts c \
+               where a.cluster_uuid=b.cluster_uuid \
+               and a.host_uuid=c.host_uuid \
+               and a.osd_uuid='%s'" \
+              % (osd_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def cephosd_list(self, cluster_uuid, page_size, page_num):
+
+        page_size = int(page_size)
+        page_num = int(page_num)
+        start_position = (page_num - 1) * page_size
+
+        sql_01 = "select a.osd_uuid, a.osd_id, a.host_uuid, a.storage_ip, \
+                  a.jour_disk, a.data_disk, a.disk_type, a.weight, \
+                  a.status, a.create_time, a.update_time, \
+                  b.cluster_name, c.host_name, c.host_ip \
+                  from ceph_osds a join ceph_clusters b join ceph_hosts c \
+                  where a.cluster_uuid=b.cluster_uuid \
+                  and a.host_uuid=c.host_uuid \
+                  and a.cluster_uuid='%s' limit %d,%d" \
+                 % (cluster_uuid, start_position, page_size)
+
+        sql_02 = "select count(*) from ceph_osds where cluster_uuid='%s'" \
+                 % (cluster_uuid)
+
+        db_osd_list = super(StorageDB, self).exec_select_sql(sql_01)
+        count = super(StorageDB, self).exec_select_sql(sql_02)
+
+        return {
+                   "osd_list": db_osd_list,
+                   "count": count
+               }
+
+    def cephpool_info(self, pool_uuid):
+
+        sql = "select a.cluster_uuid, a.pool_name, a.pool_size, \
+               a.used, a.avail, a.used_rate, a.pool_type, \
+               a.create_time, a.update_time, b.cluster_name \
+               from ceph_pools a join ceph_clusters b \
+               where a.cluster_uuid=b.cluster_uuid \
+               and a.pool_uuid='%s'" \
+              % (pool_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def cephpool_list(self, cluster_uuid):
+
+        sql = "select a.pool_uuid, a.pool_name, a.pool_size, \
+               a.used, a.avail, a.used_rate, a.pool_type, \
+               a.create_time, a.update_time, b.cluster_name \
+               from ceph_pools a join ceph_clusters b \
+               where a.cluster_uuid=b.cluster_uuid \
+               and a.cluster_uuid='%s'" \
+              % (cluster_uuid)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def osdnode_check(self, cluster_uuid, pool_type):
+
+        sql = "select count(distinct host_uuid) from ceph_osds \
+               where cluster_uuid='%s' and disk_type='%s'" \
+              % (cluster_uuid, pool_type)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
+    def cephpool_create(self, pool_uuid, cluster_uuid,
+                        pool_name, pool_size, used,
+                        avail, used_rate, pool_type):
+
+        sql = "insert into ceph_pools(pool_uuid, cluster_uuid, \
+               pool_name, pool_size, used, avail, used_rate, \
+               pool_type, create_time, update_time) \
+               values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', \
+               now(), now())" \
+              % (pool_uuid, cluster_uuid, pool_name, pool_size,
+                 used, avail, used_rate, pool_type)
+
+        return super(StorageDB, self).exec_update_sql(sql)
+
+    def cephpool_update(self, cluster_uuid, pool_size,
+                        used, avail, used_rate):
+
+        sql = "update ceph_pools set pool_size='%s', used='%s', \
+               avail='%s', used_rate='%s' \
+               where cluster_uuid='%s'" \
+              % (pool_size, used, avail, used_rate, cluster_uuid)
+
+        return super(StorageDB, self).exec_update_sql(sql)
 
     def name_duplicate_check(self, volume_name, project_uuid):
 

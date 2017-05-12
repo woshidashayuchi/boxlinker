@@ -31,8 +31,8 @@ class CephDriver(object):
     def host_ssh_del(self, host_ip, control_host_name):
 
         cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'sed -i '/%s/d' /root/.ssh/authorized_keys'" \
-              % (host_ip, control_host_name))
+               "'sed -i '/%s/d' /root/.ssh/authorized_keys'"
+               % (host_ip, control_host_name))
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
@@ -40,6 +40,49 @@ class CephDriver(object):
 
         cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'hostname'" \
               % (host_ip)
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def remote_host_cpu(self, host_ip):
+
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'cat '/proc/cpuinfo' | grep -w 'processor' | wc -l'"
+               % (host_ip))
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def remote_host_mem(self, host_ip):
+
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'free -m' | grep -w 'Mem' | awk '{print $2/1024}'"
+               % (host_ip))
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def remote_host_disk(self, host_ip):
+
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'fdisk -l' | egrep '^/dev/(sd|vd)' "
+               "| grep -v '*' | awk '{print $1, $4}'"
+               % (host_ip))
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def remote_host_nic_name(self, host_ip):
+
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ip addr' | grep -w 'mtu' | grep -v 'br' "
+               "| grep -v 'lo' | grep -v 'vlan' | awk -F: '{print $2}'"
+               % (host_ip))
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def remote_host_nic_info(self, host_ip, nic_name):
+
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ip addr show '%s'' | egrep -w '(ether|inet)' "
+               "| awk '{print $2}'"
+               % (host_ip, nic_name))
 
         return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
@@ -57,12 +100,6 @@ class CephDriver(object):
                % (host_ip, storage_nic))
 
         return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
-
-    def nic_mac(self, host_ip, nic_name):
-
-        result = execute("ssh -o StrictHostKeyChecking=no root@"+host_ip+" 'ethx='"+nic_name+"';ip addr show $ethx' | grep 'ether' | awk '{print $2}'", shell=True, run_as_root=True)[0][0].strip('\n')
-
-        return result
 
     def ceph_conf_init(self, cluster_uuid, cluster_auth,
                        service_auth, client_auth, ceph_pgnum,
@@ -180,24 +217,6 @@ class CephDriver(object):
         execute(cmd_01, shell=True, run_as_root=True)
         execute(cmd_02, shell=True, run_as_root=True)
 
-    def mon_conf_init(self, mon_id, mon_host_name, mon_storage_ip, ceph_fsid):
-
-        result = execute("bash "+self.drivers_path+"/mon_conf_init.sh "+mon_id+" "+mon_storage_ip+" "+mon_host_name+" "+ceph_fsid+"", shell=True, run_as_root=True)[1]
-
-        return str(result)
-
-    def mon_count(self):
-
-        result = execute("cat /etc/ceph/ceph.conf | grep 'mon\.' | grep -v '^#' | wc -l", shell=True, run_as_root=True)[0][0].strip('\n')
-
-        return str(result)
-
-    def ceph_fsid(self):
-
-        result = execute("cat /etc/ceph/ceph.conf | grep fsid | awk '{print $3}'", shell=True, run_as_root=True)[0][0].strip('\n')
-
-        return str(result)
-
     def conf_dist(self, cluster_uuid, host_ip):
 
         self.ceph_conf = "%s/%s.conf" % (self.ceph_conf_path, cluster_uuid)
@@ -209,61 +228,59 @@ class CephDriver(object):
 
     def monmap_init(self, mon01_hostname, mon01_storage_ip,
                     mon02_hostname, mon02_storage_ip,
-                    mon01_hostip, mon02_hostip, cluster_uuid):
-
-        execute("rm -rf /tmp/monmap", shell=True, run_as_root=True)
-
-        cmd = ("monmaptool --create --add %s %s:5000"
-               " --add %s %s:5000 --fsid %s /tmp/monmap &> /dev/null"
-               % (mon01_hostname, mon01_storage_ip,
-                  mon02_hostname, mon02_storage_ip,
-                  cluster_uuid))
-        mon_map_create = execute(cmd, shell=True, run_as_root=True)[1]
-        if int(mon_map_create) != 0:
-            log.error('Ceph monmap init failure, mon01_hostname=%s,'
-                      ' mon01_storage_ip=%s, mon02_hostname=%s,'
-                      ' mon02_storage_ip=%s'
-                      % (mon01_hostname, mon01_storage_ip,
-                         mon02_hostname, mon02_storage_ip))
-            return 1
-
-        cmd_01 = "scp /tmp/monmap root@'%s':/tmp/ &> /dev/null" \
-                 % (mon01_hostip)
-        cmd_02 = "scp /tmp/monmap root@'%s':/tmp/ &> /dev/null" \
-                 % (mon02_hostip)
-
-        sync_monmap01 = execute(cmd_01, shell=True, run_as_root=True)[1]
-        sync_monmap02 = execute(cmd_02, shell=True, run_as_root=True)[1]
-        if int(sync_monmap01) == 0 and int(sync_monmap02) == 0:
-            return 0
-        else:
-            log.error('Ceph monmap sync failure,'
-                      ' mon01_hostip=%s, mon02_hostip=%s'
-                      % (mon01_hostip, mon02_hostip))
-            return 1
-
-    def mon_host_init(self, mon_host_name, mon_host_ip):
+                    mon01_hostip, cluster_uuid):
 
         cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'mkdir -p /ceph/mondata; "
+               "'rm -rf /tmp/monmap; "
+               "monmaptool --create --add %s %s:5000 "
+               "--add %s %s:5000 --fsid %s /tmp/monmap'"
+               % (mon01_hostip, mon01_hostname, mon01_storage_ip,
+                  mon02_hostname, mon02_storage_ip, cluster_uuid))
+
+        return execute(cmd, shell=True, run_as_root=True)[1]
+
+    def monmap_sync(self, source_ip, dest_ip):
+
+        cmd_01 = "scp root@'%s':/tmp/monmap /tmp/" % (source_ip)
+        cmd_02 = "scp /tmp/monmap root@'%s':/tmp/" % (dest_ip)
+
+        result01 = execute(cmd_01, shell=True, run_as_root=True)[1]
+        result02 = execute(cmd_02, shell=True, run_as_root=True)[1]
+        if (int(result01) == 0) and (int(result02) == 0):
+            return 0
+        else:
+            return 1
+
+    def mon_host_init(self, mon_host_name,
+                      mon_host_ip, ntp_server):
+
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'sed -i '/ntpdate/d' /etc/crontab; "
+               "echo '''0 * * * * root /usr/sbin/ntpdate %s''' >> /etc/crontab; "
+               "mkdir -p /ceph/mondata; "
                "ceph-mon --mkfs -i %s --monmap /tmp/monmap; "
                "systemctl stop firewalld.service; "
                "systemctl disable firewalld.service; "
                "chkconfig ceph on; service ceph start'"
-               % (mon_host_ip, mon_host_name))
+               % (mon_host_ip, ntp_server, mon_host_name))
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def crush_ssd_add(self):
+    def crush_ssd_add(self, mon_hostip):
 
-        cmd = "ceph osd crush add-bucket ssd root"
+        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' \
+               'ceph osd crush add-bucket ssd root'" \
+              % (mon_hostip)
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def mon_host_add(self, mon_host_name, mon_host_ip, storage_ip):
+    def mon_host_add(self, mon_host_name, mon_host_ip,
+                     storage_ip, ntp_server):
 
         cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'mkdir -p /ceph/mondata; "
+               "'sed -i '/ntpdate/d' /etc/crontab; "
+               "echo '0 * * * * root /usr/sbin/ntpdate %s' >> /etc/crontab; "
+               "mkdir -p /ceph/mondata; "
                "mkdir -p /tmp/ceph; "
                "ceph mon getmap -o /tmp/ceph/monmap; "
                "ceph-mon --mkfs -i %s --monmap /tmp/ceph/monmap; "
@@ -271,150 +288,189 @@ class CephDriver(object):
                "systemctl stop firewalld.service; "
                "systemctl disable firewalld.service; "
                "chkconfig ceph on; service ceph start'"
-               % (mon_host_ip, mon_host_name,
+               % (mon_host_ip, ntp_server, mon_host_name,
                   mon_host_name, storage_ip))
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def pool_check(self, pool_type):
+    def pool_check(self, host_ip, pool_name):
 
-        result = execute("ceph df | grep 'vmdisk_"+pool_type+"' | wc -l", shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ceph df | grep %s | wc -l'"
+               % (host_ip, pool_name))
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def pool_status_check(self):
+    def ceph_status_check(self, host_ip):
 
-        result = execute("ceph -s | grep 'HEALTH_OK' | wc -l", shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ceph -s | grep 'HEALTH_OK' | wc -l'"
+               % (host_ip))
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def pool_disk_check(self):
+    def pool_disk_check(self, host_ip):
 
-        result = execute("ceph df | grep 'vmdisk' | wc -l", shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'ceph df | wc -l'" \
+              % (host_ip)
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def pool_ssd_create(self):
+    def pool_ssd_create(self, host_ip, pool_name):
 
-        result01 = execute("ceph osd crush rule create-simple ssd ssd host", shell=True, run_as_root=True)[1]
-        ruleset = execute("ceph osd crush rule dump ssd | grep 'ruleset' | awk '{print $2}' | awk -F, '{print $1}'", shell=True, run_as_root=True)[0][0].strip('\n')
-        result02 = execute("rados mkpool vmdisk_ssd 6 "+ruleset+"", shell=True, run_as_root=True)[1]
-        if (result01 == '0') and (result02 == '0'):
-            return True
+        cmd_01 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+                  "'ceph osd crush rule create-simple ssd ssd host'"
+                  % (host_ip))
+        cmd_02 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+                  "'ceph osd crush rule dump ssd' | grep 'ruleset' "
+                  "| awk '{print $2}' | awk -F, '{print $1}'"
+                  % (host_ip))
+
+        result01 = execute(cmd_01, shell=True, run_as_root=True)[1]
+        rule = execute(cmd_02, shell=True, run_as_root=True)[0][0].strip('\n')
+
+        cmd_03 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+                  "'rados mkpool %s 6 %s'"
+                  % (host_ip, pool_name, rule))
+
+        result02 = execute(cmd_03, shell=True, run_as_root=True)[1]
+        if (int(result01) == 0) and (int(result02) == 0):
+            return 0
         else:
-            return False
+            return 1
 
-    def pool_hdd_create(self):
+    def pool_hdd_create(self, host_ip, pool_name):
 
-        result = execute("rados mkpool vmdisk_hdd", shell=True, run_as_root=True)[1]
+        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'rados mkpool %s'" \
+              % (host_ip, pool_name)
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def pool_info_get(self):
+    def pool_info_get(self, host_ip):
 
-        result = execute("ceph df |awk 'NR==3 {print $1\" \"$2\" \"$3\" \"$4}'", shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ceph df' | awk 'NR==3 {print $1, $2, $3, $4}'"
+               % (host_ip))
 
-        return result
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def pool_used(self):
+    def pool_used(self, host_ip):
 
-        result = execute("ceph df | awk 'NR==3 {print $4}'", shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ceph df' | awk 'NR==3 {print $4}'"
+               % (host_ip))
 
-        return float(result)
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def osd_add(self, host_ip, jour_disk, data_disk, disk_type, osd_id, weight, ntp_server01, ntp_server02 = None):
+    def osd_add(self, host_ip, host_name, jour_disk, data_disk,
+                disk_type, osd_id, weight, ntp_server):
 
-        if ntp_server02 is None:
-            result = execute("bash "+self.drivers_path+"/osd_add.sh "+host_ip+" "+jour_disk+" "+data_disk+" "+disk_type+" "+osd_id+" "+weight+" "+ntp_server01+"", shell=True, run_as_root=True)[1]
-        else:
-            result = execute("bash "+self.drivers_path+"/osd_add.sh "+host_ip+" "+jour_disk+" "+data_disk+" "+disk_type+" "+osd_id+" "+weight+" "+ntp_server01+" "+ntp_server02+"", shell=True, run_as_root=True)[1]
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'if [ ! -b %s ] || [ ! -b %s ]; then exit 1; fi; "
+               "sed -i '/ntpdate/d' /etc/crontab; "
+               "echo '0 * * * * root /usr/sbin/ntpdate %s' >> /etc/crontab; "
+               "mkdir -p /ceph/journal/osd%s; "
+               "mkdir -p /data/osd%s; "
+               "mkfs.xfs -f %s; "
+               "mkfs.xfs -f %s; "
+               "mount %s /ceph/journal/osd%s; "
+               "mount %s /data/osd%s; "
+               "echo '%s               /ceph/journal/osd%s           xfs     defaults   0 0' >> /etc/fstab; "
+               "systemctl stop firewalld.service; "
+               "systemctl disable firewalld.service; "
+               "ceph-osd -i %s --mkfs --mkkey; "
+               "ceph auth add osd.%s osd 'allow *' mon 'allow rwx' -i /data/osd%s/keyring; "
+               "ceph osd crush add osd.%s %s root=%s; "
+               "chkconfig ceph on; service ceph start; "
+               "ceph osd crush move %s root=%s; "
+               "ceph osd crush reweight osd.%s %s'"
+               % (host_ip, jour_disk, data_disk, ntp_server,
+                  osd_id, osd_id, jour_disk, data_disk,
+                  jour_disk, osd_id, data_disk, osd_id,
+                  jour_disk, osd_id, osd_id, osd_id, osd_id,
+                  osd_id, weight, disk_type, host_name,
+                  disk_type, osd_id, weight))
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def osd_reweight(self, osd_id, weight):
+    def osd_reweight(self, host_ip, osd_id, weight):
 
-        osd_id = 'osd.' + str(osd_id)
-        result = execute("ceph osd crush reweight "+osd_id+" "+weight+"", shell=True, run_as_root=True)[1]
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ceph osd crush reweight osd.%s %s'"
+               % (host_ip, osd_id, weight))
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def osd_in(self, osd_id):
+    def osd_in(self, host_ip, osd_id):
 
-        result = execute("ceph osd in "+osd_id+"", shell=True, run_as_root=True)[1]
+        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'ceph osd in %s'" \
+              % (host_ip, osd_id)
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def osd_out(self, osd_id):
+    def osd_out(self, host_ip, osd_id):
 
-        result = execute("ceph osd out "+osd_id+"", shell=True, run_as_root=True)[1]
+        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'ceph osd out %s'" \
+              % (host_ip, osd_id)
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[1]
 
     def osd_stop(self, host_ip, osd_id):
 
-        result = execute("ssh -o StrictHostKeyChecking=no root@"+host_ip+" 'v_osd_id='"+osd_id+"';/etc/init.d/ceph stop osd.$v_osd_id' &> /dev/null", shell=True, run_as_root=True)[1]
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'/etc/init.d/ceph stop osd.%s'"
+               % (host_ip, osd_id))
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def osd_crush_out(self, osd_id):
+    def osd_crush_out(self, host_ip, osd_id):
 
-        result01 = execute("ceph osd crush remove osd."+osd_id+"", shell=True, run_as_root=True)[1]
-        result02 = execute("ceph auth del osd."+osd_id+"", shell=True, run_as_root=True)[1]
-        result03 = execute("ceph osd rm "+osd_id+"", shell=True, run_as_root=True)[1]
-        log.debug('result01_type = %s' %(type(result01)))
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'ceph osd crush remove osd.%s; "
+               "ceph auth del osd.%s; "
+               "ceph osd rm %s'"
+               % (host_ip, osd_id, osd_id, osd_id))
 
-        if (result01 == 0) and (result02 == 0) and (result03 == 0):
-            return True
-        else:
-            return False
-
-    def osd_conf_add(self, host_name, data_disk, osd_id):
-
-        execute("echo '[osd."+osd_id+"]' >> /etc/ceph/ceph.conf", shell=True, run_as_root=True)[1]
-        execute("echo '    host = "+host_name+"' >> /etc/ceph/ceph.conf", shell=True, run_as_root=True)[1]
-        execute("echo '    devs = /dev/"+data_disk+"' >> /etc/ceph/ceph.conf", shell=True, run_as_root=True)[1]
-
-#        execute("cp -a /etc/ceph/ceph.conf /kvmcenter/conf/", shell=True, run_as_root=True)[1]
-
-        return
-
-    def osd_conf_del(self, osd_id):
-
-        osd_line = execute("cat /etc/ceph/ceph.conf | grep -n 'osd."+osd_id+"' | awk -F: '{print $1}'", shell=True, run_as_root=True)[0][0].strip('\n')
-        if not osd_line:
-            return
-
-        host_line = int(osd_line) + 1
-        devs_line = int(osd_line) + 2
-
-        host_line = str(host_line)
-        devs_line = str(devs_line)
-
-        execute("sed -i '"+devs_line+"d' /etc/ceph/ceph.conf", shell=True, run_as_root=True)[1]
-        execute("sed -i '"+host_line+"d' /etc/ceph/ceph.conf", shell=True, run_as_root=True)[1]
-        execute("sed -i '"+osd_line+"d' /etc/ceph/ceph.conf", shell=True, run_as_root=True)[1]
-
-#        execute("cp -a /etc/ceph/ceph.conf /kvmcenter/conf/", shell=True, run_as_root=True)[1]
-
-        return
+        return execute(cmd, shell=True, run_as_root=True)[1]
 
     def osd_host_del(self, host_ip, osd_id):
 
-        result = execute("ssh -o StrictHostKeyChecking=no root@"+host_ip+" 'v_osd_id='"+osd_id+"'; sed -i \"/osd$v_osd_id/d\" /etc/fstab; umount /ceph/journal/osd$v_osd_id; umount /data/osd$v_osd_id; rm -rf /ceph/journal/osd$v_osd_id; rm -rf /data/osd$v_osd_id'", shell=True, run_as_root=True)[1]
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'sed -i '/osd%s/d' /etc/fstab; "
+               "umount /ceph/journal/osd%s; "
+               "umount /data/osd%s; "
+               "rm -rf /ceph/journal/osd%s; "
+               "rm -rf /data/osd%s'"
+               % (host_ip, osd_id, osd_id, osd_id, osd_id, osd_id))
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[1]
+
+    def osd_conf_add(self, cluster_uuid,
+                     host_name, data_disk, osd_id):
+
+        self.ceph_conf = "%s/%s.conf" % (self.ceph_conf_path, cluster_uuid)
+        cmd_01 = "echo '[osd.%s]' >> %s" % (osd_id, self.ceph_conf)
+        cmd_02 = "echo '    host = %s' >> %s" % (host_name, self.ceph_conf)
+        cmd_03 = "echo '    devs = %s' >> %s" % (data_disk, self.ceph_conf)
+
+        execute(cmd_01, shell=True, run_as_root=True)
+        execute(cmd_02, shell=True, run_as_root=True)
+        execute(cmd_03, shell=True, run_as_root=True)
 
     def disk_use_check(self, host_ip, disk_name):
 
-        result = execute("ssh -o StrictHostKeyChecking=no root@"+host_ip+" 'd_disk='"+disk_name+"'; df -h | grep \"$d_disk\" | wc -l'", shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+               "'df -h | grep '%s' | wc -l'"
+               % (host_ip, disk_name))
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def osd_id_create(self):
+    def osd_id_create(self, host_ip):
 
-        result = execute("ceph osd create", shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'ceph osd create'" \
+              % (host_ip)
 
-        return str(result)
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
     def disk_create(self, pool_name, disk_name, disk_size):
 

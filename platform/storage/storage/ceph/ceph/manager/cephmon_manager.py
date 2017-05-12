@@ -4,8 +4,6 @@
 
 import uuid
 
-from time import sleep
-
 from common.logs import logging as log
 from common.code import request_result
 from ceph.driver import ceph_driver
@@ -70,18 +68,19 @@ class CephMonManager(object):
             return request_result(524)
 
         if cluster_info:
-            cluster_uuid = cluster_info[0][0]
-            cluster_name = cluster_info[0][1]
-            cluster_auth = cluster_info[0][2]
-            service_auth = cluster_info[0][3]
-            client_auth = cluster_info[0][4]
-            ceph_pgnum = cluster_info[0][5]
-            ceph_pgpnum = cluster_info[0][6]
-            public_network = cluster_info[0][7]
-            cluster_network = cluster_info[0][8]
-            osd_full_ratio = cluster_info[0][9]
-            osd_nearfull_ratio = cluster_info[0][10]
-            journal_size = cluster_info[0][11]
+            cluster_uuid = cluster_info.get('cluster_uuid')
+            cluster_name = cluster_info.get('cluster_name')
+            cluster_auth = cluster_info.get('cluster_auth')
+            service_auth = cluster_info.get('service_auth')
+            client_auth = cluster_info.get('client_auth')
+            ceph_pgnum = cluster_info.get('ceph_pgnum')
+            ceph_pgpnum = cluster_info.get('ceph_pgpnum')
+            public_network = cluster_info.get('public_network')
+            cluster_network = cluster_info.get('cluster_network')
+            osd_full_ratio = cluster_info.get('osd_full_ratio')
+            osd_nearfull_ratio = cluster_info.get('osd_nearfull_ratio')
+            journal_size = cluster_info.get('journal_size')
+            ntp_server = cluster_info.get('ntp_server')
         else:
             cluster_uuid = str(uuid.uuid4())
             cluster_auth = 'none'
@@ -94,6 +93,7 @@ class CephMonManager(object):
             osd_full_ratio = '.85'
             osd_nearfull_ratio = '.70'
             journal_size = 5000
+            ntp_server = 'time.nist.gov'
 
         self.ceph_driver.ceph_conf_init(
              cluster_uuid, cluster_auth, service_auth, client_auth,
@@ -122,35 +122,39 @@ class CephMonManager(object):
         monmap_init = self.ceph_driver.monmap_init(
                            mon01_hostname, mon01_storage_ip,
                            mon02_hostname, mon02_storage_ip,
-                           mon01_hostip, mon02_hostip, cluster_uuid)
+                           mon01_hostip, cluster_uuid)
         if int(monmap_init) != 0:
             log.error('Ceph monmap init failure')
             return request_result(526)
 
+        monmap_sync = self.ceph_driver.monmap_sync(
+                           mon01_hostip, mon02_hostip)
+        if int(monmap_sync) != 0:
+            log.error('Ceph monmap sync failure')
+            return request_result(526)
+
         mon01_init = self.ceph_driver.mon_host_init(
-                          mon01_hostname, mon01_hostip)
+                          mon01_hostname, mon01_hostip, ntp_server)
         if int(mon01_init) != 0:
             log.error('mon节点(主机名：%s,IP：%s)初始化失败'
                       % (mon01_hostname, mon01_hostip))
             return request_result(526)
 
         mon02_init = self.ceph_driver.mon_host_init(
-                          mon02_hostname, mon02_hostip)
+                          mon02_hostname, mon02_hostip, ntp_server)
         if int(mon02_init) != 0:
             log.error('mon节点(主机名：%s,IP：%s)初始化失败'
                       % (mon02_hostname, mon02_hostip))
             return request_result(526)
 
-        sleep(2)
-
-        crush_ssd_add = self.ceph_driver.crush_ssd_add()
+        crush_ssd_add = self.ceph_driver.crush_ssd_add(mon01_hostip)
         if int(crush_ssd_add) != 0:
             log.error('创建ssd bucket失败')
             return request_result(526)
 
-        control_host_name = self.ceph_driver.local_host_name()
-        self.ceph_driver.host_ssh_del(mon01_hostip, control_host_name)
-        self.ceph_driver.host_ssh_del(mon02_hostip, control_host_name)
+        # control_host_name = self.ceph_driver.local_host_name()
+        # self.ceph_driver.host_ssh_del(mon01_hostip, control_host_name)
+        # self.ceph_driver.host_ssh_del(mon02_hostip, control_host_name)
 
         result = {
                      "mon01_hostip": mon01_hostip,
@@ -193,18 +197,19 @@ class CephMonManager(object):
             return request_result(524)
 
         if cluster_info:
-            cluster_uuid = cluster_info[0][0]
-            cluster_name = cluster_info[0][1]
-            cluster_auth = cluster_info[0][2]
-            service_auth = cluster_info[0][3]
-            client_auth = cluster_info[0][4]
-            ceph_pgnum = cluster_info[0][5]
-            ceph_pgpnum = cluster_info[0][6]
-            public_network = cluster_info[0][7]
-            cluster_network = cluster_info[0][8]
-            osd_full_ratio = cluster_info[0][9]
-            osd_nearfull_ratio = cluster_info[0][10]
-            journal_size = cluster_info[0][11]
+            cluster_uuid = cluster_info.get('cluster_uuid')
+            cluster_name = cluster_info.get('cluster_name')
+            cluster_auth = cluster_info.get('cluster_auth')
+            service_auth = cluster_info.get('service_auth')
+            client_auth = cluster_info.get('client_auth')
+            ceph_pgnum = cluster_info.get('ceph_pgnum')
+            ceph_pgpnum = cluster_info.get('ceph_pgpnum')
+            public_network = cluster_info.get('public_network')
+            cluster_network = cluster_info.get('cluster_network')
+            osd_full_ratio = cluster_info.get('osd_full_ratio')
+            osd_nearfull_ratio = cluster_info.get('osd_nearfull_ratio')
+            journal_size = cluster_info.get('journal_size')
+            ntp_server = cluster_info.get('ntp_server')
         else:
             log.warning('Ceph cluster info not exists')
             return request_result(528)
@@ -232,14 +237,15 @@ class CephMonManager(object):
                       % (host_name, host_ip))
             return request_result(525)
 
-        mon_add = self.ceph_driver.mon_host_add(host_name, host_ip, storage_ip)
+        mon_add = self.ceph_driver.mon_host_add(
+                       host_name, host_ip, storage_ip, ntp_server)
         if int(mon_add) != 0:
             log.error('mon节点(主机名：%s,IP：%s)添加失败'
                       % (host_name, host_ip))
             return request_result(526)
 
-        control_host_name = self.ceph_driver.local_host_name()
-        self.ceph_driver.host_ssh_del(host_ip, control_host_name)
+        # control_host_name = self.ceph_driver.local_host_name()
+        # self.ceph_driver.host_ssh_del(host_ip, control_host_name)
 
         result = {
                      "host_ip": host_ip,

@@ -1,100 +1,201 @@
-#!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+# Author: YanHua <it-yanh@all-reach.com>
 
-import sys
-import re
+import uuid
+import json
 
+from conf import conf
 from common.logs import logging as log
-from common.auth_manager import user_auth
-from common.lock_manager import distributed_lock
-from common.result_manager import result_info
+from common.code import request_result
+from common.json_encode import CJsonEncoder
+from common.operation_record import operation_record
 
-from storage.common.storage_base import CephInit
+from storage.db import storage_db
+from storage.driver import storage_driver
 
 
-class PoolManager(CephInit):
+class CephPoolManager(object):
 
-    def pool_create(self, dict_data):
+    def __init__(self):
+
+        self.storage_db = storage_db.StorageDB()
+        self.storage_driver = storage_driver.StorageDriver()
+
+    @operation_record(resource_type='cephpool', action='create')
+    def cephpool_create(self, cluster_uuid, pool_type,
+                        token, source_ip, resource_name):
 
         try:
-            user_info = dict_data['user']
-            parameters = dict_data['parameters']
-
-            user_token = user_info[0]
-            user_name = user_info[1]
-            user_role = user_info[2]
-            user_orag = user_info[3]
-            user_ip = user_info[4]
-
-            pool_type = parameters[0]
+            osd_check = self.storage_db.osdnode_check(
+                             cluster_uuid, pool_type)[0][0]
         except Exception, e:
-            log.warning('parameters error: %s' %(e))
-            return 'parameters error'
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
 
+        if osd_check < 2:
+            log.warning('%s类型硬盘osd节点不足，无法创建存储池' % (pool_type))
+            return request_result(534)
 
-        @result_info(user_name, user_ip, '创建ceph存储池', pool_type)
-        @user_auth(user_token, user_name, user_role, user_orag, 'stg_ceh_pol_cte', 'api')
-        @distributed_lock('stg_ceh_pol_cte', 'api')
-        def ceph_pool_create(pool_type):
+        try:
+            cephmon_ip = self.storage_db.cephmon_manage_ip(
+                              cluster_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
 
-            if (pool_type != 'hdd') and (pool_type != 'ssd'):
-                log.warning('创建ceph存储池参数错误')
-                return '参数错误'
+        pool_name = 'pool_%s' % (pool_type)
 
-            pool_check = self.ceph_driver.pool_check(pool_type)
-            if pool_check != '0':
-                log.info('%s类型的存储池已存在，无需再次创建' %(pool_type))
-                return '%s类型的存储池已存在，无需再次创建' %(pool_type)
+        pool_create_result = self.storage_driver.cephpool_create(
+                                  token, cephmon_ip, pool_type, pool_name)
+        status_code = pool_create_result.get('status')
+        if int(status_code) != 0:
+            log.error('Ceph pool create failure, cephmon_ip=%s, pool_type=%s'
+                      % (cephmon_ip, pool_type))
+            return request_result(status_code)
 
-            osd_check = self.ceph_db.osd_check(pool_type)
-            if osd_check < 2:
-                if pool_type == 'hdd':
-                    log.warning('机械硬盘osd节点不足，无法创建机械硬盘池')
-                    return '机械硬盘osd节点不足，无法创建机械硬盘池'
-                elif pool_type == 'ssd':
-                    log.warning('固态硬盘osd节点不足，无法创建固态硬盘池')
-                    return '固态硬盘osd节点不足，无法创建固态硬盘池'
+        pool_size = pool_create_result.get('result').get('pool_size')
+        used = pool_create_result.get('result').get('used')
+        avail = pool_create_result.get('result').get('avail')
+        used_rate = pool_create_result.get('result').get('used_rate')
 
-            if pool_type == 'hdd':
-                pool_create = self.ceph_driver.pool_hdd_create()
-                if pool_create != '0':
-                    log.error('机械硬盘池创建失败')
-                    return '机械硬盘池创建失败'
+        pool_uuid = str(uuid.uuid4())
 
-            elif pool_type == 'ssd':
-                pool_create = self.ceph_driver.pool_ssd_create()
-                if not pool_create:
-                    log.error('固态硬盘池创建失败')
-                    return '固态硬盘池创建失败'
+        try:
+            self.storage_db.cephpool_create(
+                 pool_uuid, cluster_uuid, 
+                 pool_name, pool_size, used,
+                 avail, used_rate, pool_type)
+        except Exception, e:
+            log.error('Database insert error, reason=%s' % (e))
+            return request_result(401)
 
-            pool_info = self.ceph_driver.pool_info_get()
-            pool_info = re.split(' ', pool_info)
+        result = {
+                     "cluster_uuid": cluster_uuid,
+                     "pool_type": pool_type,
+                     "pool_name": pool_name
+                 }
 
-            pool_size = pool_info[0]
-            avail = pool_info[1]
-            used = pool_info[2]
-            used_rate = pool_info[3]
+        return request_result(0, result)
 
-            pool_name = 'vmdisk_' + pool_type
+    @operation_record(resource_type='cephpool', action='update')
+    def cephpool_update(self, cluster_uuid,
+                        token, source_ip, resource_name):
 
-            pool_info_create = self.ceph_db.pool_info_create(pool_name, pool_size, used, avail, used_rate, pool_type)
-            if not pool_info_create:
-                log.error('ceph存储池信息写入数据库失败')
-                return 'ceph存储池信息写入数据库失败'
+        try:
+            cephmon_ip = self.storage_db.cephmon_manage_ip(
+                              cluster_uuid)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
 
-            return 'ceph存储池创建完成'
+        pool_info = self.storage_driver.cephpool_info(
+                         token, cephmon_ip)
 
-        return ceph_pool_create(pool_type)
+        status_code = pool_info.get('status')
+        if int(status_code) != 0:
+            log.error('Get Ceph pool info failure, cephmon_ip=%s'
+                      % (cephmon_ip))
+            return request_result(status_code)
 
+        pool_size = pool_info.get('result').get('pool_size')
+        avail = pool_info.get('result').get('avail')
+        used = pool_info.get('result').get('used')
+        used_rate = pool_info.get('result').get('used_rate')
 
-    def pool_update(self):
-        pool_info = self.ceph_driver.pool_info_get()
-        pool_info = re.split(' ', pool_info)
+        try:
+            self.storage_db.cephpool_update(
+                 cluster_uuid, pool_size,
+                 used, avail, used_rate)
+        except Exception, e:
+            log.error('Database insert error, reason=%s' % (e))
+            return request_result(401)
 
-        pool_size = pool_info[0]
-        avail = pool_info[1]
-        used = pool_info[2]
-        used_rate = pool_info[3]
+        result = {
+                     "pool_size": pool_size,
+                     "avail": avail,
+                     "used": used,
+                     "used_rate": used_rate
+                 }
 
-        self.ceph_db.pool_info_update(pool_size, used, avail, used_rate)
+        return request_result(0, result)
 
+    def cephpool_info(self, pool_uuid):
+
+        try:
+            pool_info = self.storage_db.cephpool_info(pool_uuid)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        cluster_uuid = pool_info[0][0]
+        pool_name = pool_info[0][1]
+        pool_size = pool_info[0][2]
+        used = pool_info[0][3]
+        avail = pool_info[0][4]
+        used_rate = pool_info[0][5]
+        pool_type = pool_info[0][6]
+        create_time = pool_info[0][7]
+        update_time = pool_info[0][8]
+        cluster_name = pool_info[0][9]
+
+        v_result = {
+                       "pool_uuid": pool_uuid,
+                       "cluster_uuid": cluster_uuid,
+                       "cluster_name": cluster_name,
+                       "pool_name": pool_name,
+                       "pool_size": pool_size,
+                       "used": used,
+                       "avail": avail,
+                       "used_rate": used_rate,
+                       "pool_type": pool_type,
+                       "create_time": create_time,
+                       "update_time": update_time
+                   }
+
+        v_result = json.dumps(v_result, cls=CJsonEncoder)
+        result = json.loads(v_result)
+
+        return request_result(0, result)
+
+    def cephpool_list(self, cluster_uuid):
+
+        try:
+            pool_list = self.storage_db.cephpool_list(cluster_uuid)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        result_list = []
+        for pool_info in pool_list:
+            pool_uuid = pool_info[0]
+            pool_name = pool_info[1]
+            pool_size = pool_info[2]
+            used = pool_info[3]
+            avail = pool_info[4]
+            used_rate = pool_info[5]
+            pool_type = pool_info[6]
+            create_time = pool_info[7]
+            update_time = pool_info[8]
+            cluster_name = pool_info[9]
+
+            v_result = {
+                           "pool_uuid": pool_uuid,
+                           "cluster_uuid": cluster_uuid,
+                           "cluster_name": cluster_name,
+                           "pool_name": pool_name,
+                           "pool_size": pool_size,
+                           "used": used,
+                           "avail": avail,
+                           "used_rate": used_rate,
+                           "pool_type": pool_type,
+                           "create_time": create_time,
+                           "update_time": update_time
+                       }
+
+            v_result = json.dumps(v_result, cls=CJsonEncoder)
+            v_result = json.loads(v_result)
+            result_list.append(v_result)
+
+        result = {"pool_list": result_list}
+
+        return request_result(0, result)
