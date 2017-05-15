@@ -39,23 +39,13 @@ class AlarmDB(MysqlInit):
         return sql
 
     def insert_alarm(self, dict_data):
-
-        a_uuid, user_uuid, service_uuid, wise, cpu_unit, cpu_value, memory_unit, memory_value, network_unit, \
-        network_value, storage_unit, storage_value, time_span, \
-        alarm_time = self.element_ex.insert_alarm_ex(dict_data)
-
-        sql_alarm = "insert into alarming(uuid,wise,cpu_unit,cpu_value,memory_unit,memory_value," \
-                    "network_unit,network_value,storage_unit,storage_value,time_span,alarm_time) " \
-                    "VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'," \
-                    "'%s')" % (a_uuid, wise, cpu_unit, cpu_value, memory_unit, memory_value,
-                               network_unit, network_value, storage_unit, storage_value, time_span, alarm_time)
-
-        super(AlarmDB, self).exec_update_sql(sql_alarm)
+        service_uuid = dict_data.get('service_uuid')
+        alarm_uuid = dict_data.get('alarm_uuid')
         for i in service_uuid:
             rule_uuid = str(uuid.uuid4())
             # sql = "update alarm_service_rules set alarm_uuid='%s' WHERE service_uuid='%s'" % (alarm_uuid, i)
             sql = "insert INTO alarm_service_rules(uuid, alarm_uuid, service_uuid) VALUES ('%s'," \
-                  "'%s','%s')" % (rule_uuid, a_uuid, i)
+                  "'%s','%s')" % (rule_uuid, alarm_uuid, i)
             log.info('update the alarm_service_rules sql is: %s' % sql)
 
             super(AlarmDB, self).exec_update_sql(sql)
@@ -64,23 +54,42 @@ class AlarmDB(MysqlInit):
 
         project_uuid = dict_data.get('project_uuid')
         user_uuid = dict_data.get('user_uuid')
+        alarm_uuid = dict_data.get('alarm_uuid')
 
-        sql = "select a.wise,a.cpu_unit,a.cpu_value,a.memory_unit,a.memory_value,a.network_unit,a.network_value," \
-              "a.storage_unit,a.storage_value,a.time_span,a.alarm_time,b.service_uuid from alarming a," \
+        sql = "select a.wise,a.cpu_value,a.memory_value,a.network_value," \
+              "a.storage_value,a.time_span,a.alarm_time,b.service_uuid from alarming a," \
               "alarm_service_rules b " \
               "WHERE b.service_uuid IN (SELECT uuid from font_service WHERE user_uuid='%s' " \
-              "AND project_uuid='%s') AND a.uuid=b.alarm_uuid" % (user_uuid, project_uuid)
+              "AND project_uuid='%s') AND a.uuid=b.alarm_uuid AND a.uuid=%s" % (user_uuid, project_uuid, alarm_uuid)
 
         return super(AlarmDB, self).exec_select_sql(sql)
 
     def get_alarm_svc(self):
 
-        sql = "select b.project_uuid,b.service_name,b.uuid,a.wise,a.cpu_unit,a.cpu_value,a.memory_unit,a.memory_value," \
-              "a.network_unit,a.network_value,a.storage_unit,a.storage_value,a.time_span,a.alarm_time FROM " \
+        sql = "select b.project_uuid,b.service_name,b.uuid,a.cpu_value,a.memory_value," \
+              "a.network_value,a.storage_value,a.time_span,a.alarm_time FROM " \
               "font_service b,alarming a,alarm_service_rules c WHERE (b.uuid=c.service_uuid and a.uuid=c.alarm_uuid)"
         log.info('query the alarm message sql is: %s' % sql)
 
         return super(AlarmDB, self).exec_select_sql(sql)
+
+    def delete_alarm_svc(self, dict_data):
+        service_uuid = dict_data.get('service_uuid')
+        id_list = self.element_explain(service_uuid)
+        # alarm_uuid = dict_data.get('alarm_uuid')
+
+        sql = "delete from alarm_service_rules WHERE service_uuid in %s" % id_list
+        log.info('delete the service and alarm rules sql is: %s' % sql)
+
+        return super(AlarmDB, self).exec_update_sql(sql)
+
+    def update_alarm_svc(self, dict_data):
+        service_uuid = dict_data.get('service_uuid')
+        alarm_uuid = dict_data.get('alarm_uuid')
+
+        sql = "update alarm_service_rules set alarm_uuid='%s' WHERE service_uuid='%s'" % (alarm_uuid, service_uuid)
+
+        return super(AlarmDB, self).exec_update_sql(sql)
 
     def get_default(self, dict_data):
         service_uuid = dict_data.get('service_uuid')
@@ -153,24 +162,20 @@ class AlarmDB(MysqlInit):
         a_uuid = str(uuid.uuid4())
         user_uuid = dict_data.get('user_uuid')
         wise = 0
-        cpu_unit = dict_data.get('cpu_unit')
         cpu_value = dict_data.get('cpu_value')
-        memory_unit = dict_data.get('memory_unit')
         memory_value = dict_data.get('memory_value')
-        network_unit = dict_data.get('network_unit')
         network_value = dict_data.get('network_value')
-        storage_unit = dict_data.get('storage_unit')
         storage_value = dict_data.get('storage_value')
         time_span = dict_data.get('time_span')
         alarm_time = dict_data.get('alarm_time')
         email = dict_data.get('email')
         phone = dict_data.get('phone')
 
-        sql = "insert into alarming(uuid, user_uuid, wise,cpu_unit,cpu_value,memory_unit,memory_value," \
-              "network_unit,network_value,storage_unit,storage_value,time_span,alarm_time," \
-              "email,phone) VALUES ('%s','%s',%d,'%s',%d,'%s',%d,'%s',%d,'%s',%d,'%s','%s','%s'," \
-              "%s)" % (a_uuid, user_uuid, wise, cpu_unit, cpu_value, memory_unit, memory_value, network_unit,
-                       network_value, storage_unit, storage_value, time_span, alarm_time, email,
+        sql = "insert into alarming(uuid, user_uuid, wise,cpu_value,memory_value," \
+              "network_value,storage_value,time_span,alarm_time," \
+              "email,phone) VALUES ('%s','%s',%d,%d,%d,%d,%d,'%s','%s','%s'," \
+              "%s)" % (a_uuid, user_uuid, wise, cpu_value, memory_value,
+                       network_value, storage_value, time_span, alarm_time, email,
                        phone)
         sql_acl = "insert into resources_acl(resource_uuid,resource_type,admin_uuid,team_uuid,project_uuid," \
                   "user_uuid) VALUES ('%s','%s','%s','%s','%s'," \
@@ -183,16 +188,16 @@ class AlarmDB(MysqlInit):
 
     def only_alarm_query(self, dict_data):
         user_uuid = dict_data.get('user_uuid')
-        sql = "select uuid alarm_uuid,cpu_unit,cpu_value,memory_unit,memory_value," \
-              "network_unit,network_value,storage_unit,storage_value,time_span,alarm_time,email,phone FROM " \
+        sql = "select uuid alarm_uuid,cpu_value,memory_value," \
+              "network_value, storage_value,time_span,alarm_time,email,phone,wise FROM " \
               "alarming WHERE user_uuid='%s'" % user_uuid
 
         return super(AlarmDB, self).exec_select_sql(sql)
 
     def only_detail_query(self, dict_data):
         alarm_uuid = dict_data.get('alarm_uuid')
-        sql = "select uuid alarm_uuid,cpu_unit,cpu_value,memory_unit,memory_value," \
-              "network_unit,network_value,storage_unit,storage_value,time_span,alarm_time,email,phone FROM " \
+        sql = "select uuid alarm_uuid,cpu_value,memory_value," \
+              "network_value,storage_value,time_span,alarm_time,email,phone,wise FROM " \
               "alarming WHERE uuid ='%s'" % alarm_uuid
 
         return super(AlarmDB, self).exec_select_sql(sql)
@@ -221,5 +226,18 @@ class AlarmDB(MysqlInit):
               "WHERE uuid='%s'" % (wise, cpu_unit, cpu_value, memory_unit, memory_value, network_unit,
                                    network_value, storage_unit, storage_value, time_span,
                                    alarm_time, email, phone, alarm_uuid)
+
+        return super(AlarmDB, self).exec_update_sql(sql)
+
+    def alarm_if_used(self, dict_data):
+        alarm_uuid = dict_data.get('alarm_uuid')
+
+        sql = "select service_uuid from alarm_service_rules WHERE alarm_uuid='%s'" % alarm_uuid
+
+        return super(AlarmDB, self).exec_select_sql(sql)
+
+    def only_delete_alarm(self, dict_data):
+
+        sql = "delete from alarming WHERE uuid='%s'" % (dict_data.get('alarm_uuid'))
 
         return super(AlarmDB, self).exec_update_sql(sql)

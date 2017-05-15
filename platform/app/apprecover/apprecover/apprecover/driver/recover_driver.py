@@ -93,21 +93,22 @@ class RecoverDriver(object):
         except Exception, e:
             log.error('get the teams list of zero money error, reason is: %s' % e)
             raise Exception('get the teams list of zero money error')
-
+        if len(zero_teams_list) == 0:
+            return
         try:
             db_ret = self.service_db.update_zero_services(zero_teams_list)
             if db_ret is not None:
                 log.error('update the db error, ret is: %s' % db_ret)
                 raise Exception('update the db error')
         except Exception, e:
-            log.error('update the font_Service error, reason is: %s' % e)
+            log.error('update the font_service error, reason is: %s' % e)
             raise Exception('update the db error')
 
         try:
             db_get = self.service_db.get_zero_services(zero_teams_list)
             log.info('get the zero services result is: %s' % str(db_get))
         except Exception, e:
-            log.error('select the font_Service error, reason is: %s' % e)
+            log.error('select the font_service error, reason is: %s' % e)
             raise Exception('select the db error')
 
         try:
@@ -128,10 +129,10 @@ class RecoverDriver(object):
             log.error('delete the namespace for k8s or billing error, reason is: %s' % e)
             raise Exception('delete ns or billing error')
 
-    def get_recycle_services(self, project_uuid):
+    def get_recycle_services(self, parameters):
         list_recycle = []
         try:
-            db_ret = self.service_db.recycle_svc_list(project_uuid)
+            db_ret = self.service_db.recycle_svc_list(parameters)
             if len(db_ret) == 0 or len(db_ret[0]) == 0:
                 return []
             else:

@@ -13,7 +13,10 @@ class ServiceDB(MysqlInit):
 
     def compare_image_id(self, image_name):
         sql = "select a.service_name, a.project_uuid from font_service a, replicationcontrollers b " \
-              "WHERE a.rc_uuid=b.uuid AND b.image_name='%s' AND b.policy=%d" % (image_name, 1)
+              "WHERE a.rc_uuid=b.uuid AND b.image_name='%s' AND b.policy=%d AND lifecycle is NULL " \
+              "UNION ALL (select a.service_name, a.project_uuid from font_service a, replicationcontrollers b " \
+              "WHERE a.rc_uuid=b.uuid AND b.image_name='%s' AND b.policy=%d AND lifecycle ='' )" % (image_name, 1,
+                                                                                                    image_name, 1)
 
         log.info('select the database sql is: %s' % sql)
 

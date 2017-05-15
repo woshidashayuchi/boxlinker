@@ -22,8 +22,8 @@ lb = 'boxlinker.com'
 # db_server01 = 'boxlinker.com'
 # db_server02 = 'boxlinker.com'
 # db_port = 30000
-db_server01 = 'database02'
-db_server02 = 'database02'
+db_server01 = 'database'
+db_server02 = 'database'
 db_port = 3306
 
 

@@ -33,6 +33,12 @@ class RabbitmqResponse(object):
 
         self.rpc_api.add_resource('only_update_alarm', self.rpcapi_define.only_update_alarm)
 
+        self.rpc_api.add_resource('only_del_alarm', self.rpcapi_define.only_del_alarm)
+
+        self.rpc_api.add_resource('del_service_alarm', self.rpcapi_define.alarm_svc_delete)
+
+        self.rpc_api.add_resource('up_service_alarm', self.rpcapi_define.alarm_svc_update)
+
     def rpc_exec(self, rpc_body):
 
         try:

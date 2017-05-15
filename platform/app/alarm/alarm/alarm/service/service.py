@@ -8,17 +8,16 @@ p_path1 = sys.path[0] + '/..'
 sys.path.insert(1, p_path)
 sys.path.append(p_path1)
 from common.logs import logging as log
-from manager.alarm_manager import AlarmManager
+from manager.alarm_manager import AlarmForService
 from time import sleep
 
 
 def alarm_server(alarm):
-    alarm_manager = AlarmManager()
+    al_manager = AlarmForService()
+    dict_data = {'time_long': '15m', 'time_span': '1m'}
     while True:
         try:
-            log.info('^^^^^^^^^xxxxxxx')
-            alarm_manager.alarm_svc_manager()
-
+            al_manager.alarm_for_svc(dict_data)
         except Exception, e:
             log.error('start the service of %s error, reason is: %s' % (alarm, e))
 

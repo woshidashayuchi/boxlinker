@@ -22,10 +22,9 @@ class RecoverManager(object):
             log.error('recover error, reason is: %s' % e)
 
     def service_list(self, parameters):
-        project_uuid = parameters.get('project_uuid')
 
         try:
-            ret = self.recover_driver.get_recycle_services(project_uuid)
+            ret = self.recover_driver.get_recycle_services(parameters)
             return request_result(0, ret)
         except Exception, e:
             log.error('get the recover services error, reason is: %s' % e)
@@ -145,8 +144,9 @@ class RecoverManager(object):
     def delete_in30_days(self):
         try:
             db_ret = self.service_db.delete_30days()
-            if db_ret is None:
-                raise Exception('db result is not zero')
+            if db_ret is not None:
+                log.error('delete the db result is: %s' % db_ret)
+                raise Exception('db result is not None')
         except Exception, e:
             log.error('delete the recover services in 30 days error, reason is: %s' % e)
             raise Exception('delete the recover services in 30 days error')

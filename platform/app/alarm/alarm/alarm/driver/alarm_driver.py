@@ -181,26 +181,19 @@ class AlarmDriver(object):
             q_ret = self.alarm_db.get_alarm_svc()
         except Exception, e:
             log.error('get the alarm rules from database error, reason is: %s' % e)
-            raise Exception(
-                'get the alarm rules from database error'
-            )
+            raise Exception('get the alarm rules from database error')
 
         # 获取每个对应服务下的pod名称
         for i in q_ret:
             project_uuid = i[0]
             service_name = i[1]
             service_uuid = i[2]
-            wise = i[3]
-            cpu_unit = i[4]
-            cpu_value = i[5]
-            memory_unit = i[6]
-            memory_value = i[7]
-            network_unit = i[8]
-            network_value = i[9]
-            storage_unit = i[10]
-            storage_value = i[11]
-            time_span = i[12]
-            alarm_time = i[13]  # 00~03 03~06 06~09 09~12 12~15 15~18 18~21 21~24
+            cpu_value = i[3]
+            memory_value = i[4]
+            network_value = i[5]
+            storage_value = i[6]
+            time_span = i[7]
+            alarm_time = i[8]  # 00~03 03~06 06~09 09~12 12~15 15~18 18~21 21~24
             pod_name = ""
             try:
                 pods_name = self.get_pods_name(project_uuid, service_name)
@@ -248,17 +241,13 @@ class AlarmDriver(object):
                     alarm_end_time = int(alarm_time.split('~', 1)[1])
                     log.info('from database get the alarm time, latest time is: %s, '
                              'last time is: %s' % (alarm_start_time, alarm_end_time))
-                    if memory_limit != 0 and memory_usage/memory_limit*100 <= memory_value:
-                        log.info('explain the memory monitor data result is:memory_usage=%s,memory_limit=%s,'
-                                 'memory_value=%s,shang=%s' % (memory_usage, memory_limit,
-                                                               memory_value, memory_usage/memory_limit))
-
+                    if memory_limit != 0 and memory_usage/memory_limit*100 >= memory_value:
                         to_email.append({'usage': str(round(memory_usage/memory_limit*100, 2))+'%',
                                          'service_name': service_name,
                                          'time': now_time})
 
                         # self.send_email(str(round(memory_usage/memory_limit*100, 2))+'%')
-                    if cpu_limit != 0 and cpu_usage/cpu_limit*100 <= cpu_value:
+                    if cpu_limit != 0 and cpu_usage/cpu_limit*100 >= cpu_value:
                         log.info('explain the memory monitor data result is:cpu_usage=%s,cpu_limit=%s,'
                                  'cpu_value=%s,shang=%s' % (cpu_usage, cpu_limit,
                                                             cpu_value, cpu_usage/cpu_limit))
@@ -272,8 +261,8 @@ class AlarmDriver(object):
                     raise Exception('explain the memory data error')
 
         if alarm_start_time <= now_hour < alarm_end_time:
-            self.send_email(to_email, service_uuid)
-
+            # self.send_email(to_email, service_uuid)
+            log.info('will send the email data is: %s ' % to_email)
         return
 
     def get_detail_msg(self, dict_data):

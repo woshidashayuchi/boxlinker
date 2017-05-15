@@ -92,7 +92,14 @@ class KubernetesDriver(object):
                     ran_port = '30000'
                     tcp_lb = '%s:%s' % (ran_port, i.get('container_port'))
                 else:
-                    ran_port = int(using_port)+m
+                    if context.get('container_update') == 'yes':
+                        try:
+                            ran_port = self.service_db.get_svc_port(context)[0][0]
+
+                        except Exception, e:
+                            log.error('get the tcp_port from database error, reason is: %s' % e)
+                    else:
+                        ran_port = int(using_port)+m
                     m += 1
                     if tcp_lb == '':
                         tcp_lb = '%s:%s' % (ran_port, i.get('container_port'))
@@ -293,9 +300,10 @@ class KubernetesDriver(object):
                     "apiVersion": "extensions/v1beta1", "kind": "Ingress",
                     "metadata": {
                         "name": service_name, "namespace": namespace,
-                        "annotations": {"kubernetes.io/ingress.class": "nginx"}
+                        "annotations": {"kubernetes.io/ingress.class": "nginx",
+                                        "loadbalancer/lb.name": "user"}
                     },
-                    "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
+                    "spec": {"rules": [{"host": "%s.%s" % (domain_http, self.lb),
                                         "http": {"paths": [{"path": "/",
                                                             "backend": {"serviceName": service_name,
                                                                         "servicePort": container_port}
@@ -304,15 +312,16 @@ class KubernetesDriver(object):
                                         }]
                              }
                 }
-                if certify == 1 or (certify is not None and certify != 'None'):
+                if certify == 1 or (certify is not None and certify != 'None' and certify != 0):
                     ingress_json = {
                         "apiVersion": "extensions/v1beta1", "kind": "Ingress",
                         "metadata": {
                             "name": service_name, "namespace": namespace,
                             "annotations": {"kubernetes.io/ingress.class": "nginx",
-                                            "nginx.org/ssl-services": service_name}
+                                            "nginx.org/ssl-services": service_name,
+                                            "loadbalancer/lb.name": "user"}
                         },
-                        "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
+                        "spec": {"rules": [{"host": "%s.%s" % (domain_http, self.lb),
                                             "http": {"paths": [{"path": "/",
                                                                 "backend": {"serviceName": service_name,
                                                                             "servicePort": 443}
@@ -352,8 +361,9 @@ class KubernetesDriver(object):
 
                 conf_map_json = {"apiVersion": "v1",
                                  "kind": "ConfigMap",
-                                 "metadata": {"name": service_name, "namespace": namespace},
-                                 "data": {"host": "boxlinker.com", "hostport": str(container_port),
+                                 "metadata": {"name": service_name, "namespace": namespace,
+                                              "annotations": {"loadbalancer/lb.name": "user"}},
+                                 "data": {"host": "lb1.boxlinker.com", "hostport": str(container_port),
                                           "servicename": service_name}
                                  }
 
@@ -392,7 +402,8 @@ class KubernetesDriver(object):
                         "containers": [
                            {"name": service_name, "image": image_name+":"+image_version, "imagePullPolicy": pullpolicy,
                             "command": command, "ports": self.container(container), "env": self.env(env),
-                            "resources": {"limits": {"cpu": container_cpu, "memory": container_memory}},
+                            "resources": {"limits": {# "cpu": container_cpu,
+                                                     "memory": container_memory}},
                             "volumeMounts": volume_mounts}
                         ], "volumes": volumes,
                      }
@@ -574,7 +585,6 @@ class KubernetesDriver(object):
                               "selector": {"component": dict_data.get("service_name")}  # "name": service_name1}
                            },
                         }
-
             if dict_data.get('rtype') == 'container':
                 ret = self.get_one_re(add_service)
 
@@ -760,8 +770,6 @@ class KubernetesDriver(object):
         ingress_json = self.add_ingress_http(context)
         config_map_json = self.add_config_map(context)
 
-        log.info('--------+++++++=%s' % ingress_json)
-
         if add_rc is False or add_service is False or ingress_json is False or config_map_json is False:
             return request_result(501)
 
@@ -887,6 +895,10 @@ class KubernetesDriver(object):
             log.error('get_ingress_certify error, reason is: %s' % e)
             raise Exception('get ingress certify error')
 
+        for c in dict_data.get('container'):
+            if c.get('access_mode') == 'TCP':
+                return {'kind': 'Ingress'}
+
         domain_http = ''
         for i in dict_data.get('container'):
             if i.get('domain') is not None and i.get('domain') != 'NULL' and i.get('domain') != '':
@@ -895,52 +907,144 @@ class KubernetesDriver(object):
                 team_name = dict_data.get('team_name')
                 project_name = dict_data.get('project_name')
                 if project_name is not None and project_name != '' and project_name != team_name:
-                    domain_http = '%s-%s-%s.boxlinker.com' % (team_name, project_name, service_name)
+                    domain_http = '%s-%s-%s.%s' % (team_name, project_name, service_name, self.lb)
                 else:
-                    domain_http = '%s-%s.boxlinker.com' % (team_name, service_name)
+                    domain_http = '%s-%s.%s' % (team_name, service_name, self.lb)
 
         log.info('update the ingress the domain_http is: %s' % domain_http)
         container_port = self.ingress_port(dict_data)
-        if certify != 1:
-            ingress_json = {
-                        "apiVersion": "extensions/v1beta1", "kind": "Ingress",
-                        "metadata": {
-                            "name": service_name, "namespace": namespace,
-                            "annotations": {"kubernetes.io/ingress.class": "nginx"}
-                        },
-                        "spec": {"rules": [{"host": domain_http,
-                                            "http": {"paths": [{"path": "/",
-                                                                "backend": {"serviceName": service_name,
-                                                                            "servicePort": container_port}
-                                                                }]
-                                                     }
-                                            }]
-                                 }
-                    }
+        if certify is None or certify == 'None' or certify == 0 or certify == '':
+            if self.lb in domain_http:
+                ingress_json = {
+                            "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                            "metadata": {
+                                "name": service_name, "namespace": namespace,
+                                "annotations": {"kubernetes.io/ingress.class": "nginx",
+                                                "loadbalancer/lb.name": "user"}
+                            },
+                            "spec": {"rules": [{"host": domain_http,
+                                                "http": {"paths": [{"path": "/",
+                                                                    "backend": {"serviceName": service_name,
+                                                                                "servicePort": container_port}
+                                                                    }]
+                                                         }
+                                                }]
+                                     }
+                        }
+            else:
+                domain_http1 = ''
+                if 'www.' in domain_http:
+                    domain_http1 = domain_http.replace('www.', '')
+                if 'www.' not in domain_http:
+                    domain_http1 = 'www.' + domain_http
+                ingress_json = {
+                            "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                            "metadata": {
+                                "name": service_name, "namespace": namespace,
+                                "annotations": {"kubernetes.io/ingress.class": "nginx",
+                                                "loadbalancer/lb.name": "user"}
+                            },
+                            "spec": {"rules": [{"host": domain_http,
+                                                "http": {"paths": [{"path": "/",
+                                                                    "backend": {"serviceName": service_name,
+                                                                                "servicePort": container_port}
+                                                                    }]
+                                                         }
+                                                },
+                                               {"host": domain_http1,
+                                                "http": {"paths": [{"path": "/",
+                                                                    "backend": {"serviceName": service_name,
+                                                                                "servicePort": container_port}
+                                                                    }]
+                                                         }
+                                                }]
+                                     }
+                        }
         else:
-            ingress_json = {
-                        "apiVersion": "extensions/v1beta1", "kind": "Ingress",
-                        "metadata": {
-                            "name": service_name, "namespace": namespace,
-                            "annotations": {"kubernetes.io/ingress.class": "nginx",
-                                            "nginx.org/ssl-services": service_name}
-                        },
-                        "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
-                                            "http": {"paths": [{"path": "/",
-                                                                "backend": {"serviceName": service_name,
-                                                                            "servicePort": 443}
-                                                                }]
-                                                     }
-                                            }],
-                                 "tls": [{'secretName': 'certify-https'}],
-                                 "backend": {"serviceName": service_name,
-                                             "servicePort": container_port}
-                                 }
-                    }
+            if self.lb in domain_http:
+                ingress_json = {
+                            "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                            "metadata": {
+                                "name": service_name, "namespace": namespace,
+                                "annotations": {"kubernetes.io/ingress.class": "nginx",
+                                                "nginx.org/ssl-services": service_name,
+                                                "loadbalancer/lb.name": "user"}
+                            },
+                            "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
+                                                "http": {"paths": [{"path": "/",
+                                                                    "backend": {"serviceName": service_name,
+                                                                                "servicePort": 443}
+                                                                    }]
+                                                         }
+                                                }],
+                                     "tls": [{'secretName': 'certify-https'}],
+                                     "backend": {"serviceName": service_name,
+                                                 "servicePort": container_port}
+                                     }
+                        }
+            else:
+                domain_http1 = ''
+                if 'www.' in domain_http:
+                    domain_http1 = domain_http.replace('www.', '')
+                if 'www.' not in domain_http:
+                    domain_http1 = 'www.' + domain_http
+                ingress_json = {
+                            "apiVersion": "extensions/v1beta1", "kind": "Ingress",
+                            "metadata": {
+                                "name": service_name, "namespace": namespace,
+                                "annotations": {"kubernetes.io/ingress.class": "nginx",
+                                                "nginx.org/ssl-services": service_name,
+                                                "loadbalancer/lb.name": "user"}
+                            },
+                            "spec": {"rules": [{"host": "%s.boxlinker.com" % domain_http,
+                                                "http": {"paths": [{"path": "/",
+                                                                    "backend": {"serviceName": service_name,
+                                                                                "servicePort": 443}
+                                                                    }]
+                                                         }
+                                                },
+                                               {"host": "%s.boxlinker.com" % domain_http1,
+                                                "http": {"paths": [{"path": "/",
+                                                                    "backend": {"serviceName": service_name,
+                                                                                "servicePort": 443}
+                                                                    }]
+                                                         }
+                                                }],
+                                     "tls": [{'secretName': 'certify-https'}],
+                                     "backend": {"serviceName": service_name,
+                                                 "servicePort": container_port}
+                                     }
+                        }
 
         ret = self.krpc_client.update_ingress(ingress_json)
 
         return ret
+
+    def update_configmap(self, context):
+        for i in context.get('container'):
+            if i.get('access_mode') == 'HTTP':
+                return {'kind': 'ConfigMap'}
+        try:
+            use_port = self.service_db.get_svc_port(context)[0][0]
+            log.info('更新TCP获取到的已用端口为:%s' % use_port)
+        except Exception, e:
+            log.error('get the using port error, reason is: %s' % e)
+            return request_result(404)
+
+        try:
+            config_json = self.add_config_map(context)
+            config_json['data']['hostport'] = str(use_port)
+            config_json['rtype'] = 'configmaps'
+        except Exception, e:
+            log.error('configmap json struct error, reason is: %s' % e)
+            return request_result(502)
+
+        ret = self.krpc_client.update_service(config_json)
+        log.info('update the configmap result is: %s, type is: %s' % (ret, type(ret)))
+        if ret.get('result') != '<Response [200]>':
+            return request_result(502)
+
+        return {'kind': 'ConfigMap'}
 
     def identify_update(self, context):
 
@@ -1063,6 +1167,7 @@ class KubernetesDriver(object):
         return True
 
     def update_container(self, context):
+        context['container_update'] = 'yes'
         try:
             con_ret = self.check_domain_use(context)
         except Exception, e:
@@ -1105,6 +1210,12 @@ class KubernetesDriver(object):
 
         try:
             self.service_db.update_container(context)
+            ingress_ret = self.update_ingress(context)
+            config_ret = self.update_configmap(context)
+            if ingress_ret.get('kind') != 'Ingress' or config_ret.get('kind') != 'ConfigMap':
+                log.error('update the ingress or configmap error, ')
+                log.info('ingress_ret is: %s, configmap_ret is: %s' % (ingress_ret, config_ret))
+                return request_result(502)
         except Exception, e:
             log.error('container inner database error, reason is: %s' % e)
             return request_result(403)
@@ -1247,6 +1358,7 @@ class KubernetesDriver(object):
         if int(context.get('identify')) == 1 and int(domain[0][1]) == 0:
                 try:
                     self.service_db.update_identify_to_1(context)
+                    self.service_db.update_http_domain(context)
                 except Exception, e:
                     log.error('update the databse for domain to can not use error, reason is: %s' % e)
                     return request_result(403)

@@ -42,10 +42,14 @@ class ServiceDB(MysqlInit):
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
-    def recycle_svc_list(self, project_uuid):
+    def recycle_svc_list(self, parameters):
+        project_uuid = parameters.get('project_uuid')
+        page_size = int(parameters.get('page_size'))
+        page_num = int(parameters.get('page_num'))
+        start_position = (page_num - 1) * page_size
 
         sql = "select service_name,service_create_time ltime, uuid from font_service WHERE project_uuid='%s' and " \
-              "lifecycle='stop'" % project_uuid
+              "lifecycle='stop' limit %d, %d" % (project_uuid, start_position, page_size)
 
         return super(ServiceDB, self).exec_select_sql(sql)
 
@@ -107,7 +111,7 @@ class ServiceDB(MysqlInit):
         sql_rc = "delete from replicationcontrollers WHERE uuid in (SELECT rc_uuid from font_service WHERE " \
                  "lifecycle='stop' and to_days(now())-to_days(service_update_time) >30)"
 
-        sql_acl = "delete from resources_acl WHERE resource_uuid in (select uuid from font_Service WHERE " \
+        sql_acl = "delete from resources_acl WHERE resource_uuid in (select uuid from font_service WHERE " \
                   "lifecycle='stop' and to_days(now())-to_days(service_update_time) >30)"
 
         sql_font = "delete from font_service WHERE lifecycle='stop' and to_days(now())-to_days(service_update_time) >30"

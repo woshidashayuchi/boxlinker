@@ -43,14 +43,11 @@ class DBInit(object):
 
     alarm = Table('alarming', metadata,
                   Column('uuid', String(64), primary_key=True),
+                  Column('user_uuid', String(64)),
                   Column('wise', Integer),   # 0为横向,1为纵向
-                  Column('cpu_unit', String(32)),  # 可为'%','num'
                   Column('cpu_value', Float),
-                  Column('memory_unit', String(32)),  # 也可为'%','G','M'
                   Column('memory_value', Float),
-                  Column('network_unit', String(32)),
                   Column('network_value', Float),
-                  Column('storage_unit', String(32)),  # 也可为'%', 'G'
                   Column('storage_value', Float),
                   Column('time_span', String(32)),
                   Column('alarm_time', DateTime),

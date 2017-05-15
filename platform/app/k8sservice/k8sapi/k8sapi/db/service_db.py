@@ -52,9 +52,7 @@ class ServiceDB(MysqlInit):
         return super(ServiceDB, self).exec_select_sql(sql)
 
     def infix_db(self, dict_data):
-        alarm_uuid = str(uuid.uuid4())
-        email = dict_data.get('email')
-        phone = dict_data.get('phone')
+
         font_uuid, rc_uuid, service_uuid, user_uuid, team_uuid, project_uuid, service_name, \
             image_dir, description, certify = font_infix_element(dict_data)
 
@@ -150,7 +148,7 @@ class ServiceDB(MysqlInit):
         start_position = (page_num - 1) * page_size
 
         sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
-               a.service_status, a.image_dir, a.service_create_time ltime, a.description FROM font_service a join \
+               a.service_status, a.image_dir, a.service_create_time ltime, a.description,b.private_domain domain,b.identify FROM font_service a join \
                containers b \
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND ((b.http_domain is not \
                NULL and b.http_domain != 'None' and b.http_domain != '') OR (b.tcp_domain is not NULL AND \
@@ -176,7 +174,8 @@ class ServiceDB(MysqlInit):
         start_position = (page_num - 1) * page_size
 
         sql = "SELECT a.uuid service_uuid, a.service_name, b.http_domain, b.tcp_domain, b.container_port, \
-               a.service_status, a.image_dir, a.service_create_time ltime, a.description FROM font_service a join \
+               a.service_status, a.image_dir, a.service_create_time ltime, a.description, b.private_domain domain,b.identify \
+               FROM font_service a join  \
                containers b \
                WHERE (a.rc_uuid = b.rc_uuid AND a.project_uuid='%s' AND a.user_uuid='%s' \
                AND ((b.http_domain is not NULL and b.http_domain != '' AND b.http_domain != 'None') \
@@ -319,6 +318,17 @@ class ServiceDB(MysqlInit):
 
         sql_update_time = "update font_service SET service_update_time=now() WHERE rc_uuid='%s'" % rc_uuid
         super(ServiceDB, self).exec_update_sql(sql_update_time)
+
+    def get_svc_port(self, dict_data):
+        project_uuid, service_name = normal_call(dict_data)
+
+        sql = "select tcp_port from containers WHERE rc_uuid=(SELECT rc_uuid from font_service WHERE " \
+              "project_uuid='%s' AND service_name='%s') AND tcp_domain != '' AND tcp_domain != 'None' " \
+              "AND tcp_domain is not NULL" % (project_uuid, service_name)
+
+        log.info('获取正在使用的port的sql为:%s' % sql)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
 
     def update_env(self, dict_data):
         env = dict_data.get('env')

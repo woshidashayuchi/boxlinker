@@ -28,6 +28,14 @@ class AlarmRpcAPI(object):
         return self.alarm_manager.update_manager(parameters)
 
     @acl_check
+    def alarm_svc_delete(self, context, parameters):
+        return self.alarm_manager.alarm_svc_delete(parameters)
+
+    @acl_check
+    def alarm_svc_update(self, context, parameters):
+        return self.alarm_manager.alarm_svc_update(parameters)
+
+    @acl_check
     def only_alarm_create(self, context, parameters):
 
         return self.alarm_manager.only_alarm_create(parameters)
@@ -43,3 +51,7 @@ class AlarmRpcAPI(object):
     @acl_check
     def only_update_alarm(self, context, parameters):
         return self.alarm_manager.only_update_alarm(parameters)
+
+    @acl_check
+    def only_del_alarm(self, context, parameters):
+        return self.alarm_manager.only_del_alarm(parameters)

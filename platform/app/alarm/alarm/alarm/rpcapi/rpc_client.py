@@ -43,7 +43,22 @@ class AlarmRpcClient(object):
             log.error('Rpc client exec error, reason is: %s' % e)
             return request_result(598)
 
+    def delete_alarm_svc(self, context, parameters=None):
+        try:
+            rpc_body = rpc_data('del_service_alarm', context, parameters)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason is: %s' % e)
+            return request_result(598)
 
+    def update_service_alarm(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data('up_service_alarm', context, parameters)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason is: %s' % e)
+            return request_result(598)
 
     def create_alarm(self, context, parameters=None):
         try:
@@ -62,9 +77,17 @@ class AlarmRpcClient(object):
             return request_result(598)
 
     def only_detail_alarm(self, context, parameters=None):
-        log.info('1111111111')
         try:
             rpc_body = rpc_data('only_detail_alarm', context, parameters)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason is: %s' % e)
+            return request_result(598)
+
+    def only_delete_alarm(self, context, parameters=None):
+        try:
+            rpc_body = rpc_data('only_del_alarm', context, parameters)
+
             return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
         except Exception, e:
             log.error('Rpc client exec error, reason is: %s' % e)

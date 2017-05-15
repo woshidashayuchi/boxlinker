@@ -25,12 +25,15 @@ class CertifyManager(object):
 
         try:
             certify_uuid = self.certify.infix_certify(context)
-            return request_result(0, {'certify_uuid': certify_uuid})
+            return request_result(0, {'resource_uuid': certify_uuid})
         except Exception, e:
             log.error('inner the certify message into database error, reason is: %s' % e)
             return request_result(401)
 
     def query_manager(self, context):
+        certify_uuid = ''
+        crt = ''
+        tls_key = ''
         try:
             db_ret = self.certify.query_certify(context)
             for i in db_ret:

@@ -88,10 +88,12 @@ class MetalWork(object):
             raise
 
         for i in query_ret:
+            http_domain = i[2]
             if i[2] == 'None':
                 http_domain = ''
-            else:
-                http_domain = i[2]
+            if i[10] != '' and i[10] is not None and i[10] != 'NULL':
+                if str(i[10]) == '1':
+                    http_domain = i[9]
             ret.append({'service_uuid': i[0],
                         'service_name': i[1],
                         'service_status': i[5],

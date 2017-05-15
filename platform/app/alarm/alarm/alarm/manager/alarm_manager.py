@@ -34,17 +34,13 @@ class AlarmManager(object):
             for i in ret:
                 ret_ex = {
                     'wise': i[0],
-                    'cpu_unit': i[1],
-                    'cpu_value': i[2],
-                    'memory_unit': i[3],
-                    'memory_value': i[4],
-                    'network_unit': i[5],
-                    'network_value': i[6],
-                    'storage_unit': i[7],
-                    'storage_value': i[8],
-                    'time_span': i[9],
-                    'alarm_time': i[10],
-                    'service_uuid': i[11]
+                    'cpu_value': i[1],
+                    'memory_value': i[2],
+                    'network_value': i[3],
+                    'storage_value': i[4],
+                    'time_span': i[5],
+                    'alarm_time': i[6],
+                    'service_uuid': i[7]
                 }
                 result.append(ret_ex)
         except Exception, e:
@@ -62,12 +58,27 @@ class AlarmManager(object):
 
         return request_result(0, ret)
 
-    def alarm_svc_manager(self):
-        dict_data = {'type': 'cpu', 'time_long': '15m', 'time_span': '1m'}
-        self.alarm_drv.alarm_driver(dict_data)
+    def alarm_svc_delete(self, dict_data):
+        try:
+            ret = self.alarm_db.delete_alarm_svc(dict_data)
+            if ret is not None:
+                return request_result(402)
 
-    def update_manager(self, dict_data):
-        return self.alarm_drv.update_alarm(dict_data)
+            return request_result(0, {'resource_uuid': dict_data.get('alarm_uuid')})
+        except Exception, e:
+            log.error('delete database data error, reason is: %s' % e)
+            return request_result(402)
+
+    def alarm_svc_update(self, dict_data):
+        try:
+            ret = self.alarm_db.update_alarm_svc(dict_data)
+            if ret is not None:
+                return request_result(403)
+
+            return request_result(0, {'resource_uuid': dict_data.get('alarm_uuid')})
+        except Exception, e:
+            log.error('update the database data error, reason is: %s' % e)
+            return request_result(403)
 
     def only_alarm_create(self, dict_data):
 
@@ -84,28 +95,22 @@ class AlarmManager(object):
 
         for i in database_ret:
             alarm_uuid = i[0]
-            cpu_unit = i[1]
-            cpu_value = i[2]
-            memory_unit = i[3]
-            memory_value = i[4]
-            network_unit = i[5]
-            network_value = i[6]
-            storage_unit = i[7]
-            storage_value = i[8]
-            time_span = i[9]
-            alarm_time = i[10]
-            email = i[11]
-            phone = i[12]
+            cpu_value = i[1]
+            memory_value = i[2]
+            network_value = i[3]
+            storage_value = i[4]
+            time_span = i[5]
+            alarm_time = i[6]
+            email = i[7]
+            phone = i[8]
+            alarm_name = i[9]
 
             dict_ret = {
+                'alarm_name': alarm_name,
                 'alarm_uuid': alarm_uuid,
-                'cpu_unit': cpu_unit,
                 'cpu_value': cpu_value,
-                'memory_unit': memory_unit,
                 'memory_value': memory_value,
-                'network_unit': network_unit,
                 'network_value': network_value,
-                'storage_unit': storage_unit,
                 'storage_value': storage_value,
                 'time_span': time_span,
                 'alarm_time': alarm_time,
@@ -170,3 +175,34 @@ class AlarmManager(object):
         except Exception, e:
             log.error('database update error, reason is: %s' % e)
             return request_result(403)
+
+    def only_del_alarm(self, dict_data):
+        # 判断要删除的规则是否有服务使用
+        try:
+            ret = self.alarm_db.alarm_if_used(dict_data)
+            if len(ret[0]) != 0:
+                return request_result(301)
+        except Exception, e:
+            log.error('get the service id when check the alarm is used by service, reason is: %s' % e)
+            return request_result(404)
+
+        # 证实没有服务使用要删除的告警规则,继续下一步:删除告警规则
+        try:
+            up_ret = self.alarm_db.only_delete_alarm(dict_data)
+            if up_ret is not None:
+                return request_result(402)
+
+            return request_result(0, 'successfully')
+        except Exception, e:
+            log.error('delete the database error, reason is: %s' % e)
+            return request_result(402)
+
+
+class AlarmForService(object):
+    def __init__(self):
+        self.alarm_drv = AlarmDriver()
+
+    def alarm_for_svc(self, dict_data):
+        for i in ['cpu', 'memory']:
+            dict_data['type'] = i
+            self.alarm_drv.alarm_driver(dict_data)

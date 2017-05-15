@@ -51,7 +51,7 @@ class CertifyDriver(object):
 
         ret = self.rpc_client.update_certify(secret_json)
 
-        if ret.get('result').get('kind') != 'Secret':
+        if ret.get('result') != '<Response [200]>':
             log.error('update the secret result is: %s' % ret)
             return request_result(501)
 

@@ -3,26 +3,17 @@
 # Date: 2017/02/06
 from flask import Flask
 from flask_cors import CORS
-from time import sleep
+from flask_restful import Api
 from common.logs import logging as log
-from restapi_define import KubernetesClientApi
-
-
-app = Flask(__name__)
-CORS(app=app)
-
-
-@app.route('/api/v1.0/application/services', methods=['POST', 'GET', 'DELETE'])
-def create_service():
-    return KubernetesClientApi.services_server()
+import restapi_define
 
 
 def rest_app_run():
+    app = Flask(__name__)
+    CORS(app=app)
+    api = Api(app)
+    api.add_resource(restapi_define.RestApiDefine, '/api/v1.0/application/services')
 
-    while True:
-        try:
-            app.run(debug=True, host="0.0.0.0", port=9000, threaded=True)
-        except Exception, e:
-            log.warning('k8s API Server running error, reason=%s' % e)
+    app.run(host="0.0.0.0", port=9000, threaded=True, debug=True)
 
-        sleep(8)
+

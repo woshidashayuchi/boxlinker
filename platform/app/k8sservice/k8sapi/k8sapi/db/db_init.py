@@ -70,6 +70,7 @@ class DBInit(object):
                      Column('policy', Integer),
                      Column('auto_startup', Integer),
                      Column('command', String(320)),
+                     Column('image_name', String(320)),
                      Column('isUpdate', Integer),
                      Column('rc_create_time', DateTime, server_default=func.now()),
                      Column('rc_update_time', DateTime, server_default=func.now())

@@ -16,36 +16,107 @@ class RestApiDefine(Resource):
     def __init__(self):
         self.alarm = AlarmRpcClient()
 
-    def post(self):
+    # def post(self):
+    #     try:
+    #         token = request.headers.get('token')
+    #         token_ret = token_auth(token)
+    #     except Exception, e:
+    #         log.error('Token check error, reason=%s' % e)
+    #         return request_result(201)
+    #     try:
+    #         parameters = json.loads(request.get_data())
+    #         parameters.update(token_ret.get('result'))
+    #     except Exception, e:
+    #         log.error('explain the parameters error, reason is: %s' % e)
+    #         return request_result(101)
+    #
+    #     context = context_data(token, "service_create", "create")
+    #     ret = self.alarm.create_service_alarm(context, parameters)
+    #
+    #     return ret
+
+    # 获取与某个service绑定的alarm的详细信息
+    # def get(self, alarm_uuid):
+    #     try:
+    #         token = request.headers.get('token')
+    #         token_ret = token_auth(token)
+    #     except Exception, e:
+    #         log.error('Token check error, reason=%s' % e)
+    #         return request_result(201)
+    #
+    #     context = context_data(token, "alarm_list", "read")
+    #     parameters = token_ret.get('result')
+    #     parameters['alarm_uuid'] = alarm_uuid
+    #     ret = self.alarm.query_alarm(context, parameters)
+    #
+    #     return ret
+
+    def post(self, alarm_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
             return request_result(201)
+
+        parameters = token_ret.get('result')
         try:
-            parameters = json.loads(request.get_data())
-            parameters.update(token_ret.get('result'))
+            parameters.update(json.loads(request.get_data()))
+            parameters['alarm_uuid'] = alarm_uuid
         except Exception, e:
-            log.error('explain the parameters error, reason is: %s' % e)
+            log.error('parameters error, reason is: %s' % e)
             return request_result(101)
 
-        context = context_data(token, "service_create", "create")
+        context = context_data(token, alarm_uuid, "update")
         ret = self.alarm.create_service_alarm(context, parameters)
 
         return ret
 
-    def get(self):
+    # 解绑service与alarm的关系
+    def delete(self, alarm_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
             return request_result(201)
-
-        context = context_data(token, "service_list", "read")
         parameters = token_ret.get('result')
-        ret = self.alarm.query_alarm(context, parameters)
+
+        try:
+            parameters['alarm_uuid'] = alarm_uuid
+
+            # 参数形式: {"service_uuid": ["",""]}
+            parameters.update(json.loads(request.get_data()))
+        except Exception, e:
+            log.error('parameters error, reason is: %s' % e)
+            return request_result(101)
+
+        context = context_data(token, alarm_uuid, "update")
+        ret = self.alarm.delete_alarm_svc(context, parameters)
+
+        return ret
+
+    # 更改service与alarm的绑定关系
+    # 即修改service对应的alarm规则
+    def put(self, alarm_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return request_result(201)
+        parameters = token_ret.get('result')
+        try:
+            parameters['alarm_uuid'] = alarm_uuid
+
+            # 参数形式: {"service_uuid": ""}
+            parameters.update(json.loads(request.get_data()))
+        except Exception, e:
+            log.error('parameters error, reason is: %s' % e)
+            return request_result(101)
+
+        context = context_data(token, alarm_uuid, "update")
+        ret = self.alarm.update_service_alarm(context, parameters)
 
         return ret
 
@@ -54,7 +125,7 @@ class UpApiDefine(Resource):
     def __init__(self):
         self.alarm = AlarmRpcClient()
 
-    def puts(self, service_uuid):
+    def get(self, alarm_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
@@ -62,31 +133,14 @@ class UpApiDefine(Resource):
             log.error('Token check error, reason=%s' % e)
             return request_result(201)
 
-        parameters = token_ret.get('result')
-        parameters['service_uuid'] = service_uuid
-        parameters.update(json.loads(request.get_data()))
-        context = context_data(token, service_uuid, "update")
-
-        ret = self.alarm.update_alarm(context, parameters)
-
-        return ret
-
-    def get(self, service_uuid):
-        try:
-            token = request.headers.get('token')
-            token_ret = token_auth(token)
-        except Exception, e:
-            log.error('Token check error, reason=%s' % e)
-            return request_result(201)
-
-        parameters = {'alarm_uuid': service_uuid}
+        parameters = {'alarm_uuid': alarm_uuid}
         parameters.update(token_ret.get('result'))
-        context = context_data(token, service_uuid, "read")
+        context = context_data(token, alarm_uuid, "read")
         ret = self.alarm.only_detail_alarm(context, parameters)
 
         return ret
 
-    def put(self, service_uuid):
+    def put(self, alarm_uuid):
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
@@ -95,11 +149,27 @@ class UpApiDefine(Resource):
             return request_result(201)
 
         parameters = json.loads(request.get_data())
-        parameters['alarm_uuid'] = service_uuid
+        parameters['alarm_uuid'] = alarm_uuid
         parameters.update(token_ret.get('result'))
 
-        context = context_data(token, service_uuid, "update")
+        context = context_data(token, alarm_uuid, "update")
         ret = self.alarm.only_update_alarm(context, parameters)
+
+        return ret
+
+    def delete(self, alarm_uuid):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return request_result(201)
+
+        parameters = token_ret.get('result')
+        parameters['alarm_uuid'] = alarm_uuid
+        context = context_data(token, alarm_uuid, 'delete')
+
+        ret = self.alarm.only_delete_alarm(context, parameters)
 
         return ret
 
@@ -137,7 +207,7 @@ class AlarmApiDefine(Resource):
             return request_result(201)
 
         parameters = token_ret.get('result')
-        context = context_data(token, "alarm_list", "create")
+        context = context_data(token, "alarm_list", "read")
 
         ret = self.alarm.only_query_alarm(context, parameters)
         return ret

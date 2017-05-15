@@ -13,15 +13,16 @@ def rest_app_run():
     CORS(app=app)
     api = Api(app)
 
-    # 规则维护,即:增删改查告警规则
+    # 规则维护,即:增查告警规则
     api.add_resource(restapi_define.AlarmApiDefine,
                      '/api/v1.0/application/alarm')
 
+    # 服务与规则的对应关系维护
     api.add_resource(restapi_define.RestApiDefine,
-                     '/api/v1.0/application/services/alarm')
+                     '/api/v1.0/application/services/alarm/<alarm_uuid>')
 
-    # 查看规则详情,为
+    # 具体服务维护,有修改与删除某条规则之责
     api.add_resource(restapi_define.UpApiDefine,
-                     '/api/v1.0/application/alarm/<service_uuid>')
+                     '/api/v1.0/application/alarm/<alarm_uuid>')
 
     app.run(host="0.0.0.0", port=9000, threaded=True, debug=True)

@@ -13,6 +13,33 @@
 }
 """
 """
+@apiDefine CODE_CERTIFY_POST
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {'resource_uuid': certify_uuid}
+}
+"""
+"""
+@apiDefine CODE_CERTIFY_GET
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {"certify_uuid": certify_uuid, "certify": content}
+}
+"""
+"""
+@apiDefine CODE_CERTIFY_UPDATE
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {'resource_name': 'certify-https'}
+}
+"""
+"""
 @apiDefine CODE_POST_0
 @apiSuccessExample 返回
 {
@@ -382,4 +409,43 @@
 @apiPermission user and organization
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_GET_POD_0
+"""
+
+"""
+@api {post} /api/v1.0/application/certifies 6.1 https服务上传证书
+@apiName certify create
+@apiGroup 6 certify
+@apiVersion 1.0.0
+@apiDescription 上传证书创建secret
+@apiPermission all
+@apiParam {json} header {"token": "string"}
+@apiParam {string} body
+@apiParamExample body
+"<..............>,tls_key:<..............>"
+@apiUse CODE_CERTIFY_POST
+"""
+
+"""
+@api {get} /api/v1.0/application/certifies 6.2 查询服务的pod信息
+@apiName certify read
+@apiGroup 6 read_certify
+@apiVersion 1.0.0
+@apiDescription 证书查询
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiUse CODE_CERTIFY_GET
+"""
+
+"""
+@api {put} /api/v1.0/application/certifies/<certify_uuid> 6.3 更新证书
+@apiName certify update
+@apiGroup 6 update_certify
+@apiVersion 1.0.0
+@apiDescription 更新证书
+@apiPermission user and organization
+@apiParam {json} header {"token": "string"}
+@apiParam {string} body
+@apiParamExample body
+"<..............>,tls_key:<..............>"
+@apiUse CODE_CERTIFY_UPDATE
 """
