@@ -71,6 +71,14 @@ class CephOsdManager(object):
             log.warning('Ceph cluster info not exists')
             return request_result(528)
 
+        ntp_conf = self.ceph_driver.host_ntp_conf(
+                        host_ip, ntp_server)
+        if int(ntp_conf) != 0:
+            log.error('Host ntp server conf failure, '
+                      'host_ip=%s, ntp_server=%s'
+                      % (host_ip, ntp_server))
+            return request_result(530)
+
         self.ceph_driver.ceph_conf_init(
              cluster_uuid, cluster_auth, service_auth, client_auth,
              ceph_pgnum, ceph_pgpnum, public_network, cluster_network,
@@ -95,7 +103,7 @@ class CephOsdManager(object):
 
         osd_add = self.ceph_driver.osd_add(
                        host_ip, host_name, jour_disk, data_disk,
-                       disk_type, osd_id, weight, ntp_server)
+                       disk_type, osd_id, weight)
         if int(osd_add) != 0:
             self.ceph_driver.osd_stop(host_ip, osd_id)
             self.ceph_driver.osd_host_del(host_ip, osd_id)
@@ -109,6 +117,7 @@ class CephOsdManager(object):
         self.ceph_driver.host_ssh_del(host_ip, control_host_name)
 
         result = {
+                     "osd_id": osd_id,
                      "host_ip": host_ip,
                      "host_name": host_name,
                      "cluster_uuid": cluster_uuid,

@@ -383,6 +383,7 @@ class CephOsdApi(Resource):
         try:
             body = request.get_data()
             parameters = json.loads(body)
+            parameters['osd_uuid'] = osd_uuid
         except Exception, e:
             log.warning('Parameters error, body=%s, reason=%s' % (body, e))
 

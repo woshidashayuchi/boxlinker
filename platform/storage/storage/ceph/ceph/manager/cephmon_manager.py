@@ -119,6 +119,22 @@ class CephMonManager(object):
                       % (mon02_hostname, mon02_hostip))
             return request_result(525)
 
+        ntp01_conf = self.ceph_driver.host_ntp_conf(
+                          mon01_hostip, ntp_server)
+        if int(ntp01_conf) != 0:
+            log.error('Host ntp server conf failure, '
+                      'host_ip=%s, ntp_server=%s'
+                      % (mon01_hostip, ntp_server))
+            return request_result(526)
+
+        ntp02_conf = self.ceph_driver.host_ntp_conf(
+                          mon02_hostip, ntp_server)
+        if int(ntp02_conf) != 0:
+            log.error('Host ntp server conf failure, '
+                      'host_ip=%s, ntp_server=%s'
+                      % (mon02_hostip, ntp_server))
+            return request_result(526)
+
         monmap_init = self.ceph_driver.monmap_init(
                            mon01_hostname, mon01_storage_ip,
                            mon02_hostname, mon02_storage_ip,
@@ -134,14 +150,14 @@ class CephMonManager(object):
             return request_result(526)
 
         mon01_init = self.ceph_driver.mon_host_init(
-                          mon01_hostname, mon01_hostip, ntp_server)
+                          mon01_hostname, mon01_hostip)
         if int(mon01_init) != 0:
             log.error('mon节点(主机名：%s,IP：%s)初始化失败'
                       % (mon01_hostname, mon01_hostip))
             return request_result(526)
 
         mon02_init = self.ceph_driver.mon_host_init(
-                          mon02_hostname, mon02_hostip, ntp_server)
+                          mon02_hostname, mon02_hostip)
         if int(mon02_init) != 0:
             log.error('mon节点(主机名：%s,IP：%s)初始化失败'
                       % (mon02_hostname, mon02_hostip))
@@ -237,8 +253,16 @@ class CephMonManager(object):
                       % (host_name, host_ip))
             return request_result(525)
 
+        ntp_conf = self.ceph_driver.host_ntp_conf(
+                        host_ip, ntp_server)
+        if int(ntp_conf) != 0:
+            log.error('Host ntp server conf failure, '
+                      'host_ip=%s, ntp_server=%s'
+                      % (host_ip, ntp_server))
+            return request_result(526)
+
         mon_add = self.ceph_driver.mon_host_add(
-                       host_name, host_ip, storage_ip, ntp_server)
+                       host_name, host_ip, storage_ip)
         if int(mon_add) != 0:
             log.error('mon节点(主机名：%s,IP：%s)添加失败'
                       % (host_name, host_ip))

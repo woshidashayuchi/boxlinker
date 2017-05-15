@@ -923,7 +923,6 @@
 @apiParamExample body
 {
     "cluster_uuid": "string",
-    "osd_uuid": "string",
     "weight": float
 }
 @apiUse CODE_OSD_PUT_0

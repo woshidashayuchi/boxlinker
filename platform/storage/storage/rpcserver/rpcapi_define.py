@@ -312,8 +312,8 @@ class StorageRpcManager(object):
             host_ip = parameter_check(host_ip, ptype='pnip')
             rootpwd = parameter_check(rootpwd, ptype='ppwd')
             storage_nic = parameter_check(storage_nic, ptype='pnam')
-            jour_disk = parameter_check(jour_disk, ptype='pnam')
-            data_disk = parameter_check(data_disk, ptype='pnam')
+            jour_disk = parameter_check(jour_disk, ptype='pdsk')
+            data_disk = parameter_check(data_disk, ptype='pdsk')
             weight = parameter_check(weight, ptype='pflt')
             if disk_type not in ('hdd', 'ssd'):
                 raise(Exception('Parameter disk_type error'))

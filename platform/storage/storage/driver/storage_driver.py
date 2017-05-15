@@ -117,7 +117,7 @@ class StorageDriver(object):
 
         return self.ceph_api.cephosd_reweight(context, parameters)
 
-    def cephpool_create(token, cephmon_ip, pool_type, pool_name):
+    def cephpool_create(self, token, cephmon_ip, pool_type, pool_name):
 
         context = {"token": token}
 
@@ -129,7 +129,7 @@ class StorageDriver(object):
 
         return self.ceph_api.cephpool_create(context, parameters)
 
-    def cephpool_info(token, cephmon_ip):
+    def cephpool_info(self, token, cephmon_ip):
 
         context = {"token": token}
 

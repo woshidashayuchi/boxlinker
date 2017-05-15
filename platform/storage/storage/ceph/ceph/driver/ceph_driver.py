@@ -251,18 +251,24 @@ class CephDriver(object):
         else:
             return 1
 
-    def mon_host_init(self, mon_host_name,
-                      mon_host_ip, ntp_server):
+    def host_ntp_conf(self, host_ip, ntp_server):
+
+        cmd = ("sed -i '/ntpdate/d' /etc/crontab; "
+               "echo '0 * * * * root /usr/sbin/ntpdate %s' >> /etc/crontab; "
+               "scp /etc/crontab root@'%s':/etc/"
+               % (ntp_server, host_ip))
+
+        return execute(cmd, shell=True, run_as_root=True)[1]
+
+    def mon_host_init(self, mon_host_name, mon_host_ip):
 
         cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'sed -i '/ntpdate/d' /etc/crontab; "
-               "echo '''0 * * * * root /usr/sbin/ntpdate %s''' >> /etc/crontab; "
-               "mkdir -p /ceph/mondata; "
+               "'mkdir -p /ceph/mondata; "
                "ceph-mon --mkfs -i %s --monmap /tmp/monmap; "
                "systemctl stop firewalld.service; "
                "systemctl disable firewalld.service; "
                "chkconfig ceph on; service ceph start'"
-               % (mon_host_ip, ntp_server, mon_host_name))
+               % (mon_host_ip, mon_host_name))
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
@@ -274,13 +280,10 @@ class CephDriver(object):
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def mon_host_add(self, mon_host_name, mon_host_ip,
-                     storage_ip, ntp_server):
+    def mon_host_add(self, mon_host_name, mon_host_ip, storage_ip):
 
         cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'sed -i '/ntpdate/d' /etc/crontab; "
-               "echo '0 * * * * root /usr/sbin/ntpdate %s' >> /etc/crontab; "
-               "mkdir -p /ceph/mondata; "
+               "'mkdir -p /ceph/mondata; "
                "mkdir -p /tmp/ceph; "
                "ceph mon getmap -o /tmp/ceph/monmap; "
                "ceph-mon --mkfs -i %s --monmap /tmp/ceph/monmap; "
@@ -288,7 +291,7 @@ class CephDriver(object):
                "systemctl stop firewalld.service; "
                "systemctl disable firewalld.service; "
                "chkconfig ceph on; service ceph start'"
-               % (mon_host_ip, ntp_server, mon_host_name,
+               % (mon_host_ip, mon_host_name,
                   mon_host_name, storage_ip))
 
         return execute(cmd, shell=True, run_as_root=True)[1]
@@ -362,13 +365,11 @@ class CephDriver(object):
 
         return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def osd_add(self, host_ip, host_name, jour_disk, data_disk,
-                disk_type, osd_id, weight, ntp_server):
+    def osd_add(self, host_ip, host_name, jour_disk,
+                data_disk, disk_type, osd_id, weight):
 
         cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
                "'if [ ! -b %s ] || [ ! -b %s ]; then exit 1; fi; "
-               "sed -i '/ntpdate/d' /etc/crontab; "
-               "echo '0 * * * * root /usr/sbin/ntpdate %s' >> /etc/crontab; "
                "mkdir -p /ceph/journal/osd%s; "
                "mkdir -p /data/osd%s; "
                "mkfs.xfs -f %s; "
@@ -384,7 +385,7 @@ class CephDriver(object):
                "chkconfig ceph on; service ceph start; "
                "ceph osd crush move %s root=%s; "
                "ceph osd crush reweight osd.%s %s'"
-               % (host_ip, jour_disk, data_disk, ntp_server,
+               % (host_ip, jour_disk, data_disk,
                   osd_id, osd_id, jour_disk, data_disk,
                   jour_disk, osd_id, data_disk, osd_id,
                   jour_disk, osd_id, osd_id, osd_id, osd_id,

@@ -90,6 +90,7 @@ class CephOsdManager(object):
 
         host_name = osd_add_result.get('result').get('host_name')
         storage_ip = osd_add_result.get('result').get('storage_ip')
+        osd_id = osd_add_result.get('result').get('osd_id')
         osd_uuid = str(uuid.uuid4())
 
         try:
@@ -135,7 +136,7 @@ class CephOsdManager(object):
             return request_result(404)
 
         osd_id = osd_info[0][1]
-        host_ip = osd_info[0][12]
+        host_ip = osd_info[0][13]
 
         osd_del_result = self.storage_driver.cephosd_delete(
                               token, cephmon_ip, osd_id,
@@ -278,10 +279,10 @@ class CephOsdManager(object):
             host_ip = osd_info[13]
 
             v_result = {
-                           "osd_uuid": mon_uuid,
+                           "osd_uuid": osd_uuid,
                            "cluster_uuid": cluster_uuid,
                            "cluster_name": cluster_name,
-                           "osd_id": mon_id,
+                           "osd_id": osd_id,
                            "host_uuid": host_uuid,
                            "host_name": host_name,
                            "host_ip": host_ip,
