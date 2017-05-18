@@ -46,6 +46,16 @@ class StorageRpcApi(object):
             log.error('Rpc client exec error, reason=%s' % (e))
             return request_result(598)
 
+    def cephcluster_mount(self, context, parameters=None):
+
+        try:
+            rpc_body = rpc_data("stg_ceh_cls_mnt", context, parameters)
+            return self.rbtmq.rpc_call_client(
+                        self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % (e))
+            return request_result(598)
+
     def host_create(self, context, parameters=None):
 
         try:

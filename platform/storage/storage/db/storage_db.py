@@ -74,6 +74,14 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_select_sql(sql)
 
+    def ceph_host_check(self, host_ip):
+
+        sql = "select count(*) from ceph_hosts a join ceph_osds b \
+               where a.host_uuid=b.host_uuid and a.host_ip='%s'" \
+              % (host_ip)
+
+        return super(StorageDB, self).exec_select_sql(sql)
+
     def host_create(self, host_uuid, host_name, host_ip,
                     host_cpu, host_mem, host_disk, host_nic):
 
@@ -144,7 +152,7 @@ class StorageDB(MysqlInit):
         sql_02 = "select count(*) from ceph_hosts"
 
         db_host_list = super(StorageDB, self).exec_select_sql(sql_01)
-        count = super(StorageDB, self).exec_select_sql(sql_02)
+        count = super(StorageDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "host_list": db_host_list,
@@ -207,15 +215,6 @@ class StorageDB(MysqlInit):
                from ceph_mons a join ceph_hosts b \
                where a.host_uuid=b.host_uuid \
                and a.cluster_uuid='%s'" \
-              % (cluster_uuid)
-
-        return super(StorageDB, self).exec_select_sql(sql)
-
-    def cephmon_manage_ip(self, cluster_uuid):
-
-        sql = "select a.host_ip from ceph_hosts a join ceph_mons b \
-               where a.host_uuid=b.host_uuid and a.host_status='on' \
-               and b.cluster_uuid='%s' limit 1" \
               % (cluster_uuid)
 
         return super(StorageDB, self).exec_select_sql(sql)
@@ -310,7 +309,7 @@ class StorageDB(MysqlInit):
                  % (cluster_uuid)
 
         db_osd_list = super(StorageDB, self).exec_select_sql(sql_01)
-        count = super(StorageDB, self).exec_select_sql(sql_02)
+        count = super(StorageDB, self).exec_select_sql(sql_02)[0][0]
 
         return {
                    "osd_list": db_osd_list,
@@ -373,14 +372,16 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_update_sql(sql)
 
-    def name_duplicate_check(self, volume_name, project_uuid):
+    def name_duplicate_check(self, volume_name,
+                             project_uuid, cluster_uuid):
 
         sql = "select count(*) from volumes a join resources_acl b \
-               where a.volume_name='%s' and b.project_uuid='%s' \
-               and a.volume_uuid=b.resource_uuid" \
-               % (volume_name, project_uuid)
+               where a.volume_uuid=b.resource_uuid \
+               and a.volume_name='%s' and a.cluster_uuid='%s' \
+               and b.project_uuid='%s'" \
+               % (volume_name, cluster_uuid, project_uuid)
 
-        return super(StorageDB, self).exec_select_sql(sql)[0][0]
+        return super(StorageDB, self).exec_select_sql(sql)
 
     def volume_name(self, volume_uuid):
 
@@ -389,8 +390,9 @@ class StorageDB(MysqlInit):
 
         return super(StorageDB, self).exec_select_sql(sql)
 
-    def volume_create(self, volume_uuid, volume_name, disk_name,
-                      volume_size, fs_type, pool_name,
+    def volume_create(self, volume_uuid, cluster_uuid,
+                      pool_name, volume_name, volume_size,
+                      volume_type, disk_name, fs_type,
                       team_uuid, project_uuid, user_uuid):
 
         sql_01 = "insert into resources_acl(resource_uuid, resource_type, \
@@ -398,12 +400,15 @@ class StorageDB(MysqlInit):
                   create_time, update_time) \
                   values('%s', 'volume', '0', '%s', '%s', '%s', now(), now())" \
                   % (volume_uuid, team_uuid, project_uuid, user_uuid)
-        sql_02 = "insert into volumes(volume_uuid, volume_name, volume_size, \
-                  volume_status, disk_name, fs_type, mount_point, pool_name, \
+
+        sql_02 = "insert into volumes(volume_uuid, cluster_uuid, \
+                  volume_name, volume_size, volume_type, volume_status, \
+                  disk_name, fs_type, mount_point, pool_name, \
                   create_time, update_time) \
-                  values('%s', '%s', '%d', 'unused', '%s', '%s', 'None', \
-                  '%s', now(), now())" \
-                  % (volume_uuid, volume_name, int(volume_size),
+                  values('%s', '%s', '%s', '%d', '%s', 'unused', '%s', \
+                  '%s', 'None', '%s', now(), now())" \
+                  % (volume_uuid, cluster_uuid, volume_name,
+                     int(volume_size), volume_type,
                      disk_name, fs_type, pool_name)
 
         return super(StorageDB, self).exec_update_sql(sql_01, sql_02)
@@ -443,17 +448,10 @@ class StorageDB(MysqlInit):
 
     def volume_info(self, volume_uuid):
 
-        sql = "select volume_name, volume_size, volume_status, disk_name, \
-               fs_type, mount_point, pool_name, create_time, update_time \
-               from volumes where volume_uuid='%s' and volume_status!='delete'" \
-               % (volume_uuid)
-
-        return super(StorageDB, self).exec_select_sql(sql)
-
-    def volume_delete_info(self, volume_uuid):
-
-        sql = "select disk_name from volumes \
-               where volume_uuid='%s' and volume_status='delete'" \
+        sql = "select cluster_uuid, pool_name, volume_name, \
+               volume_size, volume_type, volume_status, disk_name, \
+               fs_type, mount_point, create_time, update_time \
+               from volumes where volume_uuid='%s'" \
                % (volume_uuid)
 
         return super(StorageDB, self).exec_select_sql(sql)
@@ -491,9 +489,10 @@ class StorageDB(MysqlInit):
         page_num = int(page_num)
         start_position = (page_num - 1) * page_size
 
-        sql_01 = "select a.volume_uuid, a.volume_name, a.volume_size, \
+        sql_01 = "select a.volume_uuid, a.cluster_uuid, a.pool_name, \
+                  a.volume_name, a.volume_size, a.volume_type, \
                   a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-                  a.pool_name, a.create_time, a.update_time \
+                  a.create_time, a.update_time \
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status!='delete' \
@@ -523,9 +522,10 @@ class StorageDB(MysqlInit):
         page_num = int(page_num)
         start_position = (page_num - 1) * page_size
 
-        sql_01 = "select a.volume_uuid, a.volume_name, a.volume_size, \
+        sql_01 = "select a.volume_uuid, a.cluster_uuid, a.pool_name, \
+                  a.volume_name, a.volume_size, a.volume_type, \
                   a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-                  a.pool_name, a.create_time, a.update_time \
+                  a.create_time, a.update_time \
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status!='delete' \
@@ -557,9 +557,10 @@ class StorageDB(MysqlInit):
         page_num = int(page_num)
         start_position = (page_num - 1) * page_size
 
-        sql_01 = "select a.volume_uuid, a.volume_name, a.volume_size, \
+        sql_01 = "select a.volume_uuid, a.cluster_uuid, a.pool_name, \
+                  a.volume_name, a.volume_size, a.volume_type, \
                   a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-                  a.pool_name, a.create_time, a.update_time \
+                  a.create_time, a.update_time \
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status='delete' \
@@ -589,9 +590,10 @@ class StorageDB(MysqlInit):
         page_num = int(page_num)
         start_position = (page_num - 1) * page_size
 
-        sql_01 = "select a.volume_uuid, a.volume_name, a.volume_size, \
+        sql_01 = "select a.volume_uuid, a.cluster_uuid, a.pool_name, \
+                  a.volume_name, a.volume_size, a.volume_type, \
                   a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-                  a.pool_name, a.create_time, a.update_time \
+                  a.create_time, a.update_time \
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status='delete' \

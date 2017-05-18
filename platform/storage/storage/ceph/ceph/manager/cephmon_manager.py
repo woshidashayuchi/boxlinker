@@ -135,6 +135,20 @@ class CephMonManager(object):
                       % (mon02_hostip, ntp_server))
             return request_result(526)
 
+        mon01_ceph_install = self.ceph_driver.ceph_service_install(
+                                  mon01_hostip, cluster_uuid)
+        if int(mon01_ceph_install) != 0:
+            log.error('Ceph service install failure, mon_host_ip=%s'
+                      % (mon01_hostip))
+            return request_result(526)
+
+        mon02_ceph_install = self.ceph_driver.ceph_service_install(
+                                  mon02_hostip, cluster_uuid)
+        if int(mon02_ceph_install) != 0:
+            log.error('Ceph service install failure, mon_host_ip=%s'
+                      % (mon02_hostip))
+            return request_result(526)
+
         monmap_init = self.ceph_driver.monmap_init(
                            mon01_hostname, mon01_storage_ip,
                            mon02_hostname, mon02_storage_ip,
@@ -168,9 +182,9 @@ class CephMonManager(object):
             log.error('创建ssd bucket失败')
             return request_result(526)
 
-        # control_host_name = self.ceph_driver.local_host_name()
-        # self.ceph_driver.host_ssh_del(mon01_hostip, control_host_name)
-        # self.ceph_driver.host_ssh_del(mon02_hostip, control_host_name)
+        control_host_name = self.ceph_driver.local_host_name()
+        self.ceph_driver.host_ssh_del(mon01_hostip, control_host_name)
+        self.ceph_driver.host_ssh_del(mon02_hostip, control_host_name)
 
         result = {
                      "mon01_hostip": mon01_hostip,
@@ -261,6 +275,13 @@ class CephMonManager(object):
                       % (host_ip, ntp_server))
             return request_result(526)
 
+        mon_ceph_install = self.ceph_driver.ceph_service_install(
+                                host_ip, cluster_uuid)
+        if int(mon_ceph_install) != 0:
+            log.error('Ceph service install failure, mon_host_ip=%s'
+                      % (host_ip))
+            return request_result(526)
+
         mon_add = self.ceph_driver.mon_host_add(
                        host_name, host_ip, storage_ip)
         if int(mon_add) != 0:
@@ -268,8 +289,8 @@ class CephMonManager(object):
                       % (host_name, host_ip))
             return request_result(526)
 
-        # control_host_name = self.ceph_driver.local_host_name()
-        # self.ceph_driver.host_ssh_del(host_ip, control_host_name)
+        control_host_name = self.ceph_driver.local_host_name()
+        self.ceph_driver.host_ssh_del(host_ip, control_host_name)
 
         result = {
                      "host_ip": host_ip,

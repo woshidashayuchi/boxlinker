@@ -36,21 +36,14 @@ class CephPoolManager(object):
             log.warning('%s类型硬盘osd节点不足，无法创建存储池' % (pool_type))
             return request_result(534)
 
-        try:
-            cephmon_ip = self.storage_db.cephmon_manage_ip(
-                              cluster_uuid)[0][0]
-        except Exception, e:
-            log.error('Database select error, reason=%s' % (e))
-            return request_result(404)
-
         pool_name = 'pool_%s' % (pool_type)
 
         pool_create_result = self.storage_driver.cephpool_create(
-                                  token, cephmon_ip, pool_type, pool_name)
+                                  token, cluster_uuid, pool_type, pool_name)
         status_code = pool_create_result.get('status')
         if int(status_code) != 0:
-            log.error('Ceph pool create failure, cephmon_ip=%s, pool_type=%s'
-                      % (cephmon_ip, pool_type))
+            log.error('Ceph pool create failure, pool_type=%s'
+                      % (pool_type))
             return request_result(status_code)
 
         pool_size = pool_create_result.get('result').get('pool_size')
@@ -81,20 +74,13 @@ class CephPoolManager(object):
     def cephpool_update(self, cluster_uuid,
                         token, source_ip, resource_name):
 
-        try:
-            cephmon_ip = self.storage_db.cephmon_manage_ip(
-                              cluster_uuid)[0][0]
-        except Exception, e:
-            log.error('Database select error, reason=%s' % (e))
-            return request_result(404)
-
         pool_info = self.storage_driver.cephpool_info(
-                         token, cephmon_ip)
+                         token, cluster_uuid)
 
         status_code = pool_info.get('status')
         if int(status_code) != 0:
-            log.error('Get Ceph pool info failure, cephmon_ip=%s'
-                      % (cephmon_ip))
+            log.error('Get Ceph pool info failure, cluster_uuid=%s'
+                      % (cluster_uuid))
             return request_result(status_code)
 
         pool_size = pool_info.get('result').get('pool_size')

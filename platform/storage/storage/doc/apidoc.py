@@ -68,6 +68,21 @@
 
 
 """
+@apiDefine CODE_CLUSTER_PUT_0
+@apiSuccessExample 返回
+{
+    "status": 0,
+    "msg": "OK",
+    "result": {
+        "cluster_uuid": "string",
+        "host_ip": "string",
+        "host_type": "kvm/k8s"
+    }
+}
+"""
+
+
+"""
 @apiDefine CODE_CLUSTER_LIST_0
 @apiSuccessExample 返回
 {
@@ -566,10 +581,12 @@
     "msg": "OK",
     "result": {
         "volume_uuid": "string",
+        "cluster_uuid": "string",
         "volume_name": "string",
         "pool_name": "string",
         "image_name": "string",
         "volume_size": int,
+        "volume_type": "string",
         "fs_type": "string"
     }
 }
@@ -628,13 +645,15 @@
     "msg": "OK",
     "result": {
         "volume_uuid": "string",
+        "cluster_uuid": "string",
+        "pool_name": "string",
         "volume_name": "string",
         "volume_size": int,
+        "volume_type": "string",
         "volume_status": "string",
         "image_name": "string",
         "fs_type": "string",
         "mount_point": "string",
-        "pool_name": "string",
         "create_time": "YYYY-MM-DD HH:MM:SS",
         "update_time": "YYYY-MM-DD HH:MM:SS"
     }
@@ -653,37 +672,43 @@
         "volume_list": [
             {
                 "volume_uuid": "string",
+                "cluster_uuid": "string",
+                "pool_name": "string",
                 "volume_name": "string",
                 "volume_size": int,
+                "volume_type": "string",
                 "volume_status": "string",
                 "image_name": "string",
                 "fs_type": "string",
                 "mount_point": "string",
-                "pool_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
                 "volume_uuid": "string",
+                "cluster_uuid": "string",
+                "pool_name": "string",
                 "volume_name": "string",
                 "volume_size": int,
+                "volume_type": "string",
                 "volume_status": "string",
                 "image_name": "string",
                 "fs_type": "string",
                 "mount_point": "string",
-                "pool_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             },
             {
                 "volume_uuid": "string",
+                "cluster_uuid": "string",
+                "pool_name": "string",
                 "volume_name": "string",
                 "volume_size": int,
+                "volume_type": "string",
                 "volume_status": "string",
                 "image_name": "string",
                 "fs_type": "string",
                 "mount_point": "string",
-                "pool_name": "string",
                 "create_time": "YYYY-MM-DD HH:MM:SS",
                 "update_time": "YYYY-MM-DD HH:MM:SS"
             }
@@ -712,6 +737,7 @@
     "cluster_name": "string",
     "journal_size": int,
     "ntp_server": "ip",
+    "cluster_uuid": "string",
     "cluster_auth": "string",
     "service_auth": "string",
     "client_auth": "string",
@@ -747,6 +773,25 @@
 @apiPermission admin
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_CLUSTER_INFO_0
+"""
+
+
+"""
+@api {put} /api/v1.0/admin/storage/cephclusters/<cluster_uuid> 1.4 存储集群挂载
+@apiName cluster mount
+@apiGroup 1 cluster
+@apiVersion 1.0.0
+@apiDescription 存储集群挂载
+@apiPermission admin
+@apiParam {json} header {"token": "string"}
+@apiParam {json} body
+@apiParamExample body
+{
+    "host_ip": "string",
+    "password": "string",
+    "host_type": "kvm/k8s"
+}
+@apiUse CODE_CLUSTER_PUT_0
 """
 
 
@@ -1006,8 +1051,10 @@
 @apiParam {json} body
 @apiParamExample body
 {
+    "cluster_uuid": "string",
     "volume_name": "string",
     "volume_size": int,
+    "volume_type": "hdd/ssd",
     "fs_type": "xfs/ext4",
     "cost": float
 }

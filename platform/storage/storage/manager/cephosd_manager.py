@@ -70,16 +70,9 @@ class CephOsdManager(object):
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        try:
-            cephmon_ip = self.storage_db.cephmon_manage_ip(
-                              cluster_uuid)[0][0]
-        except Exception, e:
-            log.error('Database select error, reason=%s' % (e))
-            return request_result(404)
-
         osd_add_result = self.storage_driver.cephosd_add(
-                              token, cluster_info, mon_list,
-                              cephmon_ip, host_ip, rootpwd,
+                              token, cluster_uuid, cluster_info,
+                              mon_list, host_ip, rootpwd,
                               storage_nic, jour_disk, data_disk,
                               disk_type, weight)
         status_code = osd_add_result.get('status')
@@ -123,13 +116,6 @@ class CephOsdManager(object):
                        token, source_ip, resource_name):
 
         try:
-            cephmon_ip = self.storage_db.cephmon_manage_ip(
-                              cluster_uuid)[0][0]
-        except Exception, e:
-            log.error('Database select error, reason=%s' % (e))
-            return request_result(404)
-
-        try:
             osd_info = self.storage_db.cephosd_info(osd_uuid)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
@@ -139,7 +125,7 @@ class CephOsdManager(object):
         host_ip = osd_info[0][13]
 
         osd_del_result = self.storage_driver.cephosd_delete(
-                              token, cephmon_ip, osd_id,
+                              token, cluster_uuid, osd_id,
                               host_ip, rootpwd)
         status_code = osd_del_result.get('status')
         if int(status_code) != 0:
@@ -166,13 +152,6 @@ class CephOsdManager(object):
                          token, source_ip, resource_name):
 
         try:
-            cephmon_ip = self.storage_db.cephmon_manage_ip(
-                              cluster_uuid)[0][0]
-        except Exception, e:
-            log.error('Database select error, reason=%s' % (e))
-            return request_result(404)
-
-        try:
             osd_info = self.storage_db.cephosd_info(osd_uuid)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
@@ -181,11 +160,11 @@ class CephOsdManager(object):
         osd_id = osd_info[0][1]
 
         osd_reweight = self.storage_driver.cephosd_reweight(
-                            token, cephmon_ip, osd_id, weight)
+                            token, cluster_uuid, osd_id, weight)
         status_code = osd_reweight.get('status')
         if int(status_code) != 0:
-            log.error('Ceph osd reweight failure, cephmon_ip=%s, osd_id=%s'
-                      % (cephmon_ip, osd_id))
+            log.error('Ceph osd reweight failure, osd_id=%s'
+                      % (osd_id))
             return request_result(status_code)
 
         try:

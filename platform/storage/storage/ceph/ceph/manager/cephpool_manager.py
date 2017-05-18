@@ -15,26 +15,26 @@ class CephPoolManager(object):
 
         self.ceph_driver = ceph_driver.CephDriver()
 
-    def cephpool_create(self, cephmon_ip, pool_type, pool_name):
+    def cephpool_create(self, pool_type, pool_name):
 
-        pool_check = self.ceph_driver.pool_check(cephmon_ip, pool_name)
+        pool_check = self.ceph_driver.pool_check(pool_name)
         if int(pool_check) != 0:
             log.info('存储池%s已存在，无需再次创建' %(pool_name))
             return request_result(301)
 
         if pool_type == 'hdd':
-            pool_create = self.ceph_driver.pool_hdd_create(cephmon_ip, pool_name)
+            pool_create = self.ceph_driver.pool_hdd_create(pool_name)
             if int(pool_create) != 0:
                 log.error('机械硬盘池创建失败')
                 return request_result(534)
 
         elif pool_type == 'ssd':
-            pool_create = self.ceph_driver.pool_ssd_create(cephmon_ip, pool_name)
+            pool_create = self.ceph_driver.pool_ssd_create(pool_name)
             if int(pool_create) != 0:
                 log.error('固态硬盘池创建失败')
                 return request_result(534)
 
-        pool_info = self.ceph_driver.pool_info_get(cephmon_ip)
+        pool_info = self.ceph_driver.pool_info_get()
         pool_info = pool_info.split(" ")
 
         pool_size = pool_info[0]
@@ -45,7 +45,6 @@ class CephPoolManager(object):
         result = {
                      "pool_type": pool_type,
                      "pool_name": pool_name,
-                     "cephmon_ip": cephmon_ip,
                      "pool_size": pool_size,
                      "avail": avail,
                      "used": used,
@@ -54,9 +53,9 @@ class CephPoolManager(object):
 
         return request_result(0, result)
 
-    def cephpool_info(self, cephmon_ip):
+    def cephpool_info(self):
 
-        pool_info = self.ceph_driver.pool_info_get(cephmon_ip)
+        pool_info = self.ceph_driver.pool_info_get()
         pool_info = pool_info.split(" ")
 
         pool_size = pool_info[0]

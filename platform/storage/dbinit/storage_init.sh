@@ -175,13 +175,15 @@ ENGINE=InnoDB"
 
 $v_connect_mysql "CREATE TABLE IF NOT EXISTS volumes (
         volume_uuid         VARCHAR(64) NULL DEFAULT NULL,
+        cluster_uuid        VARCHAR(64) NULL DEFAULT NULL,
+        pool_name           VARCHAR(32) NULL DEFAULT NULL,
         volume_name         VARCHAR(64) NULL DEFAULT NULL,
         volume_size         INT(8) NULL DEFAULT NULL,
+        volume_type         VARCHAR(32) NULL DEFAULT NULL,
         volume_status       VARCHAR(32) NULL DEFAULT NULL,
         disk_name           VARCHAR(128) NULL DEFAULT NULL,
         fs_type             VARCHAR(32) NULL DEFAULT NULL,
         mount_point         VARCHAR(32) NULL DEFAULT NULL,
-        pool_name           VARCHAR(32) NULL DEFAULT NULL,
         create_time         DATETIME NULL DEFAULT NULL,
         update_time         DATETIME NULL DEFAULT NULL,
         PRIMARY KEY (volume_uuid)

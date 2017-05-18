@@ -36,6 +36,7 @@ class StorageRpcManager(object):
             source_ip = context.get('source_ip')
 
             cluster_name = parameters.get('cluster_name')
+            cluster_uuid = parameters.get('cluster_uuid')
             cluster_auth = parameters.get('cluster_auth')
             service_auth = parameters.get('service_auth')
             client_auth = parameters.get('client_auth')
@@ -51,6 +52,8 @@ class StorageRpcManager(object):
             source_ip = parameter_check(source_ip, ptype='pnip',
                                         exist='no')
             cluster_name = parameter_check(cluster_name, ptype='pnam')
+            cluster_uuid = parameter_check(cluster_uuid, ptype='pstr',
+                                           exist='no')
             cluster_auth = parameter_check(cluster_auth, ptype='pnam',
                                            exist='no')
             service_auth = parameter_check(service_auth, ptype='pnam',
@@ -85,9 +88,9 @@ class StorageRpcManager(object):
             return request_result(101)
 
         return self.cephcluster_manager.cephcluster_create(
-                    cluster_name, cluster_auth, service_auth,
-                    client_auth, ceph_pgnum, ceph_pgpnum,
-                    public_network, cluster_network,
+                    cluster_name, cluster_uuid, cluster_auth,
+                    service_auth, client_auth, ceph_pgnum,
+                    ceph_pgpnum, public_network, cluster_network,
                     osd_full_ratio, osd_nearfull_ratio,
                     journal_size, ntp_server,
                     token=token, source_ip=source_ip,
@@ -112,6 +115,34 @@ class StorageRpcManager(object):
     def cephcluster_list(self, context, parameters):
 
         return self.cephcluster_manager.cephcluster_list()
+
+    @acl_check
+    def cephcluster_mount(self, context, parameters):
+
+        try:
+            token = context['token']
+            source_ip = context.get('source_ip')
+
+            cluster_uuid = parameters.get('cluster_uuid')
+            host_ip = parameters.get('host_ip')
+            password = parameters.get('password')
+            host_type = parameters.get('host_type')
+
+            cluster_uuid = parameter_check(cluster_uuid, ptype='pstr')
+            host_ip = parameter_check(host_ip, ptype='pnip')
+            password = parameter_check(password, ptype='ppwd')
+            if host_type not in ('kvm', 'k8s'):
+                raise(Exception('Parameter host_type error'))
+        except Exception, e:
+            log.warning('parameters error, context=%s, '
+                        'parameters=%s, reason=%s'
+                        % (context, parameters, e))
+            return request_result(101)
+
+        return self.cephcluster_manager.cephcluster_mount(
+                    cluster_uuid, host_ip, password, host_type,
+                    token=token, source_ip=source_ip,
+                    resource_name=None)
 
     @acl_check
     def host_create(self, context, parameters):
@@ -480,14 +511,19 @@ class StorageRpcManager(object):
             team_uuid = user_info.get('team_uuid')
             project_uuid = user_info.get('project_uuid')
 
+            cluster_uuid = parameters.get('cluster_uuid')
             volume_name = parameters.get('volume_name')
             volume_size = parameters.get('volume_size')
+            volume_type = parameters.get('volume_type')
             fs_type = parameters.get('fs_type')
             cost = parameters.get('cost')
 
+            cluster_uuid = parameter_check(cluster_uuid, ptype='pstr')
             source_ip = parameter_check(source_ip, ptype='pnip', exist='no')
             volume_name = parameter_check(volume_name, ptype='pnam')
             volume_size = parameter_check(volume_size, ptype='pint')
+            if volume_type not in ('hdd', 'ssd'):
+                raise(Exception('Parameter volume_type error'))
             if self.balancecheck is True:
                 cost = parameter_check(cost, ptype='pflt')
                 if float(cost) < 0:
@@ -495,8 +531,8 @@ class StorageRpcManager(object):
                                     'cost must greater than 0'))
             else:
                 cost = parameter_check(cost, ptype='pflt', exist='no')
-            if (fs_type != 'xfs') and (fs_type != 'ext4'):
-                raise
+            if fs_type not in ('xfs', 'ext4'):
+                raise(Exception('Parameter fs_type error'))
         except Exception, e:
             log.warning('parameters error, context=%s, '
                         'parameters=%s, reason=%s'
@@ -505,7 +541,8 @@ class StorageRpcManager(object):
 
         return self.clouddisk_manager.volume_create(
                     team_uuid, project_uuid, user_uuid,
-                    volume_name, volume_size, fs_type, cost,
+                    cluster_uuid, volume_name, volume_size,
+                    volume_type, fs_type, cost,
                     token=token, source_ip=source_ip,
                     resource_name=volume_name)
 

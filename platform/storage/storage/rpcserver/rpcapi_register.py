@@ -29,6 +29,9 @@ class RabbitmqResponse(object):
              'stg_ceh_cls_lst', self.rpcapi_define.cephcluster_list)
 
         self.rpc_api.add_resource(
+             'stg_ceh_cls_mnt', self.rpcapi_define.cephcluster_mount)
+
+        self.rpc_api.add_resource(
              'stg_ceh_hst_crt', self.rpcapi_define.host_create)
 
         self.rpc_api.add_resource(

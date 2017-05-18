@@ -11,6 +11,7 @@ from ceph.manager import cephmon_manager
 from ceph.manager import cephosd_manager
 from ceph.manager import cephpool_manager
 from ceph.manager import cephdisk_manager
+from ceph.manager import cephcluster_manager
 
 
 class CephRpcManager(object):
@@ -22,6 +23,7 @@ class CephRpcManager(object):
         self.cephosd_manager = cephosd_manager.CephOsdManager()
         self.cephpool_manager = cephpool_manager.CephPoolManager()
         self.cephdisk_manager = cephdisk_manager.CephDiskManager()
+        self.cephcluster_manager = cephcluster_manager.CephClusterManager()
 
     @token_check
     def host_info(self, context, parameters):
@@ -34,7 +36,7 @@ class CephRpcManager(object):
             password = parameter_check(password, ptype='ppwd')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.host_manager.host_info(host_ip, password)
@@ -59,7 +61,7 @@ class CephRpcManager(object):
             mon02_snic = parameter_check(mon02_snic, ptype='pnam')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephmon_manager.cephmon_init(
@@ -83,7 +85,7 @@ class CephRpcManager(object):
             storage_nic = parameter_check(storage_nic, ptype='pnam')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephmon_manager.cephmon_add(
@@ -91,12 +93,34 @@ class CephRpcManager(object):
                     rootpwd, storage_nic, mon_list)
 
     @token_check
+    def cephcluster_mount(self, context, parameters):
+
+        try:
+            cluster_info = parameters.get('cluster_info')
+            mon_list = parameters.get('mon_list')
+            host_ip = parameters.get('host_ip')
+            rootpwd = parameters.get('rootpwd')
+            host_type = parameters.get('host_type')
+
+            host_ip = parameter_check(host_ip, ptype='pnip')
+            rootpwd = parameter_check(rootpwd, ptype='ppwd')
+            if host_type not in ('kvm', 'k8s'):
+                raise(Exception('Parameter host_type error'))
+        except Exception, e:
+            log.warning('parameters error, parameters=%s, reason=%s'
+                        % (parameters, e))
+            return request_result(101)
+
+        return self.cephcluster_manager.cephcluster_mount(
+                    cluster_info, mon_list, host_ip,
+                    rootpwd, host_type)
+
+    @token_check
     def cephosd_add(self, context, parameters):
 
         try:
             cluster_info = parameters.get('cluster_info')
             mon_list = parameters.get('mon_list')
-            cephmon_ip = parameters.get('cephmon_ip')
             host_ip = parameters.get('host_ip')
             rootpwd = parameters.get('rootpwd')
             storage_nic = parameters.get('storage_nic')
@@ -105,7 +129,6 @@ class CephRpcManager(object):
             disk_type = parameters.get('disk_type')
             weight = parameters.get('weight')
 
-            cephmon_ip = parameter_check(cephmon_ip, ptype='pnip')
             host_ip = parameter_check(host_ip, ptype='pnip')
             rootpwd = parameter_check(rootpwd, ptype='ppwd')
             storage_nic = parameter_check(storage_nic, ptype='pnam')
@@ -116,11 +139,11 @@ class CephRpcManager(object):
                 raise(Exception('Parameter disk_type error'))
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephosd_manager.cephosd_add(
-                    cluster_info, mon_list, cephmon_ip,
+                    cluster_info, mon_list,
                     host_ip, rootpwd, storage_nic,
                     jour_disk, data_disk, disk_type, weight)
 
@@ -128,32 +151,28 @@ class CephRpcManager(object):
     def cephosd_delete(self, context, parameters):
 
         try:
-            cephmon_ip = parameters.get('cephmon_ip')
             osd_id = parameters.get('osd_id')
             host_ip = parameters.get('host_ip')
             rootpwd = parameters.get('rootpwd')
 
-            cephmon_ip = parameter_check(cephmon_ip, ptype='pnip')
             osd_id = parameter_check(osd_id, ptype='pint')
             host_ip = parameter_check(host_ip, ptype='pnip')
             rootpwd = parameter_check(rootpwd, ptype='ppwd')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephosd_manager.cephosd_delete(
-                    cephmon_ip, osd_id, host_ip, rootpwd)
+                    osd_id, host_ip, rootpwd)
 
     @token_check
     def cephosd_reweight(self, context, parameters):
 
         try:
-            cephmon_ip = parameters.get('cephmon_ip')
             osd_id = parameters.get('osd_id')
             weight = parameters.get('weight')
 
-            cephmon_ip = parameter_check(cephmon_ip, ptype='pnip')
             osd_id = parameter_check(osd_id, ptype='pint')
             weight = parameter_check(weight, ptype='pflt')
         except Exception, e:
@@ -162,41 +181,30 @@ class CephRpcManager(object):
             return request_result(101)
 
         return self.cephosd_manager.cephosd_reweight(
-                    cephmon_ip, osd_id, weight)
+                    osd_id, weight)
 
     @token_check
     def cephpool_create(self, context, parameters):
 
         try:
-            cephmon_ip = parameters.get('cephmon_ip')
             pool_type = parameters.get('pool_type')
             pool_name = parameters.get('pool_name')
 
-            cephmon_ip = parameter_check(cephmon_ip, ptype='pnip')
             pool_name = parameter_check(pool_name, ptype='pnam')
             if pool_type not in ('hdd', 'ssd'):
                 raise(Exception('Parameter pool_type error'))
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephpool_manager.cephpool_create(
-                    cephmon_ip, pool_type, pool_name)
+                    pool_type, pool_name)
 
     @token_check
     def cephpool_info(self, context, parameters):
 
-        try:
-            cephmon_ip = parameters.get('cephmon_ip')
-
-            cephmon_ip = parameter_check(cephmon_ip, ptype='pnip')
-        except Exception, e:
-            log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
-            return request_result(101)
-
-        return self.cephpool_manager.cephpool_info(cephmon_ip)
+        return self.cephpool_manager.cephpool_info()
 
     @token_check
     def disk_create(self, context, parameters):
@@ -211,7 +219,7 @@ class CephRpcManager(object):
             disk_size = parameter_check(disk_size, ptype='pint')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephdisk_manager.disk_create(
@@ -228,7 +236,7 @@ class CephRpcManager(object):
             disk_name = parameter_check(disk_name, ptype='pstr')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephdisk_manager.disk_delete(
@@ -247,7 +255,7 @@ class CephRpcManager(object):
             disk_size = parameter_check(disk_size, ptype='pint')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephdisk_manager.disk_resize(
@@ -262,7 +270,7 @@ class CephRpcManager(object):
             image_name = parameter_check(image_name, ptype='pstr')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
-                      % (parameters, e))
+                        % (parameters, e))
             return request_result(101)
 
         return self.cephdisk_manager.disk_growfs(image_name)

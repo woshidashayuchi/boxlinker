@@ -19,13 +19,14 @@ class CephClusterManager(object):
         self.storage_db = storage_db.StorageDB()
 
     @operation_record(resource_type='cephcluster', action='create')
-    def cephcluster_create(self, cluster_name, cluster_auth,
-                           service_auth, client_auth, ceph_pgnum,
-                           ceph_pgpnum, public_network, cluster_network,
-                           osd_full_ratio, osd_nearfull_ratio,
-                           journal_size, ntp_server,
+    def cephcluster_create(self, cluster_name, cluster_uuid,
+                           cluster_auth, service_auth, client_auth,
+                           ceph_pgnum, ceph_pgpnum, public_network,
+                           cluster_network, osd_full_ratio,
+                           osd_nearfull_ratio, journal_size, ntp_server,
                            token, source_ip, resource_name):
 
+        cluster_uuid = cluster_uuid or str(uuid.uuid4())
         cluster_auth = cluster_auth or 'none'
         service_auth = service_auth or 'none'
         client_auth = client_auth or 'none'
@@ -47,8 +48,6 @@ class CephClusterManager(object):
             log.warning('Ceph cluster name(%s) already exists'
                         % (cluster_name))
             return request_result(301)
-
-        cluster_uuid = str(uuid.uuid4())
 
         try:
             self.storage_db.ceph_cluster_create(
@@ -175,5 +174,54 @@ class CephClusterManager(object):
             result_list.append(v_result)
 
         result = {"cluster_list": result_list}
+
+        return request_result(0, result)
+
+    @operation_record(resource_type='cephcluster', action='update')
+    def cephcluster_mount(self, cluster_uuid,
+                          host_ip, password, host_type,
+                          token, source_ip, resource_name):
+
+        try:
+            host_check = self.storage_db.ceph_host_check(
+                              host_ip)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        if (host_check != 0) and (host_type == 'kvm'):
+            log.info('Host(%s) already in ceph cluster' % (host_ip))
+            return request_result(0)
+
+        req_result = self.cephcluster_info(cluster_uuid)
+        status_code = req_result.get('status')
+        if int(status_code) != 0:
+            log.error('Get cluster info failure, cluster_uuid=%s'
+                      % (cluster_uuid))
+            return request_result(status_code)
+
+        cluster_info = req_result.get('result')
+
+        try:
+            mon_list = self.storage_db.mon_list(cluster_uuid)
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        req_result = self.storage_driver.cephcluster_mount(
+                          token, cluster_uuid, cluster_info,
+                          mon_list, host_ip, rootpwd, host_type)
+        status_code = req_result.get('status')
+        if int(status_code) != 0:
+            log.error('Cephcluster mount failure, '
+                      'cluster_uuid=%s, host_ip=%s'
+                      % (cluster_uuid, host_ip))
+            return request_result(status_code)
+
+        result = {
+                     "cluster_uuid": cluster_uuid,
+                     "host_ip": host_ip,
+                     "host_type": host_type
+                 }
 
         return request_result(0, result)

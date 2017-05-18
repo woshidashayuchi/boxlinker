@@ -87,6 +87,33 @@ class CephClusterApi(Resource):
 
         return self.storage_api.cephcluster_info(context, parameters)
 
+    @time_log
+    def put(self, cluster_uuid):
+
+        try:
+            token = request.headers.get('token')
+            token_auth(token)
+            source_ip = request.headers.get('X-Real-IP')
+            if source_ip is None:
+                source_ip = request.remote_addr
+        except Exception, e:
+            log.warning('Token check error, token=%s, reason=%s' % (token, e))
+
+            return request_result(201)
+
+        try:
+            body = request.get_data()
+            parameters = json.loads(body)
+            parameters['cluster_uuid'] = cluster_uuid
+        except Exception, e:
+            log.warning('Parameters error, body=%s, reason=%s' % (body, e))
+
+            return request_result(101)
+
+        context = context_data(token, "stg_stg_adm_com", "update", source_ip)
+
+        return self.storage_api.cephcluster_mount(context, parameters)
+
 
 class CephHostsApi(Resource):
 

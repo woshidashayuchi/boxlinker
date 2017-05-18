@@ -15,9 +15,9 @@ class CephOsdManager(object):
 
         self.ceph_driver = ceph_driver.CephDriver()
 
-    def cephosd_add(self, cluster_info, mon_list, cephmon_ip,
-                    host_ip, rootpwd, storage_nic, jour_disk,
-                    data_disk, disk_type, weight):
+    def cephosd_add(self, cluster_info, mon_list,
+                    host_ip, rootpwd, storage_nic,
+                    jour_disk, data_disk, disk_type, weight):
 
         host_ssh_conf = self.ceph_driver.host_ssh_conf(
                              host_ip, rootpwd)
@@ -92,7 +92,7 @@ class CephOsdManager(object):
                  cluster_uuid, ceph_mon_id[-1],
                  mon_host_name, mon_storage_ip)
 
-        osd_id = self.ceph_driver.osd_id_create(cephmon_ip)
+        osd_id = self.ceph_driver.osd_id_create()
         self.ceph_driver.osd_conf_add(
              cluster_uuid, host_name, data_disk, osd_id)
         conf_dist = self.ceph_driver.conf_dist(cluster_uuid, host_ip)
@@ -107,8 +107,8 @@ class CephOsdManager(object):
         if int(osd_add) != 0:
             self.ceph_driver.osd_stop(host_ip, osd_id)
             self.ceph_driver.osd_host_del(host_ip, osd_id)
-            self.ceph_driver.osd_out(cephmon_ip, osd_id)
-            self.ceph_driver.osd_crush_out(cephmon_ip, osd_id)
+            self.ceph_driver.osd_out(osd_id)
+            self.ceph_driver.osd_crush_out(osd_id)
             log.error('主机(hostname:%s, IP:%s)添加osd节点失败'
                       %(host_name, host_ip))
             return request_result(530)
@@ -131,16 +131,16 @@ class CephOsdManager(object):
 
         return request_result(0, result)
 
-    def cephosd_delete(self, cephmon_ip, osd_id, host_ip, rootpwd):
+    def cephosd_delete(self, osd_id, host_ip, rootpwd):
 
-        pool_check = self.ceph_driver.pool_disk_check(cephmon_ip)
+        pool_check = self.ceph_driver.pool_disk_check()
         if int(pool_check) > 8:
-            ceph_check = self.ceph_driver.ceph_status_check(cephmon_ip)
+            ceph_check = self.ceph_driver.ceph_status_check()
             if int(ceph_check) == 0:
                 log.warning('ceph存储状态异常，不允许执行osd节点移除操作。')
                 return request_result(202)
 
-            pool_used = self.ceph_driver.pool_used(cephmon_ip)
+            pool_used = self.ceph_driver.pool_used()
             if float(pool_used) >= 65:
                 log.warning('ceph存储池剩余容量不足，不允许执行osd节点移除操作。')
                 return request_result(531)
@@ -164,37 +164,35 @@ class CephOsdManager(object):
             log.warning('host节点(%s)密码错误' % (host_ip))
             return request_result(523)
 
-        osd_out = self.ceph_driver.osd_out(cephmon_ip, osd_id)
+        osd_out = self.ceph_driver.osd_out(osd_id)
         if int(osd_out) != 0:
-            log.error('将osd(%s)移出ceph存储失败, cephmon_ip=%s'
-                      % (osd_id, cephmon_ip))
+            log.error('将osd(%s)移出ceph存储失败'
+                      % (osd_id))
             return request_result(532)
 
-        osd_crush_out = self.ceph_driver.osd_crush_out(cephmon_ip, osd_id)
+        osd_crush_out = self.ceph_driver.osd_crush_out(osd_id)
         if int(osd_crush_out) != 0:
-            log.error('将osd(%s)移出ceph存储CRUSH map失败, cephmon_ip=%s'
-                      % (osd_id, cephmon_ip))
+            log.error('将osd(%s)移出ceph存储CRUSH map失败'
+                      % (osd_id))
             return request_result(532)
 
         result = {
-                     "cephmon_ip": cephmon_ip,
                      "host_ip": host_ip,
                      "osd_id": osd_id
                  }
 
         return request_result(0, result)
 
-    def cephosd_reweight(self, cephmon_ip, osd_id, weight):
+    def cephosd_reweight(self, osd_id, weight):
 
         osd_rewt = self.ceph_driver.osd_reweight(
-                        cephmon_ip, osd_id, weight)
+                        osd_id, weight)
         if int(osd_rewt) != 0:
-            log.error('调整ceph存储osd节点(osd.%s)权重失败, '
-                      'cephmon_ip=%s' % (osd_id, cephmon_ip))
+            log.error('调整ceph存储osd节点(osd.%s)权重失败'
+                      % (osd_id))
             return request_result(533)
 
         result = {
-                     "cephmon_ip": cephmon_ip,
                      "osd_id": osd_id,
                      "weight": weight
                  }

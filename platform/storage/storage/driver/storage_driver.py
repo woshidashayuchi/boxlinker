@@ -69,16 +69,31 @@ class StorageDriver(object):
 
         return self.ceph_api.cephmon_add(context, parameters)
 
-    def cephosd_add(self, token, cluster_info, mon_list,
-                    cephmon_ip, host_ip, rootpwd, storage_nic,
-                    jour_disk, data_disk, disk_type, weight):
+    def cephcluster_mount(self, token, cluster_uuid,
+                          cluster_info, mon_list,
+                          host_ip, rootpwd, host_type):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         parameters = {
                          "cluster_info": cluster_info,
                          "mon_list": mon_list,
-                         "cephmon_ip": cephmon_ip,
+                         "host_ip": host_ip,
+                         "rootpwd": rootpwd,
+                         "host_type": host_type
+                     }
+
+        return self.ceph_api.cephcluster_mount(context, parameters)
+
+    def cephosd_add(self, token, cluster_uuid, cluster_info,
+                    mon_list, host_ip, rootpwd, storage_nic,
+                    jour_disk, data_disk, disk_type, weight):
+
+        context = {"token": token, "queue": cluster_uuid}
+
+        parameters = {
+                         "cluster_info": cluster_info,
+                         "mon_list": mon_list,
                          "host_ip": host_ip,
                          "rootpwd": rootpwd,
                          "storage_nic": storage_nic,
@@ -90,13 +105,12 @@ class StorageDriver(object):
 
         return self.ceph_api.cephosd_add(context, parameters)
 
-    def cephosd_delete(self, token, cephmon_ip,
+    def cephosd_delete(self, token, cluster_uuid,
                        osd_id, host_ip, rootpwd):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         parameters = {
-                         "cephmon_ip": cephmon_ip,
                          "osd_id": osd_id,
                          "host_ip": host_ip,
                          "rootpwd": rootpwd
@@ -104,44 +118,39 @@ class StorageDriver(object):
 
         return self.ceph_api.cephosd_delete(context, parameters)
 
-    def cephosd_reweight(self, token, cephmon_ip,
+    def cephosd_reweight(self, token, cluster_uuid,
                          osd_id, weight):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         parameters = {
-                         "cephmon_ip": cephmon_ip,
                          "osd_id": osd_id,
                          "weight": weight
                      }
 
         return self.ceph_api.cephosd_reweight(context, parameters)
 
-    def cephpool_create(self, token, cephmon_ip, pool_type, pool_name):
+    def cephpool_create(self, token, cluster_uuid, pool_type, pool_name):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         parameters = {
-                         "cephmon_ip": cephmon_ip,
                          "pool_type": pool_type,
                          "pool_name": pool_name
                      }
 
         return self.ceph_api.cephpool_create(context, parameters)
 
-    def cephpool_info(self, token, cephmon_ip):
+    def cephpool_info(self, token, cluster_uuid):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
-        parameters = {
-                         "cephmon_ip": cephmon_ip
-                     }
+        return self.ceph_api.cephpool_info(context)
 
-        return self.ceph_api.cephpool_info(context, parameters)
+    def disk_create(self, token, cluster_uuid,
+                    pool_name, disk_name, disk_size):
 
-    def disk_create(self, token, pool_name, disk_name, disk_size):
-
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         disk_size = int(disk_size) * 1024
         parameters = {
@@ -152,9 +161,10 @@ class StorageDriver(object):
 
         return self.ceph_api.rbd_create(context, parameters)
 
-    def disk_delete(self, token, pool_name, disk_name):
+    def disk_delete(self, token, cluster_uuid,
+                    pool_name, disk_name):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         parameters = {
                          "pool_name": pool_name,
@@ -163,9 +173,10 @@ class StorageDriver(object):
 
         return self.ceph_api.rbd_delete(context, parameters)
 
-    def disk_resize(self, token, pool_name, disk_name, disk_size):
+    def disk_resize(self, token, cluster_uuid,
+                    pool_name, disk_name, disk_size):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         disk_size = int(disk_size) * 1024
         parameters = {
@@ -176,9 +187,9 @@ class StorageDriver(object):
 
         return self.ceph_api.rbd_resize(context, parameters)
 
-    def disk_growfs(self, token, image_name):
+    def disk_growfs(self, token, cluster_uuid, image_name):
 
-        context = {"token": token}
+        context = {"token": token, "queue": cluster_uuid}
 
         parameters = {"image_name": image_name}
 

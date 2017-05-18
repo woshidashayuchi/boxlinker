@@ -16,6 +16,11 @@ class CephDriver(object):
 
         self.ceph_conf_path = '/tmp/ceph/conf'
         self.ceph_conf_file = '/etc/ceph/ceph.conf'
+        self.ceph_dirname = os.path.dirname(
+                                os.path.dirname(
+                                    os.path.dirname(
+                                        os.path.dirname(
+                                            os.path.abspath(__file__)))))
 
     def host_ping_check(self, host_ip):
 
@@ -254,7 +259,7 @@ class CephDriver(object):
     def host_ntp_conf(self, host_ip, ntp_server):
 
         cmd = ("sed -i '/ntpdate/d' /etc/crontab; "
-               "echo '0 * * * * root /usr/sbin/ntpdate %s' >> /etc/crontab; "
+               "echo '0 * * * * root /usr/sbin/ntpdate %s &> /dev/null' >> /etc/crontab; "
                "scp /etc/crontab root@'%s':/etc/"
                % (ntp_server, host_ip))
 
@@ -296,45 +301,87 @@ class CephDriver(object):
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def pool_check(self, host_ip, pool_name):
+    def ceph_service_install(self, mon_host_ip, cluster_uuid):
 
-        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'ceph df | grep %s | wc -l'"
-               % (host_ip, pool_name))
+        cmd_01 = "scp -r %s/ceph root@'%s':/" \
+                 % (self.ceph_dirname, mon_host_ip)
 
-        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+        cmd_02 = ("cp %s/ceph/conf/conf.py /tmp/%s_conf.py; "
+                  "sed -i 's/ceph_call_queue = .*/ceph_call_queue = \"%s\"/g' /tmp/%s_conf.py; "
+                  "scp /tmp/%s_conf.py root@'%s':/ceph/conf/conf.py"
+                  % (self.ceph_dirname, cluster_uuid,
+                     cluster_uuid, cluster_uuid,
+                     cluster_uuid, mon_host_ip))
 
-    def ceph_status_check(self, host_ip):
+        cmd_03 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+                  "'cp /ceph/ceph_service /etc/init.d/; "
+                  "chmod 755 /etc/init.d/ceph_service; "
+                  "chkconfig ceph_service on; service ceph_service start'"
+                  % (mon_host_ip))
 
-        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'ceph -s | grep 'HEALTH_OK' | wc -l'"
-               % (host_ip))
+        result01 = execute(cmd_01, shell=True, run_as_root=True)[1]
+        result02 = execute(cmd_02, shell=True, run_as_root=True)[1]
+        result03 = execute(cmd_03, shell=True, run_as_root=True)[1]
+        if (int(result01) == 0) and (int(result02) == 0) \
+           and (int(result03) == 0):
+            return 0
+        else:
+            return 1
 
-        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+    def ceph_growfs_install(self, cluster_uuid, host_ip):
 
-    def pool_disk_check(self, host_ip):
+        cmd_01 = "scp -r %s/ceph root@'%s':/" \
+                 % (self.ceph_dirname, host_ip)
 
-        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'ceph df | wc -l'" \
-              % (host_ip)
+        cmd_02 = ("cp %s/ceph/conf/conf.py /tmp/%s_conf.py; "
+                  "sed -i 's/ceph_exchange_name = .*/ceph_exchange_name = \"%s\"/g' /tmp/%s_conf.py; "
+                  "scp /tmp/%s_conf.py root@'%s':/ceph/conf/conf.py"
+                  % (self.ceph_dirname, cluster_uuid,
+                     cluster_uuid, cluster_uuid,
+                     cluster_uuid, host_ip))
 
-        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
-
-    def pool_ssd_create(self, host_ip, pool_name):
-
-        cmd_01 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-                  "'ceph osd crush rule create-simple ssd ssd host'"
+        cmd_03 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
+                  "'cp /ceph/ceph_bcast /etc/init.d/; "
+                  "chmod 755 /etc/init.d/ceph_bcast; "
+                  "chkconfig ceph_bcast on; service ceph_bcast start'"
                   % (host_ip))
-        cmd_02 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-                  "'ceph osd crush rule dump ssd' | grep 'ruleset' "
-                  "| awk '{print $2}' | awk -F, '{print $1}'"
-                  % (host_ip))
+
+        result01 = execute(cmd_01, shell=True, run_as_root=True)[1]
+        result02 = execute(cmd_02, shell=True, run_as_root=True)[1]
+        result03 = execute(cmd_03, shell=True, run_as_root=True)[1]
+        if (int(result01) == 0) and (int(result02) == 0) \
+           and (int(result03) == 0):
+            return 0
+        else:
+            return 1
+
+    def pool_check(self, pool_name):
+
+        cmd = "ceph df | grep %s | wc -l" % (pool_name)
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def ceph_status_check(self):
+
+        cmd = "ceph -s | grep 'HEALTH_OK' | wc -l"
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def pool_disk_check(self):
+
+        cmd = "ceph df | wc -l"
+
+        return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+
+    def pool_ssd_create(self, pool_name):
+
+        cmd_01 = "ceph osd crush rule create-simple ssd ssd host"
+        cmd_02 = "ceph osd crush rule dump ssd | grep 'ruleset' | awk '{print $2}' | awk -F, '{print $1}'"
 
         result01 = execute(cmd_01, shell=True, run_as_root=True)[1]
         rule = execute(cmd_02, shell=True, run_as_root=True)[0][0].strip('\n')
 
-        cmd_03 = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-                  "'rados mkpool %s 6 %s'"
-                  % (host_ip, pool_name, rule))
+        cmd_03 = "rados mkpool %s 6 %s" % (pool_name, rule)
 
         result02 = execute(cmd_03, shell=True, run_as_root=True)[1]
         if (int(result01) == 0) and (int(result02) == 0):
@@ -342,26 +389,21 @@ class CephDriver(object):
         else:
             return 1
 
-    def pool_hdd_create(self, host_ip, pool_name):
+    def pool_hdd_create(self, pool_name):
 
-        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'rados mkpool %s'" \
-              % (host_ip, pool_name)
+        cmd = "rados mkpool %s" % (pool_name)
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def pool_info_get(self, host_ip):
+    def pool_info_get(self):
 
-        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'ceph df' | awk 'NR==3 {print $1, $2, $3, $4}'"
-               % (host_ip))
+        cmd = "ceph df | awk 'NR==3 {print $1, $2, $3, $4}'"
 
         return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def pool_used(self, host_ip):
+    def pool_used(self):
 
-        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'ceph df' | awk 'NR==3 {print $4}'"
-               % (host_ip))
+        cmd = "ceph df | awk 'NR==3 {print $4}'"
 
         return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
@@ -394,11 +436,9 @@ class CephDriver(object):
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def osd_reweight(self, host_ip, osd_id, weight):
+    def osd_reweight(self, osd_id, weight):
 
-        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'ceph osd crush reweight osd.%s %s'"
-               % (host_ip, osd_id, weight))
+        cmd = "ceph osd crush reweight osd.%s %s" % (osd_id, weight)
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
@@ -409,10 +449,9 @@ class CephDriver(object):
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def osd_out(self, host_ip, osd_id):
+    def osd_out(self, osd_id):
 
-        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'ceph osd out %s'" \
-              % (host_ip, osd_id)
+        cmd = "ceph osd out %s" % (osd_id)
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
@@ -424,13 +463,12 @@ class CephDriver(object):
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
-    def osd_crush_out(self, host_ip, osd_id):
+    def osd_crush_out(self, osd_id):
 
-        cmd = ("ssh -o StrictHostKeyChecking=no root@'%s' "
-               "'ceph osd crush remove osd.%s; "
+        cmd = ("ceph osd crush remove osd.%s; "
                "ceph auth del osd.%s; "
-               "ceph osd rm %s'"
-               % (host_ip, osd_id, osd_id, osd_id))
+               "ceph osd rm %s"
+               % (osd_id, osd_id, osd_id))
 
         return execute(cmd, shell=True, run_as_root=True)[1]
 
@@ -466,10 +504,9 @@ class CephDriver(object):
 
         return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
-    def osd_id_create(self, host_ip):
+    def osd_id_create(self):
 
-        cmd = "ssh -o StrictHostKeyChecking=no root@'%s' 'ceph osd create'" \
-              % (host_ip)
+        cmd = "ceph osd create"
 
         return execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
 
@@ -516,7 +553,7 @@ class CephDriver(object):
             cmd = "xfs_growfs %s" % (dev_name)
             result = execute(cmd, shell=True, run_as_root=True)[1]
             if str(result) != '0':
-                log.error('Ceph disk(%s) growfs failure' % (disk_name))
+                log.error('Ceph disk(%s) growfs failure' % (image_name))
                 return request_result(513)
             else:
                 return request_result(0)

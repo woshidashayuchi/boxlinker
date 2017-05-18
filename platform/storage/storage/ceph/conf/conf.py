@@ -4,8 +4,8 @@
 import os
 
 
-mq_server01 = 'rabbitmq'
-mq_server02 = 'rabbitmq'
+mq_server01 = '10.10.10.11'
+mq_server02 = '10.10.10.11'
 mq_port = 5672
 
 log_level = 'WARNING'

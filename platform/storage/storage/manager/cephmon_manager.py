@@ -146,7 +146,7 @@ class CephMonManager(object):
         if host_check != 0:
             log.warning('Ceph mon节点(host_uuid:%s, IP:%s)已存在系统中，'
                         '无法执行添加操作'
-                        % (host_ip))
+                        % (host_uuid, host_ip))
             return request_result(521)
 
         try:

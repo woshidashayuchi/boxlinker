@@ -20,7 +20,6 @@ class CloudDiskManager(object):
 
     def __init__(self):
 
-        self.pool_name = conf.ceph_pool_name
         self.balancecheck = conf.balance_check
         self.storage_db = storage_db.StorageDB()
         self.storage_driver = storage_driver.StorageDriver()
@@ -29,12 +28,14 @@ class CloudDiskManager(object):
     @operation_record(resource_type='volume', action='create')
     @limit_check('volumes')
     def volume_create(self, team_uuid, project_uuid, user_uuid,
-                      volume_name, volume_size, fs_type, cost,
+                      cluster_uuid, volume_name, volume_size,
+                      volume_type, fs_type, cost,
                       token, source_ip, resource_name):
 
         try:
             disk_name_ch = self.storage_db.name_duplicate_check(
-                                        volume_name, project_uuid)
+                                volume_name, project_uuid,
+                                cluster_uuid)[0][0]
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
@@ -45,9 +46,10 @@ class CloudDiskManager(object):
 
         volume_uuid = str(uuid.uuid4())
         disk_name = volume_name + '-' + volume_uuid
+        pool_name = 'pool_%s' % (volume_type)
 
         status_code = self.storage_driver.disk_create(
-                           token, self.pool_name,
+                           token, cluster_uuid, pool_name,
                            disk_name, volume_size)['status']
         if int(status_code) != 0:
             log.error('Create storage disk(%s) failure' % (volume_name))
@@ -55,8 +57,9 @@ class CloudDiskManager(object):
 
         try:
             self.storage_db.volume_create(
-                         volume_uuid, volume_name, disk_name,
-                         volume_size, fs_type, self.pool_name,
+                         volume_uuid, cluster_uuid, pool_name,
+                         volume_name, volume_size, volume_type,
+                         disk_name, fs_type,
                          team_uuid, project_uuid, user_uuid)
         except Exception, e:
             log.error('Database insert error, reason=%s' % (e))
@@ -68,10 +71,12 @@ class CloudDiskManager(object):
 
         result = {
                      "volume_uuid": volume_uuid,
+                     "cluster_uuid": cluster_uuid,
                      "volume_name": volume_name,
-                     "pool_name": self.pool_name,
+                     "pool_name": pool_name,
                      "image_name": disk_name,
                      "volume_size": volume_size,
+                     "volume_type": volume_type,
                      "fs_type": fs_type,
                      "resource_uuid": volume_uuid
                  }
@@ -108,21 +113,26 @@ class CloudDiskManager(object):
                                source_ip, resource_uuid):
 
         try:
-            volume_name = self.storage_db.volume_name(
-                               volume_uuid)[0][0]
+            volume_info = self.storage_db.volume_info(volume_uuid)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        try:
-            disk_name = self.storage_db.volume_delete_info(
-                             volume_uuid)[0][0]
-        except Exception, e:
-            log.error('Database select error, reason=%s' % (e))
-            return request_result(404)
+        cluster_uuid = volume_info[0][0]
+        pool_name = volume_info[0][1]
+        volume_name = volume_info[0][2]
+        volume_status = volume_info[0][5]
+        disk_name = volume_info[0][6]
+
+        if volume_status != 'delete':
+            log.warning('Storage disk status not equal delete, '
+                        'operation denied, volume_name=%s, '
+                        'cluster_uuid=%s, pool_name=%s'
+                        % (volume_name, cluster_uuid, pool_name))
+            return request_result(202)
 
         status_code = self.storage_driver.disk_delete(
-                           token, self.pool_name,
+                           token, cluster_uuid, pool_name,
                            disk_name)['status']
         if int(status_code) != 0:
             log.error('Delete storage disk(%s) failure' % (disk_name))
@@ -148,17 +158,19 @@ class CloudDiskManager(object):
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        volume_name = volume_info[0][0]
-        disk_name = volume_info[0][3]
+        cluster_uuid = volume_info[0][0]
+        pool_name = volume_info[0][1]
+        volume_name = volume_info[0][2]
+        disk_name = volume_info[0][6]
 
         status_code = self.storage_driver.disk_resize(
-                           token, self.pool_name,
+                           token, cluster_uuid, pool_name,
                            disk_name, volume_size)['status']
         if int(status_code) != 0:
             log.error('storage disk(%s) resize failure' % (disk_name))
             return request_result(status_code)
 
-        self.storage_driver.disk_growfs(token, disk_name)
+        self.storage_driver.disk_growfs(token, cluster_uuid, volume_name)
 
         try:
             self.storage_db.volume_resize(volume_uuid, volume_size)
@@ -174,7 +186,7 @@ class CloudDiskManager(object):
         result = {
                      "volume_uuid": volume_uuid,
                      "volume_name": volume_name,
-                     "pool_name": self.pool_name,
+                     "pool_name": pool_name,
                      "image_name": disk_name,
                      "volume_size": volume_size,
                      "resource_name": volume_name
@@ -225,25 +237,29 @@ class CloudDiskManager(object):
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        volume_name = volume_info[0][0]
-        volume_size = volume_info[0][1]
-        volume_status = volume_info[0][2]
-        image_name = volume_info[0][3]
-        fs_type = volume_info[0][4]
-        mount_point = volume_info[0][5]
-        pool_name = volume_info[0][6]
-        create_time = volume_info[0][7]
-        update_time = volume_info[0][8]
+        cluster_uuid = volume_info[0][0]
+        pool_name = volume_info[0][1]
+        volume_name = volume_info[0][2]
+        volume_size = volume_info[0][3]
+        volume_type = volume_info[0][4]
+        volume_status = volume_info[0][5]
+        image_name = volume_info[0][6]
+        fs_type = volume_info[0][7]
+        mount_point = volume_info[0][8]
+        create_time = volume_info[0][9]
+        update_time = volume_info[0][10]
 
         v_disk_info = {
                           "volume_uuid": volume_uuid,
+                          "cluster_uuid": cluster_uuid,
+                          "pool_name": pool_name,
                           "volume_name": volume_name,
                           "volume_size": volume_size,
+                          "volume_type": volume_type,
                           "volume_status": volume_status,
                           "image_name": image_name,
                           "fs_type": fs_type,
                           "mount_point": mount_point,
-                          "pool_name": pool_name,
                           "create_time": create_time,
                           "update_time": update_time
                       }
@@ -278,25 +294,29 @@ class CloudDiskManager(object):
         disk_list = []
         for volume_info in user_volumes_list:
             volume_uuid = volume_info[0]
-            volume_name = volume_info[1]
-            volume_size = volume_info[2]
-            volume_status = volume_info[3]
-            image_name = volume_info[4]
-            fs_type = volume_info[5]
-            mount_point = volume_info[6]
-            pool_name = volume_info[7]
-            create_time = volume_info[8]
-            update_time = volume_info[9]
+            cluster_uuid = volume_info[1]
+            pool_name = volume_info[2]
+            volume_name = volume_info[3]
+            volume_size = volume_info[4]
+            volume_type = volume_info[5]
+            volume_status = volume_info[6]
+            image_name = volume_info[7]
+            fs_type = volume_info[8]
+            mount_point = volume_info[9]
+            create_time = volume_info[10]
+            update_time = volume_info[11]
 
             v_disk_info = {
                               "volume_uuid": volume_uuid,
+                              "cluster_uuid": cluster_uuid,
+                              "pool_name": pool_name,
                               "volume_name": volume_name,
                               "volume_size": volume_size,
+                              "volume_type": volume_type,
                               "volume_status": volume_status,
                               "image_name": image_name,
                               "fs_type": fs_type,
                               "mount_point": mount_point,
-                              "pool_name": pool_name,
                               "create_time": create_time,
                               "update_time": update_time
                           }
@@ -358,25 +378,29 @@ class CloudDiskManager(object):
         disk_list = []
         for volume_info in user_volumes_list:
             volume_uuid = volume_info[0]
-            volume_name = volume_info[1]
-            volume_size = volume_info[2]
-            volume_status = volume_info[3]
-            image_name = volume_info[4]
-            fs_type = volume_info[5]
-            mount_point = volume_info[6]
-            pool_name = volume_info[7]
-            create_time = volume_info[8]
-            update_time = volume_info[9]
+            cluster_uuid = volume_info[1]
+            pool_name = volume_info[2]
+            volume_name = volume_info[3]
+            volume_size = volume_info[4]
+            volume_type = volume_info[5]
+            volume_status = volume_info[6]
+            image_name = volume_info[7]
+            fs_type = volume_info[8]
+            mount_point = volume_info[9]
+            create_time = volume_info[10]
+            update_time = volume_info[11]
 
             v_disk_info = {
                               "volume_uuid": volume_uuid,
+                              "cluster_uuid": cluster_uuid,
+                              "pool_name": pool_name,
                               "volume_name": volume_name,
                               "volume_size": volume_size,
+                              "volume_type": volume_type,
                               "volume_status": volume_status,
                               "image_name": image_name,
                               "fs_type": fs_type,
                               "mount_point": mount_point,
-                              "pool_name": pool_name,
                               "create_time": create_time,
                               "update_time": update_time
                           }

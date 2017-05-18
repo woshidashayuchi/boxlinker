@@ -49,6 +49,7 @@ status_code = {
         532: "Ceph osd delete failure",
         533: "Ceph osd reweight failure",
         534: "Ceph pool create failure",
+        535: "Ceph cluster mount failure",
         597: "RabbitMQ rpc client exec timeout",
         598: "RabbitMQ rpc client exec error",
         599: "RabbitMQ rpc server exec error",
