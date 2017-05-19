@@ -17,7 +17,7 @@ class CertifyManager(object):
     def create_manager(self, context):
         try:
             k_ret = self.certify_driver.create_cer_driver(context)
-            if k_ret.get('code') != 0:
+            if k_ret.get('status') != 0:
                 return k_ret
         except Exception, e:
             log.error('create the secret to k8s error, reason is: %s' % e)

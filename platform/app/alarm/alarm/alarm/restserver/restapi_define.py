@@ -141,16 +141,20 @@ class UpApiDefine(Resource):
         return ret
 
     def put(self, alarm_uuid):
+        log.info('111111111----')
         try:
             token = request.headers.get('token')
             token_ret = token_auth(token)
         except Exception, e:
             log.error('Token check error, reason=%s' % e)
             return request_result(201)
-
-        parameters = json.loads(request.get_data())
-        parameters['alarm_uuid'] = alarm_uuid
-        parameters.update(token_ret.get('result'))
+        try:
+            parameters = json.loads(request.get_data())
+            parameters['alarm_uuid'] = alarm_uuid
+            parameters.update(token_ret.get('result'))
+        except Exception, e:
+            log.error('parameters explain error, reason is: %s' % e)
+            return request_result(101)
 
         context = context_data(token, alarm_uuid, "update")
         ret = self.alarm.only_update_alarm(context, parameters)
@@ -214,3 +218,18 @@ class AlarmApiDefine(Resource):
 
     def delete(self):
         pass
+
+
+class AdminResourceDefine(Resource):
+
+    def __init__(self):
+        pass
+
+    def get(self):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+            log.info('admin token check result is: %s' % token_ret)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return request_result(201)

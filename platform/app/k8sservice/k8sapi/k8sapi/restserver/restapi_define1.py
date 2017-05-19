@@ -12,6 +12,7 @@ from common.parameters import context_data
 from common.token_ucenterauth import token_auth
 from rpcapi.rpc_client import KubernetesRpcClient
 from rpcapi.rpc_client import CertifyRpcClient
+from rpcapi.rpc_client import AdminServiceRpcClient
 
 
 class ServicesApi(Resource):
@@ -276,5 +277,28 @@ class CertifyUp(Resource):
         context = context_data(token, certify_uuid, "update", source_ip)
 
         ret = self.certify.update_certify(context, parameters)
+
+        return ret
+
+
+class AdminService(Resource):
+    def __init__(self):
+        self.admin_service = AdminServiceRpcClient()
+
+    def get(self):
+        try:
+            token = request.headers.get('token')
+            token_ret = token_auth(token)
+        except Exception, e:
+            log.error('Token check error, reason=%s' % e)
+            return request_result(201)
+
+        context = context_data(token, "service_list", "read")
+
+        try:
+            ret = self.admin_service.get_all_services(context, token_ret)
+        except Exception, e:
+            log.error('error, reason is: %s' % e)
+            return request_result(601)
 
         return ret

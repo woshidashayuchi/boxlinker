@@ -7,6 +7,7 @@ p_path = sys.path[0] + '/..'
 sys.path.append(p_path)
 
 from common.acl import acl_check
+from common.logs import logging as log
 from manager.alarm_manager import AlarmManager
 
 
@@ -25,6 +26,7 @@ class AlarmRpcAPI(object):
 
     @acl_check
     def alarm_update(self, context, parameters):
+        log.info('5555555555555-----+++')
         return self.alarm_manager.update_manager(parameters)
 
     @acl_check
@@ -33,6 +35,7 @@ class AlarmRpcAPI(object):
 
     @acl_check
     def alarm_svc_update(self, context, parameters):
+        log.info('3333333333333333-------++++')
         return self.alarm_manager.alarm_svc_update(parameters)
 
     @acl_check
@@ -50,6 +53,7 @@ class AlarmRpcAPI(object):
 
     @acl_check
     def only_update_alarm(self, context, parameters):
+        log.info('go rpc_api_define.....')
         return self.alarm_manager.only_update_alarm(parameters)
 
     @acl_check

@@ -248,3 +248,24 @@ class MetalWork(object):
             return request_result(0, rc)
 
         return request_result(0, ret)
+
+    def get_container(self, context):
+        try:
+            db_ret = self.service_db.get_container_msg(context)
+        except Exception, e:
+            log.error('at the end, get the detainer container message error, reason is: %s' % e)
+            return request_result(404)
+        container = []
+        for i in db_ret:
+            container_port = i[0]
+            protocol = i[1]
+            access_mode = i[2]
+            access_scope = i[3]
+
+            container.append({'container_port': container_port, 'protocol': protocol,
+                              'access_mode': access_mode, 'access_scope': access_scope})
+
+        con = {'container': container}
+        context.update(con)
+
+        return context

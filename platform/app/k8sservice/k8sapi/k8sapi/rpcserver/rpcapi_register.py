@@ -21,6 +21,8 @@ class RabbitmqResponse(object):
 
         self.rpcapi_define_certify = rpcapi_define.CertifyRpcAPI()
 
+        self.rpcapi_define_admin = rpcapi_define.AdminServiceRpcAPI()
+
         self.rpc_api.add_resource('svc_cre', self.rpcapi_define.service_create)
 
         self.rpc_api.add_resource('svc_query', self.rpcapi_define.service_query)
@@ -40,6 +42,8 @@ class RabbitmqResponse(object):
         self.rpc_api.add_resource('certify_query', self.rpcapi_define_certify.query_certify)
 
         self.rpc_api.add_resource('certify_update', self.rpcapi_define_certify.update_certify)
+
+        self.rpc_api.add_resource('admin_services_get', self.rpcapi_define_admin.get_all_services)
 
     def rpc_exec(self, rpc_body):
 

@@ -32,7 +32,7 @@ class DeleteManager(object):
         try:
             ret_volume = self.kuber.update_volume_status(context)
             if ret_volume is False:
-                log.info('UPDATE THE VOLUME STATUS ERROR')
+                log.error('update the volume status error')
                 return request_result(503)
         except Exception, e:
             log.error('update volume status error, reason is: %s' % e)

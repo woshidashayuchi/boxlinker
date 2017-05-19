@@ -24,6 +24,8 @@ class AlarmDriver(object):
         self.k8s_pod = conf.k8s_pod
         self.pods_rbt_client = PodsRpcClient()
         self.email_api = conf.email_api
+        self.login = conf.login_url
+        self.all_svc = conf.all_svc_url
 
     @staticmethod
     def sql_driver(parameters):
@@ -165,6 +167,20 @@ class AlarmDriver(object):
         if memory_usage/memory_limit <= memory_value:
             self.send_email(memory_usage)
 
+    def get_admin_token(self):
+        try:
+            admin_data = {'user_name': 'service', 'password': 'service@2017'}
+            ret = json.loads(requests.post(self.login, json.dumps(admin_data), timeout=5).text)
+            log.info('admin login the result is: %s,type is: %s' % (ret, type(ret)))
+            if ret.get('status') != 0:
+                return False
+
+            return ret.get('result').get('user_token')
+
+        except Exception, e:
+            log.error('get the admin token error, reason is: %s' % e)
+            return False
+
     def alarm_driver(self, dict_data):
         base_sql = conf.basesql
         now_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -183,86 +199,107 @@ class AlarmDriver(object):
             log.error('get the alarm rules from database error, reason is: %s' % e)
             raise Exception('get the alarm rules from database error')
 
+        admin_token = self.get_admin_token()
+        header = {'token': admin_token}
+        if not admin_token:
+            raise Exception('get token error')
+
+        try:
+            svc_ret = requests.get(self.all_svc, headers=header)
+            log.info('------------------------------%s' % svc_ret)
+            svc_ret = json.loads(svc_ret.text)
+            if svc_ret.get('status') != 0:
+                raise Exception('get the all svc1 error')
+        except Exception, e:
+            log.error('get the all svc error, reason is: %s' % e)
+            raise Exception('get the all svc error')
+
         # 获取每个对应服务下的pod名称
         for i in q_ret:
-            project_uuid = i[0]
-            service_name = i[1]
-            service_uuid = i[2]
-            cpu_value = i[3]
-            memory_value = i[4]
-            network_value = i[5]
-            storage_value = i[6]
-            time_span = i[7]
-            alarm_time = i[8]  # 00~03 03~06 06~09 09~12 12~15 15~18 18~21 21~24
+            # project_uuid = i[0]
+            # service_name = i[1]
+            service_uuid = i[0]
+            cpu_value = i[1]
+            memory_value = i[2]
+            network_value = i[3]
+            storage_value = i[4]
+            time_span = i[5]
+            alarm_time = i[6]  # 00~03 03~06 06~09 09~12 12~15 15~18 18~21 21~24
             pod_name = ""
-            try:
-                pods_name = self.get_pods_name(project_uuid, service_name)
-                log.info('from k8s api get the pod_name is %s' % str(pods_name))
-            except Exception, e:
-                log.error('get the pod message error, reason is: %s' % e)
-                raise Exception('get the pod message error')
+            for x in svc_ret.get('result'):
+                if x.get('service_uuid') == service_uuid:
+                    project_uuid = x.get('project_uuid')
+                    service_name = x.get('service_name')
+                    try:
+                        pods_name = self.get_pods_name(project_uuid, service_name)
+                        log.info('from k8s api get the pod_name is %s' % str(pods_name))
+                    except Exception, e:
+                        log.error('get the pod message error, reason is: %s' % e)
+                        raise Exception('get the pod message error')
 
-            for j in pods_name:
-                dict_data['project_uuid'] = project_uuid
-                dict_data['pod_name'] = j
-                try:
-                    sql_dict = self.sql_driver(dict_data)
-                    log.info('sql_dict is: %s' % sql_dict)
-                except Exception, e:
-                    log.error('create the query sql error, reason is:%s' % e)
-                    raise Exception('sql create error')
+                    for j in pods_name:
+                        dict_data['project_uuid'] = project_uuid
+                        dict_data['pod_name'] = j
+                        try:
+                            sql_dict = self.sql_driver(dict_data)
+                            log.info('sql_dict is: %s' % sql_dict)
+                        except Exception, e:
+                            log.error('create the query sql error, reason is:%s' % e)
+                            raise Exception('sql create error')
 
-                try:
+                        try:
 
-                    limit_sql = sql_dict.get('limit_sql')
-                    limit_ret = json.loads(requests.get(base_sql+limit_sql).text)
-                    for m in limit_ret.get('results'):
-                        for n in m.get('series'):
-                            if dict_data.get('type') == 'memory':
-                                memory_limit = n.get('values')[1][1]
-                            if dict_data.get('type') == 'cpu':
-                                cpu_limit = n.get('values')[1][1]
+                            limit_sql = sql_dict.get('limit_sql')
+                            limit_ret = json.loads(requests.get(base_sql+limit_sql).text)
+                            for m in limit_ret.get('results'):
+                                for n in m.get('series'):
+                                    if dict_data.get('type') == 'memory':
+                                        memory_limit = n.get('values')[1][1]
+                                    if dict_data.get('type') == 'cpu':
+                                        cpu_limit = n.get('values')[1][1]
 
-                    usage_sql = sql_dict.get('usage_sql')
-                    usage_ret = json.loads(requests.get(base_sql+usage_sql).text)
-                    sum_m = 0
-                    sum_c = 0
-                    for x in usage_ret.get('results'):
-                        for y in x.get('series'):
-                            for l in range(2, 16):
-                                if dict_data.get('type') == 'memory':
-                                    sum_m = sum_m+y.get('values')[l][1]
-                                if dict_data.get('type') == 'cpu':
-                                    sum_c = sum_c+y.get('values')[l][1]
-                    memory_usage = sum_m/14
-                    cpu_usage = sum_c/14
+                            usage_sql = sql_dict.get('usage_sql')
+                            usage_ret = json.loads(requests.get(base_sql+usage_sql).text)
+                            sum_m = 0
+                            sum_c = 0
+                            for x in usage_ret.get('results'):
+                                for y in x.get('series'):
+                                    for l in range(2, 16):
+                                        if dict_data.get('type') == 'memory':
+                                            sum_m = sum_m+y.get('values')[l][1]
+                                        if dict_data.get('type') == 'cpu':
+                                            sum_c = sum_c+y.get('values')[l][1]
+                            memory_usage = sum_m/14
+                            cpu_usage = sum_c/14
 
-                    alarm_start_time = int(alarm_time.split('~')[0])
-                    alarm_end_time = int(alarm_time.split('~', 1)[1])
-                    log.info('from database get the alarm time, latest time is: %s, '
-                             'last time is: %s' % (alarm_start_time, alarm_end_time))
-                    if memory_limit != 0 and memory_usage/memory_limit*100 >= memory_value:
-                        to_email.append({'usage': str(round(memory_usage/memory_limit*100, 2))+'%',
-                                         'service_name': service_name,
-                                         'time': now_time})
+                            alarm_start_time = int(alarm_time.split('~')[0])
+                            alarm_end_time = int(alarm_time.split('~')[1])
+                            log.info('from database get the alarm time, latest time is: %s, '
+                                     'last time is: %s' % (alarm_start_time, alarm_end_time))
+                            if memory_limit != 0 and memory_usage/memory_limit*100 >= memory_value:
+                                to_email.append({'usage': str(round(memory_usage/memory_limit*100, 2))+'%',
+                                                 'service_name': service_name,
+                                                 'time': now_time})
 
-                        # self.send_email(str(round(memory_usage/memory_limit*100, 2))+'%')
-                    if cpu_limit != 0 and cpu_usage/cpu_limit*100 >= cpu_value:
-                        log.info('explain the memory monitor data result is:cpu_usage=%s,cpu_limit=%s,'
-                                 'cpu_value=%s,shang=%s' % (cpu_usage, cpu_limit,
-                                                            cpu_value, cpu_usage/cpu_limit))
+                                # self.send_email(str(round(memory_usage/memory_limit*100, 2))+'%')
+                            if cpu_limit != 0 and cpu_usage/cpu_limit*100 >= cpu_value:
+                                log.info('explain the memory monitor data result is:cpu_usage=%s,cpu_limit=%s,'
+                                         'cpu_value=%s,shang=%s' % (cpu_usage, cpu_limit,
+                                                                    cpu_value, cpu_usage/cpu_limit))
 
-                        to_email.append({'usage': str(round(cpu_usage/cpu_limit*100, 2))+'%',
-                                         'service_name': service_name,
-                                         'time': now_time})
-                        # self.send_email(str(round(cpu_usage/cpu_limit*100, 2))+'%')
-                except Exception, e:
-                    log.error('explain the data error, reason is: %s' % e)
-                    raise Exception('explain the memory data error')
-
+                                to_email.append({'usage': str(round(cpu_usage/cpu_limit*100, 2))+'%',
+                                                 'service_name': service_name,
+                                                 'time': now_time})
+                                # self.send_email(str(round(cpu_usage/cpu_limit*100, 2))+'%')
+                        except Exception, e:
+                            log.error('explain the data error, reason is: %s' % e)
+                            raise Exception('explain the memory data error')
+        log.info('now_hour=======%s,alarm_start_time=====%s,alarm_end_time=====%s' % (now_hour, alarm_start_time,
+                                                                                      alarm_end_time))
         if alarm_start_time <= now_hour < alarm_end_time:
             # self.send_email(to_email, service_uuid)
             log.info('will send the email data is: %s ' % to_email)
+
         return
 
     def get_detail_msg(self, dict_data):

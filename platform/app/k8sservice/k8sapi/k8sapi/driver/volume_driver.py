@@ -45,11 +45,13 @@ class VolumeDriver(object):
                 response = self.put_using(dict_data)
 
         if dict_data.get("action").upper() == "PUT":
+
             for i in volume:
                 volume_uuid = i.get("volume_uuid")
                 json_status = {"volume_uuid": volume_uuid, "volume_status": "unused"}
                 dict_data.update(json_status)
                 response = self.put_using(dict_data)
+                log.info('delete the volumes data is fuck: %s' % dict_data)
 
         return response
 

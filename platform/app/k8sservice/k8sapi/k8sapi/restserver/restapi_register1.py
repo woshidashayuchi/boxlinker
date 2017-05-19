@@ -27,5 +27,8 @@ def rest_app_run():
     api.add_resource(restapi_define.CertifyUp,
                      '/api/v1.0/application/certifies/<certify_uuid>')
 
-    app.run(host="0.0.0.0", port=9000, threaded=True, debug=True)
+    api.add_resource(restapi_define.AdminService,
+                     '/api/v1.0/application/admin/services')
+
+    app.run(host="0.0.0.0", port=9000, threaded=True, debug=False)
 

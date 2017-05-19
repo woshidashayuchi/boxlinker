@@ -120,3 +120,17 @@ class CertifyRpcClient(object):
             log.error('Rpc client exec error, reason=%s' % e)
             return request_result(598)
 
+
+class AdminServiceRpcClient(object):
+    def __init__(self):
+        self.rbtmq = RabbitmqClient()
+        self.queue = conf.call_queue
+        self.timeout = 60
+
+    def get_all_services(self, context, parameters=None):
+        try:
+            rpc_body = rpc_data("admin_services_get", context, parameters)
+            return self.rbtmq.rpc_call_client(self.queue, self.timeout, rpc_body)
+        except Exception, e:
+            log.error('Rpc client exec error, reason=%s' % e)
+            return request_result(598)

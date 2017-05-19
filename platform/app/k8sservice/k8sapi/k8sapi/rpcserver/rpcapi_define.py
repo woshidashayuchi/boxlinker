@@ -15,6 +15,7 @@ from manager.query_manager import QueryManager
 from manager.delete_manager import DeleteManager
 from manager.update_manager import UpdateManager
 from manager.certify_manager.certify_manager import CertifyManager
+from manager.admin_manager.admin_manager import AdminServiceManager
 
 
 class KubernetesRpcAPI(object):
@@ -227,3 +228,12 @@ class CertifyRpcAPI(object):
     @acl_check
     def update_certify(self, context, parameters):
         return self.certify_manager.update_manager(parameters)
+
+
+class AdminServiceRpcAPI(object):
+    def __init__(self):
+        self.admin_services_manager = AdminServiceManager()
+
+    @acl_check
+    def get_all_services(self, context, parameters):
+        return self.admin_services_manager.get_all_services()

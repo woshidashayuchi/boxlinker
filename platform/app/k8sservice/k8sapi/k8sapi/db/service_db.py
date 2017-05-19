@@ -9,6 +9,7 @@ from unit_element import font_infix_element, rc_infix_element, container_element
     normal_call, uuid_ele
 from common.db_operate import DbOperate
 from common.time_log import func_time_log
+from conf import conf
 
 
 class ServiceDB(MysqlInit):
@@ -16,6 +17,7 @@ class ServiceDB(MysqlInit):
     def __init__(self):
         super(ServiceDB, self).__init__()
         self.operate = DbOperate()
+        self.conf = conf
 
     def init_insert(self):
 
@@ -228,6 +230,15 @@ class ServiceDB(MysqlInit):
 
         return rc_ret, containers_ret, env_ret, volume_ret
 
+    def get_container_msg(self, dict_data):
+        project_uuid = dict_data.get('project_uuid')
+        service_name = dict_data.get('service_name')
+        sql = "select container_port,protocol,access_mode,access_scope from containers WHERE " \
+              "rc_uuid=(select rc_uuid from font_service WHERE project_uuid='%s' AND " \
+              "service_name='%s')" % (project_uuid, service_name)
+
+        return super(ServiceDB, self).exec_select_sql(sql)
+
     def get_service_name(self, dict_data):
 
         sql = "select service_name from font_service where uuid='%s'" % dict_data.get('service_uuid')
@@ -318,6 +329,27 @@ class ServiceDB(MysqlInit):
 
         sql_update_time = "update font_service SET service_update_time=now() WHERE rc_uuid='%s'" % rc_uuid
         super(ServiceDB, self).exec_update_sql(sql_update_time)
+
+    def http_to_tcp_container(self, project_uuid, service_name, container):
+        container_port = container.get('container_port')
+        protocol = container.get('protocol')
+        access_mode = container.get('access_mode')
+        access_scope = container.get('access_scope')
+        tcp_port = container.get('tcp_port')
+        tcp_domain = self.conf.lb+str(tcp_port)
+        uuid_c = str(uuid.uuid4())
+
+        sql = "insert into containers(uuid, rc_uuid, container_port, protocol, access_mode," \
+              "access_scope,tcp_port, tcp_domain) VALUES ('%s', (select rc_uuid from font_service where " \
+              "service_name='%s' and project_uuid='%s'),%d,'%s','%s','%s','%s','%s')" % (uuid_c, service_name,
+                                                                                         project_uuid,
+                                                                                         int(container_port),
+                                                                                         protocol,
+                                                                                         access_mode,
+                                                                                         access_scope, tcp_port,
+                                                                                         tcp_domain)
+        log.info('http service change to tcp service...insert the tcp_port sql is: %s' % sql)
+        return super(ServiceDB, self).exec_update_sql(sql)
 
     def get_svc_port(self, dict_data):
         project_uuid, service_name = normal_call(dict_data)
@@ -731,7 +763,7 @@ class CertifyDB(MysqlInit):
         self.operate = DbOperate()
 
     def infix_certify(self, dict_data):
-
+        log.info('certify in database , the data is: %s' % dict_data)
         content = dict_data.get('content')
         crt = content.get('tls.crt')
         tls_key = content.get('tls.key')
@@ -767,3 +799,14 @@ class CertifyDB(MysqlInit):
         sql = "update certify SET crt='%s', tls_key='%s' WHERE uuid='%s'" % (crt, tls_key, certify_uuid)
 
         return super(CertifyDB, self).exec_update_sql(sql)
+
+
+class AdminServicesDB(MysqlInit):
+    def __init__(self):
+        super(AdminServicesDB, self).__init__()
+
+    def get_all_no_stopping_svc(self):
+        sql = "select uuid service_uuid, project_uuid, service_name from font_service WHERE lifecycle is NULL or " \
+              "lifecycle=''"
+
+        return super(AdminServicesDB, self).exec_select_sql(sql)

@@ -164,14 +164,15 @@ class AlarmManager(object):
 
         try:
             result = self.query_result_work(ret)[0]
-            dict_data.update(result)
+            result.update(dict_data)
+            log.info('to update the database json is: %s' % result)
         except Exception, e:
             log.error('ecplain the data error, reason is: %s' % e)
             return request_result(601)
 
         try:
-            self.alarm_db.only_update_alarm(dict_data)
-            return request_result(0, {'result': 'ok'})
+            self.alarm_db.only_update_alarm(result)
+            return request_result(0, {'resource_uuid': dict_data.get('alarm_uuid')})
         except Exception, e:
             log.error('database update error, reason is: %s' % e)
             return request_result(403)
@@ -192,7 +193,7 @@ class AlarmManager(object):
             if up_ret is not None:
                 return request_result(402)
 
-            return request_result(0, 'successfully')
+            return request_result(0, {'resource_uuid': dict_data.get('alarm_uuid')})
         except Exception, e:
             log.error('delete the database error, reason is: %s' % e)
             return request_result(402)

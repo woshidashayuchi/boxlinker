@@ -5,6 +5,7 @@
 from common.logs import logging as log
 from common.mysql_base import MysqlInit
 from common.logs import logging as log
+from time import sleep
 
 
 class ServiceDB(MysqlInit):
@@ -17,14 +18,19 @@ class ServiceDB(MysqlInit):
 
         sql = "select a.uuid, b.cm_format from font_service a, replicationcontrollers b WHERE " \
               "a.project_uuid='%s' and a.service_name='%s' AND a.rc_uuid=b.uuid" % (project_uuid, service_name)
-
+        log.info('create the service, get the message for the billings sql is: %s' % sql)
         try:
+            sleep(2)
             ret = super(ServiceDB, self).exec_select_sql(sql)
+
+            log.info('for billing,--------%s' % type(ret))
+            log.info(ret)
+            # log.info('for billing,select the database, get the data is: %s' % ret)
         except Exception, e:
             log.error('exec the select sql error, reason is: %s' % e)
             raise Exception(e)
 
-        log.info('the database select result is: %s' % ret)
+        # log.info('the database select result is: %s' % ret)
         if len(ret[0]) == 0:
             return False
 

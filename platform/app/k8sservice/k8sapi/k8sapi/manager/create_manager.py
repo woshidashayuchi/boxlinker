@@ -122,20 +122,20 @@ class CreateManager(object):
             return request_result(501)
         context['team_name'] = team_name
         context['project_name'] = project_name
+        context['action'] = 'post'
+
+        ret = self.kuber_driver.create_service(context)
+        if ret is not True:
+            log.info('kubernetes resource create result is: %s' % ret)
+            return request_result(501)
 
         try:
-            context['action'] = 'post'
             change_volume = self.volume.storage_status(context)
             if change_volume is False:
                 log.info('VOLUME STATUS UPDATE ERROR,CHANGE_VOLUME RESULT IS: %s' % change_volume)
                 return request_result(501)
         except Exception, e:
             log.error('change the volume status error, reason is:%s' % e)
-            return request_result(501)
-
-        ret = self.kuber_driver.create_service(context)
-        if ret is not True:
-            log.info('kubernetes resource create result is: %s' % ret)
             return request_result(501)
 
         if context.get('rtype') != 'lifecycle':
@@ -166,6 +166,7 @@ class CreateManager(object):
                 photo_dir(context)
             except Exception, e:
                 log.error('from the photo url make the photo for service error, reason is: ' % e)
+
             post_es(context, 'service is creating...please wait')
             return request_result(0, {'resource_uuid': infix})
         else:

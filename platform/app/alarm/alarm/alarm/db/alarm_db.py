@@ -66,9 +66,9 @@ class AlarmDB(MysqlInit):
 
     def get_alarm_svc(self):
 
-        sql = "select b.project_uuid,b.service_name,b.uuid,a.cpu_value,a.memory_value," \
+        sql = "select c.service_uuid,a.cpu_value,a.memory_value," \
               "a.network_value,a.storage_value,a.time_span,a.alarm_time FROM " \
-              "font_service b,alarming a,alarm_service_rules c WHERE (b.uuid=c.service_uuid and a.uuid=c.alarm_uuid)"
+              "alarming a,alarm_service_rules c WHERE a.uuid=c.alarm_uuid"
         log.info('query the alarm message sql is: %s' % sql)
 
         return super(AlarmDB, self).exec_select_sql(sql)
@@ -205,26 +205,22 @@ class AlarmDB(MysqlInit):
     def only_update_alarm(self, dict_data):
 
         alarm_uuid = dict_data.get('alarm_uuid')
-        wise = 0
-        cpu_unit = dict_data.get('cpu_unit')
+        alarm_name = dict_data.get('alarm_name')
         cpu_value = dict_data.get('cpu_value')
-        memory_unit = dict_data.get('memory_unit')
         memory_value = dict_data.get('memory_value')
-        network_unit = dict_data.get('network_unit')
         network_value = dict_data.get('network_value')
-        storage_unit = dict_data.get('storage_unit')
         storage_value = dict_data.get('storage_value')
         time_span = dict_data.get('time_span')
         alarm_time = dict_data.get('alarm_time')
         email = dict_data.get('email')
         phone = dict_data.get('phone')
 
-        sql = "update alarming set wise=%d,cpu_unit=%d,cpu_value='%s',memory_unit=%d," \
-              "memory_value='%s'," \
-              "network_unit=%d,network_value='%s',storage_unit=%d,storage_value='%s'," \
+        sql = "update alarming set wise='%s',cpu_value=%d," \
+              "memory_value=%d," \
+              "network_value=%d,storage_value=%d," \
               "time_span='%s',alarm_time='%s',email='%s',phone='%s'" \
-              "WHERE uuid='%s'" % (wise, cpu_unit, cpu_value, memory_unit, memory_value, network_unit,
-                                   network_value, storage_unit, storage_value, time_span,
+              "WHERE uuid='%s'" % (alarm_name, cpu_value, memory_value,
+                                   network_value, storage_value, time_span,
                                    alarm_time, email, phone, alarm_uuid)
 
         return super(AlarmDB, self).exec_update_sql(sql)
@@ -241,3 +237,19 @@ class AlarmDB(MysqlInit):
         sql = "delete from alarming WHERE uuid='%s'" % (dict_data.get('alarm_uuid'))
 
         return super(AlarmDB, self).exec_update_sql(sql)
+
+
+class DeviceDB(MysqlInit):
+
+    def __init__(self):
+        super(DeviceDB, self).__init__()
+        self.element_ex = ElementExplain()
+
+    def catch_message(self, dict_data):
+        log.info('insert thd monitor message to database, the data is: %s' % dict_data)
+        sql = "insert INTO device_alarming(ip, cpu_used, cpu_wa, mem_used, network, disk_used, " \
+              "lb) VALUES ('%s', %f, %f, %f, '%s', '%s', '%s')" % (dict_data.get('ip'), dict_data.get('cpu_used'),
+                                                                   dict_data.get('cpu_wa'), dict_data.get('mem_used'),
+                                                                   dict_data.get('network'), dict_data.get('disk_used'),
+                                                                   dict_data.get('lb'))
+        return super(DeviceDB, self).exec_update_sql(sql)

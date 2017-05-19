@@ -21,8 +21,12 @@ def rest_app_run():
     api.add_resource(restapi_define.RestApiDefine,
                      '/api/v1.0/application/services/alarm/<alarm_uuid>')
 
-    # 具体服务维护,有修改与删除某条规则之责
+    # 规则维护,有修改与删除某条规则之责
     api.add_resource(restapi_define.UpApiDefine,
                      '/api/v1.0/application/alarm/<alarm_uuid>')
+
+    # 管理员:平台资源的告警
+    api.add_resource(restapi_define.AdminResourceDefine,
+                     '/api/v1.0/device/alarms')
 
     app.run(host="0.0.0.0", port=9000, threaded=True, debug=True)

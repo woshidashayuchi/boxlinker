@@ -4,6 +4,8 @@
 import re
 import json
 import requests
+import time
+import copy
 from conf import conf
 from common.code import request_result
 from common.logs import logging as log
@@ -60,7 +62,6 @@ class KubernetesDriver(object):
         return result
 
     def service_domain(self, context):
-
         ser = context.get('container')
         service_name = context.get('service_name')
         team_name = context.get('team_name')
@@ -92,12 +93,13 @@ class KubernetesDriver(object):
                     ran_port = '30000'
                     tcp_lb = '%s:%s' % (ran_port, i.get('container_port'))
                 else:
-                    if context.get('container_update') == 'yes':
+                    if context.get('container_update') == 'yes' or context.get('rtype') == 'container':
                         try:
                             ran_port = self.service_db.get_svc_port(context)[0][0]
 
                         except Exception, e:
                             log.error('get the tcp_port from database error, reason is: %s' % e)
+
                     else:
                         ran_port = int(using_port)+m
                     m += 1
@@ -362,7 +364,8 @@ class KubernetesDriver(object):
                 conf_map_json = {"apiVersion": "v1",
                                  "kind": "ConfigMap",
                                  "metadata": {"name": service_name, "namespace": namespace,
-                                              "annotations": {"loadbalancer/lb.name": "user"}},
+                                              "annotations": {"loadbalancer/lb.name": "user",
+                                                              "loadbalancer/lb.date": str(time.time())}},
                                  "data": {"host": "lb1.boxlinker.com", "hostport": str(container_port),
                                           "servicename": service_name}
                                  }
@@ -402,8 +405,7 @@ class KubernetesDriver(object):
                         "containers": [
                            {"name": service_name, "image": image_name+":"+image_version, "imagePullPolicy": pullpolicy,
                             "command": command, "ports": self.container(container), "env": self.env(env),
-                            "resources": {"limits": {# "cpu": container_cpu,
-                                                     "memory": container_memory}},
+                            # "resources": {"limits": {"cpu": container_cpu, "memory": container_memory}},
                             "volumeMounts": volume_mounts}
                         ], "volumes": volumes,
                      }
@@ -1098,6 +1100,67 @@ class KubernetesDriver(object):
 
         return True
 
+    def http_tcp_change(self, context):
+        namespace = context.get('project_uuid')
+        name = context.get('service_name')
+        try:
+            db_ret = self.service_db.get_container_msg(context)
+            container = []
+            for i in db_ret:
+                container_port = i[0]
+                protocol = i[1]
+                access_mode = i[2]
+                access_scope = i[3]
+
+                container.append({'container_port': container_port, 'protocol': protocol,
+                                  'access_mode': access_mode, 'access_scope': access_scope})
+        except Exception, e:
+            log.error('get the container message from databse error, reason is: %s' % e)
+            raise Exception('get the container message from databse error')
+
+        for m in container:
+            if m.get('access_mode') == 'http' or m.get('access_mode') == 'HTTP':
+                for n in context.get('container'):
+                    if n.get('access_mode') == 'tcp' or n.get('access_mode') == 'TCP':
+                        del_ing_json = {'namespace': namespace, 'name': name, 'rtype': 'ingress'}
+                        ing_ret = self.krpc_client.delete_service_a_rc(del_ing_json)
+                        if ing_ret.get('code') != 200 and ing_ret.get('code') != 404:
+                            raise Exception('ingress delete error when change the http tp tcp')
+
+                        config_map_json = self.add_config_map(context)
+                        if config_map_json is not None and config_map_json is not False:
+                            config_map_json = self.easy_struct(context, config_map_json)
+                            config_map_json['rtype'] = 'configmaps'
+                            self.krpc_client.create_services(config_map_json)
+                            tcp_port = int(self.service_db.max_used_port()[0][0])+1
+                            n['tcp_port'] = tcp_port
+                            self.service_db.http_to_tcp_container(namespace, name, n)
+                        else:
+                            log.error('config map struct json error')
+                            raise Exception('config map struct json error')
+
+                        return True
+
+            if m.get('access_mode') == 'tcp' or m.get('access_mode') == 'TCP':
+                for n in context.get('container'):
+                    if n.get('access_mode') == 'http' or n.get('access_mode') == 'HTTP':
+                        del_confmap_json = {'namespace': namespace, 'name': name, 'rtype': 'configmaps'}
+                        configmap_ret = self.krpc_client.delete_service_a_rc(del_confmap_json)
+                        if configmap_ret.get('code') != 200 and configmap_ret.get('code') != 404:
+                            raise Exception('configmap delete error when change the tcp tp http')
+
+                        ingress_json = self.add_ingress_http(context)
+                        if ingress_json is not None and ingress_json is not False:
+                            ingress_json = self.easy_struct(context, ingress_json)
+                            self.krpc_client.create_ingress(ingress_json)
+
+                        else:
+                            log.error('ingress json struct error')
+                            raise Exception('ingress json struct error')
+
+                        return True
+        return False
+
     def update_certify(self, context):
         try:
             self.service_db.update_ingress_certify(context)
@@ -1115,11 +1178,14 @@ class KubernetesDriver(object):
 
     def update_volume_status(self, dict_data):
         using_volume = self.service_db.get_using_volume(dict_data)
+        log.info('from database get the using volumes is: %s' % using_volume)
         ch_volume = dict()
         to_change_volume = []
         for i in using_volume:
             ch_volume['volume_uuid'] = i.get('volume_uuid')
-            to_change_volume.append(ch_volume)
+            to_change_volume.append(copy.deepcopy(ch_volume))
+            log.info('explain the database data ,ch_volume is: %s,to_change_volume is: %s' % (ch_volume,
+                                                                                              to_change_volume))
 
         result = self.volume.storage_status({'volume': to_change_volume, 'action': 'put',
                                              'token': dict_data.get('token')})
@@ -1169,6 +1235,11 @@ class KubernetesDriver(object):
     def update_container(self, context):
         context['container_update'] = 'yes'
         try:
+            change_check = self.http_tcp_change(context)
+        except Exception, e:
+            log.error('check if the service is change with http and tcp error, reason is: %s' % e)
+            return request_result(502)
+        try:
             con_ret = self.check_domain_use(context)
         except Exception, e:
             log.error('get the domain message error, reason is: %s' % e)
@@ -1210,12 +1281,13 @@ class KubernetesDriver(object):
 
         try:
             self.service_db.update_container(context)
-            ingress_ret = self.update_ingress(context)
-            config_ret = self.update_configmap(context)
-            if ingress_ret.get('kind') != 'Ingress' or config_ret.get('kind') != 'ConfigMap':
-                log.error('update the ingress or configmap error, ')
-                log.info('ingress_ret is: %s, configmap_ret is: %s' % (ingress_ret, config_ret))
-                return request_result(502)
+            if not change_check:
+                ingress_ret = self.update_ingress(context)
+                config_ret = self.update_configmap(context)
+                if ingress_ret.get('kind') != 'Ingress' or config_ret.get('kind') != 'ConfigMap':
+                    log.error('update the ingress or configmap error, ')
+                    log.info('ingress_ret is: %s, configmap_ret is: %s' % (ingress_ret, config_ret))
+                    return request_result(502)
         except Exception, e:
             log.error('container inner database error, reason is: %s' % e)
             return request_result(403)
@@ -1385,32 +1457,113 @@ class KubernetesDriver(object):
             log.error('update the description error, reason is: %s' % e)
             return request_result(403)
 
+    def all_use_up(self, context):
+        try:
+            inner_context = self.metal.get_container(context)
+            ret = self.update_configmap(inner_context)
+            if ret.get('kind') != 'ConfigMap':
+                return request_result(502)
+        except Exception, e:
+            log.error('all update error, reason is: %s' % e)
+            return request_result(502)
+
+        return
+
     def update_main(self, context):
         rtype = context.get('rtype')
 
         if rtype == 'env':
-            return self.update_env(context)
+            ret = self.update_env(context)
+
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'cm':
-            return self.update_cm(context)
+            ret = self.update_cm(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'volume':
-            return self.update_volume(context)
+            ret = self.update_volume(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'container':
-            return self.update_container(context)
+            ret = self.update_container(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'status':
-            return self.update_status(context)
+            ret = self.update_status(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'telescopic':
-            return self.update_telescopic(context)
+            ret = self.update_telescopic(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'policy':
-            return self.update_publish(context)
+            ret = self.update_publish(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'command':
-            return self.update_command(context)
+            ret = self.update_command(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
+
         if rtype == 'domain':
-            return self.update_domain(context)
+            ret = self.update_domain(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
         if rtype == 'identify':
-            return self.update_identify(context)
+            ret = self.update_identify(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
         if rtype == 'description':
-            return self.update_description(context)
+            ret = self.update_description(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
         if rtype == 'certify':
-            return self.update_certify(context)
+            ret = self.update_certify(context)
+            config_ret = self.all_use_up(context)
+            if config_ret is not None:
+                return config_ret
+
+            return ret
 
         return True
