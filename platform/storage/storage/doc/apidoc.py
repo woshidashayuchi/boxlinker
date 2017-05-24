@@ -673,6 +673,7 @@
             {
                 "volume_uuid": "string",
                 "cluster_uuid": "string",
+                "cluster_name": "string",
                 "pool_name": "string",
                 "volume_name": "string",
                 "volume_size": int,
@@ -687,6 +688,7 @@
             {
                 "volume_uuid": "string",
                 "cluster_uuid": "string",
+                "cluster_name": "string",
                 "pool_name": "string",
                 "volume_name": "string",
                 "volume_size": int,
@@ -701,6 +703,7 @@
             {
                 "volume_uuid": "string",
                 "cluster_uuid": "string",
+                "cluster_name": "string",
                 "pool_name": "string",
                 "volume_name": "string",
                 "volume_size": int,
@@ -1063,7 +1066,7 @@
 
 
 """
-@api {get} /api/v1.0/storage/volumes?page_size=<int>&page_num=<int> 6.2 存储卷列表
+@api {get} /api/v1.0/storage/volumes?cluster_uuid=<string>&page_size=<int>&page_num=<int> 6.2 存储卷列表
 @apiName volume list
 @apiGroup 6 volumes
 @apiVersion 1.0.0

@@ -187,11 +187,15 @@ class StorageDriver(object):
 
         return self.ceph_api.rbd_resize(context, parameters)
 
-    def disk_growfs(self, token, cluster_uuid, image_name):
+    def disk_growfs(self, token, cluster_uuid,
+                    image_name, fs_type):
 
         context = {"token": token, "queue": cluster_uuid}
 
-        parameters = {"image_name": image_name}
+        parameters = {
+                         "image_name": image_name,
+                         "fs_type": fs_type
+                     }
 
         return self.ceph_api.rbd_growfs(context, parameters)
 

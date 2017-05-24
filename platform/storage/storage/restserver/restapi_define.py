@@ -593,9 +593,11 @@ class VolumesApi(Resource):
             return request_result(201)
 
         try:
+            cluster_uuid = request.args.get('cluster_uuid')
             page_size = request.args.get('page_size')
             page_num = request.args.get('page_num')
             parameters = {
+                             "cluster_uuid": cluster_uuid,
                              "page_size": page_size,
                              "page_num": page_num
                          }

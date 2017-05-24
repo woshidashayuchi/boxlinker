@@ -23,6 +23,6 @@ class CephDiskManager(object):
 
         return self.ceph_driver.disk_resize(pool_name, disk_name, disk_size)
 
-    def disk_growfs(self, image_name):
+    def disk_growfs(self, image_name, fs_type):
 
-        return self.ceph_driver.disk_growfs(image_name)
+        return self.ceph_driver.disk_growfs(image_name, fs_type)

@@ -3,6 +3,7 @@
 
 import uuid
 import json
+import socket
 
 from conf import conf
 from common.logs import logging as log
@@ -20,6 +21,7 @@ class CephPoolManager(object):
 
         self.storage_db = storage_db.StorageDB()
         self.storage_driver = storage_driver.StorageDriver()
+        self.local_ip = socket.gethostbyname(socket.gethostname())
 
     @operation_record(resource_type='cephpool', action='create')
     def cephpool_create(self, cluster_uuid, pool_type,
@@ -65,14 +67,16 @@ class CephPoolManager(object):
         result = {
                      "cluster_uuid": cluster_uuid,
                      "pool_type": pool_type,
-                     "pool_name": pool_name
+                     "pool_name": pool_name,
+                     "resource_uuid": pool_uuid,
+                     "resource_name": pool_name
                  }
 
         return request_result(0, result)
 
     @operation_record(resource_type='cephpool', action='update')
-    def cephpool_update(self, cluster_uuid,
-                        token, source_ip, resource_name):
+    def pool_update(self, cluster_uuid,
+                    token, source_ip, resource_name):
 
         pool_info = self.storage_driver.cephpool_info(
                          token, cluster_uuid)
@@ -100,10 +104,38 @@ class CephPoolManager(object):
                      "pool_size": pool_size,
                      "avail": avail,
                      "used": used,
-                     "used_rate": used_rate
+                     "used_rate": used_rate,
+                     "resource_uuid": cluster_uuid
                  }
 
         return request_result(0, result)
+
+    def cephpool_update(self):
+
+        try:
+            ret = self.storage_driver.service_token()
+            if int(ret.get('status')) == 0:
+                token = ret['result']['user_token']
+            else:
+                raise(Exception('request_code not equal 0'))
+        except Exception, e:
+            log.error('Get service token error: reason=%s' % (e))
+            return request_result(601)
+
+        try:
+            cluster_list = self.storage_db.ceph_cluster_list()
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        for cluster_info in cluster_list:
+            cluster_uuid = cluster_info[0]
+            cluster_name = cluster_info[1]
+
+            self.pool_update(
+                 cluster_uuid, token=token,
+                 source_ip=self.local_ip,
+                 resource_name=cluster_name)
 
     def cephpool_info(self, pool_uuid):
 

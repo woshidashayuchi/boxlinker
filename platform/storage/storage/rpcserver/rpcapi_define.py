@@ -20,7 +20,7 @@ class StorageRpcManager(object):
 
     def __init__(self):
 
-        self.balancecheck = conf.balance_check
+        self.billing_check = conf.billing
         self.cephcluster_manager = cephcluster_manager.CephClusterManager()
         self.host_manager = host_manager.HostManager()
         self.cephmon_manager = cephmon_manager.CephMonManager()
@@ -142,7 +142,7 @@ class StorageRpcManager(object):
         return self.cephcluster_manager.cephcluster_mount(
                     cluster_uuid, host_ip, password, host_type,
                     token=token, source_ip=source_ip,
-                    resource_name=None)
+                    resource_uuid=cluster_uuid)
 
     @acl_check
     def host_create(self, context, parameters):
@@ -186,7 +186,7 @@ class StorageRpcManager(object):
         return self.host_manager.host_delete(
                     host_uuid,
                     token=token, source_ip=source_ip,
-                    resource_name=None)
+                    resource_uuid=host_uuid)
 
     @acl_check
     def host_info(self, context, parameters):
@@ -242,11 +242,11 @@ class StorageRpcManager(object):
             mon01_hostuuid = parameter_check(mon01_hostuuid, ptype='pstr')
             mon01_hostip = parameter_check(mon01_hostip, ptype='pnip')
             mon01_rootpwd = parameter_check(mon01_rootpwd, ptype='ppwd')
-            mon01_snic = parameter_check(mon01_snic, ptype='pnam')
+            mon01_snic = parameter_check(mon01_snic, ptype='psnm')
             mon02_hostuuid = parameter_check(mon02_hostuuid, ptype='pstr')
             mon02_hostip = parameter_check(mon02_hostip, ptype='pnip')
             mon02_rootpwd = parameter_check(mon02_rootpwd, ptype='ppwd')
-            mon02_snic = parameter_check(mon02_snic, ptype='pnam')
+            mon02_snic = parameter_check(mon02_snic, ptype='psnm')
         except Exception, e:
             log.warning('parameters error, context=%s, '
                         'parameters=%s, reason=%s'
@@ -278,7 +278,7 @@ class StorageRpcManager(object):
             host_uuid = parameter_check(host_uuid, ptype='pstr')
             host_ip = parameter_check(host_ip, ptype='pnip')
             rootpwd = parameter_check(rootpwd, ptype='ppwd')
-            storage_nic = parameter_check(storage_nic, ptype='pnam')
+            storage_nic = parameter_check(storage_nic, ptype='psnm')
         except Exception, e:
             log.warning('parameters error, context=%s, '
                         'parameters=%s, reason=%s'
@@ -342,7 +342,7 @@ class StorageRpcManager(object):
             host_uuid = parameter_check(host_uuid, ptype='pstr')
             host_ip = parameter_check(host_ip, ptype='pnip')
             rootpwd = parameter_check(rootpwd, ptype='ppwd')
-            storage_nic = parameter_check(storage_nic, ptype='pnam')
+            storage_nic = parameter_check(storage_nic, ptype='psnm')
             jour_disk = parameter_check(jour_disk, ptype='pdsk')
             data_disk = parameter_check(data_disk, ptype='pdsk')
             weight = parameter_check(weight, ptype='pflt')
@@ -384,7 +384,7 @@ class StorageRpcManager(object):
         return self.cephosd_manager.cephosd_delete(
                     cluster_uuid, osd_uuid, rootpwd,
                     token=token, source_ip=source_ip,
-                    resource_name=None)
+                    resource_uuid=osd_uuid)
 
     @acl_check
     def cephosd_reweight(self, context, parameters):
@@ -409,7 +409,7 @@ class StorageRpcManager(object):
         return self.cephosd_manager.cephosd_reweight(
                     cluster_uuid, osd_uuid, weight,
                     token=token, source_ip=source_ip,
-                    resource_name=None)
+                    resource_uuid=osd_uuid)
 
     @acl_check
     def cephosd_info(self, context, parameters):
@@ -524,7 +524,7 @@ class StorageRpcManager(object):
             volume_size = parameter_check(volume_size, ptype='pint')
             if volume_type not in ('hdd', 'ssd'):
                 raise(Exception('Parameter volume_type error'))
-            if self.balancecheck is True:
+            if self.billing_check is True:
                 cost = parameter_check(cost, ptype='pflt')
                 if float(cost) < 0:
                     raise(Exception('Parameter cost error, '
@@ -592,9 +592,11 @@ class StorageRpcManager(object):
             project_uuid = user_info.get('project_uuid')
             project_priv = user_info.get('project_priv')
 
+            cluster_uuid = parameters.get('cluster_uuid')
             page_size = parameters.get('page_size')
             page_num = parameters.get('page_num')
 
+            cluster_uuid = parameter_check(cluster_uuid, ptype='pstr')
             page_size = parameter_check(page_size, ptype='pint')
             page_num = parameter_check(page_num, ptype='pint')
         except Exception, e:
@@ -606,7 +608,7 @@ class StorageRpcManager(object):
         return self.clouddisk_manager.volume_list(
                     user_uuid, team_uuid, team_priv,
                     project_uuid, project_priv,
-                    page_size, page_num)
+                    cluster_uuid, page_size, page_num)
 
     @acl_check
     def volume_update(self, context, parameters):

@@ -76,14 +76,16 @@ class HostManager(object):
                      "host_cpu": host_cpu,
                      "host_mem": host_mem,
                      "host_disk": host_disk,
-                     "host_nic": host_nic
+                     "host_nic": host_nic,
+                     "resource_uuid": host_uuid,
+                     "resource_name": host_name
                  }
 
         return request_result(0, result)
 
     @operation_record(resource_type='host', action='delete')
     def host_delete(self, host_uuid,
-                    token, source_ip, resource_name):
+                    token, source_ip, resource_uuid):
 
         try:
             self.storage_db.host_delete(host_uuid)
@@ -124,7 +126,8 @@ class HostManager(object):
                        "host_nic": host_nic,
                        "host_status": host_status,
                        "create_time": create_time,
-                       "update_time": update_time
+                       "update_time": update_time,
+                       "resource_name": host_name
                    }
 
         v_result = json.dumps(v_result, cls=CJsonEncoder)

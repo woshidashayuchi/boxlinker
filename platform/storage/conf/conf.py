@@ -4,8 +4,8 @@
 import os
 
 
-mq_server01 = 'rabbitmq'
-mq_server02 = 'rabbitmq'
+mq_server01 = 'rabbitmq01'
+mq_server02 = 'rabbitmq02'
 mq_port = 5672
 
 # mq_server01 = os.environ.get('MQ_SERVER01')
@@ -34,7 +34,7 @@ api_debug = False
 log_level = 'WARNING'
 log_file = '/var/log/cloud.log'
 
-balance_check = True
+billing = True
 
 storage_call_queue = 'storage_call_api'
 ceph_call_queue = 'ceph_call'

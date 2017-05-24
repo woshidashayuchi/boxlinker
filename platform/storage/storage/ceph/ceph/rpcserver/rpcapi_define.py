@@ -55,10 +55,10 @@ class CephRpcManager(object):
 
             mon01_hostip = parameter_check(mon01_hostip, ptype='pnip')
             mon01_rootpwd = parameter_check(mon01_rootpwd, ptype='ppwd')
-            mon01_snic = parameter_check(mon01_snic, ptype='pnam')
+            mon01_snic = parameter_check(mon01_snic, ptype='psnm')
             mon02_hostip = parameter_check(mon02_hostip, ptype='pnip')
             mon02_rootpwd = parameter_check(mon02_rootpwd, ptype='ppwd')
-            mon02_snic = parameter_check(mon02_snic, ptype='pnam')
+            mon02_snic = parameter_check(mon02_snic, ptype='psnm')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
                         % (parameters, e))
@@ -82,7 +82,7 @@ class CephRpcManager(object):
 
             host_ip = parameter_check(host_ip, ptype='pnip')
             rootpwd = parameter_check(rootpwd, ptype='ppwd')
-            storage_nic = parameter_check(storage_nic, ptype='pnam')
+            storage_nic = parameter_check(storage_nic, ptype='psnm')
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
                         % (parameters, e))
@@ -131,7 +131,7 @@ class CephRpcManager(object):
 
             host_ip = parameter_check(host_ip, ptype='pnip')
             rootpwd = parameter_check(rootpwd, ptype='ppwd')
-            storage_nic = parameter_check(storage_nic, ptype='pnam')
+            storage_nic = parameter_check(storage_nic, ptype='psnm')
             jour_disk = parameter_check(jour_disk, ptype='pdsk')
             data_disk = parameter_check(data_disk, ptype='pdsk')
             weight = parameter_check(weight, ptype='pflt')
@@ -266,11 +266,15 @@ class CephRpcManager(object):
 
         try:
             image_name = parameters['image_name']
+            fs_type = parameters['fs_type']
 
             image_name = parameter_check(image_name, ptype='pstr')
+            if fs_type not in ('xfs', 'ext4'):
+                raise(Exception('Parameter fs_type error'))
         except Exception, e:
             log.warning('parameters error, parameters=%s, reason=%s'
                         % (parameters, e))
             return request_result(101)
 
-        return self.cephdisk_manager.disk_growfs(image_name)
+        return self.cephdisk_manager.disk_growfs(
+                    image_name, fs_type)

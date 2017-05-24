@@ -255,8 +255,8 @@ class StorageDB(MysqlInit):
                create_time, update_time) \
                values('%s', '%s', '%s', '%s', '%s', '%s', \
                '%s', '%s', '%s', 'on', now(), now())" \
-              % (osd_uuid, cluster_uuid, osd_id, \
-                 host_uuid, storage_ip, jour_disk, \
+              % (osd_uuid, cluster_uuid, osd_id,
+                 host_uuid, storage_ip, jour_disk,
                  data_disk, disk_type, weight)
 
         return super(StorageDB, self).exec_update_sql(sql)
@@ -366,7 +366,7 @@ class StorageDB(MysqlInit):
                         used, avail, used_rate):
 
         sql = "update ceph_pools set pool_size='%s', used='%s', \
-               avail='%s', used_rate='%s' \
+               avail='%s', used_rate='%s', update_time=now() \
                where cluster_uuid='%s'" \
               % (pool_size, used, avail, used_rate, cluster_uuid)
 
@@ -483,7 +483,7 @@ class StorageDB(MysqlInit):
         return super(StorageDB, self).exec_select_sql(sql)
 
     def volume_list_project(self, team_uuid, project_uuid,
-                            page_size, page_num):
+                            cluster_uuid, page_size, page_num):
 
         page_size = int(page_size)
         page_num = int(page_num)
@@ -496,16 +496,18 @@ class StorageDB(MysqlInit):
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status!='delete' \
+                  and a.cluster_uuid='%s' \
                   and b.team_uuid='%s' and b.project_uuid='%s' \
                   limit %d,%d" \
-                 % (team_uuid, project_uuid,
+                 % (cluster_uuid, team_uuid, project_uuid,
                     start_position, page_size)
 
         sql_02 = "select count(*) from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status!='delete' \
+                  and a.cluster_uuid='%s' \
                   and b.team_uuid='%s' and b.project_uuid='%s'" \
-                 % (team_uuid, project_uuid)
+                 % (cluster_uuid, team_uuid, project_uuid)
 
         volumes_list = super(StorageDB, self).exec_select_sql(sql_01)
         count = super(StorageDB, self).exec_select_sql(sql_02)[0][0]
@@ -516,7 +518,8 @@ class StorageDB(MysqlInit):
                }
 
     def volume_list_user(self, team_uuid, project_uuid,
-                         user_uuid, page_size, page_num):
+                         user_uuid, cluster_uuid,
+                         page_size, page_num):
 
         page_size = int(page_size)
         page_num = int(page_num)
@@ -529,18 +532,20 @@ class StorageDB(MysqlInit):
                   from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status!='delete' \
+                  and a.cluster_uuid='%s' \
                   and b.team_uuid='%s' and b.project_uuid='%s' \
                   and b.user_uuid='%s' \
                   limit %d,%d" \
-                 % (team_uuid, project_uuid, user_uuid,
-                    start_position, page_size)
+                 % (cluster_uuid, team_uuid, project_uuid,
+                    user_uuid, start_position, page_size)
 
         sql_02 = "select count(*) from volumes a join resources_acl b \
                   where a.volume_uuid=b.resource_uuid \
                   and a.volume_status!='delete' \
+                  and a.cluster_uuid='%s' \
                   and b.team_uuid='%s' and b.project_uuid='%s' \
                   and b.user_uuid='%s'" \
-                 % (team_uuid, project_uuid, user_uuid)
+                 % (cluster_uuid, team_uuid, project_uuid, user_uuid)
 
         volumes_list = super(StorageDB, self).exec_select_sql(sql_01)
         count = super(StorageDB, self).exec_select_sql(sql_02)[0][0]
@@ -560,9 +565,10 @@ class StorageDB(MysqlInit):
         sql_01 = "select a.volume_uuid, a.cluster_uuid, a.pool_name, \
                   a.volume_name, a.volume_size, a.volume_type, \
                   a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-                  a.create_time, a.update_time \
-                  from volumes a join resources_acl b \
+                  a.create_time, a.update_time, c.cluster_name \
+                  from volumes a join resources_acl b join ceph_clusters c \
                   where a.volume_uuid=b.resource_uuid \
+                  and a.cluster_uuid=c.cluster_uuid \
                   and a.volume_status='delete' \
                   and b.team_uuid='%s' and b.project_uuid='%s' \
                   limit %d,%d" \
@@ -593,9 +599,10 @@ class StorageDB(MysqlInit):
         sql_01 = "select a.volume_uuid, a.cluster_uuid, a.pool_name, \
                   a.volume_name, a.volume_size, a.volume_type, \
                   a.volume_status, a.disk_name, a.fs_type, a.mount_point, \
-                  a.create_time, a.update_time \
-                  from volumes a join resources_acl b \
+                  a.create_time, a.update_time, c.cluster_name \
+                  from volumes a join resources_acl b join ceph_clusters c \
                   where a.volume_uuid=b.resource_uuid \
+                  and a.cluster_uuid=c.cluster_uuid \
                   and a.volume_status='delete' \
                   and b.team_uuid='%s' and b.project_uuid='%s' \
                   and b.user_uuid='%s' \

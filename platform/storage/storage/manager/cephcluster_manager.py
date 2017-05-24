@@ -10,6 +10,7 @@ from common.json_encode import CJsonEncoder
 from common.operation_record import operation_record
 
 from storage.db import storage_db
+from storage.driver import storage_driver
 
 
 class CephClusterManager(object):
@@ -17,6 +18,7 @@ class CephClusterManager(object):
     def __init__(self):
 
         self.storage_db = storage_db.StorageDB()
+        self.storage_driver = storage_driver.StorageDriver()
 
     @operation_record(resource_type='cephcluster', action='create')
     def cephcluster_create(self, cluster_name, cluster_uuid,
@@ -73,7 +75,8 @@ class CephClusterManager(object):
                      "osd_full_ratio": osd_full_ratio,
                      "osd_nearfull_ratio": osd_nearfull_ratio,
                      "journal_size": journal_size,
-                     "ntp_server": ntp_server
+                     "ntp_server": ntp_server,
+                     "resource_uuid": cluster_uuid
                  }
 
         return request_result(0, result)
@@ -180,7 +183,7 @@ class CephClusterManager(object):
     @operation_record(resource_type='cephcluster', action='update')
     def cephcluster_mount(self, cluster_uuid,
                           host_ip, password, host_type,
-                          token, source_ip, resource_name):
+                          token, source_ip, resource_uuid):
 
         try:
             host_check = self.storage_db.ceph_host_check(
@@ -201,6 +204,7 @@ class CephClusterManager(object):
             return request_result(status_code)
 
         cluster_info = req_result.get('result')
+        cluster_name = cluster_info.get('cluster_name')
 
         try:
             mon_list = self.storage_db.mon_list(cluster_uuid)
@@ -210,7 +214,7 @@ class CephClusterManager(object):
 
         req_result = self.storage_driver.cephcluster_mount(
                           token, cluster_uuid, cluster_info,
-                          mon_list, host_ip, rootpwd, host_type)
+                          mon_list, host_ip, password, host_type)
         status_code = req_result.get('status')
         if int(status_code) != 0:
             log.error('Cephcluster mount failure, '
@@ -221,7 +225,8 @@ class CephClusterManager(object):
         result = {
                      "cluster_uuid": cluster_uuid,
                      "host_ip": host_ip,
-                     "host_type": host_type
+                     "host_type": host_type,
+                     "resource_name": cluster_name
                  }
 
         return request_result(0, result)

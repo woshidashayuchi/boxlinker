@@ -106,14 +106,16 @@ class CephOsdManager(object):
                      "jour_disk": jour_disk,
                      "data_disk": data_disk,
                      "disk_type": disk_type,
-                     "weight": weight
+                     "weight": weight,
+                     "resource_uuid": osd_uuid,
+                     "resource_name": osd_id
                  }
 
         return request_result(0, result)
 
     @operation_record(resource_type='cephosd', action='delete')
     def cephosd_delete(self, cluster_uuid, osd_uuid, rootpwd,
-                       token, source_ip, resource_name):
+                       token, source_ip, resource_uuid):
 
         try:
             osd_info = self.storage_db.cephosd_info(osd_uuid)
@@ -142,14 +144,15 @@ class CephOsdManager(object):
         result = {
                      "cluster_uuid": cluster_uuid,
                      "osd_uuid": osd_uuid,
-                     "osd_id": osd_id
+                     "osd_id": osd_id,
+                     "resource_name": osd_id
                  }
 
         return request_result(0, result)
 
     @operation_record(resource_type='cephosd', action='update')
     def cephosd_reweight(self, cluster_uuid, osd_uuid, weight,
-                         token, source_ip, resource_name):
+                         token, source_ip, resource_uuid):
 
         try:
             osd_info = self.storage_db.cephosd_info(osd_uuid)
@@ -177,7 +180,8 @@ class CephOsdManager(object):
                      "cluster_uuid": cluster_uuid,
                      "osd_uuid": osd_uuid,
                      "osd_id": osd_id,
-                     "weight": weight
+                     "weight": weight,
+                     "resource_name": osd_id
                  }
 
         return request_result(0, result)

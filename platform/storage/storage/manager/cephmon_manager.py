@@ -116,6 +116,8 @@ class CephMonManager(object):
             log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
+        resource_name = "%s_%s" % (mon01_id, mon02_id)
+
         result = {
                      "mon01_hostuuid": mon01_hostuuid,
                      "mon02_hostuuid": mon02_hostuuid,
@@ -127,7 +129,9 @@ class CephMonManager(object):
                      "mon01_id": mon01_id,
                      "mon02_id": mon02_id,
                      "mon01_storage_ip": mon01_storage_ip,
-                     "mon02_storage_ip": mon02_storage_ip
+                     "mon02_storage_ip": mon02_storage_ip,
+                     "resource_uuid": cluster_uuid,
+                     "resource_name": resource_name
                  }
 
         return request_result(0, result)
@@ -237,7 +241,9 @@ class CephMonManager(object):
                      "host_name": host_name,
                      "host_ip": host_ip,
                      "mon_id": mon_id,
-                     "storage_ip": storage_ip
+                     "storage_ip": storage_ip,
+                     "resource_uuid": mon_uuid,
+                     "resource_name": mon_id
                  }
 
         return request_result(0, result)

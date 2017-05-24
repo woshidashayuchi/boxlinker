@@ -20,7 +20,7 @@ class CloudDiskManager(object):
 
     def __init__(self):
 
-        self.balancecheck = conf.balance_check
+        self.billing_check = conf.billing
         self.storage_db = storage_db.StorageDB()
         self.storage_driver = storage_driver.StorageDriver()
         self.local_ip = socket.gethostbyname(socket.gethostname())
@@ -65,9 +65,10 @@ class CloudDiskManager(object):
             log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
-        volume_conf = str(volume_size) + 'G'
-        self.storage_driver.billing_create(
-             token, volume_uuid, volume_name, volume_conf)
+        if self.billing_check is True:
+            volume_conf = str(volume_size) + 'G'
+            self.storage_driver.billing_create(
+                 token, volume_uuid, volume_name, volume_conf)
 
         result = {
                      "volume_uuid": volume_uuid,
@@ -100,7 +101,8 @@ class CloudDiskManager(object):
             log.error('Database delete error, reason=%s' % (e))
             return request_result(402)
 
-        self.storage_driver.billing_delete(token, volume_uuid)
+        if self.billing_check is True:
+            self.storage_driver.billing_delete(token, volume_uuid)
 
         result = {
                      "resource_name": volume_name
@@ -162,6 +164,7 @@ class CloudDiskManager(object):
         pool_name = volume_info[0][1]
         volume_name = volume_info[0][2]
         disk_name = volume_info[0][6]
+        fs_type = volume_info[0][7]
 
         status_code = self.storage_driver.disk_resize(
                            token, cluster_uuid, pool_name,
@@ -170,7 +173,8 @@ class CloudDiskManager(object):
             log.error('storage disk(%s) resize failure' % (disk_name))
             return request_result(status_code)
 
-        self.storage_driver.disk_growfs(token, cluster_uuid, volume_name)
+        self.storage_driver.disk_growfs(
+             token, cluster_uuid, volume_name, fs_type)
 
         try:
             self.storage_db.volume_resize(volume_uuid, volume_size)
@@ -178,10 +182,11 @@ class CloudDiskManager(object):
             log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
-        volume_conf = str(volume_size) + 'G'
-        self.storage_driver.billing_update(
-                            token, volume_uuid,
-                            volume_conf)
+        if self.billing_check is True:
+            volume_conf = str(volume_size) + 'G'
+            self.storage_driver.billing_update(
+                                token, volume_uuid,
+                                volume_conf)
 
         result = {
                      "volume_uuid": volume_uuid,
@@ -271,7 +276,7 @@ class CloudDiskManager(object):
         return request_result(0, result)
 
     def volume_list(self, user_uuid, team_uuid, team_priv,
-                    project_uuid, project_priv,
+                    project_uuid, project_priv, cluster_uuid,
                     page_size, page_num):
 
         try:
@@ -279,11 +284,11 @@ class CloudDiskManager(object):
                or ((team_priv is not None) and ('R' in team_priv)):
                 volumes_list_info = self.storage_db.volume_list_project(
                                          team_uuid, project_uuid,
-                                         page_size, page_num)
+                                         cluster_uuid, page_size, page_num)
             else:
                 volumes_list_info = self.storage_db.volume_list_user(
                                          team_uuid, project_uuid, user_uuid,
-                                         page_size, page_num)
+                                         cluster_uuid, page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
@@ -389,10 +394,12 @@ class CloudDiskManager(object):
             mount_point = volume_info[9]
             create_time = volume_info[10]
             update_time = volume_info[11]
+            cluster_name = volume_info[12]
 
             v_disk_info = {
                               "volume_uuid": volume_uuid,
                               "cluster_uuid": cluster_uuid,
+                              "cluster_name": cluster_name,
                               "pool_name": pool_name,
                               "volume_name": volume_name,
                               "volume_size": volume_size,
@@ -418,7 +425,7 @@ class CloudDiskManager(object):
     def volume_reclaim_recovery(self, volume_uuid, token,
                                 source_ip, resource_uuid):
 
-        if self.balancecheck is True:
+        if self.billing_check is True:
             # 获取并检查用户余额，只有当余额大于0时才允许执行恢复操作
             team_balance = self.storage_driver.team_balance(token)
             if team_balance.get('status') != 0:
@@ -443,8 +450,9 @@ class CloudDiskManager(object):
             log.error('Database update error, reason=%s' % (e))
             return request_result(403)
 
-        self.storage_driver.billing_update(
-                            token, volume_uuid)
+        if self.billing_check is True:
+            self.storage_driver.billing_update(
+                                token, volume_uuid)
 
         result = {
                      "volume_uuid": volume_uuid,

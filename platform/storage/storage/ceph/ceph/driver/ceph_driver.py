@@ -545,17 +545,24 @@ class CephDriver(object):
         else:
             return request_result(0)
 
-    def disk_growfs(self, image_name):
+    def disk_growfs(self, image_name, fs_type):
 
-        cmd = "df -h | grep -w '%s' | awk '{print $1}'" % (image_name)
-        dev_name = execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
-        if dev_name:
-            cmd = "xfs_growfs %s" % (dev_name)
-            result = execute(cmd, shell=True, run_as_root=True)[1]
-            if str(result) != '0':
-                log.error('Ceph disk(%s) growfs failure' % (image_name))
-                return request_result(513)
-            else:
-                return request_result(0)
+        cmd = "df -h | grep '%s' | awk '{print $1}'" % (image_name)
+        dev_info = execute(cmd, shell=True, run_as_root=True)[0][0].strip('\n')
+        for dev_name in dev_info.split('\n'):
+            if dev_name:
+                if fs_type == 'xfs':
+                    cmd = "xfs_growfs %s" % (dev_name)
+                elif fs_type == 'ext4':
+                    cmd = "resize2fs %s" % (dev_name)
+                else:
+                    return request_result(101)
 
-        return
+                result = execute(cmd, shell=True, run_as_root=True)[1]
+                if str(result) != '0':
+                    log.error('Ceph disk(%s) growfs failure' % (image_name))
+                    return request_result(513)
+                else:
+                    return request_result(0)
+
+        return request_result(0)
