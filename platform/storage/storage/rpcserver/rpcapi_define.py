@@ -54,11 +54,11 @@ class StorageRpcManager(object):
             cluster_name = parameter_check(cluster_name, ptype='pnam')
             cluster_uuid = parameter_check(cluster_uuid, ptype='pstr',
                                            exist='no')
-            cluster_auth = parameter_check(cluster_auth, ptype='pnam',
+            cluster_auth = parameter_check(cluster_auth, ptype='psnm',
                                            exist='no')
-            service_auth = parameter_check(service_auth, ptype='pnam',
+            service_auth = parameter_check(service_auth, ptype='psnm',
                                            exist='no')
-            client_auth = parameter_check(client_auth, ptype='pnam',
+            client_auth = parameter_check(client_auth, ptype='psnm',
                                           exist='no')
             ceph_pgnum = parameter_check(ceph_pgnum, ptype='pint',
                                          exist='no')

@@ -4,8 +4,8 @@
 import os
 
 
-mq_server01 = '10.10.10.11'
-mq_server02 = '10.10.10.11'
+mq_server01 = '172.20.1.101'
+mq_server02 = '172.20.1.102'
 mq_port = 5672
 
 log_level = 'WARNING'
