@@ -13,7 +13,6 @@ from conf import DEBUG
 
 OpenType = ['github', 'coding']
 
-
 SECRET_KEY = 'wwq44rw3drwkr2o334i34343'
 
 if DEBUG:

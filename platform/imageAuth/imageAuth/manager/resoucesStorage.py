@@ -14,23 +14,24 @@ import requests
 from common.logs import logging as log
 
 
-image_repo_prefix = 'http://101.200.45.76:8765'
+image_repo_prefix = 'https://imgstorage.boxlinker.com'
+
 def GetFileByLocation(team_uuid, resource_type, resource_uuid, resource_domain):
     """ 镜像名得到镜像id """
-    url_suffix = '/api/v1.0/files/' + team_uuid + '/' + resource_type + '/' + resource_uuid + '/' + resource_domain
-    url = image_repo_prefix + url_suffix
-    # headers = {'token': token}
-    ret = requests.get(url, timeout=5, verify=True)
-
-    if ret.json()['status'] != 0:
-        log.info("ret.json()['status'] != 0")
-        return False, None
-
-    if len(ret.json()['result']) == 0:
-        log.info("len(ret.json()['result']) == 0")
-        return False, None
-
     try:
+
+        url_suffix = '/api/v1.0/files/' + team_uuid + '/' + resource_type + '/' + resource_uuid + '/' + resource_domain
+        url = image_repo_prefix + url_suffix
+        # headers = {'token': token}
+        ret = requests.get(url, timeout=2, verify=True)
+
+        if ret.json()['status'] != 0:
+            log.info("ret.json()['status'] != 0")
+            return False, None
+
+        if len(ret.json()['result']) == 0:
+            log.info("len(ret.json()['result']) == 0")
+            return False, None
         storage_url = ret.json()['result'][0]['storage_url']
         return True, storage_url
     except Exception:

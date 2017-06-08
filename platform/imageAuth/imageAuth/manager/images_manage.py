@@ -13,7 +13,7 @@ import json
 import uuid
 import time
 
-from conf.conf import OssHost
+from conf.conf import OssHost, DEFAULT_IMAGE
 
 from common.code import request_result
 from common.logs import logging as log
@@ -59,13 +59,15 @@ def retImageRepo(page, page_size, count, repolist):
         temp_d['src_type'] = src_type
 
         # 每次都调用是否影响性能
+
         retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid=team_uuid, resource_type="ImageAvatars",
                                                                resource_uuid=image_uuid,
                                                                resource_domain="boxlinker")
         if retbool:
-            temp_d['logo'] = OssHost + '/' + image_dir
+            # temp_d['logo'] = OssHost + '/' + image_dir
+            temp_d['logo'] = image_dir
         else:
-            temp_d['logo'] = OssHost + '/' + 'repository/default.png'
+            temp_d['logo'] = DEFAULT_IMAGE
 
         temp_d = json.dumps(temp_d, cls=CJsonEncoder)
         temp_d = json.loads(temp_d)
@@ -224,9 +226,11 @@ class ImageRepoManager(object):
                                                                    resource_uuid=image_uuid,
                                                                    resource_domain="boxlinker")
             if retbool:
-                ret_d['logo'] = OssHost + '/' + image_dir
+                # ret_d['logo'] = OssHost + '/' + image_dir
+                ret_d['logo'] = image_dir
             else:
-                ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+                # ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+                ret_d['logo'] = DEFAULT_IMAGE
 
 
         repo_event = self.image_repo_db.get_repo_events_by_imagename(repository)
@@ -280,9 +284,13 @@ class ImageRepoManager(object):
                                                                resource_uuid=image_uuid, resource_domain="boxlinker")
 
         if retbool:
-            ret_d['logo'] = OssHost + '/' + image_dir
+            # ret_d['logo'] = OssHost + '/' + image_dir
+            ret_d['logo'] = image_dir
         else:
-            ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+            # ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+            ret_d['logo'] = DEFAULT_IMAGE
+
+
 
 
         repo_event = self.image_repo_db.get_repo_events_by_imagename(repository)

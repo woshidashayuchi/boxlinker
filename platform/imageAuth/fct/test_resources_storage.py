@@ -13,7 +13,8 @@ import requests
 from imageAuth.manager.userTools import username_password_authentication
 
 # image_repo_prefix = 'https://registrytoken.boxlinker.com:8843'
-image_repo_prefix = 'http://101.200.45.76:8765'
+# image_repo_prefix = 'http://101.201.56.57:8765'
+image_repo_prefix = 'https://imgstorage.boxlinker.com'
 # image_repo_prefix = 'http://localhost:8928'
 retbool, token = username_password_authentication(username='boxlinker', password='QAZwsx123')
 

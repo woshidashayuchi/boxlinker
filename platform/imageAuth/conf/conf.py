@@ -36,9 +36,6 @@ image_api_prefix = 'http://0.0.0.0:8001'
 
 # ucenter_api = 'http://192.168.1.7:8001/api/v1.0/ucenter/tokens'
 ucenter_api = 'https://ucenter.boxlinker.com/api/v1.0/ucenter/tokens'
-
-
-
 rest_host = '0.0.0.0'
 rest_port = 8001
 rest_debug = True
@@ -53,8 +50,11 @@ if DEBUG:
     SEND_EMAIL_URL = 'http://email.boxlinker.com/send'
 else:
     OssHost = "https://boxlinker-images.oss-cn-beijing.aliyuncs.com"
+    DEFAULT_IMAGE = OssHost + '/' + 'repository/default.png'
     SEND_EMAIL_URL = 'https://email.boxlinker.com/send'
 
+
+# 192.168.1.23
 
 class hub_db:
     charset = 'utf8'
@@ -66,7 +66,7 @@ class hub_db:
         host = 'mysql'
         mysql_engine = 'mysql://' + user + ':' + pawd + '@' + host + ':' + str(port) + '/' + cydb + '?charset=utf8'
     else:
-        host = '101.200.45.76'  # 线上
+        host = '101.201.56.57'  # 线上
         user = 'root'
         pawd = 'root123admin'
         cydb = 'release'
@@ -77,8 +77,8 @@ if DEBUG:
     db_server02 = 'mysql'
     database = 'debug'
 else:
-    db_server01 = '101.200.45.76'
-    db_server02 = '101.200.45.76'
+    db_server01 = '101.201.56.57'
+    db_server02 = '101.201.56.57'
     database = 'release'
 
 

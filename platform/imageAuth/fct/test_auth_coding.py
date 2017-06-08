@@ -17,7 +17,7 @@ from imageAuth.manager.userTools import username_password_authentication
 
 # image_repo_prefix = 'https://registrytoken.boxlinker.com:8843'
 # image_repo_prefix = 'http://192.168.1.6:8843'
-# image_repo_prefix = 'http://101.200.45.76:8843'
+# image_repo_prefix = 'http://101.201.56.57:8843'
 # image_repo_prefix = 'https://imageauth.boxlinker.com'
 image_repo_prefix = 'https://imageauth.boxlinker.com'
 # image_repo_prefix = 'http://localhost:8928'

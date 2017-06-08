@@ -79,7 +79,7 @@ class AliPay:
 
     def __ordered_data(self, data):
         """
-        对参数的参数做排序处理的，不用关心
+        对参数的参数做排序处理的
         """
         complex_keys = []
         for key, value in data.items():

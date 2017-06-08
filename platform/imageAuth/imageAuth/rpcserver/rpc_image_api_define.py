@@ -43,6 +43,8 @@ def SetImageIco(team_uuid, resource_type, resource_uuid, resource_domain, imagen
         return False
     log.info(image_dir)
 
+    image_dir = 'https://boxlinker-images.oss-cn-beijing.aliyuncs.com/' + image_dir
+
     resoucesStorage.SetFileUrlSave(team_uuid, resource_type, resource_uuid, resource_domain, image_dir)
 
 
