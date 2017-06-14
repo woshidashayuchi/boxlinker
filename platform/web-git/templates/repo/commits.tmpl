@@ -1,0 +1,30 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation" class="active"><a href="{{.RepoLink}}">代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+			<li role="presentation"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content repository file list form-horizontal">
+			<div class = "form-group">
+				<div class = "left mar-hor"><label class = "control-label">当前分支:</label></div>
+				<div class = "col-sm-3">
+					{{template "repo/branch_dropdown" .}}
+				</div>
+			</div>
+			{{template "repo/commits_table" .}}
+		</div>
+	</div>
+</div>
+<!--main end-->
+{{template "base/footer" .}}
+

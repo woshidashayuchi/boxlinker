@@ -1,0 +1,230 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	<form action="{{.Link}}" method="post">
+		{{.CsrfTokenHtml}}
+		<div class = "panel git_creat_project">
+			<div class = "panel-heading">
+				<h3 class = "panel-title">创建项目</h3>
+			</div>
+			<div class = "panel-body">
+				<div class = "row">
+					<div class = "col-sm-3">
+						<div class = "form-group">
+							<p class = "control-label text-main text-bold">拥有者</p>
+							<select class = "demo_select2 form-control" id = "projectUserSelect2" name="user_id">
+								<option value = "{{.ContextUser.ID}}">{{.ContextUser.ShortName 20}}</option>
+							</select>
+							<small class = "help-block"></small>
+						</div>
+					</div>
+					<div class = "col-sm-1 git_creat_project_line">
+						<span>/</span>
+					</div>
+					<div class = "col-sm-6">
+						<div class = "form-group">
+							<p class = "control-label text-main text-bold">项目名称</p>
+							<input class = "form-control" autofocus placeholder = "字母数字下划线,字母开头,最少 5 位" id = "projectName" name = "repo_name" />
+							<small class = "help-block" id = "projectNameTip"></small>
+						</div>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-sm-12">
+						<div class = "form-group">
+							<p class = "control-label text-main text-bold">项目简介</p>
+							<input type = "text" class = "form-control" placeholder = "可选" name = "description" />
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class = "row">
+					<div class = "col-sm-12">
+						<div class = "form-group">
+							<div class="checkbox">
+								<input type="radio" id = "noPublic" name = "private" class = "magic-radio" checked />
+								<label for="noPublic">不公开</label>
+								<input type="radio" id = "public" name = "private" class = "magic-radio"  />
+								<label for="public">公开</label>
+								<p class = "git_form_dosc">私有项目只有您自己或者组织内部成员可以访问.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class = "row">
+					<div class = "col-sm-12">
+						<div class = "form-group">
+							<div class="checkbox">
+								<input id="useReadMe" class="magic-checkbox" type="checkbox" name = "auto_init">
+								<label for="useReadMe">使用 README 文件初始化该项目</label>
+								<p class = "git_form_dosc">添加 Readme 文件, 您可以立即拉取项目.如果您要导入一个已存在的项目,请跳过次步骤.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "row">
+					<div class = "col-sm-5">
+						<div class = "form-group">
+							<p class = "control-label text-main text-bold">添加 .gitignore</p>
+							<select class = "demo_select2 form-control" id = "addGitignore" name = "gitignores">
+								<option value = "None">None</option>
+								{{range .Gitignores}}
+								<option value = "{{.}}">{{.}}</option>
+								{{end}}
+							</select>
+						</div>
+					</div>
+					<div class = "col-sm-5">
+						<div class = "form-group">
+							<p class = "control-label text-main text-bold">添加 License</p>
+							<select class = "demo_select2 form-control" id = "addLicense" name = "readme" >
+								<option value = "None">None</option>
+								{{range .Licenses}}
+								<option value="{{.}}">{{.}}</option>
+								{{end}}
+							</select>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class = "row">
+					<div class = "col-sm-5">
+						<button class = "btn btn-success" id = "createProject" disabled>创建项目</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<!--main end-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="repository new repo">-->
+	<!--<div class="ui middle very relaxed page grid">-->
+		<!--<div class="column">-->
+			<!--<form class="ui form" action="{{.Link}}" method="post">-->
+				<!--{{.CsrfTokenHtml}}-->
+				<!--<h3 class="ui top attached header">-->
+					<!--{{.i18n.Tr "new_repo"}}-->
+				<!--</h3>-->
+				<!--<div class="ui attached segment">-->
+					<!--{{template "base/alert" .}}-->
+					<!--<div class="inline required field {{if .Err_Owner}}error{{end}}">-->
+						<!--<label>{{.i18n.Tr "repo.owner"}}</label>-->
+						<!--<div class="ui selection owner dropdown">-->
+							<!--<input type="hidden" id="user_id" name="user_id" value="{{.ContextUser.ID}}" required>-->
+							<!--<span class="text">-->
+								<!--<img class="ui mini image" src="{{.ContextUser.RelAvatarLink}}">-->
+								<!--{{.ContextUser.ShortName 20}}-->
+							<!--</span>-->
+							<!--<i class="dropdown icon"></i>-->
+							<!--<div class="menu">-->
+								<!--<div class="item" data-value="{{.SignedUser.ID}}">-->
+									<!--<img class="ui mini image" src="{{.SignedUser.RelAvatarLink}}">-->
+									<!--{{.SignedUser.ShortName 20}}-->
+								<!--</div>-->
+								<!--{{range .Orgs}}-->
+									<!--<div class="item" data-value="{{.ID}}">-->
+										<!--<img class="ui mini image" src="{{.RelAvatarLink}}">-->
+										<!--{{.ShortName 20}}-->
+									<!--</div>-->
+								<!--{{end}}-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!--<div class="inline required field {{if .Err_RepoName}}error{{end}}">-->
+						<!--<label for="repo_name">{{.i18n.Tr "repo.repo_name"}}</label>-->
+						<!--<input id="repo_name" name="repo_name" value="{{.repo_name}}" required>-->
+						<!--<span class="help">{{.i18n.Tr "repo.repo_name_helper" | Safe}}</span>-->
+					<!--</div>-->
+					<!--<div class="inline field">-->
+						<!--<label>{{.i18n.Tr "repo.visibility"}}</label>-->
+						<!--<div class="ui checkbox">-->
+							<!--{{if .IsForcedPrivate}}-->
+								<!--<input name="private" type="checkbox" checked readonly>-->
+								<!--<label>{{.i18n.Tr "repo.visiblity_helper_forced" | Safe}}</label>-->
+							<!--{{else}}-->
+								<!--<input name="private" type="checkbox" {{if .private}}checked{{end}}>-->
+								<!--<label>{{.i18n.Tr "repo.visiblity_helper" | Safe}}</label>-->
+							<!--{{end}}-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="inline field {{if .Err_Description}}error{{end}}">-->
+						<!--<label for="description">{{.i18n.Tr "repo.repo_desc"}}</label>-->
+						<!--<textarea id="description" name="description">{{.description}}</textarea>-->
+					<!--</div>-->
+
+					<!--<div class="ui divider"></div>-->
+
+					<!--<div class="inline field">-->
+						<!--<label>.gitignore</label>-->
+						<!--<div class="ui multiple search normal selection dropdown">-->
+							<!--<input type="hidden" name="gitignores" value="{{.gitignores}}">-->
+							<!--<div class="default text">{{.i18n.Tr "repo.repo_gitignore_helper"}}</div>-->
+							<!--<div class="menu">-->
+								<!--{{range .Gitignores}}-->
+									<!--<div class="item" data-value="{{.}}">{{.}}</div>-->
+								<!--{{end}}-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="inline field">-->
+						<!--<label>{{.i18n.Tr "repo.license"}}</label>-->
+						<!--<div class="ui search selection dropdown">-->
+							<!--<input type="hidden" name="license" value="{{.license}}">-->
+							<!--<div class="default text">{{.i18n.Tr "repo.license_helper"}}</div>-->
+							<!--<div class="menu">-->
+								<!--{{range .Licenses}}-->
+									<!--<div class="item" data-value="{{.}}">{{.}}</div>-->
+								<!--{{end}}-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!--<div class="inline field">-->
+						<!--<label>{{.i18n.Tr "repo.readme"}} <a target="_blank" href="https://github.com/gogits/go-gogs-client/wiki/Repositories#litte-notes-on-readme-template"><span class="octicon octicon-question"></span></a></label>-->
+						<!--<div class="ui selection dropdown">-->
+							<!--<input type="hidden" name="readme" value="{{.readme}}">-->
+							<!--<div class="default text">{{.i18n.Tr "repo.readme_helper"}}</div>-->
+							<!--<div class="menu">-->
+								<!--{{range .Readmes}}-->
+									<!--<div class="item" data-value="{{.}}">{{.}}</div>-->
+								<!--{{end}}-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="inline field">-->
+						<!--<div class="ui checkbox" id="auto-init">-->
+							<!--<input class="hidden" name="auto_init" type="checkbox" tabindex="0" {{if .auto_init}}checked{{end}}>-->
+							<!--<label>{{.i18n.Tr "repo.auto_init"}}</label>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!--<div class="inline field">-->
+						<!--<label></label>-->
+						<!--<button class="ui green button">-->
+							<!--{{.i18n.Tr "repo.create_repo"}}-->
+						<!--</button>-->
+						<!--<a class="ui button" href="{{AppSubUrl}}/">{{.i18n.Tr "cancel"}}</a>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</form>-->
+		<!--</div>-->
+	<!--</div>-->
+<!--</div>-->
+{{template "base/footer" .}}

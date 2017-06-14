@@ -1,0 +1,75 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+				<li role="presentation" class = "active"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class="tab-base tab-stacked-left">
+				<div class = "row">
+					<div class = "col-sm-4">
+						{{template "repo/settings/navbar" .}}
+					</div>
+					<div class = "col-sm-8">
+						<div class="col-sm-10">
+								<form class="form" action="{{.Link}}" method="post">
+									{{.CsrfTokenHtml}}
+									<input type="hidden" name="action" value="update">
+									<input type="hidden" name="website" value="{{.Repository.Website}}">
+									<div class = "row">
+										<div class = "col-sm-12">
+											<div class = "form-group">
+												<p class = "control-label text-main text-bold">项目名称</p>
+												<input type="hidden" name ="repo_name" value = "{{.Repository.Name}}">
+												<span class = "form-control disabled" disabled  data-repo-name="{{.Repository.Name}}">{{.Repository.Name}}</span>
+												<small class = "help-block" id = "projectNameTip"></small>
+											</div>
+										</div>
+									</div>
+									<div class = "row">
+										<div class = "col-sm-12">
+											<div class = "form-group">
+												<p class = "control-label text-main text-bold">项目简介</p>
+												<input type = "text" class = "form-control" placeholder = "可选" id="description" name="description" value = "{{.Repository.Description}}" />
+											</div>
+										</div>
+									</div>
+									<div class = "row">
+										<div class = "col-sm-12">
+											<div class = "form-group">
+												<div class="checkbox">
+													<input type="radio" id = "noPublic" name="private" class = "magic-radio" value = "on" {{if .Repository.IsPrivate}}checked{{end}} />
+													<label for="noPublic">不公开</label>
+													<input type="radio" id = "public" name="private" class = "magic-radio" value = "off" {{if not .Repository.IsPrivate}}checked{{end}}  />
+													<label for="public">公开</label>
+													<p class = "git_form_dosc">私有项目只有您自己或者组织内部成员可以访问.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class = "row">
+										<div class = "col-sm-12">
+											<button class = "btn btn-primary">保存设置</button>
+											<a href = "javascript:;" class = "btn btn-danger del-rope" data-url = "{{.Link}}" data-name = "{{.Repository.Name}}" >删除项目</a>
+										</div>
+									</div>
+								</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+{{template "base/footer" .}}

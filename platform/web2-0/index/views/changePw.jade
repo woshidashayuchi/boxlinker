@@ -1,0 +1,41 @@
+extends layout
+block link
+  link(rel="stylesheet", type="text/css", href="/statics/css/login.css")
+  script(type="text/javascript", src="/statics/js/changePw.js")
+block content
+        .entryBox
+            .entryHd
+                div.w1200
+                    div.indexLogo.left
+                        a(href="/")
+                            img(src="/statics/image/logo.png")
+                    div.indexLogin.right
+                        div.userBefore
+                            a.icon-username(href="/signUp") 注册
+                            = "|"
+                            a.icon-username1(href="/login") 登录
+            .entryBd
+                .entryModel.forgetPw
+                    .entryModelBg
+                        img(src="/statics/image/login_bg.jpg")
+                        p Make it simple<br />make it fast
+                    .entryFrom
+                        .title 重置密码
+                        .entryItemBox
+                            .entryItem
+                                .entryInputBox.icon-mima
+                                    input.entryInput#password(type = "password",placeholder = "请输入新密码")
+                                .entryTip
+                                    p#passwordTip 密码不正确
+                            .entryItem
+                                .entryInputBox.icon-mima
+                                    input.entryInput#passwordAgain(type = "password",placeholder = "请再次输入密码")
+                                .entryTip
+                                    p#passwordAgainTip 密码不正确
+                            .entryBtnBox
+                                button.btn.btn-primary.entryBtn#setPassword 确定
+                            .entryFromFt
+                                 a(href = "/signUp") 立即注册
+                                 a(href = "/") 回首页
+                                 a(href = "/login")  登录
+        .entryBg

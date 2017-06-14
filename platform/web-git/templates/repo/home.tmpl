@@ -1,0 +1,101 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation" class="active"><a href="{{.RepoLink}}">代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+				<li role="presentation"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content repository file list">
+			<div class = "row">
+				<div class = "col-sm-2">
+					{{template "repo/branch_dropdown" .}}
+				</div>
+				<div class = "col-sm-4">
+					{{with .Repository}}
+					<ol class="breadcrumb pull-left mt-5">
+						<li><a href="{{AppSubUrl}}/{{.Owner.Name}}" class = "btn-link">{{.Owner.Name}}</a></li>
+						<li><a href="{{$.RepoLink}}" class = "btn-link">{{.Name}}</a></li>
+						{{ $n := len $.TreeNames}}
+						{{ $l := Subtract $n 1}}
+						{{range $i, $v := $.TreeNames}}
+						{{if eq $i $l}}
+						<li>{{$v}}</li>
+						{{else}}
+						{{ $p := index $.Paths $i}}
+						<li><a href="{{EscapePound $.BranchLink}}/{{EscapePound $p}}">{{$v}}</a></li>
+						{{end}}
+						{{end}}
+					</ol>
+					{{end}}
+				</div>
+				<div class = "col-sm-6">
+					{{ $n := len .TreeNames}}
+					{{ $l := Subtract $n 1}}
+					{{if eq $n 0}}
+					<div class = "pull-right">
+						<button class = "btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >
+							git clone
+							<span class = "caret"></span>
+						</button>
+						<div class = "dropdown-menu project_code_download" id = "downloadTab">
+							<div class="input-group mar-top">
+								<div class="input-group-btn">
+									{{if not $.DisableHTTP}}
+									<button class = "btn btn-default btn-primary btn-sm"
+													id = "httpUrl"
+													data-link="{{.CloneLink.HTTPS}}"
+													style = "height:31px"
+									>{{if UseHTTPS}}HTTPS{{else}}HTTP{{end}}</button>
+									{{end}}
+									{{if not $.DisableSSH}}
+									<button class = "btn btn-default btn-sm"
+													id = "sshUrl"
+													data-link="{{.CloneLink.SSH}}"
+													style = "height:31px"
+									>SSH</button>
+									{{end}}
+								</div>
+								<input style="height:31px" type="text" id = "url" value = "{{if not $.DisableHTTP}}{{$.CloneLink.HTTPS}}{{else}}{{$.CloneLink.SSH}}{{end}}" class="form-control" readonly />
+								<div class="input-group-btn">
+									<button class="btn btn-default btn-sm clipboard add-tooltip" data-toggle="tooltip" data-container="body" data-placement="top" title="点击复制" type="button" id = "clipboard-btn"  data-success="复制成功" data-error="复制失败" ><i class = "octicon octicon-clippy"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class = "dropdown pull-right mar-rgt">
+						<button class = "btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >压缩包下载
+							<span class = "caret"></span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li>
+								<a href = "{{$.RepoLink}}/archive/{{EscapePound $.BranchName}}.zip">zip下载</a>
+							</li>
+							<li>
+								<a href = "{{$.RepoLink}}/archive/{{EscapePound $.BranchName}}.tar.gz">tar.gz下载</a>
+							</li>
+						</ul>
+					</div>
+					<!--<button class = "btn btn-primary pull-right mar-hor">WEBIDE</button>-->
+					<!--<button class = "btn btn-primary pull-right">部署当前分支</button>-->
+					{{end}}
+				</div>
+			</div>
+			{{if .IsViewFile}}
+			{{template "repo/view_file" .}}
+			{{else}}
+			{{template "repo/view_list" .}}
+			{{end}}
+		</div>
+	</div>
+</div>
+<!--main end-->
+{{template "base/footer" .}}

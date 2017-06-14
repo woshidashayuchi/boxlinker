@@ -1,0 +1,29 @@
+.containerBody{
+  margin:0 15px;
+  position: relative;
+}
+.box{
+  min-height: 100vh;
+  height: auto;
+  position: relative;
+  min-width: 320px;
+  overflow: hidden;
+}
+.close{
+  position: fixed;
+  top:85px;
+  width:100%;
+  left:180px;
+  min-height:100vh;
+  overflow:hidden;
+  z-index:9;
+  display:none;
+}
+@media(max-width:768px){
+  .containerBody{
+    margin:0 8px;
+  }
+  .close{
+    display: block;
+  }
+}

@@ -1,0 +1,41 @@
+@charset "utf-8";
+html, body, h1, h2, h3, h4, h5, h6, div, ol, ul, li, dl, dt, dd, p, textarea, input, select, option, form, tr, th, td, img, em, i, var, strong { margin: 0; padding: 0; font-family:"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;font-size:13px;}
+body, html { position: relative; width: 100%;}
+h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+li { list-style: none;vertical-align:middle; }
+img { border: 0; vertical-align: middle }
+table { border-collapse: collapse; border-spacing: 0 }
+p { word-wrap: break-word }
+a { text-decoration: none;}
+a:hover { text-decoration: none;color:#1d91bc; transition:color ease .3s 0s;}
+a, textarea, input { outline: 0 }
+input{outline:none;}
+textarea { overflow: auto; resize: none }
+em, i { font-style: normal }
+em { font-style: normal; }
+button{outline:none;}
+button:focus,button:active{outline:none !important;}
+.left{
+	float:left;
+}
+.right{
+	float:right;
+}
+.mt-10{
+	margin-top:10px;
+}
+.mt-5{
+	margin-top:5px;
+}
+.m-hor{
+	margin:0 5px;
+}
+.mr-5{
+	margin-right:5px;
+}
+.ml-10{
+	margin-left:10px;
+}
+.mb-5{
+	margin-bottom:5px;
+}

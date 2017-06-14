@@ -1,0 +1,165 @@
+.search{
+  margin: 30px auto;
+  position: relative;
+  height: 40px;
+}
+.search>div{
+  position: absolute;
+  width: 400px;
+  height: 40px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  left: 50%;
+  margin-left: -200px;
+}
+.search>div input{
+  height: 38px;
+  border: 0;
+  outline: none;
+  padding: 10px;
+  font-size: 14px;
+  width: 360px;
+  background:#fff;
+}
+.search>div input:focus{
+  border:0;
+}
+.search>div button{
+  border: 0;
+  font-size: 21px;
+  background: #fff;
+  position: relative;
+  top: 0px;
+  cursor: pointer;
+  outline: none;
+  margin:0;
+}
+.search>div button:hover{
+  background: #fff;
+  color:#21a1d0;
+}
+.search>div button:active{
+  background: #fff;
+  color:#2dafdf;
+}
+.box{
+  min-height:400px;
+}
+.box>div:last-child{
+  padding:0;
+}
+.item{
+  width: auto;
+  border: 0;
+  border-bottom: 1px solid #e9e9e9;
+  display: block;
+  box-shadow: none;
+  padding: 20px 30px 20px 20px;
+  margin: 0;
+  position: relative;
+}
+.item:last-child{
+  border-bottom:0;
+}
+.left{
+  padding: 0 15px 0 0;
+  position: absolute;
+  vertical-align: top;
+}
+.left img{
+  border: 1px solid #e8e8e8;
+  width: 40px;
+  height: 40px;
+}
+.info{
+  margin: 3px 170px 0 55px;
+}
+.info h1{
+  font-size: 13px;
+  color: #333;
+  font-weight: normal;
+}
+.info p{
+  font-size: 13px;
+  margin-top: 5px;
+  max-width: 700px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #999;
+}
+.info p span{
+  color:#333;
+}
+.right{
+  position: absolute;
+  right: 0;
+  display: inline-block;
+  padding-right: 20px;
+  padding-top: 10px;
+  top:22px;
+}
+.right p{
+  display: inline-block;
+  margin: 0 23px 0 0;
+  font-size: 12px;
+  color: #999;
+  position: relative;
+  top: 3px;
+}
+.right p span{
+  color: #777;
+  font-size: 13px;
+  margin-left: 5px;
+}
+.searchTip{
+  padding: 10px 15px 0;
+  color:#454545;
+}
+.searchTip span{
+  color: #2dafdf;
+  padding: 0 5px;
+}
+.page{
+  margin-right:20px;
+}
+@media(max-width:768px){
+  .item{
+    padding-left:10px;
+  }
+  .left{
+    margin-top:3px;
+  }
+  .info{
+    margin-right:33px;
+  }
+  .right p{
+    display:none;
+  }
+  .right{
+    padding-right:10px;
+  }
+  .info h1 span:first-child{
+    display:none;
+  }
+  .info p span{
+    display:none;
+  }
+  .search{
+    margin:0 auto 10px;
+  }
+  .search>div{
+    width:100%;
+    margin-left:-50%;
+  }
+  .search>div>input{
+    width:90%;
+  }
+  .search>div>button{
+    width:10%;
+  }
+  .page{
+    margin-right:10px;
+  }
+}

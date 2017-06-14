@@ -1,0 +1,103 @@
+{{template "base/head" .}}
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	{{template "base/alert" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation" class="active"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+				<li role="presentation"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class = "row">
+				<div class = "project_label_hd">
+					{{if .IsRepositoryWriter}}
+						<a href = "#createLabel" class = "btn btn-primary" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="createLabel">新建标签</a>
+						{{if and $.IsRepositoryWriter (eq .NumLabels 0)}}
+							<form class = "box-inline" action="{{.Link}}/initialize" method="post">
+								{{.CsrfTokenHtml}}
+								<input type="hidden" name="template_name" value="Default">
+								<button type="submit" class="btn btn-purple">加载预定义标签模板</button>
+							</form>
+						{{end}}
+					{{end}}
+					<div class="collapse" id="createLabel">
+						<div class = "form-group project_label_creat">
+							<form action="{{$.RepoLink}}/labels/new" method="post">
+								{{.CsrfTokenHtml}}
+								<div class = "row">
+									<div class = "col-sm-4">
+										<input type = "text" class = "form-control" id = "new-label-title" name="title" placeholder="请输入标签名称" autofocus required  />
+									</div>
+									<div class = "col-sm-2">
+										<div class = "input-group">
+													<span class = "input-group-addon project_label_color">
+														<i class = "labelColorEx" ></i>
+													</span>
+											<input class = "form-control dropdown-toggle labelColorInput"  name="color" required type = "text" data-toggle="dropdown" aria-expanded="false" />
+											<div class = "dropdown-menu project_label_color_menu">
+												<ul class = "labelColor">
+
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class = "col-sm-6">
+										<button class = "btn btn-primary" disabled id = "new-label-submit">保存</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class = "project_milestone_bd mt-10">
+					<div class = "list-group">
+						<div class = "list-header">
+							<span>共<span>{{.NumLabels}}</span>个标签</span>
+						</div>
+						{{range .Labels}}
+							<div class = "list-group-item">
+								<div class = "row">
+									<div class = "col-sm-4">
+										<span class = "label project_labels" style="color: {{.ForegroundColor}}; background-color: {{.Color}}"><i class="octicon octicon-tag"></i>{{.Name}}</span>
+									</div>
+									<div class = "col-sm-6">
+										<a href="{{$.RepoLink}}/issues?labels={{.ID}}">
+											共<span class="m-hor text-success">{{.NumOpenIssues}}</span>个未解决的任务
+										</a>
+									</div>
+									{{if $.IsRepositoryWriter}}
+									<div class = "col-sm-2">
+										<a href="javascript:;" class = "btn-link editLabel"
+											 data-id={{.ID}}
+											 data-title={{.Name}}
+											 data-color={{.Color}}
+											 data-url = '{{$.RepoLink}}/labels/edit'
+										>
+											<i class = "ion-compose"></i> 编辑
+										</a>
+										<a href="javascript:;" class = "btn-link ml-10 deleteLabel"
+											 data-url="{{$.RepoLink}}/labels/delete"
+											 data-id="{{.ID}}"
+										>
+											<i class = "ion-close"></i> 删除
+										</a>
+									</div>
+									{{end}}
+								</div>
+							</div>
+						{{end}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+{{template "base/footer" .}}

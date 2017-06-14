@@ -1,0 +1,11 @@
+.loading{
+  color:#2dafdf;
+  font-size:19px;
+  animation:rotate 1s linear infinite 0s;
+  display: inline-block;
+}
+@keyframes rotate
+{
+  from {transform:rotate(0deg);}
+  to {transform:rotate(360deg);}
+}

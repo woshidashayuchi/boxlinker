@@ -1,0 +1,128 @@
+
+.container{
+  margin-top: 40px;
+  min-height: 500px;
+}
+.box{
+  margin: 35px 25px 0;
+  padding-bottom: 35px;
+}
+.item{
+  padding: 20px 30px 20px;
+  border: 1px solid #e8e8e8;
+  border-left: 4px solid #2dafdf;
+  border-radius: 0 3px 3px 0;
+  margin-top:25px;
+}
+.item>p{
+  margin-bottom: 15px;
+}
+.item > p>span{
+  color: #2dafdf;
+  margin-left: 10px;
+}
+.item li{
+  width: 30%;
+  min-width: 300px;
+  float: left;
+  word-break: break-all;
+  margin-bottom: 25px;
+}
+.item li span{
+  color:#999;
+}
+.item li span:first-child{
+  min-width: 80px;
+  text-align: right;
+  margin-right: 10px;
+}
+.item li span:last-child{
+  color:#333;
+}
+.logBox{
+  margin-top: 25px;
+}
+.logBox>div>ul{
+  padding-left: 20px;
+  height:auto;
+  margin-bottom:30px;
+}
+.logBox >div>ul li > a{
+  border-bottom-color: transparent;
+  cursor: default;
+  border: 0;
+  background: #2dafdf !important;
+  color: #fff !important;
+  padding: 8px 15px !important;
+}
+.branch{
+  padding: 20px 30px 20px;
+  border: 1px solid #e8e8e8;
+  border-left: 4px solid #2dafdf;
+  border-radius: 0 3px 3px 0;
+  margin-top:25px;
+}
+.branch li{
+  float: left;
+  width: 20%;
+  padding: 5px 10px 5px 0;
+  position: relative;
+  min-height: 75px;
+}
+.branch li:last-child:before{
+  display:none;
+}
+.branch li > p:first-child {
+  margin-bottom: 10px;
+  color: #2dafdf;
+  margin-top: 10px;
+}
+.branch li > p:last-child{
+  color: #999;
+  font-size: 12px;
+}
+.branch li:before{
+  content: "";
+  width: 1px;
+  height: 52px;
+  background: #e8e8e8;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -26px;
+}
+.branch li:last-child{
+  width:40%;
+}
+.branchBtn{
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  width: 100px;
+  height: 65px;
+  line-height: 65px;
+  margin-left: 10px;
+  background: #cc7a6f;
+  cursor: pointer;
+  font-size: 12px;
+}
+.branchBtn span{
+  color:#fff;
+}
+.branchBtn span:first-child{
+  font-size: 14px;
+  margin-right: 5px;
+}
+.branchBtn span:before{
+  position: relative;
+  top: 1px;
+  left: -1px;
+}
+@media(max-width:768px){
+  .container{
+    overflow-x:auto;
+  }
+  .container>div{
+    min-width:600px;
+  }
+}

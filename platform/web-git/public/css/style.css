@@ -1,0 +1,541 @@
+#container{
+	overflow:auto;
+}
+.project-breadcrumb li,.project-breadcrumb li a,.project-breadcrumb li i{
+	font-size:20px;
+}
+.git_header{
+	height:40px;
+	background:#fff;
+	position: fixed;
+	width:100%;
+	left:0;
+	top:0;
+	vertical-align: middle;
+	z-index:5;
+	border-bottom:1px solid #e8e8e8;
+}
+.git_logo{
+	padding:8px 24px;
+}
+.git_logo img{
+	width:120px;
+	height:24px;
+}
+.git_nav a{
+	color:#758697;
+	display:inline-block;
+	height:40px;
+	line-height:40px;
+	padding:0 15px;
+	transition:all ease .3s.0s;
+}
+.git_nav a:hover{
+	background:#f2f2f2;
+}
+.git_user{
+	padding:0 20px;
+}
+.git_user>button{
+	margin-top:5px;
+}
+.git_user>.dropdown>button{
+	margin-top:5px;
+	text-decoration: none !important;
+}
+.git_user>.dropdown>button:before{
+	font-size:16px;
+}
+.git_user>p:hover{
+	background:#f7f7f7;
+}
+.git_feeds .dropdown>button span{
+	font-size:20px;
+}
+.git_container{
+	margin:60px 30px 0;
+	max-width:1440px;
+	padding-bottom:60px;
+}
+footer .git_container{
+	height:40px;
+	line-height:40px;
+	margin:0 30px;
+}
+
+/*dashboard*/
+.git_project_sm{
+	width:150px;
+	height:150px;
+	float:left;
+	padding:15px 5px;
+	margin:5px;
+	text-align:center;
+	cursor:pointer;
+}
+.git_project_sm>a{
+	display:block;
+}
+.git_project_sm:hover{
+	background:#f7f7f7;
+}
+.git_project_sm img{
+	width:100px;
+	height:100px;
+}
+.git_project_sm p{
+	font-size:12px;
+}
+.git_project_add{
+	border:1px dashed #e8e8e8;
+}
+.git_project_add span:first-child{
+  font-size: 60px;
+}
+.git_project_add span{
+	color:#999;
+  display: block;
+}
+.time_line{
+	padding-bottom:10px;
+	position: relative;
+  color:#999;
+}
+.time_line:after,.time_line:before{
+	background-color: #bec6ce;
+  bottom: 20px;
+  content: "";
+  display: block;
+  position: absolute;
+}
+.time_line:after{
+	left: 46px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid #bec6ce;
+  background-color: #ecf0f5;
+}
+.time_line:before{
+	left: 49px;
+  top: 20px;
+  width: 1px;
+}
+.time_line_entry{
+	margin-bottom: 25px;
+  margin-top: 5px;
+  position: relative;
+}
+.time_line_start{
+	width: 100px;
+  float: left;
+  text-align: center;
+  padding-bottom: 15px;
+}
+.time_line_icon{
+	border-radius: 50%;
+  display: block;
+  margin: 5px auto 0;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  width: 40px;
+  background:#fff;
+}
+.time_line_time{
+	display: inline-block;
+  padding: 2px 3px;
+  font-size:12px;
+  max-width: 75px;
+  background:#fff;
+}
+.icon-2x{
+	font-size:23px;
+}
+.time_line_label{
+	padding: 15px;
+  position: relative;
+  min-height: 50px;
+  margin-left:100px;
+}
+.time_line_label>p img{
+	width:35px;
+	height:35px;
+	border-radius:50%;
+	margin-right:5px;
+}
+.time_line_label_content img{
+	max-width:500px;
+}
+.time_line_label p a{
+	font-weight:bold;
+}
+.time_line_label p span{
+	margin:0 5px;
+}
+.time_line_label ul{
+	margin:10px 0 10px 40px;
+}
+.time_line_label ul li{
+	font-size:12px;
+}
+.git_task_list{
+	color:#999;
+}
+.git_task_list>li{
+	padding:10px 0;
+	border-bottom:1px solid #e8e8e8;
+}
+.git_task_jj{
+	color:#c71612;
+	display:inline-block;
+	width:20px;
+	text-align: center;
+	cursor:default;
+}
+.git_task_3{
+
+}
+.git_task_2 i:last-child{
+	display:none;
+}
+.git_task_1 i:last-child,.git_task_1 i:first-child{
+	display:none;
+}
+.git_task_0{
+	color:#999;
+}
+.git_task_0 i:last-child,.git_task_1 i:first-child{
+	display:none;
+}
+.git_task_0 i:first-child{
+	display:none;
+}
+.git_task_bd{
+	margin:10px 0 0 20px;
+}
+.git_task_time{
+	cursor:default;
+}
+.git_task_time:before{
+	margin-right:3px;
+}
+.git_task_time_out{
+	padding:0 5px;
+	background:#c71612;
+	color:#fff;
+	border-radius:3px;
+}
+.mega-octicon.octicon-invalid.type:before{
+	content:"\f027"
+}
+
+/*创建项目*/
+.git_creat_project{
+	width:760px;
+	margin:0 auto;
+}
+.git_creat_project_line{
+	padding:0;
+	width:10px;
+	color:#999;
+	text-align:center;
+}
+.git_creat_project_line span{
+	display:block;
+	font-size:32px;
+	margin-top:10px;
+}
+.git_form_dosc{
+	font-size:12px;
+	color:#999;
+	padding-left:20px;
+	padding-top:5px;
+}
+/*项目详情*/
+.project_index_action span i{
+	margin-right:3px;
+}
+.project_index_dl dt,.project_index_dl dd{
+	line-height:34px;
+}
+.project_index_list{
+	padding:15px;
+}
+.project_index_list li{
+	margin-bottom:5px;
+}
+/*创建里程碑*/
+.project_milestone_desc{
+	height:150px !important;
+}
+.laydate_box{
+	margin-top:-60px !important;
+}
+/*任务*/
+.project_issue_w50{
+	min-width:50px;
+	display:inline-block;
+}
+.issue_hd .panel-title{
+	font-size:24px;
+}
+.issue_hd .label{
+	display:inline-block;
+}
+.deleteIssue{
+	display:inline-block;
+	margin-top:4px;
+	vertical-align: middle;
+}
+/*#select2-label_ids-results li{*/
+
+/*}*/
+/*#select2-label_ids-results .label{*/
+	/*display:block;*/
+	/*height:28px;*/
+	/*text-align:left;*/
+	/*padding-left:10px;*/
+	/*line-height:28px;*/
+/*}*/
+/*#select2-label_ids-results .label:hover{*/
+	/*opacity: .8;*/
+/*}*/
+/*标签*/
+.project_labels i{
+	display:inline-block;
+	vertical-align: middle;
+}
+.project_label_creat{
+	padding:10px;
+	background:#f7f7f7;
+}
+.project_label_color{
+	min-width:25px;
+	padding:4px 9px;
+}
+.project_label_color i{
+	display:block;
+	width:15px;
+	height:15px;
+	padding:0;
+	margin:0;
+	background:red;
+}
+.project_label_color_menu{
+	padding:5px;
+}
+.labelColor{
+	width:250px;
+	padding:5px;
+}
+.labelColor li{
+	float:left;
+}
+.labelColor a{
+	display:block;
+	width:30px;
+	height:30px;
+	position:relative;
+	background:#e8e8e8;
+}
+.labelColor a:hover{
+	border:1px solid #666;
+}
+/*里程碑详情*/
+.milestone_bar{
+	display:inline-block;
+	width:100px;
+	vertical-align: middle;
+	margin-top:8px;
+}
+.issue_item{
+	padding-left:60px;
+	position:relative;
+}
+.issue_user{
+	position: absolute;
+  left: 0;
+}
+.issue_item_body{
+	position:relative;
+	border:1px solid #ddd;
+}
+.issue_item_body:before{
+	content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 0;
+  top: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 7px solid #ddd;
+  margin: 15px 0 0 -7px;
+}
+.issue_item_body:after{
+	content: "";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 0;
+    top: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 7px solid #edf7ff;
+    margin: 15px 0 0 -5px;
+}
+.issue_item_head{
+	line-height: 32px;
+  padding: 0 15px;
+  background-color: #edf7ff;
+  border-bottom: 1px solid #ddd;
+}
+.issue_item_content{
+	min-height:100px;
+	padding:10px;
+}
+.summernoteBtn{
+	display:none;
+}
+.issue_item_content_txt{
+	padding:10px;
+}
+.issue_ft{
+	padding-left:60px;
+}
+/*设置*/
+.set_tab_nav>li>a:hover{
+	border:1px solid transparent !important;
+	background:#f7f7f7 !important;
+}
+.set_tab_content{
+	width:100% !important;
+	border:0;
+	box-shadow: none !important;
+}
+/*code*/
+.project_code_name>i{
+	font-size:22px;
+	margin-top:3px;
+	position: relative;
+	top:3px;
+}
+.project_code_col .col-sm-3{
+	line-height:28px;
+}
+.project_code_download{
+	width:450px;
+	padding:15px;
+}
+.project_code_col{
+	line-height:33px;
+}
+form .form-control{
+	height:32px;
+}
+form .input-sm {
+	height: 30px;
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+}
+.search-box{
+	position: relative;
+}
+.search-box >ul{
+	display: none;
+	border: 1px solid #ccc;
+	position: absolute;
+	width: 100%;
+	left: 7px;
+	top: 30px;
+	background: #fff;
+	z-index: 3;
+}
+.search-box>ul >li {
+	list-style-type: none;
+	color: #333;
+	cursor: pointer;
+	position: relative;
+	border-bottom: 1px solid #e8e8e8;
+	padding:6px 10px;
+}
+.search-box>ul>li:hover{
+	background:#eee;
+}
+.search-box>ul>li.active{
+	background:#42a5f5;
+	color:#fff;
+}
+.search-box>ul>li.active a{
+	color:#fff;
+}
+/*user*/
+.git_user_container{
+	padding:10px;
+	background:#fff;
+}
+/*footer*/
+footer{
+	position:fixed;
+	bottom:0;
+	left:0;
+	width:100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

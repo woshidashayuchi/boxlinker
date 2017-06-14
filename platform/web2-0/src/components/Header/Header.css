@@ -1,0 +1,140 @@
+.root{
+
+}
+.logoBox{
+  display: block;
+  padding: 8px 24px;
+  background: #fff!important;
+  color: #2dafdf;
+  height: 40px;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  width: 180px;
+  transition: all .5s ease;
+  float: left;
+  font-size: 18px;
+  line-height: 20px;
+}
+.logo{
+  width: 120px;
+  height: 24px;
+  float: left;
+  margin: 0 5px;
+}
+.box{
+  border-right:1px solid #e8e8e8;
+}
+.box:before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 40px;
+  background-color: #fff;
+}
+.img,.imgNo{
+  position: relative;
+  display: inline-block;
+  color:#666;
+}
+.img img,.imgNo img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.hd{
+  display:block;
+  padding:10px 0;
+  position: relative;
+  min-height:40px;
+  border-bottom:1px solid #e8e8e8;
+}
+.hd img{
+  position:absolute;
+  top:20px;
+  left:10px;
+}
+.hd>div{
+  margin-left:70px;
+  color:#666;
+  font-size:12px;
+  padding:2px 0;
+}
+.hd>div span{
+  color:#2dafdf;
+}
+.mr10{
+  margin-right:10px;
+}
+.lastNav{
+  padding-right:15px;
+}
+.loading{
+  border-left:0 !important;
+}
+.loading svg{
+  position: relative;
+  margin-top:-10px;
+}
+.loading > a:hover{
+  background:#fff !important;
+  cursor:default;
+}
+.userList{
+  width:200px;
+  overflow: hidden;
+}
+.createOrg{
+  color:#2dafdf;
+  margin-left:10px;
+  font-size:12px;
+}
+.item{
+  float:left;
+  text-align: center;
+  padding:10px;
+  width:50%;
+}
+.item p{
+  font-size:12px;
+}
+.item p:first-child{
+  font-size:24px;
+}
+.item:hover{
+  color:#2dafdf;
+  background:#e9e9e9;
+}
+.lastNav >ul>li>ul{
+  padding:0;
+}
+.lastNav >ul>li>ul>li>a:hover{
+  background:#fff;
+}
+.lastNav >ul>li>ul>li:last-child a{
+  text-align: center;
+  padding:10px 0;
+  background:#f9f9f9;
+}
+.lastNav >ul>li>ul>li:last-child a:hover{
+  color:#2dafdf;
+}
+.organize a{
+  color:#666;
+}
+.nav p:last-child{
+  font-size:12px;
+  color:#999;
+}
+@media (max-width: 768px) {
+  .box{
+    border-bottom:1px solid #e8e8e8;
+    border-right:0;
+  }
+  .logoBox{
+    padding:8px 5px;
+  }
+}

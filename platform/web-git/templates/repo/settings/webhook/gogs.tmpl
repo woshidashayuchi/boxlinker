@@ -1,0 +1,41 @@
+{{if eq .HookType "gogs"}}
+	<p>{{.i18n.Tr "repo.settings.add_webhook_desc" "https://gogs.io/docs/features/webhook.html" | Str2html}}</p>
+	<form class="ui form" action="{{.BaseLink}}/settings/hooks/gogs/{{if .PageIsSettingsHooksNew}}new{{else}}{{.Webhook.ID}}{{end}}" method="post">
+		{{.CsrfTokenHtml}}
+		<div class = "row">
+			<div class = "col-sm-12">
+				<div class = "form-group {{if .Err_PayloadURL}}has-error{{end}}">
+					<p class = "text-main text-bold">推送地址</p>
+					<input class = "form-control"
+								 id="payload_url"
+								 name="payload_url"
+								 type="url" value="{{.Webhook.URL}}" autofocus required />
+					<small class = "help-block" id = ""></small>
+				</div>
+			</div>
+		</div>
+		<div class = "row">
+			<div class = "col-sm-12">
+				<div class = "form-group">
+					<p class = "text-main text-bold">数据格式</p>
+					<select class = "demo_select2 form-control" id = "content_type" name = "content_type">
+						<option value="application/json">application/json</option>
+						<option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+					</select>
+					<small class = "help-block" ></small>
+				</div>
+			</div>
+		</div>
+		<div class = "row">
+			<div class = "col-sm-12">
+				<div class = "form-group {{if .Err_Secret}}has-error{{end}}">
+					<p class = "text-main text-bold">密钥文本</p>
+					<input  class = "form-control" id="secret" name="secret" type="password" value="{{.Webhook.Secret}}" autocomplete="off">
+					<small class = "help-block" ></small>
+					<p class="text grey desc">{{.i18n.Tr "repo.settings.secret_desc" | Safe}}</p>
+				</div>
+			</div>
+		</div>
+		{{template "repo/settings/webhook/settings" .}}
+	</form>
+{{end}}

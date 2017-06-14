@@ -1,0 +1,259 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="projectIndex.html" >概览</a></li>
+			<li role="presentation" class="active"><a href="projectCode.html" >代码</a></li>
+			<li role="presentation"><a href="projectMilestone.html" >里程碑</a></li>
+			<li role="presentation"><a href="projectIssue.html" >任务</a></li>
+			<li role="presentation"><a href="projectLabel.html" >标签</a></li>
+			<li role="presentation"><a href="projectSetUp.html" >设置</a></li>
+		</ul>
+		<div class = "tab-content">
+			<div class = "row">
+				<div class = "col-sm-2">
+					{{template "repo/branch_dropdown" .}}
+					<select class = "pull-left form-control" id = "chooseBranch">
+						<option>matset</option>
+						<option>deveolp_1</option>
+						<option>deveolp_2</option>
+						<option>deveolp_3</option>
+					</select>
+				</div>
+				<div class = "col-sm-2">
+					<ol class="breadcrumb pull-left mt-5">
+						<li><a href="javascript:;" class = "btn-link">Home</a></li>
+						<li><a href="javascript:;" class = "btn-link">Library</a></li>
+						<li class="active">Data</li>
+					</ol>
+				</div>
+				<div class = "col-sm-8">
+					<div class = "pull-right">
+						<button class = "btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >下载
+							<span class = "caret"></span>
+						</button>
+						<div class = "dropdown-menu project_code_download">
+							<div class="input-group mar-btm">
+								<input type="text" value = "https://boxlinker.com" class="form-control">
+								<span class="input-group-btn">
+                        <button class="btn btn-default" type="button">复制</button>
+                    </span>
+							</div>
+						</div>
+					</div>
+					<button class = "btn btn-primary pull-right mar-hor">WEBIDE</button>
+					<button class = "btn btn-primary pull-right">部署当前分支</button>
+				</div>
+			</div>
+			<div class = "row">
+				<div class = "col-sm-12">
+					<div class = "list-group mar-top">
+						<div class = "list-header">
+							<a href="javascript:;" class = "btn-link">
+								<img class = "img-circle" width = "25px" height = "25px" src="../images/head.jpg" />
+								bowumanman
+							</a>
+							<span class = "text-muted">Update index.html</span>
+							<div class = "pull-right">
+								<a href="javascript:;" class = "btn-link">12454323 <i class = "ion-document-text"></i></a>
+								<span class = "text-muted ml-10">提交于 2017-03-05 12:12:21</span>
+							</div>
+						</div>
+						<div class = "list-group-item">
+							<div class = "row project_code_col">
+								<div class = "col-sm-3">
+									<a href="javascript:;" class = "btn-link project_code_name">
+										<i class = "ion-folder"></i>
+										src
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-duted">3小时前</span>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<a href="javascript:;" class = "btn-link">
+										<img class = "img-circle" width = "25px" height = "25px" src="../images/head.jpg" />
+										bowumanman
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-muted">Update index.html</span>
+								</div>
+							</div>
+						</div>
+						<div class = "list-group-item">
+							<div class = "row project_code_col">
+								<div class = "col-sm-3">
+									<a href="javascript:;" class = "btn-link project_code_name">
+										<i class = "ion-folder"></i>
+										src
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-duted">3小时前</span>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<a href="javascript:;" class = "btn-link">
+										<img class = "img-circle" width = "25px" height = "25px" src="../images/head.jpg" />
+										bowumanman
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-muted">Update index.html</span>
+								</div>
+							</div>
+						</div>
+						<div class = "list-group-item">
+							<div class = "row project_code_col">
+								<div class = "col-sm-3">
+									<a href="javascript:;" class = "btn-link project_code_name">
+										<i class = "ion-folder"></i>
+										src
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-duted">3小时前</span>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<a href="javascript:;" class = "btn-link">
+										<img class = "img-circle" width = "25px" height = "25px" src="../images/head.jpg" />
+										bowumanman
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-muted">Update index.html</span>
+								</div>
+							</div>
+						</div>
+						<div class = "list-group-item">
+							<div class = "row project_code_col">
+								<div class = "col-sm-3">
+									<a href="javascript:;" class = "btn-link project_code_name">
+										<i class = "ion-folder"></i>
+										src
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-duted">3小时前</span>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<a href="javascript:;" class = "btn-link">
+										<img class = "img-circle" width = "25px" height = "25px" src="../images/head.jpg" />
+										bowumanman
+									</a>
+								</div>
+								<div class = "col-sm-3 text-right">
+									<span class = "text-muted">Update index.html</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+
+
+<div class="repository file list">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		{{if .PageIsRepoHome}}
+			<p id="repo-desc">
+				{{if .Repository.Description}}<span class="description has-emoji">{{.Repository.Description | Str2html}}</span>{{else}}<span class="no-description text-italic">{{.i18n.Tr "repo.no_desc"}}</span>{{end}}
+				<a class="link" href="{{.Repository.Website}}">{{.Repository.Website}}</a>
+			</p>
+			<div class="ui segment" id="git-stats">
+				<div class="ui two horizontal center link list">
+					<div class="item">
+				  	<a href="{{.RepoLink}}/commits/{{EscapePound .BranchName}}"><span class="ui text black"><i class="octicon octicon-history"></i> <b>{{.CommitsCount}}</b> {{.i18n.Tr "repo.commits"}}</span> </a>
+					</div>
+					<div class="item">
+				  	<a href="{{.RepoLink}}/branches"><span class="ui text black"><i class="octicon octicon-git-branch"></i><b>{{.BrancheCount}}</b> {{.i18n.Tr "repo.git_branches"}}</span> </a>
+					</div>
+					<div class="item">
+				  	<a href="{{.RepoLink}}/releases"><span class="ui text black"><i class="octicon octicon-tag"></i> <b>{{.Repository.NumTags}}</b> {{.i18n.Tr "repo.releases"}}</span> </a>
+					</div>
+				</div>
+			</div>
+		{{end}}
+		<div class="ui secondary menu">
+			{{if .PullRequestCtx.Allowed}}
+				<div class="fitted item">
+					<a href="{{.BaseRepo.Link}}/compare/{{.BaseRepo.DefaultBranch}}...{{.PullRequestCtx.HeadInfo}}">
+						<button class="ui green small button"><i class="octicon octicon-git-compare"></i></button>
+					</a>
+				</div>
+			{{end}}
+			{{template "repo/branch_dropdown" .}}
+			<div class="fitted item">
+				<div class="ui breadcrumb">
+					<a class="section" href="{{.RepoLink}}/src/{{EscapePound .BranchName}}">{{EllipsisString .Repository.Name 15}}</a>
+					{{ $n := len .TreeNames}}
+					{{ $l := Subtract $n 1}}
+					{{range $i, $v := .TreeNames}}
+						<div class="divider"> / </div>
+						{{if eq $i $l}}
+							<span class="active section">{{$v}}</span>
+						{{else}}
+							{{ $p := index $.Paths $i}}
+							<span class="section"><a href="{{EscapePound $.BranchLink}}/{{EscapePound $p}}">{{$v}}</a></span>
+						{{end}}
+					{{end}}
+				</div>
+			</div>
+			<div class="right fitted item">
+				{{if .Repository.CanEnableEditor}}
+					<div id="file-buttons" class="ui tiny blue buttons">
+						{{if .CanAddFile}}
+							<a href="{{.RepoLink}}/_new/{{EscapePound .BranchName}}/{{EscapePound .TreePath}}" class="ui button">
+								{{.i18n.Tr "repo.editor.new_file"}}
+							</a>
+						{{end}}
+						{{if .CanUploadFile}}
+							<a href="{{.RepoLink}}/_upload/{{EscapePound .BranchName}}/{{EscapePound .TreePath}}" class="ui button">
+								{{.i18n.Tr "repo.editor.upload_file"}}
+							</a>
+						{{end}}
+					</div>
+				{{end}}
+
+				<!-- Only show colne panel in repository home page -->
+				{{if eq $n 0}}
+					<div class="ui action small input" id="clone-panel">
+						{{if not $.DisableHTTP}}
+							<button class="ui basic clone button" id="repo-clone-https" data-link="{{.CloneLink.HTTPS}}">
+								{{if UseHTTPS}}HTTPS{{else}}HTTP{{end}}
+							</button>
+						{{end}}
+						{{if not $.DisableSSH}}
+							<button class="ui basic clone button" id="repo-clone-ssh" data-link="{{.CloneLink.SSH}}">
+								SSH
+							</button>
+						{{end}}
+						<input id="repo-clone-url" value="{{if not $.DisableHTTP}}{{$.CloneLink.HTTPS}}{{else}}{{$.CloneLink.SSH}}{{end}}" readonly>
+						<button class="ui basic icon button poping up clipboard" id="clipboard-btn" data-original="{{.i18n.Tr "repo.copy_link"}}" data-success="{{.i18n.Tr "repo.copy_link_success"}}" data-error="{{.i18n.Tr "repo.copy_link_error"}}" data-content="{{.i18n.Tr "repo.copy_link"}}" data-variation="inverted tiny" data-clipboard-target="#repo-clone-url">
+							<i class="octicon octicon-clippy"></i>
+						</button>
+						<div class="ui basic jump dropdown icon button">
+							<i class="download icon"></i>
+							<div class="menu">
+								<a class="item" href="{{$.RepoLink}}/archive/{{EscapePound $.BranchName}}.zip"><i class="octicon octicon-file-zip"></i> ZIP</a>
+								<a class="item" href="{{$.RepoLink}}/archive/{{EscapePound $.BranchName}}.tar.gz"><i class="octicon octicon-file-zip"></i> TAR.GZ</a>
+							</div>
+						</div>
+					</div>
+				{{end}}
+			</div>
+		</div>
+		{{if .IsViewFile}}
+			{{template "repo/view_file" .}}
+		{{else}}
+			{{template "repo/view_list" .}}
+		{{end}}
+	</div>
+</div>

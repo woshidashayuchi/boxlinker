@@ -1,0 +1,67 @@
+
+<div class = "row">
+	<div class = "col-sm-12">
+		<div class = "list-group mar-top">
+			<div class = "list-header">
+				{{if .LatestCommitUser}}
+					<a href="{{AppSubUrl}}/{{.LatestCommitUser.Name}}" class = "btn-link">
+						<img class = "img-circle" width = "25px" height = "25px" src="{{.LatestCommitUser.RelAvatarLink}}" />
+						{{.LatestCommit.Author.Name}}
+					</a>
+				{{else}}
+					<img class = "img-circle" width = "25px" height = "25px" src="{{AvatarLink .LatestCommit.Author.Email}}" />
+					{{.LatestCommit.Author.Name}}
+				{{end}}
+				<a href="{{.RepoLink}}/commit/{{.LatestCommit.ID}}" class = "btn-link">{{ShortSha .LatestCommit.ID.String}} <i class = "ion-document-text"></i></a>
+				<span class = "text-muted">{{RenderCommitMessage false .LatestCommit.Summary .RepoLink $.Repository.ComposeMetas}}</span>
+				<span class = "text-muted ml-10">提交于 {{TimeSince .LatestCommit.Author.When $.Lang}}</span>
+				<div class = "pull-right">
+						<a href = "{{.RepoLink}}/commits/{{.BranchName}}" class = "btn-link">提交历史</a>
+				</div>
+			</div>
+			{{if .HasParentPath}}
+				<div class = "list-group-item">
+					<a href = "{{EscapePound .BranchLink}}{{.ParentPath}}" class = "btn-link">上一步</a>
+				</div>
+			{{end}}
+			{{range $item := .Files}}
+				{{$entry := index $item 0}}
+				{{$commit := index $item 1}}
+				<div class = "list-group-item">
+					<div class = "row project_code_col">
+					{{if $entry.IsSubModule}}
+						<div class = "col-sm-4">
+							{{$refURL := $commit.RefURL AppUrl $.BranchLink}}
+							{{if $refURL}}
+								<a href="{{$refURL}}">{{$entry.Name}}</a> @ <a href="{{$refURL}}/commit/{{$commit.RefID}}">{{ShortSha $commit.RefID}}</a>
+							{{else}}
+								{{$entry.Name}} @ {{ShortSha $commit.RefID}}
+							{{end}}
+						</div>
+					{{else}}
+						<div class = "col-sm-4">
+							<a href="{{EscapePound $.TreeLink}}/{{EscapePound $entry.Name}}" class = "btn-link project_code_name">
+								<i class="octicon octicon-file-{{if or $entry.IsDir}}directory{{else}}text{{end}}"></i>
+								{{$entry.Name}}
+							</a>
+						</div>
+					{{end}}
+						<div class = "col-sm-4 text-left">
+							<a class="btn-link" href="{{$.RepoLink}}/commit/{{$commit.ID}}">{{ShortSha $commit.ID.String}}</a>
+							<span class = "text-muted">{{RenderCommitMessage false $commit.Summary $.RepoLink $.Repository.ComposeMetas}}</span>
+						</div>
+						<!--<div class = "col-sm-3 text-right">-->
+							<!--<a href="javascript:;" class = "btn-link">-->
+								<!--<img class = "img-circle" width = "25px" height = "25px" src="" />-->
+								<!--bowumanman-->
+							<!--</a>-->
+						<!--</div>-->
+						<div class = "col-sm-4">
+							<span class = "text-duted">{{TimeSince $commit.Committer.When $.Lang}}</span>
+						</div>
+				</div>
+			</div>
+			{{end}}
+		</div>
+	</div>
+</div>

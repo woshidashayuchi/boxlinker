@@ -1,0 +1,354 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	{{template "base/alert" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation" class="active"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+				<li role="presentation"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class = "row">
+				<div class = "project_milestone_hd">
+					{{if .IsRepositoryWriter}}
+						<a class="btn btn-primary" href="{{.RepoLink}}/issues/new">创建任务</a>
+					{{end}}
+					<div class = "pull-right btn-group">
+						<!--标签筛选-->
+						<div class="btn-group">
+							{{if not $.SelectLabels}}
+								<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+									标签筛选 <i class="dropdown-caret"></i>
+								</button>
+							{{else}}
+								{{range .Labels}}
+									{{if eq $.SelectLabels .ID}}
+									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+										{{.Name | Sanitize}} <i class="dropdown-caret"></i>
+									</button>
+									{{end}}
+								{{end}}
+							{{end}}
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li><a href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}">{{.i18n.Tr "repo.issues.filter_label_no_select"}}</a></li>
+								{{range .Labels}}
+								<li>
+									<a href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{.ID}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}">
+										<span class="octicon {{if eq $.SelectLabels .ID}}octicon-check{{end}}">{{if not .IsChecked}}&nbsp;{{end}}</span>
+										<span class="label color" style="background-color: {{.Color}}"></span>
+										{{.Name | Sanitize}}
+									</a>
+								</li>
+								{{end}}
+							</ul>
+						</div>
+						<!--标签筛选 end-->
+						<!--里程碑筛选-->
+						<div class="btn-group">
+							{{if not $.MilestoneID}}
+								<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+									里程碑筛选 <i class="dropdown-caret"></i>
+								</button>
+							{{else}}
+								{{range .Milestones}}
+									{{if eq $.MilestoneID .ID}}
+										<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+											{{.Name | Sanitize}} <i class="dropdown-caret"></i>
+										</button>
+									{{end}}
+								{{end}}
+							{{end}}
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li><a href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&assignee={{$.AssigneeID}}">{{.i18n.Tr "repo.issues.filter_milestone_no_select"}}</a></li>
+								{{range .Milestones}}
+								<li class = "{{if eq $.MilestoneID .ID}}active selected{{end}}">
+									<a href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{$.SelectLabels}}&milestone={{.ID}}&assignee={{$.AssigneeID}}">{{.Name | Sanitize}}</a></li>
+								{{end}}
+							</ul>
+						</div>
+						<!--里程碑筛选 end-->
+						<!--状态筛选-->
+						<!--<div class="btn-group">-->
+							<!--<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">-->
+								<!--状态筛选 <i class="dropdown-caret"></i>-->
+							<!--</button>-->
+							<!--<ul class="dropdown-menu dropdown-menu-right">-->
+								<!--<li><a class="{{if eq .ViewType "all"}}active{{end}} item" href="{{$.Link}}?type=all&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}">{{.i18n.Tr "repo.issues.filter_type.all_issues"}}</a></li>-->
+								<!--<li><a class="{{if eq .ViewType "assigned"}}active{{end}} item" href="{{$.Link}}?type=assigned&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}">{{.i18n.Tr "repo.issues.filter_type.assigned_to_you"}}</a></li>-->
+								<!--<li><a class="{{if eq .ViewType "created_by"}}active{{end}} item" href="{{$.Link}}?type=created_by&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}">{{.i18n.Tr "repo.issues.filter_type.created_by_you"}}</a></li>-->
+								<!--<li><a class="{{if eq .ViewType "mentioned"}}active{{end}} item" href="{{$.Link}}?type=mentioned&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}">{{.i18n.Tr "repo.issues.filter_type.mentioning_you"}}</a></li>-->
+							<!--</ul>-->
+						<!--</div>-->
+						<!--状态筛选 end-->
+						<!--指派人筛选-->
+						<div class="btn-group">
+							{{if not $.AssigneeID}}
+								<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+									指派人筛选 <i class="dropdown-caret"></i>
+								</button>
+							{{else}}
+								{{range .Assignees}}
+									{{if eq $.AssigneeID .ID}}
+										<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+											{{.Name | Sanitize}} <i class="dropdown-caret"></i>
+										</button>
+									{{end}}
+								{{end}}
+							{{end}}
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li><a class="item" href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&milestone={{$.MilestoneID}}">{{.i18n.Tr "repo.issues.filter_assginee_no_select"}}</a></li>
+								{{range .Assignees}}
+								<li class = "{{if eq $.AssigneeID .ID}}active selected{{end}}">
+									<a href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{$.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{.ID}}">{{.DisplayName}}</a>
+								</li>
+								{{end}}
+							</ul>
+						</div>
+						<!--指派人筛选 end-->
+					</div>
+				</div>
+				<div class = "project_milestone_bd mt-10">
+					{{$open:="open"}}
+					{{$closed:="closed"}}
+					{{$fix:="fix"}}
+					<div class = "btn-group">
+						<a href = "{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state=open&labels={{.SelectLabels}}&milestone={{.MilestoneID}}&assignee={{.AssigneeID}}" class = "btn btn-default {{if eq .IsShowClosed 0}} btn-danger{{end}}">
+							{{.IssueStats.OpenCount}}个未解决
+						</a>
+						<a href = "{{$.Link}}?type={{.ViewType}}&sort={{$.SortType}}&state=closed&labels={{.SelectLabels}}&milestone={{.MilestoneID}}&assignee={{.AssigneeID}}"  class = "btn btn-default {{if eq .IsShowClosed 1}} btn-primary{{end}}">
+							{{.IssueStats.ClosedCount}}个已解决
+						</a>
+						<a href = "{{$.Link}}?type={{.ViewType}}&sort={{$.SortType}}&state=fix&labels={{.SelectLabels}}&milestone={{.MilestoneID}}&assignee={{.AssigneeID}}"  class = "btn btn-default {{if eq .IsShowClosed 2}} btn-success{{end}}">
+							{{.IssueStats.FixCount}}个已验收
+						</a>
+					</div>
+					<div class = "list-group mar-top">
+						{{$IssueImportanceState := .IssueImportanceState}}
+						{{range .Issues}}
+						{{ $timeStr:= TimeSince .Created $.Lang }}
+							<div class = "list-group-item">
+								<div class = "row">
+									<div class = "text-overflow project_issue_hd">
+										<span href = "javascript:;" class = "pull-right">
+											{{if .NumComments}}
+											<i class = "ion-chatbubble">&nbsp;{{.NumComments}}&nbsp;条评论</i>
+											{{end}}
+										</span>
+										<a href="{{$.Link}}/{{.Index}}" class = "btn-link text-lg">
+											<span class = "add-tooltip git_task_jj git_task_{{.Importance}}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{{index $.IssueImportanceState .Importance}}"><!--git_task_3十万火急 git_task_2非常紧急 git_task_1紧急  git_task_0 一般 -->
+												<i class = "ion-alert"></i>
+												<i class = "ion-alert"></i>
+												<i class = "ion-alert"></i>
+											</span>
+											{{.Title}}
+										</a>
+										{{range .Labels}}
+											<a class="label" href="{{$.Link}}?type={{$.ViewType}}&state={{$.State}}&labels={{.ID}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}" style="color: {{.ForegroundColor}}; background-color: {{.Color}}">{{.Name | Sanitize}}</a>
+										{{end}}
+									</div>
+									<div class = "clearfix mt-10">
+										{{if .Milestone}}
+										<a class = "btn-link mar-rgt" href="{{$.Link}}?type={{$.ViewType}}&state={{$.State}}&labels={{$.SelectLabels}}&milestone={{.Milestone.ID}}&assignee={{$.AssigneeID}}">
+											<i class = "ion-flag"></i>&nbsp;{{.Milestone.Name | Sanitize}}
+										</a>
+										{{end}}
+										{{$length := len .Comments}}
+										{{if eq $length 0}}
+										{{else}}
+											{{$comment := index .Comments .TopComment}}
+											{{$user := $comment.Poster.Name}}
+											{{$update := TimeSince $comment.Updated $.Lang}}
+											{{$headImg := $comment.Poster.RelAvatarLink}}
+											{{$HomeLink := $comment.Poster.HomeLink}}
+											{{if eq $comment.Type 1}}
+												<a href="{{$HomeLink}}" class = "btn-link">
+													<img class = "img-circle" width = "20px" height = "20px" src="{{$headImg}}">
+													<span class = "ml-5">{{$user}}</span>
+												</a>
+												于{{$update}}
+												<span class = "mar-rgt">设置为<span class = "text-danger">未解决</span></span>
+											{{else if eq $comment.Type 2}}
+												<a href="{{$HomeLink}}" class = "btn-link">
+													<img class = "img-circle" width = "20px" height = "20px" src="{{$headImg}}">
+													<span class = "ml-5">{{$user}}</span>
+												</a>
+												于{{$update}}
+												<span class = "mar-rgt">设置为<span class = "text-primary">已解决</span></span>
+											{{else if eq $comment.Type 7}}
+												<a href="{{$HomeLink}}" class = "btn-link">
+													<img class = "img-circle" width = "20px" height = "20px" src="{{$headImg}}">
+													<span class = "ml-5">{{$user}}</span>
+												</a>
+												于{{$update}}
+												<span class = "mar-rgt">指派给
+													<a href = "{{$comment.AssigneeLink}}" class = "btn-link">
+														<img class = "img-circle" width = "20px" height = "20px" src="{{$comment.AssigneeAvatar}}">
+														<span class = "ml-5">{{$comment.AssigneeName}}</span>
+													</a>
+												</span>
+												{{else if eq $comment.Type 8}}
+												<!--重要程度-->
+													<a href="{{.Poster.HomeLink}}" class = "btn-link">
+														<img class = "img-circle" width = "20px" height = "20px" src="{{.Poster.RelAvatarLink}}">
+														<span class = "ml-5">{{.Poster.DisplayName}}</span>
+													</a>
+													<span class = "mar-rgt">于{{$update}}设置为 {{index $IssueImportanceState .Importance}}</span>
+												<!--重要程度 end-->
+												{{else if eq $comment.Type 9}}
+												<!--标签-->
+													<a href="{{.Poster.HomeLink}}" class = "btn-link">
+														<img class = "img-circle" width = "20px" height = "20px" src="{{.Poster.RelAvatarLink}}">
+														<span class = "ml-5">{{.Poster.DisplayName}}</span>
+													</a>
+													{{if eq $comment.AddOrDel 0}}
+														<span class = "mar-rgt">于{{$update}} 清除了所有标签
+													{{else}}
+														<span class = "mar-rgt">于{{$update}} {{if eq $comment.AddOrDel 1}}添加新标签{{else}}删除了标签{{end}}
+															{{$Label := $comment.Label}}
+															{{range $.Labels}}
+																{{$IsLabel := eq .ID $Label}}
+																<span class="label {{if $IsLabel}} {{else}}hide{{end}}" style="color: {{.ForegroundColor}}; background-color: {{.Color}}">
+																	{{.Name | Sanitize}}
+																</span>
+															{{end}}
+														</span>
+													{{end}}
+												<!--标签 end-->
+												{{else if eq $comment.Type 10}}
+												<!--里程碑-->
+													<a href="{{.Poster.HomeLink}}" class = "btn-link">
+														<img class = "img-circle" width = "20px" height = "20px" src="{{.Poster.RelAvatarLink}}">
+														<span class = "ml-5">{{.Poster.DisplayName}}</span>
+													</a>
+													{{if eq $comment.Milestone 0}}
+													<span class = "mar-rgt">于{{$update}}</span> 取消了选中的里程碑
+													{{else}}
+														<span class = "mar-rgt">于{{$update}}</span>把任务归属到
+														{{$Milestone := $comment.Milestone}}
+														{{range $.Milestones}}
+															{{if eq $Milestone .ID}}
+																<a href="{{$.RepoLink}}/issues?milestone={{.ID}}" class = "btn-link mar-rgt">{{.Name | Sanitize}}</a>
+															{{end}}
+														{{end}}
+													{{end}}
+												<!--里程碑 end-->
+												{{else if eq $comment.Type 11}}
+													<a href="{{.Poster.HomeLink}}" class = "btn-link">
+														<img class = "img-circle" width = "20px" height = "20px" src="{{.Poster.RelAvatarLink}}">
+														<span class = "ml-5">{{.Poster.DisplayName}}</span>
+													</a>
+													于{{$update}}
+													<span class = "mar-rgt">设置为<span class = "text-success">已验收</span></span>
+											{{end}}
+										{{end}}
+											<div class = "pull-right">
+
+												{{if $.IsRepositoryWriter}}
+													{{if $.IsRepositoryAdmin}}
+														<a href="javascript:;" data-url="{{$.RepoLink}}/issues/{{.Index}}/delete" class = "text-danger mar-rgt deleteIssue" >删除</a>
+													{{else if eq .PosterID $.SignedUser.ID}}
+														<a href="javascript:;" data-url="{{$.RepoLink}}/issues/{{.Index}}/delete" class = "text-danger mar-rgt deleteIssue" >删除</a>
+													{{end}}
+													<form class="issue-form" style = "display:inline-block" action="{{$.RepoLink}}/issues/{{.Index}}/comments" method="post">
+														<input class = "status" name="status" type="hidden">
+														<input class = "csrf" name = "_csrf" type = "hidden" />
+														<input name = "content" type = "hidden" />
+														<div class="btn-group btn-group-xs">
+																<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+																	{{if eq .IsClosed 0}}未解决 <i class="dropdown-caret"></i>{{end}}
+																	{{if eq .IsClosed 1}}已解决 <i class="dropdown-caret"></i>{{end}}
+																	{{if eq .IsClosed 2}}已验收 <i class="dropdown-caret"></i>{{end}}
+																</button>
+																<ul class="dropdown-menu dropdown-menu-right">
+																	<li class = "issue-status-button {{if eq .IsClosed 0}}active selected{{end}}" data-status="未解决" data-status-and-comment="" data-status-val="reopen"><a href="javascript:;">未解决</a></li>
+																	<li class = "issue-status-button {{if eq .IsClosed 1}}active selected{{end}}" data-status="已解决" data-status-and-comment="" data-status-val="close"><a href="javascript:;">已解决</a></li>
+																	<li class = "issue-status-button {{if eq .IsClosed 2}}active selected{{end}}" data-status="已验收" data-status-and-comment="" data-status-val="fix"><a href="javascript:;">已验收</a></li>
+																</ul>
+														</div>
+													</form>
+													<div class="btn-group btn-group-xs ml-10 select-assignee">
+												{{if .Assignee}}
+													{{$AssineesID := .Assignee.ID}}
+													{{range $.Assignees}}
+														{{if eq $AssineesID .ID}}
+															<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+																{{.DisplayName}} <i class="dropdown-caret"></i>
+															</button>
+														{{end}}
+													{{end}}
+												{{else}}
+													<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">
+														转派给 <i class="dropdown-caret"></i>
+													</button>
+												{{end}}
+												<ul class="dropdown-menu dropdown-menu-right list-set-assignee menu" data-action="update" data-update-url="{{$.RepoLink}}/issues/{{.Index}}/assignee">
+													{{if .Assignee}}
+														{{$AssineesID := .Assignee.ID}}
+														<!--<li class = "no-select item">-->
+															<!--<a href="javascript:;">取消指派人</a>-->
+														<!--</li>-->
+														{{range $.Assignees}}
+														<li class = "item {{if eq $AssineesID .ID}}active selected{{end}}" data-id="{{.ID}}"
+																data-href="{{$.RepoLink}}/issues?assignee={{.ID}}"
+																data-avatar="{{.RelAvatarLink}}">
+															<a href="javascript:;">{{.DisplayName}}</a>
+														</li>
+														{{end}}
+													{{else}}
+														{{range $.Assignees}}
+														<li class = "item" data-id="{{.ID}}"
+																data-href="{{$.RepoLink}}/issues?assignee={{.ID}}"
+																data-avatar="{{.RelAvatarLink}}">
+															<a href="javascript:;">{{.DisplayName}}</a>
+														</li>
+														{{end}}
+													{{end}}
+												</ul>
+											</div>
+												{{end}}
+										</div>
+									</div>
+								</div>
+							</div>
+						{{end}}
+						{{with .Page}}
+						{{if gt .TotalPages 1}}
+						<div aria-label="Page navigation" class = "text-right">
+							<ul class="pagination">
+								<li class="{{if not .HasPrevious}}disabled{{end}}">
+									<a {{if .HasPrevious}}href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{$.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}&page={{.Previous}}"{{end}} aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+									</a>
+								</li>
+								{{range .Pages}}
+								{{if eq .Num -1}}
+								<li class="disabled"><a >...</a></li>
+								{{else}}
+								<li class="{{if .IsCurrent}}active{{end}}"><a  {{if not .IsCurrent}}href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{$.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}&page={{.Num}}"{{end}}>{{.Num}}</a></li>
+								{{end}}
+								{{end}}
+								<li class="{{if not .HasNext}}disabled{{end}}" >
+									<a {{if .HasNext}}href="{{$.Link}}?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&labels={{$.SelectLabels}}&milestone={{$.MilestoneID}}&assignee={{$.AssigneeID}}&page={{.Next}}"{{end}} aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						{{end}}
+						{{end}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+{{template "base/footer" .}}

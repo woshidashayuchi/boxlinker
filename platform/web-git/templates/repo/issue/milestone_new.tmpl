@@ -1,0 +1,124 @@
+{{template "base/head" .}}
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	{{template "base/alert" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation" class="active"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+				<li role="presentation"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class = "panel bord-no">
+				<div class = "panel-heading">
+					<h3 class = "panel-title">创建里程碑<small class = "ml-10">创建里程碑可以帮助管理您的多个任务，用来描述项目的特定版本或功能，更多详细信息请点击<a href="javascript:;" class = "btn-link">里程碑</a></small></h3>
+				</div>
+				<div class = "panel-body">
+					<form action="{{.Link}}" method="post">
+						{{.CsrfTokenHtml}}
+						<div class = "row">
+							<div class = "col-sm-6">
+								<div class = "form-group">
+									<p class = "text-main text-bold">标题</p>
+									<input type = "text" class = "form-control" name="title" id = "milestoneName" value="{{.title}}" autofocus />
+									<small class = "help-block" id = "milestoneNameTip"></small>
+								</div>
+								<div class = "form-group">
+									<p class = "text-main text-bold">截止日期</p>
+									<input type = "text" class = "form-control" id = "milestoneTime" name="deadline" value="{{.deadline}}" />
+									<small class = "help-block" id = "milestoneTimeTip"></small>
+								</div>
+								<div class = "form-group">
+									<p class = "text-main text-bold">描述</p>
+									<textarea class = "form-control project_milestone_desc" id = "milestoneContent" name="content">{{.content}}</textarea>
+								</div>
+							</div>
+						</div>
+						<div class = "row">
+							<button class = "btn btn-primary" id = "createMilestone" disabled>提交</button>
+							<a href="{{.RepoLink}}/milestones" class = "ml-10 btn-link">返回里程碑列表</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+
+
+
+
+<!--<div class="repository new milestone">-->
+	<!--{{template "repo/header" .}}-->
+	<!--<div class="ui container">-->
+		<!--<div class="navbar">-->
+			<!--{{template "repo/issue/navbar" .}}-->
+			<!--{{if and .IsRepositoryWriter .PageIsEditMilestone}}-->
+				<!--<div class="ui right floated secondary menu">-->
+					<!--<a class="ui green button" href="{{$.RepoLink}}/milestones/new">{{.i18n.Tr "repo.milestones.new"}}</a>-->
+				<!--</div>-->
+			<!--{{end}}-->
+		<!--</div>-->
+		<!--<div class="ui divider"></div>-->
+		<!--<h2 class="ui dividing header">-->
+			<!--{{if .PageIsEditMilestone}}-->
+				<!--{{.i18n.Tr "repo.milestones.edit"}}-->
+				<!--<div class="sub header">{{.i18n.Tr "repo.milestones.edit_subheader"}}</div>-->
+			<!--{{else}}-->
+				<!--{{.i18n.Tr "repo.milestones.new"}}-->
+				<!--<div class="sub header">{{.i18n.Tr "repo.milestones.new_subheader"}}</div>-->
+			<!--{{end}}-->
+		<!--</h2>-->
+		<!--{{template "base/alert" .}}-->
+		<!--<form class="ui form grid" action="{{.Link}}" method="post">-->
+			<!--{{.CsrfTokenHtml}}-->
+			<!--<div class="eleven wide column">-->
+				<!--<div class="field {{if .Err_Title}}error{{end}}">-->
+					<!--<label>{{.i18n.Tr "repo.milestones.title"}}</label>-->
+					<!--<input name="title" placeholder="{{.i18n.Tr "repo.milestones.title"}}" value="{{.title}}" autofocus required>-->
+				<!--</div>-->
+				<!--<div class="field">-->
+					<!--<label>{{.i18n.Tr "repo.milestones.desc"}}</label>-->
+					<!--<textarea name="content">{{.content}}</textarea>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="four wide column">-->
+				<!--<div class="field {{if .Err_Deadline}}error{{end}}">-->
+					<!--<label>-->
+						<!--{{.i18n.Tr "repo.milestones.due_date"}}-->
+						<!--<a id="clear-date" href="#">{{.i18n.Tr "repo.milestones.clear"}}</a>-->
+					<!--</label>-->
+					<!--<input id="deadline" name="deadline" value="{{.deadline}}">-->
+				<!--</div>-->
+				<!--<div class="field">-->
+					<!--<input class="milestone datepicker" data-lang="{{.DateLang}}" data-start-date="{{.deadline}}">-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="ui container">-->
+				<!--<div class="ui divider"></div>-->
+				<!--<div class="ui right">-->
+					<!--{{if .PageIsEditMilestone}}-->
+						<!--<a class="ui blue basic button" href="{{.RepoLink}}/milestones">-->
+							<!--{{.i18n.Tr "repo.milestones.cancel"}}-->
+						<!--</a>-->
+						<!--<button class="ui green button">-->
+							<!--{{.i18n.Tr "repo.milestones.modify"}}-->
+						<!--</button>-->
+					<!--{{else}}-->
+						<!--<button class="ui green button">-->
+							<!--{{.i18n.Tr "repo.milestones.create"}}-->
+						<!--</button>-->
+					<!--{{end}}-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</form>-->
+	<!--</div>-->
+<!--</div>-->
+{{template "base/footer" .}}

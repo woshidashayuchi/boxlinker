@@ -1,0 +1,28 @@
+{{template "base/head" .}}
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation" class="active"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+				<li role="presentation"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class = "panel bord-no">
+				<div class = "panel-heading">
+					<h3 class = "panel-title">创建任务<small class = "ml-10">任务是项目执行的基本单位，任务的类型可以自定义，具体了解请点击<a href="javascript:;" class = "btn-link">任务</a></small></h3>
+				</div>
+			{{template "repo/issue/new_form" .}}
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+
+{{template "base/footer" .}}

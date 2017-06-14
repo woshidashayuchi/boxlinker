@@ -1,0 +1,84 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+			<li role="presentation" class = "active"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class="tab-base tab-stacked-left">
+				<div class = "row">
+					<div class = "col-sm-4">
+						{{template "repo/settings/navbar" .}}
+					</div>
+					<div class = "col-sm-8">
+						<div class="col-sm-12">
+							<div class = "list-group">
+								<div class = "list-header">默认分支</div>
+								<div class = "list-group-item">
+									<p>默认分支是被用于代码提交、合并请求和在线编辑的基准分支。</p>
+									<div class = "row">
+										<form action="{{.Link}}/default_branch" method="post">
+											{{.CsrfTokenHtml}}
+											<div class = "col-sm-4">
+												<select class = "demo_select2 form-control" id = "branch" name="branch" >
+													{{range .Branches}}
+													<option value = "{{.}}" {{if eq $.Repository.DefaultBranch .}}selected {{end}}>{{.}}</option>
+													{{end}}
+												</select>
+											</div>
+											<button class="btn btn-success mar-lft">更新</button>
+										</form>
+									</div>
+								</div>
+							</div>
+							<div class = "list-group">
+								<div class = "list-header">保护分支</div>
+								<div class = "list-group-item">
+									<p>保护分支不被强制推送、意外删除和限制代码提交白名单。</p>
+									<div class = "row">
+										<div class = "col-sm-4">
+											<div class = "dropdown ">
+												<button class = "btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" >请选择一个分支
+													<span class = "caret"></span>
+												</button>
+												<ul class="dropdown-menu">
+													{{range .Branches}}
+														<li>
+															<a href = "{{$.Link}}/{{.}}">{{.}}</a>
+														</li>
+													{{end}}
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class = "row">
+										<div class="list-inline mar-top pad-lft">
+											<p>受保护的分支</p>
+											{{range .ProtectBranches}}
+											<li>
+												<a href="{{$.Link}}/{{.}}"><code>{{.}}</code></a>
+											</li>
+											{{end}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+{{template "base/footer" .}}
