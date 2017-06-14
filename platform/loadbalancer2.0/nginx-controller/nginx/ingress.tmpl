@@ -1,0 +1,80 @@
+{{range $upstream := .Upstreams}}
+upstream {{$upstream.Name}} {
+	ip_hash;
+	{{range $server := $upstream.UpstreamServers}}
+	server {{$server.Address}}:{{$server.Port}} max_fails=1 fail_timeout=30;{{end}}
+	keepalive 80;
+}{{end}}
+{{range $server := .Servers}}
+{{range $location := $server.Locations}}
+server {
+	listen 80;
+	{{if $server.Name}} server_name {{$server.Name}}; {{end}}
+	{{if $server.SSL}} rewrite ^(.*)$  https://$host$1 permanent; {{end}}
+	location {{$location.Path}} {
+		proxy_http_version 1.1;
+		{{if $location.Websocket}}
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection $connection_upgrade;
+		{{end}}
+		{{- if $location.LocationSnippets}}
+		{{range $value := $location.LocationSnippets}}
+		{{$value}}{{end}}
+		{{- end}}
+		{{if not $server.SSL}}
+		index index.html index.htm;
+		proxy_connect_timeout {{$location.ProxyConnectTimeout}};
+		proxy_read_timeout {{$location.ProxyReadTimeout}};
+		client_max_body_size {{$location.ClientMaxBodySize}};
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_set_header X-Forwarded-Port $server_port;
+		proxy_set_header X-Forwarded-Proto {{if $server.RedirectToHTTPS}}https{{else}}$scheme{{end}};
+
+		proxy_buffering {{if $location.ProxyBuffering}}on{{else}}off{{end}};
+		{{- if $location.ProxyBuffers}} proxy_buffers {{$location.ProxyBuffers}}; {{- end}} 
+		{{- if $location.ProxyBufferSize}} proxy_buffer_size {{$location.ProxyBufferSize}}; {{- end}}
+		{{- if $location.ProxyMaxTempFileSize}} proxy_max_temp_file_size {{$location.ProxyMaxTempFileSize}}; {{- end}}
+		proxy_pass http://{{$location.Upstream.Name}}{{$location.Rewrite}};
+		{{end}}
+	}
+}
+{{if $server.SSL}}
+server {
+	ssl on;
+	listen 443 ssl{{if $server.HTTP2}} http2{{end}}{{if $server.ProxyProtocol}} proxy_protocol{{end}};
+	ssl_certificate {{$server.SSLCertificate}};
+	ssl_certificate_key {{$server.SSLCertificateKey}};
+	{{if $server.Name}} server_name {{$server.Name}}; {{end}}
+	location {{$location.Path}} {
+		proxy_http_version 1.1;
+		{{if $location.Websocket}}
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection $connection_upgrade;
+		{{end}}
+		{{- if $location.LocationSnippets}}
+		{{range $value := $location.LocationSnippets}}
+		{{$value}}{{end}}
+		{{- end}}
+		index index.html index.htm;
+		proxy_connect_timeout {{$location.ProxyConnectTimeout}};
+		proxy_read_timeout {{$location.ProxyReadTimeout}};
+		client_max_body_size {{$location.ClientMaxBodySize}};
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_set_header X-Forwarded-Port $server_port;
+		proxy_set_header X-Forwarded-Proto {{if $server.RedirectToHTTPS}}https{{else}}$scheme{{end}};
+
+		proxy_buffering {{if $location.ProxyBuffering}}on{{else}}off{{end}};
+		{{- if $location.ProxyBuffers}} proxy_buffers {{$location.ProxyBuffers}}; {{- end}}
+		{{- if $location.ProxyBufferSize}} proxy_buffer_size {{$location.ProxyBufferSize}}; {{- end}}
+		{{- if $location.ProxyMaxTempFileSize}} proxy_max_temp_file_size {{$location.ProxyMaxTempFileSize}}; {{- end}}
+		proxy_pass http://{{$location.Upstream.Name}}{{$location.Rewrite}};
+	}
+}{{end}}
+{{end}}
+{{end}}
