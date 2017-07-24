@@ -29,10 +29,10 @@ def token_auth(token):
                                headers=headers, timeout=5).json()
             status = ret['status']
             if status != 0:
-                raise
+                raise(Exception('Token auth denied'))
         except Exception, e:
-            log.error('Token ucenter auth error: reason=%s' % (e))
-            raise
+            log.warning('Token ucenter auth error: reason=%s' % (e))
+            raise(Exception('Token auth error'))
 
         expire = int(time.time()) + 300
         caches.set(token, {"token_info": ret, "expire": expire})

@@ -1,0 +1,10 @@
+
+
+rabbit:
+  queue: "gitauth_rpc_queue"
+  service: "rabbitmq"
+  port: "5672"
+
+
+oauth:
+  webhookurl: "http://imageauth.boxlinker.com/api/v1.0/oauthclient/webhoos"

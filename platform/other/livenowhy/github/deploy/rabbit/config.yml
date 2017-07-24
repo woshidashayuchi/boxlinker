@@ -1,0 +1,14 @@
+# 测试版本
+rabbitRelease:
+  queue: "gitauth_rpc_queue"
+  service: "amqp://101.201.56.57:5672"
+  port: "5672"
+
+
+
+# 测试版本
+rabbitDebug:
+  queue: "gitauth_rpc_queue"
+  service: "amqp://192.168.1.6:5672"
+  port: "5672"
+

@@ -116,7 +116,7 @@ def add_user_team(token, user_uuid, role_uuid):
     headers = {'content-type': "application/json",
                'token': token}
 
-    body = {"user_uuid": user_uuid, 'role_uuid':role_uuid}
+    body = {"user_uuid": user_uuid, 'role_uuid': role_uuid}
     body = json.dumps(body)
     ret = requests.post(url=url, headers=headers, data=body)
     return ret.json()

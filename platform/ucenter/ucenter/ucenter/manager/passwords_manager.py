@@ -71,14 +71,15 @@ class PasswordsManager(object):
             passwd_db = user_info[0][1]
             salt = user_info[0][2]
         except Exception, e:
-            log.error('Get user token info error, user_name=%s'
-                      % (user_name))
+            log.warning('Get user info failure, '
+                        'user_name=%s, reason=%s'
+                        % (user_name, e))
             return request_result(201)
 
         passwd_user = passwd_encrypt(user_name, old_password, salt)
         if passwd_user != passwd_db:
-            log.info('user(%s) auth error, password not correct'
-                     % (user_name))
+            log.warning('user(%s) auth error, password not correct'
+                        % (user_name))
             return request_result(201)
 
         return self.password_reset(user_uuid, new_password)

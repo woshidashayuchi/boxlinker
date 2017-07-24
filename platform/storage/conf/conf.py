@@ -4,8 +4,8 @@
 import os
 
 
-mq_server01 = 'rabbitmq'
-mq_server02 = 'rabbitmq'
+mq_server01 = 'rabbitmq01'
+mq_server02 = 'rabbitmq02'
 mq_port = 5672
 
 # mq_server01 = os.environ.get('MQ_SERVER01')
@@ -13,8 +13,8 @@ mq_port = 5672
 # mq_port = os.environ.get('MQ_PORT')
 
 
-db_server01 = 'database'
-db_server02 = 'database'
+db_server01 = 'database01'
+db_server02 = 'database02'
 db_port = 3306
 db_user = 'cloud'
 db_passwd = 'cloud'
@@ -29,16 +29,19 @@ database = 'storage'
 
 api_host = '0.0.0.0'
 api_port = 8001
-api_debug = True
+api_debug = False
 
-log_level = 'INFO'
+log_level = 'WARNING'
 log_file = '/var/log/cloud.log'
 
-ceph_pool_name = 'pool_hdd'
+billing = True
 
 storage_call_queue = 'storage_call_api'
 ceph_call_queue = 'ceph_call'
 ceph_exchange_name = 'ceph_bcast'
 
-ucenter_api = 'http://ucenter:8001'
-billing_api = 'http://billing:8002'
+security_call_queue = 'security_call_api'
+security_cast_queue = 'security_cast_api'
+
+ucenter_api = 'https://ucenter.boxlinker.com'
+billing_api = 'https://ucenter.boxlinker.com'

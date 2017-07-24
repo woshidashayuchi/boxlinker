@@ -1,0 +1,184 @@
+
+
+@import "_variables";
+$main-compile       : true;
+$mainnav-lg-width:180px;
+$navbar-width:120px;
+$navbar-height:40px;
+$mainnav-color:#eee;
+$mainnav-hover-color:#2dafdf;
+$mainnav-width:175px;
+$font-size-base:14px;
+$font-family-base:Microsoft Yahei, 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+// Set as default color scheme.
+
+
+
+@import "nifty/_layout";
+@import "nifty/_navbar";
+@import "nifty/_mainnav";
+@import "nifty/_animations";
+
+.navbar-content .nav > li > a{
+  height:40px;
+  line-height:40px;
+  padding:0 15px;
+}
+#mainnav-container{
+  z-index:7;
+  padding-top:0;
+  top:40px;
+  transition:all ease .5s;
+}
+#mainnav-menu .menu-title{
+  display:inline-block;
+  min-width:80px;
+}
+#container.mainnav-in #navbar,#container.mainnav-in .navbar-header{
+  left:0;
+}
+#container.mainnav-in .tgl-menu-btn{
+  right:0;
+}
+#container.mainnav-in #content-container{
+  left:0;
+}
+#container.mainnav-in #mainnav-container{
+  left:-180px;
+}
+//close
+#container.mainnav-in.sidebar-close #content-container,#container.mainnav-in.sidebar-close #content-container{
+  left:180px;
+}
+#container.mainnav-in.sidebar-close #mainnav-container{
+  width:180px !important;
+  left:0;
+}
+
+#container.mainnav-in.sidebar-close{
+  .icon-back:before{
+    content:"\e923"
+  }
+}
+#container.mainnav-in{
+  //serviceList
+  .services-table{
+    thead tr th:nth-child(2),tbody tr td:nth-child(2){
+      display:none;
+    }
+  }
+  .volumes-table{
+    thead tr th:nth-child(2),tbody tr td:nth-child(2),
+    thead tr th:nth-child(3),tbody tr td:nth-child(3)
+    {
+      display:none;
+    }
+  }
+  .icon-withdraw:before{
+    content:"\e92d";
+  }
+  .btn-group{
+    min-width:55px;
+  }
+  .mirror-state{
+    min-width:55px;
+  }
+  td>p{
+    word-break:break-all;
+    word-wrap:break-word;
+  }
+  .mediaItem{
+    margin:0;
+    span{
+      margin-left:10px;
+      min-width:50px;
+    }
+  }
+  .table-bordered{
+    td button{
+      padding:1px 5px ;
+      font-size:12px;
+      line-height:1.5;
+    }
+    td select{
+      height:27px;
+      padding:2px 6px;
+    }
+  }
+}
+.navbar-content .nav > li > .aside-toggle{
+  padding:0;
+  font-size:27px;
+  i{
+    position: relative;
+    top:4px;
+  }
+}
+@media (min-width: 768px) {
+  #container.mainnav-sm #logo {
+    margin: 0 5px;
+    position: absolute;
+    left: 9px;
+    top: 8px;
+    transform: translateY(0px);
+  }
+  #container.mainnav-sm #navbar .navbar-brand:before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    right: -5px;
+    height: 25px;
+    z-index: 12;
+    display: block;
+    background: #fff;
+  }
+  #container.mainnav-sm #mainnav-menu a {
+    white-space: nowrap;
+    position: relative;
+    padding: 12px 0 12px 17px;
+    transition:all ease .5s;
+  }
+  #container.mainnav-sm #mainnav-menu .collapse.in {
+    margin-left:0;
+  }
+  #container.mainnav-sm #mainnav-menu .collapse {
+
+  }
+  #container.mainnav-sm #mainnav-menu a:hover {
+    box-shadow: inset 2px 0 0 0 #2dafdf;
+  }
+}
+.navbar-top-links > li > a > i{
+  font-size:18px;
+  vertical-align: middle;
+}
+#mainnav-menu i{
+  font-size:18px;
+  vertical-align: middle;
+  padding-right:7px;
+}
+#container:not(.mainnav-sm) #mainnav-menu{
+  margin-top:0;
+}
+.app.sidebar-close #mainnav-container .icon-servicecenter:before,.app.sidebar-close #mainnav-container .icon-mirrorceer:before{
+  content: "\E92F";
+  transition: all ease .3s;
+  display: inline-block;
+}
+.app.sidebar-close #mainnav-container li.active .icon-servicecenter:before, .app.sidebar-close #mainnav-container li.active .icon-mirrorceer:before{
+  transform: rotate(90deg);
+}
+#container.mainnav-sm .collapse p a:hover span{
+  display: inline-block;
+}
+#mainnav li i.arrow:before {
+  transition: all .3s ease;
+}
+#mainnav li.active>a>.arrow:before {
+  transform: rotate(135deg);
+}
+#mainnav li i.arrow {
+  line-height: 0;
+  margin-top: 8px;
+}

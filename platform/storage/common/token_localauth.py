@@ -3,11 +3,11 @@
 
 import time
 import inspect
+import ucenter_rpcapi
 
 from common.logs import logging as log
 from common.local_cache import LocalCache
 from common.code import request_result
-from ucenter.rpcapi import rpc_api as ucenter_rpcapi
 
 caches = LocalCache(100)
 
@@ -25,7 +25,7 @@ def token_auth(token):
             if status != 0:
                 raise(Exception('Token auth denied'))
         except Exception, e:
-            log.error('Token local auth error: reason=%s' % (e))
+            log.warning('Token local auth error: reason=%s' % (e))
             raise(Exception('Token auth error'))
 
         expire = int(time.time()) + 300

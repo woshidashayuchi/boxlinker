@@ -24,13 +24,16 @@ class UsersManager(object):
 
         self.ucenter_db = ucenter_db.UcenterDB()
         self.ucenter_driver = ucenter_driver.UcenterDriver()
+        self.verify_code = conf.verify_code
+        self.ucenter_api = conf.ucenter_api
+        self.init_balance = conf.init_balance
+        self.user_image = conf.user_image
+        self.default_avatar = conf.default_avatar
 
-    def user_create(self, user_name, password,
-                    email, real_name=None, mobile=None,
-                    sex=None, birth_date=None,
+    def user_create(self, user_name, password, email, mobile,
                     code_id=None, code_str=None):
 
-        if conf.verify_code is True:
+        if self.verify_code is True:
             verify_code_check = self.ucenter_driver.verify_code_check(
                                      code_id, code_str).get('status')
             if int(verify_code_check) != 0:
@@ -62,19 +65,16 @@ class UsersManager(object):
         user_uuid = str(uuid.uuid4())
         salt = str(uuid.uuid4())[-11:-1]
         passwd = passwd_encrypt(user_name, password, salt)
-        birth_date = time.strftime("%Y-%m-%d %H:%M:%S",
-                                   time.gmtime(float(birth_date or 0)))
         try:
-            self.ucenter_db.user_create(
+            self.ucenter_db.user_register(
                  user_uuid, user_name, passwd,
-                 salt, email, real_name, mobile,
-                 sex, birth_date)
+                 salt, email, mobile)
         except Exception, e:
             log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
         # 发送激活邮件给用户
-        user_activate_url = '%s%s%s' % (conf.ucenter_api,
+        user_activate_url = '%s%s%s' % (self.ucenter_api,
                                         '/api/v1.0/ucenter/users/status/',
                                         user_uuid)
 
@@ -83,10 +83,11 @@ class UsersManager(object):
                    "title": "用户激活",
                    "text": None,
                    "html": ("<p>"
-                            "感谢您注册boxlinker账号，"
+                            "感谢您注册boxlinker账号，您的用户名为：%s"
                             "请点击以下链接激活您的账号：<br>"
                             "<a href = %s>%s</a> </p>"
-                            % (user_activate_url, user_activate_url))
+                            % (user_name, user_activate_url,
+                               user_activate_url))
                }
 
         email_send = self.ucenter_driver.email_send(data).get('status')
@@ -97,15 +98,34 @@ class UsersManager(object):
         result = {
                      "user_name": user_name,
                      "email": email,
-                     "real_name": real_name,
-                     "mobile": mobile,
-                     "sex": sex,
-                     "birth_date": birth_date
+                     "mobile": mobile
                  }
 
         return request_result(0, result)
 
-    def user_list(self, user_name, name_check):
+    def user_check(self, user_name):
+
+        try:
+            result = self.ucenter_db.name_duplicate_check(
+                          user_name)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        return request_result(0, result)
+
+    def email_check(self, email):
+
+        try:
+            result = self.ucenter_db.email_duplicate_check(
+                          email)[0][0]
+        except Exception, e:
+            log.error('Database select error, reason=%s' % (e))
+            return request_result(404)
+
+        return request_result(0, result)
+
+    def user_list(self, user_name):
 
         try:
             email = parameter_check(user_name, ptype='peml')
@@ -113,15 +133,10 @@ class UsersManager(object):
             email = None
 
         try:
-            if name_check == 'true':
-                result = self.ucenter_db.name_duplicate_check(
-                              user_name)[0][0]
-                return request_result(0, result)
+            if email is None:
+                user_list_info = self.ucenter_db.user_list(user_name)
             else:
-                if email is None:
-                    user_list_info = self.ucenter_db.user_list(user_name)
-                else:
-                    user_list_info = self.ucenter_db.user_list_email(email)
+                user_list_info = self.ucenter_db.user_list_email(email)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
@@ -130,6 +145,8 @@ class UsersManager(object):
         for user_info in user_list_info:
             user_uuid = user_info[0]
             user_name = user_info[1]
+            if user_uuid == 'sysadmin':
+                continue
 
             v_user_info = {
                               "user_uuid": user_uuid,
@@ -144,13 +161,26 @@ class UsersManager(object):
 
         return request_result(0, result)
 
-    def user_info(self, user_uuid):
+    def user_info(self, user_uuid, team_uuid):
 
         try:
             user_single_info = self.ucenter_db.user_info(user_uuid)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
+
+        try:
+            if self.user_image is True:
+                # 获取用户头像存储地址
+                ret = self.ucenter_driver.image_info(team_uuid)
+                if int(ret.get('status')) == 0:
+                    user_avatar = ret.get('result')
+                else:
+                    user_avatar = self.default_avatar
+            else:
+                user_avatar = self.default_avatar
+        except Exception, e:
+            log.warning('Get user avatar error: reason=%s' % (e))
 
         user_name = user_single_info[0][0]
         real_name = user_single_info[0][1]
@@ -169,6 +199,7 @@ class UsersManager(object):
                           "email": email,
                           "mobile": mobile,
                           "status": status,
+                          "user_avatar": user_avatar,
                           "sex": sex,
                           "birth_date": birth_date,
                           "create_time": create_time,
@@ -183,7 +214,7 @@ class UsersManager(object):
     def user_update(self, user_uuid, real_name, mobile, sex, birth_date):
 
         birth_date = time.strftime("%Y-%m-%d %H:%M:%S",
-                                   time.gmtime(float(birth_date or 0)))
+                                   time.localtime(float(birth_date or 0)))
 
         try:
             self.ucenter_db.user_update(
@@ -206,15 +237,25 @@ class UsersManager(object):
     def user_activate(self, user_uuid):
 
         try:
-            user_info = self.ucenter_db.user_info(user_uuid)
+            user_info = self.ucenter_db.register_info(user_uuid)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
-        user_name = user_info[0][0]
-        user_status = user_info[0][4]
-        if user_status == 'enable':
-            log.info('User(%s) already activated' % (user_name))
+        try:
+            user_name = user_info[0][0]
+            password = user_info[0][1]
+            salt = user_info[0][2]
+            email = user_info[0][3]
+            mobile = user_info[0][4]
+            status = user_info[0][5]
+        except Exception, e:
+            log.warning('Get user register info error, '
+                        'user_uuid=%s, reason=%s' % (user_uuid, e))
+            return request_result(601)
+
+        if status == 'active':
+            log.warning('User(%s) already activated' % (user_name))
             return request_result(202)
 
         team_uuid = str(uuid.uuid4())
@@ -230,16 +271,23 @@ class UsersManager(object):
             log.error('Database insert error, reason=%s' % (e))
             return request_result(401)
 
+        level_init = self.ucenter_driver.level_init(
+                          user_token).get('status')
+        if int(level_init) != 0:
+            log.error('User(%s) level init failure' % (user_name))
+            return request_result(599)
+
         balance_init = self.ucenter_driver.balance_init(
-                            user_token).get('status')
+                            user_token, self.init_balance).get('status')
         if int(balance_init) != 0:
-            log.error('User(%s) balance init error' % (user_name))
+            log.error('User(%s) balance init failure' % (user_name))
             return request_result(599)
 
         role_uuid = 'owner'
         try:
             self.ucenter_db.user_activate(
-                 user_uuid, user_name, team_uuid,
+                 user_uuid, user_name, password,
+                 salt, email, mobile, team_uuid,
                  project_uuid, role_uuid)
         except Exception, e:
             log.error('Database insert error, reason=%s' % (e))

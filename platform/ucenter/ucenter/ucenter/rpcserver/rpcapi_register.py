@@ -29,6 +29,9 @@ class RabbitmqResponse(object):
              'uct_usr_usr_stu', self.rpcapi_define.user_status)
 
         self.rpc_api.add_resource(
+             'uct_usr_usr_chk', self.rpcapi_define.user_check)
+
+        self.rpc_api.add_resource(
              'uct_usr_usr_lst', self.rpcapi_define.user_list)
 
         self.rpc_api.add_resource(

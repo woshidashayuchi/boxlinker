@@ -129,6 +129,7 @@ class CodeOauth(Base):
     git_uid = sa.Column(sa.String(20))
     access_token = sa.Column(sa.String(60))
 
+# code_oauth  code_repo
 
 
 # 20160928 代码源
@@ -145,7 +146,7 @@ class CodeRepo(Base):
     repo_branch = sa.Column(sa.String(64))  # 项目名,分支
     repo_hook_token = sa.Column(sa.String(64))  # web hooks token
 
-    hook_id = sa.Column(sa.Integer)  # web hook id,删除和修改时用
+    hook_url = sa.Column(sa.String(256))  # web hook_url
 
     html_url = sa.Column(sa.String(256))  # 项目 url
     ssh_url = sa.Column(sa.String(256))   # 项目 git clone 地址

@@ -12,4 +12,4 @@ COPY ./conf /storage/conf/
 COPY ./common /storage/common/
 COPY ./storage /storage/storage/
 
-CMD python /storage/storage/restserver/restapi_server.py & python /storage/storage/rpcserver/rpcapi_callserver.py
+CMD python /storage/storage/restserver/restapi_server.py & python /storage/storage/rpcserver/rpcapi_callserver.py & python /storage/storage/service/storage_service.py & python /storage/storage/ceph/ceph/rpcserver/rpcapi_callserver.py

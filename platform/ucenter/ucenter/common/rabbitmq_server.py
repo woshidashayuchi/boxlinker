@@ -93,13 +93,13 @@ class RabbitmqServer(object):
         try:
             self.channel.start_consuming()
         except BaseException, e:
-            log.warning('RabbitMQ server %s exit, reason = %s'
-                        % (qu_ex_name, e))
+            log.error('RabbitMQ server %s exit, reason = %s'
+                      % (qu_ex_name, e))
             self.channel.stop_consuming()
             self.connection.close()
             raise
 
-    def __init__(self, heartbeat_time):
+    def __init__(self, heartbeat_time=30):
 
         self.mq_connect(heartbeat_time=heartbeat_time)
 
@@ -135,7 +135,7 @@ class RabbitmqServer(object):
             self.msg_broadcast_request(exchange_name, queue_name)
             self.server_run(exchange_name)
         except Exception, e:
-            log.error(
-                'RabbitMQ broadcast server run error: exchange=%s, reason=%s'
-                % (exchange_name, e))
+            log.error('RabbitMQ broadcast server run error: '
+                      'exchange=%s, reason=%s'
+                      % (exchange_name, e))
             raise

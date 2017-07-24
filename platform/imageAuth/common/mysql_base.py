@@ -94,3 +94,31 @@ class MysqlInit(object):
                 self.cursor.close()
                 self.conn.close()
                 raise
+
+    def exec_update_sql_dict(self, query, args=None):
+
+        self.get_cursor()
+        try:
+
+            self.cursor.execute(query=query, args=args)
+
+            self.conn.commit()
+            self.cursor.close()
+            self.conn.close()
+            log.debug('exec sql success, sql=%s' % (str(query)))
+            return
+        except Exception, e:
+            try:
+                self.cursor.execute(query=query, args=args)
+                self.conn.commit()
+                self.cursor.close()
+                self.conn.close()
+                log.debug('exec sql success, sql=%s' % (str(query)))
+                return
+            except Exception, e:
+                log.error('exec sql error, sql=%s, reason=%s'
+                          % (str(query), e))
+                self.cursor.close()
+                self.conn.close()
+                raise
+

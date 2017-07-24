@@ -1,0 +1,23 @@
+.box{
+  margin-top:25px;
+}
+.bd{
+  margin-top: 10px;
+}
+.ft{
+  min-height: 400px;
+  margin-top: 15px;
+}
+.btn button:first-child:not(:last-child){
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.btn button:last-child{
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+.btn button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}

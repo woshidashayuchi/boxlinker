@@ -33,8 +33,10 @@ api_debug = True
 
 verify_code = False
 
-log_level = 'INFO'
+log_level = 'WARNING'
 log_file = '/var/log/cloud.log'
+
+init_balance = 100
 
 ucenter_call_queue = 'ucenter_call_api'
 billing_call_queue = 'billing_call_api'
@@ -43,3 +45,7 @@ boxlinker_index = 'https://boxlinker.com'
 ucenter_api = 'https://ucenter.boxlinker.com'
 email_api = 'https://email.boxlinker.com/send'
 verify_code_api = 'https://verify-code.boxlinker.com/check_code'
+
+user_image = True  #是否开启头像获取
+image_api = 'https://imgstorage.boxlinker.com'
+default_avatar = 'https://boxlinker-images.oss-cn-beijing.aliyuncs.com/repository/default.png'

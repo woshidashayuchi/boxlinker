@@ -6,12 +6,14 @@ import re
 from common.logs import logging as log
 
 
-def context_data(token=None, resource_uuid=None, action=None):
+def context_data(token=None, resource_uuid=None,
+                 action=None, source_ip=None):
 
     return {
                "token": token,
                "resource_uuid": resource_uuid,
-               "action": action
+               "action": action,
+               "source_ip": source_ip
            }
 
 
@@ -33,15 +35,17 @@ def parameter_check(parameter, ptype='pstr', exist='yes'):
 
     para_format = {
         "pstr": "[A-Za-z0-9-_]{1,60}$",
-        "pnam": "[A-Za-z]{1,30}[A-Za-z0-9-_]{0,10}$",
-        "pint": "-{0,1}[0-9]{1,16}$",
-        "pflt": "-{0,1}[0-9]{1,15}[.]{0,1}[0-9]{1,6}$",
+        "pnam": "[A-Za-z]{1}[A-Za-z0-9-_]{4,19}$",
+        "pint": "-{0,1}[0-9]{1,24}$",
+        "pflt": "-{0,1}[0-9]{1,15}[.]{0,1}[0-9]{0,6}$",
         "peml": ("[A-Za-z1-9]{1,1}[A-Za-z0-9-_]{2,30}"
                  "@[A-Za-z0-9]{1,1}[A-Za-z0-9-_.]{1,20}"
                  "[.]{1,1}[A-Za-z]{1,5}$"),
         "puid": ("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-"
                  "[a-z0-9]{4}-[a-z0-9]{12}$"),
-        "ppwd": ".{5,60}"
+        "pdat": "20{1}[0-9]{2}.[0-9]{2}.[0-9]{2}$",
+        "pnip": "[1-9]{1}[0-9]{0,2}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$",
+        "ppwd": ".{6,60}"
     }
 
     m = re.match(para_format[ptype], str(parameter))

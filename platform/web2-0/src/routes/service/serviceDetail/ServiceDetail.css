@@ -1,0 +1,340 @@
+.hd{
+  position: relative;
+  padding-top: 30px;
+}
+.logo{
+  width: 120px;
+  position: absolute;
+  text-align: center;
+}
+.logo img{
+  width: 66px;
+  height: 66px;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+}
+.logo a{
+  display: inline-block;
+  font-size: 12px;
+  color: #333;
+  padding-left: 18px;
+  margin-top: 13px;
+  transition: color .3s ease;
+  position: relative;
+}
+.logo a :before{
+  font-family: "icomoon";
+  display: inline-block;
+  position: absolute;
+  content: "\E913";
+  font-size: 14px;
+  color: #767676;
+  left: 0;
+  top: 2px;
+}
+.info{
+  margin: -7px 20px 0 120px;
+}
+.title{
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 20px;
+}
+.titleItem{
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  color: #333;
+}
+.titleItem span{
+  margin-left:10px;
+}
+.titleItem:first-child{
+  width: 26%;
+  text-align: left;
+  padding-left: 10px;
+}
+.titleItem:nth-child(2){
+  width: 23%;
+}
+.titleItem:nth-child(3){
+  width: 21%;
+}
+.titleItem:last-child{
+  width: 30%;
+  text-align: right;
+  padding-right: 0;
+}
+.titleItem button{
+  margin-left: 27px;
+}
+.address{
+  padding: 10px 0 30px;
+}
+.addItem{
+  padding: 5px 0;
+}
+.addItem span{
+  color:#666;
+}
+.addItem .addName{
+  display: inline-block;
+  width: 70px;
+  text-align: right;
+  color: #333;
+  margin-right: 10px;
+}
+.addItem:last-child{
+  margin-top: 13px;
+}
+.addRange{
+  display: inline-block;
+  width: 33%;
+  height: 23px;
+  vertical-align: middle;
+  margin-right: 80px;
+}
+.main{
+  min-height:400px;
+}
+.item{
+  margin: 35px 25px 0;
+  border-bottom: 1px solid #ececec;
+  padding:0 0 35px 0;
+}
+.item:last-child{
+  border-bottom:0;
+}
+.bd{
+  margin-top:25px;
+  padding-left:15px;
+}
+.bd>input,.bd>select,.bd textarea{
+  display: inline-block;
+  width: 66%;
+  border-radius: 2px;
+  font-size: 13px;
+  margin-bottom:10px;
+}
+.add{
+  margin:0 15px;
+}
+.add>input{
+  width: 80px;
+  display: inline-block;
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px 0 0 3px;
+  border-color: #e8e8e8;
+}
+.add>span{
+  display: inline-block;
+  width: 32px;
+  height: 30px;
+  border: 1px solid #e8e8e8;
+  vertical-align: top;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+.add>span:before{
+  color: #666;
+  position: relative;
+  top: 7px;
+}
+.add .ok{
+  border-left: 0;
+  border-right: 0;
+}
+.bd table select,.bd table input[type = "text"]{
+  padding:5px 10px;
+  height: 30px;
+}
+.bd table td{
+  text-align:center !important;
+}
+.delBtn{
+  display: inline-block;
+  width: 32px;
+  height: 30px;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  background: #f2f4f8;
+  color: #999;
+}
+.delBtn:before{
+  font-family: "icomoon";
+  content: '\E921';
+  position: absolute;
+  left: 7px;
+  top: 2px;
+  font-size: 19px;
+}
+.delBtn:hover{
+  color: #fff;
+  background: #21a1d0;
+}
+.ft{
+  margin-left:15px;
+  margin-top: 10px;
+}
+.ft>button:first-child{
+  margin-right:35px;
+}
+.tip{
+  display: none;
+  color: darkred;
+  margin-left:15px;
+}
+.show{
+  display:inline-block;
+}
+.env{
+  margin:0 15px 10px 0;
+}
+.envKey,.envValue{
+  display: inline-block;
+  width: 42.5%;
+}
+.envLine{
+  display: inline-block;
+  margin: 0 1%;
+  width: 3%;
+  border-top: 1px solid #999;
+  vertical-align: middle;
+}
+.delBox{
+  display: inline-block;
+  width: 8%;
+  vertical-align: middle;
+  margin-left: 2%;
+}
+.delBox .delBtn:before{
+  top:5px;
+}
+.toggle{
+  margin-left:15px;
+}
+.pod{
+  margin-left: 25px;
+  margin-top: 20px;
+}
+.pod select{
+  width: 400px;
+  margin-left: 5px;
+  display: inline-block;
+}
+.domain{
+  padding:15px 25px;
+}
+.opt button{
+  width: 350px;
+  box-shadow: none;
+  height: 37px;
+}
+.opt p{
+  font-size: 12px;
+  color: #cc0000;
+  margin: 13px 6px;
+}
+.bdP{
+  position: relative;
+}
+.choose{
+  position: absolute;
+  left:150px;
+  bottom:10px;
+  color:#21a1d0;
+  font-size:14px;
+  cursor:pointer;
+}
+.choose:before{
+  margin-right:5px;
+  margin-top:2px;
+}
+.noMonitor{
+  text-align: center;
+  color:#666;
+  margin:50px;
+  font-size:24px;
+}
+@media (max-width: 768px) {
+  .item{
+    margin:30px 15px 0;
+    padding-bottom:20px;
+  }
+  .bd{
+    padding-left:15px;
+  }
+  .ft{
+    margin:15px 0 0 15px;
+  }
+  .env{
+    margin-left:0;
+  }
+  .info{
+    margin:0;
+  }
+  .title{
+    padding-left:110px;
+  }
+  .logo{
+    width:100px;
+  }
+  .logo img{
+    width:80px;
+    height:80px;
+  }
+  .titleItem{
+    display:block;
+    width:100% !important;
+    text-align: left !important;
+    padding-left:0 !important;
+    margin-bottom:5px;
+  }
+  .titleItem>span:first-child{
+    min-width:60px;
+    display:inline-block;
+  }
+  .titleItem:last-child{
+    padding-left:13px !important;
+  }
+  .titleItem button{
+    margin-left:15px;
+  }
+  .addRange{
+    width:38%;
+    margin-right:42px;
+  }
+  .address{
+    padding:10px 0;
+    border-bottom:1px solid #e8e8e8;
+    margin-bottom:20px;
+  }
+  .main{
+    overflow-x:auto;
+  }
+  .tabs{
+    min-width:760px;
+  }
+  .add{
+    margin:0;
+  }
+  .add>input{
+    width:50px;
+  }
+  .opt button{
+    width:320px;
+  }
+  .table{
+    min-width:620px;
+    padding:10px;
+  }
+}
+.cerTip{
+  font-size:12px;
+  color: #a94442;
+  display: block;
+  margin:0 0 -5px;
+}

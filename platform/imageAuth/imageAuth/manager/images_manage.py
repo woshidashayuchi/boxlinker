@@ -13,7 +13,7 @@ import json
 import uuid
 import time
 
-from conf.conf import OssHost
+from conf.conf import OssHost, DEFAULT_IMAGE
 
 from common.code import request_result
 from common.logs import logging as log
@@ -24,7 +24,7 @@ from pyTools.token.jwt_token import safe_JwtToken
 from pyTools.token.token import get_md5
 
 from collections import namedtuple
-
+from imageAuth.manager import resoucesStorage
 
 from conf.conf import issuer, private_key
 from imageAuth.db import image_repo_db
@@ -58,11 +58,17 @@ def retImageRepo(page, page_size, count, repolist):
         temp_d['is_code'] = is_code
         temp_d['src_type'] = src_type
 
-        # 图片
-        if logo == '' or logo is None:
-            temp_d['logo'] = OssHost + '/' + 'repository/default.png'
+        # 每次都调用是否影响性能
+
+        retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid=team_uuid, resource_type="ImageAvatars",
+                                                               resource_uuid=image_uuid,
+                                                               resource_domain="boxlinker")
+        if retbool:
+            # temp_d['logo'] = OssHost + '/' + image_dir
+            temp_d['logo'] = image_dir
         else:
-            temp_d['logo'] = OssHost + '/' + logo
+            temp_d['logo'] = DEFAULT_IMAGE
+
         temp_d = json.dumps(temp_d, cls=CJsonEncoder)
         temp_d = json.loads(temp_d)
         retlist.append(temp_d)
@@ -203,6 +209,10 @@ class ImageRepoManager(object):
         ret_d['creation_time'] = creation_time
         ret_d['update_time'] = update_time
         ret_d['is_public'] = is_public
+        ret_d['team_uuid'] = team_uuid
+
+
+
         if private:
             ret_d['short_description'] = short_description
             ret_d['detail'] = detail
@@ -212,21 +222,28 @@ class ImageRepoManager(object):
             ret_d['pushed'] = pushed
             ret_d['is_code'] = is_code
 
-            if logo == '' or logo is None:
-                ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+            retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid=team_uuid, resource_type="ImageAvatars",
+                                                                   resource_uuid=image_uuid,
+                                                                   resource_domain="boxlinker")
+            if retbool:
+                # ret_d['logo'] = OssHost + '/' + image_dir
+                ret_d['logo'] = image_dir
             else:
-                ret_d['logo'] = OssHost + '/' + logo
+                # ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+                ret_d['logo'] = DEFAULT_IMAGE
+
 
         repo_event = self.image_repo_db.get_repo_events_by_imagename(repository)
 
         repo_tags = list()
         for repo_event_node in repo_event:
-            repository, url, lengths, tag, actor, actions, digest, \
+            tagid, repository, url, lengths, tag, actor, actions, digest, \
             sizes, repo_id, source_instanceID, source_addr, deleted, \
             creation_time, update_time = repo_event_node
             tag_temp = dict()
             tag_temp['repo_id'] = repo_id
             tag_temp['tag'] = tag
+            tag_temp['tagid'] = tagid
 
             if private:
                 tag_temp['url'] = url
@@ -261,21 +278,30 @@ class ImageRepoManager(object):
         ret_d['repository'] = repository
         ret_d['creation_time'] = creation_time
         ret_d['update_time'] = update_time
+        ret_d['team_uuid'] = team_uuid
 
-        if logo == '' or logo is None:
-            ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+        retbool, image_dir = resoucesStorage.GetFileByLocation(team_uuid=team_uuid, resource_type="ImageAvatars",
+                                                               resource_uuid=image_uuid, resource_domain="boxlinker")
+
+        if retbool:
+            # ret_d['logo'] = OssHost + '/' + image_dir
+            ret_d['logo'] = image_dir
         else:
-            ret_d['logo'] = OssHost + '/' + logo
+            # ret_d['logo'] = OssHost + '/' + 'repository/default.png'
+            ret_d['logo'] = DEFAULT_IMAGE
 
-        ####
+
+
+
         repo_event = self.image_repo_db.get_repo_events_by_imagename(repository)
 
         repo_tags = list()
         for repo_event_node in repo_event:
-            repository, url, lengths, tag, actor, actions, digest, \
+            tagid, repository, url, lengths, tag, actor, actions, digest, \
             sizes, repo_id, source_instanceID, source_addr, deleted, \
             creation_time, update_time = repo_event_node
             tag_temp = dict()
+            tag_temp['tagid'] = tagid
             tag_temp['url'] = url
             tag_temp['length'] = lengths
             tag_temp['tag'] = tag
@@ -316,10 +342,30 @@ class ImageRepoManager(object):
             log.error("image_repo_name_exist is error: %s", (e))
             return request_result(404)
 
+    def get_imagename_tag_by_tagid(self, tagid):
+        try:
+            image_repo = self.image_repo_db.get_imagename_tag_by_tagid(tagid)
+            if len(image_repo) <= 0:
+                return request_result(701)
 
+            repository, tag = image_repo[0]
+            msg = dict()
+            msg['image_name'] = repository
+            msg['tag'] = tag
 
-    # 修改镜像详情
+            image_repo = self.image_repo_db.get_repo_uuid_by_image_name(repository)
+            if len(image_repo) <= 0:
+                return request_result(701)
+
+            msg['image_uuid'] = image_repo[0][0]
+
+            return request_result(0, ret=msg)
+        except Exception, e:
+            log.error("image_repo_name_exist is error: %s", (e))
+            return request_result(404)
+
     def modifyRepoDetail(self, repoid, detail_type, detail):
+        """ 修改镜像详情 """
         try:
             ret = self.image_repo_db.modify_image_repo(image_uuid=repoid, detail_type=detail_type, detail=detail)
             return request_result(0)
@@ -355,3 +401,16 @@ class ImageRepoManager(object):
 
         res = {"token": token}
         return res
+
+    def get_image_team_uuid_by_imagename(self, imagename):
+        ret = self.image_repo_db.get_image_uuid_and_team_uuid_by_imagename(imagename=imagename)
+        if len(ret) == 0:
+            return None
+        return ret[0]
+
+    def get_image_tagid(self, repo_name, repo_tag):
+        ret = self.image_repo_db.get_image_tagid(repo_name=repo_name, repo_tag=repo_tag)
+        if len(ret) == 0:
+            return request_result(703)
+        return request_result(0, ret=ret[0][0])
+

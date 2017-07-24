@@ -1,0 +1,60 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+			<li role="presentation" class = "active"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class="tab-base tab-stacked-left">
+				<div class = "row">
+					<div class = "col-sm-4">
+						{{template "repo/settings/navbar" .}}
+					</div>
+					<div class = "col-sm-8">
+						<div class="col-sm-12">
+							<div class = "list-group">
+								<div class = "list-header">分支保护</div>
+								<div class = "list-group-item">
+									<p>请选择应用于 master 分支的保护选项。</p>
+
+									<form class="ui form" action="{{.Link}}" method="post">
+										{{.CsrfTokenHtml}}
+										<div class = "form-group">
+											<div class="checkbox">
+												<input type="checkbox" id = "protected" name = "protected" class = "magic-checkbox" {{if .Branch.Protected}}checked{{end}} />
+												<label for="protected">启用分支保护</label>
+												<p class = "git_form_dosc">禁止强制推送和删除分支。</p>
+											</div>
+											<div class="checkbox">
+												<input type="checkbox" id = "require_pull_request" name = "require_pull_request" class = "magic-checkbox" {{if .Branch.RequirePullRequest}}checked{{end}} />
+												<label for="require_pull_request">要求通过合并请求提交代码</label>
+												<p class = "git_form_dosc">启用该选项后代码将不能直接被推送到此分支，所有的代码提交都必须通过另一个非保护分支发起合并请求进行合并。。</p>
+											</div>
+										</div>
+										<hr>
+										<button class="btn btn-success">更新设置</button>
+
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+
+
+{{template "base/footer" .}}

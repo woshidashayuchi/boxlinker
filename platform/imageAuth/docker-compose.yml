@@ -9,22 +9,22 @@ services:
 #    ports:
 #    - 80:80
 #    - 443:443
-
-  mysql:
-    image: index.boxlinker.com/boxlinker/user_mysql:latest
-    restart: always
-    volumes:
-    - /data/dbase/:/var/lib/mysql
-    ports:
-    - 3306:3306
-    environment:
-    - MYSQL_ROOT_PASSWORD=root123admin
+#
+#  mysql:
+#    image: index.boxlinker.com/boxlinker/user_mysql:latest
+#    restart: always
+#    volumes:
+#    - /data/database/:/var/lib/mysql
+#    ports:
+#    - 3306:3306
+#    environment:
+#    - MYSQL_ROOT_PASSWORD=root123admin
   imagerepo-apiserver:
     image: index.boxlinker.com/boxlinker/imagerepo-base:latest
     restart: always
     links:
     - rabbitmq:rabbitmq
-    - mysql:mysql
+#    - mysql:mysql
     command: python /ImageRepo/imageAuth/restserver/restapi_server.py
     volumes:
     - "./common:/ImageRepo/common/"
@@ -42,7 +42,7 @@ services:
     command: python /ImageRepo/imageAuth/rpcserver/rpcapi_callserver.py
     links:
     - rabbitmq:rbbitmq
-    - mysql:mysql
+#    - mysql:mysql
     volumes:
     - "./common:/ImageRepo/common/"
     - "./imageAuth:/ImageRepo/imageAuth/"

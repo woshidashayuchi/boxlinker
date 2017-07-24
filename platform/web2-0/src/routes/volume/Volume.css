@@ -1,0 +1,121 @@
+.head{
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 25px 15px 15px;
+}
+.btn{
+  width: 207px;
+  height: 50px;
+  border: 1px solid #2dafdf;
+  border-radius: 2px;
+  cursor: pointer;
+  float: left;
+  transition: all .15s ease-in-out;
+}
+.plus{
+  height: 100%;
+  width: 71px;
+  background-color: #2dafdf;
+  position: relative;
+  transition: all .15s ease-in-out;
+}
+.plus:after{
+  content: "+";
+  display: inline-block;
+  position: absolute;
+  top: -14px;
+  left: 18px;
+  color: #fff;
+  font-size: 50px;
+  background-size: 25px 25px;
+}
+.btn:hover{
+  border: 1px solid #21a1d0;
+}
+.btn:hover .plus{
+  background-color: #21a1d0;
+}
+.info{
+  width: 134px;
+  height: 49px;
+  text-align: center;
+}
+.name{
+  font-size: 16px;
+  color: #333;
+  margin-top: 6px;
+}
+.nameE{
+  font-size: 10px;
+  font-weight: 200;
+  color:#999;
+  font-style: italic;
+}
+.other{
+  color:#999;
+  font-style: italic;
+  float: left;
+  font-size: 12px;
+  margin: 30px 0 0 10px;
+}
+.right{
+  margin-top: 13px;
+}
+.right>button{
+  margin-left: 5px;
+  height: 35px;
+  font-size: 17px;
+}
+.search{
+  position: relative;
+  display: inline-block;
+  margin-left: 5px;
+}
+.search input{
+  height: 35px;
+  line-height: 35px;
+  padding: 5px 5px 5px 13px;
+  background: #f2f4f8;
+  font-size: 12px;
+  color: #333;
+  outline: none;
+  width: 190px;
+  border-radius: 2px;
+  vertical-align: middle;
+  border: 1px solid #f2f4f8;
+  display: inline-block;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.search>input:focus{
+  border: 1px solid #21a1d0;
+  background: #fff;
+}
+.search>button{
+  width: 35px;
+  height: 35px;
+  border: 0;
+  background: #f2f4f8;
+  vertical-align: middle;
+  margin-left: 5px;
+  border-radius: 2px;
+  outline: none;
+  color: #2dafdf;
+  display: inline-block;
+  cursor: pointer;
+}
+.search>button:hover{
+  background: #2dafdf;
+  color: #fff;
+}
+.search>button:active{
+  background: #21a1d0
+}
+.search>button:before{
+  position: absolute;
+  font-size: 21px;
+  top: 6px;
+  right: 8px;
+}
+.table{
+  min-width:620px;
+}

@@ -31,18 +31,39 @@ api_host = '0.0.0.0'
 api_port = 8002
 api_debug = True
 
-rest_host = '0.0.0.0'
-rest_debug = True
-billing_port = 8002
-
-log_level = 'INFO'
+log_level = 'WARNING'
 log_file = '/var/log/cloud.log'
+
+balance_check = True
+limit_check = True
 
 ucenter_call_queue = 'ucenter_call_api'
 billing_call_queue = 'billing_call_api'
+billing_cast_queue = 'billing_cast_api'
 
-app_datum_cost = 0.2
-hdd_datum_cost = 0.1
-ssd_datum_cost = 0.4
+level_up_exp = {
+                   1: 100,
+                   2: 1000,
+                   3: 10000,
+                   4: 100000,
+                   5: 1000000
+               }
+
+app_datum_cost = 0.02
+hdd_datum_cost = 0.001
+ssd_datum_cost = 0.004
 bwh_datum_cost = 0.5
 fip_datum_cost = 0.1
+def_datum_cost = 0.02
+
+#ali_pay_app_id = '2016080200149684'  #沙箱环境app_id
+ali_pay_app_id = '2017032406390773'  #正式环境app_id
+ali_pay_debug = False  #是否使用沙箱环境
+
+weixin_pay_app_id = 'wx53a1112475d4a196'  #微信支付分配的公众账号ID
+weixin_pay_mch_id = '1457863602'  #微信支付分配的商户号
+weixin_pay_key = 'HA7d3gN7M51g0oe1tzV2aSxAX2FYbiE5'  #key设置路径：微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置
+spbill_create_ip = '59.110.125.30'  #Native支付为调用微信支付API的机器IP
+#spbill_create_ip = '106.38.76.170'  #本地测试
+notify_url = 'https://ucenter.boxlinker.com/api/v1.0/billing/weixin/notify'  #微信支付结果发回地址
+weixin_pay_debug = False  #是否使用沙箱环境

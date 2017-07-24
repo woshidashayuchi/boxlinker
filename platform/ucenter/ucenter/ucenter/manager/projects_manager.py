@@ -8,6 +8,7 @@ import time
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
+from common.limit_local import limit_check
 
 from ucenter.db import ucenter_db
 
@@ -18,7 +19,8 @@ class ProjectsManager(object):
 
         self.ucenter_db = ucenter_db.UcenterDB()
 
-    def project_create(self, project_name, project_owner,
+    @limit_check('projects')
+    def project_create(self, token, project_name, project_owner,
                        project_team, project_desc=None):
 
         try:
@@ -203,10 +205,9 @@ class ProjectsManager(object):
                 log.error('Database update error, reason=%s' % (e))
                 return request_result(403)
         else:
-            error_reason = "%s, %s" \
-                           % ("Project delete denied",
-                              "there are users in the project")
-            log.warning('%s' % (error_reason))
+            error_reason = ('Project delete denied, '
+                            'there are users in the project.')
+            log.warning(error_reason)
             result = {"reason": error_reason}
             return request_result(202, result)
         return request_result(0)

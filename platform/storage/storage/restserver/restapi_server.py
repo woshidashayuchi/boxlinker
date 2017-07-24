@@ -19,11 +19,11 @@ def server_start(service_name):
 
     while True:
         try:
-            log.info('Starting %s Restful API Server' % (service_name))
+            log.critical('Starting %s Restful API Server' % (service_name))
             rest_app_run()
         except Exception, e:
-            log.warning('%s RESTful API Server running error, reason=%s'
-                        % (service_name, e))
+            log.error('%s RESTful API Server running error, reason=%s'
+                      % (service_name, e))
         sleep(10)
 
 

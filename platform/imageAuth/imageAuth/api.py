@@ -117,26 +117,47 @@
 @apiSuccessExample 返回:
 {
     "msg": "OK",
-    "result": {
-        "creation_time": "2017-02-20 17:32:25",
-        "logo": "https://boxlinker-images.oss-cn-beijing.aliyuncs.com/repository/default.png",
-        "repository": "zhangsan/pause",
-        "tags": [
-            {
-                "action": "push",
-                "actor": "liuzhangpei",
-                "creation_time": "2017-02-20 17:32:21",
-                "digest": "sha256:f08f3ef4886ad27a80682c1e55ede2dbe8a801c521db07859b829101488f7d83",
-                "length": "733",
-                "repo_id": "11b4a3e8-0ce8-4b37-8d3f-e3ceb88e5d74",
-                "tag": "2.0",
-                "update_time": "2017-02-21 14:58:56",
-                "url": "https://index.boxlinker.com/v2/zhangsan/pause/manifests/sha256:f08f3ef4886ad27a80682c1e55ede2dbe8a801c521db07859b829101488f7d83"
-            }
-        ],
-        "update_time": "2017-02-20 17:32:25"
+    "result":
+    {
+        "image_uuid': "4bd1ca3f-1752-33e6-b8d0-b9348a58ced7",
+         "tag": "2.0",
+         "image_name": "zhangsan/pause"
     },
     "status": 0
 }
 
+"""
+
+"""
+@api {put} https://imageauth.boxlinker.com  0.1
+@apiName host
+@apiGroup Global Setup
+@apiVersion 1.0.0
+@apiDescription 修改镜像详情
+"""
+
+
+
+
+""" 操作成功,获取代码列表"""
+"""
+@apiDefine LIST_CODE_REPO
+@apiSuccessExample 返回:
+{
+    "msg": "OK",
+    "status": 0,
+    "result": [
+        {
+            "git_name": "ss", 
+            "description": "Docker Official Image packaging for WordPress () test"
+            "url": "git://github.com/liuzhangpei/wordpress.git"
+            "html_url": "https://github.com/liuzhangpei/wordpress"
+            "git_uid": "6070423"
+            "ssh_url": "git@github.com:liuzhangpei/wordpress.git"
+            "is_hook": "0"
+            "id": 28,
+            "repo_name": "wordpress'
+        },
+    ]
+}
 """

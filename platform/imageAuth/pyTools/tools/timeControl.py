@@ -12,6 +12,7 @@
 import os
 import time
 import datetime
+import random
 
 def get_now_time(seconds=None):  # 输出  2016-09-18 16:35:30  样式的时间格式
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(seconds))
@@ -29,6 +30,13 @@ def get_now_time_ymd(part='-'):  # 采用不同分割符，分割 -, . , other  
 def get_timestamp_13():
     now_time = time.time()
     return int(round(now_time * 1000))
+
+
+def random_str_num(le=16):
+    rand = random.uniform(1, 100)
+    rand = str(rand).replace('.', '') + str(get_timestamp_13())
+    return rand[0:le]
+
 
 def strtime_to_int(strtime, detailed=True):
     """
@@ -114,3 +122,7 @@ if __name__ == '__main__':
     print int_time_to_str(int(time.time()))
 
     print get_now_time()
+
+    print 'sssssssss'
+
+    print int_time_to_str(1490502003.168)

@@ -1,0 +1,20 @@
+mFROM alpine:3.3
+
+# Install system utils & Gogs runtime dependencies
+ADD https://github.com/tianon/gosu/releases/download/1.9/gosu-amd64 /usr/sbin/gosu
+RUN chmod +x /usr/sbin/gosu \
+ && apk --no-cache --no-progress add ca-certificates bash git linux-pam s6 curl openssh socat tzdata
+
+# Set temp environment vars
+ENV GOPATH /tmp/go
+ENV PATH ${PATH}:${GOPATH}/bin
+ENV GO15VENDOREXPERIMENT 1
+
+# Install build deps
+RUN apk --no-cache --no-progress add --virtual build-deps build-base linux-pam-dev go
+
+# Install glide
+RUN git clone -b 0.10.2 https://github.com/Masterminds/glide ${GOPATH}/src/github.com/Masterminds/glide \
+    && cd ${GOPATH}/src/github.com/Masterminds/glide \
+    && make build \
+    && go install

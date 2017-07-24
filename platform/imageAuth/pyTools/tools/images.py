@@ -86,23 +86,19 @@ def setRepoLogo(repositoryname, fonttype, localpath, remopath, access_key_id, ac
     return False
 
 
-def CreatePutRetUrl(src_str, localpath, remopath):
+def CreatePutRetUrl(src_str, localpath, remopath, fonttype, access_key_id, access_key_secret, endpoint, bucker_name):
     if isinstance(src_str, str) is False:
         return False, 'not is str'
 
     if len(src_str) <= 2:
         return False, 'The string is too short'
-
-
     tt = str(get_timestamp_13()) + src_str
-
-    # remoteName, localFile
-
 
     savename = localpath + os.path.sep + tt + '.png'
     remoteName = remopath + os.path.sep + tt + '.png'
+    if CreateImagePut(fonttype, src_str[0], src_str[1], savename, remoteName, access_key_id, access_key_secret, endpoint, bucker_name):
 
-    if CreateImagePut(src_str[0], src_str[1], savename, remoteName):
+        # fonttype, fa, nd, savename, remoteName, access_key_id, access_key_secret, endpoint, bucker_name
         if os.path.exists(savename):
             os.remove(savename)
         return True, remoteName
@@ -113,13 +109,17 @@ def CreatePutRetUrl(src_str, localpath, remopath):
 if __name__ == '__main__':
     import conf.conf as CONF
 
-    dd = setRepoLogo('sdsdsd/ssss', fonttype=CONF.FONTTYPE, localpath=CONF.LOCAL_PATH,
-                     remopath=CONF.RepositoryObject, access_key_id=CONF.AccessKeyID,
-                     access_key_secret=CONF.AccessKeySecret, endpoint=CONF.Endpoint,
+#     dd = setRepoLogo('sdsdsd/ssss', fonttype=CONF.FONTTYPE, localpath=CONF.LOCAL_PATH,
+#                      remopath=CONF.RepositoryObject, access_key_id=CONF.AccessKeyID,
+#                      access_key_secret=CONF.AccessKeySecret, endpoint=CONF.Endpoint,
+#                      bucker_name=CONF.BucketName)
+#
+# #    print dd
+
+    # src_str, localpath, remopath, fonttype, access_key_id, access_key_secret, endpoint, bucker_name
+    reb, dd = CreatePutRetUrl('sss', localpath=CONF.LOCAL_PATH, remopath=CONF.RepositoryObject,
+                         fonttype=CONF.FONTTYPE, access_key_id=CONF.AccessKeyID, access_key_secret=CONF.AccessKeySecret, endpoint=CONF.Endpoint,
                      bucker_name=CONF.BucketName)
-
-
-
-    # CreatePutRetUrl('sss')
+    print dd
     # print 'ssssssssss'
     # CreatePutRetUrl(12)

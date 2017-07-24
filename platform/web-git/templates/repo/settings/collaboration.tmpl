@@ -1,0 +1,93 @@
+{{template "base/head" .}}
+
+<!--main-->
+<div class = "git_container">
+	{{template "repo/header" .}}
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}" >代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			{{if .IsRepositoryAdmin}}
+				<li role="presentation" class = "active"><a href="{{.RepoLink}}/settings" >设置</a></li>
+			{{end}}
+		</ul>
+		<div class = "tab-content">
+			<div class="tab-base tab-stacked-left">
+				<div class = "row">
+					<div class = "col-sm-4">
+						{{template "repo/settings/navbar" .}}
+					</div>
+					<div class = "col-sm-8">
+						<div class="col-sm-12">
+							<div class = "list-group">
+									<div class = "list-header">协作者管理</div>
+									{{range .Collaborators}}
+										<div class = "list-group-item">
+											<div class = "row">
+												<div class = "col-sm-5">
+													<a href="{{AppSubUrl}}/{{.Name}}">
+														<img class="ui avatar image" src="{{.RelAvatarLink}}">
+														{{.DisplayName}}
+													</a>
+												</div>
+												<div class = "col-sm-5">
+													<div class = "btn-group">
+														<button class = "btn btn-primary dropdown-toggle" data-toggle="dropdown">
+															<span>{{$.i18n.Tr .Collaboration.ModeI18nKey}}</span> <i class = "dropdown-caret"></i>
+														</button>
+														<ul class = "dropdown-menu set-access-list" data-url="{{$.Link}}/access_mode" data-uid="{{.ID}}">
+																	<li class = "item" data-value="3">
+																		<a href = "javascript:;">管理权限</a>
+																	</li>
+																	<li class = "item" data-value="2">
+																		<a href = "javascript:;">可写权限</a>
+																	</li>
+																	<li class = "item"data-value="1" >
+																		<a href = "javascript:;">只读权限</a>
+																	</li>
+														</ul>
+													</div>
+												</div>
+												<div class = "col-sm-2">
+													<button class = "btn btn-danger delete-button-collaboration" data-url="{{$.Link}}/delete" data-id="{{.ID}}">删除</button>
+												</div>
+											</div>
+										</div>
+									{{end}}
+									<div class = "list-group-item">
+										<form class="ui form" action="{{.Link}}" method="post">
+											{{.CsrfTokenHtml}}
+											<div class = "col-sm-4 search-box">
+												<input type = "text" name="collaborator" class = "col-sm-4 form-control" id = "setting-search-user" data-type = "user" autocomplete="off" required>
+												<ul>
+
+												</ul>
+											</div>
+											<button class = "btn btn-sm btn-success">增加新的协作者</button>
+										</form>
+									</div>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--main end-->
+{{template "base/footer" .}}
+
+
+
+
+
+
+
+
+
+
+
+

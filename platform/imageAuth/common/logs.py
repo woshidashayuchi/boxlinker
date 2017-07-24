@@ -5,10 +5,12 @@ import logging
 
 from conf import conf
 
+# log_file = '/var/log/cloud.log'
 
 logging.basicConfig(
     level=logging.INFO,
     filename=conf.log_file,
+    # filename=log_file,/
     format=('%(asctime)s '
             '[%(levelname)s] '
             '[%(filename)s line:%(lineno)d] '

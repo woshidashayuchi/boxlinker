@@ -48,8 +48,8 @@ def execute(*cmd, **kwargs):
 
     if run_as_root and hasattr(os, 'geteuid') and os.geteuid() != 0:
         if not root_helper:
-            log.error('Command requested root, but did not '
-                      'specify a root helper.')
+            log.warning('Command requested root, but did not '
+                        'specify a root helper.')
         if shell:
             # root helper has to be injected into the command string
             cmd = [' '.join((root_helper, cmd[0]))] + list(cmd[1:])

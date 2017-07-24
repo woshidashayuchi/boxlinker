@@ -1,0 +1,58 @@
+extends layout
+block link
+  link(rel="stylesheet", type="text/css", href="/statics/css/login.css")
+  script(type="text/javascript", src="/statics/js/signUp.js")
+block content
+        .entryBox
+            .entryHd
+                div.w1200
+                    div.indexLogo.left
+                        a(href="/")
+                            img(src="/statics/image/logo.png")
+                    div.indexLogin.right
+                        div.userBefore
+                            a.icon-username(href="/signUp") 注册
+                            = "|"
+                            a.icon-username1(href="/login") 登录
+            .entryBd.signUp
+                .entryModel
+                    .entryModelBg
+                        img(src="/statics/image/login_bg.jpg")
+                        p Make it simple<br />make it fast
+                    .entryFrom
+                        .title 用户注册
+                        .entryItemBox
+                            .entryItem
+                                .entryInputBox.icon-username
+                                    input.entryInput#userName(type = "text",placeholder = "请输入用户名")
+                                .entryTip
+                                    p#userTip 用户名错误
+                            .entryItem
+                                .entryInputBox.icon-mima
+                                    input.entryInput#password(type = "password",placeholder = "请输入密码")
+                                .entryTip
+                                    p#passwordTip 密码错误
+                            .entryItem
+                              .entryInputBox.icon-mima
+                                input.entryInput#passwordAgain(type = "password",placeholder = "请再次输入密码")
+                              .entryTip
+                                p#passwordAgainTip 密码错误
+                            .entryItem
+                                .entryInputBox.icon-email
+                                    input.entryInput#email(type = "text",placeholder = "请输入邮箱")
+                                .entryTip
+                                    p#emailTip 邮箱错误
+                            .entryItem.entryItemCode
+                                .entryInputBox.icon-yzcode
+                                    input.entryInput#code(type = "text",placeholder = "请输入验证码")
+                                    img#imgCode(src = "")
+                                    span.icon-refresh#changeImgCode
+                                .entryTip
+                                    p#codeTip 验证码错误
+                            .entryBtnBox
+                                button.btn.btn-primary.entryBtn#signUp 注册
+                             .entryFromFt
+                                 a(href = "/login") 立即登录
+                                 a(href = "/") 回首页
+                                 a(href = "/forgetPw") 忘记密码?
+        .entryBg

@@ -24,10 +24,7 @@
     "result": {
         "user_name": "string",
         "email": "string",
-        "mobile": "string",
-        "real_name": "string",
-        "sex": "string",
-        "birth_date": "YYYY-MM-DD HH:MM:SS"
+        "mobile": "string"
     }
 }
 """
@@ -264,6 +261,7 @@
     "msg": "OK",
     "result": {
         "user_uuid": "string",
+        "user_name": "string",
         "team_uuid": "string",
         "team_priv": "string",
         "project_uuid": "string",
@@ -540,6 +538,7 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "user_list": [
             {
                 "user_uuid": "string",
@@ -590,6 +589,7 @@
     "status": 0,
     "msg": "OK",
     "result": {
+        "count": int,
         "user_list": [
             {
                 "user_uuid": "string",
@@ -637,10 +637,7 @@
     "user_name": "string",
     "password": "string",
     "email": "string",
-    "real_name": "string",
     "mobile": "string",
-    "sex": "man/woman",
-    "birth_date": epoch_milliseconds
     "code_id": "string",
     "code_str": "string"
 }
@@ -1040,7 +1037,7 @@
 @apiName project list
 @apiGroup 6 projects
 @apiVersion 1.0.0
-@apiDescription 查询用户所属的项目列表
+@apiDescription 查询用户在某一特定组织下所属的项目列表
 @apiPermission organization
 @apiParam {json} header {"token": "string"}
 @apiUse CODE_PROJECTS_LIST_0
@@ -1108,7 +1105,7 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/usersteams 5.2.2 组织用户列表
+@api {get} /api/v1.0/ucenter/usersteams?page_size=<int>&page_num=<int> 5.2.2 组织用户列表
 @apiName team user list
 @apiGroup 5 teams
 @apiVersion 1.0.0
@@ -1184,7 +1181,7 @@
 
 
 """
-@api {get} /api/v1.0/ucenter/usersprojects 6.2.2 项目用户列表
+@api {get} /api/v1.0/ucenter/usersprojects?page_size=<int>&page_num=<int> 6.2.2 项目用户列表
 @apiName project user list
 @apiGroup 6 projects
 @apiVersion 1.0.0

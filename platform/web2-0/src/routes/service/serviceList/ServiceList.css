@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+  .table {
+    width:650px;
+    padding:10px;
+  }
+}
+@media (max-width: 340px) {
+  .search div input{
+    width:165px !important;
+  }
+}

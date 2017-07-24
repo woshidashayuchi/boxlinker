@@ -20,18 +20,40 @@ from common.logs import logging as log
 
 import imageAuth.manager.githubApi as githubApi
 import imageAuth.manager.CodingApi as CodingApi
-from imageAuth.db.oauth_db import OauthDB
-
-
-
-
-
+import imageAuth.db.oauth_db as DBMG
 
 class CodeOauthManager(object):
     def __init__(self):
-        self.oauthdb = OauthDB()
+        self.oauthdb = DBMG.OauthDbManager()
 
-    def update_code_oauth(self, db_session, team_uuid, token, src_type, update_token=False):
+    def DelOauthStatus(self, team_uuid, src_type):
+        """ 取消绑定 """
+
+        retbool, oauthret = self.oauthdb.get_code_oauth(team_uuid=team_uuid, src_type=src_type)
+        if retbool is False:
+            return request_result(0)
+
+        code_repo = self.oauthdb.get_code_repo(team_uuid=team_uuid, src_type=src_type)
+        if code_repo is None:
+            return request_result(0)
+
+        for node in code_repo:
+            if '1' == node.is_hook:
+                # user_name, project_name, access_token, hook_url_del
+                CodingApi.DellAllWebHooksByProjectName(oauthret.git_name, node.repo_name,
+                                                       oauthret.access_token, node.hook_url)
+
+        self.oauthdb.del_code_repo(team_uuid=team_uuid, src_type=src_type)
+        self.oauthdb.del_code_oauth(team_uuid=team_uuid, src_type=src_type)
+
+        return request_result(0)
+
+    def OauthStatue(self, team_uuid):
+        """ 获取Oauth绑定状态 """
+        src_type_dict = self.oauthdb.get_code_oauth_type(team_uuid=team_uuid)
+        return request_result(0, ret=src_type_dict)
+
+    def update_code_oauth(self, team_uuid, token, src_type, update_token=False):
         """更新  CodeOauth 中的用户信息"""
         if src_type == 'github':
             retbool, git_name, git_uid, git_emain = githubApi.get_github_user_some_info(token=token)
@@ -44,12 +66,10 @@ class CodeOauthManager(object):
             return False, None
 
         if update_token:
-            retbool = self.oauthdb.update_code_oauth(db_session=db_session, team_uuid=team_uuid, src_type=src_type,
-                                                     git_name=git_name, git_emain=git_name, git_uid=git_uid,
-                                                     access_token=token)
+            retbool = self.oauthdb.update_code_oauth(team_uuid=team_uuid, src_type=src_type, git_name=git_name,
+                                                     git_emain=git_name, git_uid=git_uid, access_token=token)
         else:
-            retbool = self.oauthdb.update_code_oauth_only_user(db_session=db_session, team_uuid=team_uuid,
-                                                               src_type=src_type,
+            retbool = self.oauthdb.update_code_oauth_only_user(team_uuid=team_uuid, src_type=src_type,
                                                                git_name=git_name, git_emain=git_name, git_uid=git_uid)
 
         if retbool is False:
@@ -57,9 +77,9 @@ class CodeOauthManager(object):
         return True, (git_name, git_uid, git_emain)
 
 
-    def get_code_oauth_info(self, db_session, team_uuid, src_type):
+    def get_code_oauth_info(self, team_uuid, src_type):
         """ 根据组织uuid 和 第三方类型, 获取 CodeOauth , 返回"""
-        retbool, oauthret = self.oauthdb.get_code_oauth(db_session=db_session, team_uuid=team_uuid, src_type=src_type)
+        retbool, oauthret = self.oauthdb.get_code_oauth(team_uuid=team_uuid, src_type=src_type)
 
         if retbool is False:
             return False, None
@@ -74,7 +94,7 @@ class CodeOauthManager(object):
         # 还没有获取用户信息,需要获取用户信息并更新到数据表
         # if git_name is None or ret.git_emain is None or git_uid is None:
         if git_name is None or git_uid is None:  # 对于不显示email的用户设置，无法得到用户邮箱
-            retbool, git_name, git_uid, git_emain = self.update_code_oauth(db_session=db_session, team_uuid=team_uuid,
+            retbool, git_name, git_uid, git_emain = self.update_code_oauth(team_uuid=team_uuid,
                                               src_type=src_type, token=access_token)
         return retbool, (access_token, git_name, git_uid, git_emain)
 
@@ -96,6 +116,10 @@ class OauthUrlManager(object):
 
         state_ret = gen_token(key=openOauth.SECRET_KEY, data=state_msg)
 
+        state_ret = state_ret.replace('=', '.')  # coding 无故吃掉 =
+
+        log.info('create_oauth_url state_ret: %s' % (state_ret))
+
         if src_type == "github":
             return openOauth.user_oauth_url.format(state_ret)
         elif 'coding' == src_type:
@@ -113,316 +137,177 @@ class OauthUrlManager(object):
 class CallBackManager(object):
     def __init__(self):
         self.CodeOauthManager = CodeOauthManager()
-        self.oauthdb = OauthDB()
+        self.oauthdb = DBMG.OauthDbManager()
 
     # coding 回调
-    def callback_coding(self, db_session, src_type, code, team_uuid):
+    def callback_coding(self, code):
 
         token = CodingApi.get_token_by_code(client_id=openOauth.coding_client_id,
                                             client_secret=openOauth.coding_client_secret, code=code)
+        return token
 
-        retbool, oauthret = self.oauthdb.get_code_oauth(db_session=db_session, team_uuid=team_uuid, src_type=src_type)
-
-        if retbool is False:
-            return False, None, None
-
-        return True, token, oauthret
-
-
-    def callback_git(self, db_session, src_type, code, team_uuid):
-
+    def callback_git(self, code):
         token = githubApi.get_token_by_code(code=code, client_id=openOauth.github_client_id,
                                             client_secret=openOauth.github_client_secret)
+        return token
 
-        retbool, oauthret = self.oauthdb.get_code_oauth(db_session=db_session, team_uuid=team_uuid, src_type=src_type)
-        if retbool is False:
-            return False, None, None
-
-        return True, token, oauthret
-
-
-
-
-    def callback(self, db_session, src_type, code, team_uuid):
+    def callback(self, src_type, code, team_uuid):
         if 'github' == src_type:
-            retbool, token, oauthret = self.callback_git(db_session=db_session, src_type=src_type,
-                                                         code=code, team_uuid=team_uuid)
+            token = self.callback_git(code=code)
         elif 'coding' == src_type:
-            retbool, token, oauthret = self.callback_coding(db_session=db_session, src_type=src_type,
-                                                            code=code, team_uuid=team_uuid)
+            token = self.callback_coding(code=code)
         else:
             return request_result(101)
 
-
-        if oauthret is None:  # 把 token 存起来
-            retbool = self.oauthdb.save_access_token(db_session=db_session, team_uuid=team_uuid,
-                                                     src_type=src_type, access_token=token)
-            if retbool is False:
-                return request_result(404)
-
-            ret = self.CodeOauthManager.update_code_oauth(db_session=db_session, team_uuid=team_uuid, token=token, src_type=src_type)
+        retbool, oauthret = self.oauthdb.get_code_oauth(team_uuid=team_uuid, src_type=src_type)
+        if retbool is False:  # 把 token 存起来
+            self.oauthdb.save_access_token(team_uuid=team_uuid, src_type=src_type, access_token=token)
+            ret = self.CodeOauthManager.update_code_oauth(team_uuid=team_uuid, token=token, src_type=src_type)
         else:
-            ret = self.CodeOauthManager.update_code_oauth(db_session=db_session, team_uuid=team_uuid, token=token, src_type=src_type, update_token=True)
+            ret = self.CodeOauthManager.update_code_oauth(team_uuid=team_uuid, token=token, src_type=src_type, update_token=True)
 
         return ret
 
 
-
 class WebHookManager(object):
+    """ Web Hook 管理 """
     def __init__(self):
-        self.oauthdb = OauthDB()
+        self.oauthdb = DBMG.OauthDbManager()
         self.CodeOauthManager = CodeOauthManager()
         self.callback = CallBackManager()
 
 
-    # 设置 github webhook
-    def SetGitHook(self, db_session, git_name, repo_name, team_uuid, access_token, del_hooks=False):
+    def SetCodingHook(self, git_name, repo_name, team_uuid, access_token, del_hooks=True):
+        """ 设置 coding web hooks """
+
+        # 暂时不删除
         if del_hooks:
-            githubApi.DelGithubHooks(git_name=git_name, repo_name=repo_name, token=access_token)
+            CodingApi.DellAllWebHooksByProjectName(git_name, repo_name, access_token, hook_url_del=openOauth.OAUTH_WEBHOOKS)
 
         random_key = make_random_key()
 
-        retbool, response_json = githubApi.SetGithubHook(
-            git_name=git_name, repo_name=repo_name, token=access_token, payload_url=None, secret=random_key)
+        retbool, result = CodingApi.WebHookAdd(
+            user_name=git_name, project_name=repo_name,
+            access_token=access_token, hook_url=openOauth.OAUTH_WEBHOOKS, hook_token=random_key)
+
         if retbool is False:
-            return request_result(100, ret=response_json)
+            return request_result(100, ret=result)
 
-        # 从  response_json  取回hook_id
+        log.info("--->result: %s" % (result))
+        log.info("--->team_uuid: %s" % (team_uuid))
+        log.info("--->repo_name: %s" % (repo_name))
+        log.info("--->random_key: %s" % (random_key))
 
-        hook_id = 'ss'
-        self.oauthdb.update_code_repo_web_hook(db_session=db_session, team_uuid=team_uuid,
-                                               repo_name=repo_name, random_key=random_key,hook_id=hook_id)
+        self.oauthdb.update_code_repo_web_hook(team_uuid=team_uuid, repo_name=repo_name,
+                                               repo_hook_token=random_key, hook_url=openOauth.OAUTH_WEBHOOKS, src_type='coding')
+        log.info(" update_code_repo_web_hook is ok")
 
 
-    def create_web_hook(self, db_session, team_uuid, src_type, repo_name):
-        retbool, result = self.CodeOauthManager.get_code_oauth_info(db_session=db_session, team_uuid=team_uuid, src_type=src_type)
+        try:
+            # 设置部署公钥
+            retbool, result = CodingApi.RsaKeyAdd(user_name=git_name, project_name=repo_name, access_token=access_token)
+            if retbool is False:
+                return request_result(100, ret=result)
+            return request_result(0)
+        except Exception, e:
+            log.error(' RsaKeyAdd is error: %s' % (e))
+            return request_result(403)
+
+        return request_result(0)
+
+
+
+
+    def create_web_hook(self, team_uuid, src_type, repo_name):
+        retbool, result = self.CodeOauthManager.get_code_oauth_info(team_uuid=team_uuid, src_type=src_type)
         if retbool is False:
             return request_result(601)
-
         access_token, git_name, git_uid, git_emain = result
 
-
-        if 'github' == src_type:
-            return self.SetGitHook(db_session, git_name, repo_name, team_uuid, access_token, del_hooks=True)
-        elif 'coding' == src_type:
-            log.info('ssss')
-            return request_result(0)
-
-            # from authServer.common.oauthclient.webhooks import SetWebHook
-            # return SetWebHook(git_name=git_name, repo_name=repo_name,
-            #                   access_token=access_token, uid=uid, src_type=kwargs['src_type_arg'])
-            #
+        self.SetCodingHook(git_name, repo_name, team_uuid, access_token, del_hooks=True)
+        return request_result(0)
 
 
-
-# 代码项目管理
 class OauthCodeRepoManager(object):
+    """ 代码项目管理 """
     def __init__(self):
-        self.oauthdb = OauthDB()
+        self.oauthdb = DBMG.OauthDbManager()
         self.CodeOauthManager = CodeOauthManager()
 
-    def GetCodeRepoList(self, db_session, access_token, git_name, uid, git_uid, src_type, team_uuid):
+    def GetCodeRepoList(self, src_type, team_uuid, refresh=False):
         """ 从数据库中, 获取代码项目 """
 
-        code_repo = self.oauthdb.get_code_repo(db_session=db_session, team_uuid=team_uuid, src_type=src_type)
 
-        if code_repo is None:
+        retbool, oauthret = self.oauthdb.get_code_oauth(team_uuid=team_uuid, src_type=src_type)
+        if retbool is False:
             return request_result(0)
+
+
+        code_repo = self.oauthdb.get_code_repo(team_uuid=team_uuid, src_type=src_type)
+        if code_repo is None and refresh:
+            return request_result(0)
+
+        if refresh is False:
+            return self.refresh_repos(team_uuid=team_uuid, src_type=src_type)
         repo_list = list()
         for node in code_repo:
             repo_list.append(
                 {'repo_name': node.repo_name, 'git_uid': node.repo_uid, 'is_hook': node.is_hook,
-                 'id': node.id, 'html_url': node.html_url, 'ssh_url': node.ssh_url,
-                 'url': node.url, 'description': node.description, 'git_name': git_name})
-
+                 'id': node.code_repo_uuid, 'html_url': node.html_url, 'ssh_url': node.ssh_url,
+                 'url': node.git_url, 'description': node.description, 'git_name': oauthret.git_name})
         return request_result(0, ret=repo_list)
 
-
-
-    def refresh_repos(self, db_session, access_token, git_name, uid, git_uid, src_type, team_uuid):
+    def refresh_repos(self, team_uuid, src_type='coding'):
         """ 刷新 github 代码列表 """
+        retbool, codeOauth = self.oauthdb.get_code_oauth(team_uuid, src_type)
+        if retbool is False:
+            return request_result(701)
+        access_token = codeOauth.access_token
+        git_name = codeOauth.git_name
 
-        if src_type == 'github':
-            retbool, ret_json = githubApi.GetGithubALLRepoList(token=access_token, username=git_name)
-            if retbool is False:
-                return ret_json
-        elif src_type == 'coding':
+        code, ret_json = CodingApi.GetRepoList(access_token=access_token)
+        if code is False:
+            return ret_json
+        ret_json = ret_json['data']['list']  # coding 和 github 结构不一样
 
-            code, ret_json = CodingApi.GetRepoList(access_token=access_token)
-            if code is False:
-                return ret_json
-            ret_json = ret_json['data']['list']  # coding 和 github 结构不一样
-
-        repo_list = list()
-        code_repos = list()
-
-        old_repo_name_d = dict()
-        old_githubrepo = self.oauthdb.get_code_repo(db_session=db_session, team_uuid=team_uuid, src_type=src_type)
-
-
-        if old_githubrepo is not None:
-            for node_repo in old_githubrepo:
-                old_repo_name_d[node_repo.repo_id] = node_repo.repo_id
-
-
-
-        # 全部标记已经删除
-        g.db_session.query(CodeRepo).filter(
-            CodeRepo.uid == uid, CodeRepo.src_type == src_type
-        ).update({'deleted': '1', })
-
-        g.db_session.commit()
-
-        # ret_json = ret_json['data']['list']  # coding 和 github 结构不一样
+        ret, codeOauth = self.oauthdb.get_code_repo_repo_id(team_uuid=team_uuid, src_type=src_type)
+        self.oauthdb.set_all_code_repo_deleted(team_uuid=team_uuid, src_type=src_type)
         for node in ret_json:
-
-            # github == coding
+            log.info("node--> %s" % (node))
+            temp = dict()
             repo_id = str(node['id'])
-            description = node['description']
-            repo_name = node['name']
-            ssh_url = node['ssh_url']
-            git_url = node['git_url']
+            default_branch = ''
+            html_url = node['https_url']
+            temp['team_uuid'] = team_uuid
+            temp['repo_uid'] = node['owner_id']
+            temp['repo_id'] = repo_id
+            temp['repo_name'] = node['name']
 
-            if src_type == 'github':
-                html_url = node['html_url']
-            elif src_type == 'coding':
-                html_url = node['https_url']
+            temp['repo_branch'] = default_branch
+            temp['html_url'] = html_url
+            temp['ssh_url'] = node['ssh_url']
+            temp['git_url'] = node['git_url']
+            temp['src_type'] = src_type
+            temp['description'] = node['description']
+            try:
+                if codeOauth is not None and str(repo_id) in codeOauth:
+                    log.info('old data do modify')
+                    self.oauthdb.modify_code_repo_dict(temp)  # 修改
+                else:
+                    log.info('new data do insert')
+                    self.oauthdb.add_code_repo_dict(temp)
+            except Exception, e:
+                log.error('refresh_repos is error: %s' % (e))
+                return request_result(403)
 
-            if repo_id in old_repo_name_d:
-                g.db_session.query(CodeRepo).filter(
-                    CodeRepo.uid == uid, CodeRepo.repo_id == repo_id, CodeRepo.src_type == src_type
-                ).update(
-                    {'repo_name': repo_name,
-                     'html_url': html_url,
-                     'ssh_url': ssh_url,
-                     'url': git_url,
-                     'description': description,
-                     'deleted': '0',
-                     })
-            else:
-                code_repos.append(CodeRepo(
-                    uid=uid, repo_uid=git_uid, repo_id=repo_id, repo_name=repo_name, update_time=get_now_time(),
-                    creation_time=get_now_time(), src_type=src_type, html_url=html_url, ssh_url=ssh_url,
-                    url=git_url, description=description, deleted='0'
-                ))
-
-        g.db_session.add_all(code_repos)
-        g.db_session.commit()
-
-        # 真正删除
-        try:
-            del_repos = g.db_session.query(CodeRepo).filter(CodeRepo.uid == str(uid),
-                                                            CodeRepo.src_type == src_type,
-                                                            CodeRepo.deleted == '1').all()
-
-            for del_repo in del_repos:
-                g.db_session.delete(del_repo)
-                g.db_session.commit()
-            print "del is ok"
-        except Exception as msg:
-            print "del is error"
-            print msg.message
-            return request_result(100, ret=msg.message)
-
-        return DbGetRepoList(access_token=access_token, git_name=git_name, uid=uid, git_uid=git_uid, src_type=src_type)
-
-
-
-
-
-    def refresh_code_repo(self, access_token, git_name, uid, git_uid):
-        """ 刷新 github 代码列表 """
-
-        if src_type == 'github':
-            from authServer.common.oauthclient.HubApi import GetGithubRepoList, GetGithubALLRepoList
-            # # modify liuzhangpei 20170121
-            # retbool, ret_json = GetGithubRepoList(token=access_token, username=git_name)
-            retbool, ret_json = GetGithubALLRepoList(token=access_token, username=git_name)
-            if retbool is False:
-                return ret_json
-        elif src_type == 'coding':
-            from authServer.common.oauthclient.CodingApi import GetRepoList
-            code, ret_json = GetRepoList(access_token=access_token)
-            if code is False:
-                return ret_json
-            ret_json = ret_json['data']['list']  # coding 和 github 结构不一样
-
-        repo_list = list()
-        code_repos = list()
-
-        old_repo_name_d = dict()
-        old_githubrepo = g.db_session.query(CodeRepo).filter(CodeRepo.uid == str(uid),
-                                                             CodeRepo.src_type == src_type).all()
-        if old_githubrepo is not None:
-            for node_repo in old_githubrepo:
-                old_repo_name_d[node_repo.repo_id] = node_repo.repo_id
-
-        # print "------------> 01"
-        # print ret_json
-        # print "------------> 02"
-
-        # 全部标记已经删除
-        g.db_session.query(CodeRepo).filter(
-            CodeRepo.uid == uid, CodeRepo.src_type == src_type
-        ).update({'deleted': '1', })
-
-        g.db_session.commit()
-
-        # ret_json = ret_json['data']['list']  # coding 和 github 结构不一样
-        for node in ret_json:
-
-            # github == coding
-            repo_id = str(node['id'])
-            description = node['description']
-            repo_name = node['name']
-            ssh_url = node['ssh_url']
-            git_url = node['git_url']
-
-            if src_type == 'github':
-                html_url = node['html_url']
-            elif src_type == 'coding':
-                html_url = node['https_url']
-
-            if repo_id in old_repo_name_d:
-                g.db_session.query(CodeRepo).filter(
-                    CodeRepo.uid == uid, CodeRepo.repo_id == repo_id, CodeRepo.src_type == src_type
-                ).update(
-                    {'repo_name': repo_name,
-                     'html_url': html_url,
-                     'ssh_url': ssh_url,
-                     'url': git_url,
-                     'description': description,
-                     'deleted': '0',
-                     })
-            else:
-                code_repos.append(CodeRepo(
-                    uid=uid, repo_uid=git_uid, repo_id=repo_id, repo_name=repo_name, update_time=get_now_time(),
-                    creation_time=get_now_time(), src_type=src_type, html_url=html_url, ssh_url=ssh_url,
-                    url=git_url, description=description, deleted='0'
-                ))
-
-        g.db_session.add_all(code_repos)
-        g.db_session.commit()
-
-        # 真正删除
-        try:
-            del_repos = g.db_session.query(CodeRepo).filter(CodeRepo.uid == str(uid),
-                                                            CodeRepo.src_type == src_type,
-                                                            CodeRepo.deleted == '1').all()
-
-            for del_repo in del_repos:
-                g.db_session.delete(del_repo)
-                g.db_session.commit()
-            print "del is ok"
-        except Exception as msg:
-            print "del is error"
-            print msg.message
-            return request_result(100, ret=msg.message)
-
-        return DbGetRepoList(access_token=access_token, git_name=git_name, uid=uid, git_uid=git_uid, src_type=src_type)
-
+        self.oauthdb.del_code_repo_deleted(team_uuid=team_uuid, src_type=src_type)
+        return self.GetCodeRepoList(team_uuid=team_uuid, src_type=src_type, refresh=True)
 
 if __name__ == '__main__':
-    OUM = OauthUrlManager()
+    OUM = OauthCodeRepoManager()
 
-    print OUM.create_oauth_url('sdsds', 'codings', 'wwww.baidu.com')
+    ret = OUM.GetCodeRepoList(team_uuid='2e8e7b37-a957-4770-9075-aaa67eaa49ce', src_type='coding')
+    print ret
+
+    # HOOKS = WebHookManager()
+    # HOOKS.create_web_hook(team_uuid='2e8e7b37-a957-4770-9075-aaa67eaa49ce', src_type='github', repo_name='3des')

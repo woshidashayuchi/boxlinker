@@ -1,0 +1,22 @@
+
+# 阿里云 key
+aliyunkey:
+  AccessKeyID: "LTAIRgaFkdGaZlVM"
+  AccessKeySecret: "EGv0wHzPE5cv97INkIQ4vYdqyYzxnH"
+    # 外网访问地址
+#  HostOuter: "http://boxlinker-images.oss-cn-beijing.aliyuncs.com"
+  HostOuter: "https://boxlinker-images.oss-cn-beijing.aliyuncs.com"
+
+  # 内网地址
+  HostIn: "boxlinker-images.oss-cn-beijing-internal.aliyuncs.com"
+    # oss 回调
+#  CallbackUrl : "http://101.201.56.57:8765/api/v1.0/files/callback"
+  CallbackUrl : "https://imgstorage.boxlinker.com/api/v1.0/files/callback"
+  ExpireTime : 60000
+
+#  Invalid according to Policy: Policy expired  服务器时间不一致
+
+
+# oss 配置
+oss:
+  UploadDir : "test/"

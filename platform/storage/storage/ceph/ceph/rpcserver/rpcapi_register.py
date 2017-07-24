@@ -20,6 +20,33 @@ class RabbitmqResponse(object):
         self.rpcapi_define = rpcapi_define.CephRpcManager()
 
         self.rpc_api.add_resource(
+             'drv_hst_hst_inf', self.rpcapi_define.host_info)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_mon_ini', self.rpcapi_define.cephmon_init)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_mon_add', self.rpcapi_define.cephmon_add)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_clt_mnt', self.rpcapi_define.cephcluster_mount)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_osd_add', self.rpcapi_define.cephosd_add)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_osd_del', self.rpcapi_define.cephosd_delete)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_osd_rwt', self.rpcapi_define.cephosd_reweight)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_pol_crt', self.rpcapi_define.cephpool_create)
+
+        self.rpc_api.add_resource(
+             'drv_ceh_pol_inf', self.rpcapi_define.cephpool_info)
+
+        self.rpc_api.add_resource(
              'drv_ceh_dsk_crt', self.rpcapi_define.disk_create)
 
         self.rpc_api.add_resource(

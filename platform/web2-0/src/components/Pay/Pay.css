@@ -1,0 +1,22 @@
+.root{
+  display:inline-block;
+}
+.payNumber{
+  display:inline-block;
+}
+.payNumber input{
+  width:100px;
+  height:31px !important;
+  display:inline-block;
+}
+.payNumber button{
+  margin-right:10px;
+}
+.pay{
+  vertical-align: middle;
+  margin-top:-25px;
+}
+.payLogo img{
+  margin-right:30px;
+  cursor:pointer;
+}

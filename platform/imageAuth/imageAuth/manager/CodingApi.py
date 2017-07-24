@@ -206,22 +206,26 @@ def WebHookListOnlyHookID(user_name, project_name, access_token):
     """ 获取一个项目的 webhook 的 hook url 和 id;仅仅只有 URL 和 id """
     retbool, hooks = WebHookList(user_name, project_name, access_token)
 
-    hooks_list = []
     if retbool is False:
-        return retbool, hooks_list
+        return retbool, None
 
     hooks_data = hooks['data']
-
-    for hooknode in hooks_data:
-        hook_id = hooknode['id']
-        hook_url = hooknode['hook_url']
-        log.info('hook_id: %s' % (hook_id))
-        hooks_list.append((hook_url, hook_id))
-
+    hooks_list = [(hooknode['hook_url'], hooknode['id']) for hooknode in hooks_data]
     return True, hooks_list
 
 
 
+
+def DellAllWebHooksByProjectName(user_name, project_name, access_token, hook_url_del):
+    """ 删除一个项目下的所有hook_url为hook_url的webhooks ;"""
+    retbool, hooks_list = WebHookListOnlyHookID(user_name=user_name, project_name=project_name, access_token=access_token)
+
+    if retbool:
+        for hook_node in hooks_list:
+            hook_url, hook_id = hook_node
+            if hook_url_del == hook_url:
+                log.info('DellAllWebHooks--> hook_id: %s, hook_url: %s' % (hook_id, hook_url))
+                WebHookDelete(user_name=user_name, project_name=project_name, hook_id=hook_id, access_token=access_token)
 
 
 

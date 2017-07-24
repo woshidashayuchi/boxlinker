@@ -89,12 +89,8 @@ def acl_check(func):
             log.info("acl_check context :%s" % (context))
 
             token = context['token']
-            log.info('acl_check --> 01')
             resource_uuid = context['resource_uuid']
-            log.info('acl_check --> 02')
             action = context['action']
-            log.info('acl_check --> 03')
-
             user_info = token_auth(token)['result']
             log.info('acl_check --> 04')
             user_uuid = user_info['user_uuid']

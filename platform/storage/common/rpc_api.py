@@ -22,7 +22,7 @@ class RpcAPI(object):
             context = dict_data['context']
             parameters = dict_data['parameters']
         except Exception, e:
-            log.error('parameters error: %s' % (e))
+            log.warning('parameters error: %s' % (e))
             return request_result(101)
 
         try:

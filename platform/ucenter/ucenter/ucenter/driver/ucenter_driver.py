@@ -22,6 +22,7 @@ class UcenterDriver(object):
 
         self.email_api = conf.email_api
         self.verify_code_api = conf.verify_code_api
+        self.image_api = conf.image_api
         self.billing_api = BillingRpcApi()
 
     def email_send(self, data):
@@ -39,6 +40,7 @@ class UcenterDriver(object):
                 raise(Exception('request_code not equal 0'))
         except Exception, e:
             log.error('Email send error: reason=%s' % (e))
+            log.info('email api body=%s' % (body))
             return request_result(601)
 
         return request_result(0)
@@ -55,13 +57,43 @@ class UcenterDriver(object):
             if int(status) != 0:
                 raise(Exception('request_code not equal 0'))
         except Exception, e:
-            log.error('Verify code check error: reason=%s' % (e))
+            log.warning('Verify code check error: reason=%s' % (e))
             return request_result(601)
 
         return request_result(0)
 
-    def balance_init(self, token):
+    def level_init(self, token):
+
+        context = context_data(token, "bil_lvl_lvl_ini", "create")
+
+        return self.billing_api.level_init(context)
+
+    def balance_init(self, token, balance=0):
 
         context = context_data(token, "bil_blc_blc_add", "create")
+        parameters = {"balance": balance}
 
-        return self.billing_api.balance_init(context)
+        return self.billing_api.balance_init(context, parameters)
+
+    def image_info(self, image_uuid, resource_type='UserAvatars',
+                   resource_domain='boxlinker'):
+
+        resource_uuid = image_uuid
+        url = '%s/api/v1.0/files/%s/%s/%s/%s' % (self.image_api, image_uuid,
+                                                 resource_type, resource_uuid,
+                                                 resource_domain)
+
+        try:
+            r = requests.get(url, timeout=3, verify=True)
+            status = r.json()['status']
+            log.debug('Image info url=%s, request_status=%s'
+                      % (url, status))
+            if int(status) != 0:
+                raise(Exception('request_code not equal 0'))
+            else:
+                result = r.json()['result'][0]['storage_url']
+        except Exception, e:
+            log.warning('Image info get error: reason=%s' % (e))
+            return request_result(601)
+
+        return request_result(0, result)

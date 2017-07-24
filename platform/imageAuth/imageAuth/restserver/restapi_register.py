@@ -36,6 +36,8 @@ def rest_app_run():
 
     api.add_resource(rest_image_api_define.TestApi, '/api/v1.0/imagerepo/test')
 
+    api.add_resource(rest_image_api_define.CreateImage, '/api/v1.0/pictures')
+
     api.add_resource(rest_image_api_define.RegistryToken, '/api/v1.0/registry/token')
 
     # 镜像通知
@@ -68,14 +70,28 @@ def rest_app_run():
     api.add_resource(rest_image_api_define.ImageRepoSystem,
                      '/api/v1.0/imagerepo/image/<string:repoid>/public_info')
 
+    # 通过tagid拿到镜像名和版本
+    api.add_resource(rest_image_api_define.ImageTag,
+                     '/api/v1.0/imagerepo/image/tagid/<string:tagid>')
+
     # 修改详情
     api.add_resource(rest_image_api_define.ImageRepoDetail,
                      '/api/v1.0/imagerepo/image/<string:repoid>/detail/<string:detail_type>')
 
+    # 修改详情
+    api.add_resource(rest_image_api_define.ImageRepoTagID,
+                     '/api/v1.0/imagerepo/image/tagids/')
 
+    # http://imageauth.boxlinker.com/api/v1.0/imagerepo/image/tagids/?repo_name=boxlinker/pause&repo_tag=2.0
 
 
     # 第三方认证
+    # 2.0 get    获取用户是否已经绑定 /api/v1.0/oauthclient/oauth
+    # 2.4 delete 解除绑定
+    api.add_resource(rest_oauth_api_define.OauthStatus,
+                     '/api/v1.0/oauthclient/oauth',
+                     '/api/v1.0/oauthclient/oauth/<string:src_type>')
+
     # 2.1 获取用户授权跳转链接
     api.add_resource(rest_oauth_api_define.OauthUrl, '/api/v1.0/oauthclient/url')
 
@@ -83,16 +99,25 @@ def rest_app_run():
     api.add_resource(rest_oauth_api_define.CallBack,
                      '/api/v1.0/oauthclient/callback/',
                      '/api/v1.0/oauthclient/callback')
-
-    # 2.3 授权平台可以对某个项目具有 hooks 权限
-    api.add_resource(rest_oauth_api_define.WebHook, '/api/v1.0/oauthclient/webhooks/<string:src_type>/<string:repo_name>')
+    # 2.0 2.1 2.2 github 和 coding 公用
 
 
+    # 2.3 2.4
     # get 获取代码项目列表;
     # put 刷新代码列表,返回新的代码项目列表
+    # Python 代码处理 coding
     api.add_resource(rest_oauth_api_define.OauthCodeRepo,
                      '/api/v1.0/oauthclient/repos/<string:src_type>')
 
+
+
+    # 2.3 授权平台可以对某个项目具有 hooks 权限
+    api.add_resource(rest_oauth_api_define.WebHook,
+                     '/api/v1.0/oauthclient/webhooks/<string:src_type>/<string:repo_name>')
+
+
+
+    # api.add_resource(rest_oauth_api_define.OauthCodeRepo, '/api/v1.0/oauthclient/repos/github')
     app.run(host='0.0.0.0', port=8001, threaded=True, debug=True)
 
     # app.run(host='0.0.0.0', port=8001, threaded=True, debug=True, ssl_context=('/ImageRepo/registry/ssl/ca.crt',

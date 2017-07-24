@@ -8,5 +8,7 @@ COPY ./billing /usr/share/nginx/html/
 COPY ./index.html /usr/share/nginx/html/
 COPY ./log /usr/share/nginx/html/
 COPY ./usercenter /usr/share/nginx/html/
+COPY ./apprecover /usr/share/nginx/html/
 COPY ./imageauth /usr/share/nginx/html/
+COPY ./security /usr/share/nginx/html/
 

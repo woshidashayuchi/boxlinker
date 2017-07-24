@@ -1,0 +1,60 @@
+{{template "base/head" .}}
+<!--main-->
+<div class = "git_container">
+	<div class = "git_project tab-base">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="{{.RepoLink}}/project" >概览</a></li>
+			<li role="presentation" class="active"><a href="{{.RepoLink}}">代码</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/milestones" >里程碑</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/issues" >任务</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/labels" >标签</a></li>
+			<li role="presentation"><a href="{{.RepoLink}}/settings" >设置</a></li>
+		</ul>
+		<div class = "tab-content">
+			<div class="repository diff">
+
+			<div class="ui container {{if .IsSplitStyle}}fluid padded{{end}}">
+				{{if .IsDiffCompare }}
+				{{template "repo/commits_table" .}}
+				{{else}}
+				<div class="ui top attached info clearing segment">
+					<a class="ui floated right blue tiny button" href="{{EscapePound .SourcePath}}">
+						{{.i18n.Tr "repo.diff.browse_source"}}
+					</a>
+					{{RenderCommitMessage true .Commit.Message $.RepoLink $.Repository.ComposeMetas}}
+				</div>
+				<div class="ui attached info segment">
+					{{if .Author}}
+					<img class="ui avatar image" src="{{.Author.RelAvatarLink}}" />
+					<a href="{{.Author.HomeLink}}"><strong>{{.Commit.Author.Name}}</strong></a> {{if .IsSigned}}<{{.Commit.Author.Email}}>{{end}}
+					{{else}}
+					<img class="ui avatar image" src="{{AvatarLink .Commit.Author.Email}}" />
+					<strong>{{.Commit.Author.Name}}</strong>
+					{{end}}
+					<span class="text grey" id="authored-time">{{TimeSince .Commit.Author.When $.Lang}}</span>
+					<div class="ui right">
+						<div class="ui horizontal list">
+							{{if .Parents}}
+							<div class="item">
+								{{.i18n.Tr "repo.diff.parent"}}
+							</div>
+							<div class="item">
+								{{range .Parents}}
+								<a class="ui blue sha label" href="{{$.RepoLink}}/commit/{{.}}">{{ShortSha .}}</a>
+								{{end}}
+							</div>
+							{{end}}
+							<div class="item">{{.i18n.Tr "repo.diff.commit"}}</div>
+							<div class="item"><span class="ui blue sha label">{{ShortSha .CommitID}}</span></div>
+						</div>
+					</div>
+				</div>
+				{{end}}
+
+				{{template "repo/diff/box" .}}
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

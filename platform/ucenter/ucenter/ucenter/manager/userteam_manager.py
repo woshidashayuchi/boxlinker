@@ -5,9 +5,11 @@ import uuid
 import json
 import time
 
+from conf import conf
 from common.logs import logging as log
 from common.code import request_result
 from common.json_encode import CJsonEncoder
+from common.limit_local import limit_check
 
 from ucenter.db import ucenter_db
 
@@ -17,8 +19,12 @@ class UserTeamManager(object):
     def __init__(self):
 
         self.ucenter_db = ucenter_db.UcenterDB()
+        self.user_image = conf.user_image
+        self.default_avatar = conf.default_avatar
 
-    def user_team_add(self, user_uuid, team_uuid, team_role):
+    @limit_check('teamusers')
+    def user_team_add(self, token, user_uuid,
+                      team_uuid, team_role):
 
         if team_role is None:
             team_role = 'user'
@@ -46,18 +52,22 @@ class UserTeamManager(object):
 
         return request_result(0, result)
 
-    def user_team_list(self, team_uuid):
+    def user_team_list(self, team_uuid, page_size, page_num):
 
         'show team user and role list'
 
         try:
-            user_list_info = self.ucenter_db.user_team_list(team_uuid)
+            user_list_info = self.ucenter_db.user_team_list(
+                                  team_uuid, page_size, page_num)
         except Exception, e:
             log.error('Database select error, reason=%s' % (e))
             return request_result(404)
 
+        team_user_list = user_list_info.get('team_user_list')
+        count = user_list_info.get('count')
+
         t_user_list = []
-        for user_info in user_list_info:
+        for user_info in team_user_list:
             user_uuid = user_info[0]
             user_name = user_info[1]
             team_role = user_info[2]
@@ -76,7 +86,8 @@ class UserTeamManager(object):
             v_user_info = json.loads(v_user_info)
             t_user_list.append(v_user_info)
 
-        result = {"user_list": t_user_list}
+        result = {"count": count}
+        result['user_list'] = t_user_list
 
         return request_result(0, result)
 
