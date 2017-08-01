@@ -1,1 +1,0 @@
-## 基于 alpine:3.4 创建 Python2.7.10镜像,并且按照 supervisor

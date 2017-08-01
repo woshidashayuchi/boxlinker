@@ -1,6 +1,0 @@
-{
-  "name": "Pay",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./Pay.js"
-}

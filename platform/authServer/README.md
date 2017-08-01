@@ -1,1 +1,0 @@
-#### aliyun alias k8s='ssh -l root 123.56.4.95'
