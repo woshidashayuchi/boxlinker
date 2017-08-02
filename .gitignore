@@ -4,3 +4,4 @@ node_modules
 docs/docs
 npm-debug.log
 *.pyc
+db_data
