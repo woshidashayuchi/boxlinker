@@ -64,6 +64,34 @@ var (
 			Value:  "service@boxlinker.com",
 			EnvVar: "ADMIN_EMAIL",
 		},
+		cli.StringFlag{
+			Name: 	"user-password-salt",
+			Value:	"arandomuserpasswordsalt",
+			EnvVar: "USER_PASSWORD_SALT",
+		},
+
+		cli.StringFlag{
+			Name: "redis-host",
+			Value: "127.0.0.1",
+			EnvVar: "REDIS_HOST",
+		},
+		cli.IntFlag{
+			Name: "redis-port",
+			Value: 6379,
+			EnvVar: "REDIS_PORT",
+		},
+		cli.StringFlag{
+			Name: "redis-password",
+			Value: "",
+			EnvVar: "REDIS_PASSWORD",
+		},
+		cli.IntFlag{
+			Name: "redis-db",
+			Value: 0,
+			EnvVar: "REDIS_DB",
+		},
+
+
 
 	}
 )

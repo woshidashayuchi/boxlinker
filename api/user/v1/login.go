@@ -2,9 +2,7 @@ package v1
 
 import (
 	"net/http"
-	"encoding/json"
 	"github.com/cabernety/boxlinker"
-	"io/ioutil"
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -25,13 +23,8 @@ func (f *LoginForm) validate() string {
 
 func (a *Api) Login(w http.ResponseWriter, r *http.Request){
 	form := &LoginForm{}
-	b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if err := json.Unmarshal(b, form); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if err := boxlinker.ReadRequestBody(r, form); err != nil {
+		boxlinker.Resp(w, boxlinker.STATUS_INTERNAL_SERVER_ERR, nil, err.Error())
 		return
 	}
 	log.Debugf("form: %v", form)
@@ -41,7 +34,7 @@ func (a *Api) Login(w http.ResponseWriter, r *http.Request){
 	}
 
 	u := a.manager.GetUserByName(form.Username)
-	success, err := a.manager.VerifyUsernamePassword(u.Name, u.Password)
+	success, err := a.manager.VerifyUsernamePassword(form.Username, form.Password, u.Password)
 	if err != nil {
 		boxlinker.Resp(w, 1, nil, err.Error())
 		return

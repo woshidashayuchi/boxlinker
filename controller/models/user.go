@@ -3,10 +3,11 @@ package models
 import (
 	"time"
 	"github.com/go-xorm/xorm"
+	"github.com/satori/go.uuid"
 )
 
 type User struct {
-	Id 	int64 `xorm:"pk autoincr"`
+	Id 	string `xorm:"pk"`
 	Name 	string `xorm:"INDEX UNIQUE NOT NULL"`
 	Password string `xorm:"NOT NULL"`
 	Email string `xorm:"UNIQUE NOT NULL"`
@@ -18,6 +19,7 @@ type User struct {
 }
 
 func (me *User) BeforeInsert() {
+	me.Id = uuid.NewV4().String()
 	me.CreatedUnix = time.Now().Unix()
 	me.UpdatedUnix = me.CreatedUnix
 }

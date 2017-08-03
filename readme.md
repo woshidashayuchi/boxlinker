@@ -5,3 +5,4 @@
 * 2 --
 * 3 --
 * 4 -- not found
+* 5 -- internal server error

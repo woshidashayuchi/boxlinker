@@ -3,6 +3,8 @@ package boxlinker
 import (
 	"strconv"
 	"net/http"
+	"io/ioutil"
+	"encoding/json"
 )
 
 func ParseHTTPQuery(r *http.Request) PageConfig {
@@ -24,4 +26,15 @@ func ParseHTTPQuery(r *http.Request) PageConfig {
 	pc.CurrentPage = int(current_page)
 	pc.PageCount = int(page_count)
 	return pc
+}
+
+func ReadRequestBody(r *http.Request, bean interface{}) error {
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+	if err := json.Unmarshal(b, bean); err != nil {
+		return err
+	}
+	return nil
 }

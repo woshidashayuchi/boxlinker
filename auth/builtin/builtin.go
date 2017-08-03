@@ -25,10 +25,11 @@ func (a BuiltinAuthenticator) Name() string {
 func (a BuiltinAuthenticator) Authenticate(username, password, hash string) (bool, error) {
 	if err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)); err == nil {
 		return true, nil
+	} else {
+		return false, nil
 	}
-	return false, nil
 }
 
-func (a BuiltinAuthenticator) GenerateToken(uid int64, username string) (string, error) {
+func (a BuiltinAuthenticator) GenerateToken(uid string, username string) (string, error) {
 	return auth.GenerateToken(uid, username)
 }

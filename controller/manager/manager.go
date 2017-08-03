@@ -7,7 +7,6 @@ import (
 	"fmt"
 	mAuth "github.com/cabernety/boxlinker/auth"
 	"errors"
-	"github.com/cabernety/boxci/auth"
 	settings "github.com/cabernety/boxlinker/settings/user"
 	"github.com/cabernety/boxlinker"
 	log "github.com/Sirupsen/logrus"
@@ -15,13 +14,18 @@ import (
 
 type Manager interface {
 	VerifyAuthToken(token string) error
-	VerifyUsernamePassword(username, password string) (bool, error)
-	GenerateToken(uid int64, username string) (string, error)
+	VerifyUsernamePassword(username, password, hash string) (bool, error)
+	GenerateToken(uid string, username string) (string, error)
 
+	// user
 	CheckAdminUser() error
 	GetUserByName(username string) (*models.User)
+	GetUserById(id string) (*models.User)
 	GetUsers(pageConfig boxlinker.PageConfig) ([]*models.User, error)
 	SaveUser(user *models.User) error
+	IsUserExists(username string) (bool, error)
+	IsEmailExists(email string) (bool, error)
+	UpdatePassword(id string, password string) (bool, error)
 }
 
 type DefaultManager struct {
@@ -59,15 +63,15 @@ func NewManager(config ManagerOptions) (Manager, error) {
 	}, nil
 }
 
-func (m DefaultManager) VerifyUsernamePassword(username, password string) (bool, error) {
-	hash, err := auth.Hash(password)
-	if err != nil {
-		return false, err
-	}
+func (m DefaultManager) VerifyUsernamePassword(username, password, hash string) (bool, error) {
+	//hash, err := mAuth.Hash(password)
+	//if err != nil {
+	//	return false, err
+	//}
 	return m.authenticator.Authenticate(username, password, hash)
 }
 
-func (m DefaultManager) GenerateToken(uid int64, username string) (string, error) {
+func (m DefaultManager) GenerateToken(uid string, username string) (string, error) {
 	return m.authenticator.GenerateToken(uid, username)
 }
 
@@ -110,24 +114,29 @@ func (m DefaultManager) VerifyAuthToken(token string) error {
 func (m DefaultManager) CheckAdminUser() error {
 	sess := m.engine.NewSession()
 	defer sess.Close()
-	if has, _ := sess.Get(&models.User{
+	adminUser := &models.User{
 		Name: "admin",
-	}); !has {
-		pass, err := auth.Hash(settings.ADMIN_PASSWORD)
+	}
+	if has, _ := sess.Get(adminUser); !has {
+		pass, err := mAuth.Hash(settings.ADMIN_PASSWORD)
 		if err != nil{
 			return err
 		}
-		if id, err := sess.Insert(&models.User{
+		u := &models.User{
 			Name: settings.ADMIN_NAME,
 			Password: pass,
 			Email: settings.ADMIN_EMAIL,
-		}); err != nil {
+		}
+		if _, err := sess.Insert(u); err != nil {
+			sess.Rollback()
 			return err
 		} else {
-			log.Infof("Add admin user: %d", id)
+			log.Infof("Add admin user: %s", u.Id)
 		}
+	} else {
+		log.Infof("Admin user exists: %s", adminUser.Id)
 	}
-	return nil
+	return sess.Commit()
 }
 
 func (m DefaultManager) GetUsers(pageConfig boxlinker.PageConfig) (users []*models.User, err error) {
@@ -145,3 +154,54 @@ func (m DefaultManager) GetUserByName(username string) (*models.User) {
 	}
 	return nil
 }
+
+func (m DefaultManager) GetUserById(id string) (*models.User) {
+	u := &models.User{}
+	if found, _ := m.engine.Id(id).Get(u); found {
+		return u
+	}
+	return nil
+}
+
+
+
+func (m DefaultManager) IsUserExists(username string) (bool, error) {
+	u := &models.User{
+		Name: username,
+	}
+	if found, err := m.engine.Cols("name").Get(u); err != nil {
+		return false, err
+	} else if found {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
+func (m DefaultManager) IsEmailExists(email string) (bool, error) {
+	u := &models.User{
+		Email: email,
+	}
+	if found, err := m.engine.Cols("email").Get(u); err != nil {
+		return false, err
+	} else if found {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
+func (m DefaultManager) UpdatePassword(id string, password string) (bool, error) {
+	sess := m.engine.NewSession()
+	defer sess.Close()
+	u := &models.User{
+		Password: password,
+	}
+	_, err := m.engine.Id(id).Update(u)
+	if err != nil {
+		sess.Rollback()
+		return false, err
+	}
+	return true, sess.Commit()
+}
+

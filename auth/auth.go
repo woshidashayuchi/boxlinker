@@ -7,12 +7,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	_ "github.com/Sirupsen/logrus"
 	settings "github.com/cabernety/boxlinker/settings/user"
+	"golang.org/x/crypto/scrypt"
 )
 
 type (
 	Authenticator interface{
 		Authenticate(username, password, hash string) (bool, error)
-		GenerateToken(uid int64, username string) (string, error)
+		GenerateToken(uid string, username string) (string, error)
 		IsUpdateSupported() bool
 		Name() string
 	}
@@ -23,7 +24,12 @@ func Hash(data string) (string, error) {
 	return string(h[:]), err
 }
 
-func GenerateToken(uid int64, username string) (string, error) {
+func HashPassword(password string) (string, error) {
+	h, err := scrypt.Key([]byte(password),[]byte(settings.USER_PASSWORD_SALT), 16384, 8, 1, 3)
+	return string(h[:]), err
+}
+
+func GenerateToken(uid string, username string) (string, error) {
 
 	claims := make(jwt.MapClaims)
 	claims["uid"] = uid
