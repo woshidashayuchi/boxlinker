@@ -11,11 +11,6 @@ var (
 	ADMIN_EMAIL string
 	TOKEN_KEY string
 
-	REDIS_HOST string
-	REDIS_PORT int
-	REDIS_PASSWORD string
-	REDIS_DB int
-
 	USER_PASSWORD_SALT string
 )
 
@@ -40,11 +35,6 @@ func InitSettings(c *cli.Context){
 
 	USER_PASSWORD_SALT = c.String("user-password-salt")
 	paramRequired("user-password-salt", USER_PASSWORD_SALT)
-
-	REDIS_HOST = c.String("redis-host")
-	REDIS_PORT = c.Int("redis-port")
-	REDIS_PASSWORD = c.String("redis-password")
-	REDIS_DB = c.Int("redis-db")
 
 }
 

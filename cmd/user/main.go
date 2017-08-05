@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli"
 	"github.com/cabernety/boxlinker/controller/manager"
 	"github.com/cabernety/boxlinker/auth/builtin"
-	api "github.com/cabernety/boxlinker/api/user/v1"
+	api "github.com/cabernety/boxlinker/api/v1/user"
 
 	"os"
 	settings "github.com/cabernety/boxlinker/settings/user"
@@ -68,27 +68,6 @@ var (
 			Name: 	"user-password-salt",
 			Value:	"arandomuserpasswordsalt",
 			EnvVar: "USER_PASSWORD_SALT",
-		},
-
-		cli.StringFlag{
-			Name: "redis-host",
-			Value: "127.0.0.1",
-			EnvVar: "REDIS_HOST",
-		},
-		cli.IntFlag{
-			Name: "redis-port",
-			Value: 6379,
-			EnvVar: "REDIS_PORT",
-		},
-		cli.StringFlag{
-			Name: "redis-password",
-			Value: "",
-			EnvVar: "REDIS_PASSWORD",
-		},
-		cli.IntFlag{
-			Name: "redis-db",
-			Value: 0,
-			EnvVar: "REDIS_DB",
 		},
 
 
