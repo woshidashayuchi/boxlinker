@@ -51,10 +51,10 @@ func NewManager(config ManagerOptions) (Manager, error) {
 		Host: config.DBHost,
 		Port: config.DBPort,
 	}
-
+	log.Infof("New Xorm Engine: %+v", dbOptions)
 	engine, err := models.NewEngine(dbOptions)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("new xorm engine err: %v", err)
 	}
 
 	return &DefaultManager{
@@ -112,6 +112,7 @@ func (m DefaultManager) VerifyAuthToken(token string) error {
 }
 
 func (m DefaultManager) CheckAdminUser() error {
+	log.Debugf("CheckAdminUser ...")
 	sess := m.engine.NewSession()
 	defer sess.Close()
 	adminUser := &models.User{

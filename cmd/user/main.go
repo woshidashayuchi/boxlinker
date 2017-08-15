@@ -9,6 +9,7 @@ import (
 
 	"os"
 	settings "github.com/cabernety/boxlinker/settings/user"
+	"fmt"
 )
 
 var (
@@ -111,11 +112,11 @@ func action(c *cli.Context) error {
 	})
 
 	if err != nil {
-		return err
+		return fmt.Errorf("New Manager: %s", err.Error())
 	}
 
 	if err := controllerManager.CheckAdminUser(); err != nil {
-		return err
+		return fmt.Errorf("CheckAdminUser: %v", err)
 	}
 
 	return api.NewApi(api.ApiOptions{

@@ -47,8 +47,9 @@ func NewEngine(config DBOptions) (*xorm.Engine, error){
 	}
 	log.Info("Connect to db ok.")
 	x.SetMapper(core.GonicMapper{})
+	log.Infof("start to sync tables ...")
 	if err = x.StoreEngine("InnoDB").Sync2(tables...); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("sync tables err: %v",err)
 	}
 	x.ShowSQL(true)
 	return x, nil
