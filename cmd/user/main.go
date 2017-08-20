@@ -70,7 +70,11 @@ var (
 			Value:	"arandomuserpasswordsalt",
 			EnvVar: "USER_PASSWORD_SALT",
 		},
-
+		cli.StringFlag{
+			Name:  "cookie-domain",
+			Value: "localhost",
+			EnvVar: "COOKIE_DOMAIN",
+		},
 
 
 	}

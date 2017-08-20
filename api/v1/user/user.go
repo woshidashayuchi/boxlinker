@@ -3,7 +3,6 @@ package user
 import (
 	"net/http"
 	"github.com/cabernety/boxlinker"
-	"github.com/gorilla/mux"
 	"github.com/cabernety/boxlinker/auth"
 )
 
@@ -59,7 +58,17 @@ func (a *Api) GetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) GetUser(w http.ResponseWriter, r *http.Request){
-	id := mux.Vars(r)["id"]
+	us := r.Context().Value("user")
+	if us == nil {
+		boxlinker.Resp(w, boxlinker.STATUS_NOT_FOUND, nil)
+		return
+	}
+	ctx := us.(map[string]interface{})
+	if ctx == nil || ctx["uid"] == nil {
+		boxlinker.Resp(w, boxlinker.STATUS_NOT_FOUND, nil)
+		return
+	}
+	id := ctx["uid"].(string)
 	u := a.manager.GetUserById(id)
 	if u == nil {
 		boxlinker.Resp(w, boxlinker.STATUS_NOT_FOUND, nil, "not found")
@@ -80,7 +89,12 @@ func (a *Api) ChangePassword(w http.ResponseWriter, r *http.Request) {
 		boxlinker.Resp(w, boxlinker.STATUS_FORM_VALIDATE_ERR, validate)
 		return
 	}
-	id := mux.Vars(r)["id"]
+	ctx := r.Context().Value("user").(map[string]interface{})
+	if ctx == nil || ctx["id"] == nil {
+		boxlinker.Resp(w, boxlinker.STATUS_NOT_FOUND, nil)
+		return
+	}
+	id := ctx["id"].(string)
 	u := a.manager.GetUserById(id)
 	if u == nil {
 		boxlinker.Resp(w, boxlinker.STATUS_NOT_FOUND, nil, "not found")

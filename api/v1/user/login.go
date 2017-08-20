@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"github.com/cabernety/boxlinker"
 	log "github.com/Sirupsen/logrus"
+	settings "github.com/cabernety/boxlinker/settings/user"
+	"time"
 )
 
 type LoginForm struct {
@@ -48,8 +50,15 @@ func (a *Api) Login(w http.ResponseWriter, r *http.Request){
 		boxlinker.Resp(w, 1, nil, err.Error())
 		return
 	}
+	cookie := &http.Cookie{
+		Name:"X-Access-Token",
+		Value: token,
+		Expires: time.Now().Add(30*24*time.Hour),
+		Domain: settings.COOKIE_DOMAIN,
+	}
+	http.SetCookie(w, cookie)
 	boxlinker.Resp(w, 0, map[string]string{
-		"token": token,
+		"X-Access-Token": token,
 	})
 }
 

@@ -11,6 +11,8 @@ var (
 	ADMIN_EMAIL string
 	TOKEN_KEY string
 
+	COOKIE_DOMAIN string
+
 	USER_PASSWORD_SALT string
 )
 
@@ -35,6 +37,8 @@ func InitSettings(c *cli.Context){
 
 	USER_PASSWORD_SALT = c.String("user-password-salt")
 	paramRequired("user-password-salt", USER_PASSWORD_SALT)
+
+	COOKIE_DOMAIN = c.String("cookie-domain")
 
 }
 

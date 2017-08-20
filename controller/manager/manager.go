@@ -13,7 +13,7 @@ import (
 )
 
 type Manager interface {
-	VerifyAuthToken(token string) error
+	VerifyAuthToken(token string) (map[string]interface{}, error)
 	VerifyUsernamePassword(username, password, hash string) (bool, error)
 	GenerateToken(uid string, username string) (string, error)
 
@@ -89,26 +89,31 @@ func (m DefaultManager) SaveUser(user *models.User) error {
 	return sess.Commit()
 }
 
-func (m DefaultManager) VerifyAuthToken(token string) error {
+func (m DefaultManager) VerifyAuthToken(token string) (map[string]interface{}, error) {
 	errFailed := errors.New("Token 解析失败")
 	success, data, err := mAuth.AuthToken(token)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	_username := data["username"]
 	if _username == nil {
-		return errFailed
+		return nil, errFailed
 	}
 	username := _username.(string)
 	u := m.GetUserByName(username)
 	if u == nil {
-		return fmt.Errorf("未找到用户: %s", username)
+		return nil, fmt.Errorf("未找到用户: %s", username)
 	}
 
 	if !success {
-		return errFailed
+		return nil, errFailed
 	}
-	return nil
+
+
+	return map[string]interface{}{
+		"uid": u.Id,
+		"username": u.Name,
+	}, nil
 }
 
 func (m DefaultManager) CheckAdminUser() error {

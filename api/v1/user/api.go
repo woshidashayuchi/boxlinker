@@ -52,8 +52,8 @@ func (a *Api) Run() error {
 
 	accountRouter := mux.NewRouter()
 	accountRouter.HandleFunc("/v1/user/account/list", a.GetUsers).Methods("GET")
-	accountRouter.HandleFunc("/v1/user/account/{id}/changepassword", a.ChangePassword).Methods("PUT")
-	accountRouter.HandleFunc("/v1/user/account/{id}", a.GetUser).Methods("GET")
+	accountRouter.HandleFunc("/v1/user/account/changepassword", a.ChangePassword).Methods("PUT")
+	accountRouter.HandleFunc("/v1/user/account/userinfo", a.GetUser).Methods("GET")
 	accountAuthRouter := negroni.New()
 	accountAuthRouter.Use(negroni.HandlerFunc(apiAuthRequired.HandlerFuncWithNext))
 	accountAuthRouter.UseHandler(accountRouter)
