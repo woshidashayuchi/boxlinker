@@ -4,3 +4,6 @@ node_modules
 docs/docs
 npm-debug.log
 *.pyc
+db_data
+cmd/email/email
+cmd/user/user
